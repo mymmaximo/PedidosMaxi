@@ -1,0 +1,61 @@
+#app {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: left ;
+  color: #2c3e50;
+  margin-top: 0px;
+  scale: 1;
+}
+body {
+  margin: 0;
+  background-color: rgb(183, 182, 229);
+}
+table{
+  margin: 0 auto;
+  width: 100%;
+  border-collapse: collapse;
+}
+th {
+  padding: 5px;
+  border: 1px solid #000000;
+}
+tr {
+  border: 1px solid #000000;
+}
+td {
+  padding: 10px;
+  border: 1px solid #000000;
+  background-color: #FFFFFF;
+}
+img {
+  width: 100px;
+  display: block;
+}
+button{  
+  padding: 10px;
+  margin: 0 auto;
+  border-radius: 10px;
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+h1{
+  font-size: small;
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  margin: 0;
+}
+.contenedor_principal {
+  width: fit-content;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 10px;
+}
+input{
+  padding: 5px;
+  border-radius: 5px;
+}
+.cerrar{
+  color: red;
+}
