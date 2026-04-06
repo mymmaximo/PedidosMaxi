@@ -3,14 +3,14 @@
     <div class="barra">
       <img alt="Vue logo" src="./assets/logo.png">
       <div class="botones">
+        <h1 @click="TablaActual = 'Productos'">
+          Ver Productos
+        </h1>
         <h1 @click="TablaActual = 'Pedidos'">
           Ver Pedidos
         </h1>
         <h1 @click="TablaActual = 'Clientes'">
           Ver Clientes
-        </h1>
-        <h1 @click="TablaActual = 'Productos'">
-          Ver Productos
         </h1>
         <h1 @click="CerrarSesion" class="cerrar">
           Cerrar Sesion
@@ -18,10 +18,9 @@
       </div>
     </div>
     <div>
+      <Productos v-if="TablaActual === 'Productos'"/>
       <Pedidos v-if="TablaActual === 'Pedidos'"/>
       <Clientes  v-if="TablaActual === 'Clientes'"/>
-      <Productos v-if="TablaActual === 'Productos'"/>
-      
     </div>
   </div>
   <div v-else class="contenedor_login">
