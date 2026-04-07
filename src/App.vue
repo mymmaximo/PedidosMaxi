@@ -15,6 +15,9 @@
         <h1 @click="CerrarSesion" class="cerrar">
           Cerrar Sesion
         </h1>
+        <h1 @click="LimpiarCompra" v-if="PedidoActual" class="cerrar">
+          Limpiar Carrito
+        </h1>
       </div>
     </div>
     <div>
@@ -30,11 +33,12 @@
 
 <script setup>
   import { onMounted, ref } from 'vue'
+  import { PedidoActual, LimpiarCompra } from './components/Estatus.js'
   import Login from './components/Login.vue'
   import Pedidos from "./components/Pedidos.vue"
   import Clientes from "./components/Clientes.vue"
   import Productos from "./components/Productos.vue"
-  const TablaActual = ref('');
+  const TablaActual = ref('Productos');
   const Iniciado = ref(false);
   onMounted(() => {
         const tokenGuardado = localStorage.getItem("token");
@@ -45,6 +49,7 @@
   const CerrarSesion = () =>{
     localStorage.removeItem("token")
     Iniciado.value = false
+    
   }
 </script>
 
