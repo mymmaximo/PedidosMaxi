@@ -12,14 +12,24 @@
                 -
             </button>
         </div>
+        <div>
+            <button @click="Confirmar">
+                Confirmar
+            </button>
+            <button @click="Cancelar">
+                Cancelar
+            </button>
+        </div>
     </div>
 </template>
 
 <script setup>
     import { ref, watch } from 'vue'
+    import { VentanaComprar, MostrarProducto_Cantidad, ProductoActual, ProductoCantidad, SumarProducto, RestarProducto } from "./Estatus.js"
     import { PedidoActual } from './Estatus'
     const Confirmar = (async() =>{
         const tokenGuardado = localStorage.getItem("token");
+        const ClienteGuardado = localStorage.getItem("id_cliente");
         if (PedidoActual.value) {
             const respuesta = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
                 method: 'POST',
@@ -36,6 +46,9 @@
             if (respuesta.ok) {
                 Cancelar ()
                 console.log ("funciono")
+            } else {
+            const error = await respuesta.text()
+            console.error("Error al agregar detalle:", error)
             }
         } else {
             const respuesta = await fetch('http://localhost:8000/pedidos/', {
@@ -45,8 +58,11 @@
                     'Authorization': 'Bearer ' + tokenGuardado
                 },
                 body: JSON.stringify({
-                    id_producto: ProductoActual.value.id,
-                    cantidad: ProductoCantidad.value
+                    id_cliente: parseInt(ClienteGuardado),
+                    id_direccion: 1,
+                    metodo_pago: " ",
+                    tiempo_estimado_entrega: 0,
+                    tiempo_entrega: 0
                 })
             })
             if (respuesta.ok) {
@@ -56,8 +72,10 @@
                     "pedido",
                     PedidoActual.value
                 )
-                Cancelar ()
-                console.log ("funciono")
+                Confirmar() 
+            } else {
+            const error = await respuesta.text()
+            console.error("Error al agregar Pedido:", error)
             }
         }
     })
@@ -65,18 +83,7 @@
         MostrarProducto_Cantidad.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
-    }
-    const SumarProducto = () => {
-        if (ProductoActual.value.stock < ProductoCantidad.value){
-            ProductoCantidad.value++
-        }
-    }
-    const RestarProducto = () => {
-        if (0 < ProductoCantidad.value){
-            ProductoCantidad.value--
-        }
-    }
-    
+    }    
     watch (ProductoCantidad, (NuevaCantidad) => {
         if (ProductoActual.value) {
             if (NuevaCantidad > ProductoActual.value.stock) {
@@ -91,10 +98,19 @@
 
 <style scoped>
 .caja_elejir_cantidad{
-  padding: 15px;
-  width: fit-content;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 15px;
+  border: 2px solid #000000;
+  z-index: 1000;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 </style>

@@ -107,6 +107,10 @@
             "token",
             datos.access_token
         )
+        localStorage.setItem(
+            "id_cliente",
+            datos.id_cliente
+        )
         SesionIniciada.value = true
         emit('LoginExitoso');
         LoginCliente.value = {

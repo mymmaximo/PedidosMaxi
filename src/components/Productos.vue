@@ -65,31 +65,19 @@
           <input type="text" v-model="NuevoProducto.stock" placeholder="Stock">
           <input type="text" v-model="NuevoProducto.categoria" placeholder="Categoria">
           <input type="text" v-model="NuevoProducto.codigo_barra" placeholder="Codigo de Barras">
-          <button type="submit" @click="Comprar" class="Boton_Crear">
+          <button type="submit" class="Boton_Crear">
             Crear
           </button>
         </form>
       </div>
   </div>
-  <div class="caja_elejir_cantidad" v-if="MostrarProducto_Cantidad">
-        <h1>
-            {{ ProductoActual.nombre }}
-        </h1>
-        <div>
-            <input type="number" v-model="ProductoCantidad">
-            <button @click="SumarProducto(ProductoActual)">
-                +
-            </button>
-            <button @click="RestarProducto(ProductoActual)">
-                -
-            </button>
-        </div>
-    </div>
+  <Comprar/>
 </template>
 
 <script setup>
   import { onMounted, ref } from 'vue';
-  import { VentanaComprar } from "./Estatus.js"
+  import Comprar from './Comprar.vue';
+  import { VentanaComprar } from './Estatus.js';
   const Productos = ref([]);
   onMounted(async() => {
     const respuesta = await fetch('http://localhost:8000/productos/')

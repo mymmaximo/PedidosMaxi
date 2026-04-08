@@ -48,6 +48,7 @@
     });
   const CerrarSesion = () =>{
     localStorage.removeItem("token")
+    localStorage.removeItem("id_cliente")
     Iniciado.value = false
     
   }
