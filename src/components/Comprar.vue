@@ -13,20 +13,54 @@
             </button>
         </div>
         <div>
-            <button @click="Confirmar">
-                Confirmar
+            <button @click="SumarCarrito">
+                Agregar al Carrito
             </button>
             <button @click="Cancelar">
                 Cancelar
             </button>
         </div>
     </div>
+    <div class="contenedor_principal" v-if="CarritoLocal.length > 0">
+        <h1>
+            Tu Carrito
+        </h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unit.</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in CarritoLocal" :key="index">
+                    <td>{{ item.nombre_producto }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>${{ item.precio_unitario }}</td>
+                    <td>${{ item.cantidad * item.precio_unitario }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>
+            Total: ${{ 
+                CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
+        </h2>
+    </div>
 </template>
 
 <script setup>
-    import { ref, watch } from 'vue'
-    import { VentanaComprar, MostrarProducto_Cantidad, ProductoActual, ProductoCantidad, SumarProducto, RestarProducto } from "./Estatus.js"
+    import { onMounted, ref, watch } from 'vue'
+    import { CarritoLocal, MostrarProducto_Cantidad, ProductoActual, ProductoCantidad, SumarProducto, RestarProducto } from "./Estatus.js"
     import { PedidoActual } from './Estatus'
+    onMounted (() => {
+        const CarritoOlvidado = localStorage.getItem('carrito_pendiente');
+        if (CarritoOlvidado) {
+            CarritoLocal.value = JSON.parse(CarritoOlvidado);
+            console.log("Carrito recuperado:", CarritoLocal.value);
+        }
+    })
     const Confirmar = (async() =>{
         const tokenGuardado = localStorage.getItem("token");
         const ClienteGuardado = localStorage.getItem("id_cliente");
@@ -37,11 +71,11 @@
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + tokenGuardado
                 },
-                body: JSON.stringify({
+                body: JSON.stringify([{
                     id_pedido: PedidoActual.value,
                     id_producto: ProductoActual.value.id,
                     cantidad: ProductoCantidad.value
-                })
+                }])
             })
             if (respuesta.ok) {
                 Cancelar ()
@@ -83,7 +117,25 @@
         MostrarProducto_Cantidad.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
-    }    
+    }
+    const SumarCarrito = () => {
+        if (!ProductoActual.value)
+            return; 
+        const nuevoProducto = {
+            id_pedido: PedidoActual.value,
+            nombre_producto: ProductoActual.value.nombre,
+            id_producto: ProductoActual.value.id,
+            cantidad: ProductoCantidad.value,
+            precio_unitario: ProductoActual.value.precio
+        }
+        CarritoLocal.value.push(nuevoProducto);
+        localStorage.setItem(
+            'carrito_pendiente',
+            JSON.stringify(
+                CarritoLocal.value
+        ));
+        Cancelar()    
+    }
     watch (ProductoCantidad, (NuevaCantidad) => {
         if (ProductoActual.value) {
             if (NuevaCantidad > ProductoActual.value.stock) {

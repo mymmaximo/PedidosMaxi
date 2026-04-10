@@ -98,20 +98,6 @@
         </table>
       </div>  
     </div>
-    <div class="contenedor_principal">
-      <h1>
-        Nuevo Cliente
-      </h1>
-      <form @submit.prevent="SubirNuevoCliente" class="Texto_cliente">
-        <input type="text" v-model="NuevoCliente.nombre" placeholder="Nombre">
-        <input type="text" v-model="NuevoCliente.apellido" placeholder="Apellido">
-        <input type="text" v-model="NuevoCliente.email" placeholder="E-Mail">
-        <input type="text" v-model="NuevoCliente.dni" placeholder="DNI">
-        <button type="submit" class="Boton_Crear">
-          Crear
-        </button>
-      </form>
-    </div>
   </div>
 </template>
 
@@ -133,30 +119,6 @@
     const datos = await respuesta.json();
     clientes.value = datos;
   })
-  const NuevoCliente = ref({
-    nombre: "",
-    apellido: "",
-    email: "",
-    dni: ""
-  });
-  const SubirNuevoCliente = async() => {
-    const SubidaNuevoCliente = await fetch('http://localhost:8000/clientes/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(NuevoCliente.value)
-    });
-  NuevoCliente.value = {
-    nombre: "",
-    apellido: "",
-    email: "",
-    dni: ""
-  };
-  const respuesta = await fetch('http://localhost:8000/clientes/');
-  const datos = await respuesta.json();
-  clientes.value = datos;
-};
 </script>
 
 <style scoped>

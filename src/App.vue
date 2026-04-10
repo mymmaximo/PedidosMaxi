@@ -15,7 +15,7 @@
         <h1 @click="CerrarSesion" class="cerrar">
           Cerrar Sesion
         </h1>
-        <h1 @click="LimpiarCompra" v-if="PedidoActual" class="cerrar">
+        <h1 @click="LimpiarCompra" v-if="CarritoLocal.length > 0" class="cerrar">
           Limpiar Carrito
         </h1>
       </div>
@@ -33,7 +33,7 @@
 
 <script setup>
   import { onMounted, ref } from 'vue'
-  import { PedidoActual, LimpiarCompra } from './components/Estatus.js'
+  import { CarritoLocal, LimpiarCompra } from './components/Estatus.js'
   import Login from './components/Login.vue'
   import Pedidos from "./components/Pedidos.vue"
   import Clientes from "./components/Clientes.vue"

@@ -3,10 +3,11 @@ import { ref } from 'vue'
 export const PedidoGuardado = parseInt(localStorage.getItem("pedido"))
 export const PedidoActual = ref(PedidoGuardado ? parseInt(PedidoGuardado) : null)
 export const LimpiarCompra = () =>{
-    PedidoActual.value = null
-    localStorage.removeItem("pedido")
+    localStorage.removeItem("carrito_pendiente")
+    CarritoLocal.value = [];
 }
 export const ProductoActual = ref(null)
+export const CarritoLocal = ref ([])
 export const ProductoCantidad = ref(1)
 export const MostrarProducto_Cantidad = ref(false)
 export const VentanaComprar = (ProductoSeleccionado) => {
