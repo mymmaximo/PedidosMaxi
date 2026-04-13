@@ -46,7 +46,7 @@
                 {{ i.codigo_barra }}
               </td>
               <td>
-                <button @click="VentanaComprar(i)">
+                <button @click="VentanaComprar(i)" :disabled="CarritoStock(i) === 0">
                   🛒
                 </button>
               </td>
@@ -77,13 +77,22 @@
 <script setup>
   import { onMounted, ref } from 'vue';
   import Comprar from './Comprar.vue';
-  import { VentanaComprar } from './Estatus.js';
+  import { CarritoLocal, VentanaComprar } from './Estatus.js';
   const Productos = ref([]);
   onMounted(async() => {
     const respuesta = await fetch('http://localhost:8000/productos/')
     const datos = await respuesta.json();
     Productos.value = datos;
   })
+  const CarritoStock = (Producto) => {
+    let stockCarrito = 0
+    CarritoLocal.value.forEach((itemCarrito) => {
+      if (itemCarrito.id_producto === Producto.id) {
+        stockCarrito = stockCarrito + itemCarrito.cantidad
+      }
+    })
+    return Producto.stock - stockCarrito;
+  }
   const NuevoProducto = ref({
     nombre: "",
     precio: "",

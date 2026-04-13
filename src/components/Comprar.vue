@@ -1,8 +1,8 @@
 <template>
     <div class="caja_elejir_cantidad" v-if="MostrarProducto_Cantidad">
-        <h1>
+        <h2>
             {{ ProductoActual.nombre }}
-        </h1>
+        </h2>
         <div>
             <input type="number" v-model="ProductoCantidad">
             <button @click="SumarProducto(ProductoActual)">
@@ -20,33 +20,6 @@
                 Cancelar
             </button>
         </div>
-    </div>
-    <div class="contenedor_principal" v-if="CarritoLocal.length > 0">
-        <h1>
-            Tu Carrito
-        </h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unit.</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item, index) in CarritoLocal" :key="index">
-                    <td>{{ item.nombre_producto }}</td>
-                    <td>{{ item.cantidad }}</td>
-                    <td>${{ item.precio_unitario }}</td>
-                    <td>${{ item.cantidad * item.precio_unitario }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <h2>
-            Total: ${{ 
-                CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
-        </h2>
     </div>
 </template>
 
@@ -128,7 +101,15 @@
             cantidad: ProductoCantidad.value,
             precio_unitario: ProductoActual.value.precio
         }
-        CarritoLocal.value.push(nuevoProducto);
+        let CarritoExistente = CarritoLocal.value.find(
+            (item_exitente) =>
+            item_exitente.id_producto === ProductoActual.value.id
+        )
+        if (CarritoExistente){
+            CarritoExistente.cantidad = ProductoCantidad.value + CarritoExistente.cantidad
+        } else {
+            CarritoLocal.value.push(nuevoProducto);
+        }
         localStorage.setItem(
             'carrito_pendiente',
             JSON.stringify(
@@ -136,12 +117,20 @@
         ));
         Cancelar()    
     }
+    // revisar para optimizar
     watch (ProductoCantidad, (NuevaCantidad) => {
+        let CantidadnCarrito = 0
         if (ProductoActual.value) {
-            if (NuevaCantidad > ProductoActual.value.stock) {
-                ProductoCantidad.value = ProductoActual.value.stock
+            CarritoLocal.value.forEach((prod) => {
+                if (prod.id_producto === ProductoActual.value.id) {
+                    CantidadnCarrito = CantidadnCarrito + prod.cantidad
+                }
+            })
+            const StockLocal = ProductoActual.value.stock - CantidadnCarrito
+            if (NuevaCantidad > StockLocal) {
+                ProductoCantidad.value = StockLocal
             }
-            if (NuevaCantidad < 1) {
+            if (NuevaCantidad < 1 && StockLocal !== 0) {
                 ProductoCantidad.value = 1
             }
         }
