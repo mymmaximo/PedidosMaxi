@@ -51,7 +51,7 @@
       <Productos v-if="TablaActual === 'Productos'"/>
       <Pedidos v-if="TablaActual === 'Pedidos'"/>
       <Clientes  v-if="TablaActual === 'Clientes'"/>
-      <Carrito v-if="TablaActual === 'Carrito'"/>
+      <Carrito v-if="TablaActual === 'Carrito'" @CarritoVacio="TablaActual = 'Productos'"/>
     </div>
   </div>
   <div v-else class="contenedor_login">

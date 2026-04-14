@@ -99,7 +99,8 @@
             nombre_producto: ProductoActual.value.nombre,
             id_producto: ProductoActual.value.id,
             cantidad: ProductoCantidad.value,
-            precio_unitario: ProductoActual.value.precio
+            precio_unitario: ProductoActual.value.precio,
+            stock_producto: ProductoActual.value.stock
         }
         let CarritoExistente = CarritoLocal.value.find(
             (item_exitente) =>

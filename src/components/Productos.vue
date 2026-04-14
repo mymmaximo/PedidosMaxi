@@ -46,7 +46,7 @@
                 {{ i.codigo_barra }}
               </td>
               <td>
-                <button @click="VentanaComprar(i)" :disabled="CarritoStock(i) === 0">
+                <button @click="VentanaComprar(i)" :disabled="CarritoStock(i) === 0" class="botoncentro">
                   🛒
                 </button>
               </td>
@@ -158,5 +158,8 @@ thead{
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+.botoncentro{
+  align-self: center;
 }
 </style>
