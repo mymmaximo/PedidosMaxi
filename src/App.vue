@@ -78,8 +78,8 @@
   const CerrarSesion = () =>{
     localStorage.removeItem("token")
     localStorage.removeItem("id_cliente")
+    LimpiarCompra()
     Iniciado.value = false
-    
   }
 </script>
 

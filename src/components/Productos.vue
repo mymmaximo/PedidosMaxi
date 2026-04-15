@@ -55,7 +55,7 @@
         </table>
       </div>  
     </div>
-    <div class="contenedor_principal">
+    <div class="contenedor_secundario">
         <h1>
           Nuevo Producto
         </h1>
@@ -161,5 +161,13 @@ thead{
 }
 .botoncentro{
   align-self: center;
+}
+.contenedor_secundario{
+  width: 20%;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 10px;
+  background-color: rgb(166, 165, 231);
+  height: fit-content;
 }
 </style>
