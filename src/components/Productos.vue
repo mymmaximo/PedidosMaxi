@@ -26,6 +26,9 @@
               <th>
                 Comprar
               </th>
+              <th v-if="Rol === '1'">
+                Borrar
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -50,26 +53,47 @@
                   🛒
                 </button>
               </td>
+              <td v-if="Rol === '1'">
+                <button @click="BorrarProducto(i)" class="botoncentro">
+                  ❌
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>  
     </div>
-    <div class="contenedor_secundario">
-        <h1>
-          Nuevo Producto
-        </h1>
-        <form @submit.prevent="SubirNuevoProducto" class="Texto_producto">
-          <input type="text" v-model="NuevoProducto.nombre" placeholder="Nombre">
-          <input type="text" v-model="NuevoProducto.precio" placeholder="Precio">
-          <input type="text" v-model="NuevoProducto.stock" placeholder="Stock">
-          <input type="text" v-model="NuevoProducto.categoria" placeholder="Categoria">
-          <input type="text" v-model="NuevoProducto.codigo_barra" placeholder="Codigo de Barras">
-          <button type="submit" class="Boton_Crear">
-            Crear
-          </button>
-        </form>
-      </div>
+    <div class="contenedor_secundario" v-if="Rol === '1'">
+      <h1>
+        Nuevo Producto
+      </h1>
+      <form @submit.prevent="SubirNuevoProducto" class="Texto_producto">
+        <input type="text" v-model="NuevoProducto.nombre" placeholder="Nombre">
+        <input type="text" v-model="NuevoProducto.precio" placeholder="Precio">
+        <input type="text" v-model="NuevoProducto.stock" placeholder="Stock">
+        <input type="text" v-model="NuevoProducto.categoria" placeholder="Categoria">
+        <input type="text" v-model="NuevoProducto.codigo_barra" placeholder="Codigo de Barras">
+        <button type="submit" class="Boton_Crear">
+          Crear
+        </button>
+      </form>
+    </div>
+    <div class="contenedor_secundario" v-if="Rol === '1'">
+      <h1>
+        Actualizar Producto
+      </h1>
+      <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+        <input type="text" v-model="ProductoAct.id" placeholder="ID">
+        <input type="text" v-model="ProductoAct.nombre" placeholder="Nombre">
+        <input type="text" v-model="ProductoAct.precio" placeholder="Precio">
+        <input type="text" v-model="ProductoAct.stock" placeholder="Stock">
+        <input type="text" v-model="ProductoAct.categoria" placeholder="Categoria">
+        <input type="text" v-model="ProductoAct.codigo_barra" placeholder="Codigo de Barras">
+        <button type="submit" class="Boton_Crear">
+          Actualizar
+        </button>
+      </form>
+    </div>
   </div>
   <Comprar/>
 </template>
@@ -77,7 +101,7 @@
 <script setup>
   import { onMounted, ref } from 'vue';
   import Comprar from './Comprar.vue';
-  import { CarritoLocal, VentanaComprar } from './Estatus.js';
+  import { CarritoLocal, VentanaComprar, CerrarSesion, Rol } from './Estatus.js';
   const Productos = ref([]);
   onMounted(async() => {
     const respuesta = await fetch('http://localhost:8000/productos/')
@@ -108,17 +132,71 @@
       },
       body: JSON.stringify(NuevoProducto.value)
     });
-  NuevoProducto.value = {
+    if (SubidaNuevoProducto.status === 401) {
+        CerrarSesion();
+        alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+        return;
+    }
+    NuevoProducto.value = {
+      nombre: "",
+      precio: "",
+      stock: "",
+      categoria: "",
+      codigo_barra: ""
+    };
+    const respuesta = await fetch('http://localhost:8000/productos/');
+    const datos = await respuesta.json();
+    Productos.value = datos;
+  };
+  const ProductoAct = ref({
+    id: "",
     nombre: "",
     precio: "",
     stock: "",
     categoria: "",
     codigo_barra: ""
+  });
+  const ActualizarProducto = async() => {
+    const ActProducto = await fetch(`http://localhost:8000/productos/id/${ProductoAct.value.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ProductoAct.value)
+    });
+    if (ActProducto.status === 401) {
+        CerrarSesion();
+        alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+        return;
+    }
+    ProductoAct.value = {
+      id: "",
+      nombre: "",
+      precio: "",
+      stock: "",
+      categoria: "",
+      codigo_barra: ""
+    };
+    const respuesta = await fetch("http://localhost:8000/productos/");
+    const datos = await respuesta.json();
+    Productos.value = datos;
   };
-  const respuesta = await fetch('http://localhost:8000/productos/');
-  const datos = await respuesta.json();
-  Productos.value = datos;
-};
+  const BorrarProducto = async(id_producto) => {
+    const EraseProducto = await fetch(`http://localhost:8000/productos/id/${id_producto.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    if (EraseProducto.status === 401) {
+        CerrarSesion();
+        alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+        return;
+    }
+    const respuesta = await fetch("http://localhost:8000/productos/");
+    const datos = await respuesta.json();
+    Productos.value = datos;
+  };
 </script>
 
 <style scoped>

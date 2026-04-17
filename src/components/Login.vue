@@ -48,6 +48,7 @@
 
 <script setup>
     import { onMounted, ref } from 'vue';
+    import { CerrarSesion, leerCookie } from './Estatus.js'
     const MostrarLogin = ref(true)
     const Herror = ref("")
     const SesionIniciada = ref(false)
@@ -72,6 +73,11 @@
             },
             body: JSON.stringify(NuevoUsuario.value)
             });
+        if (respuesta.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
         const datos = await respuesta.json();
         if (respuesta.ok) {
             NuevoUsuario.value = {
@@ -88,7 +94,7 @@
         } 
     }
     onMounted(() => {
-        const tokenGuardado = localStorage.getItem("token");
+        const tokenGuardado = leerCookie("token");
         if (tokenGuardado) {
             SesionIniciada.value = true
         }
@@ -101,16 +107,16 @@
         },
         body: JSON.stringify(LoginCliente.value)
     });
+    if (respuesta.status === 401) {
+        CerrarSesion();
+        alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+        return;
+    }
     const datos = await respuesta.json();
     if (respuesta.ok) {
-        localStorage.setItem(
-            "token",
-            datos.access_token
-        )
-        localStorage.setItem(
-            "id_cliente",
-            datos.id_cliente
-        )
+        document.cookie= `token=${datos.access_token}; path=/`;
+        document.cookie= `id_cliente=${datos.id_cliente}; path=/`;
+        document.cookie= `id_rol=${datos.id_rol}; path=/`;
         SesionIniciada.value = true
         emit('LoginExitoso');
         LoginCliente.value = {

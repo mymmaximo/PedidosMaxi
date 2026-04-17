@@ -26,7 +26,7 @@
 <script setup>
     import { onMounted, ref, watch } from 'vue'
     import { CarritoLocal, MostrarProducto_Cantidad, ProductoActual, ProductoCantidad, SumarProducto, RestarProducto } from "./Estatus.js"
-    import { PedidoActual } from './Estatus'
+    import { PedidoActual, CerrarSesion, leerCookie } from './Estatus'
     onMounted (() => {
         const CarritoOlvidado = localStorage.getItem('carrito_pendiente');
         if (CarritoOlvidado) {
@@ -35,8 +35,8 @@
         }
     })
     const Confirmar = (async() =>{
-        const tokenGuardado = localStorage.getItem("token");
-        const ClienteGuardado = localStorage.getItem("id_cliente");
+        const tokenGuardado = leerCookie("token");
+        const ClienteGuardado = leerCookie("id_cliente");
         if (PedidoActual.value) {
             const respuesta = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
                 method: 'POST',
@@ -72,6 +72,11 @@
                     tiempo_entrega: 0
                 })
             })
+            if (respuesta.status === 401) {
+                CerrarSesion();
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+                return;
+            }
             if (respuesta.ok) {
                 const DatosPedido = await respuesta.json ()
                 PedidoActual.value = DatosPedido.id

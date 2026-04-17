@@ -8,10 +8,10 @@
         <h1 @click="TablaActual = 'Productos'">
           Ver Productos
         </h1>
-        <h1 @click="TablaActual = 'Pedidos'">
+        <h1 @click="TablaActual = 'Pedidos'" v-if="Rol === '1'">
           Ver Pedidos
         </h1>
-        <h1 @click="TablaActual = 'Clientes'">
+        <h1 @click="TablaActual = 'Clientes'" v-if="Rol === '1'">
           Ver Clientes
         </h1>
       </div>
@@ -60,27 +60,14 @@
 </template>
 
 <script setup>
-  import { onMounted, ref } from 'vue'
-  import { CarritoLocal, LimpiarCompra } from './components/Estatus.js'
+  import { ref } from 'vue'
+  import { CarritoLocal, LimpiarCompra, Iniciado, CerrarSesion, Rol } from './components/Estatus.js'
   import Login from './components/Login.vue'
   import Pedidos from "./components/Pedidos.vue"
   import Clientes from "./components/Clientes.vue"
   import Productos from "./components/Productos.vue"
   import Carrito from "./components/Carrito.vue"
   const TablaActual = ref('Productos');
-  const Iniciado = ref(false);
-  onMounted(() => {
-        const tokenGuardado = localStorage.getItem("token");
-        if (tokenGuardado) {
-            Iniciado.value = true
-        }
-    });
-  const CerrarSesion = () =>{
-    localStorage.removeItem("token")
-    localStorage.removeItem("id_cliente")
-    LimpiarCompra()
-    Iniciado.value = false
-  }
 </script>
 
 <style scoped>

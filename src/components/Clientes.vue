@@ -23,6 +23,9 @@
               <th>
                 Direcciones
               </th>
+              <th v-if="Rol === '1'">
+                Eliminar
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -45,6 +48,11 @@
                 </td>
                 <td v-else>
                   No hay Direcciones Adjuntas
+                </td>
+                <td v-if="Rol === '1'">
+                  <button @click="BorrarCliente(i)" class="botoncentro">
+                    ❌
+                  </button>
                 </td>
               </tr>
               <tr v-if = "DireccionNow === i.id">
@@ -103,6 +111,7 @@
 
 <script setup>
   import { onMounted, ref } from 'vue';
+  import { Rol, CerrarSesion } from './Estatus';
 
   const clientes =  ref([])
   const DireccionNow = ref(null)
@@ -119,6 +128,22 @@
     const datos = await respuesta.json();
     clientes.value = datos;
   })
+  const BorrarCliente = async(id_cliente) => {
+    const EraseCliente = await fetch(`http://localhost:8000/clientes/id/${id_cliente.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    if (EraseCliente.status === 401) {
+        CerrarSesion();
+        alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+        return;
+    }
+    const respuesta = await fetch("http://localhost:8000/clientes/");
+    const datos = await respuesta.json();
+    clientes.value = datos;
+  };
 </script>
 
 <style scoped>
@@ -161,6 +186,9 @@ thead{
 .cajon_direcciones{
   padding: 0 !important; 
   background-color: #f9f4f4;
+}
+.botoncentro{
+  align-self: center;
 }
 .Texto_cliente{
   padding: 10px;

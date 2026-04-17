@@ -184,8 +184,8 @@
 
 <script setup>
     import { ref, onMounted, computed } from 'vue'
-    import { CarritoLocal, LimpiarCompra } from './Estatus.js'
-    const idUsuario = localStorage.getItem("id_cliente");
+    import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie } from './Estatus.js'
+    const idUsuario = leerCookie("id_cliente");
     const emit = defineEmits(['CarritoVacio']);
     const PantallaPagar = ref (false)
     const MetodoPago = ref ("")
@@ -210,14 +210,19 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem("token")}`
+                'Authorization': `Bearer ${leerCookie("token")}`
             },
             body: JSON.stringify({
                 id_cliente: idUsuario,
                 id_direccion: DireccionPedido,
                 metodo_pago: MetodoPago.value
             })
-        });
+        });   
+        if (SubidaNuevoPedido.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
         const datosPedido = await SubidaNuevoPedido.json();
         const Pedidoid = datosPedido.id;
         const DetallesLista = CarritoLocal.value.map(item => {
@@ -233,10 +238,15 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem("token")}`
+                'Authorization': `Bearer ${leerCookie("token")}`
             },
             body: JSON.stringify(DetallesLista)
-        });
+        });   
+        if (SubidaNuevoDetalle.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
         emit('CarritoVacio')
         LimpiarCompra()
     })

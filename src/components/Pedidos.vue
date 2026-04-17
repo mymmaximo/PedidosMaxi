@@ -110,7 +110,6 @@
 
 <script setup>
   import { onMounted, ref } from 'vue';
-
   const Pedidos = ref([]);
   const PedidoNow = ref(null)
   const PedidoCambio = (id) => {
