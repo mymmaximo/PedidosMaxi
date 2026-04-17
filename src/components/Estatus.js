@@ -17,6 +17,10 @@ export const ProductoCantidad = ref(1)
 
 export const MostrarProducto_Cantidad = ref(false)
 
+export const ActualizarCajaP = ref(false)
+
+export const ActualizarCajaC = ref(false)
+
 export const VentanaComprar = (ProductoSeleccionado) => {
         MostrarProducto_Cantidad.value = true
         ProductoActual.value = ProductoSeleccionado

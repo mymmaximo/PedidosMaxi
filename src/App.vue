@@ -37,7 +37,7 @@
             Mi Perfil
           </h1>
           <div class="desplegable_perfil">
-            <h2>
+            <h2 @click="TablaActual = 'Configuracion'">
               Configuracion
             </h2>
             <h2 @click="CerrarSesion" class="cerrar">
@@ -52,6 +52,7 @@
       <Pedidos v-if="TablaActual === 'Pedidos'"/>
       <Clientes  v-if="TablaActual === 'Clientes'"/>
       <Carrito v-if="TablaActual === 'Carrito'" @CarritoVacio="TablaActual = 'Productos'"/>
+      <Configuracion v-if="TablaActual === 'Configuracion'"/>
     </div>
   </div>
   <div v-else class="contenedor_login">
@@ -67,6 +68,7 @@
   import Clientes from "./components/Clientes.vue"
   import Productos from "./components/Productos.vue"
   import Carrito from "./components/Carrito.vue"
+  import Configuracion from './components/Configuracion.vue'
   const TablaActual = ref('Productos');
 </script>
 

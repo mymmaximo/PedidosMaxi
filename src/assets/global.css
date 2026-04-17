@@ -59,3 +59,21 @@ input{
 .cerrar{
   color: red;
 }
+.contenedor_secundario{
+  width: fit-content;
+  height: fit-content;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 10px;
+  background-color: rgb(166, 165, 231);
+}
+.contenedor{
+  width: 100%;
+  display: flex;
+}
+.Texto_producto{
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

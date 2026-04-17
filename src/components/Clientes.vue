@@ -26,6 +26,9 @@
               <th v-if="Rol === '1'">
                 Eliminar
               </th>
+              <th v-if="Rol === '1'">
+                Editar
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -51,7 +54,12 @@
                 </td>
                 <td v-if="Rol === '1'">
                   <button @click="BorrarCliente(i)" class="botoncentro">
-                    ❌
+                    ✖
+                  </button>
+                </td>
+                <td v-if="Rol === '1'">
+                  <button @click="Edicion(i)" class="botoncentro">
+                    ✎
                   </button>
                 </td>
               </tr>
@@ -106,12 +114,31 @@
         </table>
       </div>  
     </div>
+    <div class="caja_editar" v-if="ActualizarCajaC">
+        <h1>
+        Actualizar Cliente {{ ClienteAct.nombre }}
+      </h1>
+      <form @submit.prevent="ActualizarClientes" class="Texto_producto">
+        <input type="text" v-model="ClienteAct.nombre" placeholder="Nombre">
+        <input type="text" v-model="ClienteAct.apellido" placeholder="Apellido">
+        <input type="text" v-model="ClienteAct.email" placeholder="E-Mail">
+        <input type="text" v-model="ClienteAct.usuario" placeholder="Usuario">
+        <input type="text" v-model="ClienteAct.contrasena" placeholder="Contraseña">
+        <input type="text" v-model="ClienteAct.id_rol" placeholder="Rol 1.Adm 2. Trabajador 3.Cliente">
+        <button type="submit" class="Boton_Crear">
+          Actualizar
+        </button>
+        <button @click="ActualizarCajaC = false" class="Boton_Crear">
+          Cancelar
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script setup>
   import { onMounted, ref } from 'vue';
-  import { Rol, CerrarSesion } from './Estatus';
+  import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus';
 
   const clientes =  ref([])
   const DireccionNow = ref(null)
@@ -143,6 +170,49 @@
     const respuesta = await fetch("http://localhost:8000/clientes/");
     const datos = await respuesta.json();
     clientes.value = datos;
+  };
+    const ClienteAct = ref({
+        id: "",
+        nombre: "",
+        apellido: "",
+        email: "",
+        usuario: "",
+        contrasena: "",
+        id_rol: ""
+    });
+    const ActualizarClientes = async() => {
+        const ActCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteAct.value.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ClienteAct.value)
+        });
+        if (ActCliente.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
+        ClienteAct.value = {
+            id: "",
+            nombre: "",
+            apellido: "",
+            email: "",
+            usuario: "",
+            contrasena: "",
+            id_rol: ""
+        };
+        const respuesta = await fetch("http://localhost:8000/clientes/");
+        const datos = await respuesta.json();
+        Clientes.value = datos;
+    };
+    const Edicion = (cliente_fila) => {
+    ClienteAct.value.id = cliente_fila.id;
+    ClienteAct.value.nombre = cliente_fila.nombre;
+    ClienteAct.value.apellido = cliente_fila.apellido;
+    ClienteAct.value.email = cliente_fila.email;
+    ClienteAct.value.usuario = cliente_fila.usuario;
+    ActualizarCajaC.value = true;
   };
 </script>
 
