@@ -12,26 +12,22 @@
                 <input type="text" v-model="NuevoCliente.dni" placeholder="Documento">
                 <input type="text" v-model="NuevoCliente.usuario" placeholder="Usuario">
                 <input type="text" v-model="NuevoCliente.contrasena" placeholder="Contraseña">
-                <input type="text" v-model="NuevoCliente.id_rol" placeholder="Rol 1.Adm 2. Trabajador 3.Cliente">
+                <select v-model="NuevoCliente.id_rol" class="seleccion">
+                    <option value="" disabled>
+                        Selecciona un Rol...
+                    </option>
+                    <option value=1>
+                        Administrador
+                    </option>>
+                    <option value=2>
+                        Trabajador
+                    </option>
+                    <option value=3>
+                        Cliente
+                    </option>
+                </select>
                 <button type="submit" class="Boton_Crear">
                     Crear Cliente
-                </button>
-            </form>
-            </div>
-            <div class="contenedor_secundario" v-if="Rol === '1'">
-            <h1>
-                Actualizar Cliente
-            </h1>
-            <form @submit.prevent="ActualizarClientes" class="Texto_producto">
-                <input type="text" v-model="ClienteAct.id" placeholder="ID">
-                <input type="text" v-model="ClienteAct.nombre" placeholder="Nombre">
-                <input type="text" v-model="ClienteAct.apellido" placeholder="Apellido">
-                <input type="text" v-model="ClienteAct.email" placeholder="E-Mail">
-                <input type="text" v-model="ClienteAct.usuario" placeholder="Usuario">
-                <input type="text" v-model="ClienteAct.contrasena" placeholder="Contraseña">
-                <input type="text" v-model="ClienteAct.id_rol" placeholder="Rol 1.Adm 2. Trabajador 3.Cliente">
-                <button type="submit" class="Boton_Crear">
-                Actualizar
                 </button>
             </form>
             </div>
@@ -101,8 +97,6 @@
             usuario: "",
             contrasena: ""
         };
-        const respuesta = await fetch("http://localhost:8000/clientes/");
-        const datos = await respuesta.json();
     };
     const NuevoCliente = ref({
         nombre: "",
@@ -135,9 +129,6 @@
             contrasena: "",
             id_rol: ""
         };
-        const respuesta = await fetch('http://localhost:8000/clientes/');
-        const datos = await respuesta.json();
-        Clientes.value = datos;
     };
 </script>
 

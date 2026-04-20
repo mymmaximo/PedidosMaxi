@@ -1,4 +1,10 @@
 <template>
+  <input
+    @input="BusquedaProducto"
+    type="text" v-model="Busqueda" 
+    placeholder="Busqueda..."
+    class="busqueda"
+    >
   <div class="contenedor">
     <div class="contenedor_principal">
       <h1>
@@ -109,7 +115,7 @@
 </template>
 
 <script setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import Comprar from './Comprar.vue';
   import { CarritoLocal, VentanaComprar, CerrarSesion, Rol, ProductoActual, ActualizarCajaP } from './Estatus.js';
   const Edicion = (producto_fila) => {
@@ -122,6 +128,7 @@
     ActualizarCajaP.value = true;
   };
   const Productos = ref([]);
+  const Busqueda = ref("")
   onMounted(async() => {
     const respuesta = await fetch('http://localhost:8000/productos/')
     const datos = await respuesta.json();
@@ -135,6 +142,11 @@
       }
     })
     return Producto.stock - stockCarrito;
+  }
+  const BusquedaProducto = async() => {
+    const BusqProducto = await fetch(`http://localhost:8000/producto/?busqueda_producto=${Busqueda.value}`)
+    const datos = await BusqProducto.json();
+    Productos.value = datos;
   }
   const NuevoProducto = ref({
     nombre: "",
@@ -192,6 +204,7 @@
     const respuesta = await fetch("http://localhost:8000/productos/");
     const datos = await respuesta.json();
     Productos.value = datos;
+    ActualizarCajaP.value = false;
   };
   const BorrarProducto = async(id_producto) => {
     const EraseProducto = await fetch(`http://localhost:8000/productos/id/${id_producto.id}`, {
@@ -212,6 +225,10 @@
 </script>
 
 <style scoped>
+.busqueda{
+  padding: 10px;
+  width: 70%;
+}
 h1{
   color: black;
   font-size: x-large;
@@ -256,5 +273,8 @@ thead{
   border: 2px solid #000000;
   z-index: 1000;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+}
+.seleccion{
+  padding: 10px;
 }
 </style>

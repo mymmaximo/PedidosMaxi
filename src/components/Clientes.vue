@@ -1,4 +1,51 @@
 <template>
+  <select v-model="ElejirBusqueda" class="seleccion">
+    <option value="nombre">
+      Nombre
+    </option>
+    <option value="apellido">
+      Apellido
+    </option>
+    <option value="email">
+      E-Mail
+    </option>
+    <option value="dni">
+      DNI
+    </option>
+    <option value="usuario">
+      Usuario
+    </option>
+  </select>
+  <input 
+    v-if="ElejirBusqueda === 'nombre'" 
+    type="text" v-model="Busqueda" 
+    placeholder="Busqueda de Nombre..."
+    class="busqueda"
+    >
+  <input 
+    v-if="ElejirBusqueda === 'apellido'" 
+    type="text" v-model="Busqueda" 
+    placeholder="Busqueda de Apellido..."
+    class="busqueda"
+    >
+  <input 
+    v-if="ElejirBusqueda === 'email'" 
+    type="text" v-model="Busqueda" 
+    placeholder="Busqueda de E-Mail..."
+    class="busqueda"
+    >
+  <input 
+    v-if="ElejirBusqueda === 'dni'" 
+    type="text" v-model="Busqueda" 
+    placeholder="Busqueda de DNI..."
+    class="busqueda"
+    >
+  <input 
+    v-if="ElejirBusqueda === 'usuario'"
+    type="text" v-model="Busqueda" 
+    placeholder="Busqueda de Usuario..."
+    class="busqueda"
+    >
   <div class="contenedor">
     <div class="contenedor_principal">
       <h1>
@@ -32,7 +79,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for= "i in clientes" :key="i.id">
+            <template v-for= "i in ClientesFiltrados" :key="i.id">
               <tr>
                 <td>
                   {{ i.nombre }}
@@ -124,7 +171,20 @@
         <input type="text" v-model="ClienteAct.email" placeholder="E-Mail">
         <input type="text" v-model="ClienteAct.usuario" placeholder="Usuario">
         <input type="text" v-model="ClienteAct.contrasena" placeholder="Contraseña">
-        <input type="text" v-model="ClienteAct.id_rol" placeholder="Rol 1.Adm 2. Trabajador 3.Cliente">
+        <select v-model="ClienteAct.id_rol" class="seleccion">
+            <option value="" disabled>
+                Selecciona un Rol...
+            </option>
+            <option value=1>
+                Administrador
+            </option>>
+            <option value=2>
+                Trabajador
+            </option>
+            <option value=3>
+                Cliente
+            </option>
+        </select>
         <button type="submit" class="Boton_Crear">
           Actualizar
         </button>
@@ -137,10 +197,42 @@
 </template>
 
 <script setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus';
 
   const clientes =  ref([])
+  const Busqueda = ref("")
+  const ElejirBusqueda = ref("nombre");
+  const ClientesFiltrados = computed(() => {
+    return clientes.value.filter((clientes) => {
+      if (ElejirBusqueda.value === "nombre") {
+        const nombreCliente = clientes.nombre.toLowerCase();
+        const textoBusqueda = Busqueda.value.toLowerCase();
+        return nombreCliente.includes(textoBusqueda);
+      }
+      if (ElejirBusqueda.value === "apellido") {
+        const apellidoCliente = clientes.apellido.toLowerCase();
+        const textoBusqueda = Busqueda.value.toLowerCase();
+        return apellidoCliente.includes(textoBusqueda);
+      }
+      if (ElejirBusqueda.value === "email") {
+        const emailCliente = clientes.email.toLowerCase();
+        const textoBusqueda = Busqueda.value.toLowerCase();
+        return emailCliente.includes(textoBusqueda);
+      }
+      if (ElejirBusqueda.value === "dni") {
+        const dniCliente = clientes.dni.toLowerCase();
+        const textoBusqueda = Busqueda.value.toLowerCase();
+        return dniCliente.includes(textoBusqueda);
+      }
+      if (ElejirBusqueda.value === "usuario") {
+        const usuarioCliente = clientes.usuario.toLowerCase();
+        const textoBusqueda = Busqueda.value.toLowerCase();
+        return usuarioCliente.includes(textoBusqueda);
+      }
+      return true
+    });
+  });
   const DireccionNow = ref(null)
   const DireccionCambio = (id) => {
     if (DireccionNow.value === id) {
@@ -204,7 +296,8 @@
         };
         const respuesta = await fetch("http://localhost:8000/clientes/");
         const datos = await respuesta.json();
-        Clientes.value = datos;
+        clientes.value = datos;
+        ActualizarCajaC.value = false;
     };
     const Edicion = (cliente_fila) => {
     ClienteAct.value.id = cliente_fila.id;
@@ -222,6 +315,13 @@ h1{
   font-size: x-large;
   margin: 0;
   width: fit-content;
+}
+.seleccion{
+  padding: 10px;
+}
+.busqueda{
+  padding: 10px;
+  width: 70%;
 }
 .contenedor_tabla {
   border-radius: 15px;
@@ -242,6 +342,22 @@ thead{
 .caja_direcciones{
   background-color: #ffffff;
   padding: 10px 10px;
+}
+.caja_editar{
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 15px;
+  border: 2px solid #000000;
+  z-index: 1000;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 .cabeza_direcciones{
   background-color: #fccaca;
