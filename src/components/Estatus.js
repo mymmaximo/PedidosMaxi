@@ -56,4 +56,5 @@ export const CerrarSesion = () =>{
     document.cookie = "id_rol=; max-age=0; path=/";
     LimpiarCompra()
     Iniciado.value = false
+    window.location.reload();
 }

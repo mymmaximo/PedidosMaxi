@@ -1,17 +1,81 @@
 <template>
   <input
     @input="BusquedaProducto"
-    type="text" v-model="Busqueda" 
+    type="text" 
+    v-model="Busqueda" 
     placeholder="Busqueda..."
     class="busqueda"
     >
+  <button @click="VentanaFiltro = true" class="botoncentro">
+    Filtros ☰
+  </button>
+  <div class="caja_editar" v-if="VentanaFiltro === true">
+    <h2>
+      Filtros de Precio
+    </h2>
+    <div class="caja_radios">
+      <label>
+        <input 
+        type="radio" 
+        :value="3"
+        v-model="filtroRadio"
+        > 
+        Hasta $10,000
+      </label>
+      <label>
+        <input 
+        type="radio" 
+        :value="2"
+        v-model="filtroRadio"
+        > 
+        $10,000 a $50,000
+      </label>
+      <label>
+        <input 
+        type="radio" 
+        :value="1"
+        v-model="filtroRadio"
+        > 
+        Más de $50,000
+      </label>
+      <label>
+        <input 
+        type="radio" 
+        :value="0"
+        v-model="filtroRadio"
+        > 
+        Personalizado
+      </label>
+    </div>
+    <div v-if="filtroRadio === 0">
+      <input 
+      type="number"
+      v-model="mayor" 
+      placeholder="Precio Max..."
+      >
+      <input
+      type="number"
+      v-model="menor" 
+      placeholder="Precio Min..."
+      >
+    </div>
+    <button @click="AplicarFiltro" class="Boton_Crear">
+      Aplicar Filtros
+    </button>
+    <button @click="LimpiarFiltro" class="Boton_Crear" v-if="filtroAct === true">
+      Limpiar Filtro
+    </button>
+    <button @click="VentanaFiltro = false" class="Boton_Crear">
+      Cerrar
+    </button>
+  </div>
   <div class="contenedor">
     <div class="contenedor_principal">
       <h1>
         Productos
       </h1>
-      <div class="contenedor_tabla">
-        <table class="tabla">
+      <div class="contenedor_tabla" v-if="Productos.length > 0">
+        <table class="tabla" >
           <thead>
             <tr>
               <th>
@@ -76,6 +140,10 @@
           </tbody>
         </table>
       </div>  
+      <div v-else>
+        <h3>No se encontraron productos 😔</h3>
+        <p>Prueba buscando con otro termino</p>
+      </div>
     </div>
     <div class="caja_editar" v-if="ActualizarCajaP">
         <h1>
@@ -115,9 +183,22 @@
 </template>
 
 <script setup>
-  import { onMounted, ref, computed } from 'vue';
+  import { onMounted, ref } from 'vue';
   import Comprar from './Comprar.vue';
   import { CarritoLocal, VentanaComprar, CerrarSesion, Rol, ProductoActual, ActualizarCajaP } from './Estatus.js';
+  const VentanaFiltro = ref(false);
+  const filtroAct = ref(false)
+  const mayor = ref("");
+  const menor = ref("");
+  const filtroRadio = ref(0);
+  const Productos = ref([]);
+  const Busqueda = ref("")
+  const LimpiarFiltro = () => {
+    filtroRadio.value = 4
+    BusquedaProducto();
+    VentanaFiltro.value = false;
+    filtroAct.value = false
+  }
   const Edicion = (producto_fila) => {
     ProductoAct.value.id = producto_fila.id;
     ProductoAct.value.nombre = producto_fila.nombre;
@@ -127,8 +208,6 @@
     ProductoAct.value.codigo_barra = producto_fila.codigo_barra;
     ActualizarCajaP.value = true;
   };
-  const Productos = ref([]);
-  const Busqueda = ref("")
   onMounted(async() => {
     const respuesta = await fetch('http://localhost:8000/productos/')
     const datos = await respuesta.json();
@@ -144,9 +223,49 @@
     return Producto.stock - stockCarrito;
   }
   const BusquedaProducto = async() => {
-    const BusqProducto = await fetch(`http://localhost:8000/producto/?busqueda_producto=${Busqueda.value}`)
+    let url = new URL ('http://localhost:8000/producto/');
+    if (Busqueda.value !== "") {
+      url.searchParams.append('busqueda_producto', Busqueda.value);
+    }
+    let minfiltro = ""
+    let maxfiltro = ""
+    if (filtroRadio.value === 4) {
+      minfiltro = ""
+      maxfiltro = ""
+      menor.value = ""
+      mayor.value = ""
+    }
+    else if (filtroRadio.value === 3) {
+      maxfiltro = 10000
+    }
+    else if (filtroRadio.value === 2) {
+      minfiltro = 10000
+      maxfiltro = 50000
+    }
+    else if (filtroRadio.value === 1) {
+      minfiltro = 50000
+    }
+    else if (filtroRadio.value === 0) {
+      minfiltro = menor.value;
+      maxfiltro = mayor.value;
+    }
+    if (minfiltro !== "" && minfiltro != null) {
+      url.searchParams.append('precio_producto_min', minfiltro);
+      filtroAct.value = true
+    }
+    if (maxfiltro !== "" && maxfiltro != null) {
+      url.searchParams.append('precio_producto_max', maxfiltro);
+      filtroAct.value = true
+    }
+    const BusqProducto = await fetch(url)
     const datos = await BusqProducto.json();
     Productos.value = datos;
+  }
+  const AplicarFiltro = () => {
+    BusquedaProducto();
+    VentanaFiltro.value = false;
+    menor.value = "";
+    mayor.value = "";
   }
   const NuevoProducto = ref({
     nombre: "",
@@ -276,5 +395,16 @@ thead{
 }
 .seleccion{
   padding: 10px;
+}
+.caja_radios {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  width: 100%;
+}
+.caja_radios label {
+  cursor: pointer;
+  font-size: 16px;
 }
 </style>

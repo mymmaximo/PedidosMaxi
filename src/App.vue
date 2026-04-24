@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="perfil">
-          <h1 class="btn_perfil">
+          <h1 class="btn_perfil" @click="TablaActual = 'Configuracion'">
             Mi Perfil
           </h1>
           <div class="desplegable_perfil">

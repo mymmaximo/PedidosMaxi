@@ -123,6 +123,7 @@
             usuario: "",
             contrasena: ""
         };
+        window.location.reload();
     } else {
         Herror.value = "Usuario o contraseña incorrectos";
     } 

@@ -1,57 +1,51 @@
 <template>
-  <select v-model="ElejirBusqueda" class="seleccion">
-    <option value="nombre">
-      Nombre
-    </option>
-    <option value="apellido">
-      Apellido
-    </option>
-    <option value="email">
-      E-Mail
-    </option>
-    <option value="dni">
-      DNI
-    </option>
-    <option value="usuario">
-      Usuario
-    </option>
-  </select>
-  <input 
-    v-if="ElejirBusqueda === 'nombre'" 
+  <input
+    @input="BusquedaCliente"
     type="text" v-model="Busqueda" 
-    placeholder="Busqueda de Nombre..."
+    placeholder="Busqueda..."
     class="busqueda"
     >
-  <input 
-    v-if="ElejirBusqueda === 'apellido'" 
-    type="text" v-model="Busqueda" 
-    placeholder="Busqueda de Apellido..."
-    class="busqueda"
-    >
-  <input 
-    v-if="ElejirBusqueda === 'email'" 
-    type="text" v-model="Busqueda" 
-    placeholder="Busqueda de E-Mail..."
-    class="busqueda"
-    >
-  <input 
-    v-if="ElejirBusqueda === 'dni'" 
-    type="text" v-model="Busqueda" 
-    placeholder="Busqueda de DNI..."
-    class="busqueda"
-    >
-  <input 
-    v-if="ElejirBusqueda === 'usuario'"
-    type="text" v-model="Busqueda" 
-    placeholder="Busqueda de Usuario..."
-    class="busqueda"
-    >
+  <button @click="VentanaFiltro = true" class="botoncentro">
+    Filtros ☰
+  </button>
+  <div class="caja_editar" v-if="VentanaFiltro === true">
+    <h2>
+      Realizo un Pedido?
+    </h2>
+    <div class="caja_radios">
+      <label>
+        <input 
+        type="radio" 
+        :value="1"
+        v-model="filtroDirec"
+        > 
+        Realizo uno o mas Pedidos
+      </label>
+      <label>
+        <input 
+        type="radio" 
+        :value="0"
+        v-model="filtroDirec"
+        > 
+        No Realizo Pedidos
+      </label>
+    </div>
+    <button @click="AplicarFiltro" class="Boton_Crear">
+      Filtrar
+    </button>
+    <button @click="LimpiarFiltro" class="Boton_Crear" v-if="filtroAct === true">
+      Limpiar Filtro
+    </button>
+    <button @click="VentanaFiltro = false" class="Boton_Crear">
+      Cerrar
+    </button>
+  </div>
   <div class="contenedor">
     <div class="contenedor_principal">
       <h1>
         Clientes
       </h1>
-      <div class="contenedor_tabla">
+      <div class="contenedor_tabla" v-if="clientes.length > 0">
         <table class="tabla">
           <thead>
             <tr>
@@ -79,7 +73,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for= "i in ClientesFiltrados" :key="i.id">
+            <template v-for= "i in clientes" :key="i.id">
               <tr>
                 <td>
                   {{ i.nombre }}
@@ -160,6 +154,10 @@
           </tbody>
         </table>
       </div>  
+      <div v-else>
+        <h3>No se encontraran clientes 😔</h3>
+        <p>Prueba buscando con otro termino</p>
+      </div>
     </div>
     <div class="caja_editar" v-if="ActualizarCajaC">
         <h1>
@@ -197,43 +195,15 @@
 </template>
 
 <script setup>
-  import { onMounted, ref, computed } from 'vue';
+  import { onMounted, ref } from 'vue';
   import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus';
 
   const clientes =  ref([])
   const Busqueda = ref("")
-  const ElejirBusqueda = ref("nombre");
-  const ClientesFiltrados = computed(() => {
-    return clientes.value.filter((clientes) => {
-      if (ElejirBusqueda.value === "nombre") {
-        const nombreCliente = clientes.nombre.toLowerCase();
-        const textoBusqueda = Busqueda.value.toLowerCase();
-        return nombreCliente.includes(textoBusqueda);
-      }
-      if (ElejirBusqueda.value === "apellido") {
-        const apellidoCliente = clientes.apellido.toLowerCase();
-        const textoBusqueda = Busqueda.value.toLowerCase();
-        return apellidoCliente.includes(textoBusqueda);
-      }
-      if (ElejirBusqueda.value === "email") {
-        const emailCliente = clientes.email.toLowerCase();
-        const textoBusqueda = Busqueda.value.toLowerCase();
-        return emailCliente.includes(textoBusqueda);
-      }
-      if (ElejirBusqueda.value === "dni") {
-        const dniCliente = clientes.dni.toLowerCase();
-        const textoBusqueda = Busqueda.value.toLowerCase();
-        return dniCliente.includes(textoBusqueda);
-      }
-      if (ElejirBusqueda.value === "usuario") {
-        const usuarioCliente = clientes.usuario.toLowerCase();
-        const textoBusqueda = Busqueda.value.toLowerCase();
-        return usuarioCliente.includes(textoBusqueda);
-      }
-      return true
-    });
-  });
+  const filtroAct = ref(false)
   const DireccionNow = ref(null)
+  const VentanaFiltro = ref(false);
+  const filtroDirec = ref(2);
   const DireccionCambio = (id) => {
     if (DireccionNow.value === id) {
       DireccionNow.value = null
@@ -263,7 +233,7 @@
     const datos = await respuesta.json();
     clientes.value = datos;
   };
-    const ClienteAct = ref({
+  const ClienteAct = ref({
         id: "",
         nombre: "",
         apellido: "",
@@ -271,8 +241,8 @@
         usuario: "",
         contrasena: "",
         id_rol: ""
-    });
-    const ActualizarClientes = async() => {
+  });
+  const ActualizarClientes = async() => {
         const ActCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteAct.value.id}`, {
             method: 'PUT',
             headers: {
@@ -298,8 +268,8 @@
         const datos = await respuesta.json();
         clientes.value = datos;
         ActualizarCajaC.value = false;
-    };
-    const Edicion = (cliente_fila) => {
+  };
+  const Edicion = (cliente_fila) => {
     ClienteAct.value.id = cliente_fila.id;
     ClienteAct.value.nombre = cliente_fila.nombre;
     ClienteAct.value.apellido = cliente_fila.apellido;
@@ -307,6 +277,33 @@
     ClienteAct.value.usuario = cliente_fila.usuario;
     ActualizarCajaC.value = true;
   };
+  const LimpiarFiltro = () => {
+    filtroDirec.value = 2
+    BusquedaCliente();
+    VentanaFiltro.value = false;
+    filtroAct.value = false
+  }
+  const BusquedaCliente = async() => {
+    let url = new URL ('http://localhost:8000/cliente/');
+    if (Busqueda.value !== "") {
+      url.searchParams.append('busqueda_cliente', Busqueda.value);
+    }
+    if (filtroDirec.value === 1) {
+      url.searchParams.append('bool_direccion', 'true');
+      filtroAct.value = true;
+    }
+    if (filtroDirec.value === 0) {
+      url.searchParams.append('bool_direccion', 'false');
+      filtroAct.value = true;
+    }
+    const BusqCliente = await fetch(url)
+    const datos = await BusqCliente.json();
+    clientes.value = datos;
+  }
+  const AplicarFiltro = () => {
+    BusquedaCliente();
+    VentanaFiltro.value = false;
+  }
 </script>
 
 <style scoped>
@@ -336,7 +333,6 @@ thead{
 .boton_direcciones{
   cursor: pointer;
   background-color: #f8fff1;
-  border-radius: 15px;
   user-select: none;
 }
 .caja_direcciones{
