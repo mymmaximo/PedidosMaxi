@@ -10,7 +10,7 @@
   </button>
   <div class="caja_editar" v-if="VentanaFiltro === true">
     <h2>
-      Realizo un Pedido?
+      ¿Realizo un Pedido?
     </h2>
     <div class="caja_radios">
       <label>
@@ -28,6 +28,35 @@
         v-model="filtroDirec"
         > 
         No Realizo Pedidos
+      </label>
+    </div>
+     <h2>
+       ¿El Cliente esta Activo?
+     </h2>
+     <div class="caja_radios">
+      <label>
+        <input 
+        type="radio" 
+        :value="2"
+        v-model="filtroEst"
+        > 
+        Todos los Clientes
+      </label>
+      <label>
+        <input 
+        type="radio" 
+        :value="1"
+        v-model="filtroEst"
+        > 
+        Cliente Activo
+      </label>
+      <label>
+        <input 
+        type="radio" 
+        :value="0"
+        v-model="filtroEst"
+        > 
+        Cliente Eliminado
       </label>
     </div>
     <button @click="AplicarFiltro" class="Boton_Crear">
@@ -64,6 +93,9 @@
               <th>
                 Direcciones
               </th>
+              <th>
+                Activo
+              </th>
               <th v-if="Rol === '1'">
                 Eliminar
               </th>
@@ -93,9 +125,15 @@
                 <td v-else>
                   No hay Direcciones Adjuntas
                 </td>
+                <td :class="Estatuscolor(i.activo)">
+                  {{ Estatustxt(i.activo) }}
+                </td>
                 <td v-if="Rol === '1'">
-                  <button @click="BorrarCliente(i)" class="botoncentro">
+                  <button @click="Eliminacion(i)" v-if="i.activo" class="botoncentro">
                     ✖
+                  </button>
+                  <button @click="Eliminacion(i)" v-else class="botoncentro">
+                    🕊️
                   </button>
                 </td>
                 <td v-if="Rol === '1'">
@@ -105,30 +143,30 @@
                 </td>
               </tr>
               <tr v-if = "DireccionNow === i.id">
-                  <td colspan="5" class="cajon_direcciones">
+                <td colspan="8" class="cajon_direcciones">
                   <div class="caja_direcciones">
                   <table class="tabla_direcciones">
                     <thead class="cabeza_direcciones">
-                        <tr>
-                          <th>
-                            Calle
-                          </th>
-                          <th>
-                            Numero
-                          </th>
-                          <th>
-                            Barrio
-                          </th>
-                          <th>
-                            Ciudad
-                          </th>
-                          <th>
-                            Provincia
-                          </th>
-                        </tr>
+                      <tr>
+                        <th>
+                          Calle
+                        </th>
+                        <th>
+                          Numero
+                        </th>
+                        <th>
+                          Barrio
+                        </th>
+                        <th>
+                          Ciudad
+                        </th>
+                        <th>
+                          Provincia
+                        </th>
+                      </tr>
                     </thead>
                     <tbody>
-                        <tr v-for = "e in i.direcciones" :key="e.id">
+                      <tr v-for = "e in i.direcciones" :key="e.id">
                         <td>
                         {{ e.calle }}
                         </td>
@@ -160,7 +198,7 @@
       </div>
     </div>
     <div class="caja_editar" v-if="ActualizarCajaC">
-        <h1>
+      <h1>
         Actualizar Cliente {{ ClienteAct.nombre }}
       </h1>
       <form @submit.prevent="ActualizarClientes" class="Texto_producto">
@@ -171,16 +209,16 @@
         <input type="text" v-model="ClienteAct.contrasena" placeholder="Contraseña">
         <select v-model="ClienteAct.id_rol" class="seleccion">
             <option value="" disabled>
-                Selecciona un Rol...
+              Selecciona un Rol...
             </option>
             <option value=1>
-                Administrador
+              Administrador
             </option>>
             <option value=2>
-                Trabajador
+              Trabajador
             </option>
             <option value=3>
-                Cliente
+              Cliente
             </option>
         </select>
         <button type="submit" class="Boton_Crear">
@@ -190,20 +228,44 @@
           Cancelar
         </button>
       </form>
-    </div>
+      </div>
+        <div class="caja_editar" v-if="ActualizarCajaCDel">
+          <h1>
+            ¿Desear Eliminar/Reactivar el Cliente?
+          </h1>
+          <button @click="BorrarCliente()">
+            Si Confirmo
+          </button>
+          <button @click="ActualizarCajaCDel = false">
+            Cancelar
+          </button>
+      </div>
   </div>
 </template>
 
 <script setup>
   import { onMounted, ref } from 'vue';
   import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus';
-
   const clientes =  ref([])
   const Busqueda = ref("")
   const filtroAct = ref(false)
+  const filtroEst = ref(2)
   const DireccionNow = ref(null)
   const VentanaFiltro = ref(false);
   const filtroDirec = ref(2);
+  const ActualizarCajaCDel = ref(false)
+  const Eliminacion = (cliente_fila) => {
+    ClienteEli.value = cliente_fila.id;
+    ActualizarCajaCDel.value = true;
+  };
+  const Estatustxt = (id_estatus) => {
+    if (id_estatus === true) {
+      return "Activo"
+    }
+    else if (id_estatus === false) {
+      return "Eliminado"
+    }
+  }
   const DireccionCambio = (id) => {
     if (DireccionNow.value === id) {
       DireccionNow.value = null
@@ -213,34 +275,45 @@
     }
   }
   onMounted(async() => {
-    const respuesta = await fetch('http://localhost:8000/clientes/')
+    const respuesta = await fetch('http://localhost:8000/cliente/')
     const datos = await respuesta.json();
     clientes.value = datos;
   })
-  const BorrarCliente = async(id_cliente) => {
-    const EraseCliente = await fetch(`http://localhost:8000/clientes/id/${id_cliente.id}`, {
+  const BorrarCliente = async() => {
+    const EraseCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteEli.value}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       }
     });
-    if (EraseCliente.status === 401) {
+    ClienteEli.value = ""
+      if (EraseCliente.status === 401) {
         CerrarSesion();
         alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
         return;
     }
-    const respuesta = await fetch("http://localhost:8000/clientes/");
+    const respuesta = await fetch("http://localhost:8000/cliente/");
     const datos = await respuesta.json();
     clientes.value = datos;
+    ActualizarCajaCDel.value = false
   };
+  const Estatuscolor = (id_estatus) => {
+    if (id_estatus === true) {
+      return "classActivo"
+    }
+    else if (id_estatus === false) {
+      return "classEliminado"
+    }
+  }
+  const ClienteEli = ref("")
   const ClienteAct = ref({
-        id: "",
-        nombre: "",
-        apellido: "",
-        email: "",
-        usuario: "",
-        contrasena: "",
-        id_rol: ""
+    id: "",
+    nombre: "",
+    apellido: "",
+    email: "",
+    usuario: "",
+    contrasena: "",
+    id_rol: ""
   });
   const ActualizarClientes = async() => {
         const ActCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteAct.value.id}`, {
@@ -264,7 +337,7 @@
             contrasena: "",
             id_rol: ""
         };
-        const respuesta = await fetch("http://localhost:8000/clientes/");
+        const respuesta = await fetch("http://localhost:8000/cliente/");
         const datos = await respuesta.json();
         clientes.value = datos;
         ActualizarCajaC.value = false;
@@ -279,6 +352,7 @@
   };
   const LimpiarFiltro = () => {
     filtroDirec.value = 2
+    filtroEst.value = 1
     BusquedaCliente();
     VentanaFiltro.value = false;
     filtroAct.value = false
@@ -294,6 +368,14 @@
     }
     if (filtroDirec.value === 0) {
       url.searchParams.append('bool_direccion', 'false');
+      filtroAct.value = true;
+    }
+    if (filtroEst.value === 1) {
+      url.searchParams.append('bool_activo', 'true');
+      filtroAct.value = true;
+    }
+    if (filtroEst.value === 0) {
+      url.searchParams.append('bool_activo', 'false');
       filtroAct.value = true;
     }
     const BusqCliente = await fetch(url)
@@ -335,25 +417,15 @@ thead{
   background-color: #f8fff1;
   user-select: none;
 }
+.classActivo{
+  background-color: #d5f1cb;
+}
+.classEliminado{
+  background-color: #f58a72;
+}
 .caja_direcciones{
   background-color: #ffffff;
   padding: 10px 10px;
-}
-.caja_editar{
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border-radius: 15px;
-  border: 2px solid #000000;
-  z-index: 1000;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 .cabeza_direcciones{
   background-color: #fccaca;

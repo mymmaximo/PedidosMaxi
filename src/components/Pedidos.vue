@@ -84,7 +84,6 @@
     <button @click="VentanaFiltro = false" class="Boton_Crear">
       Cerrar
     </button>
-
   </div>
   <div class="contenedor_principal">
     <h1>
@@ -104,12 +103,24 @@
               Metodo de Pago
             </th>
             <th>
-              Tiempo de 
+              Tiempo de <br>
               Entrega Estimado
             </th>
             <th>
-              Tiempo de 
+              Tiempo de <br>
               Entrega
+            </th>
+            <th>
+              Fecha de <br>
+              Creacion
+            </th>
+            <th>
+              Fecha de <br>
+              Actualizacion
+            </th>
+            <th>
+              Total del <br>
+              Pedido
             </th>
             <th>
               Detalles
@@ -137,21 +148,36 @@
               <td>
                 {{ i.tiempo_entrega }}
               </td>
+              <td>
+                {{ FormatoFecha(i.created_at) }}
+              </td>
+              <td>
+                {{ FormatoFecha(i.updated_at) }}
+              </td>
+              <td>
+                ${{ i.total }}
+              </td>
               <td @click= "PedidoCambio(i.id_pedido)" class="boton_detalle">
                 Ver Detalles
               </td>
-              <td :class="Estatuscolor(i.estatus)">
+              <td @click="Edicion(i)" :class="Estatuscolor(i.estatus)">
                 {{ Estatustxt(i.estatus) }}
               </td>
             </tr>
             <tr v-if = "PedidoNow === i.id_pedido">
-              <td colspan="6" class="cajon_detalles">
+              <td colspan="10" class="cajon_detalles">
               <div class="caja_detalles">
               <table class="tabla_detalles">
                  <thead class="cabeza_detalles">
                     <tr>
                       <th>
                         Producto
+                      </th>
+                      <th>
+                        Categoria
+                      </th>
+                      <th>
+                        Codigo de Barras
                       </th>
                       <th>
                         Precio Unitario
@@ -162,12 +188,6 @@
                       <th>
                         Subtotal
                       </th>
-                      <th>
-                        Categoria
-                      </th>
-                      <th>
-                        Codigo de Barras
-                      </th>
                     </tr>
                  </thead>
                  <tbody>
@@ -176,19 +196,19 @@
                      {{ e.producto.nombre }}
                      </td>
                      <td>
+                     {{ e.producto.categoria }}
+                     </td>
+                     <td>
+                     {{ e.producto.codigo_barra }}
+                     </td>
+                     <td>
                      {{ e.precio_unitario }}
                      </td>
                      <td>
                      {{ e.cantidad }}
                      </td>
                      <td>
-                     {{ e.subtotal }}
-                     </td>
-                     <td>
-                     {{ e.producto.categoria }}
-                     </td>
-                     <td>
-                     {{ e.producto.codigo_barra }}
+                     ${{ e.subtotal }}
                      </td>
                    </tr>
                  </tbody>
@@ -204,11 +224,22 @@
       <h3>No se encontraron Pedidos 😔</h3>
       <p>Prueba buscando con otro termino</p>
     </div>
+    <div class="caja_editar" v-if="ActualizarCajaP">
+      <h1>
+        ¿Quiere Actualizar el Estado del Pedido?
+      </h1>
+      <button @click="ActualizarEstatus()">
+        Si Confirmo
+      </button>
+      <button @click="ActualizarCajaP = false">
+        Cancelar
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
-  import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
   const Busqueda = ref("")
   const Pedidos = ref([])
   const PedidoNow = ref(null)
@@ -216,6 +247,7 @@
   const filtroAct = ref(false)
   const filtroMP = ref(4)
   const filtroEst = ref(4)
+  const ActualizarCajaP = ref (false)
   const PedidoCambio = (id) => {
     if (PedidoNow.value === id) {
       PedidoNow.value = null
@@ -294,10 +326,67 @@
     const datos = await BusqPedido.json();
     Pedidos.value = datos;
   }
+  const FormatoFecha = (fechai) => {
+    if (fechai) {
+      return new Date(fechai).toLocaleDateString('es-ES')
+    }
+    else {
+      return "Pendiente"
+    }
+  }
   const AplicarFiltro = () => {
     BusquedaPedido();
     VentanaFiltro.value = false;
   }
+  const ActualizarEstatus = async() => {
+        const ActEst = await fetch(`http://localhost:8000/pedidos/id/${EstatusAct.value.id_pedido}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(EstatusAct.value)
+        });
+        if (ActEst.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
+        EstatusAct.value = {
+          id_pedido: "",
+          id_cliente: "",
+          id_direccion: "",
+          metodo_pago: "",
+          tiempo_estimado_entrega: "",
+          tiempo_entrega: "",
+          estatus: ""
+        };
+        const respuesta = await fetch("http://localhost:8000/pedidos/all/");
+        const datos = await respuesta.json();
+        Pedidos.value = datos;
+        ActualizarCajaP.value = false;
+  };
+  const EstatusAct = ref({
+        id_pedido: "",
+        id_cliente: "",
+        id_direccion: "",
+        metodo_pago: "",
+        tiempo_estimado_entrega: "",
+        tiempo_entrega: "",
+        estatus: ""
+  });
+  const Edicion = (pedido_fila) => {
+    if (pedido_fila.estatus === 1) {
+      return;
+    }
+    EstatusAct.value.id_pedido = pedido_fila.id_pedido;
+    EstatusAct.value.id_cliente = pedido_fila.id_cliente;
+    EstatusAct.value.id_direccion = pedido_fila.id_direccion;
+    EstatusAct.value.metodo_pago = pedido_fila.metodo_pago;
+    EstatusAct.value.tiempo_estimado_entrega = pedido_fila.tiempo_estimado_entrega;
+    EstatusAct.value.tiempo_entrega = pedido_fila.tiempo_entrega;
+    EstatusAct.value.estatus = pedido_fila.estatus - 1;
+    ActualizarCajaP.value = true;
+  };
 </script>
 
 <style scoped>
@@ -363,6 +452,7 @@ thead{
 }
 .classEntregado{
   background-color: #9ff7a5;
+  cursor: not-allowed !important;
 }
 .classEn_Camino{
   background-color: #f6f67a;

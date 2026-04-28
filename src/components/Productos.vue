@@ -59,6 +59,37 @@
       placeholder="Precio Min..."
       >
     </div>
+    <div v-if="Rol === '1'">
+      <h2>
+        ¿El Productos esta Activo?
+      </h2>
+      <div class="caja_radios">
+        <label>
+          <input 
+          type="radio" 
+          :value="2"
+          v-model="filtroEst"
+          > 
+          Todos los Productos
+        </label>
+        <label>
+          <input 
+          type="radio" 
+          :value="1"
+          v-model="filtroEst"
+          > 
+          Productos Activos
+        </label>
+        <label>
+          <input 
+          type="radio" 
+          :value="0"
+          v-model="filtroEst"
+          > 
+          Productos Eliminados
+        </label>
+      </div>
+    </div>
     <button @click="AplicarFiltro" class="Boton_Crear">
       Aplicar Filtros
     </button>
@@ -97,6 +128,9 @@
                 Comprar
               </th>
               <th v-if="Rol === '1'">
+                Activo
+              </th>
+              <th v-if="Rol === '1'">
                 Borrar
               </th>
               <th v-if="Rol === '1'">
@@ -126,9 +160,15 @@
                   🛒
                 </button>
               </td>
+              <td :class="Estatuscolor(i.activo)" v-if="Rol === '1'">
+                {{ Estatustxt(i.activo) }}
+              </td>
               <td v-if="Rol === '1'">
-                <button @click="BorrarProducto(i)" class="botoncentro">
+                <button @click="Eliminacion(i)" v-if="i.activo" class="botoncentro">
                   ✖
+                </button>
+                <button @click="Eliminacion(i)" v-else class="botoncentro">
+                  🕊️
                 </button>
               </td>
               <td v-if="Rol === '1'">
@@ -177,7 +217,18 @@
           Crear
         </button>
       </form>
-    </div>
+      </div>
+      <div class="caja_editar" v-if="ActualizarCajaPDel">
+        <h1>
+          ¿Desear Eliminar/Reactivar el Producto?
+        </h1>
+        <button @click="BorrarProducto()">
+          Si Confirmo
+        </button>
+        <button @click="ActualizarCajaPDel = false">
+          Cancelar
+        </button>
+      </div>
   </div>
   <Comprar/>
 </template>
@@ -192,13 +243,38 @@
   const menor = ref("");
   const filtroRadio = ref(0);
   const Productos = ref([]);
+  const ProductoEli = ref("")
   const Busqueda = ref("")
+  const filtroEst = ref(1)
+  const ActualizarCajaPDel = ref(false)
+  const Eliminacion = (producto_fila) => {
+    ProductoEli.value = producto_fila.id;
+    ActualizarCajaPDel.value = true;
+  };
   const LimpiarFiltro = () => {
     filtroRadio.value = 4
     BusquedaProducto();
     VentanaFiltro.value = false;
     filtroAct.value = false
   }
+    const BorrarProducto = async() => {
+    const EraseProducto = await fetch(`http://localhost:8000/productos/id/${ProductoEli.value}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    ProductoEli.value = ""
+      if (EraseProducto.status === 401) {
+        CerrarSesion();
+        alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+        return;
+    }
+    const respuesta = await fetch("http://localhost:8000/producto/");
+    const datos = await respuesta.json();
+    Productos.value = datos;
+    ActualizarCajaPDel.value = false
+  };
   const Edicion = (producto_fila) => {
     ProductoAct.value.id = producto_fila.id;
     ProductoAct.value.nombre = producto_fila.nombre;
@@ -209,10 +285,26 @@
     ActualizarCajaP.value = true;
   };
   onMounted(async() => {
-    const respuesta = await fetch('http://localhost:8000/productos/')
+    const respuesta = await fetch('http://localhost:8000/producto/')
     const datos = await respuesta.json();
     Productos.value = datos;
   })
+  const Estatuscolor = (id_estatus) => {
+    if (id_estatus === true) {
+      return "classActivo"
+    }
+    else if (id_estatus === false) {
+      return "classEliminado"
+    }
+  }
+  const Estatustxt = (id_estatus) => {
+    if (id_estatus === true) {
+      return "Activo"
+    }
+    else if (id_estatus === false) {
+      return "Eliminado"
+    }
+  }
   const CarritoStock = (Producto) => {
     let stockCarrito = 0
     CarritoLocal.value.forEach((itemCarrito) => {
@@ -257,6 +349,14 @@
       url.searchParams.append('precio_producto_max', maxfiltro);
       filtroAct.value = true
     }
+    if (filtroEst.value === 1) {
+      url.searchParams.append('bool_activo', 'true');
+      filtroAct.value = true;
+    }
+    if (filtroEst.value === 0) {
+      url.searchParams.append('bool_activo', 'false');
+      filtroAct.value = true;
+    }
     const BusqProducto = await fetch(url)
     const datos = await BusqProducto.json();
     Productos.value = datos;
@@ -275,7 +375,7 @@
     codigo_barra: ""
   });
   const SubirNuevoProducto = async() => {
-    const SubidaNuevoProducto = await fetch('http://localhost:8000/productos/', {
+    const SubidaNuevoProducto = await fetch('http://localhost:8000/producto/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -294,7 +394,7 @@
       categoria: "",
       codigo_barra: ""
     };
-    const respuesta = await fetch('http://localhost:8000/productos/');
+    const respuesta = await fetch('http://localhost:8000/producto/');
     const datos = await respuesta.json();
     Productos.value = datos;
   };
@@ -325,7 +425,7 @@
     Productos.value = datos;
     ActualizarCajaP.value = false;
   };
-  const BorrarProducto = async(id_producto) => {
+  const BorrarProduct = async(id_producto) => {
     const EraseProducto = await fetch(`http://localhost:8000/productos/id/${id_producto.id}`, {
       method: 'DELETE',
       headers: {
@@ -337,7 +437,7 @@
         alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
         return;
     }
-    const respuesta = await fetch("http://localhost:8000/productos/");
+    const respuesta = await fetch("http://localhost:8000/producto/");
     const datos = await respuesta.json();
     Productos.value = datos;
   };
@@ -368,6 +468,12 @@ thead{
   padding: 10px;
   border-radius: 5px;
 }
+.classActivo{
+  background-color: #d5f1cb;
+}
+.classEliminado{
+  background-color: #f58a72;
+}
 .caja_elejir_cantidad{
   padding: 15px;
   width: fit-content;
@@ -377,7 +483,8 @@ thead{
 }
 .botoncentro{
   align-self: center;
-}.caja_editar{
+}
+.caja_editar{
   padding: 30px;
   display: flex;
   flex-direction: column;

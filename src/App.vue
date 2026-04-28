@@ -40,7 +40,10 @@
             <h2 @click="TablaActual = 'Configuracion'">
               Configuracion
             </h2>
-            <h2 @click="CerrarSesion" class="cerrar">
+            <h2 @click="TablaActual = 'Mis_pedidos'">
+              Mis Pedidos
+            </h2>
+            <h2 @click="ActualizarCajaLogout = true" class="cerrar">
               Cerrar Sesion
             </h2>
           </div>
@@ -53,10 +56,22 @@
       <Clientes  v-if="TablaActual === 'Clientes'"/>
       <Carrito v-if="TablaActual === 'Carrito'" @CarritoVacio="TablaActual = 'Productos'"/>
       <Configuracion v-if="TablaActual === 'Configuracion'"/>
+      <Mis_pedidos v-if="TablaActual === 'Mis_pedidos'"/>
     </div>
   </div>
   <div v-else class="contenedor_login">
     <Login @LoginExitoso="Iniciado = true"/>
+  </div>
+  <div class="caja_editar" v-if="ActualizarCajaLogout">
+    <h2>
+      ¿Desear Cerrar Sesion?
+    </h2>
+    <button @click="CerrarSesion">
+      Si Confirmo
+    </button>
+    <button @click="ActualizarCajaLogout = false">
+      Cancelar
+    </button>
   </div>
 </template>
 
@@ -69,7 +84,9 @@
   import Productos from "./components/Productos.vue"
   import Carrito from "./components/Carrito.vue"
   import Configuracion from './components/Configuracion.vue'
+  import Mis_pedidos from './components/Mis_pedidos.vue'
   const TablaActual = ref('Productos');
+  const ActualizarCajaLogout = ref(false)
 </script>
 
 <style scoped>
@@ -94,6 +111,22 @@
   padding: 10px;
   margin: 0;
   border-bottom: 1px solid white;
+}
+.caja_editar{
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 15px;
+  border: 2px solid #000000;
+  z-index: 1000;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 .barra{
   display: flex;
@@ -134,7 +167,7 @@
   padding: 50px;
   margin: 50px auto;
   width: fit-content;
-  background-color: #daa32c;
+  background-color: #a7cdcf;
   border-radius: 20px;
 }
 </style>
