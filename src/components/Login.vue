@@ -49,9 +49,10 @@
 <script setup>
     import { onMounted, ref } from 'vue';
     import { CerrarSesion, leerCookie } from './Estatus.js'
-    const MostrarLogin = ref(true)
     const Herror = ref("")
+    const MostrarLogin = ref(true)
     const SesionIniciada = ref(false)
+    const emit = defineEmits(['LoginExitoso']);
     const LoginCliente = ref({
         usuario: "",
         contrasena: ""
@@ -64,7 +65,6 @@
         usuario: "",
         contrasena: ""
     });
-    const emit = defineEmits(['LoginExitoso']);
     const SubirNuevoUsuario = async() => {
         const respuesta = await fetch('http://localhost:8000/clientes/', {
             method: 'POST',
@@ -113,33 +113,33 @@
         return;
     }
     const datos = await respuesta.json();
-    if (respuesta.ok) {
-        document.cookie= `token=${datos.access_token}; path=/`;
-        document.cookie= `id_cliente=${datos.id_cliente}; path=/`;
-        document.cookie= `id_rol=${datos.id_rol}; path=/`;
-        SesionIniciada.value = true
-        emit('LoginExitoso');
-        LoginCliente.value = {
-            usuario: "",
-            contrasena: ""
-        };
-        window.location.reload();
-    } else {
-        Herror.value = "Usuario o contraseña incorrectos";
-    } 
-};
+        if (respuesta.ok) {
+            document.cookie= `token=${datos.access_token}; path=/`;
+            document.cookie= `id_cliente=${datos.id_cliente}; path=/`;
+            document.cookie= `id_rol=${datos.id_rol}; path=/`;
+            SesionIniciada.value = true
+            emit('LoginExitoso');
+            LoginCliente.value = {
+                usuario: "",
+                contrasena: ""
+            };
+            window.location.reload();
+        } else {
+            Herror.value = "Usuario o contraseña incorrectos";
+        } 
+    };
 </script>
 
 <style scoped>
-.Texto_Login{
-  padding: 15px;
-  width: fit-content;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-body {
-  margin: 0;
-  background-color: rgb(46, 42, 169);
-}
+    .Texto_Login{
+        padding: 15px;
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    body {
+        margin: 0;
+        background-color: rgb(46, 42, 169);
+    }
 </style>

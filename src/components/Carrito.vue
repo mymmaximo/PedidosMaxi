@@ -2,92 +2,107 @@
     <div class="contenedor" v-if="CarritoLocal.length > 0">
         <div class="contenedor_principal">
             <h1>
-                Tu Carrito
+            Tu Carrito
             </h1>
-        </div>
-        <div class="contenedor_tabla">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unit.</th>
-                        <th>Subtotal</th>
-                        <th>Borrar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in CarritoLocal" :key="index">
-                        <td>{{ item.nombre_producto }}</td>
-                        <td>
-                            <input 
-                                type="number"
-                                v-model="item.cantidad"
-                                @change="VerificarStock(item)" 
-                                class="botoncentro"
-                            >
-                        </td>
-                        <td>${{ item.precio_unitario }}</td>
-                        <td>${{ item.cantidad * item.precio_unitario }}</td>
-                        <td @click="BorrarDetalle(index)" style="cursor: pointer;" class="botoncentro">
+            <div class="contenedor_tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unit.</th>
+                            <th>Subtotal</th>
+                            <th>Borrar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in CarritoLocal" :key="index">
+                            <td>{{ item.nombre_producto }}</td>
+                            <td>
+                                <input 
+                                    type="number"
+                                    v-model="item.cantidad"
+                                    @change="VerificarStock(item)" 
+                                    class="botoncentro"
+                                >
+                            </td>
+                            <td>${{ item.precio_unitario }}</td>
+                            <td>${{ item.cantidad * item.precio_unitario }}</td>
+                            <td @click="Eliminacion(index)" style="cursor: pointer;" class="botoncentro">
                             ❌
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <h2>
-            Total: ${{ 
-                CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) 
-                }}
-        </h2>
-        <button @click="PantallaPagar = true">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h2>
+            Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
+            </h2>
+            <button @click="PantallaPagar = true">
             Completar Pedido
-        </button>
+            </button>
+        </div>
     </div>
-    <div v-if="PantallaPagar === true" class="ventana">
-        <label>
-            Método de Pago:
-        </label>
-        <select v-model="MetodoPago" class="seleccion">
-            <option value="" disabled>
-                Selecciona un método...
-            </option>
-            <option value="Tarjeta">
-                Tarjeta de Crédito / Débito
-            </option>>
-            <option value="MercadoPago">
-                Mercado Pago
-            </option>
-            <option value="Transferencia">
-                Transferencia Bancaria
-            </option>
-            <option value="Efectivo">
-                Efectivo al recibir
-            </option>
-        </select>
-        <label>
-            Dirección de Envío:
-        </label>
-            <label>
+    <Teleport to="body">
+        <div class="fondo_oscuro" v-if="ActualizarCarritoDel">
+            <div class="caja_editar">
+                <h1>
+                ¿Desear Eliminar el Detalle?
+                </h1>
+                <button @click="BorrarDetalle()">
+                Si Confirmo
+                </button>
+                <button @click="CerrarPopUp">
+                Cancelar
+                </button>
+            </div>
+        </div>
+    </Teleport>   
+    <Teleport to="body">
+        <div class="fondo_oscuro" v-if="PantallaPagar">
+            <div class="caja_editar">
+                <label>
+                Método de Pago:
+                </label>
+                <select v-model="MetodoPago" class="seleccion">
+                    <option value="" disabled>
+                    Selecciona un método...
+                    </option>
+                    <option value="Tarjeta">
+                    Tarjeta de Crédito / Débito
+                    </option>>
+                    <option value="MercadoPago">
+                    Mercado Pago
+                    </option>
+                    <option value="Transferencia">
+                    Transferencia Bancaria
+                    </option>
+                    <option value="Efectivo">
+                    Efectivo al recibir
+                    </option>
+                </select>
+                <label>
+                Dirección de Envío:
+                </label>
+                <label>
                 Tus Direcciones
-            </label>
-            <select v-model="DireccionExistente" class="seleccion">
-                <option value="">
+                </label>
+                <select v-model="DireccionExistente" class="seleccion">
+                    <option value="">
                     + Agrega una direccion
-                </option>
-                <option v-for="i in ListaDirecciones" :key="i.id_direccion" :value="i.id_direccion">
+                    </option>
+                    <option v-for="i in ListaDirecciones" :key="i.id_direccion" :value="i.id_direccion">
                     {{ i.calle }},
                     {{ i.numero }},
                     {{ i.barrio }},
                     {{ i.ciudad }},
                     {{ i.provincia }},
-                </option>
-            </select>
-            <div v-if="DireccionExistente === ''">
-                <label>
+                    </option>
+                </select>
+                <div v-if="DireccionExistente === ''">
+                    <label>
                     Nueva Direccion:
-                </label>
+                    </label>
                     <div class="Texto_producto">
                         <input type="text" v-model="NuevaDireccion.calle" placeholder="Calle" class="">
                         <input type="number" v-model="NuevaDireccion.numero" placeholder="Numero">
@@ -95,101 +110,117 @@
                         <input type="text" v-model="NuevaDireccion.ciudad" placeholder="Ciudad">
                         <select v-model="NuevaDireccion.provincia" class="seleccion">
                             <option value="" disabled>
-                                Selecciona tu Provincia...
+                            Selecciona tu Provincia...
                             </option>
                             <option value="Buenos Aires">
-                                Buenos Aires
+                            Buenos Aires
                             </option>>
                             <option value="Catamarca">
-                                Catamarca
+                            Catamarca
                             </option>
                             <option value="Chaco">
-                                Chaco
+                            Chaco
                             </option>
                             <option value="Chubut">
-                                Chubut
+                            Chubut
                             </option>
                             <option value="Córdoba">
-                                Córdoba
+                            Córdoba
                             </option>
                             <option value="Corrientes">
-                                Corrientes
+                            Corrientes
                             </option>
                             <option value="Entre Ríos">
-                                Entre Ríos
+                            Entre Ríos
                             </option>
                             <option value="Formosa">
-                                Formosa
+                            Formosa
                             </option>
                             <option value="Jujuy">
-                                Jujuy
+                            Jujuy
                             </option>
                             <option value="La Pampa">
-                                La Pampa
+                            La Pampa
                             </option>
                             <option value="La Pampa">
-                                La Pampa
+                            La Pampa
                             </option>
                             <option value="La Rioja">
-                                La Rioja
+                            La Rioja
                             </option>
                             <option value="Mendoza">
-                                Mendoza
+                            Mendoza
                             </option>
                             <option value="Misiones">
-                                Misiones
+                            Misiones
                             </option>
                             <option value="Neuquén">
-                                Neuquén
+                            Neuquén
                             </option>
                             <option value="Río Negro">
-                                Río Negro
+                            Río Negro
                             </option>
                             <option value="Salta">
-                                Salta
+                            Salta
                             </option>
                             <option value="San Juan">
-                                San Juan
+                            San Juan
                             </option>
                             <option value="San Luis">
-                                San Luis
+                            San Luis
                             </option>
                             <option value="Santa Cruz">
-                                Santa Cruz
+                            Santa Cruz
                             </option>
                             <option value="Santa Fe">
-                                Santa Fe
+                            Santa Fe
                             </option>
                             <option value="Santiago del Estero">
-                                Santiago del Estero
+                            Santiago del Estero
                             </option>
                             <option value="Tierra del Fuego">
-                                Tierra del Fuego
+                            Tierra del Fuego
                             </option>
                             <option value="Tucumán">
-                                Tucumán
+                            Tucumán
                             </option>
                         </select>
                     </div>
+                </div>
+                <button @click="PantallaPagar = false">
+                Cancelar
+                </button>
+                <button :disabled="confirboton" @click="ConfirmarCompra">
+                Finalizar Compra
+                </button>   
             </div>
-        <button @click="PantallaPagar = false">
-            Cancelar
-        </button>
-        <button :disabled="confirboton" @click="ConfirmarCompra">
-            Finalizar Compra
-        </button>   
-    </div>
+        </div>
+    </Teleport>
 </template>
 
 
 <script setup>
     import { ref, onMounted, computed } from 'vue'
     import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie } from './Estatus.js'
+    const MetodoPago = ref ("")
+    const ProductoEli = ref("")
+    const ListaDirecciones = ref([])
+    const PantallaPagar = ref (false)
+    const ActualizarCarritoDel = ref(false)
     const idUsuario = leerCookie("id_cliente");
     const emit = defineEmits(['CarritoVacio']);
-    const PantallaPagar = ref (false)
-    const MetodoPago = ref ("")
-    const ListaDirecciones = ref([])
+	const AbrirPopUp = () => {
+		ActualizarCarritoDel.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp = () => {
+		ActualizarCarritoDel.value = false
+		document.body.style.overflow = "auto";
+	}
+    const Eliminacion = (producto_fila) => {
+        ProductoEli.value = producto_fila
+        AbrirPopUp();
+    };
     const ConfirmarCompra = (async() => {
         let DireccionPedido = null;
         if (DireccionExistente.value !== "") {
@@ -275,9 +306,10 @@
         return false
     })
     const DireccionExistente = ref ("")
-    const BorrarDetalle = (index) => {
-        CarritoLocal.value.splice(index, 1);
+    const BorrarDetalle = () => {
+        CarritoLocal.value.splice(ProductoEli.value, 1)
         localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value));
+        CerrarPopUp()
         if (CarritoLocal.value.length === 0) {
             emit('CarritoVacio');
         }
@@ -299,65 +331,65 @@
 </script>
 
 <style scoped>
-.ventana{
-  width: 80%;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  position: fixed;
-  z-index: 1000;
-  top: 70%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgb(151, 149, 230);
-  border-radius: 15px;
-  border: 2px solid #000000;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-}
-.contenedor{
-  width: fit-content;
-  display: flex;
-  flex-direction: column;
-  padding: 15px;
-  gap: 15px;
-}
-h1{
-  color: black;
-  font-size: x-large;
-  margin: 0;
-  width: fit-content;
-}
-.seleccion{
-  width: fit-content;
-  padding: 5px;
-}
-.contenedor_tabla {
-  width: 100%;
-  border-radius: 15px;
-  overflow: hidden;
-  border: 2px solid #000000;
-}
-thead{
-  background-color: #bcf2f5;
-  color: #005f69;
-  text-align: center;
-}
-.Boton_Crear{
-  padding: 10px;
-  border-radius: 5px;
-}
-.Texto_producto{
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-}
-.botoncentro{
-  background-color: white;
-  color: black;
-  text-align: center;
-}
+    .ventana{
+        width: 80%;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        position: fixed;
+        z-index: 1000;
+        top: 70%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgb(151, 149, 230);
+        border-radius: 15px;
+        border: 2px solid #000000;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .contenedor{
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+        gap: 15px;
+    }
+    h1{
+        color: black;
+        font-size: x-large;
+        margin: 0;
+        width: fit-content;
+    }
+    .seleccion{
+        width: fit-content;
+        padding: 5px;
+    }
+    .contenedor_tabla {
+        width: 100%;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 2px solid #000000;
+    }
+    thead{
+        background-color: #bcf2f5;
+        color: #005f69;
+        text-align: center;
+    }
+    .Boton_Crear{
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .Texto_producto{
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+    .botoncentro{
+        background-color: white;
+        color: black;
+        text-align: center;
+    }
 </style>

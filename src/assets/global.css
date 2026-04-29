@@ -1,95 +1,110 @@
 #app {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left ;
-  color: #2c3e50;
-  margin-top: 0px;
-  scale: 1;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: left ;
+    color: #2c3e50;
+    margin-top: 0px;
+    scale: 1;
 }
 body {
-  margin: 0;
-  background-color: rgb(183, 182, 229);
+    margin: 0;
+    background-color: rgb(183, 182, 229);
 }
 table{
-  margin: 0 auto;
-  width: 100%;
-  border-collapse: collapse;
+    margin: 0 auto;
+    width: 100%;
+    border-collapse: collapse;
 }
 th {
-  padding: 5px;
-  border: 1px solid #000000;
+    padding: 5px;
+    border: 1px solid #000000;
 }
 tr {
-  border: 1px solid #000000;
+    border: 1px solid #000000;
 }
 td {
-  padding: 10px;
-  border: 1px solid #000000;
-  background-color: #FFFFFF;
+    padding: 10px;
+    border: 1px solid #000000;
+    background-color: #FFFFFF;
 }
 img {
-  width: 100px;
-  display: block;
+    width: 100px;
+    display: block;
 }
 button{  
-  padding: 10px;
-  margin: 0 auto;
-  border-radius: 10px;
-  background-color: #FFFFFF;
-  cursor: pointer;
+    padding: 10px;
+    margin: 0 auto;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    cursor: pointer;
 }
 h1{
-  font-size: small;
-  cursor: pointer;
-  padding: 10px;
-  color: white;
-  margin: 0;
+    font-size: small;
+    cursor: pointer;
+    padding: 10px;
+    color: white;
+    margin: 0;
 }
 .contenedor_principal {
-  width: fit-content;
-  border-radius: 10px;
-  overflow: hidden;
-  padding: 10px;
+    width: fit-content;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 10px;
 }
 input{
-  padding: 5px;
-  border-radius: 5px;
+    padding: 5px;
+    border-radius: 5px;
 }
 .cerrar{
-  color: red;
+    color: red;
 }
 .contenedor_secundario{
-  width: fit-content;
-  height: fit-content;
-  border-radius: 10px;
-  overflow: hidden;
-  padding: 10px;
-  background-color: rgb(166, 165, 231);
+    width: fit-content;
+    height: fit-content;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 10px;
+    background-color: rgb(166, 165, 231);
 }
 .contenedor{
-  width: 100%;
-  display: flex;
+    width: 100%;
+    display: flex;
 }
 .Texto_producto{
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
+    .contenedor_tabla{
+        margin-top: 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 2px solid #000000;
+        text-align: center;
+    }
 .caja_editar{
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border-radius: 15px;
-  border: 2px solid #000000;
-  z-index: 1000;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	align-items: center;
+	background-color: white;
+	border-radius: 15px;
+	border: 2px solid #000000;
+	box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+	overflow: hidden;
+	}
+.fondo_oscuro {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
 }
