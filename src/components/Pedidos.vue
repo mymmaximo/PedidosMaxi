@@ -109,7 +109,7 @@
 
 		<div class="contenedor_principal">
 			<h1>
-				Pedidos
+			Pedidos
 			</h1>
 			<div class="contenedor_tabla" v-if="Pedidos.length > 0">
 				<table class="tabla">
@@ -156,10 +156,16 @@
 						<template v-for= "i in Pedidos" :key="i.id">
 							<tr>
 								<td>
-								{{ i.cliente[0].nombre }} {{ i.cliente[0].apellido }}
+								{{ i.cliente[0].nombre }}
+								{{ i.cliente[0].apellido }}
 								</td>
 								<td>
-								{{ i.direccion[0].calle }} {{ i.direccion[0].numero }} - {{ i.direccion[0].ciudad }} - {{ i.direccion[0].provincia }}        
+								{{ i.direccion[0].calle }} 
+								{{ i.direccion[0].numero }}
+								 - 
+								{{ i.direccion[0].ciudad }}
+								 - 
+								{{ i.direccion[0].provincia }}        
 								</td>
 								<td>
 								{{ i.metodo_pago }}
@@ -252,33 +258,33 @@
 
 <script setup>
 	import { onMounted, ref } from 'vue';
-	const Busqueda = ref("")
 	const Pedidos = ref([])
-	const PedidoNow = ref(null)
-	const VentanaFiltro = ref(false)
-	const filtroAct = ref(false)
 	const filtroMP = ref(4)
+	const Busqueda = ref("")
 	const filtroEst = ref(4)
+	const PedidoNow = ref(null)
+	const filtroAct = ref(false)
+	const VentanaFiltro = ref(false)
 	const ActualizarCajaP = ref (false)
 	const PedidoCambio = (id) => {
 		if (PedidoNow.value === id) {
 			PedidoNow.value = null
 		}
 		else {
-		PedidoNow.value = id
+			PedidoNow.value = id
 		}
 	}
 	const Estatustxt = (id_estatus) => {
 		if (id_estatus === 1) {
-		return "Entregado"
+			return "Entregado"
 		}
 		else if (id_estatus === 2) {
-		return "En Camino"
+			return "En Camino"
 		}
 		else if (id_estatus === 3) {
-		return "Preparando"
+			return "Preparando"
 		}
-		return "indefinido";
+			return "indefinido";
 	}
 	const AbrirPopUp1 = () => {
 		ActualizarCajaP.value = true
@@ -298,15 +304,15 @@
 	}
 	const Estatuscolor = (id_estatus) => {
 		if (id_estatus === 1) {
-		return "classEntregado"
+			return "classEntregado"
 		}
 		else if (id_estatus === 2) {
-		return "classEn_Camino"
+			return "classEn_Camino"
 		}
 		else if (id_estatus === 3) {
-		return "classPreparando"
+			return "classPreparando"
 		}
-		return "classindefinido";
+			return "classindefinido";
 	}
 	onMounted(async() => {
 		const respuesta = await fetch('http://localhost:8000/pedidos/all/')
@@ -324,31 +330,31 @@
 	const BusquedaPedido = async() => {
 		let url = new URL ('http://localhost:8000/pedidos/all/');
 		if (Busqueda.value !== "") {
-		url.searchParams.append('busqueda_pedido', Busqueda.value);
+			url.searchParams.append('busqueda_pedido', Busqueda.value);
 		}
 		let mpfiltro = ""
 		if (filtroMP.value === 4) {
-		mpfiltro = ""
+			mpfiltro = ""
 		}
 		else if (filtroMP.value === 3) {
-		mpfiltro = "Tarjeta de Crédito"
+			mpfiltro = "Tarjeta de Crédito"
 		}
 		else if (filtroMP.value === 2) {
-		mpfiltro = "MercadoPago"
+			mpfiltro = "MercadoPago"
 		}
 		else if (filtroMP.value === 1) {
-		mpfiltro = "Transferencia"
+			mpfiltro = "Transferencia"
 		}
 		else if (filtroMP.value === 0) {
-		mpfiltro = "Efectivo"
+			mpfiltro = "Efectivo"
 		}
 		if (filtroMP.value !== 4&& mpfiltro !== "") {
-		url.searchParams.append('filtromp', mpfiltro);
-		filtroAct.value = true
+			url.searchParams.append('filtromp', mpfiltro);
+			filtroAct.value = true
 		}
 		if (filtroEst.value !== 4) {
-		url.searchParams.append('filtroest', filtroEst.value);
-		filtroAct.value = true
+			url.searchParams.append('filtroest', filtroEst.value);
+			filtroAct.value = true
 		}
 		const BusqPedido = await fetch(url)
 		const datos = await BusqPedido.json();
@@ -356,10 +362,10 @@
 	}
 	const FormatoFecha = (fechai) => {
 		if (fechai) {
-		return new Date(fechai).toLocaleDateString('es-ES')
+			return new Date(fechai).toLocaleDateString('es-ES')
 		}
 		else {
-		return "Pendiente"
+			return "Pendiente"
 		}
 	}
 	const AplicarFiltro = () => {
@@ -380,13 +386,13 @@
 				return;
 			}
 			EstatusAct.value = {
-			id_pedido: "",
-			id_cliente: "",
-			id_direccion: "",
-			metodo_pago: "",
-			tiempo_estimado_entrega: "",
-			tiempo_entrega: "",
-			estatus: ""
+				id_pedido: "",
+				id_cliente: "",
+				id_direccion: "",
+				metodo_pago: "",
+				tiempo_estimado_entrega: "",
+				tiempo_entrega: "",
+				estatus: ""
 			};
 			const respuesta = await fetch("http://localhost:8000/pedidos/all/");
 			const datos = await respuesta.json();
@@ -394,17 +400,17 @@
 			CerrarPopUp1();
 	};
 	const EstatusAct = ref({
-			id_pedido: "",
-			id_cliente: "",
-			id_direccion: "",
-			metodo_pago: "",
-			tiempo_estimado_entrega: "",
-			tiempo_entrega: "",
-			estatus: ""
+		id_pedido: "",
+		id_cliente: "",
+		id_direccion: "",
+		metodo_pago: "",
+		tiempo_estimado_entrega: "",
+		tiempo_entrega: "",
+		estatus: ""
 	});
 	const Edicion = (pedido_fila) => {
 		if (pedido_fila.estatus === 1) {
-		return;
+			return;
 		}
 		EstatusAct.value.id_pedido = pedido_fila.id_pedido;
 		EstatusAct.value.id_cliente = pedido_fila.id_cliente;

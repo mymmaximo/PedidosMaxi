@@ -2,47 +2,81 @@
     <div v-if="!SesionIniciada">
         <div v-if="MostrarLogin">
             <form @submit.prevent="IniciarSesionCliente" class="Texto_Login">
-                <input type="text" v-model="LoginCliente.usuario" placeholder="Usuario">
-                <input type="text" v-model="LoginCliente.contrasena" placeholder="Contraseña">
+                <input 
+                type="text" 
+                v-model="LoginCliente.usuario" 
+                placeholder="Usuario"
+                >
+                <input 
+                type="text" 
+                v-model="LoginCliente.contrasena" 
+                placeholder="Contraseña"
+                >
                 <button type="submit" class="Boton_Iniciar">
-                    Iniciar Sesion
+                Iniciar Sesion
                 </button>
                 <p v-if="Herror">
-                    {{ Herror }}
+                {{ Herror }}
                 </p>
                 <p>
-                    ¿No Tienes Cuenta?
-                    <button type="button" @click="MostrarLogin = false; Herror = ''">
-                        Registrate
-                    </button>
+                ¿No Tienes Cuenta?
+                <button type="button" @click="MostrarLogin = false; Herror = ''">
+                Registrate
+                </button>
                 </p>
             </form>
         </div>
         <div v-else>
             <form @submit.prevent="SubirNuevoUsuario" class="Texto_Login">
-                <input type="text" v-model="NuevoUsuario.usuario" placeholder="Usuario">
-                <input type="text" v-model="NuevoUsuario.contrasena" placeholder="Contraseña" maxlength="72">
-                <input type="text" v-model="NuevoUsuario.nombre" placeholder="Nombre">
-                <input type="text" v-model="NuevoUsuario.apellido" placeholder="Apellido">
-                <input type="text" v-model="NuevoUsuario.email" placeholder="E-Mail">
-                <input type="text" v-model="NuevoUsuario.dni" placeholder="DNI">
+                <input 
+                type="text" 
+                v-model="NuevoUsuario.usuario" 
+                placeholder="Usuario"
+                >
+                <input 
+                type="text" 
+                v-model="NuevoUsuario.contrasena" 
+                placeholder="Contraseña" 
+                maxlength="72"
+                >
+                <input 
+                type="text" 
+                v-model="NuevoUsuario.nombre" 
+                placeholder="Nombre"
+                >
+                <input 
+                type="text" 
+                v-model="NuevoUsuario.apellido" 
+                placeholder="Apellido"
+                >
+                <input 
+                type="text" 
+                v-model="NuevoUsuario.email" 
+                placeholder="E-Mail"
+                >
+                <input 
+                type="text" 
+                v-model="NuevoUsuario.dni" 
+                placeholder="DNI">
                 <button type="submit" class="Boton_Crear">
                 Registrarte
                 </button>
                 <p v-if="Herror">
-                    {{ Herror }}
+                {{ Herror }}
                 </p>
             </form>
             <p>
-                ¿Ya Tienes Cuenta?
-                <button type="button" @click="MostrarLogin = true; Herror = ''">
-                    Iniciar Sesion
-                </button>
+            ¿Ya Tienes Cuenta?
+            <button type="button" @click="MostrarLogin = true; Herror = ''">
+            Iniciar Sesion
+            </button>
             </p>
         </div>
     </div>
     <div v-else>
-        <h2>¡Bienvenido a la tienda! 🛒</h2>
+        <h2>
+        ¡Bienvenido a la tienda! 🛒
+        </h2>
     </div>
 </template>
 

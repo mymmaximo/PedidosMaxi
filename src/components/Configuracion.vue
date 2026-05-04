@@ -1,9 +1,9 @@
 <template>
     <button @click="AbrirPopUp2" class="botoncentro">
-        Actualizar Tu Usuario
+    Actualizar Tu Usuario
     </button>
     <button @click="AbrirPopUp1" class="botoncentro">
-        Crear Nuevo Cliente
+    Crear Nuevo Cliente
     </button>
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCNew">
@@ -12,12 +12,36 @@
                 Nuevo Cliente
                 </h1>
                 <form @submit.prevent="SubirNuevoCliente" class="Texto_producto">
-                    <input type="text" v-model="NuevoCliente.nombre" placeholder="Nombre">
-                    <input type="text" v-model="NuevoCliente.apellido" placeholder="Apellido">
-                    <input type="text" v-model="NuevoCliente.email" placeholder="E-Mail">
-                    <input type="text" v-model="NuevoCliente.dni" placeholder="Documento">
-                    <input type="text" v-model="NuevoCliente.usuario" placeholder="Usuario">
-                    <input type="text" v-model="NuevoCliente.contrasena" placeholder="Contraseña">
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.nombre" 
+                    placeholder="Nombre"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.apellido" 
+                    placeholder="Apellido"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.email" 
+                    placeholder="E-Mail"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.dni" 
+                    placeholder="Documento"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.usuario" 
+                    placeholder="Usuario"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.contrasena" 
+                    placeholder="Contraseña"
+                    >
                     <select v-model="NuevoCliente.id_rol" class="seleccion">
                         <option value="" disabled>
                         Selecciona un Rol...
@@ -49,11 +73,31 @@
                 Actualizar Usuario
                 </h1>
                 <form @submit.prevent="ActualizarUsuario" class="Texto_producto">
-                    <input type="text" v-model="UsuarioAct.nombre" placeholder="Nombre">
-                    <input type="text" v-model="UsuarioAct.apellido" placeholder="Apellido">
-                    <input type="text" v-model="UsuarioAct.email" placeholder="E-Mail">
-                    <input type="text" v-model="UsuarioAct.usuario" placeholder="Usuario">
-                    <input type="text" v-model="UsuarioAct.contrasena" placeholder="Contraseña">
+                    <input 
+                    type="text" 
+                    v-model="UsuarioAct.nombre" 
+                    placeholder="Nombre"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="UsuarioAct.apellido" 
+                    placeholder="Apellido"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="UsuarioAct.email" 
+                    placeholder="E-Mail"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="UsuarioAct.usuario" 
+                    placeholder="Usuario"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="UsuarioAct.contrasena" 
+                    placeholder="Contraseña"
+                    >
                     <button type="submit" class="Boton_Crear">
                     Actualizar Datos
                     </button>
@@ -69,8 +113,8 @@
 <script setup>
     import { onMounted, ref } from 'vue';
     import { CerrarSesion, Rol, leerCookie } from './Estatus.js';
-    const ActualizarCNew = ref(false)
     const ActualizarC = ref(false)
+    const ActualizarCNew = ref(false)
     const rolUsuarioAct = leerCookie("id_rol");
 	const AbrirPopUp1 = () => {
 		ActualizarCNew.value = true
@@ -94,7 +138,7 @@
             const respuesta = await fetch(`http://localhost:8000/cliente/?id_cliente=${idUsuarioAct}`);
             const datos = await respuesta.json();
             if (datos.length > 0) {
-            const miPerfil = datos[0];
+                const miPerfil = datos[0];
                 UsuarioAct.value.nombre = miPerfil.nombre;
                 UsuarioAct.value.apellido = miPerfil.apellido;
                 UsuarioAct.value.email = miPerfil.email;

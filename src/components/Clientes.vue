@@ -1,12 +1,12 @@
 <template>
     <input
-        @input="BusquedaCliente"
-        type="text" v-model="Busqueda" 
-        placeholder="Busqueda..."
-        class="busqueda"
-        >
+    @input="BusquedaCliente"
+    type="text" v-model="Busqueda" 
+    placeholder="Busqueda..."
+    class="busqueda"
+    >
     <button @click="AbrirPopUp1" class="botoncentro">
-        Filtros ☰
+    Filtros ☰
     </button>
 
     <Teleport to="body">
@@ -17,20 +17,20 @@
                 </h2>
                 <div class="caja_radios">
                     <label>
-                        <input 
-                        type="radio" 
-                        :value="1"
-                        v-model="filtroDirec"
-                        > 
-                        Realizo uno o mas Pedidos
+                    <input 
+                    type="radio" 
+                    :value="1"
+                    v-model="filtroDirec"
+                    > 
+                    Realizo uno o mas Pedidos
                     </label>
                     <label>
-                        <input 
-                        type="radio" 
-                        :value="0"
-                        v-model="filtroDirec"
-                        > 
-                        No Realizo Pedidos
+                    <input 
+                    type="radio" 
+                    :value="0"
+                    v-model="filtroDirec"
+                    > 
+                    No Realizo Pedidos
                     </label>
                 </div>
                 <h2>
@@ -38,28 +38,28 @@
                 </h2>
                 <div class="caja_radios">
                     <label>
-                        <input 
-                        type="radio" 
-                        :value="2"
-                        v-model="filtroEst"
-                        > 
-                        Todos los Clientes
+                    <input 
+                    type="radio" 
+                    :value="2"
+                    v-model="filtroEst"
+                    > 
+                    Todos los Clientes
                     </label>
                     <label>
-                        <input 
-                        type="radio" 
-                        :value="1"
-                        v-model="filtroEst"
-                        > 
-                        Cliente Activo
+                    <input 
+                    type="radio" 
+                    :value="1"
+                    v-model="filtroEst"
+                    > 
+                    Cliente Activo
                     </label>
                     <label>
-                        <input 
-                        type="radio" 
-                        :value="0"
-                        v-model="filtroEst"
-                        > 
-                        Cliente Eliminado
+                    <input 
+                    type="radio" 
+                    :value="0"
+                    v-model="filtroEst"
+                    > 
+                    Cliente Eliminado
                     </label>
                 </div>
                 <button @click="AplicarFiltro" class="Boton_Crear">
@@ -88,7 +88,7 @@
                 </button>
             </div>
         </div>
-    </Teleport>   
+    </Teleport>
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCajaC">
             <div class="caja_editar">
@@ -96,11 +96,31 @@
                 Actualizar Cliente {{ ClienteAct.nombre }}
                 </h1>
                 <form @submit.prevent="ActualizarClientes" class="Texto_producto">
-                    <input type="text" v-model="ClienteAct.nombre" placeholder="Nombre">
-                    <input type="text" v-model="ClienteAct.apellido" placeholder="Apellido">
-                    <input type="text" v-model="ClienteAct.email" placeholder="E-Mail">
-                    <input type="text" v-model="ClienteAct.usuario" placeholder="Usuario">
-                    <input type="text" v-model="ClienteAct.contrasena" placeholder="Contraseña">
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.nombre" 
+                    placeholder="Nombre"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.apellido" 
+                    placeholder="Apellido"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.email" 
+                    placeholder="E-Mail"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.usuario" 
+                    placeholder="Usuario"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.contrasena" 
+                    placeholder="Contraseña"
+                    >
                     <select v-model="ClienteAct.id_rol" class="seleccion">
                         <option value="" disabled>
                         Selecciona un Rol...
@@ -128,189 +148,189 @@
 
     <div class="contenedor">
         <div class="contenedor_principal">
-        <h1>
+            <h1>
             Clientes
-        </h1>
-        <div class="contenedor_tabla" v-if="clientes.length > 0">
-            <table class="tabla">
-            <thead>
-                <tr>
-                    <th>
-                    Nombre
-                    </th>
-                    <th>
-                    Apellido
-                    </th>
-                    <th>
-                    Email
-                    </th>
-                    <th>
-                    DNI
-                    </th>
-                    <th>
-                    Direcciones
-                    </th>
-                    <th>
-                    Activo
-                    </th>
-                    <th v-if="Rol === '1'">
-                    Eliminar
-                    </th>
-                    <th v-if="Rol === '1'">
-                    Editar
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <template v-for= "i in clientes" :key="i.id">
-                <tr>
-                    <td>
-                    {{ i.nombre }}
-                    </td>
-                    <td>
-                    {{ i.apellido }}        
-                    </td>
-                    <td>
-                    {{ i.email }}
-                    </td>
-                    <td>
-                    {{ i.dni }}
-                    </td>
-                    <td v-if="i.direcciones.length > 0" @click= "DireccionCambio(i.id)" class="boton_direcciones">
-                    Ver Direcciones
-                    </td>
-                    <td v-else>
-                    No hay Direcciones Adjuntas
-                    </td>
-                    <td :class="Estatuscolor(i.activo)">
-                    {{ Estatustxt(i.activo) }}
-                    </td>
-                    <td v-if="Rol === '1'">
-                    <button @click="Eliminacion(i)" v-if="i.activo" class="botoncentro">
-                    ❌
-                    </button>
-                    <button @click="Eliminacion(i)" v-else class="botoncentro">
-                    🕊️
-                    </button>
-                    </td>
-                    <td v-if="Rol === '1'">
-                    <button @click="Edicion(i)" class="botoncentro">
-                    ✎
-                    </button>
-                    </td>
-                </tr>
-                <tr v-if = "DireccionNow === i.id">
-                    <td colspan="8" class="cajon_direcciones">
-                    <div class="caja_direcciones">
-                    <table class="tabla_direcciones">
-                        <thead class="cabeza_direcciones">
+            </h1>
+            <div class="contenedor_tabla" v-if="clientes.length > 0">
+                <table class="tabla">
+                    <thead>
                         <tr>
                             <th>
-                            Calle
+                            Nombre
                             </th>
                             <th>
-                            Numero
+                            Apellido
                             </th>
                             <th>
-                            Barrio
+                            Email
                             </th>
                             <th>
-                            Ciudad
+                            DNI
                             </th>
                             <th>
-                            Provincia
+                            Direcciones
+                            </th>
+                            <th>
+                            Activo
+                            </th>
+                            <th v-if="Rol === '1'">
+                            Eliminar
+                            </th>
+                            <th v-if="Rol === '1'">
+                            Editar
                             </th>
                         </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for = "e in i.direcciones" :key="e.id">
-                            <td>
-                            {{ e.calle }}
-                            </td>
-                            <td>
-                            {{ e.numero }}
-                            </td>
-                            <td>
-                            {{ e.barrio }}
-                            </td>
-                            <td>
-                            {{ e.ciudad }}
-                            </td>
-                            <td>
-                            {{ e.provincia }}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    </div>
-                    </td>
-                    </tr>
-                </template>
-            </tbody>
-            </table>
-        </div>  
-        <div v-else>
-            <h3>No se encontraran clientes 😔</h3>
-            <p>Prueba buscando con otro termino</p>
+                    </thead>
+                    <tbody>
+                        <template v-for= "i in clientes" :key="i.id">
+                            <tr>
+                                <td>
+                                {{ i.nombre }}
+                                </td>
+                                <td>
+                                {{ i.apellido }}        
+                                </td>
+                                <td>
+                                {{ i.email }}
+                                </td>
+                                <td>
+                                {{ i.dni }}
+                                </td>
+                                <td v-if="i.direcciones.length > 0" @click= "DireccionCambio(i.id)" class="boton_direcciones">
+                                Ver Direcciones
+                                </td>
+                                <td v-else>
+                                No hay Direcciones Adjuntas
+                                </td>
+                                <td :class="Estatuscolor(i.activo)">
+                                {{ Estatustxt(i.activo) }}
+                                </td>
+                                <td v-if="Rol === '1'">
+                                <button @click="Eliminacion(i)" v-if="i.activo" class="botoncentro">
+                                ❌
+                                </button>
+                                <button @click="Eliminacion(i)" v-else class="botoncentro">
+                                🕊️
+                                </button>
+                                </td>
+                                <td v-if="Rol === '1'">
+                                <button @click="Edicion(i)" class="botoncentro">
+                                ✎
+                                </button>
+                                </td>
+                            </tr>
+                            <tr v-if = "DireccionNow === i.id">
+                                <td colspan="8" class="cajon_direcciones">
+                                    <div class="caja_direcciones">
+                                        <table class="tabla_direcciones">
+                                            <thead class="cabeza_direcciones">
+                                                <tr>
+                                                    <th>
+                                                    Calle
+                                                    </th>
+                                                    <th>
+                                                    Numero
+                                                    </th>
+                                                    <th>
+                                                    Barrio
+                                                    </th>
+                                                    <th>
+                                                    Ciudad
+                                                    </th>
+                                                    <th>
+                                                    Provincia
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for = "e in i.direcciones" :key="e.id">
+                                                    <td>
+                                                    {{ e.calle }}
+                                                    </td>
+                                                    <td>
+                                                    {{ e.numero }}
+                                                    </td>
+                                                    <td>
+                                                    {{ e.barrio }}
+                                                    </td>
+                                                    <td>
+                                                    {{ e.ciudad }}
+                                                    </td>
+                                                    <td>
+                                                    {{ e.provincia }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>  
+            <div v-else>
+                <h3>No se encontraran clientes 😔</h3>
+                <p>Prueba buscando con otro termino</p>
+            </div>
         </div>
-    </div>
     </div>
 </template>
 
 <script setup>
     import { onMounted, ref } from 'vue';
     import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus';
-    const clientes =  ref([])
-    const Busqueda = ref("")
-    const filtroAct = ref(false)
     const filtroEst = ref(2)
-    const DireccionNow = ref(null)
-    const VentanaFiltro = ref(false);
-    const filtroDirec = ref(2);
+    const Busqueda = ref("")
+    const clientes =  ref([])
+    const filtroDirec = ref(2)
     const ClienteEli = ref("")
+    const filtroAct = ref(false)
+    const DireccionNow = ref(null)
+    const VentanaFiltro = ref(false)
     const ActualizarCajaCDel = ref(false)
 	const AbrirPopUp1 = () => {
 		VentanaFiltro.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
 	const CerrarPopUp1 = () => {
 		VentanaFiltro.value = false
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
 	const AbrirPopUp2 = () => {
 		ActualizarCajaCDel.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
 	const CerrarPopUp2 = () => {
 		ActualizarCajaCDel.value = false
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
 	const AbrirPopUp3 = () => {
 		ActualizarCajaC.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
 	const CerrarPopUp3 = () => {
 		ActualizarCajaC.value = false
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
     const Eliminacion = (cliente_fila) => {
-        ClienteEli.value = cliente_fila.id;
-        AbrirPopUp2();
-    };
+        ClienteEli.value = cliente_fila.id
+        AbrirPopUp2()
+    }
     const Estatustxt = (id_estatus) => {
         if (id_estatus === true) {
-        return "Activo"
+            return "Activo"
         }
         else if (id_estatus === false) {
-        return "Eliminado"
+            return "Eliminado"
         }
     }
     const DireccionCambio = (id) => {
         if (DireccionNow.value === id) {
-        DireccionNow.value = null
+            DireccionNow.value = null
         }
         else {
-        DireccionNow.value = id
+            DireccionNow.value = id
         }
     }
     onMounted(async() => {
@@ -324,24 +344,24 @@
         headers: {
             'Content-Type': 'application/json',
         }
-        });
+        })
         ClienteEli.value = ""
         if (EraseCliente.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
+            return
         }
         const respuesta = await fetch("http://localhost:8000/cliente/");
         const datos = await respuesta.json();
-        clientes.value = datos;
+        clientes.value = datos
         CerrarPopUp2()
-    };
+    }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
-        return "classActivo"
+            return "classActivo"
         }
         else if (id_estatus === false) {
-        return "classEliminado"
+            return "classEliminado"
         }
     }
     const ClienteAct = ref({
@@ -352,7 +372,7 @@
         usuario: "",
         contrasena: "",
         id_rol: ""
-    });
+    })
     const ActualizarClientes = async() => {
             const ActCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteAct.value.id}`, {
                 method: 'PUT',
@@ -375,17 +395,17 @@
                 contrasena: "",
                 id_rol: ""
             };
-            const respuesta = await fetch("http://localhost:8000/cliente/");
-            const datos = await respuesta.json();
-            clientes.value = datos;
-            CerrarPopUp3();
-    };
+            const respuesta = await fetch("http://localhost:8000/cliente/")
+            const datos = await respuesta.json()
+            clientes.value = datos
+            CerrarPopUp3()
+    }
     const Edicion = (cliente_fila) => {
-        ClienteAct.value.id = cliente_fila.id;
-        ClienteAct.value.nombre = cliente_fila.nombre;
-        ClienteAct.value.apellido = cliente_fila.apellido;
-        ClienteAct.value.email = cliente_fila.email;
-        ClienteAct.value.usuario = cliente_fila.usuario;
+        ClienteAct.value.id = cliente_fila.id
+        ClienteAct.value.nombre = cliente_fila.nombre
+        ClienteAct.value.apellido = cliente_fila.apellido
+        ClienteAct.value.email = cliente_fila.email
+        ClienteAct.value.usuario = cliente_fila.usuario
         AbrirPopUp3()
     };
     const LimpiarFiltro = () => {
@@ -398,31 +418,31 @@
     const BusquedaCliente = async() => {
         let url = new URL ('http://localhost:8000/cliente/');
         if (Busqueda.value !== "") {
-        url.searchParams.append('busqueda_cliente', Busqueda.value);
+            url.searchParams.append('busqueda_cliente', Busqueda.value)
         }
         if (filtroDirec.value === 1) {
-        url.searchParams.append('bool_direccion', 'true');
-        filtroAct.value = true;
+            url.searchParams.append('bool_direccion', 'true')
+            filtroAct.value = true
         }
         if (filtroDirec.value === 0) {
-        url.searchParams.append('bool_direccion', 'false');
-        filtroAct.value = true;
+            url.searchParams.append('bool_direccion', 'false')
+            filtroAct.value = true
         }
         if (filtroEst.value === 1) {
-        url.searchParams.append('bool_activo', 'true');
-        filtroAct.value = true;
+            url.searchParams.append('bool_activo', 'true')
+            filtroAct.value = true
         }
         if (filtroEst.value === 0) {
-        url.searchParams.append('bool_activo', 'false');
-        filtroAct.value = true;
+            url.searchParams.append('bool_activo', 'false')
+            filtroAct.value = true
         }
         const BusqCliente = await fetch(url)
-        const datos = await BusqCliente.json();
+        const datos = await BusqCliente.json()
         clientes.value = datos;
     }
     const AplicarFiltro = () => {
-        BusquedaCliente();
-        CerrarPopUp1();
+        BusquedaCliente()
+        CerrarPopUp1()
     }
 </script>
 

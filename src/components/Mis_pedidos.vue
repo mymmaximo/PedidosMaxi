@@ -7,7 +7,7 @@
         class="busqueda"
         >
         <button @click="VentanaFiltro = true" class="botoncentro">
-            Filtros ☰
+        Filtros ☰
         </button>
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="VentanaFiltro">
@@ -17,36 +17,36 @@
                     </h2>
                     <div class="caja_radios">
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="3"
-                            v-model="filtroMP"
-                            > 
-                            Tarjeta de Credito / Debito
+                        <input 
+                        type="radio" 
+                        :value="3"
+                        v-model="filtroMP"
+                        > 
+                        Tarjeta de Credito / Debito
                         </label>
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="2"
-                            v-model="filtroMP"
-                            > 
-                            Mercado Pago
+                        <input 
+                        type="radio" 
+                        :value="2"
+                        v-model="filtroMP"
+                        > 
+                        Mercado Pago
                         </label>
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="1"
-                            v-model="filtroMP"
-                            > 
-                            Transferencia Bancaria
+                        <input 
+                        type="radio" 
+                        :value="1"
+                        v-model="filtroMP"
+                        > 
+                        Transferencia Bancaria
                         </label>
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="0"
-                            v-model="filtroMP"
-                            > 
-                            Efectivo
+                        <input 
+                        type="radio" 
+                        :value="0"
+                        v-model="filtroMP"
+                        > 
+                        Efectivo
                         </label>
                     </div>
                     <h2>
@@ -54,28 +54,28 @@
                     </h2>
                     <div class="caja_radios">
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="3"
-                            v-model="filtroEst"
-                            > 
-                            Preparando
+                        <input 
+                        type="radio" 
+                        :value="3"
+                        v-model="filtroEst"
+                        > 
+                        Preparando
                         </label>
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="2"
-                            v-model="filtroEst"
-                            > 
-                            En Camino
+                        <input 
+                        type="radio" 
+                        :value="2"
+                        v-model="filtroEst"
+                        > 
+                        En Camino
                         </label>
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="1"
-                            v-model="filtroEst"
-                            > 
-                            Entregado
+                        <input 
+                        type="radio" 
+                        :value="1"
+                        v-model="filtroEst"
+                        > 
+                        Entregado
                         </label>
                     </div>
                     <button @click="AplicarFiltro" class="Boton_Crear">
@@ -134,7 +134,12 @@
                             <template v-for= "i in Pedidos" :key="i.id && i.estatus === 3">
                                 <tr v-if="i.estatus === 3">
                                     <td>
-                                    {{ i.direccion[0].calle }} {{ i.direccion[0].numero }} - {{ i.direccion[0].ciudad }} - {{ i.direccion[0].provincia }}        
+                                    {{ i.direccion[0].calle }}
+                                    {{ i.direccion[0].numero }}
+                                     - 
+                                    {{ i.direccion[0].ciudad }}
+                                     - 
+                                    {{ i.direccion[0].provincia }}        
                                     </td>
                                     <td>
                                     {{ i.metodo_pago }}
@@ -256,7 +261,12 @@
                             <template v-for= "i in Pedidos" :key="i.id && i.estatus === 2">
                                 <tr v-if="i.estatus === 2">
                                     <td>
-                                    {{ i.direccion[0].calle }} {{ i.direccion[0].numero }} - {{ i.direccion[0].ciudad }} - {{ i.direccion[0].provincia }}        
+                                    {{ i.direccion[0].calle }} 
+                                    {{ i.direccion[0].numero }}
+                                     - 
+                                    {{ i.direccion[0].ciudad }}
+                                     - 
+                                    {{ i.direccion[0].provincia }}        
                                     </td>
                                     <td>
                                     {{ i.metodo_pago }}
@@ -477,10 +487,10 @@
     const idUsuario = leerCookie("id_cliente");
     const PedidoCambio = (id) => {
         if (PedidoNow.value === id) {
-        PedidoNow.value = null
+            PedidoNow.value = null
         }
         else {
-        PedidoNow.value = id
+            PedidoNow.value = id
         }
     }
     onMounted(async() => {

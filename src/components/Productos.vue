@@ -1,17 +1,17 @@
 <template>
     <div>
         <input
-            @input="BusquedaProducto"
-            type="text" 
-            v-model="Busqueda" 
-            placeholder="Busqueda..."
-            class="busqueda"
-            >
+        @input="BusquedaProducto"
+        type="text" 
+        v-model="Busqueda" 
+        placeholder="Busqueda..."
+        class="busqueda"
+        >
         <button @click="AbrirPopUp1" class="botoncentro">
-            Filtros ☰
+        Filtros ☰
         </button>
         <button @click="AbrirPopUp4" class="botoncentro" v-if="Rol === '1'">
-            Nuevo Producto +
+        Nuevo Producto +
         </button>
 
         <Teleport to="body">
@@ -22,36 +22,36 @@
                     </h2>
                     <div class="caja_radios">
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="3"
-                            v-model="filtroRadio"
-                            > 
-                            Hasta $10,000
+                        <input 
+                        type="radio" 
+                        :value="3"
+                        v-model="filtroRadio"
+                        > 
+                        Hasta $10,000
                         </label>
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="2"
-                            v-model="filtroRadio"
-                            > 
-                            $10,000 a $50,000
+                        <input 
+                        type="radio" 
+                        :value="2"
+                        v-model="filtroRadio"
+                        > 
+                        $10,000 a $50,000
                         </label>
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="1"
-                            v-model="filtroRadio"
-                            > 
-                            Más de $50,000
+                        <input 
+                        type="radio" 
+                        :value="1"
+                        v-model="filtroRadio"
+                        > 
+                        Más de $50,000
                         </label>
                         <label>
-                            <input 
-                            type="radio" 
-                            :value="0"
-                            v-model="filtroRadio"
-                            > 
-                            Personalizado
+                        <input 
+                        type="radio" 
+                        :value="0"
+                        v-model="filtroRadio"
+                        > 
+                        Personalizado
                         </label>
                     </div>
                     <div v-if="filtroRadio === 0">
@@ -68,32 +68,32 @@
                     </div>
                     <div v-if="Rol === '1'">
                         <h2>
-                            ¿El Productos esta Activo?
+                        ¿El Productos esta Activo?
                         </h2>
                         <div class="caja_radios">
                             <label>
-                                <input 
-                                type="radio" 
-                                :value="2"
-                                v-model="filtroEst"
-                                > 
-                                Todos los Productos
+                            <input 
+                            type="radio" 
+                            :value="2"
+                            v-model="filtroEst"
+                            > 
+                            Todos los Productos
                             </label>
                             <label>
-                                <input 
-                                type="radio" 
-                                :value="1"
-                                v-model="filtroEst"
-                                > 
-                                Productos Activos
+                            <input 
+                            type="radio" 
+                            :value="1"
+                            v-model="filtroEst"
+                            > 
+                            Productos Activos
                             </label>
                             <label>
-                                <input 
-                                type="radio" 
-                                :value="0"
-                                v-model="filtroEst"
-                                > 
-                                Productos Eliminados
+                            <input 
+                            type="radio" 
+                            :value="0"
+                            v-model="filtroEst"
+                            > 
+                            Productos Eliminados
                             </label>
                         </div>
                     </div>
@@ -116,11 +116,31 @@
                     Actualizar Producto {{ ProductoAct.nombre }}
                     </h1>
                     <form @submit.prevent="ActualizarProducto" class="Texto_producto">
-                        <input type="text" v-model="ProductoAct.nombre" placeholder="Nombre">
-                        <input type="text" v-model="ProductoAct.precio" placeholder="Precio">
-                        <input type="text" v-model="ProductoAct.stock" placeholder="Stock">
-                        <input type="text" v-model="ProductoAct.categoria" placeholder="Categoria">
-                        <input type="text" v-model="ProductoAct.codigo_barra" placeholder="Codigo de Barras">
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.nombre" 
+                        placeholder="Nombre"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.precio" 
+                        placeholder="Precio"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.stock" 
+                        placeholder="Stock"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.categoria"
+                        placeholder="Categoria"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.codigo_barra" 
+                        placeholder="Codigo de Barras"
+                        >
                         <button type="submit" class="Boton_Crear">
                         Actualizar
                         </button>
@@ -150,23 +170,26 @@
             <div class="fondo_oscuro" v-if="VentanaCompra">
                 <div class="caja_editar">
                     <h2>
-                        {{ ProductoActual.nombre }}
+                    {{ ProductoActual.nombre }}
                     </h2>
                     <div>
-                        <input type="number" v-model="ProductoCantidad">
+                        <input 
+                        type="number" 
+                        v-model="ProductoCantidad"
+                        >
                         <button @click="SumarProducto(ProductoActual)">
-                            +
+                        +
                         </button>
                         <button @click="RestarProducto(ProductoActual)">
-                            -
+                        -
                         </button>
                     </div>
                     <div>
                         <button @click="SumarCarrito">
-                            Agregar al Carrito
+                        Agregar al Carrito
                         </button>
                         <button @click="CerrarPopUp5">
-                            Cancelar
+                        Cancelar
                         </button>
                     </div>
                 </div>
@@ -179,12 +202,31 @@
                     Nuevo Producto
                     </h1>
                     <form @submit.prevent="SubirNuevoProducto" class="Texto_producto">
-                        <input type="text" v-model="NuevoProducto.nombre" placeholder="Nombre">
-                        <input type="text" v-model="NuevoProducto.precio" placeholder="Precio">
-                        <input type="text" v-model="NuevoProducto.stock" placeholder="Stock">
-                        <input type="text" v-model="NuevoProducto.categoria" placeholder="Categoria">
-                        <input type="text" v-model="NuevoProducto.codigo_barra" placeholder="Codigo de Barras">
-                        
+                        <input 
+                        type="text" 
+                        v-model="NuevoProducto.nombre" 
+                        placeholder="Nombre"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="NuevoProducto.precio" 
+                        placeholder="Precio"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="NuevoProducto.stock" 
+                        placeholder="Stock"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="NuevoProducto.categoria" 
+                        placeholder="Categoria"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="NuevoProducto.codigo_barra" 
+                        placeholder="Codigo de Barras"
+                        >
                     </form>
                     <button type="submit" class="Boton_Crear">
                     Crear
@@ -199,81 +241,81 @@
         <div class="contenedor">
             <div class="contenedor_principal">
                 <h1>
-                    Productos
+                Productos
                 </h1>
                 <div class="contenedor_tabla" v-if="Productos.length > 0">
                     <table class="tabla" >
-                    <thead>
-                        <tr>
-                        <th>
-                            Nombre
-                        </th>
-                        <th>
-                            Categoria
-                        </th>
-                        <th>
-                            Stock
-                        </th>
-                        <th>
-                            Precio
-                        </th>
-                        <th>
-                            Codigo de Barras
-                        </th>
-                        <th>
-                            Comprar
-                        </th>
-                        <th v-if="Rol === '1'">
-                            Activo
-                        </th>
-                        <th v-if="Rol === '1'">
-                            Borrar
-                        </th>
-                        <th v-if="Rol === '1'">
-                            Editar
-                        </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for= "i in Productos" :key="i.id">
-                        <td>
-                            {{ i.nombre }}
-                        </td>
-                        <td>
-                            {{ i.categoria }}        
-                        </td>
-                        <td>
-                            {{ i.stock }}
-                        </td>
-                        <td>
-                            {{ i.precio }}
-                        </td>
-                        <td>
-                            {{ i.codigo_barra }}
-                        </td>
-                        <td>
-                            <button @click="Compracion(i)" :disabled="CarritoStock(i) === 0" class="botoncentro">
-                            🛒
-                            </button>
-                        </td>
-                        <td :class="Estatuscolor(i.activo)" v-if="Rol === '1'">
-                            {{ Estatustxt(i.activo) }}
-                        </td>
-                        <td v-if="Rol === '1'">
-                            <button @click="Eliminacion(i)" v-if="i.activo" class="botoncentro">
-                            ❌
-                            </button>
-                            <button @click="Eliminacion(i)" v-else class="botoncentro">
-                            🕊️
-                            </button>
-                        </td>
-                        <td v-if="Rol === '1'">
-                            <button @click="Edicion(i)" class="botoncentro">
-                            ✎
-                            </button>
-                        </td>
-                        </tr>
-                    </tbody>
+                        <thead>
+                            <tr>
+                                <th>
+                                Nombre
+                                </th>
+                                <th>
+                                Categoria
+                                </th>
+                                <th>
+                                Stock
+                                </th>
+                                <th>
+                                Precio
+                                </th>
+                                <th>
+                                Codigo de Barras
+                                </th>
+                                <th>
+                                Comprar
+                                </th>
+                                <th v-if="Rol === '1'">
+                                Activo
+                                </th>
+                                <th v-if="Rol === '1'">
+                                Borrar
+                                </th>
+                                <th v-if="Rol === '1'">
+                                Editar
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for= "i in Productos" :key="i.id">
+                                <td>
+                                {{ i.nombre }}
+                                </td>
+                                <td>
+                                {{ i.categoria }}        
+                                </td>
+                                <td>
+                                {{ i.stock }}
+                                </td>
+                                <td>
+                                {{ i.precio }}
+                                </td>
+                                <td>
+                                {{ i.codigo_barra }}
+                                </td>
+                                <td>
+                                <button @click="Compracion(i)" :disabled="CarritoStock(i) === 0" class="botoncentro">
+                                🛒
+                                </button>
+                                </td>
+                                <td :class="Estatuscolor(i.activo)" v-if="Rol === '1'">
+                                {{ Estatustxt(i.activo) }}
+                                </td>
+                                <td v-if="Rol === '1'">
+                                <button @click="Eliminacion(i)" v-if="i.activo" class="botoncentro">
+                                ❌
+                                </button>
+                                <button @click="Eliminacion(i)" v-else class="botoncentro">
+                                🕊️
+                                </button>
+                                </td>
+                                <td v-if="Rol === '1'">
+                                <button @click="Edicion(i)" class="botoncentro">
+                                ✎
+                                </button>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>  
                 <div v-else>
@@ -286,28 +328,20 @@
 </template>
 
 <script setup>
-    import { onMounted, ref, watch } from 'vue';
-    import { 
-        CarritoLocal,
-        CerrarSesion, 
-        Rol, 
-        ActualizarCajaP, 
-        ProductoActual, 
-        ProductoCantidad,
-        PedidoActual
-    } from './Estatus.js';
-    const VentanaFiltro = ref(false);
-    const VentanaNuevo = ref(false);
-    const VentanaCompra = ref(false);
-    const filtroAct = ref(false)
-    const mayor = ref("");
-    const menor = ref("");
-    const filtroRadio = ref(0);
-    const Productos = ref([]);
-    const ProductoEli = ref("")
-    const Busqueda = ref("")
-    const filtroEst = ref(1)
+    import { onMounted, ref, watch } from 'vue'
+    import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
     const ActualizarCajaPDel = ref(false)
+    const VentanaCompra = ref(false)
+    const VentanaFiltro = ref(false)
+    const VentanaNuevo = ref(false)
+    const filtroAct = ref(false)
+    const ProductoEli = ref("")
+    const filtroRadio = ref(0)
+    const Productos = ref([])
+    const filtroEst = ref(1)
+    const Busqueda = ref("")
+    const mayor = ref("")
+    const menor = ref("")
 	const AbrirPopUp1 = () => {
 		VentanaFiltro.value = true
 		document.body.style.overflow = "hidden";
@@ -354,7 +388,7 @@
         VentanaComprar(producto_fila)
         AbrirPopUp5()
     };
-    const Confirmar = (async() =>{
+    const Confirmar = (async() => {
         const tokenGuardado = leerCookie("token");
         const ClienteGuardado = leerCookie("id_cliente");
         if (PedidoActual.value) {
@@ -374,8 +408,8 @@
                 CerrarPopUp5()
                 console.log ("funciono")
             } else {
-            const error = await respuesta.text()
-            console.error("Error al agregar detalle:", error)
+                const error = await respuesta.text()
+                console.error("Error al agregar detalle:", error)
             }
         } else {
             const respuesta = await fetch('http://localhost:8000/pedidos/', {
@@ -406,8 +440,8 @@
                 )
                 Confirmar() 
             } else {
-            const error = await respuesta.text()
-            console.error("Error al agregar Pedido:", error)
+                const error = await respuesta.text()
+                console.error("Error al agregar Pedido:", error)
             }
         }
     })
@@ -450,7 +484,8 @@
             'carrito_pendiente',
             JSON.stringify(
                 CarritoLocal.value
-        ));
+            )
+        )
         CerrarPopUp5()    
     }
     // revisar para optimizar
@@ -483,11 +518,11 @@
     }
     const BorrarProducto = async() => {
         const EraseProducto = await fetch(`http://localhost:8000/productos/id/${ProductoEli.value}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-        });
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
         ProductoEli.value = ""
         if (EraseProducto.status === 401) {
             CerrarSesion();
@@ -498,7 +533,7 @@
         const datos = await respuesta.json();
         Productos.value = datos;
         CerrarPopUp3()
-    };
+    }
     const Edicion = (producto_fila) => {
         ProductoAct.value.id = producto_fila.id;
         ProductoAct.value.nombre = producto_fila.nombre;
@@ -520,26 +555,26 @@
     })
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
-        return "classActivo"
+            return "classActivo"
         }
         else if (id_estatus === false) {
-        return "classEliminado"
+            return "classEliminado"
         }
     }
     const Estatustxt = (id_estatus) => {
         if (id_estatus === true) {
-        return "Activo"
+            return "Activo"
         }
         else if (id_estatus === false) {
-        return "Eliminado"
+            return "Eliminado"
         }
     }
     const CarritoStock = (Producto) => {
         let stockCarrito = 0
         CarritoLocal.value.forEach((itemCarrito) => {
-        if (itemCarrito.id_producto === Producto.id) {
-            stockCarrito = stockCarrito + itemCarrito.cantidad
-        }
+            if (itemCarrito.id_producto === Producto.id) {
+                stockCarrito = stockCarrito + itemCarrito.cantidad
+            }
         })
         return Producto.stock - stockCarrito;
     }
@@ -610,23 +645,23 @@
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(NuevoProducto.value)
-        });
+        })
         if (SubidaNuevoProducto.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;
         }
         NuevoProducto.value = {
-        nombre: "",
-        precio: "",
-        stock: "",
-        categoria: "",
-        codigo_barra: ""
+            nombre: "",
+            precio: "",
+            stock: "",
+            categoria: "",
+            codigo_barra: ""
         };
         const respuesta = await fetch('http://localhost:8000/producto/');
         const datos = await respuesta.json();
         Productos.value = datos;
-    };
+    }
     const ProductoAct = ref({
         id: "",
         nombre: "",
@@ -634,7 +669,7 @@
         stock: "",
         categoria: "",
         codigo_barra: ""
-    });
+    })
     const ActualizarProducto = async() => {
         const ActProducto = await fetch(`http://localhost:8000/productos/id/${ProductoAct.value.id}`, {
         method: 'PUT',
@@ -642,7 +677,7 @@
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(ProductoAct.value)
-        });
+        })
         if (ActProducto.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
@@ -652,7 +687,7 @@
         const datos = await respuesta.json();
         Productos.value = datos;
         CerrarPopUp2()
-    };
+    }
 </script>
 
 <style scoped>

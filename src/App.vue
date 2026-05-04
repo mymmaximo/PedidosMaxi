@@ -34,7 +34,7 @@
                 </div>
                 <div class="perfil">
                     <h1 class="btn_perfil" @click="TablaActual = 'Configuracion'">
-                        Mi Perfil
+                    Mi Perfil
                     </h1>
                     <div class="desplegable_perfil">
                         <h2 @click="TablaActual = 'Configuracion'">
@@ -104,9 +104,9 @@
     import Carrito from "./components/Carrito.vue"
     import Configuracion from './components/Configuracion.vue'
     import Mis_pedidos from './components/Mis_pedidos.vue'
+    const BorrarCarrito = ref(false)
     const TablaActual = ref('Productos');
     const ActualizarCajaLogout = ref(false)
-    const BorrarCarrito = ref(false)
 	const AbrirPopUp1 = () => {
 		ActualizarCajaLogout.value = true
 		document.body.style.overflow = "hidden";

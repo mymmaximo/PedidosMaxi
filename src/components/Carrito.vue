@@ -8,26 +8,42 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unit.</th>
-                            <th>Subtotal</th>
-                            <th>Borrar</th>
+                            <th>
+                            Producto
+                            </th>
+                            <th>
+                            Cantidad
+                            </th>
+                            <th>
+                            Precio Unit.
+                            </th>
+                            <th>
+                            Subtotal
+                            </th>
+                            <th>
+                            Borrar
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in CarritoLocal" :key="index">
-                            <td>{{ item.nombre_producto }}</td>
                             <td>
-                                <input 
-                                    type="number"
-                                    v-model="item.cantidad"
-                                    @change="VerificarStock(item)" 
-                                    class="botoncentro"
-                                >
+                            {{ item.nombre_producto }}
                             </td>
-                            <td>${{ item.precio_unitario }}</td>
-                            <td>${{ item.cantidad * item.precio_unitario }}</td>
+                            <td>
+                            <input 
+                            type="number"
+                            v-model="item.cantidad"
+                            @change="VerificarStock(item)" 
+                            class="botoncentro"
+                            >
+                            </td>
+                            <td>
+                            ${{ item.precio_unitario }}
+                            </td>
+                            <td>
+                            ${{ item.cantidad * item.precio_unitario }}
+                            </td>
                             <td @click="Eliminacion(index)" style="cursor: pointer;" class="botoncentro">
                             ❌
                             </td>
@@ -104,10 +120,26 @@
                     Nueva Direccion:
                     </label>
                     <div class="Texto_producto">
-                        <input type="text" v-model="NuevaDireccion.calle" placeholder="Calle" class="">
-                        <input type="number" v-model="NuevaDireccion.numero" placeholder="Numero">
-                        <input type="text" v-model="NuevaDireccion.barrio" placeholder="Barrio">
-                        <input type="text" v-model="NuevaDireccion.ciudad" placeholder="Ciudad">
+                        <input 
+                        type="text" 
+                        v-model="NuevaDireccion.calle" 
+                        placeholder="Calle" class=""
+                        >
+                        <input 
+                        type="number" 
+                        v-model="NuevaDireccion.numero" 
+                        placeholder="Numero"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="NuevaDireccion.barrio" 
+                        placeholder="Barrio"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="NuevaDireccion.ciudad" 
+                        placeholder="Ciudad"
+                        >
                         <select v-model="NuevaDireccion.provincia" class="seleccion">
                             <option value="" disabled>
                             Selecciona tu Provincia...
@@ -206,23 +238,24 @@
     const ProductoEli = ref("")
     const ListaDirecciones = ref([])
     const PantallaPagar = ref (false)
+    const DireccionExistente = ref ("")
     const ActualizarCarritoDel = ref(false)
-    const idUsuario = leerCookie("id_cliente");
-    const emit = defineEmits(['CarritoVacio']);
+    const idUsuario = leerCookie("id_cliente")
+    const emit = defineEmits(['CarritoVacio'])
 	const AbrirPopUp = () => {
 		ActualizarCarritoDel.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
 	const CerrarPopUp = () => {
 		ActualizarCarritoDel.value = false
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
     const Eliminacion = (producto_fila) => {
         ProductoEli.value = producto_fila
-        AbrirPopUp();
-    };
+        AbrirPopUp()
+    }
     const ConfirmarCompra = (async() => {
-        let DireccionPedido = null;
+        let DireccionPedido = null
         if (DireccionExistente.value !== "") {
             DireccionPedido = DireccionExistente.value
         } else {
@@ -262,7 +295,6 @@
                 id_producto: item.id_producto,
                 cantidad: item.cantidad,
                 precio_unitario: item.precio_unitario
-
             }
         })
         const SubidaNuevoDetalle = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
@@ -272,14 +304,14 @@
                 'Authorization': `Bearer ${leerCookie("token")}`
             },
             body: JSON.stringify(DetallesLista)
-        });   
-        if (SubidaNuevoDetalle.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
-        }
-        emit('CarritoVacio')
-        LimpiarCompra()
+            })   
+            if (SubidaNuevoDetalle.status === 401) {
+                CerrarSesion();
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+                return;
+            }
+            emit('CarritoVacio')
+            LimpiarCompra()
     })
     const NuevaDireccion = ref ({
         calle: "",
@@ -301,11 +333,9 @@
                 NuevaDireccion.value.provincia === ""
             ) {
                 return true
-            }
-        }
+        }}
         return false
     })
-    const DireccionExistente = ref ("")
     const BorrarDetalle = () => {
         CarritoLocal.value.splice(ProductoEli.value, 1)
         localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value));
@@ -315,7 +345,7 @@
         }
     }
     const VerificarStock = (item) => {
-        if (item.cantidad < 1){
+        if (item.cantidad < 1) {
             item.cantidad = 1
         }
         if (item.cantidad > item.stock_producto) {

@@ -10,9 +10,9 @@ export const ActualizarCajaP = ref(false)
 
 export const ActualizarCajaC = ref(false)
 
-export const Iniciado = ref(leerCookie("token") !== null)
-
 export const Rol = ref(leerCookie("id_rol"))
+
+export const Iniciado = ref(leerCookie("token") !== null)
 
 export const PedidoGuardado = parseInt(localStorage.getItem("pedido"))
 
@@ -24,10 +24,10 @@ export const LimpiarCompra = () =>{
 }
 
 export const leerCookie = (nombre) => {
-  const valor = `; ${document.cookie}`;
-  const partes = valor.split(`; ${nombre}=`);
-  if (partes.length === 2) return partes.pop().split(';').shift();
-  return null;
+    const valor = `; ${document.cookie}`;
+    const partes = valor.split(`; ${nombre}=`);
+    if (partes.length === 2) return partes.pop().split(';').shift();
+    return null;
 }
 
 export const CerrarSesion = () =>{
