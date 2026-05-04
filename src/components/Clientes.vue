@@ -196,7 +196,10 @@
                                 <td>
                                 {{ i.dni }}
                                 </td>
-                                <td v-if="i.direcciones.length > 0" @click= "DireccionCambio(i.id)" class="boton_direcciones">
+                                <td v-if="i.direcciones.length > 0 && DireccionNow === i.id" @click= "DireccionCambio(i.id)" class="boton_ocultar_detalle">
+                                Ocultar Direcciones
+                                </td>
+                                <td v-else-if="i.direcciones.length > 0 && DireccionNow !== i.id" @click= "DireccionCambio(i.id)" class="boton_detalle">
                                 Ver Direcciones
                                 </td>
                                 <td v-else>
@@ -215,7 +218,7 @@
                                 </td>
                                 <td v-if="Rol === '1'">
                                 <button @click="Edicion(i)" class="botoncentro">
-                                ✎
+                                ✏️
                                 </button>
                                 </td>
                             </tr>

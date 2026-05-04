@@ -185,7 +185,10 @@
 								<td>
 								${{ i.total }}
 								</td>
-								<td @click= "PedidoCambio(i.id_pedido)" class="boton_detalle">
+								<td v-if = "PedidoNow === i.id_pedido" @click= "PedidoCambio(i.id_pedido)" class="boton_ocultar_detalle">
+								Ocultar Detalles
+								</td>
+								<td v-else @click= "PedidoCambio(i.id_pedido)" class="boton_detalle">
 								Ver Detalles
 								</td>
 								<td @click="Edicion(i)" :class="Estatuscolor(i.estatus)">
@@ -467,18 +470,5 @@
 	.cajon_detalles{
 		padding: 0 !important; 
 		background-color: #f4f9f4;
-	}
-	.classEntregado{
-		background-color: #9ff7a5;
-		cursor: not-allowed !important;
-	}
-	.classEn_Camino{
-		background-color: #f6f67a;
-	}
-	.classPreparando{
-		background-color: #f5ab72;
-	}
-	.classindefinido{
-		background-color: #ffffff;
 	}
 </style>

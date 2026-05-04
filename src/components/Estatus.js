@@ -1,33 +1,15 @@
 import { ref } from 'vue'
 
-export const CarritoLocal = ref ([])
-
-export const ProductoCantidad = ref(1)
-
-export const ProductoActual = ref(null)
-
-export const ActualizarCajaP = ref(false)
-
-export const ActualizarCajaC = ref(false)
-
-export const Rol = ref(leerCookie("id_rol"))
-
-export const Iniciado = ref(leerCookie("token") !== null)
-
-export const PedidoGuardado = parseInt(localStorage.getItem("pedido"))
-
-export const PedidoActual = ref(PedidoGuardado ? parseInt(PedidoGuardado) : null)
-
 export const LimpiarCompra = () =>{
     localStorage.removeItem("carrito_pendiente")
     CarritoLocal.value = [];
 }
 
 export const leerCookie = (nombre) => {
-    const valor = `; ${document.cookie}`;
-    const partes = valor.split(`; ${nombre}=`);
-    if (partes.length === 2) return partes.pop().split(';').shift();
-    return null;
+  const valor = `; ${document.cookie}`;
+  const partes = valor.split(`; ${nombre}=`);
+  if (partes.length === 2) return partes.pop().split(';').shift();
+  return null;
 }
 
 export const CerrarSesion = () =>{
@@ -38,3 +20,21 @@ export const CerrarSesion = () =>{
     Iniciado.value = false
     window.location.reload();
 }
+
+export const CarritoLocal = ref ([])
+
+export const ProductoCantidad = ref(1)
+
+export const ProductoActual = ref(null)
+
+export const ActualizarCajaP = ref(false)
+
+export const ActualizarCajaC = ref(false)
+
+export const Iniciado = ref(leerCookie("token") !== null)
+
+export const Rol = ref(leerCookie("id_rol"))
+
+export const PedidoGuardado = parseInt(localStorage.getItem("pedido"))
+
+export const PedidoActual = ref(PedidoGuardado ? parseInt(PedidoGuardado) : null)

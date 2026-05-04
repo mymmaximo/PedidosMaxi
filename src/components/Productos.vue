@@ -11,7 +11,7 @@
         Filtros ☰
         </button>
         <button @click="AbrirPopUp4" class="botoncentro" v-if="Rol === '1'">
-        Nuevo Producto +
+        Nuevo Producto ➕
         </button>
 
         <Teleport to="body">
@@ -178,10 +178,10 @@
                         v-model="ProductoCantidad"
                         >
                         <button @click="SumarProducto(ProductoActual)">
-                        +
+                        ➕
                         </button>
                         <button @click="RestarProducto(ProductoActual)">
-                        -
+                        ➖
                         </button>
                     </div>
                     <div>
@@ -311,7 +311,7 @@
                                 </td>
                                 <td v-if="Rol === '1'">
                                 <button @click="Edicion(i)" class="botoncentro">
-                                ✎
+                                ✏️
                                 </button>
                                 </td>
                             </tr>

@@ -156,14 +156,17 @@
                                     <td>
                                     {{ FormatoFecha(i.updated_at) }}
                                     </td>
-                                    <td @click= "PedidoCambio(i.id_pedido)" class="boton_detalle">
+                                    <td v-if="PedidoNowPreparando === i.id_pedido" @click="PedidoCambioPreparando(i.id_pedido)" class="boton_ocultar_detalle">
+                                    Ocultar Detalles
+                                    </td>
+                                    <td v-else @click="PedidoCambioPreparando(i.id_pedido)" class="boton_detalle">
                                     Ver Detalles
                                     </td>
                                     <td>
                                     ${{ i.total }}
                                     </td>
                                 </tr>
-                                <tr v-if = "PedidoNow === i.id_pedido && i.estatus === 3">
+                                <tr v-if = "PedidoNowPreparando === i.id_pedido && i.estatus === 3">
                                     <td colspan="9" class="cajon_detalles">
                                         <div class="caja_detalles">
                                             <table class="tabla_detalles">
@@ -283,14 +286,17 @@
                                     <td>
                                     {{ FormatoFecha(i.updated_at) }}
                                     </td>
-                                    <td @click= "PedidoCambio(i.id_pedido)" class="boton_detalle">
+                                    <td v-if="PedidoNowEnCamino === i.id_pedido" @click="PedidoCambioEnCamino(i.id_pedido)" class="boton_ocultar_detalle">
+                                    Ocultar Detalles
+                                    </td>
+                                    <td v-else @click="PedidoCambioEnCamino(i.id_pedido)" class="boton_detalle">
                                     Ver Detalles
                                     </td>
                                     <td>
                                     ${{ i.total }}
                                     </td>
                                 </tr>
-                                <tr v-if = "PedidoNow === i.id_pedido">
+                                <tr v-if = "PedidoNowEnCamino === i.id_pedido">
                                     <td colspan="9" class="cajon_detalles">
                                         <div class="caja_detalles">
                                             <table class="tabla_detalles">
@@ -390,7 +396,12 @@
                             <template v-for= "i in Pedidos" :key="i.id && i.estatus === 1">
                                 <tr v-if="i.estatus === 1">
                                     <td>
-                                    {{ i.direccion[0].calle }} {{ i.direccion[0].numero }} - {{ i.direccion[0].ciudad }} - {{ i.direccion[0].provincia }}        
+                                    {{ i.direccion[0].calle }} 
+                                    {{ i.direccion[0].numero }}
+                                    - 
+                                    {{ i.direccion[0].ciudad }} 
+                                    - 
+                                    {{ i.direccion[0].provincia }}        
                                     </td>
                                     <td>
                                     {{ i.metodo_pago }}
@@ -407,14 +418,17 @@
                                     <td>
                                     {{ FormatoFecha(i.updated_at) }}
                                     </td>
-                                    <td @click= "PedidoCambio(i.id_pedido)" class="boton_detalle">
+                                    <td v-if="PedidoNowHistorial === i.id_pedido" @click="PedidoCambioHistorial(i.id_pedido)" class="boton_ocultar_detalle">
+                                    Ocultar Detalles
+                                    </td>
+                                    <td v-else @click="PedidoCambioHistorial(i.id_pedido)" class="boton_detalle">
                                     Ver Detalles
                                     </td>
                                     <td>
                                     ${{ i.total }}
                                     </td>
                                 </tr>
-                                <tr v-if = "PedidoNow === i.id_pedido">
+                                <tr v-if = "PedidoNowHistorial === i.id_pedido">
                                     <td colspan="9" class="cajon_detalles">
                                         <div class="caja_detalles">
                                             <table class="tabla_detalles">
@@ -480,17 +494,35 @@
     const filtroMP = ref(4)
     const filtroEst = ref(4)
     const Busqueda = ref("")
-    const PedidoNow = ref(null)
     const filtroAct = ref(false)
     const VentanaFiltro = ref(false)
     const mostrarhistorial = ref(false)
-    const idUsuario = leerCookie("id_cliente");
-    const PedidoCambio = (id) => {
-        if (PedidoNow.value === id) {
-            PedidoNow.value = null
+    const PedidoNowEnCamino = ref(null)
+    const PedidoNowHistorial = ref(null)
+    const PedidoNowPreparando = ref(null)
+    const idUsuario = leerCookie("id_cliente")
+    const PedidoCambioHistorial = (id) => {
+        if (PedidoNowHistorial.value === id) {
+            PedidoNowHistorial.value = null
         }
         else {
-            PedidoNow.value = id
+            PedidoNowHistorial.value = id
+        }
+    }
+    const PedidoCambioEnCamino = (id) => {
+        if (PedidoNowEnCamino.value === id) {
+            PedidoNowEnCamino.value = null
+        }
+        else {
+            PedidoNowEnCamino.value = id
+        }
+    }
+    const PedidoCambioPreparando = (id) => {
+        if (PedidoNowPreparando.value === id) {
+            PedidoNowPreparando.value = null
+        }
+        else {
+            PedidoNowPreparando.value = id
         }
     }
     onMounted(async() => {
@@ -585,11 +617,6 @@
         width: 80%;
         cursor: pointer;
         background-color: #d0f8d2;
-        user-select: none;
-    }
-    .boton_detalle{
-        cursor: pointer;
-        background-color: #f1fff2;
         user-select: none;
     }
     .caja_detalles{

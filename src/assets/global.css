@@ -77,13 +77,13 @@ input{
     flex-direction: column;
     gap: 15px;
 }
-    .contenedor_tabla{
-        margin-top: 15px;
-        border-radius: 15px;
-        overflow: hidden;
-        border: 2px solid #000000;
-        text-align: center;
-    }
+.contenedor_tabla{
+    margin-top: 15px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid #000000;
+    text-align: center;
+}
 .caja_editar{
 	padding: 30px;
 	display: flex;
@@ -107,4 +107,34 @@ input{
 	justify-content: center;
 	align-items: center;
 	z-index: 1000;
+}
+.boton_detalle{
+    padding: 10px;
+    font-size: small;
+    cursor: pointer;
+    background-color: #f1fff2;
+    user-select: none;
+}
+.boton_ocultar_detalle{
+    padding: 10px;
+    font-size: small;
+    cursor: pointer;
+    background-color: #fff1f1;
+    user-select: none;
+}
+.classEntregado{
+	background-color: #9ff7a5;
+	cursor: not-allowed !important;
+}
+.classEn_Camino{
+	background-color: #f6f67a;
+    cursor: pointer;
+}
+.classPreparando{
+	background-color: #f5ab72;
+    cursor: pointer;
+}
+.classindefinido{
+	background-color: #ffffff;
+    cursor: pointer;
 }
