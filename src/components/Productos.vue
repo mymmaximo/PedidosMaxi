@@ -7,10 +7,10 @@
         placeholder="Busqueda..."
         class="busqueda"
         >
-        <button @click="AbrirPopUp1" class="botoncentro">
+        <button @click="AbrirPopUp01" class="botoncentro">
         Filtros ☰
         </button>
-        <button @click="AbrirPopUp4" class="botoncentro" v-if="Rol === '1'">
+        <button @click="AbrirPopUp04" class="botoncentro" v-if="Rol === '1'">
         Nuevo Producto ➕
         </button>
 
@@ -101,53 +101,11 @@
                     Aplicar Filtros
                     </button>
                     <button @click="LimpiarFiltro" class="Boton_Crear" v-if="filtroAct === true">
-                    Limpiar Filtro
+                    🗑️ Limpiar Filtro
                     </button>
                     <button @click="CerrarPopUp1" class="Boton_Crear">
                     Cerrar
                     </button>
-                </div>
-            </div>
-        </Teleport>
-        <Teleport to="body">
-            <div class="fondo_oscuro" v-if="ActualizarCajaP">
-                <div class="caja_editar">
-                    <h1>
-                    Actualizar Producto {{ ProductoAct.nombre }}
-                    </h1>
-                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.nombre" 
-                        placeholder="Nombre"
-                        >
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.precio" 
-                        placeholder="Precio"
-                        >
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.stock" 
-                        placeholder="Stock"
-                        >
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.categoria"
-                        placeholder="Categoria"
-                        >
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.codigo_barra" 
-                        placeholder="Codigo de Barras"
-                        >
-                        <button type="submit" class="Boton_Crear">
-                        Actualizar
-                        </button>
-                        <button @click="CerrarPopUp2" class="Boton_Crear">
-                        Cancelar
-                        </button>
-                    </form>
                 </div>
             </div>
         </Teleport>
@@ -160,7 +118,7 @@
                     <button @click="BorrarProducto()">
                     Si Confirmo
                     </button>
-                    <button @click="CerrarPopUp3">
+                    <button @click="CerrarPopUp03">
                     Cancelar
                     </button>
                 </div>
@@ -188,7 +146,7 @@
                         <button @click="SumarCarrito">
                         Agregar al Carrito
                         </button>
-                        <button @click="CerrarPopUp5">
+                        <button @click="CerrarPopUp05">
                         Cancelar
                         </button>
                     </div>
@@ -231,9 +189,171 @@
                     <button type="submit" class="Boton_Crear">
                     Crear
                     </button>
-                    <button @click="CerrarPopUp4">
+                    <button @click="CerrarPopUp04">
                     Cancelar
                     </button>
+                </div>
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div class="fondo_oscuro" v-if="ActualizarCajaP">
+                <div class="caja_editar">
+                    <h1>
+                    Actualizar Producto {{ ProductoAct.nombre }}
+                    </h1>
+                    <button @click="AbrirPopUp06" class="botoncentro">
+                    Actualizar Nombre
+                    </button>
+                    <button @click="AbrirPopUp07" class="botoncentro">
+                    Actualizar Precio
+                    </button>
+                    <button @click="AbrirPopUp08" class="botoncentro">
+                    Actualizar Stock
+                    </button>
+                    <button @click="AbrirPopUp09" class="botoncentro">
+                    Actualizar Categoria
+                    </button>
+                    <button @click="AbrirPopUp10" class="botoncentro">
+                    Actualizar Codigo de Barras
+                    </button>
+                    <button @click="AbrirPopUp11" class="botoncentro">
+                    Actualizar Todo
+                    </button>
+                </div>
+            </div>
+        </Teleport>
+
+        <Teleport to="body">
+            <div class="fondo_oscuro" v-if="ActualizarPNombre">
+                <div class="caja_editar">
+                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.nombre" 
+                        placeholder="Nombre"
+                        >
+                        <button type="submit" class="Boton_Crear">
+                        Actualizar
+                        </button>
+                        <button @click="CerrarPopUp06" class="Boton_Crear">
+                        Cancelar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div class="fondo_oscuro" v-if="ActualizarPPrecio">
+                <div class="caja_editar">
+                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                        <input 
+                        type="number" 
+                        v-model="ProductoAct.precio" 
+                        placeholder="Precio"
+                        >
+                        <button type="submit" class="Boton_Crear">
+                        Actualizar
+                        </button>
+                        <button @click="CerrarPopUp07" class="Boton_Crear">
+                        Cancelar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div class="fondo_oscuro" v-if="ActualizarPStock">
+                <div class="caja_editar">
+                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                        <input 
+                        type="number" 
+                        v-model="ProductoAct.stock" 
+                        placeholder="Stock"
+                        >
+                        <button type="submit" class="Boton_Crear">
+                        Actualizar
+                        </button>
+                        <button @click="CerrarPopUp08" class="Boton_Crear">
+                        Cancelar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div class="fondo_oscuro" v-if="ActualizarPCategoria">
+                <div class="caja_editar">
+                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.categoria" 
+                        placeholder="Categoria"
+                        >
+                        <button type="submit" class="Boton_Crear">
+                        Actualizar
+                        </button>
+                        <button @click="CerrarPopUp09" class="Boton_Crear">
+                        Cancelar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div class="fondo_oscuro" v-if="ActualizarPCodigoBarra">
+                <div class="caja_editar">
+                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.codigo_barra" 
+                        placeholder="Codigo de Barras"
+                        >
+                        <button type="submit" class="Boton_Crear">
+                        Actualizar
+                        </button>
+                        <button @click="CerrarPopUp10" class="Boton_Crear">
+                        Cancelar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div class="fondo_oscuro" v-if="ActualizarProductos">
+                <div class="caja_editar">
+                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.nombre" 
+                        placeholder="Nombre"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.precio" 
+                        placeholder="Precio"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.stock" 
+                        placeholder="Stock"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.categoria"
+                        placeholder="Categoria"
+                        >
+                        <input 
+                        type="text" 
+                        v-model="ProductoAct.codigo_barra" 
+                        placeholder="Codigo de Barras"
+                        >
+                        <button type="submit" class="Boton_Crear">
+                        Actualizar
+                        </button>
+                        <button @click="CerrarPopUp11" class="Boton_Crear">
+                        Cancelar
+                        </button>
+                    </form>
                 </div>
             </div>
         </Teleport>
@@ -322,6 +442,12 @@
                     <h3>No se encontraron productos 😔</h3>
                     <p>Prueba buscando con otro termino</p>
                 </div>
+                <button @click="Pagina = Pagina - 20 ; BusquedaProducto()" :disabled="Pagina < 20">
+                ⬅
+                </button>
+                <button @click="Pagina = Pagina + 20 ; BusquedaProducto()" :disabled="Productos.length < 20">
+                ➡
+                </button>
             </div>
         </div>
     </div>
@@ -330,7 +456,13 @@
 <script setup>
     import { onMounted, ref, watch } from 'vue'
     import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
+    const ActualizarPCodigoBarra = ref(false)
+    const ActualizarPCategoria = ref(false)
+    const ActualizarProductos = ref(false)
     const ActualizarCajaPDel = ref(false)
+    const ActualizarPNombre = ref(false)
+    const ActualizarPPrecio = ref(false)
+    const ActualizarPStock = ref(false)
     const VentanaCompra = ref(false)
     const VentanaFiltro = ref(false)
     const VentanaNuevo = ref(false)
@@ -342,7 +474,16 @@
     const Busqueda = ref("")
     const mayor = ref("")
     const menor = ref("")
-	const AbrirPopUp1 = () => {
+	const Pagina = ref(0)
+    onMounted(async() => {
+        BusquedaProducto()
+        const CarritoOlvidado = localStorage.getItem('carrito_pendiente');
+        if (CarritoOlvidado) {
+            CarritoLocal.value = JSON.parse(CarritoOlvidado);
+            console.log("Carrito recuperado:", CarritoLocal.value);
+        }
+    })
+	const AbrirPopUp01 = () => {
 		VentanaFiltro.value = true
 		document.body.style.overflow = "hidden";
 	}
@@ -350,43 +491,91 @@
 		VentanaFiltro.value = false
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp2 = () => {
+	const AbrirPopUp02 = () => {
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp2 = () => {
+	const CerrarPopUp02 = () => {
 		ActualizarCajaP.value = false
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp3 = () => {
+	const AbrirPopUp03 = () => {
 		ActualizarCajaPDel.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp3 = () => {
+	const CerrarPopUp03 = () => {
 		ActualizarCajaPDel.value = false
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp4 = () => {
+	const AbrirPopUp04 = () => {
 		VentanaNuevo.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp4 = () => {
+	const CerrarPopUp04 = () => {
 		VentanaNuevo.value = false
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp5 = () => {
+	const AbrirPopUp05 = () => {
 		VentanaCompra.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp5 = () => {
+	const CerrarPopUp05 = () => {
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
 		document.body.style.overflow = "auto";
 	}
+	const AbrirPopUp06 = () => {
+		ActualizarPNombre.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp06 = () => {
+		ActualizarPNombre.value = false
+		document.body.style.overflow = "auto";
+	}
+	const AbrirPopUp07 = () => {
+		ActualizarPPrecio.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp07 = () => {
+		ActualizarPPrecio.value = false
+		document.body.style.overflow = "auto";
+	}
+	const AbrirPopUp08 = () => {
+		ActualizarPStock.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp08 = () => {
+		ActualizarPStock.value = false
+		document.body.style.overflow = "auto";
+	}
+	const AbrirPopUp09 = () => {
+		ActualizarPCategoria.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp09 = () => {
+		ActualizarPCategoria.value = false
+		document.body.style.overflow = "auto";
+	}
+	const AbrirPopUp10 = () => {
+		ActualizarPCodigoBarra.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp10 = () => {
+		ActualizarPCodigoBarra.value = false
+		document.body.style.overflow = "auto";
+	}
+	const AbrirPopUp11 = () => {
+		ActualizarProductos.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp11 = () => {
+		ActualizarProductos.value = false
+		document.body.style.overflow = "auto";
+	}
     const Compracion = (producto_fila) => {
         VentanaComprar(producto_fila)
-        AbrirPopUp5()
+        AbrirPopUp05()
     };
     const Confirmar = (async() => {
         const tokenGuardado = leerCookie("token");
@@ -405,7 +594,7 @@
                 }])
             })
             if (respuesta.ok) {
-                CerrarPopUp5()
+                CerrarPopUp05()
                 console.log ("funciono")
             } else {
                 const error = await respuesta.text()
@@ -446,7 +635,7 @@
         }
     })
     const VentanaComprar = (ProductoSeleccionado) => {
-        AbrirPopUp5()
+        AbrirPopUp05()
         ProductoActual.value = ProductoSeleccionado
         ProductoCantidad.value = 1
     }
@@ -486,7 +675,7 @@
                 CarritoLocal.value
             )
         )
-        CerrarPopUp5()    
+        CerrarPopUp05()    
     }
     // revisar para optimizar
     watch (ProductoCantidad, (NuevaCantidad) => {
@@ -508,7 +697,7 @@
     })
     const Eliminacion = (producto_fila) => {
         ProductoEli.value = producto_fila.id;
-        AbrirPopUp3()
+        AbrirPopUp03()
     };
     const LimpiarFiltro = () => {
         filtroRadio.value = 4
@@ -529,10 +718,8 @@
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;
         }
-        const respuesta = await fetch("http://localhost:8000/producto/");
-        const datos = await respuesta.json();
-        Productos.value = datos;
-        CerrarPopUp3()
+        BusquedaProducto()
+        CerrarPopUp03()
     }
     const Edicion = (producto_fila) => {
         ProductoAct.value.id = producto_fila.id;
@@ -541,18 +728,8 @@
         ProductoAct.value.stock = producto_fila.stock;
         ProductoAct.value.categoria = producto_fila.categoria;
         ProductoAct.value.codigo_barra = producto_fila.codigo_barra;
-        AbrirPopUp2()
+        AbrirPopUp02()
     };
-    onMounted(async() => {
-        const respuesta = await fetch('http://localhost:8000/producto/')
-        const datos = await respuesta.json();
-        Productos.value = datos;
-        const CarritoOlvidado = localStorage.getItem('carrito_pendiente');
-        if (CarritoOlvidado) {
-            CarritoLocal.value = JSON.parse(CarritoOlvidado);
-            console.log("Carrito recuperado:", CarritoLocal.value);
-        }
-    })
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
             return "classActivo"
@@ -580,6 +757,7 @@
     }
     const BusquedaProducto = async() => {
         let url = new URL ('http://localhost:8000/producto/');
+		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value);
         }
@@ -658,9 +836,7 @@
             categoria: "",
             codigo_barra: ""
         };
-        const respuesta = await fetch('http://localhost:8000/producto/');
-        const datos = await respuesta.json();
-        Productos.value = datos;
+        BusquedaProducto()
     }
     const ProductoAct = ref({
         id: "",
@@ -683,10 +859,14 @@
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;
         }
-        const respuesta = await fetch("http://localhost:8000/producto/");
-        const datos = await respuesta.json();
-        Productos.value = datos;
-        CerrarPopUp2()
+        BusquedaProducto()
+        CerrarPopUp02()
+        CerrarPopUp06()
+        CerrarPopUp07()
+        CerrarPopUp08()
+        CerrarPopUp09()
+        CerrarPopUp10()
+        CerrarPopUp11()
     }
 </script>
 

@@ -82,7 +82,7 @@
                     Aplicar Filtros
                     </button>
                     <button @click="LimpiarFiltro" class="Boton_Crear" v-if="filtroAct === true">
-                    Limpiar Filtro
+                    🗑️ Limpiar Filtro
                     </button>
                     <button @click="VentanaFiltro = false" class="Boton_Crear">
                     Cerrar

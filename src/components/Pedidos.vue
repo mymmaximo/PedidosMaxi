@@ -98,7 +98,7 @@
 					Aplicar Filtros
 					</button>
 					<button @click="LimpiarFiltro" class="Boton_Crear" v-if="filtroAct === true">
-					Limpiar Filtro
+					🗑️ Limpiar Filtro
 					</button>
 					<button @click="CerrarPopUp2" class="Boton_Crear">
 					Cerrar
@@ -255,12 +255,19 @@
 				<h3>No se encontraron Pedidos 😔</h3>
 				<p>Prueba buscando con otro termino</p>
 			</div>
+			<button @click="Pagina = Pagina - 20 ; BusquedaPedido()" :disabled="Pagina < 20">
+			⬅
+			</button>
+			<button @click="Pagina = Pagina + 20 ; BusquedaPedido()" :disabled="Pedidos.length < 20">
+			➡
+			</button>
 		</div>
 	</div>
 </template>
 
 <script setup>
 	import { onMounted, ref } from 'vue';
+	const Pagina = ref(0)
 	const Pedidos = ref([])
 	const filtroMP = ref(4)
 	const Busqueda = ref("")
@@ -269,6 +276,9 @@
 	const filtroAct = ref(false)
 	const VentanaFiltro = ref(false)
 	const ActualizarCajaP = ref (false)
+	onMounted(async() => {
+		BusquedaPedido()
+	})
 	const PedidoCambio = (id) => {
 		if (PedidoNow.value === id) {
 			PedidoNow.value = null
@@ -317,12 +327,6 @@
 		}
 			return "classindefinido";
 	}
-	onMounted(async() => {
-		const respuesta = await fetch('http://localhost:8000/pedidos/all/')
-		const datos = await respuesta.json();
-		console.log("aca che",datos)
-		Pedidos.value = datos;
-	})
 	const LimpiarFiltro = () => {
 		filtroMP.value = 4
 		filtroEst.value = 4
@@ -332,6 +336,7 @@
 	}
 	const BusquedaPedido = async() => {
 		let url = new URL ('http://localhost:8000/pedidos/all/');
+		url.searchParams.append('skip', Pagina.value);
 		if (Busqueda.value !== "") {
 			url.searchParams.append('busqueda_pedido', Busqueda.value);
 		}
@@ -397,11 +402,9 @@
 				tiempo_entrega: "",
 				estatus: ""
 			};
-			const respuesta = await fetch("http://localhost:8000/pedidos/all/");
-			const datos = await respuesta.json();
-			Pedidos.value = datos;
+			BusquedaPedido()
 			CerrarPopUp1();
-	};
+	}
 	const EstatusAct = ref({
 		id_pedido: "",
 		id_cliente: "",

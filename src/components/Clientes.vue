@@ -5,7 +5,7 @@
     placeholder="Busqueda..."
     class="busqueda"
     >
-    <button @click="AbrirPopUp1" class="botoncentro">
+    <button @click="AbrirPopUp01" class="botoncentro">
     Filtros ☰
     </button>
 
@@ -66,9 +66,9 @@
                 Filtrar
                 </button>
                 <button @click="LimpiarFiltro" class="Boton_Crear" v-if="filtroAct === true">
-                Limpiar Filtro
+                🗑️ Limpiar Filtro
                 </button>
-                <button @click="CerrarPopUp1" class="Boton_Crear">
+                <button @click="CerrarPopUp01" class="Boton_Crear">
                 Cerrar
                 </button>
             </div> 
@@ -83,7 +83,7 @@
                 <button @click="BorrarCliente()">
                 Si Confirmo
                 </button>
-                <button @click="CerrarPopUp2">
+                <button @click="CerrarPopUp02">
                 Cancelar
                 </button>
             </div>
@@ -93,7 +93,162 @@
         <div class="fondo_oscuro" v-if="ActualizarCajaC">
             <div class="caja_editar">
                 <h1>
-                Actualizar Cliente {{ ClienteAct.nombre }}
+                Actualizar Cliente {{ ClienteAct.nombre }} {{ ClienteAct.apellido }}
+                </h1>
+                <button @click="AbrirPopUp04" class="botoncentro">
+                Actualizar Nombre y Apellido
+                </button>
+                <button @click="AbrirPopUp05" class="botoncentro">
+                Actualizar E-Mail
+                </button>
+                <button @click="AbrirPopUp06" class="botoncentro">
+                Actualizar Usuario
+                </button>
+                <button @click="AbrirPopUp07" class="botoncentro">
+                Actualizar Contraseña
+                </button>
+                <button @click="AbrirPopUp08" class="botoncentro">
+                Actualizar Rol
+                </button>
+                <button @click="AbrirPopUp09" class="botoncentro">
+                Actualizar Todo
+                </button>
+                <button @click="CerrarPopUp03" class="Boton_Crear">
+                Cancelar
+                </button>
+            </div>
+        </div>
+    </Teleport>
+    
+    <Teleport to="body">
+        <div class="fondo_oscuro" v-if="ActualizarCNombre_Apellido">
+            <div class="caja_editar">
+                <h1>
+                Actualizar Cliente {{ ClienteAct.nombre }} {{ ClienteAct.apellido }}
+                </h1>
+                <form @submit.prevent="ActualizarClientes" class="Texto_producto">
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.nombre" 
+                    placeholder="Nombre"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.apellido" 
+                    placeholder="Apellido"
+                    >
+                    <button type="submit" class="Boton_Crear">
+                    Actualizar
+                    </button>
+                    <button @click="CerrarPopUp04" class="Boton_Crear">
+                    Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </Teleport>
+    <Teleport to="body">
+        <div class="fondo_oscuro" v-if="ActualizarCEmail">
+            <div class="caja_editar">
+                <h1>
+                Actualizar Cliente {{ ClienteAct.nombre }} {{ ClienteAct.apellido }}
+                </h1>
+                <form @submit.prevent="ActualizarClientes" class="Texto_producto">
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.email" 
+                    placeholder="E-Mail"
+                    >
+                    <button type="submit" class="Boton_Crear">
+                    Actualizar
+                    </button>
+                    <button @click="CerrarPopUp05" class="Boton_Crear">
+                    Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </Teleport>
+    <Teleport to="body">
+        <div class="fondo_oscuro" v-if="ActualizarCUsuario">
+            <div class="caja_editar">
+                <h1>
+                Actualizar Cliente {{ ClienteAct.nombre }} {{ ClienteAct.apellido }}
+                </h1>
+                <form @submit.prevent="ActualizarClientes" class="Texto_producto">
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.usuario" 
+                    placeholder="Usuario"
+                    >
+                    <button type="submit" class="Boton_Crear">
+                    Actualizar
+                    </button>
+                    <button @click="CerrarPopUp06" class="Boton_Crear">
+                    Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </Teleport>
+    <Teleport to="body">
+        <div class="fondo_oscuro" v-if="ActualizarCContrasena">
+            <div class="caja_editar">
+                <h1>
+                Actualizar Cliente {{ ClienteAct.nombre }} {{ ClienteAct.apellido }}
+                </h1>
+                <form @submit.prevent="ActualizarClientes" class="Texto_producto">
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.contrasena" 
+                    placeholder="Contraseña"
+                    >
+                    <button type="submit" class="Boton_Crear">
+                    Actualizar
+                    </button>
+                    <button @click="CerrarPopUp07" class="Boton_Crear">
+                    Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </Teleport>
+    <Teleport to="body">
+        <div class="fondo_oscuro" v-if="ActualizarCRol">
+            <div class="caja_editar">
+                <h1>
+                Actualizar Cliente {{ ClienteAct.nombre }} {{ ClienteAct.apellido }}
+                </h1>
+                <form @submit.prevent="ActualizarClientes" class="Texto_producto">
+                    <select v-model="ClienteAct.id_rol" class="seleccion">
+                        <option value="" disabled>
+                        Selecciona un Rol...
+                        </option>
+                        <option value=1>
+                        Administrador
+                        </option>>
+                        <option value=2>
+                        Trabajador
+                        </option>
+                        <option value=3>
+                        Cliente
+                        </option>
+                    </select>
+                    <button type="submit" class="Boton_Crear">
+                    Actualizar
+                    </button>
+                    <button @click="CerrarPopUp08" class="Boton_Crear">
+                    Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </Teleport>
+    <Teleport to="body">
+        <div class="fondo_oscuro" v-if="ActualizarCliente">
+            <div class="caja_editar">
+                <h1>
+                Actualizar Cliente {{ ClienteAct.nombre }} {{ ClienteAct.apellido }}
                 </h1>
                 <form @submit.prevent="ActualizarClientes" class="Texto_producto">
                     <input 
@@ -109,7 +264,7 @@
                     <input 
                     type="text" 
                     v-model="ClienteAct.email" 
-                    placeholder="E-Mail"
+                    placeholder="Email@email.com"
                     >
                     <input 
                     type="text" 
@@ -138,7 +293,7 @@
                     <button type="submit" class="Boton_Crear">
                     Actualizar
                     </button>
-                    <button @click="CerrarPopUp3" class="Boton_Crear">
+                    <button @click="CerrarPopUp09" class="Boton_Crear">
                     Cancelar
                     </button>
                 </form>
@@ -170,8 +325,11 @@
                             <th>
                             Direcciones
                             </th>
-                            <th>
+                            <th v-if="Rol === '1'">
                             Activo
+                            </th>
+                            <th v-if="Rol === '1'">
+                            Rol
                             </th>
                             <th v-if="Rol === '1'">
                             Eliminar
@@ -205,8 +363,11 @@
                                 <td v-else>
                                 No hay Direcciones Adjuntas
                                 </td>
-                                <td :class="Estatuscolor(i.activo)">
+                                <td v-if="Rol === '1'" :class="Estatuscolor(i.activo)">
                                 {{ Estatustxt(i.activo) }}
+                                </td>
+                                <td v-if="Rol === '1'" :class="Rolcolor(i.id_rol)">
+                                {{ Roltxt(i.id_rol) }}
                                 </td>
                                 <td v-if="Rol === '1'">
                                 <button @click="Eliminacion(i)" v-if="i.activo" class="botoncentro">
@@ -223,7 +384,7 @@
                                 </td>
                             </tr>
                             <tr v-if = "DireccionNow === i.id">
-                                <td colspan="8" class="cajon_direcciones">
+                                <td colspan="9" class="cajon_direcciones">
                                     <div class="caja_direcciones">
                                         <table class="tabla_direcciones">
                                             <thead class="cabeza_direcciones">
@@ -276,6 +437,12 @@
                 <h3>No se encontraran clientes 😔</h3>
                 <p>Prueba buscando con otro termino</p>
             </div>
+			<button @click="Pagina = Pagina - 20 ; BusquedaCliente()" :disabled="Pagina < 20">
+			⬅
+			</button>
+			<button @click="Pagina = Pagina + 20 ; BusquedaCliente()" :disabled="clientes.length < 20">
+			➡
+			</button>
         </div>
     </div>
 </template>
@@ -283,6 +450,7 @@
 <script setup>
     import { onMounted, ref } from 'vue';
     import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus';
+	const Pagina = ref(0)
     const filtroEst = ref(2)
     const Busqueda = ref("")
     const clientes =  ref([])
@@ -291,34 +459,102 @@
     const filtroAct = ref(false)
     const DireccionNow = ref(null)
     const VentanaFiltro = ref(false)
+    const ActualizarCRol = ref(false)
+    const ActualizarCEmail = ref(false)
+    const ActualizarCliente = ref(false)
     const ActualizarCajaCDel = ref(false)
-	const AbrirPopUp1 = () => {
+    const ActualizarCUsuario = ref(false)
+    const ActualizarCContrasena = ref(false)
+    const ActualizarCNombre_Apellido = ref(false)
+    onMounted(async() => {
+        BusquedaCliente()
+    })
+	const AbrirPopUp01 = () => {
 		VentanaFiltro.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const CerrarPopUp1 = () => {
+	const CerrarPopUp01 = () => {
 		VentanaFiltro.value = false
 		document.body.style.overflow = "auto"
 	}
-	const AbrirPopUp2 = () => {
+	const AbrirPopUp02 = () => {
 		ActualizarCajaCDel.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const CerrarPopUp2 = () => {
+	const CerrarPopUp02 = () => {
 		ActualizarCajaCDel.value = false
 		document.body.style.overflow = "auto"
 	}
-	const AbrirPopUp3 = () => {
+	const AbrirPopUp03 = () => {
 		ActualizarCajaC.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const CerrarPopUp3 = () => {
+	const CerrarPopUp03 = () => {
 		ActualizarCajaC.value = false
+		document.body.style.overflow = "auto"
+	}
+	const AbrirPopUp04 = () => {
+		ActualizarCNombre_Apellido.value = true
+		document.body.style.overflow = "hidden"
+	}
+	const CerrarPopUp04 = () => {
+		ActualizarCNombre_Apellido.value = false
+		document.body.style.overflow = "auto"
+	}
+	const AbrirPopUp05 = () => {
+		ActualizarCEmail.value = true
+		document.body.style.overflow = "hidden"
+	}
+	const CerrarPopUp05 = () => {
+		ActualizarCEmail.value = false
+		document.body.style.overflow = "auto"
+	}
+	const AbrirPopUp06 = () => {
+		ActualizarCUsuario.value = true
+		document.body.style.overflow = "hidden"
+	}
+	const CerrarPopUp06 = () => {
+		ActualizarCUsuario.value = false
+		document.body.style.overflow = "auto"
+	}
+	const AbrirPopUp07 = () => {
+		ActualizarCContrasena.value = true
+		document.body.style.overflow = "hidden"
+	}
+	const CerrarPopUp07 = () => {
+		ActualizarCContrasena.value = false
+		document.body.style.overflow = "auto"
+	}
+	const AbrirPopUp08 = () => {
+		ActualizarCRol.value = true
+		document.body.style.overflow = "hidden"
+	}
+	const CerrarPopUp08 = () => {
+		ActualizarCRol.value = false
+		document.body.style.overflow = "auto"
+	}
+	const AbrirPopUp09 = () => {
+		ActualizarCliente.value = true
+		document.body.style.overflow = "hidden"
+	}
+	const CerrarPopUp09 = () => {
+		ActualizarCliente.value = false
 		document.body.style.overflow = "auto"
 	}
     const Eliminacion = (cliente_fila) => {
         ClienteEli.value = cliente_fila.id
-        AbrirPopUp2()
+        AbrirPopUp02()
+    }
+    const Roltxt = (id_rol) => {
+        if (id_rol === 1) {
+            return "Administrador"
+        }
+        else if (id_rol === 2) {
+            return "Trabajador"
+        }
+        else if (id_rol === 3) {
+            return "Cliente"
+        }
     }
     const Estatustxt = (id_estatus) => {
         if (id_estatus === true) {
@@ -336,11 +572,6 @@
             DireccionNow.value = id
         }
     }
-    onMounted(async() => {
-        const respuesta = await fetch('http://localhost:8000/cliente/')
-        const datos = await respuesta.json();
-        clientes.value = datos;
-    })
     const BorrarCliente = async() => {
         const EraseCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteEli.value}`, {
         method: 'DELETE',
@@ -354,10 +585,19 @@
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return
         }
-        const respuesta = await fetch("http://localhost:8000/cliente/");
-        const datos = await respuesta.json();
-        clientes.value = datos
-        CerrarPopUp2()
+        BusquedaCliente()
+        CerrarPopUp02()
+    }
+    const Rolcolor = (id_rol) => {
+        if (id_rol === 1) {
+            return "classAdmin"
+        }
+        else if (id_rol === 2) {
+            return "classTrabajador"
+        }
+        else if (id_rol === 3) {
+            return "classCliente"
+        }
     }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
@@ -377,31 +617,54 @@
         id_rol: ""
     })
     const ActualizarClientes = async() => {
-            const ActCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteAct.value.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(ClienteAct.value)
-            });
-            if (ActCliente.status === 401) {
-                CerrarSesion();
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-                return;
-            }
-            ClienteAct.value = {
-                id: "",
-                nombre: "",
-                apellido: "",
-                email: "",
-                usuario: "",
-                contrasena: "",
-                id_rol: ""
-            };
-            const respuesta = await fetch("http://localhost:8000/cliente/")
-            const datos = await respuesta.json()
-            clientes.value = datos
-            CerrarPopUp3()
+        const ClienteUpd = {} 
+        if (ClienteAct.value.nombre !== "") {
+            ClienteUpd.nombre = ClienteAct.value.nombre
+        }
+        if (ClienteAct.value.apellido !== "") {
+            ClienteUpd.apellido = ClienteAct.value.apellido
+        }
+        if (ClienteAct.value.email !== "") {
+            ClienteUpd.email = ClienteAct.value.email
+        }
+        if (ClienteAct.value.usuario !== "") {
+            ClienteUpd.usuario = ClienteAct.value.usuario
+        }
+        if (ClienteAct.value.contrasena !== "") {
+            ClienteUpd.contrasena = ClienteAct.value.contrasena
+        }
+        if (ClienteAct.value.id_rol !== "") {
+            ClienteUpd.id_rol = ClienteAct.value.id_rol
+        }
+        const ActCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteAct.value.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ClienteUpd)
+        });
+        if (ActCliente.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
+        ClienteAct.value = {
+            id: "",
+            nombre: "",
+            apellido: "",
+            email: "",
+            usuario: "",
+            contrasena: "",
+            id_rol: ""
+        };
+        BusquedaCliente()
+        CerrarPopUp03()
+        CerrarPopUp04()
+        CerrarPopUp05()
+        CerrarPopUp06()
+        CerrarPopUp07()
+        CerrarPopUp08()
+        CerrarPopUp09()
     }
     const Edicion = (cliente_fila) => {
         ClienteAct.value.id = cliente_fila.id
@@ -409,17 +672,18 @@
         ClienteAct.value.apellido = cliente_fila.apellido
         ClienteAct.value.email = cliente_fila.email
         ClienteAct.value.usuario = cliente_fila.usuario
-        AbrirPopUp3()
+        AbrirPopUp03()
     };
     const LimpiarFiltro = () => {
         filtroDirec.value = 2
         filtroEst.value = 1
         BusquedaCliente();
-        CerrarPopUp1();
+        CerrarPopUp01();
         filtroAct.value = false
     }
     const BusquedaCliente = async() => {
         let url = new URL ('http://localhost:8000/cliente/');
+		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_cliente', Busqueda.value)
         }
@@ -445,7 +709,7 @@
     }
     const AplicarFiltro = () => {
         BusquedaCliente()
-        CerrarPopUp1()
+        CerrarPopUp01()
     }
 </script>
 
@@ -458,10 +722,6 @@
     }
     .seleccion{
         padding: 10px;
-    }
-    .busqueda{
-        padding: 10px;
-        width: 70%;
     }
     .contenedor_tabla {
         border-radius: 15px;
@@ -477,12 +737,6 @@
         cursor: pointer;
         background-color: #f8fff1;
         user-select: none;
-    }
-    .classActivo{
-        background-color: #d5f1cb;
-    }
-    .classEliminado{
-        background-color: #f58a72;
     }
     .caja_direcciones{
         background-color: #ffffff;

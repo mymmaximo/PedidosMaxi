@@ -95,7 +95,7 @@ input{
 	border: 2px solid #000000;
 	box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 	overflow: hidden;
-	}
+}
 .fondo_oscuro {
 	position: fixed;
 	top: 0;
@@ -137,4 +137,24 @@ input{
 .classindefinido{
 	background-color: #ffffff;
     cursor: pointer;
+}
+.classActivo{
+    background-color: #d5f1cb;
+}
+.classEliminado{
+    background-color: #f58a72;
+}
+.classAdmin{
+    background-color: #f4f1a4;
+}
+.classTrabajador{
+    background-color: #b5fcd9;
+}
+.classCliente{
+    background-color: #afe6f0;
+}
+.busqueda{
+    padding: 10px;
+    width: 70%;
+    margin: 15px;
 }
