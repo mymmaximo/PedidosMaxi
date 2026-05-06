@@ -501,6 +501,12 @@
     const PedidoNowHistorial = ref(null)
     const PedidoNowPreparando = ref(null)
     const idUsuario = leerCookie("id_cliente")
+    onMounted(async() => {
+        const respuesta = await fetch(`http://localhost:8000/pedidos/cliente/${idUsuario}`)
+        const datos = await respuesta.json();
+        console.log("aca che",datos)
+        Pedidos.value = datos;
+    })
     const PedidoCambioHistorial = (id) => {
         if (PedidoNowHistorial.value === id) {
             PedidoNowHistorial.value = null
@@ -525,12 +531,6 @@
             PedidoNowPreparando.value = id
         }
     }
-    onMounted(async() => {
-        const respuesta = await fetch(`http://localhost:8000/pedidos/cliente/${idUsuario}`)
-        const datos = await respuesta.json();
-        console.log("aca che",datos)
-        Pedidos.value = datos;
-    })
     const LimpiarFiltro = () => {
         filtroMP.value = 4
         filtroEst.value = 4

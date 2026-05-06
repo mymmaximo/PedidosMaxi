@@ -8,6 +8,9 @@
     <button @click="AbrirPopUp01" class="botoncentro">
     Filtros ☰
     </button>
+    <button @click="AbrirPopUp10" class="botoncentro">
+    Crear Nuevo Cliente
+    </button>
 
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="VentanaFiltro">
@@ -61,6 +64,16 @@
                     > 
                     Cliente Eliminado
                     </label>
+                </div>
+                <h2>
+                Ciudad del Cliente
+                </h2>
+                <div class="caja_radios">
+                </div>
+                <h2>
+                Provincia del Cliente
+                </h2>
+                <div class="caja_radios">
                 </div>
                 <button @click="AplicarFiltro" class="Boton_Crear">
                 Filtrar
@@ -116,6 +129,67 @@
                 <button @click="CerrarPopUp03" class="Boton_Crear">
                 Cancelar
                 </button>
+            </div>
+        </div>
+    </Teleport>
+    <Teleport to="body">
+        <div class="fondo_oscuro" v-if="ActualizarCNew">
+            <div class="contenedor_secundario" v-if="Rol === '1'">
+                <h1>
+                Nuevo Cliente
+                </h1>
+                <form @submit.prevent="SubirNuevoCliente" class="Texto_producto">
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.nombre" 
+                    placeholder="Nombre"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.apellido" 
+                    placeholder="Apellido"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.email" 
+                    placeholder="E-Mail"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.dni" 
+                    placeholder="Documento"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.usuario" 
+                    placeholder="Usuario"
+                    >
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.contrasena" 
+                    placeholder="Contraseña"
+                    >
+                    <select v-model="NuevoCliente.id_rol" class="seleccion">
+                        <option value="" disabled>
+                        Selecciona un Rol...
+                        </option>
+                        <option value=1>
+                        Administrador
+                        </option>>
+                        <option value=2>
+                        Trabajador
+                        </option>
+                        <option value=3>
+                        Cliente
+                        </option>
+                    </select>
+                    <button type="submit" class="Boton_Crear">
+                    Crear Cliente
+                    </button>
+                    <button @click="CerrarPopUp01">
+                    Cancelar
+                    </button>
+                </form>
             </div>
         </div>
     </Teleport>
@@ -459,6 +533,7 @@
     const filtroAct = ref(false)
     const DireccionNow = ref(null)
     const VentanaFiltro = ref(false)
+    const ActualizarCNew = ref(false)
     const ActualizarCRol = ref(false)
     const ActualizarCEmail = ref(false)
     const ActualizarCliente = ref(false)
@@ -540,6 +615,14 @@
 	const CerrarPopUp09 = () => {
 		ActualizarCliente.value = false
 		document.body.style.overflow = "auto"
+	}
+	const AbrirPopUp10 = () => {
+		ActualizarCNew.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp10 = () => {
+		ActualizarCNew.value = false
+		document.body.style.overflow = "auto";
 	}
     const Eliminacion = (cliente_fila) => {
         ClienteEli.value = cliente_fila.id
@@ -711,6 +794,40 @@
         BusquedaCliente()
         CerrarPopUp01()
     }
+    const NuevoCliente = ref({
+        nombre: "",
+        apellido: "",
+        email: "",
+        dni: "",
+        usuario: "",
+        contrasena: "",
+        id_rol: ""
+    });
+    const SubirNuevoCliente = async() => {
+        const SubidaNuevoCliente = await fetch('http://localhost:8000/clientes/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(NuevoCliente.value)
+        });
+        if (SubidaNuevoCliente.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
+        NuevoCliente.value = {
+            nombre: "",
+            apellido: "",
+            email: "",
+            email: "",
+            usuario: "",
+            contrasena: "",
+            id_rol: ""
+        };
+        BusquedaCliente()
+        CerrarPopUp10()
+    };
 </script>
 
 <style scoped>

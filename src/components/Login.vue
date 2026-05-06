@@ -86,7 +86,13 @@
     const Herror = ref("")
     const MostrarLogin = ref(true)
     const SesionIniciada = ref(false)
-    const emit = defineEmits(['LoginExitoso']);
+    const emit = defineEmits(['LoginExitoso'])
+    onMounted(() => {
+        const tokenGuardado = leerCookie("token")
+        if (tokenGuardado) {
+            SesionIniciada.value = true
+        }
+    })
     const LoginCliente = ref({
         usuario: "",
         contrasena: ""
@@ -127,12 +133,6 @@
             Herror.value = "Error al registrar, revisa tus datos";
         } 
     }
-    onMounted(() => {
-        const tokenGuardado = leerCookie("token");
-        if (tokenGuardado) {
-            SesionIniciada.value = true
-        }
-    })
     const IniciarSesionCliente = async() => {
     const respuesta = await fetch('http://localhost:8000/cliente/login/', {
         method: 'POST',

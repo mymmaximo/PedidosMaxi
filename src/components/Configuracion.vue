@@ -1,9 +1,6 @@
 <template>
     <div class="Texto_producto">
         <div class="caja_config">
-            <button @click="AbrirPopUp01" class="botoncentro">
-            Crear Nuevo Cliente
-            </button>
             <button @click="AbrirPopUp02" class="botoncentro">
             Actualiza tu Nombre y Apellido
             </button>
@@ -16,72 +13,8 @@
             <button @click="AbrirPopUp05" class="botoncentro">
             Actualiza Tu Contraseña
             </button>
-            <button @click="AbrirPopUp06" class="botoncentro">
-            Actualiza Tu Rol 
-            </button>
         </div>
     </div>
-    <Teleport to="body">
-        <div class="fondo_oscuro" v-if="ActualizarCNew">
-            <div class="contenedor_secundario" v-if="Rol === '1'">
-                <h1>
-                Nuevo Cliente
-                </h1>
-                <form @submit.prevent="SubirNuevoCliente" class="Texto_producto">
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.nombre" 
-                    placeholder="Nombre"
-                    >
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.apellido" 
-                    placeholder="Apellido"
-                    >
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.email" 
-                    placeholder="E-Mail"
-                    >
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.dni" 
-                    placeholder="Documento"
-                    >
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.usuario" 
-                    placeholder="Usuario"
-                    >
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.contrasena" 
-                    placeholder="Contraseña"
-                    >
-                    <select v-model="NuevoCliente.id_rol" class="seleccion">
-                        <option value="" disabled>
-                        Selecciona un Rol...
-                        </option>
-                        <option value=1>
-                        Administrador
-                        </option>>
-                        <option value=2>
-                        Trabajador
-                        </option>
-                        <option value=3>
-                        Cliente
-                        </option>
-                    </select>
-                    <button type="submit" class="Boton_Crear">
-                    Crear Cliente
-                    </button>
-                    <button @click="CerrarPopUp01">
-                    Cancelar
-                    </button>
-                </form>
-            </div>
-        </div>
-    </Teleport>
 
     
     <Teleport to="body">
@@ -182,20 +115,25 @@
 <script setup>
     import { onMounted, ref } from 'vue';
     import { CerrarSesion, Rol, leerCookie } from './Estatus.js';
-    const ActualizarCNew = ref(false)
     const ActualizarCEmail = ref(false)
     const ActualizarCUsuario = ref(false)
     const ActualizarCContrasena = ref(false)
     const ActualizarCNombre_Apellido = ref(false)
-    const rolUsuarioAct = leerCookie("id_rol");
-	const AbrirPopUp01 = () => {
-		ActualizarCNew.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp01 = () => {
-		ActualizarCNew.value = false
-		document.body.style.overflow = "auto";
-	}
+    const rolUsuarioAct = leerCookie("id_rol")
+    onMounted(async() => {
+        const idUsuarioAct = leerCookie("id_cliente");
+        if (idUsuarioAct) {
+            const respuesta = await fetch(`http://localhost:8000/cliente/?id_cliente=${idUsuarioAct}`);
+            const datos = await respuesta.json();
+            if (datos.length > 0) {
+                const miPerfil = datos[0];
+                UsuarioAct.value.nombre = miPerfil.nombre;
+                UsuarioAct.value.apellido = miPerfil.apellido;
+                UsuarioAct.value.email = miPerfil.email;
+                UsuarioAct.value.usuario = miPerfil.usuario;
+            }
+        }
+    })
 	const AbrirPopUp02 = () => {
 		ActualizarCNombre_Apellido.value = true
 		document.body.style.overflow = "hidden"
@@ -228,20 +166,6 @@
 		ActualizarCContrasena.value = false
 		document.body.style.overflow = "auto"
 	}
-    onMounted(async() => {
-        const idUsuarioAct = leerCookie("id_cliente");
-        if (idUsuarioAct) {
-            const respuesta = await fetch(`http://localhost:8000/cliente/?id_cliente=${idUsuarioAct}`);
-            const datos = await respuesta.json();
-            if (datos.length > 0) {
-                const miPerfil = datos[0];
-                UsuarioAct.value.nombre = miPerfil.nombre;
-                UsuarioAct.value.apellido = miPerfil.apellido;
-                UsuarioAct.value.email = miPerfil.email;
-                UsuarioAct.value.usuario = miPerfil.usuario;
-            }
-        }
-    })
     const UsuarioAct = ref({
         nombre: "",
         apellido: "",
@@ -294,40 +218,6 @@
             usuario: "",
             contrasena: ""
         };
-    };
-
-    const NuevoCliente = ref({
-        nombre: "",
-        apellido: "",
-        email: "",
-        dni: "",
-        usuario: "",
-        contrasena: "",
-        id_rol: ""
-    });
-    const SubirNuevoCliente = async() => {
-        const SubidaNuevoCliente = await fetch('http://localhost:8000/clientes/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(NuevoCliente.value)
-        });
-        if (SubidaNuevoCliente.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
-        }
-        NuevoCliente.value = {
-            nombre: "",
-            apellido: "",
-            email: "",
-            email: "",
-            usuario: "",
-            contrasena: "",
-            id_rol: ""
-        };
-        CerrarPopUp01()
     };
 </script>
 

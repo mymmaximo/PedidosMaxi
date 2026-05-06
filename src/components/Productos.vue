@@ -166,32 +166,36 @@
                         placeholder="Nombre"
                         >
                         <input 
-                        type="text" 
+                        type="number" 
                         v-model="NuevoProducto.precio" 
                         placeholder="Precio"
                         >
                         <input 
-                        type="text" 
+                        type="number" 
                         v-model="NuevoProducto.stock" 
                         placeholder="Stock"
                         >
+                        <select v-model="OpcionCategoria">
+                            <option value="new">
+                            + Agrega una Categoria
+                            </option>
+                            <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                            {{ i.categoria }}
+                            </option>
+                        </select>
                         <input 
+                        v-if="OpcionCategoria === 'new'" 
                         type="text" 
                         v-model="NuevoProducto.categoria" 
                         placeholder="Categoria"
                         >
-                        <input 
-                        type="text" 
-                        v-model="NuevoProducto.codigo_barra" 
-                        placeholder="Codigo de Barras"
-                        >
+                        <button type="submit" class="Boton_Crear">
+                        Crear
+                        </button>
+                        <button @click="CerrarPopUp04">
+                        Cancelar
+                        </button>
                     </form>
-                    <button type="submit" class="Boton_Crear">
-                    Crear
-                    </button>
-                    <button @click="CerrarPopUp04">
-                    Cancelar
-                    </button>
                 </div>
             </div>
         </Teleport>
@@ -218,6 +222,9 @@
                     </button>
                     <button @click="AbrirPopUp11" class="botoncentro">
                     Actualizar Todo
+                    </button>
+                    <button @click="CerrarPopUp02" class="botoncentro">
+                    Cancelar
                     </button>
                 </div>
             </div>
@@ -463,9 +470,11 @@
     const ActualizarPNombre = ref(false)
     const ActualizarPPrecio = ref(false)
     const ActualizarPStock = ref(false)
+    const OpcionCategoria = ref("new")
     const VentanaCompra = ref(false)
     const VentanaFiltro = ref(false)
     const VentanaNuevo = ref(false)
+    const ListaCategoria = ref ("")
     const filtroAct = ref(false)
     const ProductoEli = ref("")
     const filtroRadio = ref(0)
@@ -477,10 +486,13 @@
 	const Pagina = ref(0)
     onMounted(async() => {
         BusquedaProducto()
-        const CarritoOlvidado = localStorage.getItem('carrito_pendiente');
+        const respuesta = await fetch("http://localhost:8000/producto/categorias/")
+        const categ = await respuesta.json()
+        ListaCategoria.value = categ
+        const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
         if (CarritoOlvidado) {
-            CarritoLocal.value = JSON.parse(CarritoOlvidado);
-            console.log("Carrito recuperado:", CarritoLocal.value);
+            CarritoLocal.value = JSON.parse(CarritoOlvidado)
+            console.log("Carrito recuperado:", CarritoLocal.value)
         }
     })
 	const AbrirPopUp01 = () => {
@@ -813,11 +825,13 @@
         nombre: "",
         precio: "",
         stock: "",
-        categoria: "",
-        codigo_barra: ""
-    });
+        categoria: ""
+    })
     const SubirNuevoProducto = async() => {
-        const SubidaNuevoProducto = await fetch('http://localhost:8000/producto/', {
+        if (OpcionCategoria.value != "new") {
+            NuevoProducto.value.categoria = OpcionCategoria.value
+        }
+        const SubidaNuevoProducto = await fetch('http://localhost:8000/productos/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -833,10 +847,10 @@
             nombre: "",
             precio: "",
             stock: "",
-            categoria: "",
-            codigo_barra: ""
-        };
+            categoria: ""
+        }
         BusquedaProducto()
+        CerrarPopUp04()
     }
     const ProductoAct = ref({
         id: "",
