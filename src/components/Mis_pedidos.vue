@@ -7,7 +7,7 @@
         class="busqueda"
         >
         <button @click="VentanaFiltro = true" class="botoncentro">
-        Filtros ☰
+        🗃️Filtros
         </button>
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="VentanaFiltro">

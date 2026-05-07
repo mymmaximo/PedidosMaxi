@@ -14,6 +14,9 @@
                 <h1 @click="TablaActual = 'Clientes'" v-if="Rol === '1'">
                 Ver Clientes
                 </h1>
+                <h1 @click="TablaActual = 'Historial_precios'" v-if="Rol === '1'">
+                Ver Historial de Precios
+                </h1>
             </div>
             <div class="botones_derecha">
                 <h1 @click="AbrirPopUp2() ; TablaActual = 'Productos'" v-if="CarritoLocal.length > 0" class="cerrar">
@@ -57,6 +60,7 @@
             <Carrito v-if="TablaActual === 'Carrito'" @CarritoVacio="TablaActual = 'Productos'"/>
             <Configuracion v-if="TablaActual === 'Configuracion'"/>
             <Mis_pedidos v-if="TablaActual === 'Mis_pedidos'"/>
+            <Historial_precios v-if="TablaActual === 'Historial_precios'"/>
         </div>
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="ActualizarCajaLogout">
@@ -104,6 +108,7 @@
     import Carrito from "./components/Carrito.vue"
     import Configuracion from './components/Configuracion.vue'
     import Mis_pedidos from './components/Mis_pedidos.vue'
+    import Historial_precios from './components/Historial_precios.vue'
     const BorrarCarrito = ref(false)
     const TablaActual = ref('Productos');
     const ActualizarCajaLogout = ref(false)

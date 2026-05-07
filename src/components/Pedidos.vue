@@ -7,7 +7,7 @@
 		class="busqueda"
 		>
 		<button @click="AbrirPopUp2" class="botoncentro">
-		Filtros ☰
+		🗃️Filtros
 		</button>
 		
 		<Teleport to="body">

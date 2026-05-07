@@ -391,10 +391,6 @@
         margin: 0;
         width: fit-content;
     }
-    .seleccion{
-        width: fit-content;
-        padding: 5px;
-    }
     .contenedor_tabla {
         width: 100%;
         border-radius: 15px;

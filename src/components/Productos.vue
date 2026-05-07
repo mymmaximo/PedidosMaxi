@@ -8,7 +8,7 @@
         class="busqueda"
         >
         <button @click="AbrirPopUp01" class="botoncentro">
-        Filtros ☰
+        🗃️Filtros
         </button>
         <button @click="AbrirPopUp04" class="botoncentro" v-if="Rol === '1'">
         Nuevo Producto ➕
@@ -65,6 +65,18 @@
                         v-model="menor" 
                         placeholder="Precio Min..."
                         >
+                    </div>
+                    <div>
+                        <h2>
+                        Filtro Categoria
+                        </h2>
+                        <div>
+                            <select v-model="filtrocat" class="seleccion">
+                                <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                {{ i.categoria }}
+                                </option>
+                            </select>
+                        </div>
                     </div>
                     <div v-if="Rol === '1'">
                         <h2>
@@ -175,7 +187,7 @@
                         v-model="NuevoProducto.stock" 
                         placeholder="Stock"
                         >
-                        <select v-model="OpcionCategoria">
+                        <select v-model="OpcionCategoria" class="seleccion">
                             <option value="new">
                             + Agrega una Categoria
                             </option>
@@ -477,6 +489,7 @@
     const ListaCategoria = ref ("")
     const filtroAct = ref(false)
     const ProductoEli = ref("")
+    const filtrocat = ref ("")
     const filtroRadio = ref(0)
     const Productos = ref([])
     const filtroEst = ref(1)
@@ -713,6 +726,7 @@
     };
     const LimpiarFiltro = () => {
         filtroRadio.value = 4
+        filtrocat.value = ""
         BusquedaProducto();
         CerrarPopUp1()
         filtroAct.value = false
@@ -810,6 +824,10 @@
         if (filtroEst.value === 0) {
             url.searchParams.append('bool_activo', 'false');
             filtroAct.value = true;
+        }
+        if (filtrocat.value !== "") {
+            url.searchParams.append('filtrocat', filtrocat.value);
+            filtroAct.value = true;            
         }
         const BusqProducto = await fetch(url)
         const datos = await BusqProducto.json();

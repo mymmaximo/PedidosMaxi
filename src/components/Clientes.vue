@@ -6,7 +6,7 @@
     class="busqueda"
     >
     <button @click="AbrirPopUp01" class="botoncentro">
-    Filtros ☰
+    🗃️Filtros
     </button>
     <button @click="AbrirPopUp10" class="botoncentro">
     Crear Nuevo Cliente
