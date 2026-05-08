@@ -59,6 +59,8 @@
             </button>
         </div>
     </div>
+
+    <!-- Confirmacion Eliminar Detalle -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCarritoDel">
             <div class="caja_editar">
@@ -74,6 +76,7 @@
             </div>
         </div>
     </Teleport>   
+    <!-- Pantalla de Pagar -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="PantallaPagar">
             <div class="caja_editar">

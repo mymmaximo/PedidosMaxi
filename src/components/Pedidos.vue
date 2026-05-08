@@ -10,6 +10,7 @@
 		🗃️Filtros
 		</button>
 		
+        <!-- Confirmar Actualizar Estatus -->
 		<Teleport to="body">
 			<div class="fondo_oscuro" v-if="ActualizarCajaP">
 				<div class="caja_editar">
@@ -25,6 +26,7 @@
 				</div>
 			</div>
 		</Teleport>
+        <!-- Filtro -->
 		<Teleport to="body">
 			<div class="fondo_oscuro" v-if="VentanaFiltro">
 				<div class="caja_editar">
@@ -255,12 +257,17 @@
 				<h3>No se encontraron Pedidos 😔</h3>
 				<p>Prueba buscando con otro termino</p>
 			</div>
+            <div class="contenedor_pagina">
 			<button @click="Pagina = Pagina - 20 ; BusquedaPedido()" :disabled="Pagina < 20">
 			⬅
 			</button>
+            <h2>
+            Items {{ 0 + Pagina }} - {{ Pagina + Pedidos.length }}
+            </h2>
 			<button @click="Pagina = Pagina + 20 ; BusquedaPedido()" :disabled="Pedidos.length < 20">
 			➡
 			</button>
+			</div>
 		</div>
 	</div>
 </template>

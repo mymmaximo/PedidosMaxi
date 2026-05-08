@@ -11,6 +11,7 @@
         🗃️Filtros
         </button>
         
+        <!-- Filtro -->
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="FiltroCaja">
                 <div class="caja_editar">
@@ -180,12 +181,17 @@
                 <h3>No se encontraron Cambios en Precios</h3>
                 <p>Prueba buscando con otro termino</p>
             </div>
+            <div class="contenedor_pagina">
 			<button @click="Pagina = Pagina - 20 ; BusquedaHistorial()" :disabled="Pagina < 20">
 			⬅
 			</button>
+            <h2>
+            Items {{ 0 + Pagina }} - {{ Pagina + Historial.length }}
+            </h2>
 			<button @click="Pagina = Pagina + 20 ; BusquedaHistorial()" :disabled="Historial.length < 20">
 			➡
 			</button>
+            </div>
 		</div>
     </div>
 </template>

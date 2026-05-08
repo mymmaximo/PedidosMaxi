@@ -47,7 +47,7 @@ h1{
     margin: 0;
 }
 .contenedor_principal {
-    width: fit-content;
+    width: 100%;
     border-radius: 10px;
     overflow: hidden;
     padding: 10px;
@@ -60,15 +60,33 @@ input{
     color: red;
 }
 .contenedor_secundario{
-    width: fit-content;
+    width: 100%;
     height: fit-content;
     border-radius: 10px;
     overflow: hidden;
     padding: 10px;
     background-color: rgb(166, 165, 231);
 }
-.contenedor{
+.concontenedor{
     width: 100%;
+    display: flex;
+	flex-direction: row;
+    align-items: stretch;
+    gap: 20px;
+}
+.barside{
+    width: 15%;
+    gap: 25px;
+    background-color: rgb(26, 26, 153);
+    flex-direction: column;
+    display: flex;
+}
+.margen{
+    margin: 15px;
+}
+.contenedor{
+    width: 75%;
+    flex-direction: column;
     display: flex;
 }
 .Texto_producto{
@@ -99,7 +117,7 @@ input{
 	box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 .seleccion{
-    width: fit-content;
+    width: 100%;
     padding: 5px;
 }
 .fondo_oscuro {
@@ -113,6 +131,30 @@ input{
 	justify-content: center;
 	align-items: center;
 	z-index: 1000;
+}
+.contenedor_cartas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    gap: 30px; 
+	align-items: center;
+    padding: 20px;
+}
+.carta_producto {
+    height: 350px;
+    width: 280px;
+    border: 2px solid #000000;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    background-color: rgb(204, 245, 235);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+}
+.imagen_carta {
+    width: 150px; 
+    height: auto;
+    place-self: center;
+    margin-bottom: 10px;
 }
 .boton_detalle{
     padding: 10px;
@@ -163,4 +205,17 @@ input{
     padding: 10px;
     width: 70%;
     margin: 15px;
+}
+.botoncentro{
+    align-self: center;
+    gap: 5px;
+}
+.contenedor_pagina{
+    font-size: small;
+    display: flex;
+    align-self: center;
+    gap: 5px;
+    place-self: center;
+    width: fit-content;
+    height: 50px;
 }

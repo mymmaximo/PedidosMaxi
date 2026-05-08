@@ -1,115 +1,42 @@
 <template>
     <div class="Texto_producto">
-        <div class="caja_config">
-            <button @click="AbrirPopUp02" class="botoncentro">
-            Actualiza tu Nombre y Apellido
+        <form @submit.prevent="ActualizarUsuario" class="caja_config">
+            <h2>
+            Actualizar Usuario {{ UsuarioAct.nombre }} {{ UsuarioAct.apellido }}
+            </h2>
+            <input 
+            type="text" 
+            v-model="UsuarioAct.nombre" 
+            placeholder="Nombre"
+            >
+            <input 
+            type="text" 
+            v-model="UsuarioAct.apellido" 
+            placeholder="Apellido"
+            >
+            <input 
+            type="text" 
+            v-model="UsuarioAct.email" 
+            placeholder="Email@email.com"
+            >
+            <input 
+            type="text" 
+            v-model="UsuarioAct.usuario" 
+            placeholder="Usuario"
+            >
+            <input 
+            type="text" 
+            v-model="UsuarioAct.contrasena" 
+            placeholder="Contraseña"
+            >
+            <button type="submit" class="Boton_Crear">
+            Actualizar
             </button>
-            <button @click="AbrirPopUp03" class="botoncentro">
-            Actualiza Tu E-Mail
+            <button @click="CerrarPopUp02" class="Boton_Crear">
+            Cancelar
             </button>
-            <button @click="AbrirPopUp04" class="botoncentro">
-            Actualiza Tu Usuario
-            </button>
-            <button @click="AbrirPopUp05" class="botoncentro">
-            Actualiza Tu Contraseña
-            </button>
-        </div>
+        </form>
     </div>
-
-    
-    <Teleport to="body">
-        <div class="fondo_oscuro" v-if="ActualizarCNombre_Apellido">
-            <div class="caja_editar">
-                <h2>
-                Actualizar Nombre y Apellido {{ UsuarioAct.nombre }} {{ UsuarioAct.apellido }}
-                </h2>
-                <form @submit.prevent="ActualizarUsuario" class="Texto_producto">
-                    <input 
-                    type="text" 
-                    v-model="UsuarioAct.nombre" 
-                    placeholder="Nombre"
-                    >
-                    <input 
-                    type="text" 
-                    v-model="UsuarioAct.apellido" 
-                    placeholder="Apellido"
-                    >
-                    <button type="submit" class="Boton_Crear">
-                    Actualizar
-                    </button>
-                    <button @click="CerrarPopUp02" class="Boton_Crear">
-                    Cancelar
-                    </button>
-                </form>
-            </div>
-        </div>
-    </Teleport>
-    <Teleport to="body">
-        <div class="fondo_oscuro" v-if="ActualizarCEmail">
-            <div class="caja_editar">
-                <h2>
-                Actualizar E-Mail {{ UsuarioAct.nombre }} {{ UsuarioAct.apellido }}
-                </h2>
-                <form @submit.prevent="ActualizarUsuario" class="Texto_producto">
-                    <input 
-                    type="text" 
-                    v-model="UsuarioAct.email" 
-                    placeholder="E-Mail"
-                    >
-                    <button type="submit" class="Boton_Crear">
-                    Actualizar
-                    </button>
-                    <button @click="CerrarPopUp03" class="Boton_Crear">
-                    Cancelar
-                    </button>
-                </form>
-            </div>
-        </div>
-    </Teleport>
-    <Teleport to="body">
-        <div class="fondo_oscuro" v-if="ActualizarCUsuario">
-            <div class="caja_editar">
-                <h2>
-                Actualizar Usuario {{ UsuarioAct.nombre }} {{ UsuarioAct.apellido }}
-                </h2>
-                <form @submit.prevent="ActualizarUsuario" class="Texto_producto">
-                    <input 
-                    type="text" 
-                    v-model="UsuarioAct.usuario" 
-                    placeholder="Usuario"
-                    >
-                    <button type="submit" class="Boton_Crear">
-                    Actualizar
-                    </button>
-                    <button @click="CerrarPopUp04" class="Boton_Crear">
-                    Cancelar
-                    </button>
-                </form>
-            </div>
-        </div>
-    </Teleport>
-    <Teleport to="body">
-        <div class="fondo_oscuro" v-if="ActualizarCContrasena">
-            <div class="caja_editar">
-                <h2>
-                Actualizar Contraseña {{ UsuarioAct.nombre }} {{ UsuarioAct.apellido }}
-                </h2>
-                <form @submit.prevent="ActualizarUsuario" class="Texto_producto">
-                    <input 
-                    type="text" 
-                    v-model="UsuarioAct.contrasena" 
-                    placeholder="Contraseña"
-                    >
-                    <button type="submit" class="Boton_Crear">
-                    Actualizar
-                    </button>
-                    <button @click="CerrarPopUp05" class="Boton_Crear">
-                    Cancelar
-                    </button>
-                </form>
-            </div>
-        </div>
-    </Teleport>
 </template>
 
 <script setup>
@@ -126,11 +53,13 @@
             const respuesta = await fetch(`http://localhost:8000/cliente/?id_cliente=${idUsuarioAct}`);
             const datos = await respuesta.json();
             if (datos.length > 0) {
-                const miPerfil = datos[0];
-                UsuarioAct.value.nombre = miPerfil.nombre;
-                UsuarioAct.value.apellido = miPerfil.apellido;
-                UsuarioAct.value.email = miPerfil.email;
-                UsuarioAct.value.usuario = miPerfil.usuario;
+                const miPerfil = datos.find(cliente => cliente.id === parseInt(idUsuarioAct))
+                if (miPerfil) {
+                    UsuarioAct.value.nombre = miPerfil.nombre
+                    UsuarioAct.value.apellido = miPerfil.apellido
+                    UsuarioAct.value.email = miPerfil.email
+                    UsuarioAct.value.usuario = miPerfil.usuario
+                }
             }
         }
     })

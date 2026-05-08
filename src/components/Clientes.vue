@@ -12,6 +12,7 @@
     Crear Nuevo Cliente
     </button>
 
+    <!-- Filtro -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="VentanaFiltro">
            <div class="caja_editar">
@@ -87,6 +88,7 @@
             </div> 
         </div>
     </Teleport>
+    <!-- Confirmacion Eliminar -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCajaCDel">
             <div class="caja_editar">
@@ -102,6 +104,7 @@
             </div>
         </div>
     </Teleport>
+    <!-- Botones Actualizar Cliente -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCajaC">
             <div class="caja_editar">
@@ -132,6 +135,7 @@
             </div>
         </div>
     </Teleport>
+    <!-- Nuevo Cliente -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCNew">
             <div class="contenedor_secundario" v-if="Rol === '1'">
@@ -194,6 +198,7 @@
         </div>
     </Teleport>
     
+    <!-- Actualizar Cliente Nombre y Apellido -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCNombre_Apellido">
             <div class="caja_editar">
@@ -221,6 +226,7 @@
             </div>
         </div>
     </Teleport>
+    <!-- Actualizar Cliente Email -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCEmail">
             <div class="caja_editar">
@@ -243,6 +249,7 @@
             </div>
         </div>
     </Teleport>
+    <!-- Actualizar Cliente Usuario -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCUsuario">
             <div class="caja_editar">
@@ -265,6 +272,7 @@
             </div>
         </div>
     </Teleport>
+    <!-- Actualizar Cliente Contraseña -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCContrasena">
             <div class="caja_editar">
@@ -287,6 +295,7 @@
             </div>
         </div>
     </Teleport>
+    <!-- Actualizar Cliente Rol -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCRol">
             <div class="caja_editar">
@@ -318,6 +327,7 @@
             </div>
         </div>
     </Teleport>
+    <!-- Actualizar Todo Cliente -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCliente">
             <div class="caja_editar">
@@ -511,12 +521,17 @@
                 <h3>No se encontraran clientes 😔</h3>
                 <p>Prueba buscando con otro termino</p>
             </div>
+            <div class="contenedor_pagina">
 			<button @click="Pagina = Pagina - 20 ; BusquedaCliente()" :disabled="Pagina < 20">
 			⬅
 			</button>
+            <h2>
+            Items {{ 0 + Pagina }} - {{ Pagina + clientes.length }}
+            </h2>
 			<button @click="Pagina = Pagina + 20 ; BusquedaCliente()" :disabled="clientes.length < 20">
 			➡
 			</button>
+            </div>
         </div>
     </div>
 </template>

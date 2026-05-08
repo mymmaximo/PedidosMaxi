@@ -9,6 +9,8 @@
         <button @click="VentanaFiltro = true" class="botoncentro">
         🗃️Filtros
         </button>
+        
+        <!-- Filtro -->
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="VentanaFiltro">
                 <div class="caja_editar">
@@ -90,6 +92,7 @@
                 </div>
             </div>
         </Teleport>
+
         <div class="contenedor_principal">
             <div>
                 <h1>
