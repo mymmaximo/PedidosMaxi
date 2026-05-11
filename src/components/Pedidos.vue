@@ -1,15 +1,16 @@
 <template>
 	<div>
+    	<!-- Barra de Busqueda -->
 		<input
 		@input="BusquedaPedido"
 		type="text" v-model="Busqueda" 
 		placeholder="Busqueda..."
 		class="busqueda"
 		>
+    	<!-- Boton de Filtro -->
 		<button @click="AbrirPopUp2" class="botoncentro">
 		🗃️Filtros
-		</button>
-		
+		</button>		
         <!-- Confirmar Actualizar Estatus -->
 		<Teleport to="body">
 			<div class="fondo_oscuro" v-if="ActualizarCajaP">
@@ -96,6 +97,32 @@
 						Entregado
 						</label>
 					</div>
+					<h2>
+					Ciudad del Cliente
+					</h2>
+					<div class="caja_radios">
+						<select v-model="filtrociudad" class="seleccion">
+							<option value="" disabled>
+							Selecciona una Ciudad...
+							</option>
+							<option v-for="i in ListaCiudad" :key="i.ciudad" :value="i.ciudad">
+							{{ i.ciudad }}
+							</option>
+						</select>
+					</div>
+					<h2>
+					Provincia del Cliente
+					</h2>
+					<div class="caja_radios">
+						<select v-model="filtroprovincia" class="seleccion">
+							<option value="" disabled>
+							Selecciona una Provincia...
+							</option>
+							<option v-for="i in ListaProvincia" :key="i.provincia" :value="i.provincia">
+							{{ i.provincia }}
+							</option>
+						</select>
+					</div>
 					<button @click="AplicarFiltro" class="Boton_Crear">
 					Aplicar Filtros
 					</button>
@@ -108,7 +135,7 @@
 				</div>
 			</div>
 		</Teleport>
-
+    	<!-- Tabla de Pedidos -->
 		<div class="contenedor_principal">
 			<h1>
 			Pedidos
@@ -159,7 +186,6 @@
 							<tr>
 								<td>
 								{{ i.cliente[0].nombre }}
-								{{ i.cliente[0].apellido }}
 								</td>
 								<td>
 								{{ i.direccion[0].calle }} 
@@ -280,11 +306,21 @@
 	const Busqueda = ref("")
 	const filtroEst = ref(4)
 	const PedidoNow = ref(null)
+    const filtrociudad = ref ("")
+    const filtroprovincia = ref ("")
 	const filtroAct = ref(false)
+    const ListaCiudad = ref ("")
+    const ListaProvincia = ref ("")
 	const VentanaFiltro = ref(false)
 	const ActualizarCajaP = ref (false)
 	onMounted(async() => {
 		BusquedaPedido()
+        const respuestac = await fetch("http://localhost:8000/direccion/ciudad")
+        const ciudad = await respuestac.json()
+        ListaCiudad.value = ciudad
+        const respuestap = await fetch("http://localhost:8000/direccion/provincia")
+        const provincia = await respuestap.json()
+        ListaProvincia.value = provincia
 	})
 	const PedidoCambio = (id) => {
 		if (PedidoNow.value === id) {
@@ -337,6 +373,8 @@
 	const LimpiarFiltro = () => {
 		filtroMP.value = 4
 		filtroEst.value = 4
+        filtrociudad.value = ""
+        filtroprovincia.value = ""
 		BusquedaPedido();
 		CerrarPopUp2();
 		filtroAct.value = false
@@ -371,6 +409,14 @@
 			url.searchParams.append('filtroest', filtroEst.value);
 			filtroAct.value = true
 		}
+        if (filtrociudad.value !== "") {
+            url.searchParams.append('busqueda_pedido', filtrociudad.value);
+            filtroAct.value = true;            
+        }
+        if (filtroprovincia.value !== "") {
+            url.searchParams.append('busqueda_pedido', filtroprovincia.value);
+            filtroAct.value = true;            
+        }
 		const BusqPedido = await fetch(url)
 		const datos = await BusqPedido.json();
 		Pedidos.value = datos;

@@ -14,6 +14,9 @@
                 <h1 @click="TablaActual = 'Clientes'" v-if="Rol === '1'">
                 Ver Clientes
                 </h1>
+                <h1 @click="TablaActual = 'Usuarios'" v-if="Rol === '1'">
+                Ver Usuarios
+                </h1>
                 <h1 @click="TablaActual = 'Historial_precios'" v-if="Rol === '1'">
                 Ver Historial de Precios
                 </h1>
@@ -56,7 +59,8 @@
         <div>
             <Productos v-if="TablaActual === 'Productos'"/>
             <Pedidos v-if="TablaActual === 'Pedidos'"/>
-            <Clientes  v-if="TablaActual === 'Clientes'"/>
+            <Clientes v-if="TablaActual === 'Clientes'"/>
+            <Usuarios v-if="TablaActual === 'Usuarios'"/>
             <Carrito v-if="TablaActual === 'Carrito'" @CarritoVacio="TablaActual = 'Productos'"/>
             <Configuracion v-if="TablaActual === 'Configuracion'"/>
             <Mis_pedidos v-if="TablaActual === 'Mis_pedidos'"/>
@@ -104,6 +108,7 @@
     import Login from './components/Login.vue'
     import Pedidos from "./components/Pedidos.vue"
     import Clientes from "./components/Clientes.vue"
+    import Usuarios from "./components/Usuarios.vue"
     import Productos from "./components/Productos.vue"
     import Carrito from "./components/Carrito.vue"
     import Configuracion from './components/Configuracion.vue'

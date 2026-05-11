@@ -1,15 +1,16 @@
 <template>
     <div>
+        <!-- Barra de Busqueda -->
         <input
         @input="BusquedaPedido"
         type="text" v-model="Busqueda" 
         placeholder="Busqueda..."
         class="busqueda"
         >
+        <!-- Boton de Filtro -->
         <button @click="VentanaFiltro = true" class="botoncentro">
         🗃️Filtros
         </button>
-        
         <!-- Filtro -->
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="VentanaFiltro">
@@ -92,7 +93,7 @@
                 </div>
             </div>
         </Teleport>
-
+        <!-- Tabla de Mis Pedidos -->
         <div class="contenedor_principal">
             <div>
                 <h1>

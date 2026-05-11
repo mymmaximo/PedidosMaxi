@@ -1,39 +1,54 @@
 <template>
+    <!-- Actualizar Datos -->
     <div class="Texto_producto">
-        <form @submit.prevent="ActualizarUsuario" class="caja_config">
+        <form @submit.prevent="ActualizarCliente" class="caja_config">
             <h2>
-            Actualizar Usuario {{ UsuarioAct.nombre }} {{ UsuarioAct.apellido }}
+            Actualizar Usuario {{ ClienteConfig.nombre }}
             </h2>
+            <h1>
+            Nombre
+            </h1>
             <input 
             type="text" 
-            v-model="UsuarioAct.nombre" 
+            v-model="ClienteConfig.nombre" 
             placeholder="Nombre"
             >
+            <h1>
+            E-mail
+            </h1>
             <input 
             type="text" 
-            v-model="UsuarioAct.apellido" 
-            placeholder="Apellido"
-            >
-            <input 
-            type="text" 
-            v-model="UsuarioAct.email" 
+            v-model="ClienteConfig.email" 
             placeholder="Email@email.com"
             >
-            <input 
-            type="text" 
-            v-model="UsuarioAct.usuario" 
-            placeholder="Usuario"
-            >
-            <input 
-            type="text" 
-            v-model="UsuarioAct.contrasena" 
-            placeholder="Contraseña"
-            >
+            <h1>
+            Contraseña
+            </h1>
+            <div style="display: flex;">
+                <input 
+                :type="verContrasena ? 'text' : 'password'"
+                v-model="ClienteConfig.contrasena" 
+                placeholder="Contraseña"
+                >
+                <button type="button" @click="verContrasena = !verContrasena">
+                {{ verContrasena ? '🔒' : '👁️' }}
+                </button>
+            </div>
+            <h1>
+            Confirmar Contraseña
+            </h1>
+            <div style="display: flex;">
+                <input 
+                :type="verConContrasena ? 'text' : 'password'"
+                v-model="ClienteConfig.concontrasena" 
+                placeholder="Contraseña"
+                >
+                <button type="button" @click="verConContrasena = !verConContrasena">
+                {{ verConContrasena ? '🔒' : '👁️' }}
+                </button>
+            </div>
             <button type="submit" class="Boton_Crear">
             Actualizar
-            </button>
-            <button @click="CerrarPopUp02" class="Boton_Crear">
-            Cancelar
             </button>
         </form>
     </div>
@@ -41,87 +56,46 @@
 
 <script setup>
     import { onMounted, ref } from 'vue';
-    import { CerrarSesion, Rol, leerCookie } from './Estatus.js';
-    const ActualizarCEmail = ref(false)
-    const ActualizarCUsuario = ref(false)
-    const ActualizarCContrasena = ref(false)
-    const ActualizarCNombre_Apellido = ref(false)
-    const rolUsuarioAct = leerCookie("id_rol")
+    import { CerrarSesion, leerCookie } from './Estatus.js';
+    const verContrasena = ref(false)
+    const verConContrasena = ref(false)
     onMounted(async() => {
-        const idUsuarioAct = leerCookie("id_cliente");
-        if (idUsuarioAct) {
-            const respuesta = await fetch(`http://localhost:8000/cliente/?id_cliente=${idUsuarioAct}`);
+        const idConfig = leerCookie("id_cliente");
+        if (idConfig) {
+            const respuesta = await fetch(`http://localhost:8000/cliente/?id_cliente=${idConfig}`);
             const datos = await respuesta.json();
             if (datos.length > 0) {
-                const miPerfil = datos.find(cliente => cliente.id === parseInt(idUsuarioAct))
+                const miPerfil = datos.find(cliente => cliente.id === parseInt(idConfig))
                 if (miPerfil) {
-                    UsuarioAct.value.nombre = miPerfil.nombre
-                    UsuarioAct.value.apellido = miPerfil.apellido
-                    UsuarioAct.value.email = miPerfil.email
-                    UsuarioAct.value.usuario = miPerfil.usuario
+                    ClienteConfig.value.nombre = miPerfil.nombre
+                    ClienteConfig.value.email = miPerfil.email
+                    ClienteConfig.value.usuario = miPerfil.usuario
                 }
             }
         }
     })
-	const AbrirPopUp02 = () => {
-		ActualizarCNombre_Apellido.value = true
-		document.body.style.overflow = "hidden"
-	}
-	const CerrarPopUp02 = () => {
-		ActualizarCNombre_Apellido.value = false
-		document.body.style.overflow = "auto"
-	}
-	const AbrirPopUp03 = () => {
-		ActualizarCEmail.value = true
-		document.body.style.overflow = "hidden"
-	}
-	const CerrarPopUp03 = () => {
-		ActualizarCEmail.value = false
-		document.body.style.overflow = "auto"
-	}
-	const AbrirPopUp04 = () => {
-		ActualizarCUsuario.value = true
-		document.body.style.overflow = "hidden"
-	}
-	const CerrarPopUp04 = () => {
-		ActualizarCUsuario.value = false
-		document.body.style.overflow = "auto"
-	}
-	const AbrirPopUp05 = () => {
-		ActualizarCContrasena.value = true
-		document.body.style.overflow = "hidden"
-	}
-	const CerrarPopUp05 = () => {
-		ActualizarCContrasena.value = false
-		document.body.style.overflow = "auto"
-	}
-    const UsuarioAct = ref({
+    const ClienteConfig = ref({
         nombre: "",
-        apellido: "",
         email: "",
-        usuario: "",
         contrasena: "",
-        id_rol: rolUsuarioAct
+        concontrasena: ""
     });
-    const ActualizarUsuario = async() => {
+    const ActualizarCliente = async() => {
+        if (ClienteConfig.value.contrasena !== "" || ClienteConfig.value.concontrasena !== "") {
+            if (ClienteConfig.value.contrasena !== ClienteConfig.value.concontrasena) {
+                alert("❌ Las contraseñas no coinciden. Por favor, verifícalas.")
+                return
+            }
+        }
         const UsuarioUpd = {} 
-        if (UsuarioAct.value.nombre !== "") {
-            UsuarioUpd.nombre = UsuarioAct.value.nombre
+        if (ClienteConfig.value.nombre !== "") {
+            UsuarioUpd.nombre = ClienteConfig.value.nombre
         }
-        if (UsuarioAct.value.apellido !== "") {
-            UsuarioUpd.apellido = UsuarioAct.value.apellido
+        if (ClienteConfig.value.email !== "") {
+            UsuarioUpd.email = ClienteConfig.value.email
         }
-        if (UsuarioAct.value.email !== "") {
-            UsuarioUpd.email = UsuarioAct.value.email
-        }
-        if (UsuarioAct.value.usuario !== "") {
-            UsuarioUpd.usuario = UsuarioAct.value.usuario
-        }
-        if (UsuarioAct.value.contrasena !== "") {
-            UsuarioUpd.contrasena = UsuarioAct.value.contrasena
-        }
-        if (UsuarioAct.value.id_rol !== "") {
-            UsuarioUpd.id_rol = UsuarioAct.value.id_rol
+        if (ClienteConfig.value.contrasena !== "") {
+            UsuarioUpd.contrasena = ClienteConfig.value.contrasena
         }
         const idUsuarioAct = leerCookie("id_cliente");
         const ActUsuario = await fetch(`http://localhost:8000/clientes/id/${idUsuarioAct}`, {
@@ -132,19 +106,13 @@
             body: JSON.stringify(UsuarioUpd)
         });
         if (ActUsuario.status === 401) {
-            CerrarSesion();
+            CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
+            return
         }
-        CerrarPopUp02()
-        CerrarPopUp03()
-        CerrarPopUp04()
-        CerrarPopUp05()
-        UsuarioAct.value = {
+        ClienteConfig.value = {
             nombre: "",
-            apellido: "",
             email: "",
-            usuario: "",
             contrasena: ""
         };
     };
@@ -170,5 +138,10 @@
         overflow: hidden;
         width: 40%;
         align-self: center;
+    }
+    h1{
+        font: 1em sans-serif;
+        color: #000000;
+        padding: 0;
     }
 </style>

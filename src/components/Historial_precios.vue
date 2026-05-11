@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- Barra de Busqueda -->
         <input
         @input="BusquedaHistorial"
         type="text" 
@@ -7,10 +8,10 @@
         placeholder="Busqueda..."
         class="busqueda"
         >
+        <!-- Boton de Filtro -->
         <button @click="AbrirPopUp1" class="botoncentro">
         🗃️Filtros
         </button>
-        
         <!-- Filtro -->
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="FiltroCaja">
@@ -118,7 +119,7 @@
                 </div>
             </div>
         </Teleport>
-
+        <!-- Tabla de Historial de Precios -->
 		<div class="contenedor_principal">
 			<h1>
 			Historial de Pedidos

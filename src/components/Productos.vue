@@ -20,13 +20,14 @@
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="VentanaCompra">
                 <div class="caja_editar">
-                    <h2>
+                    <h2 style="color: black;">
                     {{ ProductoActual.nombre }}
                     </h2>
                     <div>
                         <input 
                         type="number" 
                         v-model="ProductoCantidad"
+                        style="width: 100px; height: 25px;"
                         >
                         <button @click="SumarProducto(ProductoActual)">
                         ➕
@@ -93,162 +94,46 @@
                 </div>
             </div>
         </Teleport>
-        <!-- Botones Actualizar Producto -->
+        <!-- Actualizar Producto -->
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="ActualizarCajaP">
                 <div class="caja_editar">
-                    <h1>
-                    Actualizar Producto {{ ProductoAct.nombre }}
-                    </h1>
-                    <button @click="AbrirPopUp06" class="botoncentro">
-                    Actualizar Nombre
-                    </button>
-                    <button @click="AbrirPopUp07" class="botoncentro">
-                    Actualizar Precio
-                    </button>
-                    <button @click="AbrirPopUp08" class="botoncentro">
-                    Actualizar Stock
-                    </button>
-                    <button @click="AbrirPopUp09" class="botoncentro">
-                    Actualizar Categoria
-                    </button>
-                    <button @click="AbrirPopUp10" class="botoncentro">
-                    Actualizar Codigo de Barras
-                    </button>
-                    <button @click="AbrirPopUp11" class="botoncentro">
-                    Actualizar Todo
-                    </button>
-                    <button @click="CerrarPopUp02" class="botoncentro">
-                    Cancelar
-                    </button>
-                </div>
-            </div>
-        </Teleport>
-        <!-- Actualizar Producto Nombre -->
-        <Teleport to="body">
-            <div class="fondo_oscuro" v-if="ActualizarPNombre">
-                <div class="caja_editar">
                     <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                        <h1>
+                        Nombre
+                        </h1>
                         <input 
                         type="text" 
                         v-model="ProductoAct.nombre" 
                         placeholder="Nombre"
                         >
-                        <button type="submit" class="Boton_Crear">
-                        Actualizar
-                        </button>
-                        <button @click="CerrarPopUp06" class="Boton_Crear">
-                        Cancelar
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </Teleport>
-        <!-- Actualizar Producto Precio -->
-        <Teleport to="body">
-            <div class="fondo_oscuro" v-if="ActualizarPPrecio">
-                <div class="caja_editar">
-                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
-                        <input 
-                        type="number" 
-                        v-model="ProductoAct.precio" 
-                        placeholder="Precio"
-                        >
-                        <button type="submit" class="Boton_Crear">
-                        Actualizar
-                        </button>
-                        <button @click="CerrarPopUp07" class="Boton_Crear">
-                        Cancelar
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </Teleport>
-        <!-- Actualizar Producto Stock -->
-        <Teleport to="body">
-            <div class="fondo_oscuro" v-if="ActualizarPStock">
-                <div class="caja_editar">
-                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
-                        <input 
-                        type="number" 
-                        v-model="ProductoAct.stock" 
-                        placeholder="Stock"
-                        >
-                        <button type="submit" class="Boton_Crear">
-                        Actualizar
-                        </button>
-                        <button @click="CerrarPopUp08" class="Boton_Crear">
-                        Cancelar
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </Teleport>
-        <!-- Actualizar Producto Categoria -->
-        <Teleport to="body">
-            <div class="fondo_oscuro" v-if="ActualizarPCategoria">
-                <div class="caja_editar">
-                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.categoria" 
-                        placeholder="Categoria"
-                        >
-                        <button type="submit" class="Boton_Crear">
-                        Actualizar
-                        </button>
-                        <button @click="CerrarPopUp09" class="Boton_Crear">
-                        Cancelar
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </Teleport>
-        <!-- Actualizar Producto Codigo de Barra -->
-        <Teleport to="body">
-            <div class="fondo_oscuro" v-if="ActualizarPCodigoBarra">
-                <div class="caja_editar">
-                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.codigo_barra" 
-                        placeholder="Codigo de Barras"
-                        >
-                        <button type="submit" class="Boton_Crear">
-                        Actualizar
-                        </button>
-                        <button @click="CerrarPopUp10" class="Boton_Crear">
-                        Cancelar
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </Teleport>
-        <!-- Actualizar Todo Producto -->
-        <Teleport to="body">
-            <div class="fondo_oscuro" v-if="ActualizarProductos">
-                <div class="caja_editar">
-                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.nombre" 
-                        placeholder="Nombre"
-                        >
+                        <h1>
+                        Precio
+                        </h1>
                         <input 
                         type="text" 
                         v-model="ProductoAct.precio" 
                         placeholder="Precio"
                         >
+                        <h1>
+                        Stock
+                        </h1>
                         <input 
                         type="text" 
                         v-model="ProductoAct.stock" 
                         placeholder="Stock"
                         >
+                        <h1>
+                        Categoria
+                        </h1>
                         <input 
                         type="text" 
                         v-model="ProductoAct.categoria"
                         placeholder="Categoria"
                         >
+                        <h1>
+                        Codigo de Barras
+                        </h1>
                         <input 
                         type="text" 
                         v-model="ProductoAct.codigo_barra" 
@@ -257,23 +142,39 @@
                         <button type="submit" class="Boton_Crear">
                         Actualizar
                         </button>
-                        <button @click="CerrarPopUp11" class="Boton_Crear">
+                        <button @click="CerrarPopUp02" class="Boton_Crear">
                         Cancelar
                         </button>
                     </form>
                 </div>
             </div>
         </Teleport>
-
+        <!-- Tabla de Productos -->
         <div class="concontenedor">
             <div class="barside">
                 <div class="margen">
-                    <h2>
-                    <br>
-                    <br>
-                    Filtros de Precio
-                    </h2>
+                    <div>
+                        <h2>
+                        <br>
+                        Filtro Categoria
+                        </h2>
+                        <div>
+                            <select v-model="filtrocat" class="seleccion">
+                                <option value="" disabled>
+                                Categorias...
+                                </option>
+                                <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                {{ i.categoria }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="caja_radios">
+                        <h2>
+                        <br>
+                        <br>
+                        Filtros de Precio
+                        </h2>
                         <label>
                         <input 
                         type="radio" 
@@ -319,20 +220,6 @@
                         placeholder="Precio Min..."
                         >
                     </div>
-                    <div>
-                        <h2>
-                        <br>
-                        <br>
-                        Filtro Categoria
-                        </h2>
-                        <div>
-                            <select v-model="filtrocat" class="seleccion">
-                                <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
-                                {{ i.categoria }}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
                     <div v-if="Rol === '1'">
                         <h2>
                         <br>
@@ -373,6 +260,9 @@
                     <button @click="AplicarFiltro" class="Boton_Crear">
                     Aplicar Filtros
                     </button>
+                    <h2>
+                    <br>
+                    </h2>
                     <button @click="LimpiarFiltro" class="Boton_Crear" v-if="filtroAct === true">
                     🗑️ Limpiar Filtro
                     </button>
@@ -406,7 +296,7 @@
                                 </button>
                                 <div v-if="Rol === '1'">
                                     <p>
-                                    {{ i.codigo_barra }}
+                                    {{ i.codigo_barra }} <br>
                                     {{ i.stock }}
                                     {{ Estatustxt(i.activo) }}
                                     </p>
@@ -428,18 +318,18 @@
                     <h3>No se encontraron productos 😔</h3>
                     <p>Prueba buscando con otro termino</p>
                 </div>
+                <div class="contenedor_pagina">
+                    <button @click="Pagina = Pagina - 21 ; BusquedaProducto()" :disabled="Pagina < 21">
+                    ⬅
+                    </button>
+                    <h2>
+                    Items {{ 0 + Pagina }} - {{ Pagina + Productos.length }}
+                    </h2>
+                    <button @click="Pagina = Pagina + 21 ; BusquedaProducto()" :disabled="Productos.length < 21">
+                    ➡
+                    </button>
+                </div>
             </div>
-        </div>
-        <div class="contenedor_pagina">
-            <button @click="Pagina = Pagina - 21 ; BusquedaProducto()" :disabled="Pagina < 21">
-            ⬅
-            </button>
-            <h2>
-            Items {{ 0 + Pagina }} - {{ Pagina + Productos.length }}
-            </h2>
-            <button @click="Pagina = Pagina + 21 ; BusquedaProducto()" :disabled="Productos.length < 21">
-            ➡
-            </button>
         </div>
     </div>
 </template>
@@ -447,16 +337,9 @@
 <script setup>
     import { onMounted, ref, watch } from 'vue'
     import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
-    const ActualizarPCodigoBarra = ref(false)
-    const ActualizarPCategoria = ref(false)
-    const ActualizarProductos = ref(false)
     const ActualizarCajaPDel = ref(false)
-    const ActualizarPNombre = ref(false)
-    const ActualizarPPrecio = ref(false)
-    const ActualizarPStock = ref(false)
     const OpcionCategoria = ref("new")
     const VentanaCompra = ref(false)
-    const VentanaFiltro = ref(false)
     const VentanaNuevo = ref(false)
     const ListaCategoria = ref ("")
     const filtroAct = ref(false)
@@ -480,14 +363,6 @@
             console.log("Carrito recuperado:", CarritoLocal.value)
         }
     })
-	const AbrirPopUp01 = () => {
-		VentanaFiltro.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp1 = () => {
-		VentanaFiltro.value = false
-		document.body.style.overflow = "auto";
-	}
 	const AbrirPopUp02 = () => {
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden";
@@ -520,54 +395,6 @@
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
-		document.body.style.overflow = "auto";
-	}
-	const AbrirPopUp06 = () => {
-		ActualizarPNombre.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp06 = () => {
-		ActualizarPNombre.value = false
-		document.body.style.overflow = "auto";
-	}
-	const AbrirPopUp07 = () => {
-		ActualizarPPrecio.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp07 = () => {
-		ActualizarPPrecio.value = false
-		document.body.style.overflow = "auto";
-	}
-	const AbrirPopUp08 = () => {
-		ActualizarPStock.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp08 = () => {
-		ActualizarPStock.value = false
-		document.body.style.overflow = "auto";
-	}
-	const AbrirPopUp09 = () => {
-		ActualizarPCategoria.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp09 = () => {
-		ActualizarPCategoria.value = false
-		document.body.style.overflow = "auto";
-	}
-	const AbrirPopUp10 = () => {
-		ActualizarPCodigoBarra.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp10 = () => {
-		ActualizarPCodigoBarra.value = false
-		document.body.style.overflow = "auto";
-	}
-	const AbrirPopUp11 = () => {
-		ActualizarProductos.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp11 = () => {
-		ActualizarProductos.value = false
 		document.body.style.overflow = "auto";
 	}
     const Compracion = (producto_fila) => {
@@ -700,7 +527,6 @@
         filtroRadio.value = 4
         filtrocat.value = ""
         BusquedaProducto();
-        CerrarPopUp1()
         filtroAct.value = false
     }
     const BorrarProducto = async() => {
@@ -807,7 +633,6 @@
     }
     const AplicarFiltro = () => {
         BusquedaProducto();
-        CerrarPopUp1()
         menor.value = "";
         mayor.value = "";
     }
@@ -865,12 +690,6 @@
         }
         BusquedaProducto()
         CerrarPopUp02()
-        CerrarPopUp06()
-        CerrarPopUp07()
-        CerrarPopUp08()
-        CerrarPopUp09()
-        CerrarPopUp10()
-        CerrarPopUp11()
     }
 </script>
 
@@ -881,9 +700,11 @@
     }
     h1{
         color: black;
-        font-size: x-large;
+        font-size: small;
         margin: 0;
         width: fit-content;
+        font-style: sans-serif; 
+        padding: 0;
     }
     h2{
         color: rgb(254, 255, 205);

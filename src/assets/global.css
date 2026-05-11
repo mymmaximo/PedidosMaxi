@@ -77,7 +77,7 @@ input{
 .barside{
     width: 15%;
     gap: 25px;
-    background-color: rgb(26, 26, 153);
+    background-color: rgb(83, 83, 197);
     flex-direction: column;
     display: flex;
 }
@@ -98,26 +98,27 @@ input{
 .contenedor_tabla{
     margin-top: 15px;
     border-radius: 15px;
+    width: 95%;
     overflow: hidden;
     border: 2px solid #000000;
     text-align: center;
 }
 .caja_editar{
-	padding: 30px;
+	padding: 15px;
 	display: flex;
 	flex-direction: column;
     max-height: 80%;
     max-width: 50%;
     overflow-y: auto;
-	gap: 15px;
+	gap: 5px;
 	align-items: center;
-	background-color: white;
+	background-color: rgb(190, 228, 226);
 	border-radius: 15px;
 	border: 2px solid #000000;
 	box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 .seleccion{
-    width: 100%;
+    width: fit-content;
     padding: 5px;
 }
 .fondo_oscuro {
@@ -217,5 +218,6 @@ input{
     gap: 5px;
     place-self: center;
     width: fit-content;
+    flex-direction: row;
     height: 50px;
 }

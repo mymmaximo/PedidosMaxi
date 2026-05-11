@@ -2,23 +2,24 @@ import { ref } from 'vue'
 
 export const LimpiarCompra = () =>{
     localStorage.removeItem("carrito_pendiente")
-    CarritoLocal.value = [];
+    CarritoLocal.value = []
 }
 
 export const leerCookie = (nombre) => {
-  const valor = `; ${document.cookie}`;
-  const partes = valor.split(`; ${nombre}=`);
-  if (partes.length === 2) return partes.pop().split(';').shift();
-  return null;
+  const valor = `; ${document.cookie}`
+  const partes = valor.split(`; ${nombre}=`)
+  if (partes.length === 2) return partes.pop().split(';').shift()
+  return null
 }
 
 export const CerrarSesion = () =>{
-    document.cookie = "token=; max-age=0; path=/";
-    document.cookie = "id_cliente=; max-age=0; path=/";
-    document.cookie = "id_rol=; max-age=0; path=/";
+    document.cookie = "token=; max-age=0; path=/"
+    document.cookie = "id_usuario=; max-age=0; path=/"
+    document.cookie = "id_cliente=; max-age=0; path=/"
+    document.cookie = "id_rol=; max-age=0; path=/"
     LimpiarCompra()
     Iniciado.value = false
-    window.location.reload();
+    window.location.reload()
 }
 
 export const CarritoLocal = ref ([])

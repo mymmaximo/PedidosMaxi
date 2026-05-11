@@ -1,4 +1,5 @@
 <template>
+    <!-- Tabla de Detalles -->
     <div class="contenedor" v-if="CarritoLocal.length > 0">
         <div class="contenedor_principal">
             <h1>
@@ -59,7 +60,6 @@
             </button>
         </div>
     </div>
-
     <!-- Confirmacion Eliminar Detalle -->
     <Teleport to="body">
         <div class="fondo_oscuro" v-if="ActualizarCarritoDel">
@@ -81,7 +81,9 @@
         <div class="fondo_oscuro" v-if="PantallaPagar">
             <div class="caja_editar">
                 <label>
+                <h2>
                 Método de Pago:
+                </h2>
                 </label>
                 <select v-model="MetodoPago" class="seleccion">
                     <option value="" disabled>
@@ -101,7 +103,9 @@
                     </option>
                 </select>
                 <label>
+                <h2>
                 Dirección de Envío:
+                </h2>
                 </label>
                 <label>
                 Tus Direcciones
@@ -119,10 +123,10 @@
                     </option>
                 </select>
                 <div v-if="DireccionExistente === ''">
-                    <label>
-                    Nueva Direccion:
-                    </label>
                     <div class="Texto_producto">
+                        <label>
+                        Nueva Direccion:
+                        </label>
                         <input 
                         type="text" 
                         v-model="NuevaDireccion.calle" 
@@ -243,7 +247,7 @@
     const PantallaPagar = ref (false)
     const DireccionExistente = ref ("")
     const ActualizarCarritoDel = ref(false)
-    const idUsuario = leerCookie("id_cliente")
+    const idClienteCarrito = leerCookie("id_cliente")
     const emit = defineEmits(['CarritoVacio'])
 	const AbrirPopUp = () => {
 		ActualizarCarritoDel.value = true
@@ -280,7 +284,7 @@
                 'Authorization': `Bearer ${leerCookie("token")}`
             },
             body: JSON.stringify({
-                id_cliente: idUsuario,
+                id_cliente: idClienteCarrito,
                 id_direccion: DireccionPedido,
                 metodo_pago: MetodoPago.value
             })
@@ -357,7 +361,7 @@
         localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value));
     }
     onMounted(async() => {
-        const respuesta = await fetch(`http://localhost:8000/cliente/${idUsuario}/direcciones`)
+        const respuesta = await fetch(`http://localhost:8000/cliente/${idClienteCarrito}/direcciones`)
         const datos = await respuesta.json();
         ListaDirecciones.value = datos;
     })
@@ -415,6 +419,11 @@
         flex-direction: column;
         gap: 15px;
         width: 100%;
+        align-self: center;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        place-self: center;
     }
     .botoncentro{
         background-color: white;
