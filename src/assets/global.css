@@ -1,3 +1,4 @@
+@import "tailwindcss";
 #app {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -5,219 +6,195 @@
     text-align: left ;
     color: #2c3e50;
     margin-top: 0px;
-    scale: 1;
 }
-body {
-    margin: 0;
-    background-color: rgb(183, 182, 229);
+/* tabla */
+table {
+    @apply 
+    w-full
+    text-center
 }
-table{
-    margin: 0 auto;
-    width: 100%;
-    border-collapse: collapse;
+table th {
+    @apply 
+    text-lg
+    bg-green-800 p-2 
+    text-white font-bold
 }
-th {
-    padding: 5px;
-    border: 1px solid #000000;
+table td {
+    @apply 
+    p-3 border
+    border-gray-800
+    bg-green-100
 }
-tr {
-    border: 1px solid #000000;
+/* texto */
+h1 {
+    @apply
+    text-2xl
+    font-bold  
+    p-4
 }
-td {
-    padding: 10px;
-    border: 1px solid #000000;
-    background-color: #FFFFFF;
+h2 {
+    @apply
+    text-xl
 }
-img {
-    width: 100px;
-    display: block;
+h3 {
+    @apply
+    text-sm 
 }
-button{  
-    padding: 10px;
-    margin: 0 auto;
-    border-radius: 10px;
-    background-color: #FFFFFF;
-    cursor: pointer;
+/* botones */
+.botones {
+    @apply
+    flex flex-col
+    gap-3 p-4
+    items-center
 }
-h1{
-    font-size: small;
-    cursor: pointer;
-    padding: 10px;
-    color: white;
-    margin: 0;
+.botoncon {
+    @apply
+    bg-green-400 text-white
+    rounded-3xl
+    px-8 py-2
+    hover:bg-green-600
+    hover:text-gray-200
+    active:bg-green-300
+    cursor-pointer
 }
-.contenedor_principal {
-    width: 100%;
-    border-radius: 10px;
-    overflow: hidden;
-    padding: 10px;
+.botonc {
+    @apply
+    bg-red-600 text-white
+    rounded-3xl
+    px-6 py-2
+    hover:bg-red-800
+    hover:text-gray-200
+    active:bg-red-100
+    cursor-pointer
+}
+.botont {
+    @apply
+    bg-gray-600 text-white
+    rounded-3xl
+    px-6 py-2
+    hover:bg-gray-800
+    hover:text-gray-200
+    active:bg-gray-100
+    cursor-pointer
+}
+.botona {
+    @apply
+    bg-gray-600 text-green-500
+    rounded-3xl text-4xl
+    px-4 py-1
+    hover:bg-gray-800
+    hover:text-gray-200
+    active:bg-gray-100
+    cursor-pointer
+    disabled:bg-gray-300 
+    disabled:text-gray-400 
+    disabled:cursor-not-allowed
+}
+select{
+    @apply
+    text-center text-sm
+    w-50 place-self-center p-2
+    bg-green-100 border-green-500
+    rounded-2xl border-2
+    cursor-pointer
 }
 input{
-    padding: 5px;
-    border-radius: 5px;
+    @apply
+    text-sm
+    w-50 px-4 place-self-center p-2
+    bg-green-100 border-white
+    rounded-xl border-1
+    cursor-text
 }
-.cerrar{
-    color: red;
-}
-.contenedor_secundario{
-    width: 100%;
-    height: fit-content;
-    border-radius: 10px;
-    overflow: hidden;
-    padding: 10px;
-    background-color: rgb(166, 165, 231);
-}
-.concontenedor{
-    width: 100%;
-    display: flex;
-	flex-direction: row;
-    align-items: stretch;
-    gap: 20px;
-}
-.barside{
-    width: 15%;
-    gap: 25px;
-    background-color: rgb(83, 83, 197);
-    flex-direction: column;
-    display: flex;
-}
-.margen{
-    margin: 15px;
-}
-.contenedor{
-    width: 75%;
-    flex-direction: column;
-    display: flex;
-}
-.Texto_producto{
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.contenedor_tabla{
-    margin-top: 15px;
-    border-radius: 15px;
-    width: 95%;
-    overflow: hidden;
-    border: 2px solid #000000;
-    text-align: center;
-}
-.caja_editar{
-	padding: 15px;
-	display: flex;
-	flex-direction: column;
-    max-height: 80%;
-    max-width: 50%;
-    overflow-y: auto;
-	gap: 5px;
-	align-items: center;
-	background-color: rgb(190, 228, 226);
-	border-radius: 15px;
-	border: 2px solid #000000;
-	box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-}
-.seleccion{
-    width: fit-content;
-    padding: 5px;
-}
-.fondo_oscuro {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.6);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	z-index: 1000;
-}
-.contenedor_cartas {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    width: 100%;
-    gap: 30px; 
-	align-items: center;
-    padding: 20px;
-}
-.carta_producto {
-    height: 350px;
-    width: 280px;
-    border: 2px solid #000000;
-    border-radius: 15px;
-    padding: 15px;
-    text-align: center;
-    background-color: rgb(204, 245, 235);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-}
-.imagen_carta {
-    width: 150px; 
-    height: auto;
-    place-self: center;
-    margin-bottom: 10px;
-}
-.boton_detalle{
-    padding: 10px;
-    font-size: small;
-    cursor: pointer;
-    background-color: #f1fff2;
-    user-select: none;
-}
-.boton_ocultar_detalle{
-    padding: 10px;
-    font-size: small;
-    cursor: pointer;
-    background-color: #fff1f1;
-    user-select: none;
-}
-.classEntregado{
-	background-color: #9ff7a5;
-	cursor: not-allowed !important;
-}
-.classEn_Camino{
-	background-color: #f6f67a;
-    cursor: pointer;
-}
-.classPreparando{
-	background-color: #f5ab72;
-    cursor: pointer;
-}
-.classindefinido{
-	background-color: #ffffff;
-    cursor: pointer;
-}
-.classActivo{
-    background-color: #d5f1cb;
-}
-.classEliminado{
-    background-color: #f58a72;
-}
-.classAdmin{
-    background-color: #f4f1a4;
-}
-.classTrabajador{
-    background-color: #b5fcd9;
-}
-.classCliente{
-    background-color: #afe6f0;
+input[type="radio"] {
+    @apply 
+    w-10
 }
 .busqueda{
-    padding: 10px;
-    width: 70%;
-    margin: 15px;
+    @apply
+    text-sm
+    w-10/12  p-2 m-4
+    bg-green-100 border-white
+    rounded-xl border-1
+    cursor-text
 }
-.botoncentro{
-    align-self: center;
-    gap: 5px;
+/* miselaneo */
+.cuerpo{
+    @apply
+    w-auto
+    min-h-screen 
+    bg-green-200
 }
-.contenedor_pagina{
-    font-size: small;
-    display: flex;
-    align-self: center;
-    gap: 5px;
-    place-self: center;
-    width: fit-content;
-    flex-direction: row;
-    height: 50px;
+.fondo {
+    @apply 
+    fixed inset-0
+    bg-black/70 flex 
+    justify-center
+    items-center
+}
+.popup{
+    @apply
+    flex
+    flex-col
+    bg-green-300
+    rounded-2xl p-5
+    gap-3
+}
+form{
+    @apply
+    flex flex-col
+    gap-4 
+}
+/* estados */
+.sent{
+    @apply
+    bg-green-200 
+    !cursor-not-allowed
+}
+.way{
+    @apply
+    bg-yellow-200 
+    cursor-pointer
+}
+.box{
+    @apply
+    bg-red-200 
+    cursor-pointer
+}
+.what{
+    @apply
+    bg-gray-200 
+    cursor-pointer
+}
+.si{
+    @apply
+    bg-green-200 
+}
+.no{
+    @apply
+    bg-red-200 
+}
+.admin{
+    @apply
+    bg-green-500 
+}
+.pgral{
+    @apply
+    bg-green-300 
+}
+.pedcli{
+    @apply
+    bg-blue-200 
+}
+.preci{
+    @apply
+    bg-yellow-200 
+}
+.stoc{
+    @apply
+    bg-orange-200 
+}
+.rider{
+    @apply
+    bg-red-200 
 }

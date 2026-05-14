@@ -1,40 +1,61 @@
 <template>
-    <div v-if="!SesionIniciada">
+    <div 
+    v-if="!SesionIniciada"
+    class="cuerpo"
+    >
         <!-- Iniciar Sesion -->
-        <div v-if="MostrarLogin">
-            <form @submit.prevent="IniciarSesionUsuario" class="Texto_Login">
+        <div 
+        v-if="MostrarLogin"
+        >
+            <form 
+            @submit.prevent="IniciarSesionUsuario" 
+            class="popup"
+            >
                 <input 
                 type="text" 
                 v-model="LoginBox.email" 
                 placeholder="Email"
+                class="!w-auto"
                 >
-                <div style="display: flex;">
+                <div>
                     <input 
                     :type="verContrasena ? 'text' : 'password'"
                     v-model="LoginBox.contrasena" 
                     placeholder="Contraseña"
                     >
-                    <button type="button" @click="verContrasena = !verContrasena">
+                    <button 
+                    type="button" 
+                    @click="verContrasena = !verContrasena"
+                    class="botont !p-1"
+                    >
                     {{ verContrasena ? '🔒' : '👁️' }}
                     </button>
                 </div>
-                <button type="submit" class="Boton_Iniciar">
+                <button 
+                type="submit" 
+                class="botoncon">
                 Iniciar Sesion
                 </button>
-                <p v-if="Herror">
+                <h2 v-if="Herror">
                 {{ Herror }}
-                </p>
+                </h2>
                 <p>
                 ¿No Tienes Cuenta?
-                <button type="button" @click="MostrarLogin = false; Herror = ''">
+                </p>
+                <button 
+                type="button" 
+                @click="MostrarLogin = false; Herror = ''"
+                class="botont"
+                >
                 Registrate
                 </button>
-                </p>
             </form>
         </div>
         <!-- Registrarse -->
         <div v-else>
-            <form @submit.prevent="SubirNuevoCliente" class="Texto_Login">
+            <form 
+            @submit.prevent="SubirNuevoCliente" 
+            class="popup">
                 <input 
                 type="text" 
                 v-model="NuevoCliente.email" 
@@ -54,20 +75,28 @@
                 <input 
                 type="text" 
                 v-model="NuevoCliente.dni" 
-                placeholder="DNI">
-                <button type="submit" class="Boton_Crear">
+                placeholder="DNI"
+                >
+                <button 
+                type="submit" 
+                class="botoncon"
+                >
                 Registrarte
                 </button>
                 <p v-if="Herror" class="classEliminado">
                 {{ Herror }}
                 </p>
+                <p>
+                ¿Ya Tienes Cuenta?
+                </p>
+                <button 
+                type="button" 
+                @click="MostrarLogin = true; Herror = ''"
+                class="botont"
+                >
+                Iniciar Sesion
+                </button>
             </form>
-            <p>
-            ¿Ya Tienes Cuenta?
-            <button type="button" @click="MostrarLogin = true; Herror = ''">
-            Iniciar Sesion
-            </button>
-            </p>
         </div>
     </div>
     <div v-else>
@@ -178,17 +207,3 @@
             } 
     }
 </script>
-
-<style scoped>
-    .Texto_Login{
-        padding: 15px;
-        width: fit-content;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-    body {
-        margin: 0;
-        background-color: rgb(46, 42, 169);
-    }
-</style>

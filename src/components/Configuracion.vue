@@ -1,55 +1,76 @@
 <template>
     <!-- Actualizar Datos -->
-    <div class="Texto_producto">
-        <form @submit.prevent="ActualizarCliente" class="caja_config">
-            <h2>
-            Actualizar Usuario {{ ClienteConfig.nombre }}
-            </h2>
+    <div class="cuerpo">
+        <form 
+        @submit.prevent="ActualizarCliente"
+        class="p-8" 
+        >
             <h1>
-            Nombre
+            Actualizar Usuario 
+            {{ ClienteConfig.nombre }}
             </h1>
+            <h2>
+            Nombre
+            </h2>
             <input 
             type="text" 
             v-model="ClienteConfig.nombre" 
             placeholder="Nombre"
+            class="!self-start"
             >
-            <h1>
+            <h2>
             E-mail
-            </h1>
+            </h2>
             <input 
             type="text" 
             v-model="ClienteConfig.email" 
             placeholder="Email@email.com"
+            class="!self-start !w-auto"
             >
-            <h1>
+            <h2>
             Contraseña
-            </h1>
-            <div style="display: flex;">
+            </h2>
+            <div>
                 <input 
                 :type="verContrasena ? 'text' : 'password'"
                 v-model="ClienteConfig.contrasena" 
                 placeholder="Contraseña"
+                class="!p-2"
                 >
-                <button type="button" @click="verContrasena = !verContrasena">
+                <button 
+                type="button" 
+                @click="verContrasena = !verContrasena"
+                class="!p-1"
+                >
                 {{ verContrasena ? '🔒' : '👁️' }}
                 </button>
             </div>
-            <h1>
+            <h2>
             Confirmar Contraseña
-            </h1>
-            <div style="display: flex;">
+            </h2>
+            <div>
                 <input 
                 :type="verConContrasena ? 'text' : 'password'"
                 v-model="ClienteConfig.concontrasena" 
                 placeholder="Contraseña"
+                class="!p-2"
                 >
-                <button type="button" @click="verConContrasena = !verConContrasena">
+                <button 
+                type="button" 
+                @click="verConContrasena = !verConContrasena"
+                class="botont !p-1"
+                >
                 {{ verConContrasena ? '🔒' : '👁️' }}
                 </button>
             </div>
-            <button type="submit" class="Boton_Crear">
-            Actualizar
-            </button>
+            <div class="p-5">
+                <button 
+                type="submit" 
+                class="botoncon"
+                >
+                Actualizar
+                </button>
+            </div>
         </form>
     </div>
 </template>
@@ -117,31 +138,3 @@
         };
     };
 </script>
-
-<style scoped>
-    .contenedor_principal {
-        display: flex;
-        width: fit-content;
-        border-radius: 10px;
-        overflow: hidden;
-        padding: 10px;
-    }
-    .caja_config{
-        padding: 30px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        align-items: center;
-        background-color: rgb(166, 133, 228);
-	    border: 2px solid #000000;
-        border-radius: 5px;
-        overflow: hidden;
-        width: 40%;
-        align-self: center;
-    }
-    h1{
-        font: 1em sans-serif;
-        color: #000000;
-        padding: 0;
-    }
-</style>

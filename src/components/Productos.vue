@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="cuerpo">
         <!-- Confirmacion Eliminar -->
         <Teleport to="body">
             <div class="fondo_oscuro" v-if="ActualizarCajaPDel">
@@ -18,8 +18,8 @@
         </Teleport>
         <!-- Comprar Ventana -->
         <Teleport to="body">
-            <div class="fondo_oscuro" v-if="VentanaCompra">
-                <div class="caja_editar">
+            <div class="fondo" v-if="VentanaCompra">
+                <div class="popup">
                     <h2 style="color: black;">
                     {{ ProductoActual.nombre }}
                     </h2>
@@ -28,6 +28,7 @@
                         type="number" 
                         v-model="ProductoCantidad"
                         style="width: 100px; height: 25px;"
+                        maxlength="8"
                         >
                         <button @click="SumarProducto(ProductoActual)">
                         ➕
@@ -59,16 +60,19 @@
                         type="text" 
                         v-model="NuevoProducto.nombre" 
                         placeholder="Nombre"
+                        maxlength="50"
                         >
                         <input 
                         type="number" 
                         v-model="NuevoProducto.precio" 
                         placeholder="Precio"
+                        maxlength="8"
                         >
                         <input 
                         type="number" 
                         v-model="NuevoProducto.stock" 
                         placeholder="Stock"
+                        maxlength="8"
                         >
                         <select v-model="OpcionCategoria" class="seleccion">
                             <option value="new">
@@ -83,6 +87,7 @@
                         type="text" 
                         v-model="NuevoProducto.categoria" 
                         placeholder="Categoria"
+                        maxlength="20"
                         >
                         <button type="submit" class="Boton_Crear">
                         Crear
@@ -99,46 +104,68 @@
             <div class="fondo_oscuro" v-if="ActualizarCajaP">
                 <div class="caja_editar">
                     <form @submit.prevent="ActualizarProducto" class="Texto_producto">
-                        <h1>
-                        Nombre
-                        </h1>
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.nombre" 
-                        placeholder="Nombre"
-                        >
-                        <h1>
-                        Precio
-                        </h1>
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.precio" 
-                        placeholder="Precio"
-                        >
-                        <h1>
-                        Stock
-                        </h1>
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.stock" 
-                        placeholder="Stock"
-                        >
-                        <h1>
-                        Categoria
-                        </h1>
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.categoria"
-                        placeholder="Categoria"
-                        >
-                        <h1>
-                        Codigo de Barras
-                        </h1>
-                        <input 
-                        type="text" 
-                        v-model="ProductoAct.codigo_barra" 
-                        placeholder="Codigo de Barras"
-                        >
+                        <div v-if="Rol === '1' || Rol === '2'">
+                            <h1>
+                            Nombre
+                            </h1>
+                            <input 
+                            type="text" 
+                            v-model="ProductoAct.nombre" 
+                            placeholder="Nombre"
+                            maxlength="50"
+                            >
+                        </div>
+                        <div v-if="Rol === '1' || Rol === '2' || Rol === '4'">
+                            <h1>
+                            Precio
+                            </h1>
+                            <input 
+                            type="number" 
+                            v-model="ProductoAct.precio" 
+                            placeholder="Precio"
+                            maxlength="8"
+                            >
+                        </div>
+                        <div v-if="Rol === '1' || Rol === '2' || Rol === '5'">
+                            <h1>
+                            Stock
+                            </h1>
+                            <input 
+                            type="number" 
+                            v-model="ProductoAct.stock" 
+                            placeholder="Stock"
+                            maxlength="8"
+                            >
+                        </div>
+                        <div v-if="Rol === '1' || Rol === '2'">
+                            <h1>
+                            Categoria
+                            </h1>
+                            <select v-model="OpcionCategoriaA" class="seleccion">
+                                <option value="new">
+                                + Agrega una Categoria
+                                </option>
+                                <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                {{ i.categoria }}
+                                </option>
+                            </select>
+                            <input 
+                            v-if="OpcionCategoriaA === 'new'" 
+                            type="text" 
+                            v-model="ProductoAct.categoria" 
+                            placeholder="Categoria"
+                            maxlength="20"
+                            >
+                            <h1>
+                            Codigo de Barras
+                            </h1>
+                            <input 
+                            type="text" 
+                            v-model="ProductoAct.codigo_barra" 
+                            placeholder="Codigo de Barras"
+                            maxlength="15"
+                            >
+                        </div>
                         <button type="submit" class="Boton_Crear">
                         Actualizar
                         </button>
@@ -149,8 +176,9 @@
                 </div>
             </div>
         </Teleport>
-        <!-- Tabla de Productos -->
-        <div class="concontenedor">
+        <!-- Tabla de Productos y Barra de Filtros -->
+        <div>
+            <!-- Barra de Filtros -->
             <div class="barside">
                 <div class="margen">
                     <div>
@@ -159,20 +187,24 @@
                         Filtro Categoria
                         </h2>
                         <div>
-                            <select v-model="filtrocat" class="seleccion">
+                            <select 
+                            v-model="filtrocat"
+                            >
                                 <option value="" disabled>
                                 Categorias...
                                 </option>
-                                <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                <option 
+                                v-for="i in ListaCategoria" 
+                                :key="i.categoria" 
+                                :value="i.categoria"
+                                >
                                 {{ i.categoria }}
                                 </option>
                             </select>
                         </div>
                     </div>
-                    <div class="caja_radios">
+                    <div>
                         <h2>
-                        <br>
-                        <br>
                         Filtros de Precio
                         </h2>
                         <label>
@@ -208,25 +240,29 @@
                         Personalizado
                         </label>
                     </div>
-                    <div v-if="filtroRadio === 0" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                    <div 
+                    v-if="filtroRadio === 0" 
+                    >
                         <input 
                         type="number"
                         v-model="mayor" 
                         placeholder="Precio Max..."
+		                maxlength="10"
                         >
                         <input
                         type="number"
                         v-model="menor" 
                         placeholder="Precio Min..."
+		                maxlength="10"
                         >
                     </div>
-                    <div v-if="Rol === '1'">
+                    <div 
+                    v-if="Rol === '1' || Rol === '2' || Rol === '4'"
+                    >
                         <h2>
-                        <br>
-                        <br>
                         ¿El Productos esta Activo?
                         </h2>
-                        <div class="caja_radios">
+                        <div>
                             <label>
                             <input 
                             type="radio" 
@@ -253,61 +289,97 @@
                             </label>
                         </div>
                     </div>
-                    <h2>
-                    <br>
-                    <br>
-                    </h2>
-                    <button @click="AplicarFiltro" class="Boton_Crear">
+                    <button 
+                    @click="AplicarFiltro" 
+                    class="botoncon">
                     Aplicar Filtros
                     </button>
-                    <h2>
-                    <br>
-                    </h2>
-                    <button @click="LimpiarFiltro" class="Boton_Crear" v-if="filtroAct === true">
+                    <button 
+                    @click="LimpiarFiltro" 
+                    v-if="filtroAct === true"
+                    class="botont" 
+                    >
                     🗑️ Limpiar Filtro
                     </button>
                 </div>
             </div>
-            <div class="contenedor">
+            <!-- Tabla de Productos -->
+            <div>
                 <input
                 @input="BusquedaProducto"
                 type="text" 
                 v-model="Busqueda" 
                 placeholder="Busqueda..."
                 class="busqueda"
+		        maxlength="50"
                 >
-                <button @click="AbrirPopUp04" class="botoncentro" v-if="Rol === '1'">
+                <button 
+                @click="AbrirPopUp04"
+                v-if="Rol === '1' || Rol === '2'"
+                class="botont" 
+                >
                 Nuevo Producto ➕
                 </button>
-                <div v-if="Productos.length > 0" class="contenedor_cartas">
-                    <div :class="Estatuscolor(i.activo)" v-for= "i in Productos" :key="i.id">
+                <div 
+                v-if="Productos.length > 0"
+                >
+                    <div 
+                    :class="Estatuscolor(i.activo)" 
+                    v-for= "i in Productos" 
+                    :key="i.id"
+                    >
                         <div>
-                            <img class="imagen_carta" alt="Vue logo" src="../assets/images.png">
-                            <div class="info_carta">
-                                <h3>
+                            <img
+                            alt="Vue logo" src="../assets/images.png"
+                            >
+                            <div
+                            >
+                                <h2>
                                 {{ i.nombre }}
-                                </h3>
-                                <p>
+                                </h2>
+                                <h3>
+                                Categoria: 
                                 {{ i.categoria }}
-                                {{ i.precio }}
-                                </p>
-                                <button @click="Compracion(i)" :disabled="CarritoStock(i) === 0" class="botoncentro">
+                                <br>
+                                ${{ i.precio }}
+                                </h3>
+                                <button 
+                                @click="Compracion(i)" 
+                                :disabled="CarritoStock(i) === 0" 
+                                class="botont"
+                                v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                >
                                 🛒 Añadir al Carrito 🛒
                                 </button>
-                                <div v-if="Rol === '1'">
-                                    <p>
+                                <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                    <h3>
                                     {{ i.codigo_barra }} <br>
+                                    Stock: 
                                     {{ i.stock }}
-                                    {{ Estatustxt(i.activo) }}
-                                    </p>
-                                    <button @click="Eliminacion(i)" v-if="i.activo" class="botoncentro">
-                                    ❌
-                                    </button>
-                                    <button @click="Eliminacion(i)" v-else class="botoncentro">
-                                    🕊️
-                                    </button>
-                                    <button @click="Edicion(i)" class="botoncentro">
-                                    ✏️
+                                    </h3>
+                                    <div 
+                                    v-if="Rol === '1' || Rol === '2'"
+                                    >
+                                        <button 
+                                        @click="Eliminacion(i)" 
+                                        v-if="i.activo" 
+                                        class="botonc"
+                                        >
+                                        ❌ Eliminar
+                                        </button>
+                                        <button 
+                                        @click="Eliminacion(i)" 
+                                        v-else 
+                                        class="botoncon"
+                                        >
+                                        🕊️ Reactivar
+                                        </button>
+                                    </div>
+                                    <button 
+                                    @click="Edicion(i)" 
+                                    v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                    class="botont">
+                                    ✏️ Editar
                                     </button>
                                 </div>
                             </div>
@@ -315,17 +387,34 @@
                     </div>
                 </div>
                 <div v-else>
-                    <h3>No se encontraron productos 😔</h3>
-                    <p>Prueba buscando con otro termino</p>
+                    <h2>No se encontraron productos 😔</h2>
+                    <h3>Prueba buscando con otro termino</h3>
                 </div>
-                <div class="contenedor_pagina">
-                    <button @click="Pagina = Pagina - 21 ; BusquedaProducto()" :disabled="Pagina < 21">
+                <div
+                class="
+                flex justify-center
+                ">
+                    <button 
+                    @click="Pagina = Pagina - 21 ; BusquedaProducto()" 
+                    :disabled="Pagina < 21"
+                    class="botona"
+                    >
                     ⬅
                     </button>
-                    <h2>
-                    Items {{ 0 + Pagina }} - {{ Pagina + Productos.length }}
+                    <h2
+                    class="
+                    self-center p-5
+                    ">
+                    Items 
+                    {{ 0 + Pagina }} 
+                    - 
+                    {{ Pagina + Productos.length }}
                     </h2>
-                    <button @click="Pagina = Pagina + 21 ; BusquedaProducto()" :disabled="Productos.length < 21">
+                    <button 
+                    @click="Pagina = Pagina + 21 ; BusquedaProducto()" 
+                    :disabled="Productos.length < 21"
+                    class="botona"
+                    >
                     ➡
                     </button>
                 </div>
@@ -339,6 +428,7 @@
     import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
     const ActualizarCajaPDel = ref(false)
     const OpcionCategoria = ref("new")
+    const OpcionCategoriaA = ref("new")
     const VentanaCompra = ref(false)
     const VentanaNuevo = ref(false)
     const ListaCategoria = ref ("")
@@ -526,6 +616,7 @@
     const LimpiarFiltro = () => {
         filtroRadio.value = 4
         filtrocat.value = ""
+        filtroEst.value =  1
         BusquedaProducto();
         filtroAct.value = false
     }
@@ -550,7 +641,7 @@
         ProductoAct.value.nombre = producto_fila.nombre;
         ProductoAct.value.precio = producto_fila.precio;
         ProductoAct.value.stock = producto_fila.stock;
-        ProductoAct.value.categoria = producto_fila.categoria;
+        OpcionCategoriaA.value = producto_fila.categoria;
         ProductoAct.value.codigo_barra = producto_fila.codigo_barra;
         AbrirPopUp02()
     };
@@ -676,6 +767,9 @@
         codigo_barra: ""
     })
     const ActualizarProducto = async() => {
+        if (OpcionCategoriaA.value != "new") {
+            ProductoAct.value.categoria = OpcionCategoriaA.value
+        }
         const ActProducto = await fetch(`http://localhost:8000/productos/id/${ProductoAct.value.id}`, {
         method: 'PUT',
         headers: {
@@ -694,10 +788,6 @@
 </script>
 
 <style scoped>
-    .busqueda{
-        padding: 10px;
-        width: 70%;
-    }
     h1{
         color: black;
         font-size: small;
@@ -770,7 +860,7 @@
         text-align: left;
         width: 100%;
     }
-    .caja_radios label {
+    .caja_radios_label {
         cursor: pointer;
         font-size: 16px;
     }

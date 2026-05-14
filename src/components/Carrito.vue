@@ -1,15 +1,20 @@
 <template>
     <!-- Tabla de Detalles -->
-    <div class="contenedor" v-if="CarritoLocal.length > 0">
-        <div class="contenedor_principal">
+    <div
+    v-if="CarritoLocal.length > 0" 
+    class="cuerpo">
+        <div>
             <h1>
             Tu Carrito
             </h1>
-            <div class="contenedor_tabla">
+            <div>
                 <table>
                     <thead>
                         <tr>
-                            <th>
+                            <th
+                            class="
+                            rounded-ss-2xl 
+                            ">
                             Producto
                             </th>
                             <th>
@@ -21,13 +26,19 @@
                             <th>
                             Subtotal
                             </th>
-                            <th>
+                            <th
+                            class="
+                            rounded-se-2xl 
+                            ">
                             Borrar
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in CarritoLocal" :key="index">
+                        <tr 
+                        v-for="(item, index) in CarritoLocal" 
+                        :key="index"
+                        >
                             <td>
                             {{ item.nombre_producto }}
                             </td>
@@ -45,47 +56,72 @@
                             <td>
                             ${{ item.cantidad * item.precio_unitario }}
                             </td>
-                            <td @click="Eliminacion(index)" style="cursor: pointer;" class="botoncentro">
+                            <td 
+                            @click="Eliminacion(index)"
+                            >
                             ❌
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <h2>
-            Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
-            </h2>
-            <button @click="PantallaPagar = true">
-            Completar Pedido
-            </button>
+            <div
+            class="botones"
+            >
+                <h2
+                class="
+                text-center text-2xl font-bold
+                w-70 px-5 p-3 my-5 place-self-center
+                bg-green-100 border-green-500
+                rounded-2xl border-4
+                ">
+                Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
+                </h2>
+                <button 
+                @click="PantallaPagar = true"
+                class="botoncon !p-5">
+                Completar Pedido
+                </button>
+            </div>
         </div>
     </div>
     <!-- Confirmacion Eliminar Detalle -->
     <Teleport to="body">
-        <div class="fondo_oscuro" v-if="ActualizarCarritoDel">
-            <div class="caja_editar">
-                <h1>
+        <div class="fondo" v-if="ActualizarCarritoDel">
+            <div class="popup">
+                <h1
+                class="texto2">
                 ¿Desear Eliminar el Detalle?
                 </h1>
-                <button @click="BorrarDetalle()">
-                Si Confirmo
-                </button>
-                <button @click="CerrarPopUp">
-                Cancelar
-                </button>
+                <div
+                class="botones"
+                >
+                    <button 
+                    @click="BorrarDetalle()"
+                    class="botoncon">
+                    Si Confirmo
+                    </button>
+                    <button
+                    @click="CerrarPopUp"
+                    class="botonc">
+                    Cancelar
+                    </button>
+                </div>
             </div>
         </div>
     </Teleport>   
     <!-- Pantalla de Pagar -->
     <Teleport to="body">
-        <div class="fondo_oscuro" v-if="PantallaPagar">
-            <div class="caja_editar">
+        <div class="fondo" v-if="PantallaPagar">
+            <div class="popup">
                 <label>
-                <h2>
+                <h2 class="texto2">
                 Método de Pago:
                 </h2>
                 </label>
-                <select v-model="MetodoPago" class="seleccion">
+                <select 
+                v-model="MetodoPago"
+                >
                     <option value="" disabled>
                     Selecciona un método...
                     </option>
@@ -103,14 +139,16 @@
                     </option>
                 </select>
                 <label>
-                <h2>
+                <h2 class="texto2">
                 Dirección de Envío:
                 </h2>
                 </label>
-                <label>
+                <label  class="texto1">
                 Tus Direcciones
                 </label>
-                <select v-model="DireccionExistente" class="seleccion">
+                <select 
+                v-model="DireccionExistente" 
+                class="sel">
                     <option value="">
                     + Agrega una direccion
                     </option>
@@ -122,15 +160,18 @@
                     {{ i.provincia }},
                     </option>
                 </select>
-                <div v-if="DireccionExistente === ''">
-                    <div class="Texto_producto">
+                <div 
+                v-if="DireccionExistente === ''"
+                >
+                    <div 
+                    class="botones">
                         <label>
                         Nueva Direccion:
                         </label>
                         <input 
                         type="text" 
                         v-model="NuevaDireccion.calle" 
-                        placeholder="Calle" class=""
+                        placeholder="Calle"
                         >
                         <input 
                         type="number" 
@@ -147,7 +188,9 @@
                         v-model="NuevaDireccion.ciudad" 
                         placeholder="Ciudad"
                         >
-                        <select v-model="NuevaDireccion.provincia" class="seleccion">
+                        <select 
+                        v-model="NuevaDireccion.provincia" 
+                        >
                             <option value="" disabled>
                             Selecciona tu Provincia...
                             </option>
@@ -226,12 +269,23 @@
                         </select>
                     </div>
                 </div>
-                <button @click="PantallaPagar = false">
-                Cancelar
-                </button>
-                <button :disabled="confirboton" @click="ConfirmarCompra">
-                Finalizar Compra
-                </button>   
+                <div
+                class="botones"
+                >
+                    <button 
+                    @click="PantallaPagar = false"
+                    class="botonc"
+                    >
+                    Cancelar
+                    </button>
+                    <button 
+                    :disabled="confirboton" 
+                    @click="ConfirmarCompra"
+                    class="botoncon"
+                    >
+                    Finalizar Compra
+                    </button>   
+                </div>
             </div>
         </div>
     </Teleport>
@@ -366,68 +420,3 @@
         ListaDirecciones.value = datos;
     })
 </script>
-
-<style scoped>
-    .ventana{
-        width: 80%;
-        padding: 30px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-        position: fixed;
-        z-index: 1000;
-        top: 70%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgb(151, 149, 230);
-        border-radius: 15px;
-        border: 2px solid #000000;
-        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-    }
-    .contenedor{
-        width: fit-content;
-        display: flex;
-        flex-direction: column;
-        padding: 15px;
-        gap: 15px;
-    }
-    h1{
-        color: black;
-        font-size: x-large;
-        margin: 0;
-        width: fit-content;
-    }
-    .contenedor_tabla {
-        width: 100%;
-        border-radius: 15px;
-        overflow: hidden;
-        border: 2px solid #000000;
-    }
-    thead{
-        background-color: #bcf2f5;
-        color: #005f69;
-        text-align: center;
-    }
-    .Boton_Crear{
-        padding: 10px;
-        border-radius: 5px;
-    }
-    .Texto_producto{
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        width: 100%;
-        align-self: center;
-        text-align: center;
-        align-items: center;
-        justify-content: center;
-        place-self: center;
-    }
-    .botoncentro{
-        background-color: white;
-        color: black;
-        text-align: center;
-    }
-</style>
