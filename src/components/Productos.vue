@@ -2,17 +2,27 @@
     <div class="cuerpo">
         <!-- Confirmacion Eliminar -->
         <Teleport to="body">
-            <div class="fondo_oscuro" v-if="ActualizarCajaPDel">
-                <div class="caja_editar">
+            <div class="fondo" v-if="ActualizarCajaPDel">
+                <div class="popup">
                     <h1>
                     ¿Desear Eliminar/Reactivar el Producto?
                     </h1>
-                    <button @click="BorrarProducto()">
-                    Si Confirmo
-                    </button>
-                    <button @click="CerrarPopUp03">
-                    Cancelar
-                    </button>
+                    <div
+                    class="botones"
+                    >
+                        <button 
+                        @click="BorrarProducto()"
+                        class="botoncon"
+                        >
+                        Si Confirmo
+                        </button>
+                        <button 
+                        @click="CerrarPopUp03"
+                        class="botonc"
+                        >
+                        Cancelar
+                        </button>
+                    </div>
                 </div>
             </div>
         </Teleport>
@@ -20,28 +30,47 @@
         <Teleport to="body">
             <div class="fondo" v-if="VentanaCompra">
                 <div class="popup">
-                    <h2 style="color: black;">
+                    <h1>
                     {{ ProductoActual.nombre }}
-                    </h2>
-                    <div>
+                    </h1>
+                    <div
+                    class="
+                    flex flex-col
+                    ">
                         <input 
                         type="number" 
                         v-model="ProductoCantidad"
-                        style="width: 100px; height: 25px;"
                         maxlength="8"
+                        class="!w-30 mb-5"
                         >
-                        <button @click="SumarProducto(ProductoActual)">
-                        ➕
-                        </button>
-                        <button @click="RestarProducto(ProductoActual)">
-                        ➖
-                        </button>
+                        <div class="flex justify-center">
+                            <button 
+                            @click="SumarProducto(ProductoActual)"
+                            class="botoncon !bg-green-400 !px-2"
+                            >
+                            ➕
+                            </button>
+                            <button 
+                            @click="RestarProducto(ProductoActual)"
+                            class="botonc !bg-red-400 !px-2"
+                            >
+                            ➖
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <button @click="SumarCarrito">
+                    <div
+                    class="botones"
+                    >
+                        <button 
+                        @click="SumarCarrito"
+                        class="botoncon"
+                        >
                         Agregar al Carrito
                         </button>
-                        <button @click="CerrarPopUp05">
+                        <button 
+                        @click="CerrarPopUp05"
+                        class="botonc"
+                        >
                         Cancelar
                         </button>
                     </div>
@@ -50,30 +79,42 @@
         </Teleport>
         <!-- Nuevo Producto -->
         <Teleport to="body">
-            <div class="fondo_oscuro" v-if="VentanaNuevo">
-                <div class="caja_editar">
+            <div class="fondo" v-if="VentanaNuevo">
+                <div class="popup">
                     <h1>
                     Nuevo Producto
                     </h1>
                     <form @submit.prevent="SubirNuevoProducto" class="Texto_producto">
+                        <h2>
+                        Nombre
+                        </h2>
                         <input 
                         type="text" 
                         v-model="NuevoProducto.nombre" 
                         placeholder="Nombre"
                         maxlength="50"
                         >
+                        <h2>
+                        Precio
+                        </h2>
                         <input 
                         type="number" 
                         v-model="NuevoProducto.precio" 
                         placeholder="Precio"
                         maxlength="8"
                         >
+                        <h2>
+                        Stock
+                        </h2>
                         <input 
                         type="number" 
                         v-model="NuevoProducto.stock" 
                         placeholder="Stock"
                         maxlength="8"
                         >
+                        <h2>
+                        Categoria
+                        </h2>
                         <select v-model="OpcionCategoria" class="seleccion">
                             <option value="new">
                             + Agrega una Categoria
@@ -82,6 +123,9 @@
                             {{ i.categoria }}
                             </option>
                         </select>
+                        <h3>
+                        Nueva Categoria
+                        </h3>
                         <input 
                         v-if="OpcionCategoria === 'new'" 
                         type="text" 
@@ -89,25 +133,38 @@
                         placeholder="Categoria"
                         maxlength="20"
                         >
-                        <button type="submit" class="Boton_Crear">
-                        Crear
-                        </button>
-                        <button @click="CerrarPopUp04">
-                        Cancelar
-                        </button>
+                        <div
+                        class="botones"
+                        >
+                            <button 
+                            type="submit" 
+                            class="botoncon"
+                            >
+                            Crear
+                            </button>
+                            <button 
+                            @click="CerrarPopUp04"
+                            class="botonc"
+                            >
+                            Cancelar
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
         </Teleport>
         <!-- Actualizar Producto -->
         <Teleport to="body">
-            <div class="fondo_oscuro" v-if="ActualizarCajaP">
-                <div class="caja_editar">
+            <div class="fondo" v-if="ActualizarCajaP">
+                <div class="popup">
                     <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                        <h1>
+                        {{ ProductoAct.nombre }}
+                        </h1>
                         <div v-if="Rol === '1' || Rol === '2'">
-                            <h1>
+                            <h2>
                             Nombre
-                            </h1>
+                            </h2>
                             <input 
                             type="text" 
                             v-model="ProductoAct.nombre" 
@@ -116,9 +173,9 @@
                             >
                         </div>
                         <div v-if="Rol === '1' || Rol === '2' || Rol === '4'">
-                            <h1>
+                            <h2>
                             Precio
-                            </h1>
+                            </h2>
                             <input 
                             type="number" 
                             v-model="ProductoAct.precio" 
@@ -127,9 +184,9 @@
                             >
                         </div>
                         <div v-if="Rol === '1' || Rol === '2' || Rol === '5'">
-                            <h1>
+                            <h2>
                             Stock
-                            </h1>
+                            </h2>
                             <input 
                             type="number" 
                             v-model="ProductoAct.stock" 
@@ -138,9 +195,9 @@
                             >
                         </div>
                         <div v-if="Rol === '1' || Rol === '2'">
-                            <h1>
+                            <h2>
                             Categoria
-                            </h1>
+                            </h2>
                             <select v-model="OpcionCategoriaA" class="seleccion">
                                 <option value="new">
                                 + Agrega una Categoria
@@ -156,9 +213,9 @@
                             placeholder="Categoria"
                             maxlength="20"
                             >
-                            <h1>
+                            <h2>
                             Codigo de Barras
-                            </h1>
+                            </h2>
                             <input 
                             type="text" 
                             v-model="ProductoAct.codigo_barra" 
@@ -166,24 +223,39 @@
                             maxlength="15"
                             >
                         </div>
-                        <button type="submit" class="Boton_Crear">
-                        Actualizar
-                        </button>
-                        <button @click="CerrarPopUp02" class="Boton_Crear">
-                        Cancelar
-                        </button>
+                        <div 
+                        class="botones"
+                        >
+                            <button 
+                            type="submit" 
+                            class="botoncon">
+                            Actualizar
+                            </button>
+                            <button 
+                            @click="CerrarPopUp02" 
+                            class="botonc">
+                            Cancelar
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
         </Teleport>
         <!-- Tabla de Productos y Barra de Filtros -->
-        <div>
+        <div 
+        class="pagina"
+        >
             <!-- Barra de Filtros -->
-            <div class="barside">
-                <div class="margen">
-                    <div>
+            <div
+            class="bar"
+            >
+                <div
+                class="flex flex-col"
+                >
+                    <div
+                    class="flex flex-col"
+                    >
                         <h2>
-                        <br>
                         Filtro Categoria
                         </h2>
                         <div>
@@ -203,7 +275,11 @@
                             </select>
                         </div>
                     </div>
-                    <div>
+                    <div
+                    class="
+                    flex flex-col
+                    p-4
+                    ">
                         <h2>
                         Filtros de Precio
                         </h2>
@@ -240,15 +316,33 @@
                         Personalizado
                         </label>
                     </div>
-                    <div 
+                    
+                    <div
                     v-if="filtroRadio === 0" 
-                    >
+                    class="
+                    flex flex-col
+                    p-4
+                    ">
+                        <h3
+                        class="
+                        flex flex-col
+                        p-4
+                        ">
+                        Precio Mayor
+                        </h3>
                         <input 
                         type="number"
                         v-model="mayor" 
                         placeholder="Precio Max..."
 		                maxlength="10"
                         >
+                        <h3
+                        class="
+                        flex flex-col
+                        p-4
+                        ">
+                        Precio Minimo
+                        </h3>
                         <input
                         type="number"
                         v-model="menor" 
@@ -262,7 +356,11 @@
                         <h2>
                         ¿El Productos esta Activo?
                         </h2>
-                        <div>
+                        <div
+                        class="
+                        flex flex-col
+                        p-4
+                        ">
                             <label>
                             <input 
                             type="radio" 
@@ -289,22 +387,31 @@
                             </label>
                         </div>
                     </div>
-                    <button 
-                    @click="AplicarFiltro" 
-                    class="botoncon">
-                    Aplicar Filtros
-                    </button>
-                    <button 
-                    @click="LimpiarFiltro" 
-                    v-if="filtroAct === true"
-                    class="botont" 
+                    <div
+                    class="botones"
                     >
-                    🗑️ Limpiar Filtro
-                    </button>
+                        <button 
+                        @click="AplicarFiltro" 
+                        class="botoncon">
+                        Aplicar Filtros
+                        </button>
+                        <button 
+                        @click="LimpiarFiltro" 
+                        v-if="filtroAct === true"
+                        class="botont" 
+                        >
+                        🗑️ Limpiar Filtro
+                        </button>
+                    </div>
                 </div>
             </div>
             <!-- Tabla de Productos -->
-            <div>
+            <div
+            class="
+            w-full h-fit 
+            flex flex-col 
+            p-5 gap-5
+            ">
                 <input
                 @input="BusquedaProducto"
                 type="text" 
@@ -322,27 +429,40 @@
                 </button>
                 <div 
                 v-if="Productos.length > 0"
-                >
+                class="
+                grid grid-cols-1
+                sm:grid-cols-2
+                lg:grid-cols-3 
+                gap-6
+                ">
                     <div 
                     :class="Estatuscolor(i.activo)" 
                     v-for= "i in Productos" 
                     :key="i.id"
-                    >
+                    class="
+                    flex flex-col 
+                    items-center text-center overflow-hidden
+                    p-4 gap-2
+                    rounded-2xl shadow-md
+                    bg-green-300/50
+                    ">
                         <div>
                             <img
-                            alt="Vue logo" src="../assets/images.png"
+                            alt="Vue logo" 
+                            src="../assets/images.png"
                             >
                             <div
                             >
-                                <h2>
+                                <h2 class="font-bold">
                                 {{ i.nombre }}
                                 </h2>
                                 <h3>
                                 Categoria: 
                                 {{ i.categoria }}
-                                <br>
-                                ${{ i.precio }}
                                 </h3>
+                                <h2>
+                                ${{ i.precio }}
+                                </h2>
                                 <button 
                                 @click="Compracion(i)" 
                                 :disabled="CarritoStock(i) === 0" 
@@ -786,82 +906,3 @@
         CerrarPopUp02()
     }
 </script>
-
-<style scoped>
-    h1{
-        color: black;
-        font-size: small;
-        margin: 0;
-        width: fit-content;
-        font-style: sans-serif; 
-        padding: 0;
-    }
-    h2{
-        color: rgb(254, 255, 205);
-        font-size: medium;
-        margin: 0;
-        gap: 15px;
-        width: fit-content;
-        font-style: sans-serif; 
-    }
-    label{
-        color: white;
-        font-size: small;
-        gap: 5px;
-        width: fit-content;
-    }
-    .contenedor_tabla {
-        border-radius: 15px;
-        overflow: hidden;
-        border: 2px solid #000000;
-    }
-    thead{
-        background-color: #b8fbff;
-        color: #005f69;
-        text-align: center;
-    }
-    .Boton_Crear{
-        padding: 10px;
-        border-radius: 5px;
-    }
-    .classActivo{
-        height: 100%;
-        border: 2px solid #000000;
-        border-radius: 15px;
-        padding: 10px;
-        text-align: center;
-        background-color: rgb(204, 245, 235);
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .classEliminado{
-        height: 100%;
-        border: 2px solid #000000;
-        border-radius: 15px;
-        padding: 10px;
-        text-align: center;
-        background-color: rgb(245, 204, 204);
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .seleccion{
-        padding: 10px;
-    }
-    .caja_radios {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        text-align: left;
-        width: 100%;
-    }
-    .caja_radios_label {
-        cursor: pointer;
-        font-size: 16px;
-    }
-</style>
