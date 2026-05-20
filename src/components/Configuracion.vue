@@ -1,85 +1,105 @@
 <template>
     <!-- Actualizar Datos -->
     <div class="cuerpo">
-        <form 
-        @submit.prevent="ActualizarCliente"
-        class="p-8" 
-        >
-            <h1>
-            Actualizar Usuario 
-            {{ ClienteConfig.nombre }}
-            </h1>
-            <h2>
-            Nombre
-            </h2>
-            <input 
-            type="text" 
-            v-model="ClienteConfig.nombre" 
-            placeholder="Nombre"
-            class="!self-start"
+        <div
+        class="
+        place-self-center   
+        min-w-[80vh] min-h-full
+        rounded-full
+        p-20
+        bg-green-300">
+            <form 
+            @submit.prevent="ActualizarCliente"
+            class="p-8" 
             >
-            <h2>
-            E-mail
-            </h2>
-            <input 
-            type="text" 
-            v-model="ClienteConfig.email" 
-            placeholder="Email@email.com"
-            class="!self-start !w-auto"
-            >
-            <h2>
-            Contraseña
-            </h2>
-            <div>
+                <h1>
+                Actualizar Usuario 
+                {{ ClienteConfig.nombre }}
+                </h1>
+                <h2>
+                Nombre
+                </h2>
                 <input 
-                :type="verContrasena ? 'text' : 'password'"
-                v-model="ClienteConfig.contrasena" 
-                placeholder="Contraseña"
-                class="!p-2"
+                type="text" 
+                v-model="ClienteConfig.nombre" 
+                placeholder="Nombre"
+                class="!self-center !min-w-[40vh]"
                 >
-                <button 
-                type="button" 
-                @click="verContrasena = !verContrasena"
-                class="!p-1"
-                >
-                {{ verContrasena ? '🔒' : '👁️' }}
-                </button>
-            </div>
-            <h2>
-            Confirmar Contraseña
-            </h2>
-            <div>
+                <h2>
+                E-mail
+                </h2>
                 <input 
-                :type="verConContrasena ? 'text' : 'password'"
-                v-model="ClienteConfig.concontrasena" 
-                placeholder="Contraseña"
-                class="!p-2"
+                type="text" 
+                v-model="ClienteConfig.email" 
+                placeholder="Email@email.com"
+                class="!self-center !w-auto !min-w-[40vh]"
                 >
-                <button 
-                type="button" 
-                @click="verConContrasena = !verConContrasena"
-                class="botont !p-1"
-                >
-                {{ verConContrasena ? '🔒' : '👁️' }}
-                </button>
-            </div>
-            <div class="p-5">
-                <button 
-                type="submit" 
-                class="botoncon"
-                >
-                Actualizar
-                </button>
-            </div>
-        </form>
+                <h2>
+                Contraseña
+                </h2>
+                <div
+                class="
+                self-center
+                ">
+                    <input 
+                    :type="verContrasena ? 'text' : 'password'"
+                    v-model="ClienteConfig.contrasena" 
+                    placeholder="Contraseña"
+                    class="!p-2 !min-w-[35vh]"
+                    >
+                    <button 
+                    type="button" 
+                    @click="verContrasena = !verContrasena"
+                    class="botont !p-1"
+                    >
+                    {{ verContrasena ? '🔒' : '👁️' }}
+                    </button>
+                </div>
+                <h2>
+                Confirmar Contraseña
+                </h2>
+                <div
+                class="
+                self-center
+                ">
+                    <input 
+                    :type="verConContrasena ? 'text' : 'password'"
+                    v-model="ClienteConfig.concontrasena" 
+                    placeholder="Confirmar Contraseña"
+                    class="!p-2 !min-w-[35vh]"
+                    >
+                    <button 
+                    type="button" 
+                    @click="verConContrasena = !verConContrasena"
+                    class="botont !p-1"
+                    >
+                    {{ verConContrasena ? '🔒' : '👁️' }}
+                    </button>
+                </div>
+                <div
+                class="
+                self-center p-5
+                ">
+                    <button 
+                    type="submit" 
+                    class="botoncon !p-5"
+                    >
+                    Actualizar
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
 
 <script setup>
-    import { onMounted, ref } from 'vue';
-    import { CerrarSesion, leerCookie } from './Estatus.js';
+    // ----- Imports ----- //
+    import { onMounted, ref } from 'vue'
+    import { CerrarSesion, leerCookie } from './Estatus.js'
+    // ----- Variantes ----- //
     const verContrasena = ref(false)
     const verConContrasena = ref(false)
+    // ----- Funciones Vue ----- //
     onMounted(async() => {
         const idConfig = leerCookie("id_cliente");
         if (idConfig) {
@@ -95,12 +115,14 @@
             }
         }
     })
+    // ----- Para el Frontend ----- //
     const ClienteConfig = ref({
         nombre: "",
         email: "",
         contrasena: "",
         concontrasena: ""
-    });
+    })
+    // ----- Para el Backend ----- //
     const ActualizarCliente = async() => {
         if (ClienteConfig.value.contrasena !== "" || ClienteConfig.value.concontrasena !== "") {
             if (ClienteConfig.value.contrasena !== ClienteConfig.value.concontrasena) {
@@ -125,7 +147,7 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(UsuarioUpd)
-        });
+        })
         if (ActUsuario.status === 401) {
             CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
@@ -135,6 +157,6 @@
             nombre: "",
             email: "",
             contrasena: ""
-        };
-    };
+        }
+    }
 </script>

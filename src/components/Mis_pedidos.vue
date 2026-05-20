@@ -629,8 +629,10 @@
 </template>
 
 <script setup>
+    // ----- Imports ----- //
     import { onMounted, ref } from 'vue';
     import { leerCookie } from './Estatus.js'
+    // ----- Variantes ----- //
     const Pedidos = ref([])
     const filtroMP = ref(4)
     const filtroEst = ref(4)
@@ -642,12 +644,33 @@
     const PedidoNowHistorial = ref(null)
     const PedidoNowPreparando = ref(null)
     const idUsuario = leerCookie("id_cliente")
+    // ----- Funciones Vue ----- //
     onMounted(async() => {
         const respuesta = await fetch(`http://localhost:8000/pedidos/cliente/${idUsuario}`)
         const datos = await respuesta.json();
         console.log("aca che",datos)
         Pedidos.value = datos;
     })
+    // ----- Para el Frontend ----- //
+    const AplicarFiltro = () => {
+        BusquedaPedido()
+        VentanaFiltro.value = false
+    }
+    const LimpiarFiltro = () => {
+        filtroMP.value = 4
+        filtroEst.value = 4
+        BusquedaPedido()
+        VentanaFiltro.value = false
+        filtroAct.value = false
+    }
+    const FormatoFecha = (fechai) => {
+        if (fechai) {
+            return new Date(fechai).toLocaleDateString('es-ES')
+        }
+        else {
+            return "Pendiente"
+        }
+    }
     const PedidoCambioHistorial = (id) => {
         if (PedidoNowHistorial.value === id) {
             PedidoNowHistorial.value = null
@@ -672,17 +695,11 @@
             PedidoNowPreparando.value = id
         }
     }
-    const LimpiarFiltro = () => {
-        filtroMP.value = 4
-        filtroEst.value = 4
-        BusquedaPedido();
-        VentanaFiltro.value = false;
-        filtroAct.value = false
-    }
+    // ----- Para el Backend ----- //
     const BusquedaPedido = async() => {
         let url = new URL (`http://localhost:8000/pedidos/cliente/${idUsuario}/`);
         if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_pedido', Busqueda.value);
+            url.searchParams.append('busqueda_pedido', Busqueda.value)
         }
         let mpfiltro = ""
         if (filtroMP.value === 4) {
@@ -701,27 +718,15 @@
             mpfiltro = "Efectivo"
         }
         if (filtroMP.value !== 4&& mpfiltro !== "") {
-            url.searchParams.append('filtromp', mpfiltro);
+            url.searchParams.append('filtromp', mpfiltro)
             filtroAct.value = true
         }
         if (filtroEst.value !== 4) {
-            url.searchParams.append('filtroest', filtroEst.value);
+            url.searchParams.append('filtroest', filtroEst.value)
             filtroAct.value = true
         }
         const BusqPedido = await fetch(url)
-        const datos = await BusqPedido.json();
-        Pedidos.value = datos;
-    }
-    const FormatoFecha = (fechai) => {
-        if (fechai) {
-            return new Date(fechai).toLocaleDateString('es-ES')
-        }
-        else {
-            return "Pendiente"
-        }
-    }
-    const AplicarFiltro = () => {
-        BusquedaPedido();
-        VentanaFiltro.value = false;
+        const datos = await BusqPedido.json()
+        Pedidos.value = datos
     }
 </script>

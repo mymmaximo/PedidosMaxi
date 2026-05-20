@@ -18,7 +18,7 @@
         </button>
         <!-- Crear Nuevo Cliente/Usuario -->
         <button 
-        @click="AbrirPopUp10" 
+        @click="AbrirPopUp04" 
         class="botont"
         >
         Crear Nuevo Cliente
@@ -435,7 +435,7 @@
     <!-- Nuevo Cliente -->
     <Teleport to="body">
         <div class="fondo" v-if="ActualizarCNew">
-            <div class="popup" v-if="Rol === '1'">
+            <div class="popup !min-w-[60vh]" v-if="Rol === '1'">
                 <h1>
                 Nuevo Cliente
                 </h1>
@@ -495,8 +495,10 @@
 </template>
 
 <script setup>
-    import { onMounted, ref } from 'vue';
-    import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus';
+    // ----- Imports ----- //
+    import { onMounted, ref } from 'vue'
+    import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus'
+    // ----- Variantes ----- //
 	const Pagina = ref(0)
     const filtroEst = ref(2)
     const Busqueda = ref("")
@@ -512,6 +514,7 @@
     const ListaCiudad = ref ("")
     const ListaProvincia = ref ("")
     const ActualizarCajaCDel = ref(false)
+    // ----- Funciones Vue ----- //
     onMounted(async() => {
         BusquedaCliente()
         const respuestac = await fetch("http://localhost:8000/direccion/ciudad")
@@ -521,6 +524,7 @@
         const provincia = await respuestap.json()
         ListaProvincia.value = provincia
     })
+    // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		VentanaFiltro.value = true
 		document.body.style.overflow = "hidden"
@@ -545,17 +549,19 @@
 		ActualizarCajaC.value = false
 		document.body.style.overflow = "auto"
 	}
-	const AbrirPopUp10 = () => {
+	const AbrirPopUp04 = () => {
 		ActualizarCNew.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp10 = () => {
+	const CerrarPopUp04 = () => {
 		ActualizarCNew.value = false
 		document.body.style.overflow = "auto";
 	}
-    const Eliminacion = (cliente_fila) => {
-        ClienteEli.value = cliente_fila.id
-        AbrirPopUp02()
+    const AplicarFiltro = () => {
+        BusquedaCliente()
+        CerrarPopUp01()
+        filtrociudad.value = ""
+        filtroprovincia.value = ""
     }
     const Estatustxt = (id_estatus) => {
         if (id_estatus === true) {
@@ -565,30 +571,6 @@
             return "Eliminado"
         }
     }
-    const DireccionCambio = (id) => {
-        if (DireccionNow.value === id) {
-            DireccionNow.value = null
-        }
-        else {
-            DireccionNow.value = id
-        }
-    }
-    const BorrarCliente = async() => {
-        const EraseCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteEli.value}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-        })
-        ClienteEli.value = ""
-        if (EraseCliente.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return
-        }
-        BusquedaCliente()
-        CerrarPopUp02()
-    }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
             return "classActivo"
@@ -597,12 +579,102 @@
             return "classEliminado"
         }
     }
+    const NuevoCliente = ref({
+        nombre: "",
+        email: "",
+        dni: "",
+        contrasena: ""
+    })
+    const LimpiarFiltro = () => {
+        filtroDirec.value = 2
+        filtroEst.value = 1
+        filtrociudad.value = ""
+        filtroprovincia.value = ""
+        BusquedaCliente();
+        CerrarPopUp01();
+        filtroAct.value = false
+    }
     const ClienteAct = ref({
         id: "",
         nombre: "",
         email: "",
         contrasena: "",
     })
+    const Edicion = (cliente_fila) => {
+        ClienteAct.value.id = cliente_fila.id
+        ClienteAct.value.nombre = cliente_fila.nombre
+        ClienteAct.value.email = cliente_fila.email
+        AbrirPopUp03()
+    }
+    const DireccionCambio = (id) => {
+        if (DireccionNow.value === id) {
+            DireccionNow.value = null
+        }
+        else {
+            DireccionNow.value = id
+        }
+    }
+    const Eliminacion = (cliente_fila) => {
+        ClienteEli.value = cliente_fila.id
+        AbrirPopUp02()
+    }
+    // ----- Para el Backend ----- //
+    const BusquedaCliente = async() => {
+        let url = new URL ('http://localhost:8000/cliente/');
+		url.searchParams.append('skip', Pagina.value);
+        if (Busqueda.value !== "") {
+            url.searchParams.append('busqueda_cliente', Busqueda.value)
+        }
+        if (filtroDirec.value === 1) {
+            url.searchParams.append('bool_direccion', 'true')
+            filtroAct.value = true
+        }
+        if (filtroDirec.value === 0) {
+            url.searchParams.append('bool_direccion', 'false')
+            filtroAct.value = true
+        }
+        if (filtroEst.value === 1) {
+            url.searchParams.append('bool_activo', 'true')
+            filtroAct.value = true
+        }
+        if (filtroEst.value === 0) {
+            url.searchParams.append('bool_activo', 'false')
+            filtroAct.value = true
+        }
+        if (filtrociudad.value !== "") {
+            url.searchParams.append('filtrociudad', filtrociudad.value)
+            filtroAct.value = true            
+        }
+        if (filtroprovincia.value !== "") {
+            url.searchParams.append('filtroprovincia', filtroprovincia.value)
+            filtroAct.value = true            
+        }
+        const BusqCliente = await fetch(url)
+        const datos = await BusqCliente.json()
+        clientes.value = datos
+    }
+    const SubirNuevoCliente = async() => {
+        const SubidaNuevoCliente = await fetch('http://localhost:8000/clientes/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(NuevoCliente.value)
+        })
+        if (SubidaNuevoCliente.status === 401) {
+            CerrarSesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            return
+        }
+        NuevoCliente.value = {
+            nombre: "",
+            email: "",
+            dni: "",
+            contrasena: ""
+        }
+        BusquedaCliente()
+        CerrarPopUp04()
+    }
     const ActualizarClientes = async() => {
         const ClienteUpd = {} 
         if (ClienteAct.value.nombre !== "") {
@@ -635,87 +707,20 @@
         BusquedaCliente()
         CerrarPopUp03()
     }
-    const Edicion = (cliente_fila) => {
-        ClienteAct.value.id = cliente_fila.id
-        ClienteAct.value.nombre = cliente_fila.nombre
-        ClienteAct.value.email = cliente_fila.email
-        AbrirPopUp03()
-    };
-    const LimpiarFiltro = () => {
-        filtroDirec.value = 2
-        filtroEst.value = 1
-        filtrociudad.value = ""
-        filtroprovincia.value = ""
-        BusquedaCliente();
-        CerrarPopUp01();
-        filtroAct.value = false
-    }
-    const BusquedaCliente = async() => {
-        let url = new URL ('http://localhost:8000/cliente/');
-		url.searchParams.append('skip', Pagina.value);
-        if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_cliente', Busqueda.value)
+    const BorrarCliente = async() => {
+        const EraseCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteEli.value}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
         }
-        if (filtroDirec.value === 1) {
-            url.searchParams.append('bool_direccion', 'true')
-            filtroAct.value = true
-        }
-        if (filtroDirec.value === 0) {
-            url.searchParams.append('bool_direccion', 'false')
-            filtroAct.value = true
-        }
-        if (filtroEst.value === 1) {
-            url.searchParams.append('bool_activo', 'true')
-            filtroAct.value = true
-        }
-        if (filtroEst.value === 0) {
-            url.searchParams.append('bool_activo', 'false')
-            filtroAct.value = true
-        }
-        if (filtrociudad.value !== "") {
-            url.searchParams.append('filtrociudad', filtrociudad.value);
-            filtroAct.value = true;            
-        }
-        if (filtroprovincia.value !== "") {
-            url.searchParams.append('filtroprovincia', filtroprovincia.value);
-            filtroAct.value = true;            
-        }
-        const BusqCliente = await fetch(url)
-        const datos = await BusqCliente.json()
-        clientes.value = datos;
-    }
-    const AplicarFiltro = () => {
-        BusquedaCliente()
-        CerrarPopUp01()
-        filtrociudad.value = ""
-        filtroprovincia.value = ""
-    }
-    const NuevoCliente = ref({
-        nombre: "",
-        email: "",
-        dni: "",
-        contrasena: ""
-    })
-    const SubirNuevoCliente = async() => {
-        const SubidaNuevoCliente = await fetch('http://localhost:8000/clientes/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(NuevoCliente.value)
-        });
-        if (SubidaNuevoCliente.status === 401) {
+        })
+        ClienteEli.value = ""
+        if (EraseCliente.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
+            return
         }
-        NuevoCliente.value = {
-            nombre: "",
-            email: "",
-            dni: "",
-            contrasena: ""
-        };
         BusquedaCliente()
-        CerrarPopUp10()
-    };
+        CerrarPopUp02()
+    }
 </script>

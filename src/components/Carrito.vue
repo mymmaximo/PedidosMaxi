@@ -102,7 +102,7 @@
                     Si Confirmo
                     </button>
                     <button
-                    @click="CerrarPopUp"
+                    @click="CerrarPopUp01"
                     class="botonc">
                     Cancelar
                     </button>
@@ -293,8 +293,10 @@
 
 
 <script setup>
+    // ----- Imports ----- //
     import { ref, onMounted, computed } from 'vue'
     import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie } from './Estatus.js'
+    // ----- Variantes ----- //
     const MetodoPago = ref ("")
     const ProductoEli = ref("")
     const ListaDirecciones = ref([])
@@ -302,19 +304,61 @@
     const DireccionExistente = ref ("")
     const ActualizarCarritoDel = ref(false)
     const idClienteCarrito = leerCookie("id_cliente")
-    const emit = defineEmits(['CarritoVacio'])
-	const AbrirPopUp = () => {
+    // ----- Funciones Vue ----- //
+    const emit = defineEmits([
+        'CarritoVacio'
+    ])
+    onMounted(async() => {
+        const respuesta = await fetch(`http://localhost:8000/cliente/${idClienteCarrito}/direcciones`)
+        const datos = await respuesta.json();
+        ListaDirecciones.value = datos;
+    })
+    // ----- Para el Frontend ----- //
+	const AbrirPopUp01 = () => {
 		ActualizarCarritoDel.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const CerrarPopUp = () => {
+	const CerrarPopUp01 = () => {
 		ActualizarCarritoDel.value = false
 		document.body.style.overflow = "auto"
 	}
+    const NuevaDireccion = ref ({
+        calle: "",
+        numero: null,
+        barrio: "",
+        ciudad: "",
+        provincia: ""
+    })
     const Eliminacion = (producto_fila) => {
         ProductoEli.value = producto_fila
-        AbrirPopUp()
+        AbrirPopUp01()
     }
+    // ----- Para el Backend ----- //
+    const VerificarStock = (item) => {
+        if (item.cantidad < 1) {
+            item.cantidad = 1
+        }
+        if (item.cantidad > item.stock_producto) {
+            item.cantidad = item.stock_producto
+        }
+        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value));
+    }
+    const confirboton = computed(() =>{
+        if (MetodoPago.value === "") {
+            return true
+        }
+        if (DireccionExistente.value === "") {
+            if (
+                NuevaDireccion.value.calle === ""||
+                NuevaDireccion.value.numero === ""||
+                NuevaDireccion.value.barrio === ""||
+                NuevaDireccion.value.ciudad === ""||
+                NuevaDireccion.value.provincia === ""
+            ) {
+                return true
+        }}
+        return false
+    })
     const ConfirmarCompra = (async() => {
         let DireccionPedido = null
         if (DireccionExistente.value !== "") {
@@ -327,9 +371,9 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(NuevaDireccion.value)
-            });
-            const datos = await SubidaNuevaDireccion.json();
-            DireccionPedido = datos.id;
+            })
+            const datos = await SubidaNuevaDireccion.json()
+            DireccionPedido = datos.id
         }
         const SubidaNuevoPedido = await fetch('http://localhost:8000/pedidos/', {
             method: 'POST',
@@ -342,14 +386,14 @@
                 id_direccion: DireccionPedido,
                 metodo_pago: MetodoPago.value
             })
-        });   
+        })
         if (SubidaNuevoPedido.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
+            CerrarSesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            return
         }
-        const datosPedido = await SubidaNuevoPedido.json();
-        const Pedidoid = datosPedido.id;
+        const datosPedido = await SubidaNuevoPedido.json()
+        const Pedidoid = datosPedido.id
         const DetallesLista = CarritoLocal.value.map(item => {
             return {
                 id_pedido: Pedidoid,
@@ -367,56 +411,19 @@
             body: JSON.stringify(DetallesLista)
             })   
             if (SubidaNuevoDetalle.status === 401) {
-                CerrarSesion();
+                CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-                return;
+                return
             }
             emit('CarritoVacio')
             LimpiarCompra()
     })
-    const NuevaDireccion = ref ({
-        calle: "",
-        numero: null,
-        barrio: "",
-        ciudad: "",
-        provincia: ""
-    })
-    const confirboton = computed(() =>{
-        if (MetodoPago.value === "") {
-            return true
-        }
-        if (DireccionExistente.value === "") {
-            if (
-                NuevaDireccion.value.calle === ""||
-                NuevaDireccion.value.numero === ""||
-                NuevaDireccion.value.barrio === ""||
-                NuevaDireccion.value.ciudad === ""||
-                NuevaDireccion.value.provincia === ""
-            ) {
-                return true
-        }}
-        return false
-    })
     const BorrarDetalle = () => {
         CarritoLocal.value.splice(ProductoEli.value, 1)
-        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value));
-        CerrarPopUp()
+        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value))
+        CerrarPopUp01()
         if (CarritoLocal.value.length === 0) {
-            emit('CarritoVacio');
+            emit('CarritoVacio')
         }
     }
-    const VerificarStock = (item) => {
-        if (item.cantidad < 1) {
-            item.cantidad = 1
-        }
-        if (item.cantidad > item.stock_producto) {
-            item.cantidad = item.stock_producto
-        }
-        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value));
-    }
-    onMounted(async() => {
-        const respuesta = await fetch(`http://localhost:8000/cliente/${idClienteCarrito}/direcciones`)
-        const datos = await respuesta.json();
-        ListaDirecciones.value = datos;
-    })
 </script>

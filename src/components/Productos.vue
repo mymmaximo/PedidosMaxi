@@ -17,7 +17,7 @@
                         Si Confirmo
                         </button>
                         <button 
-                        @click="CerrarPopUp03"
+                        @click="CerrarPopUp02"
                         class="botonc"
                         >
                         Cancelar
@@ -68,7 +68,7 @@
                         Agregar al Carrito
                         </button>
                         <button 
-                        @click="CerrarPopUp05"
+                        @click="CerrarPopUp04"
                         class="botonc"
                         >
                         Cancelar
@@ -80,7 +80,10 @@
         <!-- Nuevo Producto -->
         <Teleport to="body">
             <div class="fondo" v-if="VentanaNuevo">
-                <div class="popup">
+                <div class="
+                popup 
+                !min-w-[80vh]
+                ">
                     <h1>
                     Nuevo Producto
                     </h1>
@@ -133,6 +136,44 @@
                         placeholder="Categoria"
                         maxlength="20"
                         >
+                        <div>
+                            <div
+                            v-if="VistaPrevia"
+                            class="
+                            relative 
+                            w-fit mx-auto mt-2
+                            ">
+                                <button
+                                @click="LimpiarImagen"
+                                title="Quitar imagen"
+                                class="botonx"
+                                >
+                                🗙
+                                </button>
+                                <img 
+                                :src="VistaPrevia" 
+                                alt="Vista Previa"
+                                class="imagen !m-0" 
+                                />
+                            </div>
+                            <div
+                            v-else 
+                            class="
+                            imageno
+                            ">
+                            <span>
+                            Sin vista previa
+                            </span> 
+                            </div>
+                            <div class="mt-4">
+                                <input
+                                type="file"
+                                accept="image/*"
+                                @change="SeleccionarImagen"
+                                class="imagenu !w-full"
+                                />
+                            </div>
+                        </div>
                         <div
                         class="botones"
                         >
@@ -143,7 +184,7 @@
                             Crear
                             </button>
                             <button 
-                            @click="CerrarPopUp04"
+                            @click="CerrarPopUp03"
                             class="botonc"
                             >
                             Cancelar
@@ -222,6 +263,44 @@
                             placeholder="Codigo de Barras"
                             maxlength="15"
                             >
+                            <div>
+                                <div
+                                v-if="VistaPrevia"
+                                class="
+                                relative 
+                                w-fit mx-auto mt-2
+                                ">
+                                    <button
+                                    @click="LimpiarImagen"
+                                    title="Quitar imagen"
+                                    class="botonx"
+                                    >
+                                    🗙
+                                    </button>
+                                    <img 
+                                    :src="VistaPrevia" 
+                                    alt="Vista Previa"
+                                    class="imagen !m-0" 
+                                    />
+                                </div>
+                                <div
+                                v-else 
+                                class="
+                                imageno
+                                ">
+                                <span>
+                                Sin vista previa
+                                </span> 
+                                </div>
+                                <div class="mt-4">
+                                    <input
+                                    type="file"
+                                    accept="image/*"
+                                    @change="SeleccionarImagen"
+                                    class="imagenu !w-full"
+                                    />
+                                </div>
+                            </div>
                         </div>
                         <div 
                         class="botones"
@@ -232,7 +311,7 @@
                             Actualizar
                             </button>
                             <button 
-                            @click="CerrarPopUp02" 
+                            @click="CerrarPopUp01" 
                             class="botonc">
                             Cancelar
                             </button>
@@ -421,7 +500,7 @@
 		        maxlength="50"
                 >
                 <button 
-                @click="AbrirPopUp04"
+                @click="AbrirPopUp03"
                 v-if="Rol === '1' || Rol === '2'"
                 class="botont" 
                 >
@@ -448,8 +527,14 @@
                     ">
                         <div>
                             <img
-                            alt="Vue logo" 
+                            v-if="i.imagenes.length > 0"
+                            :src=ObtenerImgUrl(i.imagenes[0].s3_key)
+                            class="imagen"
+                            >
+                            <img
+                            v-else
                             src="../assets/images.png"
+                            class="imagen"
                             >
                             <div
                             >
@@ -544,16 +629,26 @@
 </template>
 
 <script setup>
-    import { onMounted, ref, watch } from 'vue'
+    // ----- Imports ----- //
+    import { onMounted, toRefs, ref, watch } from 'vue'
+    import { supabase } from '../config/supebase.js'
     import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
+    // ----- Variables ----- //
+    
+    const prop = defineProps(['path','size'])
     const ActualizarCajaPDel = ref(false)
-    const OpcionCategoria = ref("new")
     const OpcionCategoriaA = ref("new")
+    const { path, size } = toRefs(prop)
+    const OpcionCategoria = ref("new")
     const VentanaCompra = ref(false)
     const VentanaNuevo = ref(false)
+    const fileInput = ref('')
     const ListaCategoria = ref ("")
+    const ArchivoSave = ref(null)
+    const uploading = ref(false)
     const filtroAct = ref(false)
     const ProductoEli = ref("")
+    const VistaPrevia = ref('')
     const filtrocat = ref ("")
     const filtroRadio = ref(0)
     const Productos = ref([])
@@ -562,6 +657,9 @@
     const mayor = ref("")
     const menor = ref("")
 	const Pagina = ref(0)
+    const files = ref()
+    const src = ref('')
+    // ----- Funciones Vue ----- //
     onMounted(async() => {
         BusquedaProducto()
         const respuesta = await fetch("http://localhost:8000/producto/categorias/")
@@ -573,44 +671,180 @@
             console.log("Carrito recuperado:", CarritoLocal.value)
         }
     })
-	const AbrirPopUp02 = () => {
+    watch (ProductoCantidad, (NuevaCantidad) => {
+        let CantidadnCarrito = 0
+        if (ProductoActual.value) {
+            CarritoLocal.value.forEach((prod) => {
+                if (prod.id_producto === ProductoActual.value.id) {
+                    CantidadnCarrito = CantidadnCarrito + prod.cantidad
+                }
+            })
+            const StockLocal = ProductoActual.value.stock - CantidadnCarrito
+            if (NuevaCantidad > StockLocal) {
+                ProductoCantidad.value = StockLocal
+            }
+            if (NuevaCantidad < 1 && StockLocal !== 0) {
+                ProductoCantidad.value = 1
+            }
+        }
+    })
+    watch(path, () => {
+        if (path.value) ObtenerImgUrl()
+    })
+    const emit = defineEmits([
+        'upload',
+        'update:path'
+    ])
+    // ----- Para el Frontend ----- //
+	const AbrirPopUp01 = () => {
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp02 = () => {
+	const CerrarPopUp01 = () => {
 		ActualizarCajaP.value = false
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp03 = () => {
+	const AbrirPopUp02 = () => {
 		ActualizarCajaPDel.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp03 = () => {
+	const CerrarPopUp02 = () => {
 		ActualizarCajaPDel.value = false
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp04 = () => {
+	const AbrirPopUp03 = () => {
+        LimpiarImagen()
 		VentanaNuevo.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp04 = () => {
+	const CerrarPopUp03 = () => {
 		VentanaNuevo.value = false
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp05 = () => {
+	const AbrirPopUp04 = () => {
 		VentanaCompra.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp05 = () => {
+	const CerrarPopUp04 = () => {
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
 		document.body.style.overflow = "auto";
 	}
+    const Estatuscolor = (id_estatus) => {
+        if (id_estatus === true) {
+            return "si"
+        }
+        else if (id_estatus === false) {
+            return "no"
+        }
+    }
     const Compracion = (producto_fila) => {
         VentanaComprar(producto_fila)
-        AbrirPopUp05()
-    };
+        AbrirPopUp04()
+    }
+    const VentanaComprar = (ProductoSeleccionado) => {
+        AbrirPopUp04()
+        ProductoActual.value = ProductoSeleccionado
+        ProductoCantidad.value = 1
+    }
+    const SumarProducto = () => {
+        if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
+            ProductoCantidad.value++
+        }
+    }
+    const RestarProducto = () => {
+        if (ProductoCantidad.value > 1) {
+            ProductoCantidad.value--
+        }
+    }
+    const AplicarFiltro = () => {
+        BusquedaProducto();
+        menor.value = "";
+        mayor.value = "";
+    }
+    const LimpiarFiltro = () => {
+        filtroRadio.value = 4
+        filtrocat.value = ""
+        filtroEst.value =  1
+        BusquedaProducto();
+        filtroAct.value = false
+    }
+    const NuevoProducto = ref({
+        nombre: "",
+        precio: "",
+        stock: "",
+        categoria: ""
+    })
+    const SeleccionarImagen = (evt) => {
+        const file = evt.target.files[0]
+        if (file) {
+            ArchivoSave.value = file
+            VistaPrevia.value = URL.createObjectURL(file)
+        }
+    }
+    const LimpiarImagen = () => {
+    VistaPrevia.value = ''
+    ArchivoSave.value = null
+    if (fileInput.value) {
+        fileInput.value.value = ''
+    }}
+    const ObtenerImgUrl = (Imgenkey) => {
+        const respuesta = supabase.storage
+            .from('max_imagenes')
+            .getPublicUrl(Imgenkey)
+        return respuesta.data.publicUrl
+    }
+    const ProductoAct = ref({
+        id: "",
+        nombre: "",
+        precio: "",
+        stock: "",
+        categoria: "",
+        codigo_barra: ""
+    })
+    const Eliminacion = (producto_fila) => {
+        ProductoEli.value = producto_fila.id;
+        AbrirPopUp02()
+    }
+    // ----- Para el Backend ----- //
+    const CarritoStock = (Producto) => {
+        let stockCarrito = 0
+        CarritoLocal.value.forEach((itemCarrito) => {
+            if (itemCarrito.id_producto === Producto.id) {
+                stockCarrito = stockCarrito + itemCarrito.cantidad
+            }
+        })
+        return Producto.stock - stockCarrito;
+    }
+    const SumarCarrito = () => {
+        if (!ProductoActual.value)
+            return; 
+        const nuevoProducto = {
+            id_pedido: PedidoActual.value,
+            nombre_producto: ProductoActual.value.nombre,
+            id_producto: ProductoActual.value.id,
+            cantidad: ProductoCantidad.value,
+            precio_unitario: ProductoActual.value.precio,
+            stock_producto: ProductoActual.value.stock
+        }
+        let CarritoExistente = CarritoLocal.value.find(
+            (item_exitente) =>
+            item_exitente.id_producto === ProductoActual.value.id
+        )
+        if (CarritoExistente){
+            CarritoExistente.cantidad = ProductoCantidad.value + CarritoExistente.cantidad
+        } else {
+            CarritoLocal.value.push(nuevoProducto);
+        }
+        localStorage.setItem(
+            'carrito_pendiente',
+            JSON.stringify(
+                CarritoLocal.value
+            )
+        )
+        CerrarPopUp04()    
+    }
     const Confirmar = (async() => {
         const tokenGuardado = leerCookie("token");
         const ClienteGuardado = leerCookie("id_cliente");
@@ -628,7 +862,7 @@
                 }])
             })
             if (respuesta.ok) {
-                CerrarPopUp05()
+                CerrarPopUp04()
                 console.log ("funciono")
             } else {
                 const error = await respuesta.text()
@@ -668,128 +902,6 @@
             }
         }
     })
-    const VentanaComprar = (ProductoSeleccionado) => {
-        AbrirPopUp05()
-        ProductoActual.value = ProductoSeleccionado
-        ProductoCantidad.value = 1
-    }
-    const SumarProducto = () => {
-        if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
-            ProductoCantidad.value++
-        }
-    }
-    const RestarProducto = () => {
-        if (ProductoCantidad.value > 1) {
-            ProductoCantidad.value--
-        }
-    }
-    const SumarCarrito = () => {
-        if (!ProductoActual.value)
-            return; 
-        const nuevoProducto = {
-            id_pedido: PedidoActual.value,
-            nombre_producto: ProductoActual.value.nombre,
-            id_producto: ProductoActual.value.id,
-            cantidad: ProductoCantidad.value,
-            precio_unitario: ProductoActual.value.precio,
-            stock_producto: ProductoActual.value.stock
-        }
-        let CarritoExistente = CarritoLocal.value.find(
-            (item_exitente) =>
-            item_exitente.id_producto === ProductoActual.value.id
-        )
-        if (CarritoExistente){
-            CarritoExistente.cantidad = ProductoCantidad.value + CarritoExistente.cantidad
-        } else {
-            CarritoLocal.value.push(nuevoProducto);
-        }
-        localStorage.setItem(
-            'carrito_pendiente',
-            JSON.stringify(
-                CarritoLocal.value
-            )
-        )
-        CerrarPopUp05()    
-    }
-    // revisar para optimizar
-    watch (ProductoCantidad, (NuevaCantidad) => {
-        let CantidadnCarrito = 0
-        if (ProductoActual.value) {
-            CarritoLocal.value.forEach((prod) => {
-                if (prod.id_producto === ProductoActual.value.id) {
-                    CantidadnCarrito = CantidadnCarrito + prod.cantidad
-                }
-            })
-            const StockLocal = ProductoActual.value.stock - CantidadnCarrito
-            if (NuevaCantidad > StockLocal) {
-                ProductoCantidad.value = StockLocal
-            }
-            if (NuevaCantidad < 1 && StockLocal !== 0) {
-                ProductoCantidad.value = 1
-            }
-        }
-    })
-    const Eliminacion = (producto_fila) => {
-        ProductoEli.value = producto_fila.id;
-        AbrirPopUp03()
-    };
-    const LimpiarFiltro = () => {
-        filtroRadio.value = 4
-        filtrocat.value = ""
-        filtroEst.value =  1
-        BusquedaProducto();
-        filtroAct.value = false
-    }
-    const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`http://localhost:8000/productos/id/${ProductoEli.value}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        ProductoEli.value = ""
-        if (EraseProducto.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
-        }
-        BusquedaProducto()
-        CerrarPopUp03()
-    }
-    const Edicion = (producto_fila) => {
-        ProductoAct.value.id = producto_fila.id;
-        ProductoAct.value.nombre = producto_fila.nombre;
-        ProductoAct.value.precio = producto_fila.precio;
-        ProductoAct.value.stock = producto_fila.stock;
-        OpcionCategoriaA.value = producto_fila.categoria;
-        ProductoAct.value.codigo_barra = producto_fila.codigo_barra;
-        AbrirPopUp02()
-    };
-    const Estatuscolor = (id_estatus) => {
-        if (id_estatus === true) {
-            return "classActivo"
-        }
-        else if (id_estatus === false) {
-            return "classEliminado"
-        }
-    }
-    const Estatustxt = (id_estatus) => {
-        if (id_estatus === true) {
-            return "Activo"
-        }
-        else if (id_estatus === false) {
-            return "Eliminado"
-        }
-    }
-    const CarritoStock = (Producto) => {
-        let stockCarrito = 0
-        CarritoLocal.value.forEach((itemCarrito) => {
-            if (itemCarrito.id_producto === Producto.id) {
-                stockCarrito = stockCarrito + itemCarrito.cantidad
-            }
-        })
-        return Producto.stock - stockCarrito;
-    }
     const BusquedaProducto = async() => {
         let url = new URL ('http://localhost:8000/producto/');
 		url.searchParams.append('skip', Pagina.value);
@@ -842,50 +954,69 @@
         const datos = await BusqProducto.json();
         Productos.value = datos;
     }
-    const AplicarFiltro = () => {
-        BusquedaProducto();
-        menor.value = "";
-        mayor.value = "";
-    }
-    const NuevoProducto = ref({
-        nombre: "",
-        precio: "",
-        stock: "",
-        categoria: ""
-    })
     const SubirNuevoProducto = async() => {
         if (OpcionCategoria.value != "new") {
             NuevoProducto.value.categoria = OpcionCategoria.value
         }
         const SubidaNuevoProducto = await fetch('http://localhost:8000/productos/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(NuevoProducto.value)
-        })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(NuevoProducto.value)
+            })
         if (SubidaNuevoProducto.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;
         }
+        const ProductoNew = await SubidaNuevoProducto.json()
+        const NewId = ProductoNew.id        
+        if (ArchivoSave.value) {
+            const file = ArchivoSave.value
+            const fileExt = file.name.split('.').pop()
+            const filePath = `${Math.random()}.${fileExt}`
+            uploading.value = true
+            let { error: uploadError } = await supabase.storage
+                .from('max_imagenes')
+                .upload(filePath, file)
+            if (uploadError) {
+                alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
+            } else {
+                await fetch('http://localhost:8000/productos/archivos/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id_producto: NewId,
+                        s3_key: filePath,
+                        nombre_original: file.name,
+                        tipo_contenido: fileExt,
+                        tamanio: file.size
+                })
+            })
+        }}
+        uploading.value = false
         NuevoProducto.value = {
             nombre: "",
             precio: "",
             stock: "",
             categoria: ""
         }
+        LimpiarImagen()
         BusquedaProducto()
-        CerrarPopUp04()
+        CerrarPopUp03()
     }
-    const ProductoAct = ref({
-        id: "",
-        nombre: "",
-        precio: "",
-        stock: "",
-        categoria: "",
-        codigo_barra: ""
-    })
+    const Edicion = (producto_fila) => {
+        ProductoAct.value.id = producto_fila.id;
+        ProductoAct.value.nombre = producto_fila.nombre;
+        ProductoAct.value.precio = producto_fila.precio;
+        ProductoAct.value.stock = producto_fila.stock;
+        OpcionCategoriaA.value = producto_fila.categoria;
+        ProductoAct.value.codigo_barra = producto_fila.codigo_barra;
+        AbrirPopUp01()
+    }
     const ActualizarProducto = async() => {
         if (OpcionCategoriaA.value != "new") {
             ProductoAct.value.categoria = OpcionCategoriaA.value
@@ -898,6 +1029,22 @@
         body: JSON.stringify(ProductoAct.value)
         })
         if (ActProducto.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
+        BusquedaProducto()
+        CerrarPopUp01()
+    }
+    const BorrarProducto = async() => {
+        const EraseProducto = await fetch(`http://localhost:8000/productos/id/${ProductoEli.value}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        ProductoEli.value = ""
+        if (EraseProducto.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;

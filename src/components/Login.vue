@@ -107,55 +107,36 @@
 </template>
 
 <script setup>
+    // ----- Imports ----- //
     import { onMounted, ref } from 'vue';
     import { CerrarSesion, leerCookie } from './Estatus.js'
+    // ----- Variantes ----- //
     const Herror = ref("")
     const verContrasena = ref(false)
     const MostrarLogin = ref(true)
     const SesionIniciada = ref(false)
-    const emit = defineEmits(['LoginExitoso'])
+    // ----- Funciones Vue ----- //
+    const emit = defineEmits([
+        'LoginExitoso'
+    ])
     onMounted(() => {
         const tokenGuardado = leerCookie("token")
         if (tokenGuardado) {
             SesionIniciada.value = true
         }
     })
+    // ----- Para el Frontend ----- //
     const LoginBox = ref({
         email: "",
         contrasena: ""
-    });
+    })
     const NuevoCliente = ref({
         nombre: "",
         email: "",
         dni: "",
         contrasena: ""
-    });
-    const SubirNuevoCliente = async() => {
-        const respuesta = await fetch('http://localhost:8000/clientes/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(NuevoCliente.value)
-            });
-        if (respuesta.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
-        }
-        const datos = await respuesta.json();
-        if (respuesta.ok) {
-            NuevoCliente.value = {
-                nombre: "",
-                email: "",
-                dni: "",
-                contrasena: ""
-            };
-            MostrarLogin.value = true
-        } else {
-            Herror.value = "Error al registrar, revisa tus datos";
-        } 
-    }
+    })
+    // ----- Para el Backend ----- //
     const IniciarSesionUsuario = async() => {
         const respuesta = await fetch('http://localhost:8000/usuario/login/', {
             method: 'POST',
@@ -163,11 +144,11 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(LoginBox.value)
-        });
+        })
         if (respuesta.status === 401) {
             IniciarSesionCliente()
         }
-        const datos = await respuesta.json();
+        const datos = await respuesta.json()
             if (respuesta.ok) {
                 document.cookie= `token=${datos.access_token}; path=/`
                 document.cookie= `id_usuario=${datos.id_usuario}; path=/`
@@ -177,7 +158,7 @@
                 LoginBox.value = {
                     email: "",
                     contrasena: ""
-                };
+                }
                 window.location.reload()
             } else {
                 IniciarSesionCliente()
@@ -190,7 +171,7 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(LoginBox.value)
-        });
+        })
         const datos = await respuesta.json();
             if (respuesta.ok) {
                 document.cookie= `token=${datos.access_token}; path=/`
@@ -205,5 +186,31 @@
             } else {
                 Herror.value = "Usuario o contraseña incorrectos"
             } 
+    }
+    const SubirNuevoCliente = async() => {
+        const respuesta = await fetch('http://localhost:8000/clientes/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(NuevoCliente.value)
+            })
+        if (respuesta.status === 401) {
+            CerrarSesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            return
+        }
+        const datos = await respuesta.json();
+        if (respuesta.ok) {
+            NuevoCliente.value = {
+                nombre: "",
+                email: "",
+                dni: "",
+                contrasena: ""
+            }
+            MostrarLogin.value = true
+        } else {
+            Herror.value = "Error al registrar, revisa tus datos"
+        } 
     }
 </script>

@@ -12,7 +12,7 @@
 		>
     	<!-- Boton de Filtro -->
 		<button 
-		@click="AbrirPopUp2" 
+		@click="AbrirPopUp02" 
 		class="botoncon"
 		>
 		🗃️Filtros
@@ -39,7 +39,7 @@
 						Si Confirmo
 						</button>
 						<button 
-						@click="CerrarPopUp1"
+						@click="CerrarPopUp01"
 						class="botonc"
 						>
 						Cancelar
@@ -188,7 +188,7 @@
 						🗑️ Limpiar Filtro
 						</button>
 						<button 
-						@click="CerrarPopUp2" 
+						@click="CerrarPopUp02" 
 						class="botonc">
 						Cerrar
 						</button>
@@ -406,7 +406,9 @@
 </template>
 
 <script setup>
-	import { onMounted, ref } from 'vue';
+    // ----- Imports ----- //
+	import { onMounted, ref } from 'vue'
+    // ----- Variantes ----- //
 	const Pagina = ref(0)
 	const Pedidos = ref([])
 	const filtroMP = ref(4)
@@ -420,6 +422,7 @@
     const ListaProvincia = ref ("")
 	const VentanaFiltro = ref(false)
 	const ActualizarCajaP = ref (false)
+    // ----- Funciones Vue ----- //
 	onMounted(async() => {
 		BusquedaPedido()
         const respuestac = await fetch("http://localhost:8000/direccion/ciudad")
@@ -429,13 +432,22 @@
         const provincia = await respuestap.json()
         ListaProvincia.value = provincia
 	})
-	const PedidoCambio = (id) => {
-		if (PedidoNow.value === id) {
-			PedidoNow.value = null
-		}
-		else {
-			PedidoNow.value = id
-		}
+    // ----- Para el Frontend ----- //
+	const AbrirPopUp01 = () => {
+		ActualizarCajaP.value = true
+		document.body.style.overflow = "hidden"
+	}
+	const CerrarPopUp01 = () => {
+		ActualizarCajaP.value = false
+		document.body.style.overflow = "auto"
+	}
+	const AbrirPopUp02 = () => {
+		VentanaFiltro.value = true
+		document.body.style.overflow = "hidden"
+	}
+	const CerrarPopUp02 = () => {
+		VentanaFiltro.value = false
+		document.body.style.overflow = "auto"
 	}
 	const Estatustxt = (id_estatus) => {
 		if (id_estatus === 1) {
@@ -447,23 +459,7 @@
 		else if (id_estatus === 3) {
 			return "Preparando"
 		}
-			return "indefinido";
-	}
-	const AbrirPopUp1 = () => {
-		ActualizarCajaP.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp1 = () => {
-		ActualizarCajaP.value = false
-		document.body.style.overflow = "auto";
-	}
-	const AbrirPopUp2 = () => {
-		VentanaFiltro.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp2 = () => {
-		VentanaFiltro.value = false
-		document.body.style.overflow = "auto";
+			return "indefinido"
 	}
 	const Estatuscolor = (id_estatus) => {
 		if (id_estatus === 1) {
@@ -477,15 +473,45 @@
 		}
 			return "what";
 	}
+	const FormatoFecha = (fechai) => {
+		if (fechai) {
+			return new Date(fechai).toLocaleDateString('es-ES')
+		}
+		else {
+			return "Pendiente"
+		}
+	}
+	const AplicarFiltro = () => {
+		BusquedaPedido()
+		CerrarPopUp02()
+	}
 	const LimpiarFiltro = () => {
 		filtroMP.value = 4
 		filtroEst.value = 4
         filtrociudad.value = ""
         filtroprovincia.value = ""
-		BusquedaPedido();
-		CerrarPopUp2();
+		BusquedaPedido()
+		CerrarPopUp02()
 		filtroAct.value = false
 	}
+	const PedidoCambio = (id) => {
+		if (PedidoNow.value === id) {
+			PedidoNow.value = null
+		}
+		else {
+			PedidoNow.value = id
+		}
+	}
+	const EstatusAct = ref({
+		id_pedido: "",
+		id_cliente: "",
+		id_direccion: "",
+		metodo_pago: "",
+		tiempo_estimado_entrega: "",
+		tiempo_entrega: "",
+		estatus: ""
+	})
+    // ----- Para el Backend ----- //
 	const BusquedaPedido = async() => {
 		let url = new URL ('http://localhost:8000/pedidos/all/');
 		url.searchParams.append('skip', Pagina.value);
@@ -509,36 +535,24 @@
 			mpfiltro = "Efectivo"
 		}
 		if (filtroMP.value !== 4&& mpfiltro !== "") {
-			url.searchParams.append('filtromp', mpfiltro);
+			url.searchParams.append('filtromp', mpfiltro)
 			filtroAct.value = true
 		}
 		if (filtroEst.value !== 4) {
-			url.searchParams.append('filtroest', filtroEst.value);
+			url.searchParams.append('filtroest', filtroEst.value)
 			filtroAct.value = true
 		}
         if (filtrociudad.value !== "") {
-            url.searchParams.append('busqueda_pedido', filtrociudad.value);
-            filtroAct.value = true;            
+            url.searchParams.append('busqueda_pedido', filtrociudad.value)
+            filtroAct.value = true
         }
         if (filtroprovincia.value !== "") {
-            url.searchParams.append('busqueda_pedido', filtroprovincia.value);
-            filtroAct.value = true;            
+            url.searchParams.append('busqueda_pedido', filtroprovincia.value)
+            filtroAct.value = true
         }
 		const BusqPedido = await fetch(url)
-		const datos = await BusqPedido.json();
-		Pedidos.value = datos;
-	}
-	const FormatoFecha = (fechai) => {
-		if (fechai) {
-			return new Date(fechai).toLocaleDateString('es-ES')
-		}
-		else {
-			return "Pendiente"
-		}
-	}
-	const AplicarFiltro = () => {
-		BusquedaPedido();
-		CerrarPopUp2();
+		const datos = await BusqPedido.json()
+		Pedidos.value = datos
 	}
 	const ActualizarEstatus = async() => {
 			const ActEst = await fetch(`http://localhost:8000/pedidos/id/${EstatusAct.value.id_pedido}`, {
@@ -547,11 +561,11 @@
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(EstatusAct.value)
-			});
+			})
 			if (ActEst.status === 401) {
 				CerrarSesion();
 				alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-				return;
+				return
 			}
 			EstatusAct.value = {
 				id_pedido: "",
@@ -561,30 +575,21 @@
 				tiempo_estimado_entrega: "",
 				tiempo_entrega: "",
 				estatus: ""
-			};
+			}
 			BusquedaPedido()
-			CerrarPopUp1();
+			CerrarPopUp01()
 	}
-	const EstatusAct = ref({
-		id_pedido: "",
-		id_cliente: "",
-		id_direccion: "",
-		metodo_pago: "",
-		tiempo_estimado_entrega: "",
-		tiempo_entrega: "",
-		estatus: ""
-	});
 	const Edicion = (pedido_fila) => {
 		if (pedido_fila.estatus === 1) {
-			return;
+			return
 		}
-		EstatusAct.value.id_pedido = pedido_fila.id_pedido;
-		EstatusAct.value.id_cliente = pedido_fila.id_cliente;
-		EstatusAct.value.id_direccion = pedido_fila.id_direccion;
-		EstatusAct.value.metodo_pago = pedido_fila.metodo_pago;
-		EstatusAct.value.tiempo_estimado_entrega = pedido_fila.tiempo_estimado_entrega;
-		EstatusAct.value.tiempo_entrega = pedido_fila.tiempo_entrega;
-		EstatusAct.value.estatus = pedido_fila.estatus - 1;
-		AbrirPopUp1()
-	};
+		EstatusAct.value.id_pedido = pedido_fila.id_pedido
+		EstatusAct.value.id_cliente = pedido_fila.id_cliente
+		EstatusAct.value.id_direccion = pedido_fila.id_direccion
+		EstatusAct.value.metodo_pago = pedido_fila.metodo_pago
+		EstatusAct.value.tiempo_estimado_entrega = pedido_fila.tiempo_estimado_entrega
+		EstatusAct.value.tiempo_entrega = pedido_fila.tiempo_entrega
+		EstatusAct.value.estatus = pedido_fila.estatus - 1
+		AbrirPopUp01()
+	}
 </script>

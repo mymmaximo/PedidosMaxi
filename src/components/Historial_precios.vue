@@ -13,7 +13,7 @@
         >
         <!-- Boton de Filtro -->
         <button 
-        @click="AbrirPopUp1" 
+        @click="AbrirPopUp01" 
         class="botoncon">
         🗃️Filtros
         </button>
@@ -151,7 +151,7 @@
                     🗑️ Limpiar Filtro
                     </button>
                     <button 
-                    @click="CerrarPopUp1" 
+                    @click="CerrarPopUp01" 
                     class="botonc"
                     >
                     Cerrar
@@ -270,13 +270,9 @@
 </template>
 
 <script setup>
+    // ----- Imports ----- //
     import { onMounted, ref } from 'vue'
-    onMounted(async() => {
-        BusquedaHistorial()
-        const respuesta = await fetch("http://localhost:8000/producto/categorias/")
-        const categ = await respuesta.json()
-        ListaCategoria.value = categ
-	})
+    // ----- Variantes ----- //
 	const Busqueda = ref ("")
 	const FiltroCaja = ref (false)
 	const filtroAct = ref (false)
@@ -291,6 +287,64 @@
 	const filtrocat = ref ("")
     const Historial = ref([])
 	const Pagina = ref (0)
+    // ----- Funciones Vue ----- //
+    onMounted(async() => {
+        BusquedaHistorial()
+        const respuesta = await fetch("http://localhost:8000/producto/categorias/")
+        const categ = await respuesta.json()
+        ListaCategoria.value = categ
+	})
+    // ----- Para el Frontend ----- //
+	const AbrirPopUp01 = () => {
+		FiltroCaja.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp01 = () => {
+		FiltroCaja.value = false
+		document.body.style.overflow = "auto";
+	}
+    const AplicarFiltro = () => {
+        BusquedaHistorial();
+        CerrarPopUp01()
+    }
+    const LimpiarFiltro = () => {
+		fecha_upgrade_max.value = ""
+		fecha_upgrade_min.value = ""
+		precio_nuevo_max.value = ""
+		precio_nuevo_min.value = ""
+		precio_viejo_max.value = ""
+		precio_viejo_min.value = ""
+        filtrocat.value = ""
+		bool_activo.value = 1
+        BusquedaHistorial();
+        CerrarPopUp01()
+        filtroAct.value = true;            
+    }
+    const Estatustxt = (id_estatus) => {
+        if (id_estatus === true) {
+            return "Activo"
+        }
+        else if (id_estatus === false) {
+            return "Eliminado"
+        }
+    }
+    const Estatuscolor = (id_estatus) => {
+        if (id_estatus === true) {
+            return "si"
+        }
+        else if (id_estatus === false) {
+            return "no"
+        }
+    }
+	const FormatoFecha = (fechai) => {
+		if (fechai) {
+			return new Date(fechai).toLocaleDateString('es-ES')
+		}
+		else {
+			return "Pendiente"
+		}
+	}
+    // ----- Para el Backend ----- //
     const BusquedaHistorial = async() => {
         let url = new URL ('http://localhost:8000/historial/');
 		url.searchParams.append('skip', Pagina.value);
@@ -336,55 +390,6 @@
         const BusqProducto = await fetch(url)
         const datos = await BusqProducto.json();
         Historial.value = datos;
-		CerrarPopUp1()
-    }
-	const AbrirPopUp1 = () => {
-		FiltroCaja.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp1 = () => {
-		FiltroCaja.value = false
-		document.body.style.overflow = "auto";
-	}
-    const AplicarFiltro = () => {
-        BusquedaHistorial();
-        CerrarPopUp1()
-    }
-    const LimpiarFiltro = () => {
-		fecha_upgrade_max.value = ""
-		fecha_upgrade_min.value = ""
-		precio_nuevo_max.value = ""
-		precio_nuevo_min.value = ""
-		precio_viejo_max.value = ""
-		precio_viejo_min.value = ""
-        filtrocat.value = ""
-		bool_activo.value = 1
-        BusquedaHistorial();
-        CerrarPopUp1()
-        filtroAct.value = true;            
-    }
-	const FormatoFecha = (fechai) => {
-		if (fechai) {
-			return new Date(fechai).toLocaleDateString('es-ES')
-		}
-		else {
-			return "Pendiente"
-		}
-	}
-    const Estatuscolor = (id_estatus) => {
-        if (id_estatus === true) {
-            return "si"
-        }
-        else if (id_estatus === false) {
-            return "no"
-        }
-    }
-    const Estatustxt = (id_estatus) => {
-        if (id_estatus === true) {
-            return "Activo"
-        }
-        else if (id_estatus === false) {
-            return "Eliminado"
-        }
+		CerrarPopUp01()
     }
 </script>

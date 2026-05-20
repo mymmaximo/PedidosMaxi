@@ -19,7 +19,7 @@
         </button>
         <!-- Crear Nuevo Cliente/Usuario -->
         <button 
-        @click="AbrirPopUp10" 
+        @click="AbrirPopUp04" 
         class="botont"
         >
         Crear Nuevo Usuario
@@ -329,7 +329,7 @@
         class="fondo" >
             <div 
             v-if="Rol === '1'"
-            class="popup" 
+            class="popup !min-w-[60vh]" 
             >
                 <h1>
                 Nuevo Usuario
@@ -424,8 +424,10 @@
 </template>
 
 <script setup>
+    // ----- Imports ----- //
     import { onMounted, ref } from 'vue';
     import { Rol, CerrarSesion, ActualizarCajaC as ActualizarCajaU } from './Estatus';
+    // ----- Variantes ----- //
 	const Pagina = ref(0)
     const filtroEst = ref(2)
     const Busqueda = ref("")
@@ -435,9 +437,11 @@
     const VentanaFiltro = ref(false)
     const ActualizarUNew = ref(false)
     const ActualizarCajaUDel = ref(false)
+    // ----- Funciones Vue ----- //
     onMounted(async() => {
         BusquedaUsuario()
     })
+    // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		VentanaFiltro.value = true
 		document.body.style.overflow = "hidden"
@@ -462,17 +466,29 @@
 		ActualizarCajaU.value = false
 		document.body.style.overflow = "auto"
 	}
-	const AbrirPopUp10 = () => {
+	const AbrirPopUp04 = () => {
 		ActualizarUNew.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp10 = () => {
+	const CerrarPopUp04 = () => {
 		ActualizarUNew.value = false
 		document.body.style.overflow = "auto";
 	}
-    const Eliminacion = (usuario_fila) => {
-        UsuarioEli.value = usuario_fila.id
-        AbrirPopUp02()
+    const Estatustxt = (id_estatus) => {
+        if (id_estatus === true) {
+            return "Activo"
+        }
+        else if (id_estatus === false) {
+            return "Eliminado"
+        }
+    }
+    const Estatuscolor = (id_estatus) => {
+        if (id_estatus === true) {
+            return "si"
+        }
+        else if (id_estatus === false) {
+            return "no"
+        }
     }
     const Roltxt = (id_rol) => {
         if (id_rol === 1) {
@@ -494,30 +510,6 @@
             return "Rider"
         }
     }
-    const Estatustxt = (id_estatus) => {
-        if (id_estatus === true) {
-            return "Activo"
-        }
-        else if (id_estatus === false) {
-            return "Eliminado"
-        }
-    }
-    const BorrarUsuario = async() => {
-        const EraseCliente = await fetch(`http://localhost:8000/usuarios/id/${UsuarioEli.value}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-        })
-        UsuarioEli.value = ""
-        if (EraseCliente.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return
-        }
-        BusquedaUsuario()
-        CerrarPopUp02()
-    }
     const Rolcolor = (id_rol) => {
         if (id_rol === 1) {
             return "admin"
@@ -538,14 +530,23 @@
             return "rider"
         }
     }
-    const Estatuscolor = (id_estatus) => {
-        if (id_estatus === true) {
-            return "si"
-        }
-        else if (id_estatus === false) {
-            return "no"
-        }
+    const AplicarFiltro = () => {
+        BusquedaUsuario()
+        CerrarPopUp01()
     }
+    const LimpiarFiltro = () => {
+        filtroEst.value = 1
+        BusquedaUsuario();
+        CerrarPopUp01();
+        filtroAct.value = false
+    }
+    const NuevoUsuario = ref({
+        nombre: "",
+        email: "",
+        dni: "",
+        contrasena: "",
+        id_rol: ""
+    })
     const UsuarioAct = ref({
         id: "",
         nombre: "",
@@ -553,6 +554,37 @@
         contrasena: "",
         id_rol: ""
     })
+    const Edicion = (usuario_fila) => {
+        UsuarioAct.value.id = usuario_fila.id
+        UsuarioAct.value.nombre = usuario_fila.nombre
+        UsuarioAct.value.apellido = usuario_fila.apellido
+        UsuarioAct.value.email = usuario_fila.email
+        UsuarioAct.value.usuario = usuario_fila.usuario
+        AbrirPopUp03()
+    }
+    const Eliminacion = (usuario_fila) => {
+        UsuarioEli.value = usuario_fila.id
+        AbrirPopUp02()
+    }
+    // ----- Para el Backend ----- //
+    const BusquedaUsuario = async() => {
+        let url = new URL ('http://localhost:8000/usuarios/');
+		url.searchParams.append('skip', Pagina.value);
+        if (Busqueda.value !== "") {
+            url.searchParams.append('busqueda_usuario', Busqueda.value)
+        }
+        if (filtroEst.value === 1) {
+            url.searchParams.append('bool_activo', 'true')
+            filtroAct.value = true
+        }
+        if (filtroEst.value === 0) {
+            url.searchParams.append('bool_activo', 'false')
+            filtroAct.value = true
+        }
+        const BusqUsuario = await fetch(url)
+        const datos = await BusqUsuario.json()
+        usuarios.value = datos;
+    }
     const ActualizarUsuarios = async() => {
         const UsuarioUpd = {} 
         if (UsuarioAct.value.nombre !== "") {
@@ -573,7 +605,7 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(UsuarioUpd)
-        });
+        })
         if (ActUsuario.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
@@ -587,53 +619,10 @@
             usuario: "",
             contrasena: "",
             id_rol: ""
-        };
+        }
         BusquedaUsuario()
         CerrarPopUp03()
     }
-    const Edicion = (usuario_fila) => {
-        UsuarioAct.value.id = usuario_fila.id
-        UsuarioAct.value.nombre = usuario_fila.nombre
-        UsuarioAct.value.apellido = usuario_fila.apellido
-        UsuarioAct.value.email = usuario_fila.email
-        UsuarioAct.value.usuario = usuario_fila.usuario
-        AbrirPopUp03()
-    };
-    const LimpiarFiltro = () => {
-        filtroEst.value = 1
-        BusquedaUsuario();
-        CerrarPopUp01();
-        filtroAct.value = false
-    }
-    const BusquedaUsuario = async() => {
-        let url = new URL ('http://localhost:8000/usuarios/');
-		url.searchParams.append('skip', Pagina.value);
-        if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_usuario', Busqueda.value)
-        }
-        if (filtroEst.value === 1) {
-            url.searchParams.append('bool_activo', 'true')
-            filtroAct.value = true
-        }
-        if (filtroEst.value === 0) {
-            url.searchParams.append('bool_activo', 'false')
-            filtroAct.value = true
-        }
-        const BusqUsuario = await fetch(url)
-        const datos = await BusqUsuario.json()
-        usuarios.value = datos;
-    }
-    const AplicarFiltro = () => {
-        BusquedaUsuario()
-        CerrarPopUp01()
-    }
-    const NuevoUsuario = ref({
-        nombre: "",
-        email: "",
-        dni: "",
-        contrasena: "",
-        id_rol: ""
-    });
     const SubirNuevoUsuario = async() => {
         const SubidaNuevoUsuario = await fetch('http://localhost:8000/usuarios/', {
             method: 'POST',
@@ -641,7 +630,7 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(NuevoUsuario.value)
-        });
+        })
         if (SubidaNuevoUsuario.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
@@ -655,8 +644,24 @@
             usuario: "",
             contrasena: "",
             id_rol: ""
-        };
+        }
         BusquedaUsuario()
-        CerrarPopUp10()
-    };
+        CerrarPopUp04()
+    }
+    const BorrarUsuario = async() => {
+        const EraseCliente = await fetch(`http://localhost:8000/usuarios/id/${UsuarioEli.value}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+        })
+        UsuarioEli.value = ""
+        if (EraseCliente.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return
+        }
+        BusquedaUsuario()
+        CerrarPopUp02()
+    }
 </script>

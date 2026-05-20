@@ -74,7 +74,7 @@
             divide-x-3 divide-green-400
             border-green-400 border-t-2 border-l-4 rounded-ss-2xl">
                 <h3
-                @click="AbrirPopUp2() ; TablaActual = 'Productos'" 
+                @click="AbrirPopUp02() ; TablaActual = 'Productos'" 
                 v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
                 class="flex 
                 hover:bg-green-600 
@@ -172,7 +172,7 @@
                         Configuracion
                         </h3>
                         <h3
-                        @click="AbrirPopUp1()"
+                        @click="AbrirPopUp01()"
                         class="
                         p-2
                         hover:bg-red-600
@@ -224,11 +224,11 @@
                     items-center
                     ">
                         <button 
-                        @click="CerrarSesion() ; CerrarPopUp1()"
+                        @click="CerrarSesion() ; CerrarPopUp01()"
                         class="botonc">
                         Si Confirmo
                         </button>
-                        <button @click="CerrarPopUp1()"
+                        <button @click="CerrarPopUp01()"
                         class="botont">
                         Cancelar
                         </button>
@@ -267,7 +267,7 @@
                     items-center
                     ">
                         <button 
-                        @click="LimpiarCompra() ; CerrarPopUp2()"
+                        @click="LimpiarCompra() ; CerrarPopUp02()"
                         class="
                         bg-red-600 text-white
                         rounded-3xl
@@ -276,7 +276,7 @@
                         Si Confirmo
                         </button>
                         <button 
-                        @click="CerrarPopUp2()"
+                        @click="CerrarPopUp02()"
                         class="
                         bg-gray-400 text-white
                         rounded-3xl
@@ -303,6 +303,7 @@
 </template>
 
 <script setup>
+    // ----- Imports ----- //
     import { onMounted, ref } from 'vue'
     import { CarritoLocal, LimpiarCompra, Iniciado, CerrarSesion, Rol } from './components/Estatus.js'
     import Login from './components/Login.vue'
@@ -314,9 +315,11 @@
     import Configuracion from './components/Configuracion.vue'
     import Mis_pedidos from './components/Mis_pedidos.vue'
     import Historial_precios from './components/Historial_precios.vue'
+    // ----- Variables ----- //
     const BorrarCarrito = ref(false)
     const TablaActual = ref("")
     const ActualizarCajaLogout = ref(false)
+    // ----- Funciones Vue ----- //
     onMounted(async() => {
         if (Rol.value === '3' || Rol.value === '6') {
             TablaActual.value = 'Pedidos'
@@ -325,19 +328,20 @@
             TablaActual.value = 'Productos'
         }
     })
-	const AbrirPopUp1 = () => {
+    // ----- Para el Frontend ----- //
+	const AbrirPopUp01 = () => {
 		ActualizarCajaLogout.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp1 = () => {
+	const CerrarPopUp01 = () => {
 		ActualizarCajaLogout.value = false
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp2 = () => {
+	const AbrirPopUp02 = () => {
 		BorrarCarrito.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp2 = () => {
+	const CerrarPopUp02 = () => {
 		BorrarCarrito.value = false
 		document.body.style.overflow = "auto";
 	}
