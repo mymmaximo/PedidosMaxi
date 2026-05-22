@@ -5,8 +5,42 @@
             <div class="fondo" v-if="ActualizarCajaPDel">
                 <div class="popup">
                     <h1>
-                    ¿Desear Eliminar/Reactivar el Producto?
+                    ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
                     </h1>
+                    <div>
+                        <div 
+                        v-if="ProductoEli.imagenes.length > 0"
+                        class="flex flex-row 
+                        gap-3 overflow-x-auto
+                        items-center justify-center 
+                        w-full pb-2 snap-x
+                        ">
+                            <button
+                            @click="BackImg(ProductoEli)"
+                            :disabled="GetImg(ProductoEli.id) === 0"
+                            class="botonflecha"
+                            >
+                            🢀
+                            </button>
+                            <img
+                            :key="ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key"
+                            :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
+                            class="imagen"
+                            >
+                            <button
+                            @click="NextImg(ProductoEli)"
+                            :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
+                            class="botonflecha"
+                            >
+                            🢂
+                            </button>
+                        </div>
+                        <img
+                        v-else
+                        src="../assets/images.png"
+                        class="imagen"
+                        >
+                    </div>
                     <div
                     class="botones"
                     >
@@ -33,6 +67,40 @@
                     <h1>
                     {{ ProductoActual.nombre }}
                     </h1>
+                    <div>
+                        <div 
+                        v-if="ProductoActual.imagenes.length > 0"
+                        class="flex flex-row 
+                        gap-3 overflow-x-auto
+                        items-center justify-center 
+                        w-full pb-2 snap-x
+                        ">
+                            <button
+                            @click="BackImg(ProductoActual)"
+                            :disabled="GetImg(ProductoActual.id) === 0"
+                            class="botonflecha"
+                            >
+                            🢀
+                            </button>
+                            <img
+                            :key="ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key"
+                            :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
+                            class="imagen"
+                            >
+                            <button
+                            @click="NextImg(ProductoActual)"
+                            :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
+                            class="botonflecha"
+                            >
+                            🢂
+                            </button>
+                        </div>
+                        <img
+                        v-else
+                        src="../assets/images.png"
+                        class="imagen"
+                        >
+                    </div>
                     <div
                     class="
                     flex flex-col
@@ -138,23 +206,32 @@
                         >
                         <div>
                             <div
-                            v-if="VistaPrevia"
+                            v-if="VistaPrevia.length > 0"
                             class="
-                            relative 
-                            w-fit mx-auto mt-2
-                            ">
-                                <button
-                                @click="LimpiarImagen"
-                                title="Quitar imagen"
-                                class="botonx"
-                                >
-                                🗙
-                                </button>
-                                <img 
-                                :src="VistaPrevia" 
-                                alt="Vista Previa"
-                                class="imagen !m-0" 
-                                />
+                            flex flex-row
+                            gap-3 pb-2
+                            w-full overflow-x-auto
+                            "> 
+                                <div
+                                v-for="(img, index) in VistaPrevia"
+                                :key="index"
+                                class="
+                                shrink-0 mt-2
+                                relative
+                                ">
+                                    <button
+                                    @click="QuitarImagenNueva"
+                                    title="Quitar imagen"
+                                    class="botonx"
+                                    >
+                                    🗙
+                                    </button>
+                                    <img 
+                                    :src="img" 
+                                    alt="Vista Previa"
+                                    class="imagen !m-0" 
+                                    />
+                                </div>
                             </div>
                             <div
                             v-else 
@@ -170,6 +247,7 @@
                                 type="file"
                                 accept="image/*"
                                 @change="SeleccionarImagen"
+                                multiple
                                 class="imagenu !w-full"
                                 />
                             </div>
@@ -179,6 +257,7 @@
                         >
                             <button 
                             type="submit" 
+                            :disabled="confirboton" 
                             class="botoncon"
                             >
                             Crear
@@ -196,7 +275,10 @@
         </Teleport>
         <!-- Actualizar Producto -->
         <Teleport to="body">
-            <div class="fondo" v-if="ActualizarCajaP">
+            <div 
+            v-if="ActualizarCajaP"
+            class="fondo 
+            ">
                 <div class="popup">
                     <form @submit.prevent="ActualizarProducto" class="Texto_producto">
                         <h1>
@@ -247,6 +329,9 @@
                                 {{ i.categoria }}
                                 </option>
                             </select>
+                            <h3>
+                            Nueva Categoria
+                            </h3>
                             <input 
                             v-if="OpcionCategoriaA === 'new'" 
                             type="text" 
@@ -263,7 +348,61 @@
                             placeholder="Codigo de Barras"
                             maxlength="15"
                             >
+                        </div>
+                        <div v-if="Rol === '1' || Rol === '2'">
+                            <h2>Imágenes actuales</h2>
+                            <div 
+                            v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
+                            class="
+                            flex flex-row 
+                            gap-3 
+                            items-center justify-center 
+                            w-full pb-2
+                            ">
+                                <button 
+                                type="button" 
+                                @click="BackImg(ProductoAct)"
+                                :disabled="GetImg(ProductoAct.id) === 0"
+                                class="botonflecha">
+                                🢀
+                                </button>
+                                <div
+                                class="
+                                relative 
+                                w-fit mx-auto mt-2
+                                ">
+                                    <button
+                                    type="button"
+                                    @click="NoMoreImages(
+                                        ProductoAct.imagenes[GetImg(ProductoAct.id)]
+                                    )"
+                                    title="Quitar imagen"
+                                    class="botonx"
+                                    >
+                                    🗙
+                                    </button>
+                                    <img 
+                                    :src="ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)"
+                                    :class="DelImg.includes(ProductoAct.imagenes[GetImg(ProductoAct.id)].id_imagen) ? 'imagendel' : 'imagen'"
+                                    >
+                                </div>
+                                <button 
+                                type="button" 
+                                @click="NextImg(ProductoAct)"
+                                :disabled="GetImg(ProductoAct.id) === ProductoAct.imagenes.length - 1"
+                                class="botonflecha">
+                                🢂
+                                </button>
+                            </div>
+                            <div 
+                            v-else 
+                            class="imageno">
+                            Sin imágenes
+                            </div>
                             <div>
+                                <h2>
+                                Imagenes Nuevas
+                                </h2>
                                 <div
                                 v-if="VistaPrevia"
                                 class="
@@ -271,7 +410,7 @@
                                 w-fit mx-auto mt-2
                                 ">
                                     <button
-                                    @click="LimpiarImagen"
+                                    @click="LimpiarImagenes"
                                     title="Quitar imagen"
                                     class="botonx"
                                     >
@@ -285,9 +424,8 @@
                                 </div>
                                 <div
                                 v-else 
-                                class="
-                                imageno
-                                ">
+                                class="imageno"
+                                >
                                 <span>
                                 Sin vista previa
                                 </span> 
@@ -307,7 +445,9 @@
                         >
                             <button 
                             type="submit" 
-                            class="botoncon">
+                            :disabled="confirboton" 
+                            class="botoncon
+                            ">
                             Actualizar
                             </button>
                             <button 
@@ -321,9 +461,7 @@
             </div>
         </Teleport>
         <!-- Tabla de Productos y Barra de Filtros -->
-        <div 
-        class="pagina"
-        >
+        <div class="pagina">
             <!-- Barra de Filtros -->
             <div
             class="bar"
@@ -526,11 +664,33 @@
                     bg-green-300/50
                     ">
                         <div>
-                            <img
+                            <div 
                             v-if="i.imagenes.length > 0"
-                            :src=ObtenerImgUrl(i.imagenes[0].s3_key)
-                            class="imagen"
-                            >
+                            class="flex flex-row 
+                            gap-3 overflow-x-auto
+                            items-center justify-center 
+                            w-full pb-2 snap-x
+                            ">
+                                <button
+                                @click="BackImg(i)"
+                                :disabled="GetImg(i.id) === 0"
+                                class="botonflecha"
+                                >
+                                🢀
+                                </button>
+                                <img
+                                :key="i.imagenes[GetImg(i.id)].s3_key"
+                                :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                class="imagen"
+                                >
+                                <button
+                                @click="NextImg(i)"
+                                :disabled="GetImg(i.id) === i.imagenes.length - 1"
+                                class="botonflecha"
+                                >
+                                🢂
+                                </button>
+                            </div>
                             <img
                             v-else
                             src="../assets/images.png"
@@ -604,7 +764,7 @@
                     :disabled="Pagina < 21"
                     class="botona"
                     >
-                    ⬅
+                    🢀
                     </button>
                     <h2
                     class="
@@ -620,7 +780,7 @@
                     :disabled="Productos.length < 21"
                     class="botona"
                     >
-                    ➡
+                    🢂
                     </button>
                 </div>
             </div>
@@ -630,35 +790,35 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, toRefs, ref, watch } from 'vue'
+    import { onMounted, toRefs, ref, watch, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
     import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
     // ----- Variables ----- //
-    
-    const prop = defineProps(['path','size'])
-    const ActualizarCajaPDel = ref(false)
-    const OpcionCategoriaA = ref("new")
-    const { path, size } = toRefs(prop)
-    const OpcionCategoria = ref("new")
-    const VentanaCompra = ref(false)
-    const VentanaNuevo = ref(false)
-    const fileInput = ref('')
+    const prop = defineProps (['path','size'])
+    const ActualizarCajaPDel = ref (false)
+    const OpcionCategoriaA = ref ("new")
+    const OpcionCategoria = ref ("new")
+    const VentanaCompra = ref (false)
+    const VentanaNuevo = ref (false)
     const ListaCategoria = ref ("")
-    const ArchivoSave = ref(null)
-    const uploading = ref(false)
-    const filtroAct = ref(false)
-    const ProductoEli = ref("")
-    const VistaPrevia = ref('')
+    const ArchivoSave = ref ([])
+    const { path } = toRefs (prop)
+    const uploading = ref (false)
+    const filtroAct = ref (false)
+    const VistaPrevia = ref ([])
     const filtrocat = ref ("")
     const filtroRadio = ref(0)
-    const Productos = ref([])
-    const filtroEst = ref(1)
-    const Busqueda = ref("")
-    const mayor = ref("")
-    const menor = ref("")
-	const Pagina = ref(0)
-    const files = ref()
-    const src = ref('')
+    const IndiceImg = ref ({})
+    const Productos = ref ([])
+    const fileInput = ref ('')
+    const filtroEst = ref (1)
+    const Busqueda = ref ("")
+    const NewImg = ref ([])
+    const NowImg = ref ([])
+    const mayor = ref ("")
+    const menor = ref ("")
+    const DelImg= ref ([])
+	const Pagina = ref (0)
     // ----- Funciones Vue ----- //
     onMounted(async() => {
         BusquedaProducto()
@@ -691,6 +851,31 @@
     watch(path, () => {
         if (path.value) ObtenerImgUrl()
     })
+    const confirboton = computed(() =>{
+        if (VentanaNuevo.value) {
+            const faltandatos01 = 
+                NuevoProducto.value.nombre === "" ||
+                NuevoProducto.value.precio === "" ||
+                NuevoProducto.value.stock === "" ||
+                NuevoProducto.value.stock < 0 ||
+                NuevoProducto.value.precio <= 0
+            const faltandatos02 = 
+                OpcionCategoria.value === "new" && NuevoProducto.value.categoria === ""
+            return faltandatos01 || faltandatos02
+        }
+        if (ActualizarCajaP.value) {
+            const faltandatos03 =
+                ProductoAct.value.nombre === "" ||
+                ProductoAct.value.precio === "" ||
+                ProductoAct.value.stock === "" ||
+                ProductoAct.value.codigo_barra === "" ||
+                ProductoAct.value.stock < 0 ||
+                ProductoAct.value.precio <= 0
+            const faltandatos04 = 
+                OpcionCategoriaA.value === "new" && ProductoAct.value.categoria === ""
+            return faltandatos03 || faltandatos04
+        }
+    })
     const emit = defineEmits([
         'upload',
         'update:path'
@@ -702,6 +887,8 @@
 	}
 	const CerrarPopUp01 = () => {
 		ActualizarCajaP.value = false
+        DelImg.value = []
+        LimpiarImagenes()
 		document.body.style.overflow = "auto";
 	}
 	const AbrirPopUp02 = () => {
@@ -713,12 +900,16 @@
 		document.body.style.overflow = "auto";
 	}
 	const AbrirPopUp03 = () => {
-        LimpiarImagen()
 		VentanaNuevo.value = true
 		document.body.style.overflow = "hidden";
 	}
 	const CerrarPopUp03 = () => {
 		VentanaNuevo.value = false
+        LimpiarImagenes()
+        NuevoProducto.value.nombre = ""
+        NuevoProducto.value.precio = ""
+        NuevoProducto.value.stock = ""
+        OpcionCategoria.value = "new"
 		document.body.style.overflow = "auto";
 	}
 	const AbrirPopUp04 = () => {
@@ -737,6 +928,21 @@
         }
         else if (id_estatus === false) {
             return "no"
+        }
+    }
+    const GetImg = (id) => {
+        return IndiceImg.value[id] || 0
+    }
+    const NextImg = (imagen) => {
+        const ImgActual = GetImg(imagen.id)
+        if (ImgActual < imagen.imagenes.length - 1) {
+            IndiceImg.value[imagen.id] = ImgActual + 1
+        }
+    }
+    const BackImg = (imagen) => {
+        const ImgActual = GetImg(imagen.id)
+        if (ImgActual > 0) {
+            IndiceImg.value[imagen.id] = ImgActual - 1
         }
     }
     const Compracion = (producto_fila) => {
@@ -777,18 +983,29 @@
         categoria: ""
     })
     const SeleccionarImagen = (evt) => {
-        const file = evt.target.files[0]
-        if (file) {
-            ArchivoSave.value = file
-            VistaPrevia.value = URL.createObjectURL(file)
+        const files = evt.target.files
+        if (files) {
+            for (
+                let i = 0 ; i < files.length ; i++ 
+            ) {
+                ArchivoSave.value.push(files[i])
+                VistaPrevia.value.push(URL.createObjectURL(files[i]))
+            }
         }
     }
-    const LimpiarImagen = () => {
-    VistaPrevia.value = ''
-    ArchivoSave.value = null
-    if (fileInput.value) {
-        fileInput.value.value = ''
-    }}
+    const QuitarImagenNueva = (index) => {
+        ArchivoSave.value.splice(index, 1)
+        VistaPrevia.value.splice(index, 1)
+        if (fileInput.value) 
+            fileInput.value.value = ''
+    }
+    const LimpiarImagenes = () => {
+        VistaPrevia.value = []
+        ArchivoSave.value = []
+        if (fileInput.value) {
+            fileInput.value.value = ''
+        }
+    }
     const ObtenerImgUrl = (Imgenkey) => {
         const respuesta = supabase.storage
             .from('max_imagenes')
@@ -801,10 +1018,39 @@
         precio: "",
         stock: "",
         categoria: "",
-        codigo_barra: ""
+        codigo_barra: "",
+        imagenes: []
+    })
+    const MoreImages = (evt) => {
+        const file = evt.target.files[0]
+        if (file) {
+            NewImg.value.push(file)
+            ProductoAct.value.imagenes.push({
+                id_imagen: null,
+                s3_key: URL.createObjectURL(file),
+                es_nueva: true
+            })
+        }
+    }
+    const NoMoreImages = (img) => {
+        const index = DelImg.value.indexOf(
+            img.id_imagen
+        )
+        if (index === -1) {
+            DelImg.value.push(img.id_imagen)
+        } else {
+            DelImg.value.splice(index, 1);
+        }
+    }
+    const ProductoEli = ref({
+        id: "",
+        nombre: "",
+        imagenes: []
     })
     const Eliminacion = (producto_fila) => {
-        ProductoEli.value = producto_fila.id;
+        ProductoEli.value.id = producto_fila.id
+        ProductoEli.value.nombre = producto_fila.nombre
+        ProductoEli.value.imagenes = producto_fila.imagenes
         AbrirPopUp02()
     }
     // ----- Para el Backend ----- //
@@ -964,7 +1210,7 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(NuevoProducto.value)
-            })
+        })
         if (SubidaNuevoProducto.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
@@ -972,82 +1218,126 @@
         }
         const ProductoNew = await SubidaNuevoProducto.json()
         const NewId = ProductoNew.id        
-        if (ArchivoSave.value) {
-            const file = ArchivoSave.value
-            const fileExt = file.name.split('.').pop()
-            const filePath = `${Math.random()}.${fileExt}`
+        if (ArchivoSave.value.length > 0) {
             uploading.value = true
-            let { error: uploadError } = await supabase.storage
-                .from('max_imagenes')
-                .upload(filePath, file)
-            if (uploadError) {
-                alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
-            } else {
-                await fetch('http://localhost:8000/productos/archivos/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        id_producto: NewId,
-                        s3_key: filePath,
-                        nombre_original: file.name,
-                        tipo_contenido: fileExt,
-                        tamanio: file.size
-                })
-            })
-        }}
-        uploading.value = false
+            for (
+                let i = 0 ; i < ArchivoSave.value.length ; i++
+            ) {
+                const file = ArchivoSave.value[i]
+                const fileExt = file.name.split('.').pop()
+                const filePath = `${Math.random()}.${fileExt}`
+                let { error: uploadError } = await supabase.storage
+                    .from('max_imagenes')
+                    .upload(filePath, file)
+                if (uploadError) {
+                    alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
+                } else {
+                    await fetch('http://localhost:8000/productos/archivos/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id_producto: NewId,
+                            s3_key: filePath,
+                            nombre_original: file.name,
+                            tipo_contenido: fileExt,
+                            tamanio: file.size
+                        })
+                    })
+                }
+            }
+            uploading.value = false
+        }
         NuevoProducto.value = {
             nombre: "",
             precio: "",
             stock: "",
             categoria: ""
         }
-        LimpiarImagen()
+        LimpiarImagenes()
         BusquedaProducto()
         CerrarPopUp03()
     }
     const Edicion = (producto_fila) => {
-        ProductoAct.value.id = producto_fila.id;
-        ProductoAct.value.nombre = producto_fila.nombre;
-        ProductoAct.value.precio = producto_fila.precio;
-        ProductoAct.value.stock = producto_fila.stock;
-        OpcionCategoriaA.value = producto_fila.categoria;
-        ProductoAct.value.codigo_barra = producto_fila.codigo_barra;
+        ProductoAct.value.id = producto_fila.id
+        ProductoAct.value.nombre = producto_fila.nombre
+        ProductoAct.value.precio = producto_fila.precio
+        ProductoAct.value.stock = producto_fila.stock
+        OpcionCategoriaA.value = producto_fila.categoria
+        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
+        ProductoAct.value.imagenes = producto_fila.imagenes
+        DelImg.value = []
+        NewImg.value = []
+        VistaPrevia.value = ""
         AbrirPopUp01()
     }
     const ActualizarProducto = async() => {
-        if (OpcionCategoriaA.value != "new") {
-            ProductoAct.value.categoria = OpcionCategoriaA.value
+        try {
+            if (OpcionCategoriaA.value != "new") { 
+                ProductoAct.value.categoria = OpcionCategoriaA.value
+            }
+            const ActProducto = await fetch(`http://localhost:8000/productos/id/${ProductoAct.value.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ProductoAct.value)
+            })
+            if (ActProducto.status === 401) {
+                CerrarSesion();
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+                return;
+            }
+            for (const id_img of DelImg.value) {
+                await fetch(`http://localhost:8000/productos/archivos/id/${id_img}`, {
+                    method: 'DELETE'
+                })
+            }
+            for (const file of ArchivoSave.value) {
+                const fileExt = file.name.split('.').pop()
+                const filePath = `${Math.random()}.${fileExt}`
+                let { error: uploadError } = await supabase.storage
+                    .from('max_imagenes')
+                    .upload(filePath, file)
+                if (!uploadError) {
+                    await fetch('http://localhost:8000/productos/archivos/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id_producto: ProductoAct.value.id,
+                            s3_key: filePath,
+                            nombre_original: file.name,
+                            tipo_contenido: fileExt,
+                            tamanio: file.size
+                        })
+                    })
+                }
+            }
+            BusquedaProducto()
+            CerrarPopUp01()
+            alert("Producto actualizado correctamente")
+        } catch (error) {
+            console.error(error)
+            alert("Hubo un error al guardar los cambios.")
         }
-        const ActProducto = await fetch(`http://localhost:8000/productos/id/${ProductoAct.value.id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(ProductoAct.value)
-        })
-        if (ActProducto.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
-        }
-        BusquedaProducto()
-        CerrarPopUp01()
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`http://localhost:8000/productos/id/${ProductoEli.value}`, {
+        const EraseProducto = await fetch(`http://localhost:8000/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-        ProductoEli.value = ""
         if (EraseProducto.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;
+        }
+        ProductoEli.value = {
+        id: "",
+        nombre: "",
+        imagenes: []
         }
         BusquedaProducto()
         CerrarPopUp02()

@@ -39,11 +39,16 @@ img {
 }
 .imagen {
     @apply
-    h-48 w-auto 
-    object-contain 
-    self-center
+    h-48 w-48 
+    object-cover place-self-center
     rounded-xl drop-shadow-md
-    m-5
+}
+.imagendel {
+    @apply
+    border-red-600 border-3
+    h-48 w-48 
+    object-cover place-self-center
+    rounded-xl drop-shadow-md
 }
 .imagenu {
     @apply
@@ -99,6 +104,9 @@ h3 {
     hover:text-gray-200
     active:bg-green-300
     cursor-pointer
+    disabled:bg-gray-300 
+    disabled:text-gray-400 
+    disabled:cursor-not-allowed
 }
 .botonc {
     @apply
@@ -109,6 +117,21 @@ h3 {
     hover:text-gray-200
     active:bg-red-100
     cursor-pointer
+}
+.botonflecha {
+    @apply
+    bg-green-100/50
+    rounded-3xl
+    px-3 py-20
+    hover:bg-green-300/40
+    hover:text-gray-200
+    active:bg-gray-100
+    cursor-pointer
+    disabled:bg-gray-300/0
+    disabled:text-gray-400/0
+    disabled:hover:bg-gray-50/10
+    disabled:hover:text-gray-400/10
+    disabled:cursor-default 
 }
 .botont {
     @apply

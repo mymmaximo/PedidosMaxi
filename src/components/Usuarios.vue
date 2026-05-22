@@ -307,6 +307,7 @@
                     >
                         <button 
                         type="submit" 
+                        :disabled="confirboton"
                         class="botoncon"
                         >
                         Actualizar
@@ -359,7 +360,7 @@
                     Documento
                     </h2>
                     <input 
-                    type="text" 
+                    type="number" 
                     v-model="NuevoUsuario.dni" 
                     placeholder="Documento"
                     maxlength="8"
@@ -406,6 +407,7 @@
                     >
                         <button 
                         type="submit" 
+                        :disabled="confirboton"
                         class="botoncon"
                         >
                         Crear Cliente
@@ -425,7 +427,7 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, ref } from 'vue';
+    import { onMounted, ref, computed } from 'vue';
     import { Rol, CerrarSesion, ActualizarCajaC as ActualizarCajaU } from './Estatus';
     // ----- Variantes ----- //
 	const Pagina = ref(0)
@@ -440,6 +442,22 @@
     // ----- Funciones Vue ----- //
     onMounted(async() => {
         BusquedaUsuario()
+    })
+    const confirboton = computed(() =>{
+        if (ActualizarUNew.value) {
+            const faltandatos01 = 
+                NuevoUsuario.value.nombre === ""||
+                NuevoUsuario.value.email === ""||
+                NuevoUsuario.value.dni === ""||
+                NuevoUsuario.value.contrasena === ""||
+                NuevoUsuario.value.id_rol === ""
+            return faltandatos01
+        }
+        if (ActualizarCajaU.value) {
+            const faltandatos02 = 
+                UsuarioAct.value.id_rol === ""
+            return faltandatos02
+        }
     })
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {

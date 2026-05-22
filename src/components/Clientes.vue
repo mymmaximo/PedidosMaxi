@@ -400,7 +400,7 @@
                     type="text" 
                     v-model="ClienteAct.nombre" 
                     placeholder="Nombre"
-                    class="putin"
+                    maxlength="20"
                     >
                     <h2>
                     E-mail
@@ -409,7 +409,7 @@
                     type="text" 
                     v-model="ClienteAct.email" 
                     placeholder="Email@email.com"
-                    class="putin"
+                    maxlength="50"
                     >
                     <div
                     class="
@@ -419,7 +419,9 @@
                     ">
                         <button 
                         type="submit" 
-                        class="botoncon">
+                        :disabled="confirboton"
+                        class="botoncon
+                        ">
                         Actualizar
                         </button>
                         <button 
@@ -447,6 +449,7 @@
                     type="text" 
                     v-model="NuevoCliente.nombre" 
                     placeholder="Nombre"
+                    maxlength="20"
                     >
                     <h2>
                     E-Mail
@@ -455,14 +458,16 @@
                     type="text" 
                     v-model="NuevoCliente.email" 
                     placeholder="E-Mail"
+                    maxlength="50"
                     >
                     <h2>
                     Documento
                     </h2>
                     <input 
-                    type="text" 
+                    type="number" 
                     v-model="NuevoCliente.dni" 
                     placeholder="Documento"
+                    maxlength="8"
                     >
                     <h2>
                     Contraseña
@@ -471,12 +476,14 @@
                     type="text" 
                     v-model="NuevoCliente.contrasena" 
                     placeholder="Contraseña"
+                    maxlength="20"
                     >
                     <div
                     class="botones"
                     >
                         <button 
                         type="submit" 
+                        :disabled="confirboton"
                         class="botoncon"
                         >
                         Crear Cliente
@@ -496,7 +503,7 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, ref } from 'vue'
+    import { onMounted, ref, computed } from 'vue'
     import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus'
     // ----- Variantes ----- //
 	const Pagina = ref(0)
@@ -523,6 +530,22 @@
         const respuestap = await fetch("http://localhost:8000/direccion/provincia")
         const provincia = await respuestap.json()
         ListaProvincia.value = provincia
+    })
+    const confirboton = computed(() =>{
+        if (ActualizarCNew.value) {
+            const faltandatos01 = 
+                NuevoCliente.value.nombre === ""||
+                NuevoCliente.value.email === ""||
+                NuevoCliente.value.dni === ""||
+                NuevoCliente.value.contrasena === ""
+            return faltandatos01
+        }
+        if (ActualizarCajaC.value) {
+            const faltandatos02 = 
+                ClienteAct.value.nombre === ""||
+                ClienteAct.value.email === ""
+            return faltandatos02
+        }
     })
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
