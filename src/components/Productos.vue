@@ -354,9 +354,9 @@
                             <div 
                             v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
                             class="
-                            flex flex-row 
-                            gap-3 
-                            items-center justify-center 
+                            flex flex-row
+                            gap-3
+                            items-center justify-center
                             w-full pb-2
                             ">
                                 <button 
@@ -404,23 +404,32 @@
                                 Imagenes Nuevas
                                 </h2>
                                 <div
-                                v-if="VistaPrevia"
+                                v-if="VistaPrevia.length > 0"
                                 class="
-                                relative 
+                                relative
                                 w-fit mx-auto mt-2
                                 ">
-                                    <button
-                                    @click="LimpiarImagenes"
-                                    title="Quitar imagen"
-                                    class="botonx"
+                                    <div
+                                    v-for="(img, index) in VistaPrevia"
+                                    :key="index"
+                                    class="
+                                    shrink-0 mt-2 
+                                    relative"
                                     >
-                                    🗙
-                                    </button>
-                                    <img 
-                                    :src="VistaPrevia" 
-                                    alt="Vista Previa"
-                                    class="imagen !m-0" 
-                                    />
+                                        <button
+                                        type="button"
+                                        @click="LimpiarImagenes"
+                                        title="Quitar imagen"
+                                        class="botonx"
+                                        >
+                                        🗙
+                                        </button>
+                                        <img 
+                                        :src="VistaPrevia" 
+                                        alt="Vista Previa"
+                                        class="imagen !m-0" 
+                                        />
+                                    </div>
                                 </div>
                                 <div
                                 v-else 
@@ -435,7 +444,9 @@
                                     type="file"
                                     accept="image/*"
                                     @change="SeleccionarImagen"
+                                    multiple
                                     class="imagenu !w-full"
+                                    ref="fileInput"
                                     />
                                 </div>
                             </div>
@@ -451,6 +462,7 @@
                             Actualizar
                             </button>
                             <button 
+                            type="button"
                             @click="CerrarPopUp01" 
                             class="botonc">
                             Cancelar
@@ -462,326 +474,337 @@
         </Teleport>
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
-            <!-- Barra de Filtros -->
             <div
-            class="bar"
-            >
+            class="flex flex-row
+            ">
+                <img 
+                src="../assets/images.png"
+                class="imagen"
+                >
+            </div>
+            <div
+            class="flex flex-row">
+                <!-- Barra de Filtros -->
                 <div
-                class="flex flex-col"
+                class="bar"
                 >
                     <div
                     class="flex flex-col"
                     >
-                        <h2>
-                        Filtro Categoria
-                        </h2>
-                        <div>
-                            <select 
-                            v-model="filtrocat"
-                            >
-                                <option value="" disabled>
-                                Categorias...
-                                </option>
-                                <option 
-                                v-for="i in ListaCategoria" 
-                                :key="i.categoria" 
-                                :value="i.categoria"
+                        <div
+                        class="flex flex-col"
+                        >
+                            <h2>
+                            Filtro Categoria
+                            </h2>
+                            <div>
+                                <select 
+                                v-model="filtrocat"
                                 >
-                                {{ i.categoria }}
-                                </option>
-                            </select>
+                                    <option value="" disabled>
+                                    Categorias...
+                                    </option>
+                                    <option 
+                                    v-for="i in ListaCategoria" 
+                                    :key="i.categoria" 
+                                    :value="i.categoria"
+                                    >
+                                    {{ i.categoria }}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div
-                    class="
-                    flex flex-col
-                    p-4
-                    ">
-                        <h2>
-                        Filtros de Precio
-                        </h2>
-                        <label>
-                        <input 
-                        type="radio" 
-                        :value="3"
-                        v-model="filtroRadio"
-                        > 
-                        Hasta $10,000
-                        </label>
-                        <label>
-                        <input 
-                        type="radio" 
-                        :value="2"
-                        v-model="filtroRadio"
-                        > 
-                        $10,000 a $50,000
-                        </label>
-                        <label>
-                        <input 
-                        type="radio" 
-                        :value="1"
-                        v-model="filtroRadio"
-                        > 
-                        Más de $50,000
-                        </label>
-                        <label>
-                        <input 
-                        type="radio" 
-                        :value="0"
-                        v-model="filtroRadio"
-                        > 
-                        Personalizado
-                        </label>
-                    </div>
-                    
-                    <div
-                    v-if="filtroRadio === 0" 
-                    class="
-                    flex flex-col
-                    p-4
-                    ">
-                        <h3
-                        class="
-                        flex flex-col
-                        p-4
-                        ">
-                        Precio Mayor
-                        </h3>
-                        <input 
-                        type="number"
-                        v-model="mayor" 
-                        placeholder="Precio Max..."
-		                maxlength="10"
-                        >
-                        <h3
-                        class="
-                        flex flex-col
-                        p-4
-                        ">
-                        Precio Minimo
-                        </h3>
-                        <input
-                        type="number"
-                        v-model="menor" 
-                        placeholder="Precio Min..."
-		                maxlength="10"
-                        >
-                    </div>
-                    <div 
-                    v-if="Rol === '1' || Rol === '2' || Rol === '4'"
-                    >
-                        <h2>
-                        ¿El Productos esta Activo?
-                        </h2>
                         <div
                         class="
                         flex flex-col
                         p-4
                         ">
+                            <h2>
+                            Filtros de Precio
+                            </h2>
+                            <label>
+                            <input 
+                            type="radio" 
+                            :value="3"
+                            v-model="filtroRadio"
+                            > 
+                            Hasta $10,000
+                            </label>
                             <label>
                             <input 
                             type="radio" 
                             :value="2"
-                            v-model="filtroEst"
+                            v-model="filtroRadio"
                             > 
-                            Todos los Productos
+                            $10,000 a $50,000
                             </label>
                             <label>
                             <input 
                             type="radio" 
                             :value="1"
-                            v-model="filtroEst"
+                            v-model="filtroRadio"
                             > 
-                            Productos Activos
+                            Más de $50,000
                             </label>
                             <label>
                             <input 
                             type="radio" 
                             :value="0"
-                            v-model="filtroEst"
+                            v-model="filtroRadio"
                             > 
-                            Productos Eliminados
+                            Personalizado
                             </label>
                         </div>
-                    </div>
-                    <div
-                    class="botones"
-                    >
-                        <button 
-                        @click="AplicarFiltro" 
-                        class="botoncon">
-                        Aplicar Filtros
-                        </button>
-                        <button 
-                        @click="LimpiarFiltro" 
-                        v-if="filtroAct === true"
-                        class="botont" 
+                        
+                        <div
+                        v-if="filtroRadio === 0" 
+                        class="
+                        flex flex-col
+                        p-4
+                        ">
+                            <h3
+                            class="
+                            flex flex-col
+                            p-4
+                            ">
+                            Precio Mayor
+                            </h3>
+                            <input 
+                            type="number"
+                            v-model="mayor" 
+                            placeholder="Precio Max..."
+                            maxlength="10"
+                            >
+                            <h3
+                            class="
+                            flex flex-col
+                            p-4
+                            ">
+                            Precio Minimo
+                            </h3>
+                            <input
+                            type="number"
+                            v-model="menor" 
+                            placeholder="Precio Min..."
+                            maxlength="10"
+                            >
+                        </div>
+                        <div 
+                        v-if="Rol === '1' || Rol === '2' || Rol === '4'"
                         >
-                        🗑️ Limpiar Filtro
-                        </button>
+                            <h2>
+                            ¿El Productos esta Activo?
+                            </h2>
+                            <div
+                            class="
+                            flex flex-col
+                            p-4
+                            ">
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="2"
+                                v-model="filtroEst"
+                                > 
+                                Todos los Productos
+                                </label>
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="1"
+                                v-model="filtroEst"
+                                > 
+                                Productos Activos
+                                </label>
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="0"
+                                v-model="filtroEst"
+                                > 
+                                Productos Eliminados
+                                </label>
+                            </div>
+                        </div>
+                        <div
+                        class="botones"
+                        >
+                            <button 
+                            @click="AplicarFiltro" 
+                            class="botoncon">
+                            Aplicar Filtros
+                            </button>
+                            <button 
+                            @click="LimpiarFiltro" 
+                            v-if="filtroAct === true"
+                            class="botont" 
+                            >
+                            🗑️ Limpiar Filtro
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Tabla de Productos -->
-            <div
-            class="
-            w-full h-fit 
-            flex flex-col 
-            p-5 gap-5
-            ">
-                <input
-                @input="BusquedaProducto"
-                type="text" 
-                v-model="Busqueda" 
-                placeholder="Busqueda..."
-                class="busqueda"
-		        maxlength="50"
-                >
-                <button 
-                @click="AbrirPopUp03"
-                v-if="Rol === '1' || Rol === '2'"
-                class="botont" 
-                >
-                Nuevo Producto ➕
-                </button>
-                <div 
-                v-if="Productos.length > 0"
+                <!-- Tabla de Productos -->
+                <div
                 class="
-                grid grid-cols-1
-                sm:grid-cols-2
-                lg:grid-cols-3 
-                gap-6
+                w-full h-fit 
+                flex flex-col 
+                p-5 gap-5
                 ">
+                    <input
+                    @input="BusquedaProducto"
+                    type="text" 
+                    v-model="Busqueda" 
+                    placeholder="Busqueda..."
+                    class="busqueda"
+                    maxlength="50"
+                    >
+                    <button 
+                    @click="AbrirPopUp03"
+                    v-if="Rol === '1' || Rol === '2'"
+                    class="botont" 
+                    >
+                    Nuevo Producto ➕
+                    </button>
                     <div 
-                    :class="Estatuscolor(i.activo)" 
-                    v-for= "i in Productos" 
-                    :key="i.id"
+                    v-if="Productos.length > 0"
                     class="
-                    flex flex-col 
-                    items-center text-center overflow-hidden
-                    p-4 gap-2
-                    rounded-2xl shadow-md
-                    bg-green-300/50
+                    grid grid-cols-1
+                    sm:grid-cols-2
+                    lg:grid-cols-3 
+                    gap-6
                     ">
-                        <div>
-                            <div 
-                            v-if="i.imagenes.length > 0"
-                            class="flex flex-row 
-                            gap-3 overflow-x-auto
-                            items-center justify-center 
-                            w-full pb-2 snap-x
-                            ">
-                                <button
-                                @click="BackImg(i)"
-                                :disabled="GetImg(i.id) === 0"
-                                class="botonflecha"
-                                >
-                                🢀
-                                </button>
+                        <div 
+                        :class="Estatuscolor(i.activo)" 
+                        v-for= "i in Productos" 
+                        :key="i.id"
+                        class="
+                        flex flex-col 
+                        items-center text-center overflow-hidden
+                        p-4 gap-2
+                        rounded-2xl shadow-md
+                        bg-green-300/50
+                        ">
+                            <div>
+                                <div 
+                                v-if="i.imagenes.length > 0"
+                                class="flex flex-row 
+                                gap-3 overflow-x-auto
+                                items-center justify-center 
+                                w-full pb-2 snap-x
+                                ">
+                                    <button
+                                    @click="BackImg(i)"
+                                    :disabled="GetImg(i.id) === 0"
+                                    class="botonflecha"
+                                    >
+                                    🢀
+                                    </button>
+                                    <img
+                                    :key="i.imagenes[GetImg(i.id)].s3_key"
+                                    :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                    class="imagen"
+                                    >
+                                    <button
+                                    @click="NextImg(i)"
+                                    :disabled="GetImg(i.id) === i.imagenes.length - 1"
+                                    class="botonflecha"
+                                    >
+                                    🢂
+                                    </button>
+                                </div>
                                 <img
-                                :key="i.imagenes[GetImg(i.id)].s3_key"
-                                :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                v-else
+                                src="../assets/images.png"
                                 class="imagen"
                                 >
-                                <button
-                                @click="NextImg(i)"
-                                :disabled="GetImg(i.id) === i.imagenes.length - 1"
-                                class="botonflecha"
+                                <div
                                 >
-                                🢂
-                                </button>
-                            </div>
-                            <img
-                            v-else
-                            src="../assets/images.png"
-                            class="imagen"
-                            >
-                            <div
-                            >
-                                <h2 class="font-bold">
-                                {{ i.nombre }}
-                                </h2>
-                                <h3>
-                                Categoria: 
-                                {{ i.categoria }}
-                                </h3>
-                                <h2>
-                                ${{ i.precio }}
-                                </h2>
-                                <button 
-                                @click="Compracion(i)" 
-                                :disabled="CarritoStock(i) === 0" 
-                                class="botont"
-                                v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                >
-                                🛒 Añadir al Carrito 🛒
-                                </button>
-                                <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                    <h2 class="font-bold">
+                                    {{ i.nombre }}
+                                    </h2>
                                     <h3>
-                                    {{ i.codigo_barra }} <br>
-                                    Stock: 
-                                    {{ i.stock }}
+                                    Categoria: 
+                                    {{ i.categoria }}
                                     </h3>
-                                    <div 
-                                    v-if="Rol === '1' || Rol === '2'"
+                                    <h2>
+                                    ${{ i.precio }}
+                                    </h2>
+                                    <button 
+                                    @click="Compracion(i)" 
+                                    :disabled="CarritoStock(i) === 0" 
+                                    class="botont"
+                                    v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                     >
-                                        <button 
-                                        @click="Eliminacion(i)" 
-                                        v-if="i.activo" 
-                                        class="botonc"
+                                    🛒 Añadir al Carrito 🛒
+                                    </button>
+                                    <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                        <h3>
+                                        {{ i.codigo_barra }} <br>
+                                        Stock: 
+                                        {{ i.stock }}
+                                        </h3>
+                                        <div 
+                                        v-if="Rol === '1' || Rol === '2'"
                                         >
-                                        ❌ Eliminar
-                                        </button>
+                                            <button 
+                                            @click="Eliminacion(i)" 
+                                            v-if="i.activo" 
+                                            class="botonc"
+                                            >
+                                            ❌ Eliminar
+                                            </button>
+                                            <button 
+                                            @click="Eliminacion(i)" 
+                                            v-else 
+                                            class="botoncon"
+                                            >
+                                            🕊️ Reactivar
+                                            </button>
+                                        </div>
                                         <button 
-                                        @click="Eliminacion(i)" 
-                                        v-else 
-                                        class="botoncon"
-                                        >
-                                        🕊️ Reactivar
+                                        @click="Edicion(i)" 
+                                        v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                        class="botont">
+                                        ✏️ Editar
                                         </button>
                                     </div>
-                                    <button 
-                                    @click="Edicion(i)" 
-                                    v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
-                                    class="botont">
-                                    ✏️ Editar
-                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div v-else>
-                    <h2>No se encontraron productos 😔</h2>
-                    <h3>Prueba buscando con otro termino</h3>
-                </div>
-                <div
-                class="
-                flex justify-center
-                ">
-                    <button 
-                    @click="Pagina = Pagina - 21 ; BusquedaProducto()" 
-                    :disabled="Pagina < 21"
-                    class="botona"
-                    >
-                    🢀
-                    </button>
-                    <h2
+                    <div v-else>
+                        <h2>No se encontraron productos 😔</h2>
+                        <h3>Prueba buscando con otro termino</h3>
+                    </div>
+                    <div
                     class="
-                    self-center p-5
+                    flex justify-center
                     ">
-                    Items 
-                    {{ 0 + Pagina }} 
-                    - 
-                    {{ Pagina + Productos.length }}
-                    </h2>
-                    <button 
-                    @click="Pagina = Pagina + 21 ; BusquedaProducto()" 
-                    :disabled="Productos.length < 21"
-                    class="botona"
-                    >
-                    🢂
-                    </button>
+                        <button 
+                        @click="Pagina = Pagina - 21 ; BusquedaProducto()" 
+                        :disabled="Pagina < 21"
+                        class="botona"
+                        >
+                        🢀
+                        </button>
+                        <h2
+                        class="
+                        self-center p-5
+                        ">
+                        Items 
+                        {{ 0 + Pagina }} 
+                        - 
+                        {{ Pagina + Productos.length }}
+                        </h2>
+                        <button 
+                        @click="Pagina = Pagina + 21 ; BusquedaProducto()" 
+                        :disabled="Productos.length < 21"
+                        class="botona"
+                        >
+                        🢂
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1041,6 +1064,7 @@
         } else {
             DelImg.value.splice(index, 1);
         }
+        IndiceImg.value[ProductoAct.value.id] = 0
     }
     const ProductoEli = ref({
         id: "",
@@ -1269,37 +1293,56 @@
         ProductoAct.value.imagenes = producto_fila.imagenes
         DelImg.value = []
         NewImg.value = []
-        VistaPrevia.value = ""
+        VistaPrevia.value = []
         AbrirPopUp01()
     }
     const ActualizarProducto = async() => {
         try {
+            // ----- Datos Texto Backend ----- //
             if (OpcionCategoriaA.value != "new") { 
                 ProductoAct.value.categoria = OpcionCategoriaA.value
+            }
+            const ProductoActNoImg = {
+                nombre: ProductoAct.value.nombre,
+                precio: ProductoAct.value.precio,
+                stock: ProductoAct.value.stock,
+                categoria: ProductoAct.value.categoria,
+                codigo_barra: ProductoAct.value.codigo_barra
             }
             const ActProducto = await fetch(`http://localhost:8000/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(ProductoAct.value)
+            body: JSON.stringify(ProductoActNoImg)
             })
             if (ActProducto.status === 401) {
-                CerrarSesion();
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-                return;
+                CerrarSesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                return
             }
+            // ----- Borrar Datos Imagen ----- //
             for (const id_img of DelImg.value) {
+                const listaImagenes = ProductoAct.value.imagenes || []
+                const ImgDel = listaImagenes.find(
+                    img => img.id_imagen === id_img
+                )
+                if (ImgDel && ImgDel.s3_key) {
+                    await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
+                }
                 await fetch(`http://localhost:8000/productos/archivos/id/${id_img}`, {
                     method: 'DELETE'
                 })
             }
+            // ----- Subir Datos Imagen ----- //
             for (const file of ArchivoSave.value) {
                 const fileExt = file.name.split('.').pop()
                 const filePath = `${Math.random()}.${fileExt}`
+            // ----- Subir Datos Imagen Supabase ----- //
                 let { error: uploadError } = await supabase.storage
                     .from('max_imagenes')
                     .upload(filePath, file)
+            // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
                     await fetch('http://localhost:8000/productos/archivos/', {
                         method: 'POST',
@@ -1316,7 +1359,6 @@
             }
             BusquedaProducto()
             CerrarPopUp01()
-            alert("Producto actualizado correctamente")
         } catch (error) {
             console.error(error)
             alert("Hubo un error al guardar los cambios.")
