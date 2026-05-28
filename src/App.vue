@@ -2,7 +2,7 @@
     <div 
     v-if="Iniciado"
     class="
-    bg-green-600
+    bg-green-600 z-10
     ">
         <div class="
         flex m-0
@@ -11,76 +11,81 @@
         ">
             <img alt="Vue logo" src="./assets/logo.png">
         </div>
-        <div class="flex m-0 bg-green-600">
-            <div class="flex 
+        <div class="
+        flex relative w-full items-end 
+        m-0 pt-5
+        bg-green-600">
+            <div class="
+            flex min-w-36 min-h-16 items-center justify-center  
             bg-green-800
             divide-x-3 divide-green-400
             border-green-400 border-t-2 border-r-4 rounded-se-2xl
-            text-white">
+            hover:bg-green-100
+            hover:text-black
+            active:bg-green-400
+            ">
+                <h3
+                @click="TablaActual = 'Inicio'" 
+                v-if="Rol !== '3' && Rol !== '6'"
+                class="
+                flex-initial 
+                hover:text-black
+                text-white !text-lg !font-bold"
+                >
+                Ver Inicio
+                </h3>
+            </div>
+            <div class="
+            flex min-h-10 items-center
+            bg-green-800
+            divide-x-3 divide-green-400
+            border-green-400 border-t-2 border-r-4 rounded-se-2xl
+            ">
                 <h3
                 @click="TablaActual = 'Productos'" 
                 v-if="Rol !== '3' && Rol !== '6'"
-                class="flex-initial 
-                hover:bg-green-600
-                active:bg-green-400
-                p-2"
+                class="pestaña"
                 >
                 Ver Productos
                 </h3>
                 <h3 
                 @click="TablaActual = 'Pedidos'" 
                 v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
-                class="flex-initial 
-                hover:bg-green-600
-                active:bg-green-400
-                p-2"
+                class="pestaña"
                 >
                 Ver Pedidos
                 </h3>
                 <h3
                 @click="TablaActual = 'Clientes'" 
                 v-if="Rol === '1' || Rol === '3'"
-                class="flex-initial 
-                hover:bg-green-600
-                active:bg-green-400
-                p-2"
+                class="pestaña"
                 >
                 Ver Clientes
                 </h3>
                 <h3
                 @click="TablaActual = 'Usuarios'" 
                 v-if="Rol === '1'"
-                class="flex-initial 
-                hover:bg-green-600
-                active:bg-green-400
-                p-2"
+                class="pestaña"
                 >
                 Ver Usuarios
                 </h3>
                 <h3
                 @click="TablaActual = 'Historial_precios'" 
                 v-if="Rol === '1' || Rol === '4'"
-                class="flex-initial 
-                hover:bg-green-600
-                hover:rounded-se-2xl
-                active:bg-green-400
-                p-2"
+                class="pestaña"
                 >
                 Ver Historial de Precios
                 </h3>
             </div>
-            <div class="flex absolute right-0 
+            <div class="
+            flex absolute right-0 
             bg-green-800
             divide-x-3 divide-green-400
             border-green-400 border-t-2 border-l-4 rounded-ss-2xl">
                 <h3
                 @click="AbrirPopUp02() ; TablaActual = 'Productos'" 
                 v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
-                class="flex 
-                hover:bg-green-600 
-                active:bg-green-400
-                hover:rounded-ss-2xl
-                p-2"
+                class="pestaña"
                 >
                 🗑️
                 </h3>
@@ -90,11 +95,7 @@
                     <h3
                     v-if="CarritoLocal.length > 0" 
                     @click="TablaActual = 'Carrito'"
-                    class="flex 
-                    hover:bg-green-600
-                    active:bg-green-400
-                    text-white
-                    p-2"
+                    class="pestaña"
                     >
                     Tu Carrito
                     </h3>
@@ -122,7 +123,7 @@
                         bg-red-600
                         absolute top-full
                         left-1/2 -translate-x-1/2
-                        p-2 whitespace-nowrap
+                        p-2 whitespace-nowrap z-50
                         rounded-2xl"
                         >
                         ¡El Carrito está Vacio!
@@ -132,16 +133,11 @@
                 <div
                 class="
                 group relative 
-                cursor-pointer
+                cursor-pointer z-10
                 ">
                     <h3
-                    class="
-                    flex
-                    hover:bg-green-600
-                    active:bg-green-400
-                    text-white
-                    p-2
-                    ">
+                    class="pestaña"
+                    >
                     Mi Perfil
                     </h3>
                     <div 
@@ -185,6 +181,7 @@
             </div>
         </div>
         <div>
+            <Inicio v-if="TablaActual === 'Inicio'"/>
             <Productos v-if="TablaActual === 'Productos'"/>
             <Pedidos v-if="TablaActual === 'Pedidos'"/>
             <Clientes v-if="TablaActual === 'Clientes'"/>
@@ -307,6 +304,7 @@
     import { onMounted, ref } from 'vue'
     import { CarritoLocal, LimpiarCompra, Iniciado, CerrarSesion, Rol } from './components/Estatus.js'
     import Login from './components/Login.vue'
+    import Inicio from './components/Inicio.vue'
     import Pedidos from "./components/Pedidos.vue"
     import Clientes from "./components/Clientes.vue"
     import Usuarios from "./components/Usuarios.vue"
@@ -325,7 +323,7 @@
             TablaActual.value = 'Pedidos'
         }
         else {
-            TablaActual.value = 'Productos'
+            TablaActual.value = 'Inicio'
         }
     })
     // ----- Para el Frontend ----- //

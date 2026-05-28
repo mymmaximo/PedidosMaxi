@@ -1,13 +1,22 @@
 @import "tailwindcss";
-#app {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: left ;
-    color: #2c3e50;
-    margin-top: 0px;
-}
 /* tabla */
+#app {
+    @apply
+    font-sans
+    antialiased
+    text-left
+    text-black
+    mt-0
+}
+.pestaña {
+    @apply
+    flex-initial 
+    text-white
+    hover:bg-green-100
+    hover:text-black
+    active:bg-green-400
+    md:p-2 p-1
+}
 table {
     @apply 
     w-full
@@ -16,7 +25,7 @@ table {
 table th {
     @apply 
     text-lg
-    bg-green-800 p-2 
+    bg-green-800 md:p-2 p-1
     text-white font-bold
 }
 table td {
@@ -32,21 +41,32 @@ img {
 }
 .imageno {
     @apply
-    h-48 w-full
+    h-24 w-full
+    md:h-48 md:w-full
     border-2 border-dashed border-green-500 rounded-xl 
     flex items-center justify-center
     text-green-700 bg-green-100/50 my-2
 }
 .imagen {
     @apply
-    h-48 w-48 
+    h-24 w-24
+    md:h-48 md:w-48 
     object-cover place-self-center
     rounded-xl drop-shadow-md
+}
+.banner {
+    @apply
+    object-cover place-self-center
+    rounded-xl drop-shadow-md
+    h-50 w-full
+    md:h-150 md:w-full
+    select-none
 }
 .imagendel {
     @apply
     border-red-600 border-3
-    h-48 w-48 
+    h-24 w-24
+    md:h-48 md:w-48 
     object-cover place-self-center
     rounded-xl drop-shadow-md
 }
@@ -62,46 +82,54 @@ img {
 .pagina {
     @apply
     flex flex-col 
-    md:flex-row w-full 
-    gap-6
+    md:flex-row w-full
+    gap-3 relative items-start
+    md:px-0 md:gap-6
 }
 .bar {
     @apply
-    text-white
-    w-full md:w-1/6  min-h-full 
+    text-white shrink-0
     bg-green-600
-    flex flex-col
-    p-5
+    flex flex-col p-2
+    md:p-5 h-screen
+    md:gap-3
+    sticky max-h-screen md:h-screen
+    top-0 overflow-y-auto
 }
 /* texto */
 h1 {
     @apply
-    text-2xl
+    text-xl
+    md:text-2xl
     font-bold  
     p-4
 }
 h2 {
     @apply
-    text-xl
+    text-lg
+    md:text-xl
 }
 h3 {
     @apply
-    text-sm 
+    text-xs
+    md:text-sm
 }
 /* botones */
 .botones {
     @apply
     flex flex-col
-    gap-3 p-4
+    gap-1 p-2
+    md:gap-3 md:p-4
     items-center
 }
 .botoncon {
     @apply
     bg-green-400 text-white
     rounded-3xl
-    px-8 py-2
+    md:px-8 md:py-2
+    px-4 py-1
     hover:bg-green-600
-    hover:text-gray-200
+    hover:text-white
     active:bg-green-300
     cursor-pointer
     disabled:bg-gray-300 
@@ -112,7 +140,8 @@ h3 {
     @apply
     bg-red-600 text-white
     rounded-3xl
-    px-6 py-2
+    md:px-6 md:py-2
+    px-3 py-1
     hover:bg-red-800
     hover:text-gray-200
     active:bg-red-100
@@ -122,7 +151,8 @@ h3 {
     @apply
     bg-green-100/50
     rounded-3xl
-    px-3 py-20
+    md:px-3 md:py-20
+    px-1 py-7
     hover:bg-green-300/40
     hover:text-gray-200
     active:bg-gray-100
@@ -137,7 +167,8 @@ h3 {
     @apply
     bg-gray-600 text-white
     rounded-3xl
-    px-6 py-2
+    md:px-6 md:py-2
+    px-3 py-1
     hover:bg-gray-800
     hover:text-gray-200
     active:bg-gray-100
@@ -150,7 +181,8 @@ h3 {
     @apply
     bg-gray-600 text-green-500
     rounded-3xl text-4xl
-    px-4 py-1
+    md:px-4 md:py-1
+    px-2 py-1
     hover:bg-gray-800
     hover:text-gray-200
     active:bg-gray-100
@@ -162,7 +194,8 @@ h3 {
 .botonx {
     @apply
     absolute top-2 right-2 
-    p-0 w-8 h-8 z-10 px-6 py-2
+    p-0 w-8 h-8 z-10 px-3 py-1
+    md:p-0 md:w-8 md:h-8 md:px-6 md:py-2
     cursor-pointer
     flex items-center justify-center
     bg-red-600 text-white 
@@ -174,7 +207,8 @@ h3 {
 select{
     @apply
     text-center text-sm text-gray-400
-    w-50 place-self-center p-2
+    w-full p-1
+    md:w-50 place-self-center md:p-2
     bg-green-100 border-green-500
     rounded-2xl border-2
     cursor-pointer
@@ -182,22 +216,25 @@ select{
 input{
     @apply
     text-sm text-gray-700
-    w-50 px-4 place-self-center p-2
+    w-full p-1 px-2
+    md:w-50 md:px-4 place-self-center md:p-2
     bg-green-100 border-white
     rounded-xl border-1
     cursor-text
 }
 input[type="radio"] {
     @apply 
-    w-10
+    w-5
+    md:w-10
 }
 .busqueda{
     @apply
     text-sm
-    w-11/12 p-2 m-4
+    md:p-2 w-full p-1
     bg-green-100 border-white
     rounded-xl border-1
     cursor-text
+    object-contain
 }
 /* miselaneo */
 .cuerpo{
@@ -210,6 +247,7 @@ input[type="radio"] {
     @apply 
     fixed inset-0
     bg-black/70 flex 
+    z-40
     justify-center
     items-center
 }
@@ -218,15 +256,22 @@ input[type="radio"] {
     flex
     flex-col
     bg-green-300
-    rounded-2xl p-5
-    gap-3
-    max-h-[90vh]
+    rounded-2xl 
+    translate-z-15
+    md:p-5
+    md:gap-3
+    md:max-h-[90vh]
+    p-2 z-50
+    gap-1
+    max-h-[45vh]
+    max-w-[45vh]
     overflow-y-auto
 }
 form{
     @apply
     flex flex-col
-    gap-4 
+    md:gap-4
+    gap-2 
 }
 /* estados */
 .sent{
