@@ -1,93 +1,83 @@
 <template>
     <!-- Actualizar Datos -->
     <div class="cuerpo">
-        <div
-        class="
-        place-self-center   
-        min-w-[80vh] min-h-full
-        rounded-full
-        p-20
-        bg-green-300">
-            <form 
-            @submit.prevent="ActualizarCliente"
-            class="p-8" 
+        <div class="pagina">
+            <div
+            class="
+            place-self-center
+            bg-green-300
+            rounded-4xl
+            p-10
+            lg:p-20
+            2xl:p-20
+            lg:m-3
+            2xl:m-5"
             >
-                <h1>
-                Actualizar Usuario 
-                {{ ClienteConfig.nombre }}
-                </h1>
-                <h2>
-                Nombre
-                </h2>
-                <input 
-                type="text" 
-                v-model="ClienteConfig.nombre" 
-                placeholder="Nombre"
-                class="!self-center !min-w-[40vh]"
-                >
-                <h2>
-                E-mail
-                </h2>
-                <input 
-                type="text" 
-                v-model="ClienteConfig.email" 
-                placeholder="Email@email.com"
-                class="!self-center !w-auto !min-w-[40vh]"
-                >
-                <h2>
-                Contraseña
-                </h2>
-                <div
-                class="
-                self-center
-                ">
+                <form @submit.prevent="ActualizarCliente">
+                    <h1>
+                    Actualizar Usuario 
+                    {{ ClienteConfig.nombre }}
+                    </h1>
+                    <h2>
+                    Nombre
+                    </h2>
                     <input 
-                    :type="verContrasena ? 'text' : 'password'"
-                    v-model="ClienteConfig.contrasena" 
-                    placeholder="Contraseña"
-                    class="!p-2 !min-w-[35vh]"
+                    type="text" 
+                    v-model="ClienteConfig.nombre" 
+                    placeholder="Nombre"
                     >
-                    <button 
-                    type="button" 
-                    @click="verContrasena = !verContrasena"
-                    class="botont !p-1"
-                    >
-                    {{ verContrasena ? '🔒' : '👁️' }}
-                    </button>
-                </div>
-                <h2>
-                Confirmar Contraseña
-                </h2>
-                <div
-                class="
-                self-center
-                ">
+                    <h2>
+                    E-mail
+                    </h2>
                     <input 
-                    :type="verConContrasena ? 'text' : 'password'"
-                    v-model="ClienteConfig.concontrasena" 
-                    placeholder="Confirmar Contraseña"
-                    class="!p-2 !min-w-[35vh]"
+                    type="text" 
+                    v-model="ClienteConfig.email" 
+                    placeholder="Email@email.com"
                     >
-                    <button 
-                    type="button" 
-                    @click="verConContrasena = !verConContrasena"
-                    class="botont !p-1"
-                    >
-                    {{ verConContrasena ? '🔒' : '👁️' }}
-                    </button>
-                </div>
-                <div
-                class="
-                self-center p-5
-                ">
-                    <button 
-                    type="submit" 
-                    class="botoncon !p-5"
-                    >
-                    Actualizar
-                    </button>
-                </div>
-            </form>
+                    <h2>
+                    Contraseña
+                    </h2>
+                    <div class="flex">
+                        <input 
+                        :type="verContrasena ? 'text' : 'password'"
+                        v-model="ClienteConfig.contrasena" 
+                        placeholder="Contraseña"
+                        >
+                        <button 
+                        type="button" 
+                        @click="verContrasena = !verContrasena"
+                        class="botont !p-1"
+                        >
+                        {{ verContrasena ? '🔒' : '👁️' }}
+                        </button>
+                    </div>
+                    <h2>
+                    Confirmar Contraseña
+                    </h2>
+                    <div class="flex">
+                        <input 
+                        :type="verConContrasena ? 'text' : 'password'"
+                        v-model="ClienteConfig.concontrasena" 
+                        placeholder="Confirmar Contraseña"
+                        >
+                        <button 
+                        type="button" 
+                        @click="verConContrasena = !verConContrasena"
+                        class="botont !p-1"
+                        >
+                        {{ verConContrasena ? '🔒' : '👁️' }}
+                        </button>
+                    </div>
+                    <div class="botones">
+                        <button 
+                        type="submit" 
+                        class="botoncon"
+                        >
+                        Actualizar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>

@@ -2,21 +2,26 @@
     <div
     class="cuerpo"
     >
-        <!-- Barra de Busqueda -->
-        <input
-        @input="BusquedaHistorial"
-        type="text" 
-        v-model="Busqueda" 
-        placeholder="Busqueda..."
-        class="busqueda"
-		maxlength="50"
-        >
-        <!-- Boton de Filtro -->
-        <button 
-        @click="AbrirPopUp01" 
-        class="botoncon">
-        🗃️Filtros
-        </button>
+        <div
+        class="start">
+            <!-- Barra de Busqueda -->
+            <input
+            @input="BusquedaHistorial"
+            type="text" 
+            v-model="Busqueda" 
+            placeholder="Busqueda de Historial..."
+            class="busqueda"
+            maxlength="50"
+            >
+            <div class="botones">
+                <!-- Boton de Filtro -->
+                <button 
+                @click="AbrirPopUp01" 
+                class="botoncon">
+                🗃️Filtros
+                </button>
+            </div>
+        </div>
         <!-- Filtro -->
         <Teleport to="body">
             <div class="fondo" v-if="FiltroCaja">
@@ -24,10 +29,12 @@
                     <h1>
                     Filtros de Historial
                     </h1>
-                    <div class="p-2">
-						<h2 
-                        class="p-2"
-                        >
+                    <div 
+                    class="
+                    flex flex-col 
+                    p-2 gap-2
+                    ">
+						<h2 class="p-2">
 						Filtros de Fecha de Actualizacion
 						</h2>
                         <input 
@@ -41,10 +48,12 @@
                         placeholder="Fecha de Actualizacion Min..."
                         >
                     </div>
-                    <div>
-						<h2 
-                        class="p-2"
-                        >
+                    <div 
+                    class="
+                    flex flex-col 
+                    p-2 gap-2
+                    ">
+						<h2 class="p-2">
 						Filtros de Precio Viejo
 						</h2>
                         <input 
@@ -60,10 +69,12 @@
 		                maxlength="10"
                         >
                     </div>
-                    <div>
-						<h2 
-                        class="p-2"
-                        >
+                    <div 
+                    class="
+                    flex flex-col 
+                    p-2 gap-2
+                    ">
+						<h2 class="p-2">
 						Filtros de Precio Nuevo
 						</h2>
                         <input 
@@ -79,10 +90,12 @@
 		                maxlength="10"
                         >
                     </div>
-                    <div>
-                        <h2 
-                        class="p-2"
-                        >
+                    <div 
+                    class="
+                    flex flex-col 
+                    p-2 gap-2
+                    ">
+                        <h2 class="p-2">
                         Filtro Categoria
                         </h2>
                         <div>
@@ -102,15 +115,18 @@
                             </select>
                         </div>
                     </div>
-                    <div>
-                        <h2 
-                        class="p-2"
-                        >
+                    <div 
+                    class="
+                    flex flex-col 
+                    p-2 gap-2
+                    ">
+                        <h2 class="p-2">
                         ¿El Productos esta Activo?
                         </h2>
                         <div 
                         class="
-                        flex flex-col p-2 gap-2
+                        flex flex-col 
+                        p-2 gap-2
                         ">
                             <label>
                             <input 
@@ -138,24 +154,26 @@
                             </label>
                         </div>
                     </div>
-                    <button 
-                    @click="AplicarFiltro" 
-                    class="botoncon">
-                    Aplicar Filtros
-                    </button>
-                    <button 
-                    @click="LimpiarFiltro"
-                    v-if="filtroAct === true" 
-                    class="botont"
-                    >
-                    🗑️ Limpiar Filtro
-                    </button>
-                    <button 
-                    @click="CerrarPopUp01" 
-                    class="botonc"
-                    >
-                    Cerrar
-                    </button>
+                    <div class="botones">
+                        <button 
+                        @click="AplicarFiltro" 
+                        class="botoncon">
+                        Aplicar Filtros
+                        </button>
+                        <button 
+                        @click="LimpiarFiltro"
+                        v-if="filtroAct === true" 
+                        class="botont"
+                        >
+                        🗑️ Limpiar Filtro
+                        </button>
+                        <button 
+                        @click="CerrarPopUp01" 
+                        class="botonc"
+                        >
+                        Cerrar
+                        </button>
+                    </div>
                 </div>
             </div>
         </Teleport>
@@ -241,17 +259,19 @@
                 Prueba buscando con otro termino
                 </h3>
             </div>
-            <div class="flex justify-center">
+            <div 
+            class="
+            flex justify-center
+            p-3"
+            >
                 <button 
                 @click="Pagina = Pagina - 20 ; BusquedaHistorial()" 
                 :disabled="Pagina < 20"
                 class="botona"
                 >
-                ⬅
+                🢀
                 </button>
-                <h2 
-                class="self-center p-5"
-                >
+                <h2 class="item">
                 Items 
                 {{ 0 + Pagina }}
                 - 
@@ -262,7 +282,7 @@
                 :disabled="Historial.length < 20"
                 class="botona"
                 >
-                ➡
+                🢂
                 </button>
             </div>
 		</div>

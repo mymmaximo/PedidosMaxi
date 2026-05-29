@@ -1,29 +1,288 @@
 <template>
+    <!-- Filtro -->
+    <Teleport to="body">
+        <div class="fondo" v-if="VentanaFiltro">
+           <div class="popup">
+                <h1>
+                ¿El Usuario esta Activo?
+                </h1>
+                <div class="flex flex-col">
+                    <label>
+                    <input 
+                    type="radio" 
+                    :value="2"
+                    v-model="filtroEst"
+                    > 
+                    Todos los Clientes
+                    </label>
+                    <label>
+                    <input 
+                    type="radio" 
+                    :value="1"
+                    v-model="filtroEst"
+                    > 
+                    Cliente Activo
+                    </label>
+                    <label>
+                    <input 
+                    type="radio" 
+                    :value="0"
+                    v-model="filtroEst"
+                    > 
+                    Cliente Eliminado
+                    </label>
+                </div>
+                <div
+                class="botones">
+                    <button 
+                    @click="AplicarFiltro" 
+                    class="botoncon"
+                    >
+                    Filtrar
+                    </button>
+                    <button 
+                    @click="LimpiarFiltro" 
+                    v-if="filtroAct === true"
+                    class="botont"
+                    >
+                    🗑️ Limpiar Filtro
+                    </button>
+                    <button 
+                    @click="CerrarPopUp01" 
+                    class="botonc"
+                    >
+                    Cerrar
+                    </button>
+                </div>
+            </div> 
+        </div>
+    </Teleport>
+    <!-- Confirmacion Eliminar -->
+    <Teleport to="body">
+        <div 
+        v-if="ActualizarCajaUDel" 
+        class="fondo"
+        >
+            <div 
+            class="popup"
+            >
+                <h1>
+                ¿Desear Eliminar/Reactivar el Usuario {{ UsuarioAct.nombre }}?
+                </h1>
+                <div
+                class="botones">
+                    <button 
+                    @click="BorrarUsuario()"
+                    class="botoncon"
+                    >
+                    Si Confirmo
+                    </button>
+                    <button 
+                    @click="CerrarPopUp02"
+                    class="botonc"
+                    >
+                    Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </Teleport>
+    <!-- Actualizar Usuario -->
+    <Teleport to="body">
+        <div 
+        v-if="ActualizarCajaU"
+        class="fondo"
+        >
+            <div 
+            class="popup"
+            >
+                <h1>
+                Actualizar Usuario {{ UsuarioAct.nombre }}
+                </h1>
+                <form 
+                @submit.prevent="ActualizarUsuarios" 
+                >
+                    <h2 
+                    class="!self-center font-bold"
+                    >
+                    Rol
+                    </h2>
+                    <select 
+                    v-model="UsuarioAct.id_rol"
+                    >
+                        <option value="" disabled>
+                        Selecciona un Rol...
+                        </option>
+                        <option value=1>
+                        Administrador
+                        </option>
+                        <option value=2>
+                        Editor de Productos General
+                        </option>
+                        <option value=3>
+                        Gestor de Pedidos General y Editor de Clientes
+                        </option>
+                        <option value=4>
+                        Gestor de Precios
+                        </option>
+                        <option value=5>
+                        Gestor de Stock
+                        </option>
+                        <option value=6>
+                        Rider
+                        </option>
+                    </select>
+                    <div
+                    class="botones"
+                    >
+                        <button 
+                        type="submit" 
+                        :disabled="confirboton"
+                        class="botoncon"
+                        >
+                        Actualizar
+                        </button>
+                        <button 
+                        @click="CerrarPopUp03" 
+                        class="botonc"
+                        >
+                        Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </Teleport>
+    <!-- Nuevo Usuario -->
+    <Teleport to="body">
+        <div 
+        v-if="ActualizarUNew"
+        class="fondo" >
+            <div 
+            v-if="Rol === '1'"
+            class="popup" 
+            >
+                <h1>
+                Nuevo Usuario
+                </h1>
+                <form 
+                @submit.prevent="SubirNuevoUsuario" 
+                >
+                    <h2>
+                    Nombre
+                    </h2>
+                    <input 
+                    type="text" 
+                    v-model="NuevoUsuario.nombre" 
+                    placeholder="Nombre"
+                    maxlength="50"
+                    >
+                    <h2>
+                    E-Mail
+                    </h2>
+                    <input 
+                    type="text" 
+                    v-model="NuevoUsuario.email" 
+                    placeholder="E-Mail"
+                    maxlength="50"
+                    >
+                    <h2>
+                    Documento
+                    </h2>
+                    <input 
+                    type="number" 
+                    v-model="NuevoUsuario.dni" 
+                    placeholder="Documento"
+                    maxlength="8"
+                    >
+                    <h2>
+                    Contraseña
+                    </h2>
+                    <input 
+                    type="text" 
+                    v-model="NuevoUsuario.contrasena" 
+                    placeholder="Contraseña"
+                    maxlength="30"
+                    >
+                    <h2>
+                    Rol
+                    </h2>
+                    <select 
+                    v-model="NuevoUsuario.id_rol" 
+                    >
+                        <option value="" disabled>
+                        Selecciona un Rol...
+                        </option>
+                        <option value=1>
+                        Administrador
+                        </option>>
+                        <option value=2>
+                        Editor de Productos General
+                        </option>
+                        <option value=3>
+                        Gestor de Pedidos General y Editor de Clientes
+                        </option>
+                        <option value=4>
+                        Gestor de Precios
+                        </option>
+                        <option value=5>
+                        Gestor de Stock
+                        </option>
+                        <option value=6>
+                        Rider
+                        </option>
+                    </select>
+                    <div 
+                    class="botones"
+                    >
+                        <button 
+                        type="submit" 
+                        :disabled="confirboton"
+                        class="botoncon"
+                        >
+                        Crear Cliente
+                        </button>
+                        <button 
+                        @click="CerrarPopUp01"
+                        class="botonc"
+                        >
+                        Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </Teleport>
     <div
     class="cuerpo"
     >
-        <!-- Barra de Busqueda -->
-        <input
-        @input="BusquedaUsuario"
-        type="text" v-model="Busqueda" 
-        placeholder="Busqueda..."
-        class="busqueda"
-        maxlength="50"
-        >
-        <!-- Boton de Filtro -->
-        <button 
-        @click="AbrirPopUp01" 
-        class="botoncon"
-        >
-        🗃️Filtros
-        </button>
-        <!-- Crear Nuevo Cliente/Usuario -->
-        <button 
-        @click="AbrirPopUp04" 
-        class="botont"
-        >
-        Crear Nuevo Usuario
-        </button>
+        <div
+        class="start">
+            <!-- Barra de Busqueda -->
+            <input
+            @input="BusquedaUsuario"
+            type="text" v-model="Busqueda" 
+            placeholder="Busqueda de Usuarios..."
+            class="busqueda"
+            maxlength="50"
+            >
+            <div class="botones">
+                <!-- Boton de Filtro -->
+                <button 
+                @click="AbrirPopUp01" 
+                class="botoncon"
+                >
+                🗃️Filtros
+                </button>
+                <!-- Crear Nuevo Cliente/Usuario -->
+                <button 
+                @click="AbrirPopUp04" 
+                class="botont"
+                >
+                Crear Nuevo Usuario
+                </button>
+            </div>
+        </div>
         <!-- Tabla de Usuarios -->
         <div>
             <div>
@@ -141,18 +400,16 @@
                 <div 
                 class="
                 flex justify-center
-                ">
+                p-3"
+                >
                     <button 
                     @click="Pagina = Pagina - 20 ; BusquedaUsuario()" 
                     :disabled="Pagina < 20"
                     class="botona"
                     >
-                    ⬅
+                    🢀
                     </button>
-                    <h2
-                    class="
-                    self-center p-5
-                    ">
+                    <h2 class="item">
                     Items 
                     {{ 0 + Pagina }} 
                     - 
@@ -163,266 +420,12 @@
                     :disabled="usuarios.length < 20"
                     class="botona"
                     >
-                    ➡
+                    🢂
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Filtro -->
-    <Teleport to="body">
-        <div class="fondo" v-if="VentanaFiltro">
-           <div class="popup">
-                <h1>
-                ¿El Usuario esta Activo?
-                </h1>
-                <div class="flex flex-col">
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="2"
-                    v-model="filtroEst"
-                    > 
-                    Todos los Clientes
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="1"
-                    v-model="filtroEst"
-                    > 
-                    Cliente Activo
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="0"
-                    v-model="filtroEst"
-                    > 
-                    Cliente Eliminado
-                    </label>
-                </div>
-                <div
-                class="botones">
-                    <button 
-                    @click="AplicarFiltro" 
-                    class="botoncon"
-                    >
-                    Filtrar
-                    </button>
-                    <button 
-                    @click="LimpiarFiltro" 
-                    v-if="filtroAct === true"
-                    class="botont"
-                    >
-                    🗑️ Limpiar Filtro
-                    </button>
-                    <button 
-                    @click="CerrarPopUp01" 
-                    class="botonc"
-                    >
-                    Cerrar
-                    </button>
-                </div>
-            </div> 
-        </div>
-    </Teleport>
-    <!-- Confirmacion Eliminar -->
-    <Teleport to="body">
-        <div 
-        v-if="ActualizarCajaUDel" 
-        class="fondo"
-        >
-            <div 
-            class="popup"
-            >
-                <h1>
-                ¿Desear Eliminar/Reactivar el Usuario {{ UsuarioAct.nombre }}?
-                </h1>
-                <div
-                class="botones">
-                    <button 
-                    @click="BorrarUsuario()"
-                    class="botoncon"
-                    >
-                    Si Confirmo
-                    </button>
-                    <button 
-                    @click="CerrarPopUp02"
-                    class="botonc"
-                    >
-                    Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </Teleport>
-    <!-- Actualizar Usuario -->
-    <Teleport to="body">
-        <div 
-        v-if="ActualizarCajaU"
-        class="fondo"
-        >
-            <div 
-            class="popup"
-            >
-                <h1>
-                Actualizar Usuario {{ UsuarioAct.nombre }}
-                </h1>
-                <form 
-                @submit.prevent="ActualizarUsuarios" 
-                >
-                    <h2 
-                    class="!self-center font-bold"
-                    >
-                    Rol
-                    </h2>
-                    <select 
-                    v-model="UsuarioAct.id_rol"
-                    >
-                        <option value="" disabled>
-                        Selecciona un Rol...
-                        </option>
-                        <option value=1>
-                        Administrador
-                        </option>>
-                        <option value=2>
-                        Editor de Productos General
-                        </option>
-                        <option value=3>
-                        Gestor de Pedidos General y Editor de Clientes
-                        </option>
-                        <option value=4>
-                        Gestor de Precios
-                        </option>
-                        <option value=5>
-                        Gestor de Stock
-                        </option>
-                        <option value=6>
-                        Rider
-                        </option>
-                    </select>
-                    <div
-                    class="botones"
-                    >
-                        <button 
-                        type="submit" 
-                        :disabled="confirboton"
-                        class="botoncon"
-                        >
-                        Actualizar
-                        </button>
-                        <button 
-                        @click="CerrarPopUp03" 
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </Teleport>
-    <!-- Nuevo Usuario -->
-    <Teleport to="body">
-        <div 
-        v-if="ActualizarUNew"
-        class="fondo" >
-            <div 
-            v-if="Rol === '1'"
-            class="popup !min-w-[60vh]" 
-            >
-                <h1>
-                Nuevo Usuario
-                </h1>
-                <form 
-                @submit.prevent="SubirNuevoUsuario" 
-                >
-                    <h2>
-                    Nombre
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoUsuario.nombre" 
-                    placeholder="Nombre"
-                    maxlength="50"
-                    >
-                    <h2>
-                    E-Mail
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoUsuario.email" 
-                    placeholder="E-Mail"
-                    maxlength="50"
-                    >
-                    <h2>
-                    Documento
-                    </h2>
-                    <input 
-                    type="number" 
-                    v-model="NuevoUsuario.dni" 
-                    placeholder="Documento"
-                    maxlength="8"
-                    >
-                    <h2>
-                    Contraseña
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoUsuario.contrasena" 
-                    placeholder="Contraseña"
-                    maxlength="30"
-                    >
-                    <h2>
-                    Rol
-                    </h2>
-                    <select 
-                    v-model="NuevoUsuario.id_rol" 
-                    >
-                        <option value="" disabled>
-                        Selecciona un Rol...
-                        </option>
-                        <option value=1>
-                        Administrador
-                        </option>>
-                        <option value=2>
-                        Editor de Productos General
-                        </option>
-                        <option value=3>
-                        Gestor de Pedidos General y Editor de Clientes
-                        </option>
-                        <option value=4>
-                        Gestor de Precios
-                        </option>
-                        <option value=5>
-                        Gestor de Stock
-                        </option>
-                        <option value=6>
-                        Rider
-                        </option>
-                    </select>
-                    <div 
-                    class="botones"
-                    >
-                        <button 
-                        type="submit" 
-                        :disabled="confirboton"
-                        class="botoncon"
-                        >
-                        Crear Cliente
-                        </button>
-                        <button 
-                        @click="CerrarPopUp01"
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </Teleport>
 </template>
 
 <script setup>

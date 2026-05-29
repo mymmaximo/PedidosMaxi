@@ -6,18 +6,27 @@
         <!-- Iniciar Sesion -->
         <div 
         v-if="MostrarLogin"
+        class="m-5"
         >
             <form 
             @submit.prevent="IniciarSesionUsuario" 
             class="popup"
             >
+                <h1 class="text-center">
+                Iniciar Sesion
+                </h1>
+                <h2>
+                Ingresa tu E-Mail
+                </h2>
                 <input 
                 type="text" 
                 v-model="LoginBox.email" 
                 placeholder="Email"
-                class="!w-auto"
                 >
-                <div>
+                <h2>
+                Ingresa tu Contraseña
+                </h2>
+                <div class="flex">
                     <input 
                     :type="verContrasena ? 'text' : 'password'"
                     v-model="LoginBox.contrasena" 
@@ -31,24 +40,30 @@
                     {{ verContrasena ? '🔒' : '👁️' }}
                     </button>
                 </div>
-                <button 
-                type="submit" 
-                class="botoncon">
-                Iniciar Sesion
-                </button>
-                <h2 v-if="Herror">
+                <div class="botones">
+                    <button 
+                    type="submit" 
+                    class="botoncon">
+                    Iniciar Sesion
+                    </button>
+                </div>
+                <h2 
+                v-if="Herror"
+                class="text-red-500">
                 {{ Herror }}
                 </h2>
-                <p>
+                <h3 class="text-center">
                 ¿No Tienes Cuenta?
-                </p>
-                <button 
-                type="button" 
-                @click="MostrarLogin = false; Herror = ''"
-                class="botont"
-                >
-                Registrate
-                </button>
+                </h3>
+                <div class="botones">
+                    <button 
+                    type="button" 
+                    @click="MostrarLogin = false; Herror = ''"
+                    class="botont"
+                    >
+                    Registrate
+                    </button>
+                </div>
             </form>
         </div>
         <!-- Registrarse -->
@@ -56,46 +71,92 @@
             <form 
             @submit.prevent="SubirNuevoCliente" 
             class="popup">
-                <input 
+                <h1 class="text-center">
+                Registrarse
+                </h1>
+                <h3>
+                Ingresa tu E-Mail
+                </h3>
+                <input
                 type="text" 
                 v-model="NuevoCliente.email" 
                 placeholder="E-Mail"
                 >
-                <input 
-                type="text" 
-                v-model="NuevoCliente.contrasena" 
-                placeholder="Contraseña" 
-                maxlength="72"
-                >
+                <h3>
+                Ingresa tu Contraseña
+                </h3>
+                <div class="flex">
+                    <input 
+                    :type="verContrasena ? 'text' : 'password'"
+                    v-model="NuevoCliente.contrasena" 
+                    placeholder="Contraseña"
+                    >
+                    <button 
+                    type="button" 
+                    @click="verContrasena = !verContrasena"
+                    class="botont !p-1"
+                    >
+                    {{ verContrasena ? '🔒' : '👁️' }}
+                    </button>
+                </div>
+                <h3>
+                Confirmar Contraseña
+                </h3>
+                <div class="flex">
+                    <input 
+                    :type="verConContrasena ? 'text' : 'password'"
+                    v-model="NuevoCliente.concontrasena" 
+                    placeholder="Confirmar Contraseña"
+                    >
+                    <button 
+                    type="button" 
+                    @click="verConContrasena = !verConContrasena"
+                    class="botont !p-1"
+                    >
+                    {{ verConContrasena ? '🔒' : '👁️' }}
+                    </button>
+                </div>
+                <h3>
+                Ingresa tu Nombre
+                </h3>
                 <input 
                 type="text" 
                 v-model="NuevoCliente.nombre" 
                 placeholder="Nombre"
                 >
+                <h3>
+                Ingresa tu DNI
+                </h3>
                 <input 
                 type="text" 
                 v-model="NuevoCliente.dni" 
                 placeholder="DNI"
                 >
-                <button 
-                type="submit" 
-                class="botoncon"
-                >
-                Registrarte
-                </button>
-                <p v-if="Herror" class="classEliminado">
+                <div class="botones">
+                    <button 
+                    type="submit" 
+                    class="botoncon"
+                    >
+                    Registrarte
+                    </button>
+                </div>
+                <h2 
+                v-if="Herror"
+                class="text-red-500">
                 {{ Herror }}
-                </p>
-                <p>
-                ¿Ya Tienes Cuenta?
-                </p>
-                <button 
-                type="button" 
-                @click="MostrarLogin = true; Herror = ''"
-                class="botont"
-                >
-                Iniciar Sesion
-                </button>
+                </h2>
+                <div class="botones">
+                    <h3>
+                    ¿Ya Tienes Cuenta?
+                    </h3>
+                    <button 
+                    type="button" 
+                    @click="MostrarLogin = true; Herror = ''"
+                    class="botont"
+                    >
+                    Iniciar Sesion
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -134,7 +195,8 @@
         nombre: "",
         email: "",
         dni: "",
-        contrasena: ""
+        contrasena: "",
+        concontrasena: ""
     })
     // ----- Para el Backend ----- //
     const IniciarSesionUsuario = async() => {
@@ -188,6 +250,12 @@
             } 
     }
     const SubirNuevoCliente = async() => {
+        if (NuevoCliente.value.contrasena !== "" || NuevoCliente.value.concontrasena !== "") {
+            if (NuevoCliente.value.contrasena !== NuevoCliente.value.concontrasena) {
+                alert("❌ Las contraseñas no coinciden. Por favor, verifícalas.")
+                return
+            }
+        }
         const respuesta = await fetch('http://localhost:8000/clientes/', {
             method: 'POST',
             headers: {

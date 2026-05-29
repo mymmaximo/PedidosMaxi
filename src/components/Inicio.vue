@@ -414,8 +414,7 @@
                         ">
                             <h3
                             class="
-                            flex flex-col
-                            md:p-4 p-2
+                            flex flex-cols
                             ">
                             Precio Mayor
                             </h3>
@@ -448,7 +447,9 @@
                             <div
                             class="
                             flex flex-col
-                            md:p-4 p-2
+                            p-1
+                            lg:p-2
+                            2xl:p-4
                             ">
                                 <label>
                                 <input 
@@ -526,7 +527,7 @@
                             :disabled="GetImg(PBanner.id) === 0"
                             class="botonflecha
                             flex flex-row z-30
-                            absolute left-4 top-1/2 -translate-y-1/2 z-30 !md:py-50 !py-20 !hidden md:block"
+                            absolute left-4 top-1/2 -translate-y-1/2 z-30 !md:py-50 !py-20 !lg:block !2xl:block"
                             >
                             🢀
                             </button>
@@ -536,12 +537,12 @@
                             :key="PBanner.imagenes[GetImg(PBanner.id)].s3_key"
                             :src="ObtenerImgUrl(PBanner.imagenes[GetImg(PBanner.id)].s3_key)"
                             class="banner"
-                            >
+                            > 
                             <button
                             type="button"
                             @click="NextImg(PBanner)"
                             :disabled="GetImg(PBanner.id) === PBanner.imagenes.length - 1"
-                            class="botonflecha absolute right-4 top-1/2 -translate-y-1/2 z-30  !md:py-50 !py-20 !hidden md:block"
+                            class="botonflecha absolute right-4 top-1/2 -translate-y-1/2 z-30  !md:py-50 !py-20 md:block"
                             >
                             🢂
                             </button>
@@ -572,7 +573,7 @@
                             @click="ScrollIzquierda(cat.categoria)"
                             class="botonflecha 
                             flex flex-row z-30
-                            absolute self-center !md:py-10 !py-5 hidden md:block"
+                            absolute self-center hidden md:block"
                             >
                             🢀
                             </button>
@@ -585,7 +586,7 @@
                             class="
                             flex flex-col 
                             items-center text-center overflow-hidden
-                            md:p-4 md:gap-2 p-2 gap-1 w-36 h-auto md:h-100
+                            md:p-4 md:gap-2 p-2 gap-1 w-36 h-auto
                             rounded-2xl shadow-md touch-pan-y
                             bg-green-300/50
                             md:w-72 shrink-0 snap-center
@@ -596,7 +597,7 @@
                                     @touchstart="ComienzoToque($event)"
                                     @touchend="FinToque($event, i)"
                                     class="flex flex-row 
-                                    md:gap-3 gap-1
+                                    2xl:gap-3 gap-1
                                     items-center justify-center 
                                     w-full md:pb-2 pb-1 snap-x
                                     ">
@@ -633,31 +634,40 @@
                                                 v-if="i.activo" 
                                                 class="botonc"
                                                 >
-                                                ❌ Eliminar
+                                                ❌ 
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Eliminar
+                                                </span>
                                                 </button>
                                                 <button 
                                                 @click="Eliminacion(i)" 
                                                 v-else 
                                                 class="botoncon"
                                                 >
-                                                🕊️ Reactivar
+                                                🕊️
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Reactivar
+                                                </span> 
                                                 </button>
                                             </div>
                                             <button 
                                             @click="Edicion(i)" 
                                             v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
                                             class="botont">
-                                            ✏️ Editar
+                                            ✏️ 
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Editar
+                                            </span>
                                             </button>
                                         </div>
                                         <button 
                                         @click="Compracion(i)" 
                                         :disabled="CarritoStock(i) === 0" 
-                                        class="botoncon !text-black"
+                                        class="botoncon"
                                         v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                         >
                                         🛒 
-                                        <span class="hidden md:inline">
+                                        <span class="hidden lg:inline 2xl:inline">
                                         Añadir al Carrito 🛒
                                         </span>
                                         </button>
@@ -671,7 +681,7 @@
                             <button
                             @click="ScrollDerecha(cat.categoria)"
                             :disabled="ScrollDerecha(cat.categoria) === 0"
-                            class="botonflecha absolute right-5 z:10 self-center !md:py-10 !py-5 hidden md:block"
+                            class="botonflecha absolute right-5 z:10 self-center hidden md:block"
                             >
                             🢂
                             </button>

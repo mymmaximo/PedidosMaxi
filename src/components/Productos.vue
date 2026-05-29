@@ -556,7 +556,6 @@
                             Personalizado
                             </label>
                         </div>
-                        
                         <div
                         v-if="filtroRadio === 0" 
                         class="
@@ -737,7 +736,10 @@
                                     class="botont"
                                     v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                     >
-                                    🛒 Añadir al Carrito 🛒
+                                    🛒 
+                                    <span class="hidden lg:inline 2xl:inline">
+                                    Añadir al Carrito 🛒
+                                    </span>
                                     </button>
                                     <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
                                         <h3>
@@ -753,21 +755,30 @@
                                             v-if="i.activo" 
                                             class="botonc"
                                             >
-                                            ❌ Eliminar
+                                            ❌
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Eliminar
+                                            </span>
                                             </button>
                                             <button 
                                             @click="Eliminacion(i)" 
                                             v-else 
                                             class="botoncon"
                                             >
-                                            🕊️ Reactivar
+                                            🕊️
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Reactivar
+                                            </span>
                                             </button>
                                         </div>
                                         <button 
                                         @click="Edicion(i)" 
                                         v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
                                         class="botont">
-                                        ✏️ Editar
+                                        ✏️
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Editar
+                                        </span>
                                         </button>
                                     </div>
                                 </div>
@@ -823,7 +834,7 @@
     const OpcionCategoriaA = ref ("new")
     const OpcionCategoria = ref ("new")
     const VentanaCompra = ref (false)
-    const MostrarFiltro = ref (false)
+    const MostrarFiltro = ref (true)
     const VentanaNuevo = ref (false)
     const ListaCategoria = ref ("")
     const ArchivoSave = ref ([])

@@ -1,28 +1,292 @@
 <template>
+    <!-- Filtro -->
+    <Teleport to="body">
+        <div class="fondo" v-if="VentanaFiltro">
+           <div class="popup">
+                <h1>
+                ¿Realizo un Pedido?
+                </h1>
+                <div 
+                class="
+                flex flex-col
+                ">
+                    <label>
+                    <input 
+                    type="radio" 
+                    :value="1"
+                    v-model="filtroDirec"
+                    > 
+                    Realizo uno o mas Pedidos
+                    </label>
+                    <label>
+                    <input 
+                    type="radio" 
+                    :value="0"
+                    v-model="filtroDirec"
+                    > 
+                    No Realizo Pedidos
+                    </label>
+                </div>
+                <h1>
+                ¿El Cliente esta Activo?
+                </h1>
+                <div 
+                class="
+                flex flex-col
+                ">
+                    <label>
+                    <input 
+                    type="radio" 
+                    :value="2"
+                    v-model="filtroEst"
+                    > 
+                    Todos los Clientes
+                    </label>
+                    <label>
+                    <input 
+                    type="radio" 
+                    :value="1"
+                    v-model="filtroEst"
+                    > 
+                    Cliente Activo
+                    </label>
+                    <label>
+                    <input 
+                    type="radio" 
+                    :value="0"
+                    v-model="filtroEst"
+                    > 
+                    Cliente Eliminado
+                    </label>
+                </div>
+                <div 
+                v-if="filtroDirec === 1"
+                >
+                    <h2>
+                    Ciudad del Cliente
+                    </h2>
+                    <select 
+                    v-model="filtrociudad" 
+                    class="sel"
+                    >
+                        <option value="" disabled>
+                        Selecciona una Ciudad...
+                        </option>
+                        <option v-for="i in ListaCiudad" :key="i.ciudad" :value="i.ciudad">
+                        {{ i.ciudad }}
+                        </option>
+                    </select>
+                    <h2>
+                    Provincia del Cliente
+                    </h2>
+                    <select 
+                    v-model="filtroprovincia" 
+                    class="sel">
+                        <option value="" disabled>
+                        Selecciona una Provincia...
+                        </option>
+                        <option v-for="i in ListaProvincia" :key="i.provincia" :value="i.provincia">
+                        {{ i.provincia }}
+                        </option>
+                    </select>
+                </div>
+                <div
+                class="botones">
+                    <button 
+                    @click="AplicarFiltro" 
+                    class="botoncon"
+                    >
+                    Filtrar
+                    </button>
+                    <button 
+                    @click="LimpiarFiltro" 
+                    v-if="filtroAct === true"
+                    class="botont" 
+                    >
+                    🗑️ Limpiar Filtro
+                    </button>
+                    <button 
+                    @click="CerrarPopUp01" 
+                    class="botonc">
+                    Cerrar
+                    </button>
+                </div>
+            </div> 
+        </div>
+    </Teleport>
+    <!-- Confirmacion Eliminar -->
+    <Teleport to="body">
+        <div 
+        v-if="ActualizarCajaCDel" 
+        class="fondo"
+        >
+            <div 
+            class="popup"
+            >
+                <h1>
+                ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
+                </h1>
+                <div
+                class="botones">
+                    <button 
+                    @click="BorrarCliente()"
+                    class="botoncon"
+                    >
+                    Si Confirmo
+                    </button>
+                    <button 
+                    @click="CerrarPopUp02"
+                    class="botonc"
+                    >
+                    Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </Teleport>
+    <!-- Actualizar Cliente -->
+    <Teleport to="body">
+        <div  
+        v-if="ActualizarCajaC"
+        class="fondo"
+        >
+            <div 
+            class="popup"
+            >
+                <h1>
+                Actualizar Cliente {{ ClienteAct.nombre }}
+                </h1>
+                <form @submit.prevent="ActualizarClientes">
+                    <h2>
+                    Nombre
+                    </h2>
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.nombre" 
+                    placeholder="Nombre"
+                    maxlength="20"
+                    >
+                    <h2>
+                    E-mail
+                    </h2>
+                    <input 
+                    type="text" 
+                    v-model="ClienteAct.email" 
+                    placeholder="Email@email.com"
+                    maxlength="50"
+                    >
+                    <div
+                    class="botones">
+                        <button 
+                        type="submit" 
+                        :disabled="confirboton"
+                        class="botoncon
+                        ">
+                        Actualizar
+                        </button>
+                        <button 
+                        @click="CerrarPopUp03" 
+                        class="botonc">
+                        Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </Teleport>
+    <!-- Nuevo Cliente -->
+    <Teleport to="body">
+        <div class="fondo" v-if="ActualizarCNew">
+            <div class="popup" v-if="Rol === '1'">
+                <h1>
+                Nuevo Cliente
+                </h1>
+                <form @submit.prevent="SubirNuevoCliente">
+                    <h2>
+                    Nombre
+                    </h2>
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.nombre" 
+                    placeholder="Nombre"
+                    maxlength="20"
+                    >
+                    <h2>
+                    E-Mail
+                    </h2>
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.email" 
+                    placeholder="E-Mail"
+                    maxlength="50"
+                    >
+                    <h2>
+                    Documento
+                    </h2>
+                    <input 
+                    type="number" 
+                    v-model="NuevoCliente.dni" 
+                    placeholder="Documento"
+                    maxlength="8"
+                    >
+                    <h2>
+                    Contraseña
+                    </h2>
+                    <input 
+                    type="text" 
+                    v-model="NuevoCliente.contrasena" 
+                    placeholder="Contraseña"
+                    maxlength="20"
+                    >
+                    <div
+                    class="botones"
+                    >
+                        <button 
+                        type="submit" 
+                        :disabled="confirboton"
+                        class="botoncon"
+                        >
+                        Crear Cliente
+                        </button>
+                        <button 
+                        @click="CerrarPopUp01"
+                        class="botonc"
+                        >
+                        Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </Teleport>
     <div
     class="cuerpo"
     >
-        <!-- Barra de Busqueda -->
-        <input
-        @input="BusquedaCliente"
-        type="text" v-model="Busqueda" 
-        placeholder="Busqueda..."
-        class="busqueda"
-        maxlength="50"
-        >
-        <!-- Boton de Filtro -->
-        <button 
-        @click="AbrirPopUp01" 
-        class="botoncon">
-        🗃️Filtros
-        </button>
-        <!-- Crear Nuevo Cliente/Usuario -->
-        <button 
-        @click="AbrirPopUp04" 
-        class="botont"
-        >
-        Crear Nuevo Cliente
-        </button>
+        <div class="start">
+            <!-- Barra de Busqueda -->
+            <input
+            @input="BusquedaCliente"
+            type="text" v-model="Busqueda" 
+            placeholder="Busqueda..."
+            class="busqueda"
+            maxlength="50"
+            >
+            <div class="botones">
+                <!-- Boton de Filtro -->
+                <button 
+                @click="AbrirPopUp01" 
+                class="botoncon">
+                🗃️Filtros
+                </button>
+                <!-- Crear Nuevo Cliente/Usuario -->
+                <button 
+                @click="AbrirPopUp04" 
+                class="botont"
+                >
+                Crear Nuevo Cliente
+                </button>
+            </div>
+        </div>
         <!-- Tabla de Clientes -->
         <div>
             <div>
@@ -35,10 +299,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th
-                                class="
-                                rounded-ss-2xl 
-                                ">
+                                <th class="rounded-ss-2xl">
                                 Nombre
                                 </th>
                                 <th>
@@ -62,9 +323,8 @@
                                 </th>
                                 <th 
                                 v-if="Rol === '1'"
-                                class="
-                                rounded-se-2xl 
-                                ">
+                                class="rounded-se-2xl"
+                                >
                                 Editar
                                 </th>
                             </tr>
@@ -199,18 +459,16 @@
                 <div 
                 class="
                 flex justify-center
-                ">
+                p-3"
+                >
                     <button
                     @click="Pagina = Pagina - 20 ; BusquedaCliente()" 
                     :disabled="Pagina < 20"
                     class="botona"
                     >
-                    ⬅
+                    🢀
                     </button>
-                    <h2
-                    class="
-                    self-center p-5
-                    ">
+                    <h2 class="item">
                     Items 
                     {{ 0 + Pagina }} 
                     - 
@@ -221,284 +479,12 @@
                     :disabled="clientes.length < 20"
                     class="botona"
                     >
-                    ➡
+                    🢂
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Filtro -->
-    <Teleport to="body">
-        <div class="fondo" v-if="VentanaFiltro">
-           <div class="popup">
-                <h1>
-                ¿Realizo un Pedido?
-                </h1>
-                <div 
-                class="
-                flex flex-col
-                ">
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="1"
-                    v-model="filtroDirec"
-                    > 
-                    Realizo uno o mas Pedidos
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="0"
-                    v-model="filtroDirec"
-                    > 
-                    No Realizo Pedidos
-                    </label>
-                </div>
-                <h1>
-                ¿El Cliente esta Activo?
-                </h1>
-                <div 
-                class="
-                flex flex-col
-                ">
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="2"
-                    v-model="filtroEst"
-                    > 
-                    Todos los Clientes
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="1"
-                    v-model="filtroEst"
-                    > 
-                    Cliente Activo
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="0"
-                    v-model="filtroEst"
-                    > 
-                    Cliente Eliminado
-                    </label>
-                </div>
-                <div 
-                v-if="filtroDirec === 1"
-                >
-                    <h2>
-                    Ciudad del Cliente
-                    </h2>
-                    <select 
-                    v-model="filtrociudad" 
-                    class="sel"
-                    >
-                        <option value="" disabled>
-                        Selecciona una Ciudad...
-                        </option>
-                        <option v-for="i in ListaCiudad" :key="i.ciudad" :value="i.ciudad">
-                        {{ i.ciudad }}
-                        </option>
-                    </select>
-                    <h2>
-                    Provincia del Cliente
-                    </h2>
-                    <select 
-                    v-model="filtroprovincia" 
-                    class="sel">
-                        <option value="" disabled>
-                        Selecciona una Provincia...
-                        </option>
-                        <option v-for="i in ListaProvincia" :key="i.provincia" :value="i.provincia">
-                        {{ i.provincia }}
-                        </option>
-                    </select>
-                </div>
-                <div
-                class="
-                flex flex-col
-                gap-3
-                items-center
-                ">
-                    <button 
-                    @click="AplicarFiltro" 
-                    class="botoncon"
-                    >
-                    Filtrar
-                    </button>
-                    <button 
-                    @click="LimpiarFiltro" 
-                    v-if="filtroAct === true"
-                    class="botont" 
-                    >
-                    🗑️ Limpiar Filtro
-                    </button>
-                    <button 
-                    @click="CerrarPopUp01" 
-                    class="botonc">
-                    Cerrar
-                    </button>
-                </div>
-            </div> 
-        </div>
-    </Teleport>
-    <!-- Confirmacion Eliminar -->
-    <Teleport to="body">
-        <div 
-        v-if="ActualizarCajaCDel" 
-        class="fondo"
-        >
-            <div 
-            class="popup"
-            >
-                <h1>
-                ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
-                </h1>
-                <div
-                class="
-                flex flex-col
-                gap-3
-                items-center
-                ">
-                    <button 
-                    @click="BorrarCliente()"
-                    class="botoncon"
-                    >
-                    Si Confirmo
-                    </button>
-                    <button 
-                    @click="CerrarPopUp02"
-                    class="botonc"
-                    >
-                    Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </Teleport>
-    <!-- Actualizar Cliente -->
-    <Teleport to="body">
-        <div  
-        v-if="ActualizarCajaC"
-        class="fondo"
-        >
-            <div 
-            class="popup"
-            >
-                <h1>
-                Actualizar Cliente {{ ClienteAct.nombre }}
-                </h1>
-                <form @submit.prevent="ActualizarClientes" class="Texto_producto">
-                    <h2>
-                    Nombre
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="ClienteAct.nombre" 
-                    placeholder="Nombre"
-                    maxlength="20"
-                    >
-                    <h2>
-                    E-mail
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="ClienteAct.email" 
-                    placeholder="Email@email.com"
-                    maxlength="50"
-                    >
-                    <div
-                    class="
-                    flex flex-col
-                    gap-3
-                    items-center
-                    ">
-                        <button 
-                        type="submit" 
-                        :disabled="confirboton"
-                        class="botoncon
-                        ">
-                        Actualizar
-                        </button>
-                        <button 
-                        @click="CerrarPopUp03" 
-                        class="botonc">
-                        Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </Teleport>
-    <!-- Nuevo Cliente -->
-    <Teleport to="body">
-        <div class="fondo" v-if="ActualizarCNew">
-            <div class="popup !min-w-[60vh]" v-if="Rol === '1'">
-                <h1>
-                Nuevo Cliente
-                </h1>
-                <form @submit.prevent="SubirNuevoCliente" class="Texto_producto">
-                    <h2>
-                    Nombre
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.nombre" 
-                    placeholder="Nombre"
-                    maxlength="20"
-                    >
-                    <h2>
-                    E-Mail
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.email" 
-                    placeholder="E-Mail"
-                    maxlength="50"
-                    >
-                    <h2>
-                    Documento
-                    </h2>
-                    <input 
-                    type="number" 
-                    v-model="NuevoCliente.dni" 
-                    placeholder="Documento"
-                    maxlength="8"
-                    >
-                    <h2>
-                    Contraseña
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.contrasena" 
-                    placeholder="Contraseña"
-                    maxlength="20"
-                    >
-                    <div
-                    class="botones"
-                    >
-                        <button 
-                        type="submit" 
-                        :disabled="confirboton"
-                        class="botoncon"
-                        >
-                        Crear Cliente
-                        </button>
-                        <button 
-                        @click="CerrarPopUp01"
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </Teleport>
 </template>
 
 <script setup>

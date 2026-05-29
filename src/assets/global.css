@@ -7,6 +7,13 @@
     text-left
     text-black
     mt-0
+    w-full 
+    max-w-full 
+    overflow-x-hidden 
+    m-0 p-0
+    text-[10px]
+    lg:text-sm
+    2xl:text-base
 }
 .pestaña {
     @apply
@@ -14,8 +21,10 @@
     text-white
     hover:bg-green-100
     hover:text-black
-    active:bg-green-400
-    md:p-2 p-1
+    active:bg-green-400 
+    p-0
+    lg:p-2
+    2xl:p-3
 }
 table {
     @apply 
@@ -24,14 +33,29 @@ table {
 }
 table th {
     @apply 
-    text-lg
-    bg-green-800 md:p-2 p-1
-    text-white font-bold
+    truncate
+    text-[8px]
+    lg:text-sm
+    2xl:text-base
+    p-0
+    lg:p-2
+    2xl:p-4
+    font-normal
+    lg:font-bold
+    2xl:font-bold
+    bg-green-800
+    text-white
 }
 table td {
     @apply 
-    p-3 border
-    border-gray-800
+    truncate
+    p-0
+    lg:p-3
+    2xl:p-4
+    text-[8px]
+    lg:text-sm
+    2xl:text-base
+    border border-gray-800
     bg-green-100
 }
 img {
@@ -39,36 +63,46 @@ img {
     mx-auto
     object-contain
 }
-.imageno {
+.imageno9 {
     @apply
-    h-24 w-full
-    md:h-48 md:w-full
-    border-2 border-dashed border-green-500 rounded-xl 
     flex items-center justify-center
-    text-green-700 bg-green-100/50 my-2
+    h-24 
+    w-full
+    text-green-700 bg-green-100/50
+    border-2 border-dashed border-green-500 rounded-xl 
 }
 .imagen {
     @apply
-    h-24 w-24
-    md:h-48 md:w-48 
+    w-24
+    lg:w-36
+    2xl:w-48
+    h-24
+    lg:h-36
+    2xl:h-48
     object-cover place-self-center
     rounded-xl drop-shadow-md
 }
 .banner {
     @apply
     object-cover place-self-center
-    rounded-xl drop-shadow-md
-    h-50 w-full
-    md:h-150 md:w-full
     select-none
+    rounded-xl drop-shadow-md
+    w-full
+    h-50
+    lg:h-100
+    2xl:h-150
 }
 .imagendel {
     @apply
-    border-red-600 border-3
-    h-24 w-24
-    md:h-48 md:w-48 
     object-cover place-self-center
-    rounded-xl drop-shadow-md
+    w-24
+    lg:w-36
+    2xl:w-48
+    h-24
+    lg:h-36
+    2xl:h-48
+    drop-shadow-md
+    border-red-600 border-3 rounded-xl
 }
 .imagenu {
     @apply
@@ -82,196 +116,284 @@ img {
 .pagina {
     @apply
     flex flex-col 
-    md:flex-row w-full
-    gap-3 relative items-start
-    md:px-0 md:gap-6
+    bg-green-300    
+    lg:bg-red-500
+    2xl:bg-white
+    w-3xs
+    lg:w-full
+    2xl:w-full
+    gap-0
+    lg:gap-3
+    2xl:gap-3
+    relative items-start
 }
 .bar {
-    @apply
-    text-white shrink-0
-    bg-green-600
-    flex flex-col p-2
-    md:p-5 h-screen
-    md:gap-3
-    sticky max-h-screen md:h-screen
+    @apply 
+    sticky shrink-0 flex flex-col
     top-0 overflow-y-auto
+    text-white
+    bg-green-600
+    p-2
+    lg:p-5
+    2xl:p-5
+    h-screen
 }
 /* texto */
 h1 {
     @apply
-    text-xl
-    md:text-2xl
+    text-sm
+    lg:text-xl
+    2xl:text-2xl
     font-bold  
-    p-4
+    p-1
+    lg:p-2
+    2xl:p-3
 }
 h2 {
     @apply
-    text-lg
-    md:text-xl
+    text-xs
+    lg:text-lg
+    2xl:text-xl
 }
 h3 {
     @apply
-    text-xs
-    md:text-sm
+    text-[9px]
+    lg:text-sm
+    2xl:text-lg
+}
+.item {
+    @apply
+    self-center
+    p-0
+    lg:p-2
+    2xl:p-5
 }
 /* botones */
 .botones {
     @apply
     flex flex-col
-    gap-1 p-2
-    md:gap-3 md:p-4
     items-center
+    p-0
+    lg:p-2
+    2xl:p-3
+    gap-1
+    lg:gap-2
+    2xl:gap-3
 }
 .botoncon {
     @apply
-    bg-green-400 text-white
+    text-white
+    bg-green-400 
     rounded-3xl
-    md:px-8 md:py-2
-    px-4 py-1
-    hover:bg-green-600
-    hover:text-white
-    active:bg-green-300
     cursor-pointer
-    disabled:bg-gray-300 
+    px-2
+    lg:px-5
+    2xl:px-10
+    py-1
+    lg:py-2
+    2xl:py-2
+    hover:text-white
+    hover:bg-green-600
+    active:bg-green-300
     disabled:text-gray-400 
+    disabled:bg-gray-300 
     disabled:cursor-not-allowed
 }
 .botonc {
     @apply
-    bg-red-600 text-white
+    text-white
+    bg-red-600
+    cursor-pointer
     rounded-3xl
-    md:px-6 md:py-2
-    px-3 py-1
+    px-2
+    lg:px-5
+    2xl:px-10
+    py-1
+    lg:py-2
+    2xl:py-2
+    hover:text-gray-200
     hover:bg-red-800
-    hover:text-gray-200
     active:bg-red-100
-    cursor-pointer
-}
-.botonflecha {
-    @apply
-    bg-green-100/50
-    rounded-3xl
-    md:px-3 md:py-20
-    px-1 py-7
-    hover:bg-green-300/40
-    hover:text-gray-200
-    active:bg-gray-100
-    cursor-pointer
-    disabled:bg-gray-300/0
-    disabled:text-gray-400/0
-    disabled:hover:bg-gray-50/10
-    disabled:hover:text-gray-400/10
-    disabled:cursor-default 
 }
 .botont {
     @apply
     bg-gray-600 text-white
-    rounded-3xl
-    md:px-6 md:py-2
-    px-3 py-1
-    hover:bg-gray-800
-    hover:text-gray-200
-    active:bg-gray-100
     cursor-pointer
-    disabled:bg-gray-300 
+    rounded-3xl
+    px-2
+    lg:px-5
+    2xl:px-10
+    py-1
+    lg:py-2
+    2xl:py-2
+    hover:text-gray-200
+    hover:bg-gray-800
+    active:bg-gray-100
     disabled:text-gray-400 
+    disabled:bg-gray-300 
     disabled:cursor-not-allowed
 }
-.botona {
+.botonflecha {
     @apply
-    bg-gray-600 text-green-500
-    rounded-3xl text-4xl
-    md:px-4 md:py-1
-    px-2 py-1
-    hover:bg-gray-800
-    hover:text-gray-200
-    active:bg-gray-100
+    bg-green-100/50
     cursor-pointer
-    disabled:bg-gray-300 
-    disabled:text-gray-400 
+    rounded-3xl
+    lg:px-3
+    2xl:px-3
+    lg:py-18
+    2xl:py-20
+    hover:text-gray-200
+    hover:bg-green-300/40
+    active:bg-gray-100
+    disabled:text-gray-400/0
+    disabled:bg-gray-300/0
+    disabled:cursor-default 
+}
+.botona {
+    @apply 
+    text-green-500 
+    bg-gray-600
+    cursor-pointer
+    rounded-2xl
+    text-lg
+    lg:text-xl
+    2xl:text-2xl
+    px-1
+    lg:px-4
+    2xl:px-5
+    py-0
+    hover:text-gray-200
+    hover:bg-gray-800
+    active:bg-gray-100
+    disabled:text-gray-200 
+    disabled:bg-gray-100 
     disabled:cursor-not-allowed
 }
 .botonx {
     @apply
     absolute top-2 right-2 
-    p-0 w-8 h-8 z-10 px-3 py-1
-    md:p-0 md:w-8 md:h-8 md:px-6 md:py-2
-    cursor-pointer
     flex items-center justify-center
-    bg-red-600 text-white 
-    border-2 border-white drop-shadow-md rounded-3xl
-    hover:bg-red-800
+    cursor-pointer
+    text-white 
+    bg-red-600
+    border-white border-2 rounded-3xl
+    drop-shadow-md
+    z-10
+    w-8
+    lg:w-8
+    2xl:w-10
+    h-8
+    lg:h-8
+    2xl:h-10
+    px-3
+    lg:px-3
+    2xl:px-5
+    py-1
+    lg:py-1
+    2xl:py-1
     hover:text-gray-200
+    hover:bg-red-800
     active:bg-red-100
 }
 select{
     @apply
-    text-center text-sm text-gray-400
-    w-full p-1
-    md:w-50 place-self-center md:p-2
-    bg-green-100 border-green-500
-    rounded-2xl border-2
+    place-self-center
     cursor-pointer
+    text-gray-400 text-center
+    bg-green-100 border-green-500 rounded-xl border-2
+    text-xs
+    lg:text-sm
+    2xl:text-base
+    w-full
+    p-1
+    lg:p-1
+    2xl:p-2
 }
 input{
     @apply
-    text-sm text-gray-700
-    w-full p-1 px-2
-    md:w-50 md:px-4 place-self-center md:p-2
-    bg-green-100 border-white
-    rounded-xl border-1
+    place-self-center
     cursor-text
+    text-gray-700
+    bg-green-100
+    border-white rounded-xl border-1
+    text-xs
+    lg:text-sm
+    2xl:text-base
+    w-full
+    p-1
+    px-2
+    lg:px-2
+    2xl:px-2
 }
 input[type="radio"] {
     @apply 
-    w-5
-    md:w-10
+    w-3
+    lg:w-5
+    2xl:w-7
 }
 .busqueda{
     @apply
-    text-sm
-    md:p-2 w-full p-1
-    bg-green-100 border-white
-    rounded-xl border-1
-    cursor-text
     object-contain
+    cursor-text
+    bg-green-100
+    border-black border-1 rounded-xl
+    text-xs
+    lg:text-sm
+    2xl:text-base
+    w-full
+    p-2
+    lg:p-2
+    2xl:p-3
+    m-2
+    lg:m-3
+    2xl:m-5
 }
 /* miselaneo */
 .cuerpo{
     @apply
     w-auto
-    min-h-screen 
+    min-h-screen
     bg-green-200
 }
 .fondo {
     @apply 
-    fixed inset-0
-    bg-black/70 flex 
+    flex fixed inset-0
+    justify-center items-center
+    bg-black/70
     z-40
-    justify-center
-    items-center
 }
 .popup{
     @apply
-    flex
-    flex-col
+    flex flex-col
+    translate-z-15 z-50
     bg-green-300
-    rounded-2xl 
-    translate-z-15
-    md:p-5
-    md:gap-3
-    md:max-h-[90vh]
-    p-2 z-50
+    lg:bg-red-500
+    2xl:bg-white
+    rounded-2xl
+    lg:overflow-y-auto
+    2xl:overflow-y-auto
+    p-2
+    lg:p-5
+    2xl:p-10
     gap-1
-    max-h-[45vh]
-    max-w-[45vh]
-    overflow-y-auto
+    max-h-[80vh]
+    max-w-[80vh]
 }
 form{
     @apply
     flex flex-col
-    md:gap-4
-    gap-2 
+    gap-2
+    lg:gap-3
+    2xl:gap-5
+}
+.start{
+    @apply
+    flex-1 flex flex-col 
+    min-w-0 
+    h-fit 
+    p-2 
+    lg:p-3 
+    2xl:p-5
 }
 /* estados */
 .sent{

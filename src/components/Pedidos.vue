@@ -1,216 +1,215 @@
 <template>
+	<!-- Confirmar Actualizar Estatus -->
+	<Teleport to="body">
+		<div
+		v-if="ActualizarCajaP" 
+		class="fondo" 
+		>
+			<div 
+			class="popup"
+			>
+				<h1>
+				¿Quiere Actualizar el Estado del Pedido?
+				</h1>
+				<div
+				class="botones"
+				>
+					<button 
+					@click="ActualizarEstatus()"
+					class="botoncon"
+					>
+					Si Confirmo
+					</button>
+					<button 
+					@click="CerrarPopUp01"
+					class="botonc"
+					>
+					Cancelar
+					</button>
+				</div>
+			</div>
+		</div>
+	</Teleport>
+	<!-- Filtro -->
+	<Teleport to="body">
+		<div
+		v-if="VentanaFiltro" 
+		class="fondo" 
+		>
+			<div 
+			class="popup"
+			>
+				<h1>
+				Filtro de Metodo de Pago
+				</h1>
+				<div 
+				class="
+				flex flex-col
+				">
+					<label>
+					<input 
+					type="radio" 
+					:value="3"
+					v-model="filtroMP"
+					> 
+					Tarjeta de Credito / Debito
+					</label>
+					<label>
+					<input 
+					type="radio" 
+					:value="2"
+					v-model="filtroMP"
+					> 
+					Mercado Pago
+					</label>
+					<label>
+					<input 
+					type="radio" 
+					:value="1"
+					v-model="filtroMP"
+					> 
+					Transferencia Bancaria
+					</label>
+					<label>
+					<input 
+					type="radio" 
+					:value="0"
+					v-model="filtroMP"
+					> 
+					Efectivo
+					</label>
+				</div>
+				<h1>
+				Filtro de Estatus
+				</h1>
+				<div 
+				class="
+				flex flex-col
+				">
+					<label>
+					<input 
+					type="radio" 
+					:value="3"
+					v-model="filtroEst"
+					> 
+					Preparando
+					</label>
+					<label>
+					<input 
+					type="radio" 
+					:value="2"
+					v-model="filtroEst"
+					> 
+					En Camino
+					</label>
+					<label>
+					<input 
+					type="radio" 
+					:value="1"
+					v-model="filtroEst"
+					> 
+					Entregado
+					</label>
+				</div>
+				<h2>
+				Ciudad del Cliente
+				</h2>
+				<div>
+					<select 
+					v-model="filtrociudad"
+					>
+						<option 
+						value="" disabled
+						>
+						Selecciona una Ciudad...
+						</option>
+						<option 
+						v-for="i in ListaCiudad" 
+						:key="i.ciudad" 
+						:value="i.ciudad"
+						>
+						{{ i.ciudad }}
+						</option>
+					</select>
+				</div>
+				<h2>
+				Provincia del Cliente
+				</h2>
+				<div>
+					<select 
+					v-model="filtroprovincia" 
+					>
+						<option 
+						value="" 
+						disabled
+						>
+						Selecciona una Provincia...
+						</option>
+						<option 
+						v-for="i in ListaProvincia" 
+						:key="i.provincia" 
+						:value="i.provincia"
+						>
+						{{ i.provincia }}
+						</option>
+					</select>
+				</div>
+				<div
+				class="botones"
+				>
+					<button 
+					@click="AplicarFiltro" 
+					class="botoncon">
+					Aplicar Filtros
+					</button>
+					<button 
+					@click="LimpiarFiltro" 
+					v-if="filtroAct === true"
+					class="botont" 
+					>
+					🗑️ Limpiar Filtro
+					</button>
+					<button 
+					@click="CerrarPopUp02" 
+					class="botonc">
+					Cerrar
+					</button>
+				</div>
+			</div>
+		</div>
+	</Teleport>
 	<div
 	class="cuerpo"
 	>
-    	<!-- Barra de Busqueda -->
-		<input
-		@input="BusquedaPedido"
-		type="text" v-model="Busqueda" 
-		placeholder="Busqueda..."
-		class="busqueda"
-		maxlength="50"
-		>
-    	<!-- Boton de Filtro -->
-		<button 
-		@click="AbrirPopUp02" 
-		class="botoncon"
-		>
-		🗃️Filtros
-		</button>		
-        <!-- Confirmar Actualizar Estatus -->
-		<Teleport to="body">
-			<div
-			v-if="ActualizarCajaP" 
-			class="fondo" 
+		<div class="start">
+			<!-- Barra de Busqueda -->
+			<input
+			@input="BusquedaPedido"
+			type="text" v-model="Busqueda" 
+			placeholder="Busqueda..."
+			class="busqueda"
+			maxlength="50"
 			>
-				<div 
-				class="popup"
-				>
-					<h1>
-					¿Quiere Actualizar el Estado del Pedido?
-					</h1>
-					<div
-					class="botones"
-					>
-						<button 
-						@click="ActualizarEstatus()"
-						class="botoncon"
-						>
-						Si Confirmo
-						</button>
-						<button 
-						@click="CerrarPopUp01"
-						class="botonc"
-						>
-						Cancelar
-						</button>
-					</div>
-				</div>
-			</div>
-		</Teleport>
-        <!-- Filtro -->
-		<Teleport to="body">
-			<div
-			v-if="VentanaFiltro" 
-			class="fondo" 
+		<div class="botones">
+			<!-- Boton de Filtro -->
+			<button 
+			@click="AbrirPopUp02" 
+			class="botoncon"
 			>
-				<div 
-				class="popup"
-				>
-					<h1>
-					Filtro de Metodo de Pago
-					</h1>
-					<div 
-					class="
-					flex flex-col
-					">
-						<label>
-						<input 
-						type="radio" 
-						:value="3"
-						v-model="filtroMP"
-						> 
-						Tarjeta de Credito / Debito
-						</label>
-						<label>
-						<input 
-						type="radio" 
-						:value="2"
-						v-model="filtroMP"
-						> 
-						Mercado Pago
-						</label>
-						<label>
-						<input 
-						type="radio" 
-						:value="1"
-						v-model="filtroMP"
-						> 
-						Transferencia Bancaria
-						</label>
-						<label>
-						<input 
-						type="radio" 
-						:value="0"
-						v-model="filtroMP"
-						> 
-						Efectivo
-						</label>
-					</div>
-					<h1>
-					Filtro de Estatus
-					</h1>
-					<div 
-					class="
-					flex flex-col
-					">
-						<label>
-						<input 
-						type="radio" 
-						:value="3"
-						v-model="filtroEst"
-						> 
-						Preparando
-						</label>
-						<label>
-						<input 
-						type="radio" 
-						:value="2"
-						v-model="filtroEst"
-						> 
-						En Camino
-						</label>
-						<label>
-						<input 
-						type="radio" 
-						:value="1"
-						v-model="filtroEst"
-						> 
-						Entregado
-						</label>
-					</div>
-					<h2>
-					Ciudad del Cliente
-					</h2>
-					<div>
-						<select 
-						v-model="filtrociudad"
-						>
-							<option 
-							value="" disabled
-							>
-							Selecciona una Ciudad...
-							</option>
-							<option 
-							v-for="i in ListaCiudad" 
-							:key="i.ciudad" 
-							:value="i.ciudad"
-							>
-							{{ i.ciudad }}
-							</option>
-						</select>
-					</div>
-					<h2>
-					Provincia del Cliente
-					</h2>
-					<div>
-						<select 
-						v-model="filtroprovincia" 
-						>
-							<option 
-							value="" 
-							disabled
-							>
-							Selecciona una Provincia...
-							</option>
-							<option 
-							v-for="i in ListaProvincia" 
-							:key="i.provincia" 
-							:value="i.provincia"
-							>
-							{{ i.provincia }}
-							</option>
-						</select>
-					</div>
-					<div
-					class="botones"
-					>
-						<button 
-						@click="AplicarFiltro" 
-						class="botoncon">
-						Aplicar Filtros
-						</button>
-						<button 
-						@click="LimpiarFiltro" 
-						v-if="filtroAct === true"
-						class="botont" 
-						>
-						🗑️ Limpiar Filtro
-						</button>
-						<button 
-						@click="CerrarPopUp02" 
-						class="botonc">
-						Cerrar
-						</button>
-					</div>
-				</div>
-			</div>
-		</Teleport>
+			🗃️Filtros
+			</button>		
+		</div>
+		</div>
     	<!-- Tabla de Pedidos -->
-		<div class="contenedor_principal">
+		<div>
 			<h1>
 			Pedidos
 			</h1>
-			<div 
-			v-if="Pedidos.length > 0"
-			>
+			<div v-if="Pedidos.length > 0">
 				<table>
 					<thead>
 						<tr>
-							<th
-							class="
-							rounded-ss-2xl 
-							">
+							<th class="rounded-ss-2xl">
 							Cliente
 							</th>
 							<th>
@@ -373,21 +372,19 @@
 				Prueba buscando con otro termino
 				</h3>
 			</div>
-            <div
+			<div 
 			class="
-            flex justify-center
-			">
+			flex justify-center
+			p-3"
+			>
 				<button 
 				@click="Pagina = Pagina - 20 ; BusquedaPedido()" 
 				:disabled="Pagina < 20"
 				class="botona"
 				>
-				⬅
+				🢀
 				</button>
-				<h2
-				class="
-				self-center p-5
-				">
+				<h2 class="item">
 				Items 
 				{{ 0 + Pagina }} 
 				- 
@@ -398,7 +395,7 @@
 				:disabled="Pedidos.length < 20"
 				class="botona"
 				>
-				➡
+				🢂
 				</button>
 			</div>
 		</div>

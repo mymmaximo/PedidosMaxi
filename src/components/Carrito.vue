@@ -1,101 +1,15 @@
 <template>
-    <!-- Tabla de Detalles -->
-    <div
-    v-if="CarritoLocal.length > 0" 
-    class="cuerpo">
-        <div>
-            <h1>
-            Tu Carrito
-            </h1>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th
-                            class="
-                            rounded-ss-2xl 
-                            ">
-                            Producto
-                            </th>
-                            <th>
-                            Cantidad
-                            </th>
-                            <th>
-                            Precio Unit.
-                            </th>
-                            <th>
-                            Subtotal
-                            </th>
-                            <th
-                            class="
-                            rounded-se-2xl 
-                            ">
-                            Borrar
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr 
-                        v-for="(item, index) in CarritoLocal" 
-                        :key="index"
-                        >
-                            <td>
-                            {{ item.nombre_producto }}
-                            </td>
-                            <td>
-                            <input 
-                            type="number"
-                            v-model="item.cantidad"
-                            @change="VerificarStock(item)" 
-                            class="botoncentro"
-                            >
-                            </td>
-                            <td>
-                            ${{ item.precio_unitario }}
-                            </td>
-                            <td>
-                            ${{ item.cantidad * item.precio_unitario }}
-                            </td>
-                            <td 
-                            @click="Eliminacion(index)"
-                            >
-                            ❌
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div
-            class="botones"
-            >
-                <h2
-                class="
-                text-center text-2xl font-bold
-                w-70 px-5 p-3 my-5 place-self-center
-                bg-green-100 border-green-500
-                rounded-2xl border-4
-                ">
-                Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
-                </h2>
-                <button 
-                @click="PantallaPagar = true"
-                class="botoncon !p-5">
-                Completar Pedido
-                </button>
-            </div>
-        </div>
-    </div>
     <!-- Confirmacion Eliminar Detalle -->
     <Teleport to="body">
-        <div class="fondo" v-if="ActualizarCarritoDel">
+        <div
+        v-if="ActualizarCarritoDel"
+        class="fondo"
+        >
             <div class="popup">
-                <h1
-                class="texto2">
+                <h1>
                 ¿Desear Eliminar el Detalle?
                 </h1>
-                <div
-                class="botones"
-                >
+                <div class="botones">
                     <button 
                     @click="BorrarDetalle()"
                     class="botoncon">
@@ -114,20 +28,16 @@
     <Teleport to="body">
         <div class="fondo" v-if="PantallaPagar">
             <div class="popup">
-                <label>
-                <h2 class="texto2">
+                <h1>
                 Método de Pago:
-                </h2>
-                </label>
-                <select 
-                v-model="MetodoPago"
-                >
+                </h1>
+                <select v-model="MetodoPago">
                     <option value="" disabled>
                     Selecciona un método...
                     </option>
                     <option value="Tarjeta">
                     Tarjeta de Crédito / Débito
-                    </option>>
+                    </option>
                     <option value="MercadoPago">
                     Mercado Pago
                     </option>
@@ -138,21 +48,21 @@
                     Efectivo al recibir
                     </option>
                 </select>
-                <label>
-                <h2 class="texto2">
+                <h1>
                 Dirección de Envío:
-                </h2>
-                </label>
-                <label  class="texto1">
+                </h1>
+                <h3>
                 Tus Direcciones
-                </label>
-                <select 
-                v-model="DireccionExistente" 
-                class="sel">
+                </h3>
+                <select v-model="DireccionExistente">
                     <option value="">
                     + Agrega una direccion
                     </option>
-                    <option v-for="i in ListaDirecciones" :key="i.id_direccion" :value="i.id_direccion">
+                    <option 
+                    v-for="i in ListaDirecciones" 
+                    :key="i.id_direccion" 
+                    :value="i.id_direccion"
+                    >
                     {{ i.calle }},
                     {{ i.numero }},
                     {{ i.barrio }},
@@ -160,14 +70,11 @@
                     {{ i.provincia }},
                     </option>
                 </select>
-                <div 
-                v-if="DireccionExistente === ''"
-                >
-                    <div 
-                    class="botones">
-                        <label>
+                <div v-if="DireccionExistente === ''">
+                        <h3>
                         Nueva Direccion:
-                        </label>
+                        </h3>
+                    <div class="botones">
                         <input 
                         type="text" 
                         v-model="NuevaDireccion.calle" 
@@ -188,15 +95,13 @@
                         v-model="NuevaDireccion.ciudad" 
                         placeholder="Ciudad"
                         >
-                        <select 
-                        v-model="NuevaDireccion.provincia" 
-                        >
+                        <select v-model="NuevaDireccion.provincia">
                             <option value="" disabled>
                             Selecciona tu Provincia...
                             </option>
                             <option value="Buenos Aires">
                             Buenos Aires
-                            </option>>
+                            </option>
                             <option value="Catamarca">
                             Catamarca
                             </option>
@@ -269,9 +174,7 @@
                         </select>
                     </div>
                 </div>
-                <div
-                class="botones"
-                >
+                <div class="botones">
                     <button 
                     @click="PantallaPagar = false"
                     class="botonc"
@@ -289,6 +192,94 @@
             </div>
         </div>
     </Teleport>
+    <!-- Tabla de Detalles -->
+    <div
+    v-if="CarritoLocal.length > 0" 
+    class="cuerpo"
+    >
+        <div>
+            <h1 class="text-center">
+            Tu Carrito
+            </h1>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th
+                            class="
+                            rounded-ss-2xl 
+                            ">
+                            Producto
+                            </th>
+                            <th>
+                            Cantidad
+                            </th>
+                            <th>
+                            Precio Unit.
+                            </th>
+                            <th>
+                            Subtotal
+                            </th>
+                            <th
+                            class="
+                            rounded-se-2xl 
+                            ">
+                            Borrar
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr 
+                        v-for="(item, index) in CarritoLocal" 
+                        :key="index"
+                        >
+                            <td>
+                            {{ item.nombre_producto }}
+                            </td>
+                            <td>
+                            <input 
+                            type="number"
+                            v-model="item.cantidad"
+                            @change="VerificarStock(item)" 
+                            class="botoncentro"
+                            >
+                            </td>
+                            <td>
+                            ${{ item.precio_unitario }}
+                            </td>
+                            <td>
+                            ${{ item.cantidad * item.precio_unitario }}
+                            </td>
+                            <td 
+                            @click="Eliminacion(index)"
+                            >
+                            ❌
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="botones">
+                <h1
+                class="
+                place-self-center
+                text-center
+                bg-green-100 
+                border-green-500 rounded-2xl border-4
+                my-1
+                lg:my-3
+                2xl:my-5"
+                >
+                Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
+                </h1>
+                <button 
+                @click="PantallaPagar = true"
+                class="botoncon">
+                Completar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
 </template>
 
 
