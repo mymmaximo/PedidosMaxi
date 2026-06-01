@@ -475,8 +475,7 @@
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
             <div
-            class="flex flex-row
-            ">
+            class="flex w-full flex-col lg:flex-row">
                 <!-- Barra de Filtros -->
                 <div
                 class="bar"
@@ -488,7 +487,7 @@
                     ᯤ
                     </h1>
                     <div
-                    class="flex flex-col"
+                    class="flex flex-col self-center"
                     v-if="MostrarFiltro"
                     >
                         <div
@@ -678,12 +677,7 @@
                         :class="Estatuscolor(i.activo)" 
                         v-for= "i in Productos" 
                         :key="i.id"
-                        class="
-                        flex flex-col 
-                        items-center text-center overflow-hidden
-                        p-4 gap-2
-                        rounded-2xl shadow-md
-                        bg-green-300/50
+                        class="card
                         ">
                             <div>
                                 <div 

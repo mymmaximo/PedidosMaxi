@@ -347,14 +347,9 @@
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
             <div
-            class="
-            flex flex-row
-            w-full 
-            ">
+            class="flex w-full flex-col lg:flex-row">
                 <!-- Barra de Filtros -->
-                <div
-                class="bar"
-                >
+                <div class="bar">
                     <h1
                     @click="MostrarFiltro = !MostrarFiltro"
                     class="botoncon !py-0 !px-1 !md:py-1 !md:px-3 max-w-min"
@@ -362,7 +357,7 @@
                     ᯤ
                     </h1>
                     <div
-                    class="flex flex-col"
+                    class="flex flex-col self-center"
                     v-if="MostrarFiltro"
                     >
                         <div
@@ -527,7 +522,7 @@
                             :disabled="GetImg(PBanner.id) === 0"
                             class="botonflecha
                             flex flex-row z-30
-                            absolute left-4 top-1/2 -translate-y-1/2 z-30 !md:py-50 !py-20 !lg:block !2xl:block"
+                            absolute left-4 top-1/2 -translate-y-1/2 z-30 !md:py-50 !py-20 hidden md:block"
                             >
                             🢀
                             </button>
@@ -542,7 +537,7 @@
                             type="button"
                             @click="NextImg(PBanner)"
                             :disabled="GetImg(PBanner.id) === PBanner.imagenes.length - 1"
-                            class="botonflecha absolute right-4 top-1/2 -translate-y-1/2 z-30  !md:py-50 !py-20 md:block"
+                            class="botonflecha absolute right-4 top-1/2 -translate-y-1/2 z-30  !md:py-50 !py-20 hidden md:block"
                             >
                             🢂
                             </button>

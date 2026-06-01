@@ -1,25 +1,25 @@
 <template>
     <div class="cuerpo">
         <div class="pagina">
-            <div class="flex flex-row">
+            <div class="flex w-full flex-col lg:flex-row">
                 <div class="bar">
                     <h1
                     @click="MostrarFiltro = !MostrarFiltro"
-                    class="botoncon !py-0 !px-1 !md:py-1 !md:px-3 max-w-min"
+                    class="botoncon !py-0 !px-1 max-w-min self-center"
                     >
                     ᯤ
                     </h1>
                     <div
-                    class="flex flex-col"
+                    class="flex flex-col self-center"
                     v-if="MostrarFiltro"
                     >
                         <div
                         class="
-                        flex w-full
+                        flex flex-col w-full gap-2.5
                         ">
-                            <h1>
+                            <h2>
                             Filtro de Metodo de Pago
-                            </h1>
+                            </h2>
                             <div
                             class="
                             flex flex-col
@@ -58,9 +58,9 @@
                                 Efectivo
                                 </label>
                             </div>
-                            <h1>
+                            <h2>
                             Filtro de Estatus
-                            </h1>
+                            </h2>
                             <div
                             class="
                             flex flex-col
@@ -123,15 +123,17 @@
                         maxlength="50"
                         >
                     </div>
-                    <div>
-                        <h1>
+                    <div class="flex-col lg:flex-row">
+                        <h1 class="text-center">
                         Mis Pedidos en Preparacion
                         </h1>
                         <div 
                         v-if="Pedidos.length > 0"
+                        class="
+                        w-full"
                         >
                             <table 
-                            class="[&_th]:!bg-green-500"
+                            class="w-full min-w-max [&_th]:!bg-green-500"
                             >
                                 <thead>
                                     <tr>
@@ -222,7 +224,7 @@
                                         <tr 
                                         v-if = "PedidoNowPreparando === i.id_pedido && i.estatus === 3"
                                         >
-                                            <td colspan="9">
+                                            <td colspan="8">
                                                 <div>
                                                     <table>
                                                         <thead>
@@ -286,7 +288,7 @@
                         </div>
                     </div>
                     <div>
-                        <h1>
+                        <h1 class="text-center">
                         Mis Pedidos En Camino
                         </h1>
                         <div
@@ -385,7 +387,7 @@
                                         </tr>
                                         <tr 
                                         v-if = "PedidoNowEnCamino === i.id_pedido">
-                                            <td colspan="9">
+                                            <td colspan="8">
                                                 <div>
                                                     <table>
                                                         <thead>
@@ -450,7 +452,9 @@
                     class="
                     flex flex-col
                     items-center
-                    p-5
+                    my-5 
+                    lg:p-5 
+                    gap-3 lg:gap-5
                     ">
                         <button 
                         @click="mostrarhistorial = !mostrarhistorial" 
@@ -461,7 +465,7 @@
                         </button>
                         <div 
                         v-if="Pedidos.length > 0 && mostrarhistorial === true"
-                        class="p-5" 
+                        class="p-0" 
                         >
                             <table 
                             class="
@@ -541,12 +545,14 @@
                                             <td 
                                             v-if="PedidoNowHistorial === i.id_pedido" 
                                             @click="PedidoCambioHistorial(i.id_pedido)"
+                                            class="no"
                                             >
                                             Ocultar Detalles
                                             </td>
                                             <td 
                                             v-else 
                                             @click="PedidoCambioHistorial(i.id_pedido)"
+                                            class="si"
                                             >
                                             Ver Detalles
                                             </td>
@@ -558,7 +564,7 @@
                                         v-if = "PedidoNowHistorial === i.id_pedido"
                                         >
                                             <td 
-                                            colspan="9"
+                                            colspan="8"
                                             >
                                                 <div>
                                                     <table>

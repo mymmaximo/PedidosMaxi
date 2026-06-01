@@ -296,6 +296,62 @@
                 <div
                 v-if="clientes.length > 0"
                 >
+                    <div
+				    class="mb-2 lg:mb-5"
+                    v-for= "i in clientes" 
+                    :key="i.id">
+                        <div 
+                        :class="Estatuscolor(i.activo)"
+                        class="tab"
+                        >
+                            <div class="flex flex-col">
+                                <div class="flex flex-row">
+                                    <h1>
+                                    {{ i.nombre }}
+                                    </h1>
+                                </div>
+                                <div class="flex flex-col">
+                                    <h2>
+                                    E-Mail: {{ i.email }}
+                                    </h2>
+                                    <h2>
+                                    DNI: {{ i.dni }}
+                                    </h2>
+                                </div>
+                            </div>
+						    <div class="flex flex-col ml-auto text-right items-end">
+                                <button 
+                                @click="Eliminacion(i)" 
+                                v-if="i.activo"
+                                class="botonc !p-2"
+                                >
+                                ❌
+                                <span class="hidden lg:inline 2xl:inline">
+                                Eliminar
+                                </span>
+                                </button>
+                                <button 
+                                @click="Eliminacion(i)" 
+                                v-else
+                                class="botoncon !p-2"
+                                >
+                                🕊️
+                                <span class="hidden lg:inline 2xl:inline">
+                                Reactivar
+                                </span>
+                                </button>
+                                <button 
+                                @click="Edicion(i)"
+                                class="botont !p-2"
+                                >
+                                ✏️
+                                <span class="hidden lg:inline 2xl:inline">
+                                Editar
+                                </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <table>
                         <thead>
                             <tr>
@@ -582,10 +638,10 @@
     }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
-            return "classActivo"
+            return "si"
         }
         else if (id_estatus === false) {
-            return "classEliminado"
+            return "no"
         }
     }
     const NuevoCliente = ref({

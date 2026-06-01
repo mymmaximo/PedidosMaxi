@@ -9,10 +9,9 @@
     mt-0
     w-full 
     max-w-full 
-    overflow-x-hidden 
     m-0 p-0
     text-[10px]
-    lg:text-sm
+    lg:text-base
     2xl:text-base
 }
 .pestaña {
@@ -29,13 +28,14 @@
 table {
     @apply 
     w-full
+    table-fixed
     text-center
 }
 table th {
     @apply 
-    truncate
+    truncate 
     text-[8px]
-    lg:text-sm
+    lg:text-base
     2xl:text-base
     p-0
     lg:p-2
@@ -43,6 +43,7 @@ table th {
     font-normal
     lg:font-bold
     2xl:font-bold
+    break-words
     bg-green-800
     text-white
 }
@@ -53,10 +54,26 @@ table td {
     lg:p-3
     2xl:p-4
     text-[8px]
-    lg:text-sm
+    lg:text-base
     2xl:text-base
     border border-gray-800
     bg-green-100
+    max-w-0
+}
+.card {
+    @apply
+    flex flex-col 
+    items-center text-center overflow-hidden
+    p-4 gap-2
+    rounded-2xl shadow-md
+}
+.tab {
+    @apply
+    flex
+    overflow-hidden
+    p-4
+    w-full items-center gap-4
+    rounded-2xl shadow-md
 }
 img {
     @apply
@@ -66,7 +83,7 @@ img {
 .imageno9 {
     @apply
     flex items-center justify-center
-    h-24 
+    h-24
     w-full
     text-green-700 bg-green-100/50
     border-2 border-dashed border-green-500 rounded-xl 
@@ -106,10 +123,10 @@ img {
 }
 .imagenu {
     @apply
-    text-sm text-gray-500 
+    text-base text-gray-500 
     file:mr-4 file:py-2 file:px-4 
     file:rounded-full file:border-0 
-    file:text-sm file:font-semibold 
+    file:text-base file:font-semibold 
     file:bg-green-50 file:text-green-700 
     hover:file:bg-green-100
 }
@@ -119,8 +136,11 @@ img {
     bg-green-300    
     lg:bg-red-500
     2xl:bg-white
-    w-3xs
+    w-full
+    mx-auto
     lg:w-full
+    max-w-[1600px]
+    lg:flex-row
     2xl:w-full
     gap-0
     lg:gap-3
@@ -130,36 +150,40 @@ img {
 .bar {
     @apply 
     sticky shrink-0 flex flex-col
-    top-0 overflow-y-auto
+    top-0 overflow-y-auto z-20
     text-white
     bg-green-600
     p-2
     lg:p-5
     2xl:p-5
-    h-screen
+    h-auto
+    lg:h-screen
 }
 /* texto */
 h1 {
     @apply
-    text-sm
+    text-lg
     lg:text-xl
     2xl:text-2xl
     font-bold  
     p-1
     lg:p-2
     2xl:p-3
+    select-none
 }
 h2 {
     @apply
-    text-xs
+    text-sm
     lg:text-lg
     2xl:text-xl
+    select-none
 }
 h3 {
     @apply
-    text-[9px]
-    lg:text-sm
+    text-xs
+    lg:text-base
     2xl:text-lg
+    select-none
 }
 .item {
     @apply
@@ -167,6 +191,10 @@ h3 {
     p-0
     lg:p-2
     2xl:p-5
+}
+label {
+    @apply
+    select-none
 }
 /* botones */
 .botones {
@@ -301,8 +329,8 @@ select{
     cursor-pointer
     text-gray-400 text-center
     bg-green-100 border-green-500 rounded-xl border-2
-    text-xs
-    lg:text-sm
+    text-base
+    lg:text-base
     2xl:text-base
     w-full
     p-1
@@ -316,8 +344,8 @@ input{
     text-gray-700
     bg-green-100
     border-white rounded-xl border-1
-    text-xs
-    lg:text-sm
+    text-base
+    lg:text-base
     2xl:text-base
     w-full
     p-1
@@ -337,16 +365,14 @@ input[type="radio"] {
     cursor-text
     bg-green-100
     border-black border-1 rounded-xl
-    text-xs
-    lg:text-sm
+    text-base
+    lg:text-base
     2xl:text-base
     w-full
     p-2
     lg:p-2
     2xl:p-3
-    m-2
-    lg:m-3
-    2xl:m-5
+    box-border
 }
 /* miselaneo */
 .cuerpo{
@@ -360,7 +386,7 @@ input[type="radio"] {
     flex fixed inset-0
     justify-center items-center
     bg-black/70
-    z-40
+    z-50
 }
 .popup{
     @apply
@@ -398,7 +424,7 @@ form{
 /* estados */
 .sent{
     @apply
-    bg-green-200 
+    bg-green-100 
     !cursor-not-allowed
 }
 .way{
@@ -418,7 +444,7 @@ form{
 }
 .si{
     @apply
-    bg-green-200 
+    bg-green-100 
 }
 .no{
     @apply

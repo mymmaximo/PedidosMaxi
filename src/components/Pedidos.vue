@@ -201,169 +201,114 @@
 		</div>
 		</div>
     	<!-- Tabla de Pedidos -->
-		<div>
+		<div class="w-full">
 			<h1>
 			Pedidos
 			</h1>
 			<div v-if="Pedidos.length > 0">
-				<table>
-					<thead>
-						<tr>
-							<th class="rounded-ss-2xl">
-							Cliente
-							</th>
-							<th>
-							Direccion
-							</th>
-							<th>
-							Metodo de Pago
-							</th>
-							<th>
-							Tiempo de <br>
-							Entrega Estimado
-							</th>
-							<th>
-							Tiempo de <br>
-							Entrega
-							</th>
-							<th>
-							Fecha de <br>
-							Creacion
-							</th>
-							<th>
-							Fecha de <br>
-							Actualizacion
-							</th>
-							<th>
-							Total del <br>
-							Pedido
-							</th>
-							<th>
-							Detalles
-							</th>
-							<th
-							class="
-							rounded-se-2xl 
-							">
-							Estatus
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<template 
-						v-for= "i in Pedidos" 
-						:key="i.id"
-						>
-							<tr>
-								<td>
+				<div 
+				v-for= "i in Pedidos" 
+				:key="i.id"
+				class="mb-2 lg:mb-5">
+					<div 
+					@click="Edicion(i)" 
+					:class="Estatuscolor(i.estatus)"
+					class="tab"
+					>
+						<div class="flex flex-col">
+							<div class="flex flex-row">
+								<h1>
 								{{ i.cliente[0].nombre }}
-								</td>
-								<td>
+								</h1>
+								<h1>
+								{{ Estatustxt(i.estatus) }}
+								</h1>
+							</div>
+							<div class="flex flex-col">
+								<h2>
+								Direccion: 
 								{{ i.direccion[0].calle }} 
 								{{ i.direccion[0].numero }}
-								 - 
+									- 
 								{{ i.direccion[0].ciudad }}
-								 - 
-								{{ i.direccion[0].provincia }}        
-								</td>
-								<td>
-								{{ i.metodo_pago }}
-								</td>
-								<td>
-								{{ i.tiempo_estimado_entrega }}
-								</td>
-								<td>
-								{{ i.tiempo_entrega }}
-								</td>
-								<td>
-								{{ FormatoFecha(i.created_at) }}
-								</td>
-								<td>
-								{{ FormatoFecha(i.updated_at) }}
-								</td>
-								<td>
+									- 
+								{{ i.direccion[0].provincia }}
+								</h2>
+								<h2 class="font-bold">
 								${{ i.total }}
-								</td>
-								<td 
-								v-if = "PedidoNow === i.id_pedido" 
-								@click= "PedidoCambio(i.id_pedido)" 
-								class="no"
-								>
-								Ocultar Detalles
-								</td>
-								<td 
-								v-else 
-								@click= "PedidoCambio(i.id_pedido)"
-								class="si"
-								>
-								Ver Detalles
-								</td>
-								<td 
-								@click="Edicion(i)" 
-								:class="Estatuscolor(i.estatus)"
-								>
-								{{ Estatustxt(i.estatus) }}
-								</td>
-							</tr>
-							<tr v-if = "PedidoNow === i.id_pedido">
-								<td colspan="10">
-									<div>
-										<table>
-											<thead>
-												<tr>
-													<th>
-													Producto
-													</th>
-													<th>
-													Categoria
-													</th>
-													<th>
-													Codigo de Barras
-													</th>
-													<th>
-													Precio Unitario
-													</th>
-													<th>
-													Cantidad
-													</th>
-													<th>
-													Subtotal
-													</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr 
-												v-for = "e in i.detalle_pedido" 
-												:key="e.id_detalle_pedido"
-												>
-													<td>
-													{{ e.producto.nombre }}
-													</td>
-													<td>
-													{{ e.producto.categoria }}
-													</td>
-													<td>
-													{{ e.producto.codigo_barra }}
-													</td>
-													<td>
-													{{ e.precio_unitario }}
-													</td>
-													<td>
-													{{ e.cantidad }}
-													</td>
-													<td>
-													${{ e.subtotal }}
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</td>
-							</tr>
-						</template>
-					</tbody>
-				</table>
-			</div>  
+								</h2>
+								<h2>
+								Pagado con:
+								{{ i.metodo_pago }}
+								</h2>
+							</div>
+						</div>
+						<div class="flex flex-col ml-auto text-right items-end">
+							<h3>
+							Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
+							</h3>
+							<h3>
+							Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
+							</h3>
+							<h3>
+							Pedido Creado el Dia: {{ FormatoFecha(i.created_at) }}
+							</h3>
+							<h3>
+							Pedido Actualizado el Dia: {{ FormatoFecha(i.updated_at) }}
+							</h3>
+						</div>
+					</div>
+					<div 
+					v-if = "PedidoNow === i.id_pedido" 
+					@click= "PedidoCambio(i.id_pedido)" 
+					class="botonc text-center"
+					>
+					Ocultar Detalles
+					</div>
+					<div
+					v-else 
+					@click= "PedidoCambio(i.id_pedido)"
+					class="botoncon text-center"
+					>
+					Ver Detalles
+					</div>
+					<div
+					v-if = "PedidoNow === i.id_pedido" 
+					>
+						<div
+						class="tab !bg-green-100/50"
+						v-for = "e in i.detalle_pedido" 
+						:key="e.id_detalle_pedido">
+							<div class="flex flex-col">
+								<div class="flex flex-row">
+									<h3 class="font-bold">
+									{{ e.producto.nombre }}
+									</h3>
+								</div>
+								<div class="flex flex-col">
+									<h3>
+									Precio Unitario: ${{ e.precio_unitario }}
+									</h3>
+									<h3>
+									Cantidad: {{ e.cantidad }}
+									</h3>
+									<h2 class="font-bold">
+									Subtotal: ${{ e.subtotal }}
+									</h2>
+								</div>
+							</div>
+							<div class="flex flex-col ml-auto text-right items-end">
+								<h3>
+								Categoria: {{ e.producto.categoria }}
+								</h3>
+								<h3>
+								Codigo de Barras: {{ e.producto.codigo_barra }}
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div v-else>
 				<h2>
 				No se encontraron Pedidos 😔
