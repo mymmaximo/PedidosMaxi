@@ -1,232 +1,22 @@
 <template>
-    <div 
-    v-if="Iniciado"
-    class="
-    bg-green-600 z-10
-    ">
-        <div class="
-        flex m-0
-        bg-green-600
-        w-30
-        ">
-            <img alt="Vue logo" src="./assets/logo.png">
-        </div>
-        <div class="
-        flex relative w-full items-end 
-        m-0 pt-5
-        bg-green-600">
-            <div class="
-            flex min-w-36 min-h-16 items-center justify-center  
-            bg-green-800
-            divide-x-3 divide-green-400
-            border-green-400 border-t-2 border-r-4 rounded-se-2xl
-            hover:bg-green-100
-            hover:text-black
-            active:bg-green-400
-            ">
-                <h3
-                @click="TablaActual = 'Inicio'" 
-                v-if="Rol !== '3' && Rol !== '6'"
-                class="
-                flex-initial 
-                hover:text-black
-                text-white !text-lg !font-bold"
-                >
-                Ver Inicio
-                </h3>
-            </div>
-            <div class="
-            flex min-h-10 items-center
-            bg-green-800
-            divide-x-3 divide-green-400
-            border-green-400 border-t-2 border-r-4 rounded-se-2xl
-            ">
-                <h3
-                @click="TablaActual = 'Productos'" 
-                v-if="Rol !== '3' && Rol !== '6'"
-                class="pestaña"
-                >
-                Ver Productos
-                </h3>
-                <h3 
-                @click="TablaActual = 'Pedidos'" 
-                v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
-                class="pestaña"
-                >
-                Ver Pedidos
-                </h3>
-                <h3
-                @click="TablaActual = 'Clientes'" 
-                v-if="Rol === '1' || Rol === '3'"
-                class="pestaña"
-                >
-                Ver Clientes
-                </h3>
-                <h3
-                @click="TablaActual = 'Usuarios'" 
-                v-if="Rol === '1'"
-                class="pestaña"
-                >
-                Ver Usuarios
-                </h3>
-                <h3
-                @click="TablaActual = 'Historial_precios'" 
-                v-if="Rol === '1' || Rol === '4'"
-                class="pestaña"
-                >
-                Ver Historial de Precios
-                </h3>
-            </div>
-            <div class="
-            flex absolute right-0 
-            bg-green-800
-            divide-x-3 divide-green-400
-            border-green-400 border-t-2 border-l-4 rounded-ss-2xl">
-                <h3
-                @click="AbrirPopUp02() ; TablaActual = 'Productos'" 
-                v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
-                class="pestaña"
-                >
-                🗑️
-                </h3>
-                <div
-                v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                >
-                    <h3
-                    v-if="CarritoLocal.length > 0" 
-                    @click="TablaActual = 'Carrito'"
-                    class="pestaña"
-                    >
-                    Tu Carrito
-                    </h3>
-                    <div 
-                    v-else
-                    class="group relative 
-                    cursor-pointer"
-                    >
-                        <h3
-                        class="flex 
-                        hover:block
-                        hover:bg-green-600
-                        hover:rounded-ss-2xl
-                        active:bg-green-400
-                        text-white
-                        p-2"
-                        >
-                        Tu Carrito
-                        </h3>
-                        <h3
-                        v-if="CarritoLocal.length === 0"
-                        class="hidden
-                        text-white
-                        group-hover:flex
-                        bg-red-600
-                        absolute top-full
-                        left-1/2 -translate-x-1/2
-                        p-2 whitespace-nowrap z-50
-                        rounded-2xl"
-                        >
-                        ¡El Carrito está Vacio!
-                        </h3>
-                    </div>
-                </div>
-                <div
-                class="
-                group relative 
-                cursor-pointer z-10
-                ">
-                    <h3
-                    class="pestaña"
-                    >
-                    Mi Perfil
-                    </h3>
-                    <div 
-                    class="
-                    hidden
-                    group-hover:block 
-                    absolute top-full right-0
-                    bg-green-800
-                    text-white text-end
-                    rounded-es-2xl
-                    ">
-                        <h3
-                        @click="TablaActual = 'Mis_pedidos'"
-                        v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                        class="
-                        p-2
-                        hover:bg-green-600
-                        ">
-                        Mis Pedidos
-                        </h3>
-                        <h3
-                        @click="TablaActual = 'Configuracion'" 
-                        v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                        class="
-                        p-2
-                        hover:bg-green-600
-                        ">
-                        Configuracion
-                        </h3>
-                        <h3
-                        @click="AbrirPopUp01()"
-                        class="
-                        p-2
-                        hover:bg-red-600
-                        hover:rounded-es-2xl
-                        ">
-                        Cerrar Sesion
-                        </h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <Inicio v-if="TablaActual === 'Inicio'"/>
-            <Productos v-if="TablaActual === 'Productos'"/>
-            <Pedidos v-if="TablaActual === 'Pedidos'"/>
-            <Clientes v-if="TablaActual === 'Clientes'"/>
-            <Usuarios v-if="TablaActual === 'Usuarios'"/>
-            <Carrito v-if="TablaActual === 'Carrito'" @CarritoVacio="TablaActual = 'Productos'"/>
-            <Configuracion v-if="TablaActual === 'Configuracion'"/>
-            <Mis_pedidos v-if="TablaActual === 'Mis_pedidos'"/>
-            <Historial_precios v-if="TablaActual === 'Historial_precios'"/>
-        </div>
         <Teleport to="body">
             <div 
             v-if="ActualizarCajaLogout"
-            class="
-            fixed inset-0
-            bg-black/70 flex 
-            justify-center
-            items-center
+            class="fondo
             ">
-                <div class="
-                flex-col
-                bg-green-600
-                rounded-2xl p-5
-                gap-3 
-                ">
-                    <h2
-                    class="
-                    text-3xl
-                    font-bold  
-                    p-4
-                    ">
+                <div class="popup">
+                    <h1>
                     ¿Desear Cerrar Sesion?
-                    </h2>
+                    </h1>
                     <div
-                    class="
-                    flex flex-col
-                    gap-3
-                    items-center
-                    ">
+                    class="botones">
                         <button 
-                        @click="CerrarSesion() ; CerrarPopUp01()"
+                        @click="CerrarSesion() ; CerrarPopUp01() ; TablaActual = 'Productos'"
                         class="botonc">
                         Si Confirmo
                         </button>
                         <button @click="CerrarPopUp01()"
-                        class="botont">
+                        class="botoncon">
                         Cancelar
                         </button>
                     </div>
@@ -236,55 +26,324 @@
         <Teleport to="body">
             <div 
             v-if="BorrarCarrito"
-            class="
-            fixed inset-0
-            bg-black/70 flex 
-            justify-center
-            items-center
-            ">
+            class="fondo">
                 <div
-                class="
-                flex-col
-                bg-green-400
-                rounded-2xl p-5
-                gap-3 
-                ">
-                    <h2
-                    class="
-                    text-2xl
-                    font-bold  
-                    p-4
-                    ">
+                class="popup">
+                    <h1>
                     ¿Desear Vaciar tu Carrito?
-                    </h2>
+                    </h1>
                     <div
-                    class="
-                    flex flex-col
-                    gap-3
-                    items-center
-                    ">
+                    class="botones">
                         <button 
                         @click="LimpiarCompra() ; CerrarPopUp02()"
-                        class="
-                        bg-red-600 text-white
-                        rounded-3xl
-                        px-6 py-2
-                        ">
+                        class="botonc">
                         Si Confirmo
                         </button>
                         <button 
                         @click="CerrarPopUp02()"
-                        class="
-                        bg-gray-400 text-white
-                        rounded-3xl
-                        px-8 py-2
-                        ">
+                        class="botoncon">
                         Cancelar
                         </button>
                     </div>
                 </div>
             </div>
         </Teleport>   
+    <div 
+    v-if="Iniciado"
+    class="cuerpo !pt-0 !bg-green-600">
+        <div class="sticky top-0
+        w-full m-0 p-0 justify-between z-40
+        bg-green-600 hidden lg:flex 2xl:flex"
+        >
+            <div class="flex min-h-10">
+                <div
+                @click="TablaActual = 'Inicio'" 
+                v-if="Rol !== '3' && Rol !== '6'"
+                :class="{
+                    '!bg-green-300 !text-black shadow-inner': TablaActual === 'Inicio'
+                    }"
+                class="botonpestaña">
+                    <h2>
+                    Inicio
+                    </h2>
+                </div>
+                <div 
+                @click="TablaActual = 'Productos'" 
+                v-if="Rol !== '3' && Rol !== '6'"
+                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Productos'}"
+                class="botonpestaña"
+                >
+                    <h2>
+                    Productos
+                    </h2>
+                </div>
+                <div 
+                    @click="TablaActual = 'Pedidos'" 
+                    v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
+                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Pedidos'}"
+                class="botonpestaña"
+                >
+                    <h2>
+                    Pedidos
+                    </h2>
+                </div>
+                <div
+                @click="TablaActual = 'Clientes'" 
+                v-if="Rol === '1' || Rol === '3'"
+                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Clientes'}"
+                class="botonpestaña"
+                >
+                    <h2>
+                    Clientes
+                    </h2>
+                </div>
+                <div 
+                @click="TablaActual = 'Usuarios'" 
+                v-if="Rol === '1'"
+                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Usuarios'}"
+                class="botonpestaña"
+                >
+                    <h2>
+                    Usuarios
+                    </h2>
+                </div>
+                <div 
+                @click="TablaActual = 'Historial_precios'" 
+                v-if="Rol === '1' || Rol === '4'"
+                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Historial_precios'}"
+                class="botonpestaña"
+                >
+                    <h2>
+                    Historial de Precios
+                    </h2>
+                </div>
+            </div>
+            <div class="flex min-h-10">
+                <div
+                @click="AbrirPopUp02()" 
+                v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
+                class="botont !rounded-none !px-5"
+                >
+                    <h2>
+                    🗑️
+                    </h2>
+                </div>
+                <div
+                v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                @click="TablaActual = 'Carrito'"
+                class="botonpestaña"
+                >
+                    <h2>
+                    Tu Carrito
+                    </h2>
+                </div>
+                <div 
+                v-else
+                class="
+                botonpestaña
+                group relative"
+                >
+                    <h2>
+                    Tu Carrito
+                    </h2>
+                    <h2
+                    class="
+                    hidden group-hover:flex
+                    absolute top-full left-4
+                    p-4 whitespace-nowrap
+                    bg-red-200
+                    border-red-700 border-4 rounded-sm"
+                    >
+                    ¡Está Vacio!
+                    </h2>
+                </div>
+                <div
+                class="
+                botonpestaña
+                group relative z-50"
+                >
+                    <h2>
+                    Mi Perfil
+                    </h2>
+                    <div 
+                    class="
+                    hidden group-hover:block 
+                    absolute top-full left-4
+                    bg-green-800
+                    text-white
+                    border-green-700 border-4 rounded-sm
+                    ">
+                        <h3
+                        @click="TablaActual = 'Mis_pedidos'"
+                        v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                        class="botonpestaña !p-2">
+                        Mis Pedidos
+                        </h3>
+                        <h3
+                        @click="TablaActual = 'Configuracion'" 
+                        v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                        class="botonpestaña !p-2">
+                        Configuracion
+                        </h3>
+                        <h3
+                        @click="AbrirPopUp01()"
+                        class="botonc !rounded-none !p-2">
+                        Cerrar Sesion
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="flex flex-row lg:hidden 2xl:hidden">
+                <div class="m-2 p-0 !z-40"
+                >
+                    <h1
+                    @click="MostrarMenu = !MostrarMenu"
+                    class="sticky top-0 w-full bg-green-600 p-0 m-0 text-white"
+                    >
+                    ⫶☰
+                    </h1>
+                    <div class="fondo"
+                    v-if="MostrarMenu">
+                        <div
+                        class="fixed top-0 left-0 h-screen w-fit bg-green-800 z-40 shadow-2xl flex flex-col text-white"
+                        >
+                            <div
+                            class="
+                            flex flex-col
+                            
+                            ">
+                                <h1
+                                @click="MostrarMenu = !MostrarMenu"
+                                class="!py-0 !px-1 m-3 max-w-min"
+                                >
+                                ⫶☰
+                                </h1>
+                                <div>
+                                    <div
+                                    @click="TablaActual = 'Inicio' ; MostrarMenu = false" 
+                                    v-if="Rol !== '3' && Rol !== '6'"
+                                    :class="{
+                                    '!bg-green-300 !text-black shadow-inner': TablaActual === 'Inicio'
+                                    }"
+                                    class="botonpestaña !py-0 !text-left">
+                                        <h1>
+                                        🏠︎ Inicio
+                                        </h1>
+                                    </div>
+                                    <div 
+                                    @click="TablaActual = 'Productos' ; MostrarMenu = false" 
+                                    v-if="Rol !== '3' && Rol !== '6'"
+                                    :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Productos'}"
+                                    class="botonpestaña !py-0 !text-left"
+                                    >
+                                        <h1>
+                                        📦 Productos
+                                        </h1>
+                                    </div>
+                                    <div 
+                                        @click="TablaActual = 'Pedidos' ; MostrarMenu = false" 
+                                        v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
+                                    :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Pedidos'}"
+                                    class="botonpestaña !py-0 !text-left"
+                                    >
+                                        <h1>
+                                        🚛 Pedidos
+                                        </h1>
+                                    </div>
+                                    <div
+                                    @click="TablaActual = 'Clientes' ; MostrarMenu = false" 
+                                    v-if="Rol === '1' || Rol === '3'"
+                                    :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Clientes'}"
+                                    class="botonpestaña !py-0 !text-left"
+                                    >
+                                        <h1>
+                                        👥 Clientes
+                                        </h1>
+                                    </div>
+                                    <div 
+                                    @click="TablaActual = 'Usuarios' ; MostrarMenu = false" 
+                                    v-if="Rol === '1'"
+                                    :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Usuarios'}"
+                                    class="botonpestaña !py-0 !text-left"
+                                    >
+                                        <h1>
+                                        👨🏻‍💼 Usuarios
+                                        </h1>
+                                    </div>
+                                    <div 
+                                    @click="TablaActual = 'Historial_precios' ; MostrarMenu = false" 
+                                    v-if="Rol === '1' || Rol === '4'"
+                                    :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Historial_precios'}"
+                                    class="botonpestaña !py-0 !text-left"
+                                    >
+                                        <h1>
+                                        💲 Historial de Precios
+                                        </h1>
+                                    </div>
+                                    <div
+                                    v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                    @click="TablaActual = 'Carrito' ; MostrarMenu = false"
+                                    :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Carrito'}"
+                                    class="botonpestaña !py-0 !text-left"
+                                    >
+                                        <h1>
+                                        🛒 Tu Carrito
+                                        </h1>
+                                    </div>
+                                    <div
+                                    @click="AbrirPopUp02()" 
+                                    v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
+                                    class="botonpestaña !bg-red-700/50 !py-0 !text-left"
+                                    >
+                                        <h1>
+                                        🗑️ Vaciar Carrito
+                                        </h1>
+                                    </div>
+                                    <div
+                                    @click="TablaActual = 'Mis_pedidos' ; MostrarMenu = false"
+                                    v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                    :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Mis_pedidos'}"
+                                    class="botonpestaña !py-0 !text-left">
+                                        <h1>
+                                        👤 Mis Pedidos
+                                        </h1>
+                                    </div>
+                                    <div
+                                    @click="TablaActual = 'Configuracion' ; MostrarMenu = false" 
+                                    v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                    :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Configuracion'}"
+                                    class="botonpestaña !py-0 !text-left">
+                                        <h1>
+                                        ⚙️ Configuracion
+                                        </h1>
+                                    </div>
+                                    <div
+                                    @click="AbrirPopUp01()"
+                                    class="botonpestaña !bg-red-700 !py-0 !text-left">
+                                        <h1>
+                                        ➜] Cerrar Sesion
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-col w-full">
+                <Inicio v-if="TablaActual === 'Inicio'"/>
+                <Productos v-if="TablaActual === 'Productos'"/>
+                <Pedidos v-if="TablaActual === 'Pedidos'"/>
+                <Clientes v-if="TablaActual === 'Clientes'"/>
+                <Usuarios v-if="TablaActual === 'Usuarios'"/>
+                <Carrito v-if="TablaActual === 'Carrito'" @CarritoVacio="TablaActual = 'Productos'"/>
+                <Configuracion v-if="TablaActual === 'Configuracion'"/>
+                <Mis_pedidos v-if="TablaActual === 'Mis_pedidos'"/>
+                <Historial_precios v-if="TablaActual === 'Historial_precios'"/>
+            </div>
+        </div>
     </div>
     <div 
     v-else 
@@ -314,6 +373,7 @@
     import Mis_pedidos from './components/Mis_pedidos.vue'
     import Historial_precios from './components/Historial_precios.vue'
     // ----- Variables ----- //
+    const MostrarMenu = ref (false)
     const BorrarCarrito = ref(false)
     const TablaActual = ref("")
     const ActualizarCajaLogout = ref(false)

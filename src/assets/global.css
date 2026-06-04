@@ -10,7 +10,7 @@
     w-full 
     max-w-full 
     m-0 p-0
-    text-[10px]
+    text-sm
     lg:text-base
     2xl:text-base
 }
@@ -72,8 +72,10 @@ table td {
     flex
     overflow-hidden
     p-4
+    max-h-40
     w-full items-center gap-4
     rounded-2xl shadow-md
+    justify-between
 }
 img {
     @apply
@@ -96,6 +98,17 @@ img {
     h-24
     lg:h-36
     2xl:h-48
+    object-cover place-self-center
+    rounded-xl drop-shadow-md
+}
+.imagencar {
+    @apply
+    w-20
+    lg:w-36
+    2xl:w-36
+    h-20
+    lg:h-36
+    2xl:h-36
     object-cover place-self-center
     rounded-xl drop-shadow-md
 }
@@ -139,20 +152,19 @@ img {
     w-full
     mx-auto
     lg:w-full
-    max-w-[1600px]
     lg:flex-row
     2xl:w-full
     gap-0
     lg:gap-3
     2xl:gap-3
-    relative items-start
 }
 .bar {
     @apply 
     sticky shrink-0 flex flex-col
     top-0 overflow-y-auto z-20
     text-white
-    bg-green-600
+    bg-green-500
+    gap-5
     p-2
     lg:p-5
     2xl:p-5
@@ -210,15 +222,15 @@ label {
 }
 .botoncon {
     @apply
-    text-white
+    text-white text-center
     bg-green-400 
     rounded-3xl
     cursor-pointer
     px-2
     lg:px-5
     2xl:px-10
-    py-1
-    lg:py-2
+    py-5
+    lg:py-3
     2xl:py-2
     hover:text-white
     hover:bg-green-600
@@ -227,17 +239,54 @@ label {
     disabled:bg-gray-300 
     disabled:cursor-not-allowed
 }
+.botonfil {
+    @apply
+    text-white text-center
+    bg-green-700 
+    rounded-xl
+    cursor-pointer
+    px-0
+    lg:px-4
+    2xl:px-4
+    py-2
+    lg:py-3
+    2xl:py-2
+    hover:text-white
+    hover:bg-green-600
+    active:bg-green-300
+    disabled:text-gray-400 
+    disabled:bg-gray-300 
+    disabled:cursor-not-allowed
+}
+.botonpestaña {
+    @apply
+    text-white text-center
+    bg-green-800
+    cursor-pointer
+    px-2
+    lg:px-5
+    2xl:px-10
+    py-5
+    lg:py-3
+    2xl:py-2
+    hover:text-black
+    hover:bg-green-300
+    active:bg-green-100
+    disabled:text-black
+    disabled:bg-green-300 
+    disabled:cursor-not-allowed
+}
 .botonc {
     @apply
-    text-white
+    text-white text-center
     bg-red-600
     cursor-pointer
     rounded-3xl
     px-2
     lg:px-5
     2xl:px-10
-    py-1
-    lg:py-2
+    py-5
+    lg:py-3
     2xl:py-2
     hover:text-gray-200
     hover:bg-red-800
@@ -245,14 +294,14 @@ label {
 }
 .botont {
     @apply
-    bg-gray-600 text-white
+    bg-gray-600 text-white text-center
     cursor-pointer
     rounded-3xl
     px-2
     lg:px-5
     2xl:px-10
-    py-1
-    lg:py-2
+    py-5
+    lg:py-3
     2xl:py-2
     hover:text-gray-200
     hover:bg-gray-800
@@ -263,13 +312,13 @@ label {
 }
 .botonflecha {
     @apply
-    bg-green-100/50
+    bg-green-100/50 text-center
     cursor-pointer
     rounded-3xl
     lg:px-3
     2xl:px-3
-    lg:py-18
-    2xl:py-20
+    lg:py-1
+    2xl:py-15
     hover:text-gray-200
     hover:bg-green-300/40
     active:bg-gray-100
@@ -279,7 +328,7 @@ label {
 }
 .botona {
     @apply 
-    text-green-500 
+    text-green-500 text-center
     bg-gray-600
     cursor-pointer
     rounded-2xl
@@ -302,7 +351,7 @@ label {
     absolute top-2 right-2 
     flex items-center justify-center
     cursor-pointer
-    text-white 
+    text-white text-center
     bg-red-600
     border-white border-2 rounded-3xl
     drop-shadow-md
@@ -327,24 +376,42 @@ select{
     @apply
     place-self-center
     cursor-pointer
-    text-gray-400 text-center
-    bg-green-100 border-green-500 rounded-xl border-2
+    text-gray-400 text-center font-semibold
+    bg-green-100 
+    border-green-800 rounded-sm border-1
     text-base
     lg:text-base
     2xl:text-base
     w-full
     p-1
-    lg:p-1
-    2xl:p-2
+    px-2
+    lg:px-2
+    2xl:px-2
 }
 input{
     @apply
     place-self-center
     cursor-text
-    text-gray-700
+    text-gray-700 text-center font-semibold
     bg-green-100
-    border-white rounded-xl border-1
+    border-green-800 rounded-sm border-1
     text-base
+    lg:text-base
+    2xl:text-base
+    w-full
+    p-1
+    px-2
+    lg:px-2
+    2xl:px-2
+}
+input[type="number"] {
+    @apply
+    place-self-center
+    cursor-text
+    text-gray-700 text-center font-semibold
+    bg-green-100
+    border-green-800 rounded-sm border-1
+    text-sm
     lg:text-base
     2xl:text-base
     w-full
@@ -365,7 +432,7 @@ input[type="radio"] {
     cursor-text
     bg-green-100
     border-black border-1 rounded-xl
-    text-base
+    text-base text-left
     lg:text-base
     2xl:text-base
     w-full
@@ -386,7 +453,7 @@ input[type="radio"] {
     flex fixed inset-0
     justify-center items-center
     bg-black/70
-    z-50
+    z-40
 }
 .popup{
     @apply
@@ -420,6 +487,12 @@ form{
     p-2 
     lg:p-3 
     2xl:p-5
+    px-2 
+    lg:px-3 
+    2xl:px-4
+    gap-2 
+    lg:gap-3 
+    2xl:gap-4
 }
 /* estados */
 .sent{

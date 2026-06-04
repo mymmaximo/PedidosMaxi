@@ -2,10 +2,11 @@
     <div class="cuerpo">
         <div class="pagina">
             <div class="flex w-full flex-col lg:flex-row">
+                <!-- Filtros -->
                 <div class="bar">
                     <h1
                     @click="MostrarFiltro = !MostrarFiltro"
-                    class="botoncon !py-0 !px-1 max-w-min self-center"
+                    class="botonfil"
                     >
                     ᯤ
                     </h1>
@@ -124,6 +125,7 @@
                         >
                     </div>
                     <div class="flex-col lg:flex-row">
+                    <!-- Tabla de Pedidos en Preparacion -->
                         <h1 class="text-center">
                         Mis Pedidos en Preparacion
                         </h1>
@@ -132,150 +134,236 @@
                         class="
                         w-full"
                         >
-                            <table 
-                            class="w-full min-w-max [&_th]:!bg-green-500"
+                            <div
+                            class="mb-2 lg:mb-5"
+                            v-for= "i in Pedidos" 
+                            :key="i.id && i.estatus === 3"
                             >
-                                <thead>
-                                    <tr>
-                                        <th
-                                        class="
-                                        rounded-ss-2xl 
-                                        ">
-                                        Direccion
-                                        </th>
-                                        <th>
-                                        Metodo de Pago
-                                        </th>
-                                        <th>
-                                        Tiempo de <br>
-                                        Entrega Estimado
-                                        </th>
-                                        <th>
-                                        Tiempo de <br>
-                                        Entrega
-                                        </th>
-                                        <th>
-                                        Fecha de <br>
-                                        Creacion
-                                        </th>
-                                        <th>
-                                        Fecha de <br>
-                                        Actualizacion
-                                        </th>
-                                        <th>
-                                        Detalles
-                                        </th>
-                                        <th
-                                        class="
-                                        rounded-se-2xl 
-                                        ">
-                                        Total del <br>
-                                        Pedido
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template 
-                                    v-for= "i in Pedidos" 
-                                    :key="i.id && i.estatus === 3"
-                                    >
-                                        <tr 
-                                        v-if="i.estatus === 3"
-                                        >
-                                            <td>
-                                            {{ i.direccion[0].calle }}
-                                            {{ i.direccion[0].numero }}
-                                            - 
-                                            {{ i.direccion[0].ciudad }}
-                                            - 
-                                            {{ i.direccion[0].provincia }}        
-                                            </td>
-                                            <td>
-                                            {{ i.metodo_pago }}
-                                            </td>
-                                            <td>
-                                            {{ i.tiempo_estimado_entrega }}
-                                            </td>
-                                            <td>
-                                            {{ i.tiempo_entrega }}
-                                            </td>
-                                            <td>
-                                            {{ FormatoFecha(i.created_at) }}
-                                            </td>
-                                            <td>
-                                            {{ FormatoFecha(i.updated_at) }}
-                                            </td>
-                                            <td 
-                                            v-if="PedidoNowPreparando === i.id_pedido" 
-                                            @click="PedidoCambioPreparando(i.id_pedido)"
-                                            >
-                                            Ocultar Detalles
-                                            </td>
-                                            <td 
-                                            v-else 
-                                            @click="PedidoCambioPreparando(i.id_pedido)"
-                                            >
-                                            Ver Detalles
-                                            </td>
-                                            <td>
-                                            ${{ i.total }}
-                                            </td>
-                                        </tr>
-                                        <tr 
-                                        v-if = "PedidoNowPreparando === i.id_pedido && i.estatus === 3"
-                                        >
-                                            <td colspan="8">
-                                                <div>
-                                                    <table>
-                                                        <thead>
-                                                            <tr>
-                                                                <th>
-                                                                Producto
-                                                                </th>
-                                                                <th>
-                                                                Precio Unitario
-                                                                </th>
-                                                                <th>
-                                                                Cantidad
-                                                                </th>
-                                                                <th>
-                                                                Subtotal
-                                                                </th>
-                                                                <th>
-                                                                Categoria
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr 
-                                                            v-for = "e in i.detalle_pedido" 
-                                                            :key="e.id_detalle_pedido"
-                                                            >
-                                                                <td>
-                                                                {{ e.producto.nombre }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.precio_unitario }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.cantidad }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.subtotal }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.producto.categoria }}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                <div v-if="i.estatus === 3">
+                                    <div class="tab !bg-green-200">
+                                        <div class="flex flex-col">
+                                            <div class="flex flex-row">
+                                                <h1>
+                                                Pedido a
+                                                {{ i.direccion[0].calle }} 
+                                                {{ i.direccion[0].numero }}
+                                                </h1>
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Ciudad: 
+                                                </span>
+                                                {{ i.direccion[0].ciudad }}
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                - Provincia:  
+                                                </span>
+                                                {{ i.direccion[0].provincia }}
+                                                </h2>
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Pagado con: 
+                                                </span>
+                                                {{ i.metodo_pago }}
+                                                </h2>
+                                                <h2 class="font-bold">
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Total:
+                                                </span>
+                                                ${{ i.total }}
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col ml-auto text-right items-end">
+                                            <h3>
+                                            Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
+                                            </h3>
+                                            <h3>
+                                            Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
+                                            </h3>
+                                            <h3>
+                                            Pedido Creado el Dia: {{ FormatoFecha(i.created_at) }}
+                                            </h3>
+                                            <h3>
+                                            Pedido Actualizado el Dia: {{ FormatoFecha(i.updated_at) }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div v-if = "PedidoNowPreparando === i.id_pedido">
+                                        <div
+                                        class="tab !bg-green-100/50"
+                                        v-for = "e in i.detalle_pedido" 
+                                        :key="e.id_detalle_pedido">
+                                            <div class="flex flex-col">
+                                                <div class="flex flex-row">
+                                                    <h3 class="font-bold">
+                                                    {{ e.producto.nombre }}
+                                                    </h3>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>  
+                                                <div class="flex flex-col">
+                                                    <h3>
+                                                    Precio Unitario: ${{ e.precio_unitario }}
+                                                    </h3>
+                                                    <h3>
+                                                    Cantidad: {{ e.cantidad }}
+                                                    </h3>
+                                                    <h2 class="font-bold">
+                                                    Subtotal: ${{ e.subtotal }}
+                                                    </h2>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col ml-auto text-right items-end">
+                                                <h3>
+                                                Categoria: {{ e.producto.categoria }}
+                                                </h3>
+                                                <h3>
+                                                Codigo de Barras: {{ e.producto.codigo_barra }}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div 
+                                    v-if = "PedidoNowPreparando === i.id_pedido"
+                                    @click="PedidoCambioPreparando(i.id_pedido)"
+                                    class="botont text-center"
+                                    >
+                                    Ocultar Detalles
+                                    </div>
+                                    <div
+                                    v-else 
+                                    @click="PedidoCambioPreparando(i.id_pedido)"
+                                    class="botoncon text-center"
+                                    >
+                                    Ver Detalles
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div 
+                        v-else
+                        >
+                            <h2>
+                            No se encontraron Pedidos 😔
+                            </h2>
+                            <h3>
+                            Prueba buscando con otro termino
+                            </h3>
+                        </div>
+                    <div>
+                    <!-- Tabla de Pedidos en Camino -->
+                        <h1 class="text-center">
+                        Mis Pedidos En Camino
+                        </h1>
+                        <div 
+                        v-if="Pedidos.length > 0"
+                        class="
+                        w-full"
+                        >
+                            <div
+                            class="mb-2 lg:mb-5"
+                            v-for= "i in Pedidos" 
+                            :key="i.id && i.estatus === 2"
+                            >
+                                <div v-if="i.estatus === 2">
+                                    <div class="tab !bg-yellow-200">
+                                        <div class="flex flex-col">
+                                            <div class="flex flex-row">
+                                                <h1>
+                                                Pedido a
+                                                {{ i.direccion[0].calle }} 
+                                                {{ i.direccion[0].numero }}
+                                                </h1>
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Ciudad: 
+                                                </span>
+                                                {{ i.direccion[0].ciudad }}
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                - Provincia:  
+                                                </span>
+                                                {{ i.direccion[0].provincia }}
+                                                </h2>
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Pagado con: 
+                                                </span>
+                                                {{ i.metodo_pago }}
+                                                </h2>
+                                                <h2 class="font-bold">
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Total:
+                                                </span>
+                                                ${{ i.total }}
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col ml-auto text-right items-end">
+                                            <h3>
+                                            Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
+                                            </h3>
+                                            <h3>
+                                            Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
+                                            </h3>
+                                            <h3>
+                                            Pedido Creado el Dia: {{ FormatoFecha(i.created_at) }}
+                                            </h3>
+                                            <h3>
+                                            Pedido Actualizado el Dia: {{ FormatoFecha(i.updated_at) }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div v-if = "PedidoNowEnCamino === i.id_pedido">
+                                        <div
+                                        class="tab !bg-yellow-100/50"
+                                        v-for = "e in i.detalle_pedido" 
+                                        :key="e.id_detalle_pedido">
+                                            <div class="flex flex-col">
+                                                <div class="flex flex-row">
+                                                    <h3 class="font-bold">
+                                                    {{ e.producto.nombre }}
+                                                    </h3>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <h3>
+                                                    Precio Unitario: ${{ e.precio_unitario }}
+                                                    </h3>
+                                                    <h3>
+                                                    Cantidad: {{ e.cantidad }}
+                                                    </h3>
+                                                    <h2 class="font-bold">
+                                                    Subtotal: ${{ e.subtotal }}
+                                                    </h2>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col ml-auto text-right items-end">
+                                                <h3>
+                                                Categoria: {{ e.producto.categoria }}
+                                                </h3>
+                                                <h3>
+                                                Codigo de Barras: {{ e.producto.codigo_barra }}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div 
+                                    v-if = "PedidoNowEnCamino === i.id_pedido"
+                                    @click="PedidoCambioEnCamino(i.id_pedido)"
+                                    class="botont text-center"
+                                    >
+                                    Ocultar Detalles
+                                    </div>
+                                    <div
+                                    v-else 
+                                    @click="PedidoCambioEnCamino(i.id_pedido)"
+                                    class="botoncon text-center"
+                                    >
+                                    Ver Detalles
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div 
                         v-else
                         >
@@ -287,350 +375,146 @@
                             </h3>
                         </div>
                     </div>
-                    <div>
-                        <h1 class="text-center">
-                        Mis Pedidos En Camino
-                        </h1>
-                        <div
-                        v-if="Pedidos.length > 0"
-                        >
-                            <table 
-                            class="
-                            [&_th]:!bg-yellow-600 
-                            [&_td]:!bg-yellow-50"
-                            >
-                                <thead>
-                                    <tr>
-                                        <th
-                                        class="
-                                        rounded-ss-2xl 
-                                        ">
-                                        Direccion
-                                        </th>
-                                        <th>
-                                        Metodo de Pago
-                                        </th>
-                                        <th>
-                                        Tiempo de <br>
-                                        Entrega Estimado
-                                        </th>
-                                        <th>
-                                        Tiempo de <br>
-                                        Entrega
-                                        </th>
-                                        <th>
-                                        Fecha de <br>
-                                        Creacion
-                                        </th>
-                                        <th>
-                                        Fecha de <br>
-                                        Actualizacion
-                                        </th>
-                                        <th>
-                                        Detalles
-                                        </th>
-                                        <th
-                                        class="
-                                        rounded-se-2xl 
-                                        ">
-                                        Total del <br>
-                                        Pedido
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template 
-                                    v-for= "i in Pedidos" 
-                                    :key="i.id && i.estatus === 2"
-                                    >
-                                        <tr 
-                                        v-if="i.estatus === 2"
-                                        >
-                                            <td>
-                                            {{ i.direccion[0].calle }} 
-                                            {{ i.direccion[0].numero }}
-                                            - 
-                                            {{ i.direccion[0].ciudad }}
-                                            - 
-                                            {{ i.direccion[0].provincia }}        
-                                            </td>
-                                            <td>
-                                            {{ i.metodo_pago }}
-                                            </td>
-                                            <td>
-                                            {{ i.tiempo_estimado_entrega }}
-                                            </td>
-                                            <td>
-                                            {{ i.tiempo_entrega }}
-                                            </td>
-                                            <td>
-                                            {{ FormatoFecha(i.created_at) }}
-                                            </td>
-                                            <td>
-                                            {{ FormatoFecha(i.updated_at) }}
-                                            </td>
-                                            <td 
-                                            v-if="PedidoNowEnCamino === i.id_pedido" 
-                                            @click="PedidoCambioEnCamino(i.id_pedido)"
-                                            >
-                                            Ocultar Detalles
-                                            </td>
-                                            <td 
-                                            v-else 
-                                            @click="PedidoCambioEnCamino(i.id_pedido)"
-                                            >
-                                            Ver Detalles
-                                            </td>
-                                            <td>
-                                            ${{ i.total }}
-                                            </td>
-                                        </tr>
-                                        <tr 
-                                        v-if = "PedidoNowEnCamino === i.id_pedido">
-                                            <td colspan="8">
-                                                <div>
-                                                    <table>
-                                                        <thead>
-                                                            <tr>
-                                                                <th>
-                                                                Producto
-                                                                </th>
-                                                                <th>
-                                                                Precio Unitario
-                                                                </th>
-                                                                <th>
-                                                                Cantidad
-                                                                </th>
-                                                                <th>
-                                                                Subtotal
-                                                                </th>
-                                                                <th>
-                                                                Categoria
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr 
-                                                            v-for = "e in i.detalle_pedido" 
-                                                            :key="e.id_detalle_pedido"
-                                                            >
-                                                                <td>
-                                                                {{ e.producto.nombre }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.precio_unitario }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.cantidad }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.subtotal }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.producto.categoria }}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>  
-                        <div v-else>
-                            <h2
-                            >No se encontraron Pedidos 😔
-                            </h2>
-                            <h3>
-                            Prueba buscando con otro termino
-                            </h3>
-                        </div>
-                    </div>
-                    <div
-                    class="
-                    flex flex-col
-                    items-center
-                    my-5 
-                    lg:p-5 
-                    gap-3 lg:gap-5
-                    ">
+                    <!-- Boton Historial -->
+                    <div class="botones">
                         <button 
                         @click="mostrarhistorial = !mostrarhistorial" 
-                        class="botoncon">
-                            <h2>
+                        :class="Estatuscolor(mostrarhistorial)">
+                            <h2 v-if="!mostrarhistorial">
                             Ver Historial de Pedidos
                             </h2>
-                        </button>
-                        <div 
-                        v-if="Pedidos.length > 0 && mostrarhistorial === true"
-                        class="p-0" 
-                        >
-                            <table 
-                            class="
-                            [&_th]:!bg-red-500 
-                            [&_td]:!bg-red-50"
-                            >
-                                <thead>
-                                    <tr>
-                                        <th
-                                        class="
-                                        rounded-ss-2xl 
-                                        ">
-                                        Direccion
-                                        </th>
-                                        <th>
-                                        Metodo de Pago
-                                        </th>
-                                        <th>
-                                        Tiempo de <br>
-                                        Entrega Estimado
-                                        </th>
-                                        <th>
-                                        Tiempo de <br>
-                                        Entrega
-                                        </th>
-                                        <th>
-                                        Fecha de <br>
-                                        Creacion
-                                        </th>
-                                        <th>
-                                        Fecha de <br>
-                                        Actualizacion
-                                        </th>
-                                        <th>
-                                        Detalles
-                                        </th>
-                                        <th
-                                        class="
-                                        rounded-se-2xl 
-                                        ">
-                                        Total del <br>
-                                        Pedido
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template 
-                                    v-for= "i in Pedidos" 
-                                    :key="i.id && i.estatus === 1"
-                                    >
-                                        <tr 
-                                        v-if="i.estatus === 1"
-                                        >
-                                            <td>
-                                            {{ i.direccion[0].calle }} 
-                                            {{ i.direccion[0].numero }}
-                                            - 
-                                            {{ i.direccion[0].ciudad }} 
-                                            - 
-                                            {{ i.direccion[0].provincia }}        
-                                            </td>
-                                            <td>
-                                            {{ i.metodo_pago }}
-                                            </td>
-                                            <td>
-                                            {{ i.tiempo_estimado_entrega }}
-                                            </td>
-                                            <td>
-                                            {{ i.tiempo_entrega }}
-                                            </td>
-                                            <td>
-                                            {{ FormatoFecha(i.created_at) }}
-                                            </td>
-                                            <td>
-                                            {{ FormatoFecha(i.updated_at) }}
-                                            </td>
-                                            <td 
-                                            v-if="PedidoNowHistorial === i.id_pedido" 
-                                            @click="PedidoCambioHistorial(i.id_pedido)"
-                                            class="no"
-                                            >
-                                            Ocultar Detalles
-                                            </td>
-                                            <td 
-                                            v-else 
-                                            @click="PedidoCambioHistorial(i.id_pedido)"
-                                            class="si"
-                                            >
-                                            Ver Detalles
-                                            </td>
-                                            <td>
-                                            ${{ i.total }}
-                                            </td>
-                                        </tr>
-                                        <tr 
-                                        v-if = "PedidoNowHistorial === i.id_pedido"
-                                        >
-                                            <td 
-                                            colspan="8"
-                                            >
-                                                <div>
-                                                    <table>
-                                                        <thead>
-                                                            <tr>
-                                                                <th>
-                                                                Producto
-                                                                </th>
-                                                                <th>
-                                                                Precio Unitario
-                                                                </th>
-                                                                <th>
-                                                                Cantidad
-                                                                </th>
-                                                                <th>
-                                                                Subtotal
-                                                                </th>
-                                                                <th>
-                                                                Categoria
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr 
-                                                            v-for = "e in i.detalle_pedido" 
-                                                            :key="e.id_detalle_pedido"
-                                                            >
-                                                                <td>
-                                                                {{ e.producto.nombre }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.precio_unitario }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.cantidad }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.subtotal }}
-                                                                </td>
-                                                                <td>
-                                                                {{ e.producto.categoria }}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>  
-                        <div 
-                        v-else-if="mostrarhistorial === true"
-                        >
-                            <h2>
-                            No se encontraron Pedidos 😔
+                            <h2 v-if="mostrarhistorial">
+                            Ocultar Historial de Pedidos
                             </h2>
-                            <h3>
-                            Prueba buscando con otro termino
-                            </h3>
-                        </div>
+                        </button>
                     </div>
+                    <!-- Tabla Historial de Pedidos -->
+                        <div v-if="mostrarhistorial">
+                            <div 
+                            v-if="Pedidos.length > 0"
+                            class="
+                            w-full"
+                            >
+                                <div
+                                class="mb-2 lg:mb-5"
+                                v-for= "i in Pedidos" 
+                                :key="i.id && i.estatus === 3"
+                                >
+                                    <div v-if="i.estatus === 3">
+                                        <div class="tab !bg-red-200">
+                                            <div class="flex flex-col">
+                                                <div class="flex flex-row">
+                                                    <h1>
+                                                    Pedido a
+                                                    {{ i.direccion[0].calle }} 
+                                                    {{ i.direccion[0].numero }}
+                                                    </h1>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <h2>
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Ciudad: 
+                                                    </span>
+                                                    {{ i.direccion[0].ciudad }}
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    - Provincia:  
+                                                    </span>
+                                                    {{ i.direccion[0].provincia }}
+                                                    </h2>
+                                                    <h2>
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Pagado con: 
+                                                    </span>
+                                                    {{ i.metodo_pago }}
+                                                    </h2>
+                                                    <h2 class="font-bold">
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Total:
+                                                    </span>
+                                                    ${{ i.total }}
+                                                    </h2>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col ml-auto text-right items-end">
+                                                <h3>
+                                                Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
+                                                </h3>
+                                                <h3>
+                                                Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
+                                                </h3>
+                                                <h3>
+                                                Pedido Creado el Dia: {{ FormatoFecha(i.created_at) }}
+                                                </h3>
+                                                <h3>
+                                                Pedido Actualizado el Dia: {{ FormatoFecha(i.updated_at) }}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div 
+                                        v-if = "PedidoNowHistorial === i.id_pedido"
+                                        @click="PedidoCambioHistorial(i.id_pedido)"
+                                        class="botont text-center"
+                                        >
+                                        Ocultar Detalles
+                                        </div>
+                                        <div
+                                        v-else 
+                                        @click="PedidoCambioHistorial(i.id_pedido)"
+                                        class="botoncon text-center"
+                                        >
+                                        Ver Detalles
+                                        </div>
+                                        <div v-if = "PedidoNowHistorial === i.id_pedido">
+                                            <div
+                                            class="tab !bg-red-100/50"
+                                            v-for = "e in i.detalle_pedido" 
+                                            :key="e.id_detalle_pedido">
+                                                <div class="flex flex-col">
+                                                    <div class="flex flex-row">
+                                                        <h3 class="font-bold">
+                                                        {{ e.producto.nombre }}
+                                                        </h3>
+                                                    </div>
+                                                    <div class="flex flex-col">
+                                                        <h3>
+                                                        Precio Unitario: ${{ e.precio_unitario }}
+                                                        </h3>
+                                                        <h3>
+                                                        Cantidad: {{ e.cantidad }}
+                                                        </h3>
+                                                        <h2 class="font-bold">
+                                                        Subtotal: ${{ e.subtotal }}
+                                                        </h2>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-col ml-auto text-right items-end">
+                                                    <h3>
+                                                    Categoria: {{ e.producto.categoria }}
+                                                    </h3>
+                                                    <h3>
+                                                    Codigo de Barras: {{ e.producto.codigo_barra }}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div 
+                            v-else
+                            >
+                                <h2>
+                                No se encontraron Pedidos 😔
+                                </h2>
+                                <h3>
+                                Prueba buscando con otro termino
+                                </h3>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </template>
 
@@ -659,6 +543,14 @@
         Pedidos.value = datos;
     })
     // ----- Para el Frontend ----- //
+    const Estatuscolor = (id_estatus) => {
+        if (id_estatus === true) {
+            return "botonc"
+        }
+        else if (id_estatus === false) {
+            return "botoncon"
+        }
+    }
     const AplicarFiltro = () => {
         BusquedaPedido()
         MostrarFiltro.value = false

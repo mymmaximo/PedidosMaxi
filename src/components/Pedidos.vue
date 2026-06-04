@@ -181,167 +181,309 @@
 	<div
 	class="cuerpo"
 	>
-		<div class="start">
-			<!-- Barra de Busqueda -->
-			<input
-			@input="BusquedaPedido"
-			type="text" v-model="Busqueda" 
-			placeholder="Busqueda..."
-			class="busqueda"
-			maxlength="50"
-			>
-		<div class="botones">
-			<!-- Boton de Filtro -->
-			<button 
-			@click="AbrirPopUp02" 
-			class="botoncon"
-			>
-			🗃️Filtros
-			</button>		
-		</div>
-		</div>
-    	<!-- Tabla de Pedidos -->
-		<div class="w-full">
-			<h1>
-			Pedidos
-			</h1>
-			<div v-if="Pedidos.length > 0">
-				<div 
-				v-for= "i in Pedidos" 
-				:key="i.id"
-				class="mb-2 lg:mb-5">
-					<div 
-					@click="Edicion(i)" 
-					:class="Estatuscolor(i.estatus)"
-					class="tab"
+		<div class="pagina">
+			<div class="bar">
+				<div>
+					<h1
+					@click="MostrarFiltro = !MostrarFiltro"
+					class="botonfil"
 					>
-						<div class="flex flex-col">
-							<div class="flex flex-row">
-								<h1>
-								{{ i.cliente[0].nombre }}
-								</h1>
-								<h1>
-								{{ Estatustxt(i.estatus) }}
-								</h1>
-							</div>
-							<div class="flex flex-col">
-								<h2>
-								Direccion: 
-								{{ i.direccion[0].calle }} 
-								{{ i.direccion[0].numero }}
-									- 
-								{{ i.direccion[0].ciudad }}
-									- 
-								{{ i.direccion[0].provincia }}
-								</h2>
-								<h2 class="font-bold">
-								${{ i.total }}
-								</h2>
-								<h2>
-								Pagado con:
-								{{ i.metodo_pago }}
-								</h2>
-							</div>
-						</div>
-						<div class="flex flex-col ml-auto text-right items-end">
-							<h3>
-							Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
-							</h3>
-							<h3>
-							Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
-							</h3>
-							<h3>
-							Pedido Creado el Dia: {{ FormatoFecha(i.created_at) }}
-							</h3>
-							<h3>
-							Pedido Actualizado el Dia: {{ FormatoFecha(i.updated_at) }}
-							</h3>
-						</div>
-					</div>
-					<div 
-					v-if = "PedidoNow === i.id_pedido" 
-					@click= "PedidoCambio(i.id_pedido)" 
-					class="botonc text-center"
+					ᯤ
+					</h1>
+				</div>
+				<div
+				class="flex flex-col lg:self-center gap-5"
+				v-if="MostrarFiltro"
+				>
+					<div
+					class="flex flex-col"
 					>
-					Ocultar Detalles
+						<h1>
+						Filtro de Metodo de Pago
+						</h1>
+						<label>
+						<input 
+						type="radio" 
+						:value="3"
+						v-model="filtroMP"
+						> 
+						Tarjeta de Credito / Debito
+						</label>
+						<label>
+						<input 
+						type="radio" 
+						:value="2"
+						v-model="filtroMP"
+						> 
+						Mercado Pago
+						</label>
+						<label>
+						<input 
+						type="radio" 
+						:value="1"
+						v-model="filtroMP"
+						> 
+						Transferencia Bancaria
+						</label>
+						<label>
+						<input 
+						type="radio" 
+						:value="0"
+						v-model="filtroMP"
+						> 
+						Efectivo
+						</label>
 					</div>
 					<div
-					v-else 
-					@click= "PedidoCambio(i.id_pedido)"
-					class="botoncon text-center"
+					class="flex flex-col"
 					>
-					Ver Detalles
+						<h1>
+						Filtro de Estatus
+						</h1>
+						<label>
+						<input 
+						type="radio" 
+						:value="3"
+						v-model="filtroEst"
+						> 
+						Preparando
+						</label>
+						<label>
+						<input 
+						type="radio" 
+						:value="2"
+						v-model="filtroEst"
+						> 
+						En Camino
+						</label>
+						<label>
+						<input 
+						type="radio" 
+						:value="1"
+						v-model="filtroEst"
+						> 
+						Entregado
+						</label>
 					</div>
 					<div
-					v-if = "PedidoNow === i.id_pedido" 
+					class="flex flex-col"
 					>
-						<div
-						class="tab !bg-green-100/50"
-						v-for = "e in i.detalle_pedido" 
-						:key="e.id_detalle_pedido">
+						<h1>
+						Ciudad del Cliente
+						</h1>
+						<div>
+							<select 
+							v-model="filtrociudad"
+							>
+								<option 
+								value="" disabled
+								>
+								Selecciona una Ciudad...
+								</option>
+								<option 
+								v-for="i in ListaCiudad" 
+								:key="i.ciudad" 
+								:value="i.ciudad"
+								>
+								{{ i.ciudad }}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div
+					class="flex flex-col"
+					>
+						<h1>
+						Provincia del Cliente
+						</h1>
+						<div>
+							<select 
+							v-model="filtroprovincia" 
+							>
+								<option 
+								value="" 
+								disabled
+								>
+								Selecciona una Provincia...
+								</option>
+								<option 
+								v-for="i in ListaProvincia" 
+								:key="i.provincia" 
+								:value="i.provincia"
+								>
+								{{ i.provincia }}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div
+					class="botones"
+					>
+						<button 
+						@click="AplicarFiltro" 
+						class="botoncon">
+						Aplicar Filtros
+						</button>
+						<button 
+						@click="LimpiarFiltro" 
+						v-if="filtroAct === true"
+						class="botont" 
+						>
+						🗑️ Limpiar Filtro
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="start"
+			>
+				<!-- Barra de Busqueda -->
+				<input
+				@input="BusquedaPedido"
+				type="text" v-model="Busqueda" 
+				placeholder="Busqueda..."
+				class="busqueda"
+				maxlength="50"
+				>
+				<h1>
+				Pedidos
+				</h1>
+				<!-- Tabla de Pedidos -->
+				<div v-if="Pedidos.length > 0">
+					<div 
+					v-for= "i in Pedidos" 
+					:key="i.id"
+					class="mb-2 lg:mb-5">
+						<div 
+						@click="Edicion(i)" 
+						:class="Estatuscolor(i.estatus)"
+						class="tab"
+						>
 							<div class="flex flex-col">
 								<div class="flex flex-row">
-									<h3 class="font-bold">
-									{{ e.producto.nombre }}
-									</h3>
+									<h1>
+									{{ i.cliente[0].nombre }}
+									</h1>
+									<h1>
+									{{ Estatustxt(i.estatus) }}
+									</h1>
 								</div>
 								<div class="flex flex-col">
-									<h3>
-									Precio Unitario: ${{ e.precio_unitario }}
-									</h3>
-									<h3>
-									Cantidad: {{ e.cantidad }}
-									</h3>
+									<h2>
+									Direccion: 
+									{{ i.direccion[0].calle }} 
+									{{ i.direccion[0].numero }}
+										- 
+									{{ i.direccion[0].ciudad }}
+										- 
+									{{ i.direccion[0].provincia }}
+									</h2>
 									<h2 class="font-bold">
-									Subtotal: ${{ e.subtotal }}
+									${{ i.total }}
+									</h2>
+									<h2>
+									Pagado con:
+									{{ i.metodo_pago }}
 									</h2>
 								</div>
 							</div>
 							<div class="flex flex-col ml-auto text-right items-end">
 								<h3>
-								Categoria: {{ e.producto.categoria }}
+								Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
 								</h3>
 								<h3>
-								Codigo de Barras: {{ e.producto.codigo_barra }}
+								Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
 								</h3>
+								<h3>
+								Pedido Creado el Dia: {{ FormatoFecha(i.created_at) }}
+								</h3>
+								<h3>
+								Pedido Actualizado el Dia: {{ FormatoFecha(i.updated_at) }}
+								</h3>
+							</div>
+						</div>
+						<div 
+						v-if = "PedidoNow === i.id_pedido" 
+						@click= "PedidoCambio(i.id_pedido)" 
+						class="botonc text-center"
+						>
+						Ocultar Detalles
+						</div>
+						<div
+						v-else 
+						@click= "PedidoCambio(i.id_pedido)"
+						class="botoncon text-center"
+						>
+						Ver Detalles
+						</div>
+						<div v-if = "PedidoNow === i.id_pedido">
+							<div
+							class="tab !bg-green-100/50"
+							v-for = "e in i.detalle_pedido" 
+							:key="e.id_detalle_pedido">
+								<div class="flex flex-col">
+									<div class="flex flex-row">
+										<h3 class="font-bold">
+										{{ e.producto.nombre }}
+										</h3>
+									</div>
+									<div class="flex flex-col">
+										<h3>
+										Precio Unitario: ${{ e.precio_unitario }}
+										</h3>
+										<h3>
+										Cantidad: {{ e.cantidad }}
+										</h3>
+										<h2 class="font-bold">
+										Subtotal: ${{ e.subtotal }}
+										</h2>
+									</div>
+								</div>
+								<div class="flex flex-col ml-auto text-right items-end">
+									<h3>
+									Categoria: {{ e.producto.categoria }}
+									</h3>
+									<h3>
+									Codigo de Barras: {{ e.producto.codigo_barra }}
+									</h3>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div v-else>
-				<h2>
-				No se encontraron Pedidos 😔
-				</h2>
-				<h3>
-				Prueba buscando con otro termino
-				</h3>
-			</div>
-			<div 
-			class="
-			flex justify-center
-			p-3"
-			>
-				<button 
-				@click="Pagina = Pagina - 20 ; BusquedaPedido()" 
-				:disabled="Pagina < 20"
-				class="botona"
+				<div v-else>
+					<h2>
+					No se encontraron Pedidos 😔
+					</h2>
+					<h3>
+					Prueba buscando con otro termino
+					</h3>
+				</div>
+				<div 
+				class="
+				flex justify-center
+				p-3"
 				>
-				🢀
-				</button>
-				<h2 class="item">
-				Items 
-				{{ 0 + Pagina }} 
-				- 
-				{{ Pagina + Pedidos.length }}
-				</h2>
-				<button 
-				@click="Pagina = Pagina + 20 ; BusquedaPedido()" 
-				:disabled="Pedidos.length < 20"
-				class="botona"
-				>
-				🢂
-				</button>
+					<button 
+					@click="Pagina = Pagina - 20 ; BusquedaPedido()" 
+					:disabled="Pagina < 20"
+					class="botona"
+					>
+					🢀
+					</button>
+					<h2 class="item">
+					Items 
+					{{ 0 + Pagina }} 
+					- 
+					{{ Pagina + Pedidos.length }}
+					</h2>
+					<button 
+					@click="Pagina = Pagina + 20 ; BusquedaPedido()" 
+					:disabled="Pedidos.length < 20"
+					class="botona"
+					>
+					🢂
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -357,6 +499,7 @@
 	const Busqueda = ref("")
 	const filtroEst = ref(4)
 	const PedidoNow = ref(null)
+	const MostrarFiltro = ref(false)
     const filtrociudad = ref ("")
     const filtroprovincia = ref ("")
 	const filtroAct = ref(false)

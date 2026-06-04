@@ -477,22 +477,21 @@
             <div
             class="flex w-full flex-col lg:flex-row">
                 <!-- Barra de Filtros -->
-                <div
-                class="bar"
-                >
-                    <h1
-                    @click="MostrarFiltro = !MostrarFiltro"
-                    class="botoncon !py-0 !px-1 !md:py-1 !md:px-3 max-w-min"
-                    >
-                    ᯤ
-                    </h1>
+                <div class="bar">
+                    <div>
+                        <h1
+                        @click="MostrarFiltro = !MostrarFiltro"
+                        class="botonfil"
+                        >
+                        ᯤ
+                        </h1>
+                    </div>
                     <div
-                    class="flex flex-col self-center"
+                    class="flex flex-col lg:self-center"
                     v-if="MostrarFiltro"
                     >
                         <div
-                        class="flex flex-col
-                        md:p-4 p-2"
+                        class="flex flex-col md:p-4 p-2"
                         >
                             <h2>
                             Filtro Categoria
@@ -645,11 +644,7 @@
                 </div>
                 <!-- Tabla de Productos -->
                 <div
-                class="
-                w-full h-fit 
-                flex flex-col 
-                md:p-4 p-2 md:gap-5 gap-2
-                ">
+                class="start">
                     <input
                     @input="BusquedaProducto"
                     type="text" 
@@ -669,7 +664,7 @@
                     v-if="Productos.length > 0"
                     class="
                     grid
-                    md:grid-cols-4
+                    md:grid-cols-3
                     grid-cols-2
                     gap-6
                     ">
@@ -1103,7 +1098,8 @@
             id_producto: ProductoActual.value.id,
             cantidad: ProductoCantidad.value,
             precio_unitario: ProductoActual.value.precio,
-            stock_producto: ProductoActual.value.stock
+            stock_producto: ProductoActual.value.stock,
+            imagenes: ProductoActual.value.imagenes
         }
         let CarritoExistente = CarritoLocal.value.find(
             (item_exitente) =>

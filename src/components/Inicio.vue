@@ -346,18 +346,19 @@
         </Teleport>
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
-            <div
-            class="flex w-full flex-col lg:flex-row">
+            <div class="flex w-full flex-col lg:flex-row">
                 <!-- Barra de Filtros -->
-                <div class="bar">
-                    <h1
-                    @click="MostrarFiltro = !MostrarFiltro"
-                    class="botoncon !py-0 !px-1 !md:py-1 !md:px-3 max-w-min"
-                    >
-                    ᯤ
-                    </h1>
+                <div class="bar !z-30">
+                    <div class="">
+                        <h1
+                        @click="MostrarFiltro = !MostrarFiltro"
+                        class="botonfil"
+                        >
+                        ᯤ
+                        </h1>
+                    </div>
                     <div
-                    class="flex flex-col self-center"
+                    class="flex flex-col lg:self-center"
                     v-if="MostrarFiltro"
                     >
                         <div
@@ -492,12 +493,7 @@
                 </div>
                 <!-- Tabla de Productos -->
                 <div
-                class="
-                flex-1 min-w-0 h-fit 
-                flex flex-col
-                md:p-5 p-2
-                md:gap-5 gap-2
-                ">
+                class="start">
                     <input
                     @input="BusquedaProducto"
                     type="text" 

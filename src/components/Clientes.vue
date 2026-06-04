@@ -1,119 +1,4 @@
 <template>
-    <!-- Filtro -->
-    <Teleport to="body">
-        <div class="fondo" v-if="VentanaFiltro">
-           <div class="popup">
-                <h1>
-                ¿Realizo un Pedido?
-                </h1>
-                <div 
-                class="
-                flex flex-col
-                ">
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="1"
-                    v-model="filtroDirec"
-                    > 
-                    Realizo uno o mas Pedidos
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="0"
-                    v-model="filtroDirec"
-                    > 
-                    No Realizo Pedidos
-                    </label>
-                </div>
-                <h1>
-                ¿El Cliente esta Activo?
-                </h1>
-                <div 
-                class="
-                flex flex-col
-                ">
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="2"
-                    v-model="filtroEst"
-                    > 
-                    Todos los Clientes
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="1"
-                    v-model="filtroEst"
-                    > 
-                    Cliente Activo
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="0"
-                    v-model="filtroEst"
-                    > 
-                    Cliente Eliminado
-                    </label>
-                </div>
-                <div 
-                v-if="filtroDirec === 1"
-                >
-                    <h2>
-                    Ciudad del Cliente
-                    </h2>
-                    <select 
-                    v-model="filtrociudad" 
-                    class="sel"
-                    >
-                        <option value="" disabled>
-                        Selecciona una Ciudad...
-                        </option>
-                        <option v-for="i in ListaCiudad" :key="i.ciudad" :value="i.ciudad">
-                        {{ i.ciudad }}
-                        </option>
-                    </select>
-                    <h2>
-                    Provincia del Cliente
-                    </h2>
-                    <select 
-                    v-model="filtroprovincia" 
-                    class="sel">
-                        <option value="" disabled>
-                        Selecciona una Provincia...
-                        </option>
-                        <option v-for="i in ListaProvincia" :key="i.provincia" :value="i.provincia">
-                        {{ i.provincia }}
-                        </option>
-                    </select>
-                </div>
-                <div
-                class="botones">
-                    <button 
-                    @click="AplicarFiltro" 
-                    class="botoncon"
-                    >
-                    Filtrar
-                    </button>
-                    <button 
-                    @click="LimpiarFiltro" 
-                    v-if="filtroAct === true"
-                    class="botont" 
-                    >
-                    🗑️ Limpiar Filtro
-                    </button>
-                    <button 
-                    @click="CerrarPopUp01" 
-                    class="botonc">
-                    Cerrar
-                    </button>
-                </div>
-            </div> 
-        </div>
-    </Teleport>
     <!-- Confirmacion Eliminar -->
     <Teleport to="body">
         <div 
@@ -194,349 +79,377 @@
             </div>
         </div>
     </Teleport>
-    <!-- Nuevo Cliente -->
-    <Teleport to="body">
-        <div class="fondo" v-if="ActualizarCNew">
-            <div class="popup" v-if="Rol === '1'">
-                <h1>
-                Nuevo Cliente
-                </h1>
-                <form @submit.prevent="SubirNuevoCliente">
-                    <h2>
-                    Nombre
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.nombre" 
-                    placeholder="Nombre"
-                    maxlength="20"
-                    >
-                    <h2>
-                    E-Mail
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.email" 
-                    placeholder="E-Mail"
-                    maxlength="50"
-                    >
-                    <h2>
-                    Documento
-                    </h2>
-                    <input 
-                    type="number" 
-                    v-model="NuevoCliente.dni" 
-                    placeholder="Documento"
-                    maxlength="8"
-                    >
-                    <h2>
-                    Contraseña
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.contrasena" 
-                    placeholder="Contraseña"
-                    maxlength="20"
-                    >
-                    <div
-                    class="botones"
-                    >
-                        <button 
-                        type="submit" 
-                        :disabled="confirboton"
-                        class="botoncon"
+    <div class="cuerpo">
+        <div class="pagina">
+            <div class="flex w-full flex-col lg:flex-row">
+                <div class="bar">
+                    <div>
+                        <h1
+                        @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
+                        class="botonfil"
                         >
-                        Crear Cliente
-                        </button>
-                        <button 
-                        @click="CerrarPopUp01"
-                        class="botonc"
+                        ᯤ
+                        </h1>
+                        <div
+                        class="flex flex-col lg:self-center"
+                        v-if="MostrarFiltro"
                         >
-                        Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </Teleport>
-    <div
-    class="cuerpo"
-    >
-        <div class="start">
-            <!-- Barra de Busqueda -->
-            <input
-            @input="BusquedaCliente"
-            type="text" v-model="Busqueda" 
-            placeholder="Busqueda..."
-            class="busqueda"
-            maxlength="50"
-            >
-            <div class="botones">
-                <!-- Boton de Filtro -->
-                <button 
-                @click="AbrirPopUp01" 
-                class="botoncon">
-                🗃️Filtros
-                </button>
-                <!-- Crear Nuevo Cliente/Usuario -->
-                <button 
-                @click="AbrirPopUp04" 
-                class="botont"
-                >
-                Crear Nuevo Cliente
-                </button>
-            </div>
-        </div>
-        <!-- Tabla de Clientes -->
-        <div>
-            <div>
-                <h1>
-                Clientes
-                </h1>
-                <div
-                v-if="clientes.length > 0"
-                >
-                    <div
-				    class="mb-2 lg:mb-5"
-                    v-for= "i in clientes" 
-                    :key="i.id">
-                        <div 
-                        :class="Estatuscolor(i.activo)"
-                        class="tab"
-                        >
-                            <div class="flex flex-col">
-                                <div class="flex flex-row">
-                                    <h1>
-                                    {{ i.nombre }}
-                                    </h1>
-                                </div>
-                                <div class="flex flex-col">
-                                    <h2>
-                                    E-Mail: {{ i.email }}
-                                    </h2>
-                                    <h2>
-                                    DNI: {{ i.dni }}
-                                    </h2>
+                            <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h1>
+                                ¿Realizo un Pedido?
+                                </h1>
+                                <div 
+                                class="
+                                flex flex-col
+                                ">
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="1"
+                                    v-model="filtroDirec"
+                                    > 
+                                    Realizo uno o mas Pedidos
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="0"
+                                    v-model="filtroDirec"
+                                    > 
+                                    No Realizo Pedidos
+                                    </label>
                                 </div>
                             </div>
-						    <div class="flex flex-col ml-auto text-right items-end">
-                                <button 
-                                @click="Eliminacion(i)" 
-                                v-if="i.activo"
-                                class="botonc !p-2"
+                            <div
+                            class="flex flex-col p-2"
+                            >
+                                <h1>
+                                ¿El Cliente esta Activo?
+                                </h1>
+                                <div 
+                                class="
+                                flex flex-col
+                                ">
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="2"
+                                    v-model="filtroEst"
+                                    > 
+                                    Todos los Clientes
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="1"
+                                    v-model="filtroEst"
+                                    > 
+                                    Cliente Activo
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="0"
+                                    v-model="filtroEst"
+                                    > 
+                                    Cliente Eliminado
+                                    </label>
+                                </div>
+                            </div>
+                            <div
+                            class="flex flex-col p-2"
+                            >
+                            <div 
+                            v-if="filtroDirec === 1"
+                            >
+                                <h2>
+                                Ciudad del Cliente
+                                </h2>
+                                <select 
+                                v-model="filtrociudad" 
+                                class="sel"
                                 >
-                                ❌
-                                <span class="hidden lg:inline 2xl:inline">
-                                Eliminar
-                                </span>
+                                    <option value="" disabled>
+                                    Selecciona una Ciudad...
+                                    </option>
+                                    <option v-for="i in ListaCiudad" :key="i.ciudad" :value="i.ciudad">
+                                    {{ i.ciudad }}
+                                    </option>
+                                </select>
+                                <h2>
+                                Provincia del Cliente
+                                </h2>
+                                <select 
+                                v-model="filtroprovincia" 
+                                class="sel">
+                                    <option value="" disabled>
+                                    Selecciona una Provincia...
+                                    </option>
+                                    <option v-for="i in ListaProvincia" :key="i.provincia" :value="i.provincia">
+                                    {{ i.provincia }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                            <div
+                            class="botones">
+                                <button 
+                                @click="AplicarFiltro" 
+                                class="botoncon"
+                                >
+                                Filtrar
                                 </button>
                                 <button 
-                                @click="Eliminacion(i)" 
-                                v-else
-                                class="botoncon !p-2"
+                                @click="LimpiarFiltro" 
+                                v-if="filtroAct === true"
+                                class="botont" 
                                 >
-                                🕊️
-                                <span class="hidden lg:inline 2xl:inline">
-                                Reactivar
-                                </span>
-                                </button>
-                                <button 
-                                @click="Edicion(i)"
-                                class="botont !p-2"
-                                >
-                                ✏️
-                                <span class="hidden lg:inline 2xl:inline">
-                                Editar
-                                </span>
+                                🗑️ Limpiar Filtro
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="rounded-ss-2xl">
+                    <div>
+                        <h1
+                        @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
+                        class="botonfil !bg-gray-600"
+                        >
+                        +
+                        </h1>
+                        <div
+                        class="flex flex-col lg:self-center"
+                        v-if="MostrarNuevo"
+                        >
+                            <h1>
+                            Nuevo Cliente
+                            </h1>
+                            <form @submit.prevent="SubirNuevoCliente">
+                                <h2>
                                 Nombre
-                                </th>
-                                <th>
-                                Email
-                                </th>
-                                <th>
-                                DNI
-                                </th>
-                                <th>
-                                Direcciones
-                                </th>
-                                <th 
-                                v-if="Rol === '1'"
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="NuevoCliente.nombre" 
+                                placeholder="Nombre"
+                                maxlength="20"
                                 >
-                                Activo
-                                </th>
-                                <th 
-                                v-if="Rol === '1'"
+                                <h2>
+                                E-Mail
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="NuevoCliente.email" 
+                                placeholder="E-Mail"
+                                maxlength="50"
                                 >
-                                Eliminar
-                                </th>
-                                <th 
-                                v-if="Rol === '1'"
-                                class="rounded-se-2xl"
+                                <h2>
+                                Documento
+                                </h2>
+                                <input 
+                                type="number" 
+                                v-model="NuevoCliente.dni" 
+                                placeholder="Documento"
+                                maxlength="8"
                                 >
-                                Editar
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template 
-                            v-for= "i in clientes" 
-                            :key="i.id"
+                                <h2>
+                                Contraseña
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="NuevoCliente.contrasena" 
+                                placeholder="Contraseña"
+                                maxlength="20"
+                                >
+                            </form>
+                            <div
+                            class="botones"
                             >
-                                <tr>
-                                    <td>
-                                    {{ i.nombre }}
-                                    </td>
-                                    <td>
-                                    {{ i.email }}
-                                    </td>
-                                    <td>
-                                    {{ i.dni }}
-                                    </td>
-                                    <td 
-                                    v-if="i.direcciones.length > 0 && DireccionNow === i.id" 
-                                    @click= "DireccionCambio(i.id)"
-                                    class="no"
-                                    >
-                                    Ocultar Direcciones
-                                    </td>
-                                    <td 
-                                    v-else-if="i.direcciones.length > 0 && DireccionNow !== i.id" 
-                                    @click= "DireccionCambio(i.id)" 
-                                    class="si"
-                                    >
-                                    Ver Direcciones
-                                    </td>
-                                    <td 
-                                    v-else
-                                    >
-                                    No hay Direcciones Adjuntas
-                                    </td>
-                                    <td 
-                                    v-if="Rol === '1'" 
-                                    :class="Estatuscolor(i.activo)"
-                                    >
-                                    {{ Estatustxt(i.activo) }}
-                                    </td>
-                                    <td 
-                                    v-if="Rol === '1'"
-                                    >
-                                    <button 
-                                    @click="Eliminacion(i)" 
-                                    v-if="i.activo"
-                                    >
-                                    ❌
-                                    </button>
-                                    <button 
-                                    @click="Eliminacion(i)" 
-                                    v-else
-                                    >
-                                    🕊️
-                                    </button>
-                                    </td>
-                                    <td 
-                                    v-if="Rol === '1'"
-                                    >
-                                    <button 
-                                    @click="Edicion(i)"
-                                    >
-                                    ✏️
-                                    </button>
-                                    </td>
-                                </tr>
-                                <tr 
-                                v-if = "DireccionNow === i.id"
+                                <button 
+                                type="submit" 
+                                :disabled="confirboton"
+                                class="botoncon"
                                 >
-                                    <td 
-                                    colspan="9"
-                                    >
-                                        <div>
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th>
-                                                        Calle
-                                                        </th>
-                                                        <th>
-                                                        Numero
-                                                        </th>
-                                                        <th>
-                                                        Barrio
-                                                        </th>
-                                                        <th>
-                                                        Ciudad
-                                                        </th>
-                                                        <th>
-                                                        Provincia
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr 
-                                                    v-for = "e in i.direcciones" 
-                                                    :key="e.id"
-                                                    >
-                                                        <td>
-                                                        {{ e.calle }}
-                                                        </td>
-                                                        <td>
-                                                        {{ e.numero }}
-                                                        </td>
-                                                        <td>
-                                                        {{ e.barrio }}
-                                                        </td>
-                                                        <td>
-                                                        {{ e.ciudad }}
-                                                        </td>
-                                                        <td>
-                                                        {{ e.provincia }}
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>  
-                <div v-else>
-                    <h2>No se encontraran clientes 😔</h2>
-                    <h3>Prueba buscando con otro termino</h3>
+                                Crear Cliente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div 
-                class="
-                flex justify-center
-                p-3"
-                >
-                    <button
-                    @click="Pagina = Pagina - 20 ; BusquedaCliente()" 
-                    :disabled="Pagina < 20"
-                    class="botona"
+                <!-- Tabla de Clientes -->
+                <div class="start">
+                    <!-- Barra de Busqueda -->
+                    <input
+                    @input="BusquedaCliente"
+                    type="text" v-model="Busqueda" 
+                    placeholder="Busqueda..."
+                    class="busqueda"
+                    maxlength="50"
                     >
-                    🢀
-                    </button>
-                    <h2 class="item">
-                    Items 
-                    {{ 0 + Pagina }} 
-                    - 
-                    {{ Pagina + clientes.length }}
-                    </h2>
-                    <button 
-                    @click="Pagina = Pagina + 20 ; BusquedaCliente()" 
-                    :disabled="clientes.length < 20"
-                    class="botona"
-                    >
-                    🢂
-                    </button>
+                    <h1 class="text-center">
+                    Clientes
+                    </h1>
+                    <div>
+                        <div
+                        v-if="clientes.length > 0"
+                        >
+                            <div
+                            class="mb-2 lg:mb-5"
+                            v-for= "i in clientes" 
+                            :key="i.id">
+                                <div 
+                                :class="Estatuscolor(i.activo)"
+                                class="tab"
+                                >
+                                    <div class="flex flex-col">
+                                        <div class="flex flex-row">
+                                            <h1>
+                                            {{ i.nombre }}
+                                            </h1>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <h2>
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            E-Mail: 
+                                            </span>
+                                            {{ i.email }}
+                                            </h2>
+                                            <h2>
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            DNI: 
+                                            </span>
+                                            {{ i.dni }}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col ml-auto text-right items-end">
+                                        <button 
+                                        @click="Eliminacion(i)" 
+                                        v-if="i.activo"
+                                        class="botonc !p-2"
+                                        >
+                                        ❌
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Eliminar
+                                        </span>
+                                        </button>
+                                        <button 
+                                        @click="Eliminacion(i)" 
+                                        v-else
+                                        class="botoncon !p-2"
+                                        >
+                                        🕊️
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Reactivar
+                                        </span>
+                                        </button>
+                                        <button 
+                                        @click="Edicion(i)"
+                                        class="botont !p-2"
+                                        >
+                                        ✏️
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Editar
+                                        </span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div 
+                                v-if="i.direcciones.length > 0 && DireccionNow === i.id" 
+                                @click= "DireccionCambio(i.id)"
+                                class="botonc"
+                                >
+                                Ocultar Direcciones
+                                </div>
+                                <div
+                                v-else-if="i.direcciones.length > 0 && DireccionNow !== i.id" 
+                                @click= "DireccionCambio(i.id)" 
+                                class="botoncon"
+                                >
+                                Ver Direcciones
+                                </div>
+                                <button
+                                v-else
+                                disabled
+                                class="botont w-full"
+                                >
+                                No hay Direcciones Adjuntas
+                                </button>
+                                <div v-if = "DireccionNow === i.id">
+                                    <div
+                                    v-for = "e in i.direcciones" 
+                                    :key="e.id"
+                                    class="tab !bg-green-100/50"
+                                    >
+                                        <div class="flex flex-col">
+                                            <div class="flex flex-row">
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Calle: 
+                                                </span>
+                                                {{ e.calle }} 
+                                                {{ e.numero }}
+                                                </h2>
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <h3>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Barrio: 
+                                                </span>
+                                                {{ e.barrio }}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col ml-auto text-right items-end">
+                                            <h2>
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Ciudad: 
+                                            </span>
+                                            {{ e.ciudad }}
+                                            </h2>
+                                            <h2>
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Provincia:  
+                                            </span>
+                                            {{ e.provincia }}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                        <div v-else>
+                            <h2>No se encontraran clientes 😔</h2>
+                            <h3>Prueba buscando con otro termino</h3>
+                        </div>
+                        <div 
+                        class="
+                        flex justify-center
+                        p-3"
+                        >
+                            <button
+                            @click="Pagina = Pagina - 20 ; BusquedaCliente()" 
+                            :disabled="Pagina < 20"
+                            class="botona"
+                            >
+                            🢀
+                            </button>
+                            <h2 class="item">
+                            Items 
+                            {{ 0 + Pagina }} 
+                            - 
+                            {{ Pagina + clientes.length }}
+                            </h2>
+                            <button 
+                            @click="Pagina = Pagina + 20 ; BusquedaCliente()" 
+                            :disabled="clientes.length < 20"
+                            class="botona"
+                            >
+                            🢂
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -558,6 +471,8 @@
     const filtroprovincia = ref ("")
     const filtroAct = ref(false)
     const DireccionNow = ref(null)
+    const MostrarFiltro = ref(false)
+    const MostrarNuevo = ref(false)
     const VentanaFiltro = ref(false)
     const ActualizarCNew = ref(false)
     const ListaCiudad = ref ("")
@@ -627,14 +542,6 @@
         CerrarPopUp01()
         filtrociudad.value = ""
         filtroprovincia.value = ""
-    }
-    const Estatustxt = (id_estatus) => {
-        if (id_estatus === true) {
-            return "Activo"
-        }
-        else if (id_estatus === false) {
-            return "Eliminado"
-        }
     }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {

@@ -1,62 +1,4 @@
 <template>
-    <!-- Filtro -->
-    <Teleport to="body">
-        <div class="fondo" v-if="VentanaFiltro">
-           <div class="popup">
-                <h1>
-                ¿El Usuario esta Activo?
-                </h1>
-                <div class="flex flex-col">
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="2"
-                    v-model="filtroEst"
-                    > 
-                    Todos los Clientes
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="1"
-                    v-model="filtroEst"
-                    > 
-                    Cliente Activo
-                    </label>
-                    <label>
-                    <input 
-                    type="radio" 
-                    :value="0"
-                    v-model="filtroEst"
-                    > 
-                    Cliente Eliminado
-                    </label>
-                </div>
-                <div
-                class="botones">
-                    <button 
-                    @click="AplicarFiltro" 
-                    class="botoncon"
-                    >
-                    Filtrar
-                    </button>
-                    <button 
-                    @click="LimpiarFiltro" 
-                    v-if="filtroAct === true"
-                    class="botont"
-                    >
-                    🗑️ Limpiar Filtro
-                    </button>
-                    <button 
-                    @click="CerrarPopUp01" 
-                    class="botonc"
-                    >
-                    Cerrar
-                    </button>
-                </div>
-            </div> 
-        </div>
-    </Teleport>
     <!-- Confirmacion Eliminar -->
     <Teleport to="body">
         <div 
@@ -232,6 +174,176 @@
                         Rider
                         </option>
                     </select>
+                </form>
+                <div 
+                class="botones"
+                >
+                    <button 
+                    type="submit" 
+                    :disabled="confirboton"
+                    class="botoncon"
+                    >
+                    Crear Cliente
+                    </button>
+                    <button 
+                    @click="CerrarPopUp01"
+                    class="botonc"
+                    >
+                    Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </Teleport>
+    <div
+    class="cuerpo"
+    >
+        <!-- Tabla de Usuarios -->
+        <div class="pagina">
+            <div class="bar">
+                <div>
+                    <h1
+                    @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
+                    class="botonfil"
+                    >
+                    ᯤ
+                    </h1>
+                </div>
+                <div
+                class="flex flex-col lg:self-center"
+                v-if="MostrarFiltro"
+                >
+                    <div
+                    class="flex flex-col"
+                    >
+                        <h1>
+                        ¿El Usuario esta Activo?
+                        </h1>
+                        <label>
+                        <input 
+                        type="radio" 
+                        :value="2"
+                        v-model="filtroEst"
+                        > 
+                        Todos los Usuarios
+                        </label>
+                        <label>
+                        <input 
+                        type="radio" 
+                        :value="1"
+                        v-model="filtroEst"
+                        > 
+                        Usuario Activo
+                        </label>
+                        <label>
+                        <input 
+                        type="radio" 
+                        :value="0"
+                        v-model="filtroEst"
+                        > 
+                        Usuario Eliminado
+                        </label>
+                    </div>
+                    <div
+                    class="botones"
+                    >
+                        <button 
+                        @click="AplicarFiltro" 
+                        class="botoncon">
+                        Aplicar Filtros
+                        </button>
+                        <button 
+                        @click="LimpiarFiltro" 
+                        v-if="filtroAct === true"
+                        class="botont" 
+                        >
+                        🗑️ Limpiar Filtro
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <h1
+                    @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
+                    class="botonfil !bg-gray-600"
+                    >
+                    +
+                    </h1>
+                </div>
+                <div
+                class="flex flex-col lg:self-center"
+                v-if="MostrarNuevo"
+                >
+                    <h1>
+                    Nuevo Usuario
+                    </h1>
+                    <form 
+                    @submit.prevent="SubirNuevoUsuario" 
+                    >
+                        <h2>
+                        Nombre
+                        </h2>
+                        <input 
+                        type="text" 
+                        v-model="NuevoUsuario.nombre" 
+                        placeholder="Nombre"
+                        maxlength="50"
+                        >
+                        <h2>
+                        E-Mail
+                        </h2>
+                        <input 
+                        type="text" 
+                        v-model="NuevoUsuario.email" 
+                        placeholder="E-Mail"
+                        maxlength="50"
+                        >
+                        <h2>
+                        Documento
+                        </h2>
+                        <input 
+                        type="number" 
+                        v-model="NuevoUsuario.dni" 
+                        placeholder="Documento"
+                        maxlength="8"
+                        >
+                        <h2>
+                        Contraseña
+                        </h2>
+                        <input 
+                        type="text" 
+                        v-model="NuevoUsuario.contrasena" 
+                        placeholder="Contraseña"
+                        maxlength="30"
+                        >
+                        <h2>
+                        Rol
+                        </h2>
+                        <select 
+                        v-model="NuevoUsuario.id_rol" 
+                        >
+                            <option value="" disabled>
+                            Selecciona un Rol...
+                            </option>
+                            <option value=1>
+                            Administrador
+                            </option>
+                            <option value=2>
+                            Editor de Productos General
+                            </option>
+                            <option value=3>
+                            Gestor de Pedidos General y Editor de Clientes
+                            </option>
+                            <option value=4>
+                            Gestor de Precios
+                            </option>
+                            <option value=5>
+                            Gestor de Stock
+                            </option>
+                            <option value=6>
+                            Rider
+                            </option>
+                        </select>
+                    </form>
                     <div 
                     class="botones"
                     >
@@ -242,151 +354,92 @@
                         >
                         Crear Cliente
                         </button>
-                        <button 
-                        @click="CerrarPopUp01"
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
-    </Teleport>
-    <div
-    class="cuerpo"
-    >
-        <div
-        class="start">
-            <!-- Barra de Busqueda -->
-            <input
-            @input="BusquedaUsuario"
-            type="text" v-model="Busqueda" 
-            placeholder="Busqueda de Usuarios..."
-            class="busqueda"
-            maxlength="50"
-            >
-            <div class="botones">
-                <!-- Boton de Filtro -->
-                <button 
-                @click="AbrirPopUp01" 
-                class="botoncon"
+            <div class="start">
+                <!-- Barra de Busqueda -->
+                <input
+                @input="BusquedaUsuario"
+                type="text" v-model="Busqueda" 
+                placeholder="Busqueda de Usuarios..."
+                class="busqueda"
+                maxlength="50"
                 >
-                🗃️Filtros
-                </button>
-                <!-- Crear Nuevo Cliente/Usuario -->
-                <button 
-                @click="AbrirPopUp04" 
-                class="botont"
-                >
-                Crear Nuevo Usuario
-                </button>
-            </div>
-        </div>
-        <!-- Tabla de Usuarios -->
-        <div>
-            <div>
-                <h1>
+                <h1 class="text-center">
                 Usuarios
                 </h1>
                 <div
                 v-if="usuarios.length > 0"
                 >
-                    <table>
-                        <thead>
-                            <tr>
-                                <th
-                                class="
-                                rounded-ss-2xl 
-                                ">
-                                Nombre
-                                </th>
-                                <th>
-                                Email
-                                </th>
-                                <th>
-                                DNI
-                                </th>
-                                <th 
-                                v-if="Rol === '1'"
-                                >
-                                Activo
-                                </th>
-                                <th 
-                                v-if="Rol === '1'"
-                                >
-                                Rol
-                                </th>
-                                <th 
-                                v-if="Rol === '1'"
-                                >
-                                Eliminar
-                                </th>
-                                <th 
-                                v-if="Rol === '1'"
-                                class="
-                                rounded-se-2xl 
-                                ">
-                                Editar
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template 
-                            v-for= "i in usuarios" 
-                            :key="i.id"
-                            >
-                                <tr>
-                                    <td>
-                                    {{ i.nombre }}
-                                    </td>
-                                    <td>
+                    <div
+				    class="mb-2 lg:mb-5"
+                    v-for= "i in usuarios" 
+                    :key="i.id">
+                        <div 
+                        :class="Rolcolor(i.id_rol)"
+                        class="tab"
+                        >
+                            <div class="flex flex-col">
+                                <div class="flex flex-row">
+                                    <h1>
+                                    {{ i.nombre }} ({{ Roltxt(i.id_rol) }})
+                                    </h1>
+                                </div>
+                                <div class="flex flex-col">
+                                    <h2>
+                                    <span class="hidden lg:inline 2xl:inline">
+                                    E-Mail: 
+                                    </span>
                                     {{ i.email }}
-                                    </td>
-                                    <td>
+                                    </h2>
+                                    <h2>
+                                    <span class="hidden lg:inline 2xl:inline">
+                                    DNI: 
+                                    </span>
                                     {{ i.dni }}
-                                    </td>
-                                    <td 
-                                    v-if="Rol === '1'" 
-                                    :class="Estatuscolor(i.activo)"
-                                    >
+                                    </h2>
+                                    <h2>
+                                    <span class="hidden lg:inline 2xl:inline">
+                                    Estatus: 
+                                    </span>
                                     {{ Estatustxt(i.activo) }}
-                                    </td>
-                                    <td 
-                                    v-if="Rol === '1'" 
-                                    :class="Rolcolor(i.id_rol)"
-                                    >
-                                    {{ Roltxt(i.id_rol) }}
-                                    </td>
-                                    <td 
-                                    v-if="Rol === '1'"
-                                    >
-                                    <button 
-                                    @click="Eliminacion(i)" 
-                                    v-if="i.activo"
-                                    >
-                                    ❌
-                                    </button>
-                                    <button 
-                                    @click="Eliminacion(i)" 
-                                    v-else
-                                    >
-                                    🕊️
-                                    </button>
-                                    </td>
-                                    <td 
-                                    v-if="Rol === '1'"
-                                    >
-                                    <button 
-                                    @click="Edicion(i)" 
-                                    >
-                                    ✏️
-                                    </button>
-                                    </td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
+                                    </h2>
+                                </div>
+                            </div>
+						    <div class="flex flex-col ml-auto text-right items-end">
+                                <button 
+                                @click="Eliminacion(i)" 
+                                v-if="i.activo"
+                                class="botonc !p-2"
+                                >
+                                ❌
+                                <span class="hidden lg:inline 2xl:inline">
+                                Eliminar
+                                </span>
+                                </button>
+                                <button 
+                                @click="Eliminacion(i)" 
+                                v-else
+                                class="botoncon !p-2"
+                                >
+                                🕊️
+                                <span class="hidden lg:inline 2xl:inline">
+                                Reactivar
+                                </span>
+                                </button>
+                                <button 
+                                @click="Edicion(i)"
+                                class="botont !p-2"
+                                >
+                                ✏️
+                                <span class="hidden lg:inline 2xl:inline">
+                                Editar
+                                </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>  
                 <div 
                 v-else>
@@ -438,6 +491,8 @@
     const Busqueda = ref("")
     const usuarios =  ref([])
     const UsuarioEli = ref("")
+    const MostrarFiltro = ref(false)
+    const MostrarNuevo = ref(false)
     const filtroAct = ref(false)
     const VentanaFiltro = ref(false)
     const ActualizarUNew = ref(false)

@@ -1,39 +1,22 @@
 <template>
-    <div
-    class="cuerpo"
-    >
-        <div
-        class="start">
-            <!-- Barra de Busqueda -->
-            <input
-            @input="BusquedaHistorial"
-            type="text" 
-            v-model="Busqueda" 
-            placeholder="Busqueda de Historial..."
-            class="busqueda"
-            maxlength="50"
-            >
-            <div class="botones">
-                <!-- Boton de Filtro -->
-                <button 
-                @click="AbrirPopUp01" 
-                class="botoncon">
-                🗃️Filtros
-                </button>
-            </div>
-        </div>
-        <!-- Filtro -->
-        <Teleport to="body">
-            <div class="fondo" v-if="FiltroCaja">
-                <div class="popup">
-                    <h1>
-                    Filtros de Historial
+    <div class="cuerpo">
+        <div class="pagina">
+            <div class="bar">
+                <div>
+                    <h1
+                    @click="MostrarFiltro = !MostrarFiltro"
+                    class="botonfil"
+                    >
+                    ᯤ
                     </h1>
-                    <div 
-                    class="
-                    flex flex-col 
-                    p-2 gap-2
-                    ">
+                </div>
+                <div
+                class="flex flex-col lg:self-center"
+                v-if="MostrarFiltro"
+                >
+                    <div
+                    class="flex flex-col md:p-4 p-2"
+                    >
 						<h2 class="p-2">
 						Filtros de Fecha de Actualizacion
 						</h2>
@@ -48,11 +31,9 @@
                         placeholder="Fecha de Actualizacion Min..."
                         >
                     </div>
-                    <div 
-                    class="
-                    flex flex-col 
-                    p-2 gap-2
-                    ">
+                    <div
+                    class="flex flex-col md:p-4 p-2"
+                    >
 						<h2 class="p-2">
 						Filtros de Precio Viejo
 						</h2>
@@ -69,11 +50,9 @@
 		                maxlength="10"
                         >
                     </div>
-                    <div 
-                    class="
-                    flex flex-col 
-                    p-2 gap-2
-                    ">
+                    <div
+                    class="flex flex-col md:p-4 p-2"
+                    >
 						<h2 class="p-2">
 						Filtros de Precio Nuevo
 						</h2>
@@ -90,11 +69,9 @@
 		                maxlength="10"
                         >
                     </div>
-                    <div 
-                    class="
-                    flex flex-col 
-                    p-2 gap-2
-                    ">
+                    <div
+                    class="flex flex-col md:p-4 p-2"
+                    >
                         <h2 class="p-2">
                         Filtro Categoria
                         </h2>
@@ -115,11 +92,9 @@
                             </select>
                         </div>
                     </div>
-                    <div 
-                    class="
-                    flex flex-col 
-                    p-2 gap-2
-                    ">
+                    <div
+                    class="flex flex-col md:p-4 p-2"
+                    >
                         <h2 class="p-2">
                         ¿El Productos esta Activo?
                         </h2>
@@ -167,125 +142,116 @@
                         >
                         🗑️ Limpiar Filtro
                         </button>
-                        <button 
-                        @click="CerrarPopUp01" 
-                        class="botonc"
-                        >
-                        Cerrar
-                        </button>
                     </div>
                 </div>
             </div>
-        </Teleport>
-        <!-- Tabla de Historial de Precios -->
-		<div>
-			<h1>
-			Historial de Pedidos
-			</h1>
-			<div
-            v-if="Historial.length > 0"
-            >
-				<table>
-					<thead>
-						<tr>
-							<th
-                            class="
-                            rounded-ss-2xl 
-                            ">
-							Nombre Producto
-							</th>
-							<th>
-							Categoria
-							</th>
-							<th>
-							Codigo de Barras
-							</th>
-							<th>
-							Precio Viejo
-							</th>
-							<th>
-							Precio Nuevo
-							</th>
-							<th>
-							Fecha de Actualizacion
-							</th>
-							<th
-                            class="
-                            rounded-se-2xl 
-                            ">
-							Activo
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr 
-                        v-for= "i in Historial" 
-                        :key="i.id"
+            <div class="start">
+                <!-- Barra de Busqueda -->
+                <input
+                @input="BusquedaHistorial"
+                type="text" 
+                v-model="Busqueda" 
+                placeholder="Busqueda de Historial..."
+                class="busqueda"
+                maxlength="50"
+                >
+                <h1 class="text-center">
+                Historial de Pedidos
+                </h1>
+                <!-- Tabla de Historial de Precios -->
+                <div
+                v-if="Historial.length > 0"
+                >
+                    <div
+                    class="mb-2 lg:mb-5"
+                    v-for= "i in Historial" 
+                    :key="i.id">
+                        <div 
+                        :class="Estatuscolor(i.activo)"
+                        class="tab"
                         >
-							<td>
-							{{ i.nombre }}
-							</td>
-							<td>
-							{{ i.categoria }}
-							</td>
-							<td>
-							{{ i.codigo_barra }}
-							</td>
-							<td>
-							${{ i.precio_viejo }}
-							</td>
-							<td>
-							${{ i.precio_nuevo }}
-							</td>
-							<td>
-							{{ FormatoFecha(i.updated_at) }}
-							</td>
-                            <td 
-                            :class="Estatuscolor(i.activo)"
-                            >
-                            {{ Estatustxt(i.activo) }}
-                            </td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-            <div 
-            v-else
-            >
-                <h2>
-                No se encontraron Cambios en Precios
-                </h2>
-                <h3>
-                Prueba buscando con otro termino
-                </h3>
-            </div>
-            <div 
-            class="
-            flex justify-center
-            p-3"
-            >
-                <button 
-                @click="Pagina = Pagina - 20 ; BusquedaHistorial()" 
-                :disabled="Pagina < 20"
-                class="botona"
+                            <div class="flex flex-col">
+                                <div class="flex flex-row">
+                                    <h1>
+                                    {{ i.nombre }}
+                                    </h1>
+                                </div>
+                                <div class="flex flex-col">
+                                    <h2>
+                                    <span class="hidden lg:inline 2xl:inline">
+                                    Categoria: 
+                                    </span>
+                                    {{ i.categoria }}
+                                    </h2>
+                                    <h2>
+                                    <span class="hidden lg:inline 2xl:inline">
+                                    Codigo de Barras: 
+                                    </span>
+                                    {{ i.codigo_barra }}
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="flex flex-col ml-auto text-right items-end">
+                                <h2>
+                                <span class="hidden lg:inline 2xl:inline">
+                                Precio Viejo: 
+                                </span>
+                                {{ i.precio_viejo }}
+                                </h2>
+                                <h2>
+                                <span class="hidden lg:inline 2xl:inline">
+                                Precio Nuevo: 
+                                </span>
+                                {{ i.precio_nuevo }}
+                                </h2>
+                                <h2>
+                                <span class="hidden lg:inline 2xl:inline">
+                                Fecha de Act: 
+                                </span>
+                                {{ FormatoFecha(i.updated_at) }}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div 
+                v-else
                 >
-                🢀
-                </button>
-                <h2 class="item">
-                Items 
-                {{ 0 + Pagina }}
-                - 
-                {{ Pagina + Historial.length }}
-                </h2>
-                <button 
-                @click="Pagina = Pagina + 20 ; BusquedaHistorial()" 
-                :disabled="Historial.length < 20"
-                class="botona"
+                    <h2>
+                    No se encontraron Cambios en Precios
+                    </h2>
+                    <h3>
+                    Prueba buscando con otro termino
+                    </h3>
+                </div>
+                <div 
+                class="
+                flex justify-center
+                p-3"
                 >
-                🢂
-                </button>
+                    <button 
+                    @click="Pagina = Pagina - 20 ; BusquedaHistorial()" 
+                    :disabled="Pagina < 20"
+                    class="botona"
+                    >
+                    🢀
+                    </button>
+                    <h2 class="item">
+                    Items 
+                    {{ 0 + Pagina }}
+                    - 
+                    {{ Pagina + Historial.length }}
+                    </h2>
+                    <button 
+                    @click="Pagina = Pagina + 20 ; BusquedaHistorial()" 
+                    :disabled="Historial.length < 20"
+                    class="botona"
+                    >
+                    🢂
+                    </button>
+                </div>
             </div>
-		</div>
+        </div>
     </div>
 </template>
 
@@ -295,6 +261,7 @@
     // ----- Variantes ----- //
 	const Busqueda = ref ("")
 	const FiltroCaja = ref (false)
+	const MostrarFiltro = ref (false)
 	const filtroAct = ref (false)
 	const fecha_upgrade_max = ref ("")
 	const fecha_upgrade_min = ref ("")
