@@ -214,7 +214,7 @@
                     <div>
                         <h1
                         @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
-                        class="botonfil !bg-gray-600"
+                        class="botonnew"
                         >
                         +
                         </h1>
@@ -248,7 +248,7 @@
                                 Documento
                                 </h2>
                                 <input 
-                                type="number" 
+                                type="text" 
                                 v-model="NuevoCliente.dni" 
                                 placeholder="Documento"
                                 maxlength="8"
@@ -262,18 +262,18 @@
                                 placeholder="Contraseña"
                                 maxlength="20"
                                 >
-                            </form>
-                            <div
-                            class="botones"
-                            >
-                                <button 
-                                type="submit" 
-                                :disabled="confirboton"
-                                class="botoncon"
+                                <div
+                                class="botones"
                                 >
-                                Crear Cliente
-                                </button>
-                            </div>
+                                    <button 
+                                    type="submit" 
+                                    :disabled="confirboton"
+                                    class="botoncon"
+                                    >
+                                    Crear Cliente
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -489,10 +489,11 @@
         ListaProvincia.value = provincia
     })
     const confirboton = computed(() =>{
-        if (ActualizarCNew.value) {
+        if (MostrarNuevo.value) {
             const faltandatos01 = 
                 NuevoCliente.value.nombre === ""||
                 NuevoCliente.value.email === ""||
+                !NuevoCliente.value.email.includes("@") ||
                 NuevoCliente.value.dni === ""||
                 NuevoCliente.value.contrasena === ""
             return faltandatos01

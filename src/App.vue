@@ -59,18 +59,16 @@
                 <div
                 @click="TablaActual = 'Inicio'" 
                 v-if="Rol !== '3' && Rol !== '6'"
-                :class="{
-                    '!bg-green-300 !text-black shadow-inner': TablaActual === 'Inicio'
-                    }"
+                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Inicio'}"
                 class="botonpestaña">
-                    <h2>
+                    <h2 class="letra-Josefin">
                     Inicio
                     </h2>
                 </div>
                 <div 
                 @click="TablaActual = 'Productos'" 
                 v-if="Rol !== '3' && Rol !== '6'"
-                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Productos'}"
+                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Productos'}"
                 class="botonpestaña"
                 >
                     <h2>
@@ -80,7 +78,7 @@
                 <div 
                     @click="TablaActual = 'Pedidos'" 
                     v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
-                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Pedidos'}"
+                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Pedidos'}"
                 class="botonpestaña"
                 >
                     <h2>
@@ -90,7 +88,7 @@
                 <div
                 @click="TablaActual = 'Clientes'" 
                 v-if="Rol === '1' || Rol === '3'"
-                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Clientes'}"
+                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Clientes'}"
                 class="botonpestaña"
                 >
                     <h2>
@@ -100,7 +98,7 @@
                 <div 
                 @click="TablaActual = 'Usuarios'" 
                 v-if="Rol === '1'"
-                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Usuarios'}"
+                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Usuarios'}"
                 class="botonpestaña"
                 >
                     <h2>
@@ -110,7 +108,7 @@
                 <div 
                 @click="TablaActual = 'Historial_precios'" 
                 v-if="Rol === '1' || Rol === '4'"
-                :class="{'!bg-green-300 !text-black shadow-inner': TablaActual === 'Historial_precios'}"
+                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Historial_precios'}"
                 class="botonpestaña"
                 >
                     <h2>
@@ -131,6 +129,7 @@
                 <div
                 v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                 @click="TablaActual = 'Carrito'"
+                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Carrito'}"
                 class="botonpestaña"
                 >
                     <h2>

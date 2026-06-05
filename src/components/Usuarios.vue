@@ -264,7 +264,7 @@
                 <div>
                     <h1
                     @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
-                    class="botonfil !bg-gray-600"
+                    class="botonnew"
                     >
                     +
                     </h1>

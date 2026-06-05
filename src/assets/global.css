@@ -60,22 +60,31 @@ table td {
     bg-green-100
     max-w-0
 }
-.card {
+.carta {
     @apply
-    flex flex-col 
-    items-center text-center overflow-hidden
-    p-4 gap-2
+    flex flex-col
+    shrink-0 snap-center
+    items-center text-center
+    overflow-hidden touch-pan-y
+    bg-gradient-to-bl from-green-200 to-green-200/20
     rounded-2xl shadow-md
+    h-auto
+    p-2
+    md:p-4
+    gap-1
+    md:gap-2
+    w-36
+    md:w-fit
 }
 .tab {
     @apply
     flex
-    overflow-hidden
-    p-4
-    max-h-40
-    w-full items-center gap-4
+    overflow-hidden justify-between
+    bg-gradient-to-bl from-green-800/10 to-green-100
     rounded-2xl shadow-md
-    justify-between
+    p-4
+    max-h-fit
+    w-full items-center gap-4
 }
 img {
     @apply
@@ -145,10 +154,8 @@ img {
 }
 .pagina {
     @apply
-    flex flex-col 
-    bg-green-300    
-    lg:bg-red-500
-    2xl:bg-white
+    flex flex-col
+    bg-gradient-to-tr from-green-100 to-green-300
     w-full
     mx-auto
     lg:w-full
@@ -178,6 +185,7 @@ h1 {
     lg:text-xl
     2xl:text-2xl
     font-bold  
+    font-['Oswald']
     p-1
     lg:p-2
     2xl:p-3
@@ -185,6 +193,7 @@ h1 {
 }
 h2 {
     @apply
+    font-['Josefin_Sans']
     text-sm
     lg:text-lg
     2xl:text-xl
@@ -192,6 +201,7 @@ h2 {
 }
 h3 {
     @apply
+    font-['Josefin_Sans']
     text-xs
     lg:text-base
     2xl:text-lg
@@ -211,32 +221,39 @@ label {
 /* botones */
 .botones {
     @apply
-    flex flex-col
+    flex
+    flex-row
+    lg:flex-col
+    justify-center
     items-center
     p-0
     lg:p-2
     2xl:p-3
-    gap-1
+    gap-5
     lg:gap-2
     2xl:gap-3
 }
 .botoncon {
     @apply
-    text-white text-center
-    bg-green-400 
+    text-green-100 text-center font-bold
+    bg-gradient-to-br from-green-400 to-green-800
     rounded-3xl
     cursor-pointer
     px-2
     lg:px-5
-    2xl:px-10
+    2xl:px-6
     py-5
     lg:py-3
     2xl:py-2
     hover:text-white
-    hover:bg-green-600
-    active:bg-green-300
+    hover:from-green-800 
+    hover:to-green-500
+    active:text-black
+    active:from-green-400 
+    active:to-green-200
     disabled:text-gray-400 
-    disabled:bg-gray-300 
+    disabled:from-gray-300 
+    disabled:to-gray-400
     disabled:cursor-not-allowed
 }
 .botonfil {
@@ -254,14 +271,36 @@ label {
     hover:text-white
     hover:bg-green-600
     active:bg-green-300
-    disabled:text-gray-400 
-    disabled:bg-gray-300 
+    disabled:text-gray-500 
+    disabled:from-gray-300 
+    disabled:to-gray-400
+    disabled:cursor-not-allowed
+}
+.botonnew {
+    @apply
+    text-white text-center
+    bg-gray-600 
+    rounded-xl
+    cursor-pointer
+    px-0
+    lg:px-4
+    2xl:px-4
+    py-2
+    lg:py-3
+    2xl:py-2
+    hover:text-white
+    hover:bg-gray-500
+    active:text-black
+    active:bg-gray-300
+    disabled:text-gray-500 
+    disabled:from-gray-300 
+    disabled:to-gray-400
     disabled:cursor-not-allowed
 }
 .botonpestaña {
     @apply
     text-white text-center
-    bg-green-800
+    bg-gradient-to-br from-green-800 to-green-800
     cursor-pointer
     px-2
     lg:px-5
@@ -270,16 +309,18 @@ label {
     lg:py-3
     2xl:py-2
     hover:text-black
-    hover:bg-green-300
+    hover:from-green-100 
+    hover:to-green-300
     active:bg-green-100
     disabled:text-black
-    disabled:bg-green-300 
+    disabled:from-gray-300 
+    disabled:to-gray-400
     disabled:cursor-not-allowed
 }
 .botonc {
     @apply
     text-white text-center
-    bg-red-600
+    bg-red-600 bg-gradient-to-br from-red-400 to-red-800
     cursor-pointer
     rounded-3xl
     px-2
@@ -289,12 +330,19 @@ label {
     lg:py-3
     2xl:py-2
     hover:text-gray-200
-    hover:bg-red-800
-    active:bg-red-100
+    hover:from-red-800 
+    hover:to-red-500
+    active:text-black
+    active:from-red-400 
+    active:to-red-200
+    disabled:text-gray-500 
+    disabled:from-gray-300 
+    disabled:to-gray-400
 }
 .botont {
     @apply
-    bg-gray-600 text-white text-center
+    text-white text-center
+    bg-gray-600  bg-gradient-to-br from-gray-400 to-gray-800
     cursor-pointer
     rounded-3xl
     px-2
@@ -304,10 +352,14 @@ label {
     lg:py-3
     2xl:py-2
     hover:text-gray-200
-    hover:bg-gray-800
-    active:bg-gray-100
-    disabled:text-gray-400 
-    disabled:bg-gray-300 
+    hover:from-gray-800 
+    hover:to-gray-500
+    active:text-black
+    active:from-gray-400 
+    active:to-gray-200
+    disabled:text-gray-500 
+    disabled:from-gray-300 
+    disabled:to-gray-400
     disabled:cursor-not-allowed
 }
 .botonflecha {
@@ -430,7 +482,7 @@ input[type="radio"] {
     @apply
     object-contain
     cursor-text
-    bg-green-100
+    bg-green-100 bg-gradient-to-br from-green-200 to-green-100
     border-black border-1 rounded-xl
     text-base text-left
     lg:text-base
@@ -460,17 +512,17 @@ input[type="radio"] {
     flex flex-col
     translate-z-15 z-50
     bg-green-300
-    lg:bg-red-500
-    2xl:bg-white
-    rounded-2xl
+    rounded-lg
     lg:overflow-y-auto
     2xl:overflow-y-auto
-    p-2
+    p-20
     lg:p-5
     2xl:p-10
-    gap-1
-    max-h-[80vh]
-    max-w-[80vh]
+    gap-5
+    lg:gap-1
+    2xl:gap-1
+    max-h-[90vh]
+    max-w-[90vh]
 }
 form{
     @apply
@@ -497,7 +549,7 @@ form{
 /* estados */
 .sent{
     @apply
-    bg-green-100 
+    bg-green-100
     !cursor-not-allowed
 }
 .way{

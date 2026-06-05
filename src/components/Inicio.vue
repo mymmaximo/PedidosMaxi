@@ -201,16 +201,17 @@
                                 {{ i.categoria }}
                                 </option>
                             </select>
-                            <h3>
-                            Nueva Categoria
-                            </h3>
-                            <input 
-                            v-if="OpcionCategoriaA === 'new'" 
-                            type="text" 
-                            v-model="ProductoAct.categoria" 
-                            placeholder="Categoria"
-                            maxlength="20"
-                            >
+                            <div v-if="OpcionCategoriaA === 'new'">
+                                <h3>
+                                Nueva Categoria
+                                </h3>
+                                <input 
+                                type="text" 
+                                v-model="ProductoAct.categoria" 
+                                placeholder="Categoria"
+                                maxlength="20"
+                                >
+                            </div>
                             <h2>
                             Codigo de Barras
                             </h2>
@@ -558,13 +559,13 @@
                         class="
                         flex flex-row 
                         w-full overflow-hidden md:py-4 py-2
-                        scroll-smooth"
+                        scroll-smooth gap-5"
                         >
                             <button
                             @click="ScrollIzquierda(cat.categoria)"
                             class="botonflecha 
-                            flex flex-row z-30
-                            absolute self-center hidden md:block"
+                            flex-row z-30
+                            absolute self-center hidden md:flex"
                             >
                             🢀
                             </button>
@@ -574,14 +575,8 @@
                             :class="Estatuscolor(i.activo)"
                             @touchstart="ComienzoToque($event)"
                             @touchend="FinToque($event, i)" 
-                            class="
-                            flex flex-col 
-                            items-center text-center overflow-hidden
-                            md:p-4 md:gap-2 p-2 gap-1 w-36 h-auto
-                            rounded-2xl shadow-md touch-pan-y
-                            bg-green-300/50
-                            md:w-72 shrink-0 snap-center
-                            ">
+                            class="carta"
+                            >
                                 <div>
                                     <div 
                                     v-if="i.imagenes.length > 0"
@@ -617,13 +612,13 @@
                                             Stock: 
                                             {{ i.stock }}
                                             </h3>
-                                            <div 
-                                            v-if="Rol === '1' || Rol === '2'"
-                                            >
+                                        </div>
+                                        <div class="flex flex-row lg:flex-col">
+                                            <div v-if="Rol === '1' || Rol === '2'">
                                                 <button 
                                                 @click="Eliminacion(i)" 
                                                 v-if="i.activo" 
-                                                class="botonc"
+                                                class="botonc !py-2"
                                                 >
                                                 ❌ 
                                                 <span class="hidden lg:inline 2xl:inline">
@@ -633,7 +628,7 @@
                                                 <button 
                                                 @click="Eliminacion(i)" 
                                                 v-else 
-                                                class="botoncon"
+                                                class="botoncon !py-2"
                                                 >
                                                 🕊️
                                                 <span class="hidden lg:inline 2xl:inline">
@@ -641,27 +636,29 @@
                                                 </span> 
                                                 </button>
                                             </div>
+                                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                <button 
+                                                @click="Edicion(i)" 
+                                                v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                                class="botont !py-2">
+                                                ✏️ 
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Editar
+                                                </span>
+                                                </button>
+                                            </div>
                                             <button 
-                                            @click="Edicion(i)" 
-                                            v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
-                                            class="botont">
-                                            ✏️ 
+                                            @click="Compracion(i)" 
+                                            :disabled="CarritoStock(i) === 0" 
+                                            class="botoncon !py-2"
+                                            v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                            >
+                                            🛒 
                                             <span class="hidden lg:inline 2xl:inline">
-                                            Editar
+                                            Añadir al Carrito 🛒
                                             </span>
                                             </button>
                                         </div>
-                                        <button 
-                                        @click="Compracion(i)" 
-                                        :disabled="CarritoStock(i) === 0" 
-                                        class="botoncon"
-                                        v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                        >
-                                        🛒 
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Añadir al Carrito 🛒
-                                        </span>
-                                        </button>
                                     </div>
                                 </div>
                             </div>

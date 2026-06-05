@@ -4,7 +4,7 @@
         <Teleport to="body">
             <div class="fondo" v-if="ActualizarCajaPDel">
                 <div class="popup">
-                    <h1>
+                    <h1 class="text-center">
                     ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
                     </h1>
                     <div>
@@ -48,7 +48,7 @@
                         @click="BorrarProducto()"
                         class="botoncon"
                         >
-                        Si Confirmo
+                        Confirmo
                         </button>
                         <button 
                         @click="CerrarPopUp02"
@@ -111,18 +111,18 @@
                         maxlength="8"
                         class="!w-30 mb-5"
                         >
-                        <div class="flex justify-center">
+                        <div class="botones !flex-row">
                             <button 
                             @click="SumarProducto(ProductoActual)"
                             class="botoncon !bg-green-400 !px-2"
                             >
-                            ➕
+                            ✚
                             </button>
                             <button 
                             @click="RestarProducto(ProductoActual)"
-                            class="botonc !bg-red-400 !px-2"
+                            class="botonc !bg-red-400 !px-2 !font-bold"
                             >
-                            ➖
+                            ━
                             </button>
                         </div>
                     </div>
@@ -142,134 +142,6 @@
                         Cancelar
                         </button>
                     </div>
-                </div>
-            </div>
-        </Teleport>
-        <!-- Nuevo Producto -->
-        <Teleport to="body">
-            <div class="fondo" v-if="VentanaNuevo">
-                <div class="
-                popup 
-                !min-w-[80vh]
-                ">
-                    <h1>
-                    Nuevo Producto
-                    </h1>
-                    <form @submit.prevent="SubirNuevoProducto" class="Texto_producto">
-                        <h2>
-                        Nombre
-                        </h2>
-                        <input 
-                        type="text" 
-                        v-model="NuevoProducto.nombre" 
-                        placeholder="Nombre"
-                        maxlength="50"
-                        >
-                        <h2>
-                        Precio
-                        </h2>
-                        <input 
-                        type="number" 
-                        v-model="NuevoProducto.precio" 
-                        placeholder="Precio"
-                        maxlength="8"
-                        >
-                        <h2>
-                        Stock
-                        </h2>
-                        <input 
-                        type="number" 
-                        v-model="NuevoProducto.stock" 
-                        placeholder="Stock"
-                        maxlength="8"
-                        >
-                        <h2>
-                        Categoria
-                        </h2>
-                        <select v-model="OpcionCategoria" class="seleccion">
-                            <option value="new">
-                            + Agrega una Categoria
-                            </option>
-                            <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
-                            {{ i.categoria }}
-                            </option>
-                        </select>
-                        <h3>
-                        Nueva Categoria
-                        </h3>
-                        <input 
-                        v-if="OpcionCategoria === 'new'" 
-                        type="text" 
-                        v-model="NuevoProducto.categoria" 
-                        placeholder="Categoria"
-                        maxlength="20"
-                        >
-                        <div>
-                            <div
-                            v-if="VistaPrevia.length > 0"
-                            class="
-                            flex flex-row
-                            gap-3 pb-2
-                            w-full overflow-x-auto
-                            "> 
-                                <div
-                                v-for="(img, index) in VistaPrevia"
-                                :key="index"
-                                class="
-                                shrink-0 mt-2
-                                relative
-                                ">
-                                    <button
-                                    @click="QuitarImagenNueva"
-                                    title="Quitar imagen"
-                                    class="botonx"
-                                    >
-                                    🗙
-                                    </button>
-                                    <img 
-                                    :src="img" 
-                                    alt="Vista Previa"
-                                    class="imagen !m-0" 
-                                    />
-                                </div>
-                            </div>
-                            <div
-                            v-else 
-                            class="
-                            imageno
-                            ">
-                            <span>
-                            Sin vista previa
-                            </span> 
-                            </div>
-                            <div class="mt-4">
-                                <input
-                                type="file"
-                                accept="image/*"
-                                @change="SeleccionarImagen"
-                                multiple
-                                class="imagenu !w-full"
-                                />
-                            </div>
-                        </div>
-                        <div
-                        class="botones"
-                        >
-                            <button 
-                            type="submit" 
-                            :disabled="confirboton" 
-                            class="botoncon"
-                            >
-                            Crear
-                            </button>
-                            <button 
-                            @click="CerrarPopUp03"
-                            class="botonc"
-                            >
-                            Cancelar
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </Teleport>
@@ -321,7 +193,7 @@
                             <h2>
                             Categoria
                             </h2>
-                            <select v-model="OpcionCategoriaA" class="seleccion">
+                            <select v-model="OpcionCategoriaA">
                                 <option value="new">
                                 + Agrega una Categoria
                                 </option>
@@ -329,16 +201,17 @@
                                 {{ i.categoria }}
                                 </option>
                             </select>
-                            <h3>
-                            Nueva Categoria
-                            </h3>
-                            <input 
-                            v-if="OpcionCategoriaA === 'new'" 
-                            type="text" 
-                            v-model="ProductoAct.categoria" 
-                            placeholder="Categoria"
-                            maxlength="20"
-                            >
+                            <div v-if="OpcionCategoriaA === 'new'">
+                                <h2>
+                                Nueva Categoria
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="ProductoAct.categoria" 
+                                placeholder="Categoria"
+                                maxlength="20"
+                                >
+                            </div>
                             <h2>
                             Codigo de Barras
                             </h2>
@@ -480,7 +353,7 @@
                 <div class="bar">
                     <div>
                         <h1
-                        @click="MostrarFiltro = !MostrarFiltro"
+                        @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
                         >
                         ᯤ
@@ -641,6 +514,128 @@
                             </button>
                         </div>
                     </div>
+                    <div>
+                        <h1
+                        @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
+                        class="botonnew"
+                        >
+                        +
+                        </h1>
+                    </div>
+                    <div
+                    class="flex flex-col lg:self-center"
+                    v-if="MostrarNuevo"
+                    >
+                        <form @submit.prevent="SubirNuevoProducto">
+                            <h2>
+                            Nombre
+                            </h2>
+                            <input 
+                            type="text" 
+                            v-model="NuevoProducto.nombre" 
+                            placeholder="Nombre"
+                            maxlength="50"
+                            >
+                            <h2>
+                            Precio
+                            </h2>
+                            <input 
+                            type="number" 
+                            v-model="NuevoProducto.precio" 
+                            placeholder="Precio"
+                            maxlength="8"
+                            >
+                            <h2>
+                            Stock
+                            </h2>
+                            <input 
+                            type="number" 
+                            v-model="NuevoProducto.stock" 
+                            placeholder="Stock"
+                            maxlength="8"
+                            >
+                            <h2>
+                            Categoria
+                            </h2>
+                            <select v-model="OpcionCategoria" class="seleccion">
+                                <option value="new">
+                                + Agrega una Categoria
+                                </option>
+                                <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                {{ i.categoria }}
+                                </option>
+                            </select>
+                            <h3 v-if="OpcionCategoria === 'new'">
+                            Nueva Categoria
+                            </h3>
+                            <input 
+                            v-if="OpcionCategoria === 'new'" 
+                            type="text" 
+                            v-model="NuevoProducto.categoria" 
+                            placeholder="Categoria"
+                            maxlength="20"
+                            >
+                            <div>
+                                <div
+                                v-if="VistaPrevia.length > 0"
+                                class="
+                                flex flex-row
+                                gap-3 pb-2
+                                w-full overflow-x-auto
+                                "> 
+                                    <div
+                                    v-for="(img, index) in VistaPrevia"
+                                    :key="index"
+                                    class="
+                                    shrink-0 mt-2
+                                    relative
+                                    ">
+                                        <button
+                                        @click="QuitarImagenNueva"
+                                        title="Quitar imagen"
+                                        class="botonx"
+                                        >
+                                        🗙
+                                        </button>
+                                        <img 
+                                        :src="img" 
+                                        alt="Vista Previa"
+                                        class="imagen !m-0" 
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                v-else 
+                                class="
+                                imageno
+                                ">
+                                <span>
+                                Sin vista previa
+                                </span> 
+                                </div>
+                                <div class="mt-4">
+                                    <input
+                                    type="file"
+                                    accept="image/*"
+                                    @change="SeleccionarImagen"
+                                    multiple
+                                    class="imagenu !w-full"
+                                    />
+                                </div>
+                            </div>
+                            <div
+                            class="botones"
+                            >
+                                <button 
+                                type="submit" 
+                                :disabled="confirboton" 
+                                class="botoncon"
+                                >
+                                Crear
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <!-- Tabla de Productos -->
                 <div
@@ -653,27 +648,20 @@
                     class="busqueda"
                     maxlength="50"
                     >
-                    <button 
-                    @click="AbrirPopUp03"
-                    v-if="Rol === '1' || Rol === '2'"
-                    class="botont" 
-                    >
-                    Nuevo Producto ➕
-                    </button>
                     <div 
                     v-if="Productos.length > 0"
                     class="
                     grid
                     md:grid-cols-3
                     grid-cols-2
-                    gap-6
-                    ">
+                    gap-6"
+                    >
                         <div 
                         :class="Estatuscolor(i.activo)" 
                         v-for= "i in Productos" 
                         :key="i.id"
-                        class="card
-                        ">
+                        class="carta"
+                        >
                             <div>
                                 <div 
                                 v-if="i.imagenes.length > 0"
@@ -719,30 +707,43 @@
                                     <h2>
                                     ${{ i.precio }}
                                     </h2>
-                                    <button 
-                                    @click="Compracion(i)" 
-                                    :disabled="CarritoStock(i) === 0" 
-                                    class="botont"
-                                    v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                    >
-                                    🛒 
-                                    <span class="hidden lg:inline 2xl:inline">
-                                    Añadir al Carrito 🛒
-                                    </span>
-                                    </button>
                                     <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
                                         <h3>
                                         {{ i.codigo_barra }} <br>
                                         Stock: 
                                         {{ i.stock }}
                                         </h3>
+                                    </div>
+                                    <div class="botones">
+                                        <button 
+                                        @click="Compracion(i)" 
+                                        :disabled="CarritoStock(i) === 0" 
+                                        class="botont !py-2"
+                                        v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                        >
+                                        🛒 
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Añadir al Carrito 🛒
+                                        </span>
+                                        </button>
+                                        <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                            <button 
+                                            @click="Edicion(i)" 
+                                            v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                            class="botont !py-2">
+                                            ✏️
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Editar
+                                            </span>
+                                            </button>
+                                        </div>
                                         <div 
                                         v-if="Rol === '1' || Rol === '2'"
                                         >
                                             <button 
                                             @click="Eliminacion(i)" 
                                             v-if="i.activo" 
-                                            class="botonc"
+                                            class="botonc !py-2"
                                             >
                                             ❌
                                             <span class="hidden lg:inline 2xl:inline">
@@ -760,15 +761,6 @@
                                             </span>
                                             </button>
                                         </div>
-                                        <button 
-                                        @click="Edicion(i)" 
-                                        v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
-                                        class="botont">
-                                        ✏️
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Editar
-                                        </span>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -824,6 +816,7 @@
     const OpcionCategoria = ref ("new")
     const VentanaCompra = ref (false)
     const MostrarFiltro = ref (true)
+    const MostrarNuevo = ref (false)
     const VentanaNuevo = ref (false)
     const ListaCategoria = ref ("")
     const ArchivoSave = ref ([])

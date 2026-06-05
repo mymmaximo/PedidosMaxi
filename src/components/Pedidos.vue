@@ -364,7 +364,7 @@
 									{{ i.cliente[0].nombre }}
 									</h1>
 									<h1>
-									{{ Estatustxt(i.estatus) }}
+									({{ Estatustxt(i.estatus) }})
 									</h1>
 								</div>
 								<div class="flex flex-col">
@@ -401,20 +401,6 @@
 								</h3>
 							</div>
 						</div>
-						<div 
-						v-if = "PedidoNow === i.id_pedido" 
-						@click= "PedidoCambio(i.id_pedido)" 
-						class="botonc text-center"
-						>
-						Ocultar Detalles
-						</div>
-						<div
-						v-else 
-						@click= "PedidoCambio(i.id_pedido)"
-						class="botoncon text-center"
-						>
-						Ver Detalles
-						</div>
 						<div v-if = "PedidoNow === i.id_pedido">
 							<div
 							class="tab !bg-green-100/50"
@@ -447,6 +433,20 @@
 									</h3>
 								</div>
 							</div>
+						</div>
+						<div 
+						v-if = "PedidoNow === i.id_pedido" 
+						@click= "PedidoCambio(i.id_pedido)" 
+						class="botonc text-center"
+						>
+						Ocultar Detalles
+						</div>
+						<div
+						v-else 
+						@click= "PedidoCambio(i.id_pedido)"
+						class="botoncon text-center"
+						>
+						Ver Detalles
 						</div>
 					</div>
 				</div>

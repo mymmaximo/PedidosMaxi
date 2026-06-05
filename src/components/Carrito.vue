@@ -198,22 +198,26 @@
             <h1>
             Tu Carrito
             </h1>
-            <div class="flex justify-around">
-                <h2 class="">
-                Producto
-                </h2>
-                <h2 class="">
-                Precio
-                </h2>
-                <h2 class="">
-                Cantidad
-                </h2>
-                <h2 class="">
-                Subtotal
-                </h2>   
-                <h2 class="">
-                Borrar
-                </h2>   
+            <div class="flex justify-between">
+                <div>
+                    <h2>
+                    Producto
+                    </h2>
+                </div>
+                <div class="flex gap-7 lg:gap-45 2xl:gap-52">
+                    <h2>
+                    Precio
+                    </h2>
+                    <h2>
+                    Cantidad
+                    </h2>
+                    <h2>
+                    Subtotal
+                    </h2>   
+                    <h2>
+                    Borrar
+                    </h2>   
+                </div>
             </div>
             <div v-if="CarritoLocal.length > 0">
                 <div
@@ -222,7 +226,7 @@
                 :key="index"
                 >
                     <div class="tab bg-green-500/30">
-                        <div class="flex-1 flex justify-center items-center min-w-0">
+                        <div class="flex-1 hidden lg:flex justify-center items-center min-w-0">
                             <div 
                             v-if="item.imagenes && item.imagenes.length > 0"
                             class="flex flex-row 
@@ -255,11 +259,11 @@
                             class="imagen"
                             >
                         </div>
-                        <div class="flex-1 flex justify-center items-center min-w-0">
+                        <div class="flex-1 flex items-center min-w-0">
                             <div class="flex flex-row">
-                            <h1>
-                            {{ item.nombre_producto }}
-                            </h1>
+                                <h1>
+                                {{ item.nombre_producto }}
+                                </h1>
                             </div>
                         </div>
                         <div class="flex-1 flex justify-center items-center min-w-0">
@@ -280,7 +284,6 @@
                         </div>
                         <div class="flex-1 flex justify-center items-center min-w-0">
                             <h2 class="font-bold">
-                            Subtotal:
                             ${{ item.cantidad * item.precio_unitario }}
                             </h2>
                         </div>
