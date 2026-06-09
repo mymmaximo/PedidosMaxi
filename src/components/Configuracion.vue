@@ -3,15 +3,7 @@
     <div class="cuerpo">
         <div class="pagina">
             <div
-            class="
-            place-self-center
-            bg-green-300
-            rounded-4xl
-            p-10
-            lg:p-20
-            2xl:p-20
-            lg:m-3
-            2xl:m-5"
+            class="popup !z-0"
             >
                 <form @submit.prevent="ActualizarCliente">
                     <h1>
@@ -68,7 +60,7 @@
                         {{ verConContrasena ? '🔒' : '👁️' }}
                         </button>
                     </div>
-                    <div class="botones">
+                    <div class="botones !p-0">
                         <button 
                         type="submit" 
                         class="botoncon"

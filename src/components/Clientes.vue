@@ -278,7 +278,7 @@
                     </div>
                 </div>
                 <!-- Tabla de Clientes -->
-                <div class="start">
+                <div class="start !px-5">
                     <!-- Barra de Busqueda -->
                     <input
                     @input="BusquedaCliente"

@@ -640,163 +640,162 @@
                 <!-- Tabla de Productos -->
                 <div
                 class="start">
-                    <input
-                    @input="BusquedaProducto"
-                    type="text" 
-                    v-model="Busqueda" 
-                    placeholder="Busqueda..."
-                    class="busqueda"
-                    maxlength="50"
-                    >
-                    <div 
-                    v-if="Productos.length > 0"
-                    class="
-                    grid
-                    md:grid-cols-3
-                    grid-cols-2
-                    gap-6"
-                    >
-                        <div 
-                        :class="Estatuscolor(i.activo)" 
-                        v-for= "i in Productos" 
-                        :key="i.id"
-                        class="carta"
+                    <div class="px-5">
+                        <input
+                        @input="BusquedaProducto"
+                        type="text" 
+                        v-model="Busqueda" 
+                        placeholder="Busqueda..."
+                        class="busqueda"
+                        maxlength="50"
                         >
-                            <div>
-                                <div 
-                                v-if="i.imagenes.length > 0"
-                                class="flex flex-row 
-                                gap-3 overflow-x-auto
-                                items-center justify-center 
-                                w-full pb-2 snap-x
-                                ">
-                                    <button
-                                    @click="BackImg(i)"
-                                    :disabled="GetImg(i.id) === 0"
-                                    class="botonflecha"
-                                    >
-                                    🢀
-                                    </button>
+                        <div 
+                        v-if="Productos.length > 0"
+                        class="
+                        grid
+                        md:grid-cols-3
+                        grid-cols-2
+                        gap-6"
+                        >
+                            <div 
+                            :class="Estatuscolor(i.activo)" 
+                            v-for= "i in Productos" 
+                            :key="i.id"
+                            class="carta"
+                            >
+                                <div>
+                                    <div 
+                                    v-if="i.imagenes.length > 0"
+                                    class="flex flex-row 
+                                    gap-3 overflow-x-auto
+                                    items-center justify-center 
+                                    w-full pb-2 snap-x
+                                    ">
+                                        <button
+                                        @click="BackImg(i)"
+                                        :disabled="GetImg(i.id) === 0"
+                                        class="botonflecha"
+                                        >
+                                        🢀
+                                        </button>
+                                        <img
+                                        :key="i.imagenes[GetImg(i.id)].s3_key"
+                                        :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                        class="imagen"
+                                        >
+                                        <button
+                                        @click="NextImg(i)"
+                                        :disabled="GetImg(i.id) === i.imagenes.length - 1"
+                                        class="botonflecha"
+                                        >
+                                        🢂
+                                        </button>
+                                    </div>
                                     <img
-                                    :key="i.imagenes[GetImg(i.id)].s3_key"
-                                    :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                    v-else
+                                    src="../assets/images.png"
                                     class="imagen"
                                     >
-                                    <button
-                                    @click="NextImg(i)"
-                                    :disabled="GetImg(i.id) === i.imagenes.length - 1"
-                                    class="botonflecha"
+                                    <div
                                     >
-                                    🢂
-                                    </button>
-                                </div>
-                                <img
-                                v-else
-                                src="../assets/images.png"
-                                class="imagen"
-                                >
-                                <div
-                                >
-                                    <h2 class="font-bold">
-                                    {{ i.nombre }}
-                                    </h2>
-                                    <h3>
-                                    Categoria: 
-                                    {{ i.categoria }}
-                                    </h3>
-                                    <h2>
-                                    ${{ i.precio }}
-                                    </h2>
-                                    <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                        <h2 class="font-bold">
+                                        {{ i.nombre }}
+                                        </h2>
                                         <h3>
-                                        {{ i.codigo_barra }} <br>
-                                        Stock: 
-                                        {{ i.stock }}
+                                        Categoria: 
+                                        {{ i.categoria }}
                                         </h3>
-                                    </div>
-                                    <div class="botones">
-                                        <button 
-                                        @click="Compracion(i)" 
-                                        :disabled="CarritoStock(i) === 0" 
-                                        class="botont !py-2"
-                                        v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                        >
-                                        🛒 
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Añadir al Carrito 🛒
-                                        </span>
-                                        </button>
+                                        <h2>
+                                        ${{ i.precio }}
+                                        </h2>
                                         <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
-                                            <button 
-                                            @click="Edicion(i)" 
-                                            v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
-                                            class="botont !py-2">
-                                            ✏️
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Editar
-                                            </span>
-                                            </button>
+                                            <h3>
+                                            {{ i.codigo_barra }} <br>
+                                            Stock: 
+                                            {{ i.stock }}
+                                            </h3>
                                         </div>
-                                        <div 
-                                        v-if="Rol === '1' || Rol === '2'"
-                                        >
-                                            <button 
-                                            @click="Eliminacion(i)" 
-                                            v-if="i.activo" 
-                                            class="botonc !py-2"
+                                        <div class="botones">
+                                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                <button 
+                                                @click="Edicion(i)" 
+                                                v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                                class="botont !py-2">
+                                                ✏️
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Editar
+                                                </span>
+                                                </button>
+                                            </div>
+                                            <div 
+                                            v-if="Rol === '1' || Rol === '2'"
                                             >
-                                            ❌
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Eliminar
-                                            </span>
-                                            </button>
+                                                <button 
+                                                @click="Eliminacion(i)" 
+                                                v-if="i.activo" 
+                                                class="botonc !py-2"
+                                                >
+                                                ❌
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Eliminar
+                                                </span>
+                                                </button>
+                                                <button 
+                                                @click="Eliminacion(i)" 
+                                                v-else 
+                                                class="botoncon"
+                                                >
+                                                🕊️
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Reactivar
+                                                </span>
+                                                </button>
+                                            </div>
                                             <button 
-                                            @click="Eliminacion(i)" 
-                                            v-else 
-                                            class="botoncon"
+                                            @click="Compracion(i)" 
+                                            :disabled="CarritoStock(i) === 0" 
+                                            class="botont !py-2 !text-2xl"
+                                            v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                             >
-                                            🕊️
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Reactivar
-                                            </span>
+                                            𖠩 
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div v-else>
-                        <h2>No se encontraron productos 😔</h2>
-                        <h3>Prueba buscando con otro termino</h3>
-                    </div>
-                    <div
-                    class="
-                    flex justify-center
-                    ">
-                        <button 
-                        @click="Pagina = Pagina - 21 ; BusquedaProducto()" 
-                        :disabled="Pagina < 21"
-                        class="botona"
-                        >
-                        🢀
-                        </button>
-                        <h2
+                        <div v-else>
+                            <h2>No se encontraron productos 😔</h2>
+                            <h3>Prueba buscando con otro termino</h3>
+                        </div>
+                        <div
                         class="
-                        self-center p-5
+                        flex justify-center p-5
                         ">
-                        Items 
-                        {{ 0 + Pagina }} 
-                        - 
-                        {{ Pagina + Productos.length }}
-                        </h2>
-                        <button 
-                        @click="Pagina = Pagina + 21 ; BusquedaProducto()" 
-                        :disabled="Productos.length < 21"
-                        class="botona"
-                        >
-                        🢂
-                        </button>
+                            <button 
+                            @click="Pagina = Pagina - 21 ; BusquedaProducto()" 
+                            :disabled="Pagina < 21"
+                            class="botona"
+                            >
+                            🢀
+                            </button>
+                            <h2
+                            class="
+                            self-center p-5
+                            ">
+                            Items 
+                            {{ 0 + Pagina }} 
+                            - 
+                            {{ Pagina + Productos.length }}
+                            </h2>
+                            <button 
+                            @click="Pagina = Pagina + 21 ; BusquedaProducto()" 
+                            :disabled="Productos.length < 21"
+                            class="botona"
+                            >
+                            🢂
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

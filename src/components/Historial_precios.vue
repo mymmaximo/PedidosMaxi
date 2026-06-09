@@ -1,254 +1,256 @@
 <template>
     <div class="cuerpo">
         <div class="pagina">
-            <div class="bar">
-                <div>
-                    <h1
-                    @click="MostrarFiltro = !MostrarFiltro"
-                    class="botonfil"
-                    >
-                    ᯤ
-                    </h1>
-                </div>
-                <div
-                class="flex flex-col lg:self-center"
-                v-if="MostrarFiltro"
-                >
-                    <div
-                    class="flex flex-col md:p-4 p-2"
-                    >
-						<h2 class="p-2">
-						Filtros de Fecha de Actualizacion
-						</h2>
-                        <input 
-                        type="date"
-                        v-model="fecha_upgrade_max" 
-                        placeholder="Fecha de Actualizacion Max..."
+            <div class="flex w-full flex-col lg:flex-row">
+                <div class="bar">
+                    <div>
+                        <h1
+                        @click="MostrarFiltro = !MostrarFiltro"
+                        class="botonfil"
                         >
-                        <input
-                        type="date"
-                        v-model="fecha_upgrade_min" 
-                        placeholder="Fecha de Actualizacion Min..."
-                        >
+                        ᯤ
+                        </h1>
                     </div>
                     <div
-                    class="flex flex-col md:p-4 p-2"
+                    class="flex flex-col lg:self-center"
+                    v-if="MostrarFiltro"
                     >
-						<h2 class="p-2">
-						Filtros de Precio Viejo
-						</h2>
-                        <input 
-                        type="date"
-                        v-model="precio_viejo_max" 
-                        placeholder="Precio Viejo Max..."
-		                maxlength="10"
+                        <div
+                        class="flex flex-col md:p-4 p-2"
                         >
-                        <input
-                        type="date"
-                        v-model="precio_viejo_min" 
-                        placeholder="Precio Viejo Min..."
-		                maxlength="10"
-                        >
-                    </div>
-                    <div
-                    class="flex flex-col md:p-4 p-2"
-                    >
-						<h2 class="p-2">
-						Filtros de Precio Nuevo
-						</h2>
-                        <input 
-                        type="number"
-                        v-model="precio_nuevo_max" 
-                        placeholder="Precio Nuevo Max..."
-		                maxlength="10"
-                        >
-                        <input
-                        type="number"
-                        v-model="precio_nuevo_min" 
-                        placeholder="Precio Nuevo Min..."
-		                maxlength="10"
-                        >
-                    </div>
-                    <div
-                    class="flex flex-col md:p-4 p-2"
-                    >
-                        <h2 class="p-2">
-                        Filtro Categoria
-                        </h2>
-                        <div>
-                            <select 
-                            v-model="filtrocat" 
+                            <h2 class="p-2">
+                            Filtros de Fecha de Actualizacion
+                            </h2>
+                            <input 
+                            type="date"
+                            v-model="fecha_upgrade_max" 
+                            placeholder="Fecha de Actualizacion Max..."
                             >
-                                <option value="" disabled>
-                                Categorias...
-                                </option>
-                                <option 
-                                v-for="i in ListaCategoria" 
-                                :key="i.categoria" 
-                                :value="i.categoria"
+                            <input
+                            type="date"
+                            v-model="fecha_upgrade_min" 
+                            placeholder="Fecha de Actualizacion Min..."
+                            >
+                        </div>
+                        <div
+                        class="flex flex-col md:p-4 p-2"
+                        >
+                            <h2 class="p-2">
+                            Filtros de Precio Viejo
+                            </h2>
+                            <input 
+                            type="date"
+                            v-model="precio_viejo_max" 
+                            placeholder="Precio Viejo Max..."
+                            maxlength="10"
+                            >
+                            <input
+                            type="date"
+                            v-model="precio_viejo_min" 
+                            placeholder="Precio Viejo Min..."
+                            maxlength="10"
+                            >
+                        </div>
+                        <div
+                        class="flex flex-col md:p-4 p-2"
+                        >
+                            <h2 class="p-2">
+                            Filtros de Precio Nuevo
+                            </h2>
+                            <input 
+                            type="number"
+                            v-model="precio_nuevo_max" 
+                            placeholder="Precio Nuevo Max..."
+                            maxlength="10"
+                            >
+                            <input
+                            type="number"
+                            v-model="precio_nuevo_min" 
+                            placeholder="Precio Nuevo Min..."
+                            maxlength="10"
+                            >
+                        </div>
+                        <div
+                        class="flex flex-col md:p-4 p-2"
+                        >
+                            <h2 class="p-2">
+                            Filtro Categoria
+                            </h2>
+                            <div>
+                                <select 
+                                v-model="filtrocat" 
                                 >
-                                {{ i.categoria }}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div
-                    class="flex flex-col md:p-4 p-2"
-                    >
-                        <h2 class="p-2">
-                        ¿El Productos esta Activo?
-                        </h2>
-                        <div 
-                        class="
-                        flex flex-col 
-                        p-2 gap-2
-                        ">
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="2"
-                            v-model="bool_activo "
-                            > 
-                            Todos los Productos
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="1"
-                            v-model="bool_activo"
-                            > 
-                            Productos Activos
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="0"
-                            v-model="bool_activo"
-                            > 
-                            Productos Eliminados
-                            </label>
-                        </div>
-                    </div>
-                    <div class="botones">
-                        <button 
-                        @click="AplicarFiltro" 
-                        class="botoncon">
-                        Aplicar Filtros
-                        </button>
-                        <button 
-                        @click="LimpiarFiltro"
-                        v-if="filtroAct === true" 
-                        class="botont"
-                        >
-                        🗑️ Limpiar Filtro
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="start">
-                <!-- Barra de Busqueda -->
-                <input
-                @input="BusquedaHistorial"
-                type="text" 
-                v-model="Busqueda" 
-                placeholder="Busqueda de Historial..."
-                class="busqueda"
-                maxlength="50"
-                >
-                <h1 class="text-center">
-                Historial de Pedidos
-                </h1>
-                <!-- Tabla de Historial de Precios -->
-                <div
-                v-if="Historial.length > 0"
-                >
-                    <div
-                    class="mb-2 lg:mb-5"
-                    v-for= "i in Historial" 
-                    :key="i.id">
-                        <div 
-                        :class="Estatuscolor(i.activo)"
-                        class="tab"
-                        >
-                            <div class="flex flex-col">
-                                <div class="flex flex-row">
-                                    <h1>
-                                    {{ i.nombre }}
-                                    </h1>
-                                </div>
-                                <div class="flex flex-col">
-                                    <h2>
-                                    <span class="hidden lg:inline 2xl:inline">
-                                    Categoria: 
-                                    </span>
+                                    <option value="" disabled>
+                                    Categorias...
+                                    </option>
+                                    <option 
+                                    v-for="i in ListaCategoria" 
+                                    :key="i.categoria" 
+                                    :value="i.categoria"
+                                    >
                                     {{ i.categoria }}
-                                    </h2>
-                                    <h2>
-                                    <span class="hidden lg:inline 2xl:inline">
-                                    Codigo de Barras: 
-                                    </span>
-                                    {{ i.codigo_barra }}
-                                    </h2>
-                                </div>
+                                    </option>
+                                </select>
                             </div>
-                            <div class="flex flex-col ml-auto text-right items-end">
-                                <h2>
-                                <span class="hidden lg:inline 2xl:inline">
-                                Precio Viejo: 
-                                </span>
-                                {{ i.precio_viejo }}
-                                </h2>
-                                <h2>
-                                <span class="hidden lg:inline 2xl:inline">
-                                Precio Nuevo: 
-                                </span>
-                                {{ i.precio_nuevo }}
-                                </h2>
-                                <h2>
-                                <span class="hidden lg:inline 2xl:inline">
-                                Fecha de Act: 
-                                </span>
-                                {{ FormatoFecha(i.updated_at) }}
-                                </h2>
+                        </div>
+                        <div
+                        class="flex flex-col md:p-4 p-2"
+                        >
+                            <h2 class="p-2">
+                            ¿El Productos esta Activo?
+                            </h2>
+                            <div 
+                            class="
+                            flex flex-col 
+                            p-2 gap-2
+                            ">
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="2"
+                                v-model="bool_activo "
+                                > 
+                                Todos los Productos
+                                </label>
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="1"
+                                v-model="bool_activo"
+                                > 
+                                Productos Activos
+                                </label>
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="0"
+                                v-model="bool_activo"
+                                > 
+                                Productos Eliminados
+                                </label>
                             </div>
+                        </div>
+                        <div class="botones">
+                            <button 
+                            @click="AplicarFiltro" 
+                            class="botoncon">
+                            Aplicar Filtros
+                            </button>
+                            <button 
+                            @click="LimpiarFiltro"
+                            v-if="filtroAct === true" 
+                            class="botont"
+                            >
+                            🗑️ Limpiar Filtro
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div 
-                v-else
-                >
-                    <h2>
-                    No se encontraron Cambios en Precios
-                    </h2>
-                    <h3>
-                    Prueba buscando con otro termino
-                    </h3>
-                </div>
-                <div 
-                class="
-                flex justify-center
-                p-3"
-                >
-                    <button 
-                    @click="Pagina = Pagina - 20 ; BusquedaHistorial()" 
-                    :disabled="Pagina < 20"
-                    class="botona"
+                <div class="start !px-5">
+                    <!-- Barra de Busqueda -->
+                    <input
+                    @input="BusquedaHistorial"
+                    type="text" 
+                    v-model="Busqueda" 
+                    placeholder="Busqueda de Historial..."
+                    class="busqueda"
+                    maxlength="50"
                     >
-                    🢀
-                    </button>
-                    <h2 class="item">
-                    Items 
-                    {{ 0 + Pagina }}
-                    - 
-                    {{ Pagina + Historial.length }}
-                    </h2>
-                    <button 
-                    @click="Pagina = Pagina + 20 ; BusquedaHistorial()" 
-                    :disabled="Historial.length < 20"
-                    class="botona"
+                    <h1 class="text-center">
+                    Historial de Pedidos
+                    </h1>
+                    <!-- Tabla de Historial de Precios -->
+                    <div
+                    v-if="Historial.length > 0"
                     >
-                    🢂
-                    </button>
+                        <div
+                        class="mb-2 lg:mb-5"
+                        v-for= "i in Historial" 
+                        :key="i.id">
+                            <div 
+                            :class="Estatuscolor(i.activo)"
+                            class="tab"
+                            >
+                                <div class="flex flex-col">
+                                    <div class="flex flex-row">
+                                        <h1>
+                                        {{ i.nombre }}
+                                        </h1>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <h2>
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Categoria: 
+                                        </span>
+                                        {{ i.categoria }}
+                                        </h2>
+                                        <h2>
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Codigo de Barras: 
+                                        </span>
+                                        {{ i.codigo_barra }}
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col ml-auto text-right items-end">
+                                    <h2>
+                                    <span class="hidden lg:inline 2xl:inline">
+                                    Precio Viejo: 
+                                    </span>
+                                    {{ i.precio_viejo }}
+                                    </h2>
+                                    <h2>
+                                    <span class="hidden lg:inline 2xl:inline">
+                                    Precio Nuevo: 
+                                    </span>
+                                    {{ i.precio_nuevo }}
+                                    </h2>
+                                    <h2>
+                                    <span class="hidden lg:inline 2xl:inline">
+                                    Fecha de Act: 
+                                    </span>
+                                    {{ FormatoFecha(i.updated_at) }}
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div 
+                    v-else
+                    >
+                        <h2>
+                        No se encontraron Cambios en Precios
+                        </h2>
+                        <h3>
+                        Prueba buscando con otro termino
+                        </h3>
+                    </div>
+                    <div 
+                    class="
+                    flex justify-center
+                    p-3"
+                    >
+                        <button 
+                        @click="Pagina = Pagina - 20 ; BusquedaHistorial()" 
+                        :disabled="Pagina < 20"
+                        class="botona"
+                        >
+                        🢀
+                        </button>
+                        <h2 class="item">
+                        Items 
+                        {{ 0 + Pagina }}
+                        - 
+                        {{ Pagina + Historial.length }}
+                        </h2>
+                        <button 
+                        @click="Pagina = Pagina + 20 ; BusquedaHistorial()" 
+                        :disabled="Historial.length < 20"
+                        class="botona"
+                        >
+                        🢂
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

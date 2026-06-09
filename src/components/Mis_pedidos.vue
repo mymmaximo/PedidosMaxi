@@ -1,7 +1,7 @@
 <template>
     <div class="cuerpo">
         <div class="pagina">
-            <div class="flex w-full flex-col lg:flex-row">
+            <div class="flex w-full flex-col sm:flex-row">
                 <!-- Filtros -->
                 <div class="bar">
                     <h1
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <!-- Tabla de Mis Pedidos -->
-                <div class="start">
+                <div class="start !px-5">
                     <div>
                         <!-- Barra de Busqueda -->
                         <input
@@ -131,8 +131,7 @@
                         </h1>
                         <div 
                         v-if="Pedidos.length > 0"
-                        class="
-                        w-full"
+                        class="w-full"
                         >
                             <div
                             class="mb-2 lg:mb-5"
@@ -150,16 +149,6 @@
                                                 </h1>
                                             </div>
                                             <div class="flex flex-col">
-                                                <h2>
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Ciudad: 
-                                                </span>
-                                                {{ i.direccion[0].ciudad }}
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                - Provincia:  
-                                                </span>
-                                                {{ i.direccion[0].provincia }}
-                                                </h2>
                                                 <h2>
                                                 <span class="hidden lg:inline 2xl:inline">
                                                 Pagado con: 
@@ -181,44 +170,72 @@
                                             <h3>
                                             Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
                                             </h3>
-                                            <h3>
-                                            Pedido Creado el Dia: {{ FormatoFecha(i.created_at) }}
-                                            </h3>
-                                            <h3>
-                                            Pedido Actualizado el Dia: {{ FormatoFecha(i.updated_at) }}
-                                            </h3>
                                         </div>
                                     </div>
                                     <div v-if = "PedidoNowPreparando === i.id_pedido">
                                         <div
-                                        class="tab !bg-green-100/50"
+                                        class="tab !bg-green-100/50 !p-5"
                                         v-for = "e in i.detalle_pedido" 
                                         :key="e.id_detalle_pedido">
-                                            <div class="flex flex-col">
+                                            <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                 <div class="flex flex-row">
-                                                    <h3 class="font-bold">
+                                                    <h3 class="font-bold overflow-hidden text-ellipsis">
                                                     {{ e.producto.nombre }}
                                                     </h3>
                                                 </div>
-                                                <div class="flex flex-col">
+                                                <div class="flex flex-col gap-1">
+                                                    <h3>
+                                                    Categoria: {{ e.producto.categoria }}
+                                                    </h3>
                                                     <h3>
                                                     Precio Unitario: ${{ e.precio_unitario }}
                                                     </h3>
                                                     <h3>
                                                     Cantidad: {{ e.cantidad }}
                                                     </h3>
-                                                    <h2 class="font-bold">
-                                                    Subtotal: ${{ e.subtotal }}
-                                                    </h2>
+                                                    <div class="flex flex-row">
+                                                        <h2 class="font-bold mr-2">
+                                                        Subtotal:
+                                                        </h2>
+                                                        <h2>
+                                                        ${{ e.subtotal }}
+                                                        </h2>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="flex flex-col ml-auto text-right items-end">
-                                                <h3>
-                                                Categoria: {{ e.producto.categoria }}
-                                                </h3>
-                                                <h3>
-                                                Codigo de Barras: {{ e.producto.codigo_barra }}
-                                                </h3>
+                                                <div class="flex flex-col gap-1">
+                                                    <div class="flex flex-row">
+                                                        <h2 class="mr-2">
+                                                        Pedido Creado el Dia: 
+                                                        </h2>
+                                                        <h3>
+                                                        {{ FormatoFecha(i.created_at) }}
+                                                        </h3>
+                                                    </div>
+                                                    <div class="flex flex-row">
+                                                        <h3 class="mr-2">
+                                                        Pedido Act. el Dia: 
+                                                        </h3>
+                                                        <h3>
+                                                        {{ FormatoFecha(i.updated_at) }}
+                                                        </h3>
+                                                    </div>
+                                                    <div class="flex flex-row">
+                                                        <h2 class="font-bold mr-2">
+                                                        Ciudad: 
+                                                        </h2>
+                                                        <h2>
+                                                        {{ i.direccion[0].ciudad }}
+                                                        </h2>
+                                                    </div>
+                                                    <div class="flex flex-row">
+                                                        <h2 class="font-bold mr-2">
+                                                        Provincia:
+                                                        </h2>
+                                                        <h2>
+                                                        {{ i.direccion[0].provincia }}
+                                                        </h2>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -277,16 +294,6 @@
                                             <div class="flex flex-col">
                                                 <h2>
                                                 <span class="hidden lg:inline 2xl:inline">
-                                                Ciudad: 
-                                                </span>
-                                                {{ i.direccion[0].ciudad }}
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                - Provincia:  
-                                                </span>
-                                                {{ i.direccion[0].provincia }}
-                                                </h2>
-                                                <h2>
-                                                <span class="hidden lg:inline 2xl:inline">
                                                 Pagado con: 
                                                 </span>
                                                 {{ i.metodo_pago }}
@@ -306,12 +313,6 @@
                                             <h3>
                                             Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
                                             </h3>
-                                            <h3>
-                                            Pedido Creado el Dia: {{ FormatoFecha(i.created_at) }}
-                                            </h3>
-                                            <h3>
-                                            Pedido Actualizado el Dia: {{ FormatoFecha(i.updated_at) }}
-                                            </h3>
                                         </div>
                                     </div>
                                     <div v-if = "PedidoNowEnCamino === i.id_pedido">
@@ -319,31 +320,65 @@
                                         class="tab !bg-yellow-100/50"
                                         v-for = "e in i.detalle_pedido" 
                                         :key="e.id_detalle_pedido">
-                                            <div class="flex flex-col">
+                                            <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                 <div class="flex flex-row">
-                                                    <h3 class="font-bold">
+                                                    <h3 class="font-bold overflow-hidden text-ellipsis">
                                                     {{ e.producto.nombre }}
                                                     </h3>
                                                 </div>
-                                                <div class="flex flex-col">
+                                                <div class="flex flex-col gap-1">
+                                                    <h3>
+                                                    Categoria: {{ e.producto.categoria }}
+                                                    </h3>
                                                     <h3>
                                                     Precio Unitario: ${{ e.precio_unitario }}
                                                     </h3>
                                                     <h3>
                                                     Cantidad: {{ e.cantidad }}
                                                     </h3>
-                                                    <h2 class="font-bold">
-                                                    Subtotal: ${{ e.subtotal }}
-                                                    </h2>
+                                                    <div class="flex flex-row">
+                                                        <h2 class="font-bold mr-2">
+                                                        Subtotal:
+                                                        </h2>
+                                                        <h2>
+                                                        ${{ e.subtotal }}
+                                                        </h2>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="flex flex-col ml-auto text-right items-end">
-                                                <h3>
-                                                Categoria: {{ e.producto.categoria }}
-                                                </h3>
-                                                <h3>
-                                                Codigo de Barras: {{ e.producto.codigo_barra }}
-                                                </h3>
+                                                <div class="flex flex-col gap-1">
+                                                    <div class="flex flex-row">
+                                                        <h2 class="mr-2">
+                                                        Pedido Creado el Dia: 
+                                                        </h2>
+                                                        <h3>
+                                                        {{ FormatoFecha(i.created_at) }}
+                                                        </h3>
+                                                    </div>
+                                                    <div class="flex flex-row">
+                                                        <h3 class="mr-2">
+                                                        Pedido Act. el Dia: 
+                                                        </h3>
+                                                        <h3>
+                                                        {{ FormatoFecha(i.updated_at) }}
+                                                        </h3>
+                                                    </div>
+                                                    <div class="flex flex-row">
+                                                        <h2 class="font-bold mr-2">
+                                                        Ciudad: 
+                                                        </h2>
+                                                        <h2>
+                                                        {{ i.direccion[0].ciudad }}
+                                                        </h2>
+                                                    </div>
+                                                    <div class="flex flex-row">
+                                                        <h2 class="font-bold mr-2">
+                                                        Provincia:
+                                                        </h2>
+                                                        <h2>
+                                                        {{ i.direccion[0].provincia }}
+                                                        </h2>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -413,16 +448,6 @@
                                                 <div class="flex flex-col">
                                                     <h2>
                                                     <span class="hidden lg:inline 2xl:inline">
-                                                    Ciudad: 
-                                                    </span>
-                                                    {{ i.direccion[0].ciudad }}
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    - Provincia:  
-                                                    </span>
-                                                    {{ i.direccion[0].provincia }}
-                                                    </h2>
-                                                    <h2>
-                                                    <span class="hidden lg:inline 2xl:inline">
                                                     Pagado con: 
                                                     </span>
                                                     {{ i.metodo_pago }}
@@ -441,12 +466,6 @@
                                                 </h3>
                                                 <h3>
                                                 Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
-                                                </h3>
-                                                <h3>
-                                                Pedido Creado el Dia: {{ FormatoFecha(i.created_at) }}
-                                                </h3>
-                                                <h3>
-                                                Pedido Actualizado el Dia: {{ FormatoFecha(i.updated_at) }}
                                                 </h3>
                                             </div>
                                         </div>
@@ -469,31 +488,65 @@
                                             class="tab !bg-red-100/50"
                                             v-for = "e in i.detalle_pedido" 
                                             :key="e.id_detalle_pedido">
-                                                <div class="flex flex-col">
+                                                <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                     <div class="flex flex-row">
-                                                        <h3 class="font-bold">
+                                                        <h3 class="font-bold overflow-hidden text-ellipsis">
                                                         {{ e.producto.nombre }}
                                                         </h3>
                                                     </div>
-                                                    <div class="flex flex-col">
+                                                    <div class="flex flex-col gap-1">
+                                                        <h3>
+                                                        Categoria: {{ e.producto.categoria }}
+                                                        </h3>
                                                         <h3>
                                                         Precio Unitario: ${{ e.precio_unitario }}
                                                         </h3>
                                                         <h3>
                                                         Cantidad: {{ e.cantidad }}
                                                         </h3>
-                                                        <h2 class="font-bold">
-                                                        Subtotal: ${{ e.subtotal }}
-                                                        </h2>
+                                                        <div class="flex flex-row">
+                                                            <h2 class="font-bold mr-2">
+                                                            Subtotal:
+                                                            </h2>
+                                                            <h2>
+                                                            ${{ e.subtotal }}
+                                                            </h2>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="flex flex-col ml-auto text-right items-end">
-                                                    <h3>
-                                                    Categoria: {{ e.producto.categoria }}
-                                                    </h3>
-                                                    <h3>
-                                                    Codigo de Barras: {{ e.producto.codigo_barra }}
-                                                    </h3>
+                                                    <div class="flex flex-col gap-1">
+                                                        <div class="flex flex-row">
+                                                            <h2 class="mr-2">
+                                                            Pedido Creado el Dia: 
+                                                            </h2>
+                                                            <h3>
+                                                            {{ FormatoFecha(i.created_at) }}
+                                                            </h3>
+                                                        </div>
+                                                        <div class="flex flex-row">
+                                                            <h3 class="mr-2">
+                                                            Pedido Act. el Dia: 
+                                                            </h3>
+                                                            <h3>
+                                                            {{ FormatoFecha(i.updated_at) }}
+                                                            </h3>
+                                                        </div>
+                                                        <div class="flex flex-row">
+                                                            <h2 class="font-bold mr-2">
+                                                            Ciudad: 
+                                                            </h2>
+                                                            <h2>
+                                                            {{ i.direccion[0].ciudad }}
+                                                            </h2>
+                                                        </div>
+                                                        <div class="flex flex-row">
+                                                            <h2 class="font-bold mr-2">
+                                                            Provincia:
+                                                            </h2>
+                                                            <h2>
+                                                            {{ i.direccion[0].provincia }}
+                                                            </h2>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -512,9 +565,9 @@
                             </div>
                         </div>
                 </div>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 

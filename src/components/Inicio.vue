@@ -493,23 +493,24 @@
                     </div>
                 </div>
                 <!-- Tabla de Productos -->
-                <div
-                class="start">
-                    <input
-                    @input="BusquedaProducto"
-                    type="text" 
-                    v-model="Busqueda" 
-                    placeholder="Busqueda..."
-                    class="busqueda"
-                    maxlength="50"
-                    >
+                <div class="start">
+                    <div class="px-5">
+                        <input
+                        @input="BusquedaProducto"
+                        type="text" 
+                        v-model="Busqueda" 
+                        placeholder="Busqueda..."
+                        class="busqueda"
+                        maxlength="50"
+                        >
+                    </div>
                     <div 
                     v-if="PBanner"
-                    class="flex flex-col w-full relative group" 
+                    class="flex flex-col relative group" 
                     >   
                         <div 
                         v-if="PBanner.imagenes && PBanner.imagenes.length > 0"
-                        class="relative w-full"
+                        class="relative px-5"
                         @touchstart="ComienzoToque($event)"
                         @touchend="FinToque($event, PBanner)"
                         >
@@ -517,9 +518,10 @@
                             type="button"
                             @click="BackImg(PBanner)"
                             :disabled="GetImg(PBanner.id) === 0"
-                            class="botonflecha
-                            flex flex-row z-30
-                            absolute left-4 top-1/2 -translate-y-1/2 z-30 !md:py-50 !py-20 hidden md:block"
+                            class="botonflechagrande
+                            flex-row absolute 
+                            left-4 top-1/2 -translate-y-1/2 z-30 
+                            hidden md:flex"
                             >
                             🢀
                             </button>
@@ -534,7 +536,10 @@
                             type="button"
                             @click="NextImg(PBanner)"
                             :disabled="GetImg(PBanner.id) === PBanner.imagenes.length - 1"
-                            class="botonflecha absolute right-4 top-1/2 -translate-y-1/2 z-30  !md:py-50 !py-20 hidden md:block"
+                            class="botonflechagrande 
+                            flex-row absolute 
+                            right-4 top-1/2 -translate-y-1/2 z-30 
+                            hidden md:flex"
                             >
                             🢂
                             </button>
@@ -543,136 +548,135 @@
                     <div
                     v-for="cat in ListaCategoria" 
                     :key="cat.categoria" 
-                    class="
-                    flex flex-col 
-                    w-full md:mb-8 mb-0"
                     >
-                        <h1
-                        class="
-                        text-3xl font-extrabold text-green-900  
-                        md:mb-2 mb-0 drop-shadow-sm"
-                        >
-                        {{ cat.categoria }}
-                        </h1>
                         <div 
-                        :id="'carrusel-' + cat.categoria"
+                        v-if="Productos.filter(p => p.categoria === cat.categoria).length > 0"
                         class="
-                        flex flex-row 
-                        w-full overflow-hidden md:py-4 py-2
-                        scroll-smooth gap-5"
+                        flex flex-col
+                        md:mb-8 mb-2
+                        bg-gradient-to-tr from-green-600/50 to-green-300/50"
                         >
-                            <button
-                            @click="ScrollIzquierda(cat.categoria)"
-                            class="botonflecha 
-                            flex-row z-30
-                            absolute self-center hidden md:flex"
+                            <h1
+                            class="
+                            text-3xl font-extrabold text-green-900  
+                            md:mb-2 mb-0 drop-shadow-sm"
                             >
-                            🢀
-                            </button>
+                            {{ cat.categoria }}
+                            </h1>
                             <div 
-                            v-for="i in Productos.filter(p => p.categoria === cat.categoria)"
-                            :key="i.id"
-                            :class="Estatuscolor(i.activo)"
-                            @touchstart="ComienzoToque($event)"
-                            @touchend="FinToque($event, i)" 
-                            class="carta"
+                            :id="'carrusel-' + cat.categoria"
+                            class="
+                            flex flex-row 
+                            w-full overflow-hidden md:py-4 py-2
+                            scroll-smooth gap-5"
                             >
-                                <div>
-                                    <div 
-                                    v-if="i.imagenes.length > 0"
-                                    @touchstart="ComienzoToque($event)"
-                                    @touchend="FinToque($event, i)"
-                                    class="flex flex-row 
-                                    2xl:gap-3 gap-1
-                                    items-center justify-center 
-                                    w-full md:pb-2 pb-1 snap-x
-                                    ">
+                                <button
+                                @click="ScrollIzquierda(cat.categoria)"
+                                class="botonflechagrande 
+                                flex-row z-30
+                                absolute self-center hidden md:flex"
+                                >
+                                🢀
+                                </button>
+                                <div 
+                                v-for="i in Productos.filter(p => p.categoria === cat.categoria)"
+                                :key="i.id"
+                                :class="Estatuscolor(i.activo)"
+                                @touchstart="ComienzoToque($event)"
+                                @touchend="FinToque($event, i)" 
+                                class="carta"
+                                >
+                                    <div>
+                                        <div 
+                                        v-if="i.imagenes.length > 0"
+                                        class="
+                                        flex flex-row 
+                                        2xl:gap-3 gap-1
+                                        items-center justify-center 
+                                        w-full md:pb-2 pb-1 snap-x
+                                        ">
+                                            <img
+                                            :key="i.imagenes[GetImg(i.id)].s3_key"
+                                            :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                            class="imagen"
+                                            >
+                                        </div>
                                         <img
-                                        :key="i.imagenes[GetImg(i.id)].s3_key"
-                                        :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                        v-else
+                                        src="../assets/images.png"
                                         class="imagen"
                                         >
-                                    </div>
-                                    <img
-                                    v-else
-                                    src="../assets/images.png"
-                                    class="imagen"
-                                    >
-                                    <div
-                                    >
-                                        <h2 class="font-bold">
-                                        {{ i.nombre }}
-                                        </h2>
-                                        <h2>
-                                        ${{ i.precio }}
-                                        </h2>
-                                        <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
-                                            <h3>
-                                            {{ i.codigo_barra }} <br>
-                                            Stock: 
-                                            {{ i.stock }}
-                                            </h3>
-                                        </div>
-                                        <div class="flex flex-row lg:flex-col">
-                                            <div v-if="Rol === '1' || Rol === '2'">
-                                                <button 
-                                                @click="Eliminacion(i)" 
-                                                v-if="i.activo" 
-                                                class="botonc !py-2"
-                                                >
-                                                ❌ 
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Eliminar
-                                                </span>
-                                                </button>
-                                                <button 
-                                                @click="Eliminacion(i)" 
-                                                v-else 
-                                                class="botoncon !py-2"
-                                                >
-                                                🕊️
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Reactivar
-                                                </span> 
-                                                </button>
-                                            </div>
+                                        <div
+                                        >
+                                            <h2 class="font-bold">
+                                            {{ i.nombre }}
+                                            </h2>
+                                            <h2>
+                                            ${{ i.precio }}
+                                            </h2>
                                             <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
-                                                <button 
-                                                @click="Edicion(i)" 
-                                                v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
-                                                class="botont !py-2">
-                                                ✏️ 
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Editar
-                                                </span>
-                                                </button>
+                                                <h3>
+                                                {{ i.codigo_barra }} <br>
+                                                Stock: 
+                                                {{ i.stock }}
+                                                </h3>
                                             </div>
-                                            <button 
-                                            @click="Compracion(i)" 
-                                            :disabled="CarritoStock(i) === 0" 
-                                            class="botoncon !py-2"
-                                            v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                            >
-                                            🛒 
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Añadir al Carrito 🛒
-                                            </span>
-                                            </button>
+                                            <div class="flex flex-row lg:flex-col justify-center">
+                                                <div class="botones">
+                                                    <div v-if="Rol === '1' || Rol === '2'">
+                                                        <button 
+                                                        @click="Eliminacion(i)" 
+                                                        v-if="i.activo" 
+                                                        class="botonc !py-2"
+                                                        >
+                                                        ❌ 
+                                                        <span class="hidden lg:inline 2xl:inline">
+                                                        Eliminar
+                                                        </span>
+                                                        </button>
+                                                        <button 
+                                                        @click="Eliminacion(i)" 
+                                                        v-else 
+                                                        class="botoncon !py-2"
+                                                        >
+                                                        🕊️
+                                                        <span class="hidden lg:inline 2xl:inline">
+                                                        Reactivar
+                                                        </span> 
+                                                        </button>
+                                                    </div>
+                                                    <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                        <button 
+                                                        @click="Edicion(i)" 
+                                                        v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                                        class="botont !py-2">
+                                                        ✏️ 
+                                                        <span class="hidden lg:inline 2xl:inline">
+                                                        Editar
+                                                        </span>
+                                                        </button>
+                                                    </div>
+                                                    <button 
+                                                    @click="Compracion(i)" 
+                                                    :disabled="CarritoStock(i) === 0" 
+                                                    class="botoncon !py-2 !text-2xl"
+                                                    v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                                    >
+                                                    𖠩
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <button
+                                @click="ScrollDerecha(cat.categoria)"
+                                :disabled="ScrollDerecha(cat.categoria) === 0"
+                                class="botonflechagrande absolute right-5 z:10 self-center hidden md:block"
+                                >
+                                🢂
+                                </button>
                             </div>
-                            <div v-if="Productos.filter(p => p.categoria === cat.categoria).length === 0" 
-                            class="w-full text-center text-green-800/60 font-semibold md:p-4 p-2">
-                            Aún no hay productos en esta categoría.
-                            </div>
-                            <button
-                            @click="ScrollDerecha(cat.categoria)"
-                            :disabled="ScrollDerecha(cat.categoria) === 0"
-                            class="botonflecha absolute right-5 z:10 self-center hidden md:block"
-                            >
-                            🢂
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -730,18 +734,6 @@
         }
         IniciarCarruselAutomatico()
     })
-    const IniciarCarruselAutomatico = () => {
-        intervaloCarrusel = setInterval(() => {
-            if (PBanner) {
-                const indexActual = GetImg(PBanner.value.id);
-                if (indexActual < PBanner.value.imagenes.length - 1) {
-                    IndiceImg.value[PBanner.value.id] = indexActual + 1
-                } else {
-                    IndiceImg.value[PBanner.value.id] = 0
-                }
-            }
-        }, 40000)
-    }
     onUnmounted(() => {
         if (intervaloCarrusel) clearInterval(intervaloCarrusel)
     })
@@ -790,6 +782,18 @@
             return faltandatos03 || faltandatos04
         }
     })
+    const IniciarCarruselAutomatico = () => {
+        intervaloCarrusel = setInterval(() => {
+            if (PBanner) {
+                const indexActual = GetImg(PBanner.value.id);
+                if (indexActual < PBanner.value.imagenes.length - 1) {
+                    IndiceImg.value[PBanner.value.id] = indexActual + 1
+                } else {
+                    IndiceImg.value[PBanner.value.id] = 0
+                }
+            }
+        }, 40000)
+    }
     const emit = defineEmits([
         'upload',
         'update:path'
@@ -845,18 +849,24 @@
         }
     }
     const ComienzoToque = (evento) => {
-        inicioX = evento.changedTouches[0].screenX
+        inicioX = evento.changedTouches[0].clientX
     }
 
     const FinToque = (evento, producto) => {
         if (!producto) return
-        const finX = evento.changedTouches[0].screenX
-        if (inicioX - finX > 50) {
+        const finX = evento.changedTouches[0].clientX
+        const diferencia = inicioX - finX
+        if (Math.abs(diferencia) < 50) {
+            inicioX = 0
+            return
+        }
+        if (diferencia > 0) {
             NextImg(producto)
         }
-        if (finX - inicioX > 50) {
+        else {
             BackImg(producto)
         }
+        inicioX = 0
     }
     const Banner = async () => {
         try {

@@ -193,125 +193,129 @@
                 </div>
             </div>
         </Teleport>
-        <!-- Tabla de Detalles -->
-        <div class="start">
-            <h1>
-            Tu Carrito
-            </h1>
-            <div class="flex justify-between">
-                <div>
-                    <h2>
-                    Producto
-                    </h2>
-                </div>
-                <div class="flex gap-7 lg:gap-45 2xl:gap-52">
-                    <h2>
-                    Precio
-                    </h2>
-                    <h2>
-                    Cantidad
-                    </h2>
-                    <h2>
-                    Subtotal
-                    </h2>   
-                    <h2>
-                    Borrar
-                    </h2>   
-                </div>
-            </div>
-            <div v-if="CarritoLocal.length > 0">
-                <div
-                class="mb-2 lg:mb-5"
-                v-for="(item, index) in CarritoLocal" 
-                :key="index"
-                >
-                    <div class="tab bg-green-500/30">
-                        <div class="flex-1 hidden lg:flex justify-center items-center min-w-0">
-                            <div 
-                            v-if="item.imagenes && item.imagenes.length > 0"
-                            class="flex flex-row 
-                            gap-3 justify-evenly
-                            ">
-                                <button
-                                @click="BackImg(item)"
-                                :disabled="GetImg(item.id_producto) === 0"
-                                class="
-                                botonflecha"
-                                >
-                                🢀
-                                </button>
-                                <img
-                                :key="item.imagenes[GetImg(item.id_producto)].s3_key"
-                                :src=ObtenerImgUrl(item.imagenes[GetImg(item.id_producto)].s3_key)
-                                class="imagencar"
-                                >
-                                <button
-                                @click="NextImg(item)"
-                                :disabled="GetImg(item.id_producto) === item.imagenes.length - 1"
-                                class="botonflecha"
-                                >
-                                🢂
-                                </button>
-                            </div>
-                            <img
-                            v-else
-                            src="../assets/images.png"
-                            class="imagen"
-                            >
-                        </div>
-                        <div class="flex-1 flex items-center min-w-0">
-                            <div class="flex flex-row">
-                                <h1>
-                                {{ item.nombre_producto }}
-                                </h1>
-                            </div>
-                        </div>
-                        <div class="flex-1 flex justify-center items-center min-w-0">
+        <div class="pagina">
+            <div class="flex w-full flex-col lg:flex-row">
+                <!-- Tabla de Detalles -->
+                <div class="start">
+                    <h1>
+                    Tu Carrito
+                    </h1>
+                    <div class="flex">
+                        <div class="mr-15 sm:mr-50 md:mr-70  lg:mr-100  xl:mr-110  2xl:mr-130">
                             <h2>
-                            ${{ item.precio_unitario }}
+                            Producto
                             </h2>
                         </div>
-                        <div class="flex-1 flex justify-center items-center min-w-0">
-                            <input 
-                            type="number"
-                            v-model="item.cantidad"
-                            @change="VerificarStock(item)" 
+                        <div class="flex gap-10 sm:gap-20 md:gap-25 lg:gap-35 xl:gap-48 2xl:gap-50 mr-20">
+                            <h2>
+                            Precio
+                            </h2>
+                            <h2>
+                            Cantidad
+                            </h2>
+                            <h2>
+                            Subtotal
+                            </h2>   
+                            <h2>
+                            Borrar
+                            </h2>   
+                        </div>
+                    </div>
+                    <div v-if="CarritoLocal.length > 0">
+                        <div
+                        class="mb-2 lg:mb-5"
+                        v-for="(item, index) in CarritoLocal" 
+                        :key="index"
+                        >
+                            <div class="tab bg-green-500/30">
+                                <div class="flex-1 hidden sm:flex justify-center items-center min-w-0">
+                                    <div 
+                                    v-if="item.imagenes && item.imagenes.length > 0"
+                                    class="flex flex-row 
+                                    gap-3 justify-evenly
+                                    ">
+                                        <button
+                                        @click="BackImg(item)"
+                                        :disabled="GetImg(item.id_producto) === 0"
+                                        class="
+                                        botonflecha"
+                                        >
+                                        🢀
+                                        </button>
+                                        <img
+                                        :key="item.imagenes[GetImg(item.id_producto)].s3_key"
+                                        :src=ObtenerImgUrl(item.imagenes[GetImg(item.id_producto)].s3_key)
+                                        class="imagencar"
+                                        >
+                                        <button
+                                        @click="NextImg(item)"
+                                        :disabled="GetImg(item.id_producto) === item.imagenes.length - 1"
+                                        class="botonflecha"
+                                        >
+                                        🢂
+                                        </button>
+                                    </div>
+                                    <img
+                                    v-else
+                                    src="../assets/images.png"
+                                    class="imagen"
+                                    >
+                                </div>
+                                <div class="flex-1 flex items-center min-w-0">
+                                    <div class="flex flex-row">
+                                        <h1>
+                                        {{ item.nombre_producto }}
+                                        </h1>
+                                    </div>
+                                </div>
+                                <div class="flex-1 flex justify-center items-center min-w-0">
+                                    <h2>
+                                    ${{ item.precio_unitario }}
+                                    </h2>
+                                </div>
+                                <div class="flex-1 flex justify-center items-center min-w-0">
+                                    <input 
+                                    type="number"
+                                    v-model="item.cantidad"
+                                    @change="VerificarStock(item)" 
+                                    class="
+                                    max-w-20
+                                    lg:max-w-100
+                                    2xl:max-w-200"
+                                    >
+                                </div>
+                                <div class="flex-1 flex justify-center items-center min-w-0">
+                                    <h2 class="font-bold">
+                                    ${{ item.cantidad * item.precio_unitario }}
+                                    </h2>
+                                </div>
+                                <div class="flex-1 flex justify-center items-center min-w-0">
+                                    <button @click="Eliminacion(index)" class="text-2xl">
+                                    🗑️
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="botones">
+                            <h1
                             class="
-                            max-w-20
-                            lg:max-w-100
-                            2xl:max-w-200"
+                            place-self-center
+                            text-center
+                            bg-green-100 
+                            border-green-500 rounded-2xl border-4
+                            my-1
+                            lg:my-3
+                            2xl:my-5"
                             >
-                        </div>
-                        <div class="flex-1 flex justify-center items-center min-w-0">
-                            <h2 class="font-bold">
-                            ${{ item.cantidad * item.precio_unitario }}
-                            </h2>
-                        </div>
-                        <div class="flex-1 flex justify-center items-center min-w-0">
-                            <button @click="Eliminacion(index)" class="text-2xl">
-                            🗑️
+                            Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
+                            </h1>
+                            <button 
+                            @click="PantallaPagar = true"
+                            class="botoncon">
+                            Completar Pedido
                             </button>
                         </div>
                     </div>
-                </div>
-                <div class="botones">
-                    <h1
-                    class="
-                    place-self-center
-                    text-center
-                    bg-green-100 
-                    border-green-500 rounded-2xl border-4
-                    my-1
-                    lg:my-3
-                    2xl:my-5"
-                    >
-                    Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
-                    </h1>
-                    <button 
-                    @click="PantallaPagar = true"
-                    class="botoncon">
-                    Completar Pedido
-                    </button>
                 </div>
             </div>
         </div>
