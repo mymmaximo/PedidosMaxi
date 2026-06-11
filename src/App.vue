@@ -57,18 +57,18 @@
             >
                 <div class="flex min-h-10 !bg-green-600">
                     <div
-                    @click="TablaActual = 'Inicio'" 
+                    @click="router.push('/')" 
                     v-if="Rol !== '3' && Rol !== '6'"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Inicio'}"
+                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
                     class="botonpestaña">
                         <h2 class="letra-Josefin">
                         Inicio
                         </h2>
                     </div>
                     <div 
-                    @click="TablaActual = 'Productos'" 
+                    @click="router.push('/productos')" 
                     v-if="Rol !== '3' && Rol !== '6'"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Productos'}"
+                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
                     class="botonpestaña"
                     >
                         <h2>
@@ -76,9 +76,9 @@
                         </h2>
                     </div>
                     <div 
-                        @click="TablaActual = 'Pedidos'" 
+                        @click="router.push('/pedidos')" 
                         v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Pedidos'}"
+                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
                     class="botonpestaña"
                     >
                         <h2>
@@ -86,9 +86,9 @@
                         </h2>
                     </div>
                     <div
-                    @click="TablaActual = 'Clientes'" 
+                    @click="router.push('/clientes')" 
                     v-if="Rol === '1' || Rol === '3'"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Clientes'}"
+                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
                     class="botonpestaña"
                     >
                         <h2>
@@ -96,9 +96,9 @@
                         </h2>
                     </div>
                     <div 
-                    @click="TablaActual = 'Usuarios'" 
+                    @click="router.push('/usuarios')" 
                     v-if="Rol === '1'"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Usuarios'}"
+                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
                     class="botonpestaña"
                     >
                         <h2>
@@ -106,9 +106,9 @@
                         </h2>
                     </div>
                     <div 
-                    @click="TablaActual = 'Historial_precios'" 
+                    @click="router.push('/historial_precios')" 
                     v-if="Rol === '1' || Rol === '4'"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Historial_precios'}"
+                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
                     class="botonpestaña"
                     >
                         <h2>
@@ -128,8 +128,8 @@
                     </div>
                     <div
                     v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                    @click="TablaActual = 'Carrito'"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Carrito'}"
+                    @click="router.push('/carrito')"
+                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
                     class="botonpestaña"
                     >
                         <h2>
@@ -173,13 +173,13 @@
                         border-green-700 border-4 rounded-sm
                         ">
                             <h3
-                            @click="TablaActual = 'Mis_pedidos'"
+                            @click="router.push('/mis_pedidos')"
                             v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
                             class="botonpestaña !p-2">
                             Mis Pedidos
                             </h3>
                             <h3
-                            @click="TablaActual = 'Configuracion'" 
+                            @click="router.push('/configuracion')" 
                             v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                             class="botonpestaña !p-2">
                             Configuracion
@@ -195,7 +195,7 @@
             </div>
             <div class="flex">
                 <div class="flex flex-row bg-green-600 sm:hidden">
-                    <div class="m-2 p-0 !z-40"
+                    <div class="m-2 p-2 !z-40"
                     >
                         <h1
                         @click="MostrarMenu = !MostrarMenu"
@@ -221,18 +221,18 @@
                                     </h1>
                                     <div>
                                         <div
-                                        @click="TablaActual = 'Inicio' ; MostrarMenu = false" 
+                                        @click="router.push('/') ; MostrarMenu = false" 
                                         v-if="Rol !== '3' && Rol !== '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Inicio'}"
+                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
                                         class="botonpestaña !py-0 !text-left">
                                             <h1>
                                             🏠︎ Inicio
                                             </h1>
                                         </div>
                                         <div 
-                                        @click="TablaActual = 'Productos' ; MostrarMenu = false" 
+                                        @click="router.push('/productos') ; MostrarMenu = false" 
                                         v-if="Rol !== '3' && Rol !== '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Productos'}"
+                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
                                         class="botonpestaña !py-0 !text-left"
                                         >
                                             <h1>
@@ -240,9 +240,9 @@
                                             </h1>
                                         </div>
                                         <div 
-                                            @click="TablaActual = 'Pedidos' ; MostrarMenu = false" 
+                                            @click="router.push('/pedidos') ; MostrarMenu = false" 
                                             v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Pedidos'}"
+                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
                                         class="botonpestaña !py-0 !text-left"
                                         >
                                             <h1>
@@ -250,9 +250,9 @@
                                             </h1>
                                         </div>
                                         <div
-                                        @click="TablaActual = 'Clientes' ; MostrarMenu = false" 
+                                        @click="router.push('/clientes') ; MostrarMenu = false" 
                                         v-if="Rol === '1' || Rol === '3'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Clientes'}"
+                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
                                         class="botonpestaña !py-0 !text-left"
                                         >
                                             <h1>
@@ -260,9 +260,9 @@
                                             </h1>
                                         </div>
                                         <div 
-                                        @click="TablaActual = 'Usuarios' ; MostrarMenu = false" 
+                                        @click="router.push('/usuarios') ; MostrarMenu = false" 
                                         v-if="Rol === '1'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Usuarios'}"
+                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
                                         class="botonpestaña !py-0 !text-left"
                                         >
                                             <h1>
@@ -270,9 +270,9 @@
                                             </h1>
                                         </div>
                                         <div 
-                                        @click="TablaActual = 'Historial_precios' ; MostrarMenu = false" 
+                                        @click="router.push('/historial_precios') ; MostrarMenu = false" 
                                         v-if="Rol === '1' || Rol === '4'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Historial_precios'}"
+                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
                                         class="botonpestaña !py-0 !text-left"
                                         >
                                             <h1>
@@ -281,8 +281,8 @@
                                         </div>
                                         <div
                                         v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                        @click="TablaActual = 'Carrito' ; MostrarMenu = false"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Carrito'}"
+                                        @click="router.push('/carrito') ; MostrarMenu = false"
+                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
                                         class="botonpestaña !py-0 !text-left"
                                         >
                                             <h1>
@@ -299,18 +299,18 @@
                                             </h1>
                                         </div>
                                         <div
-                                        @click="TablaActual = 'Mis_pedidos' ; MostrarMenu = false"
+                                        @click="router.push('/mis_pedidos') ; MostrarMenu = false"
                                         v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Mis_pedidos'}"
+                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
                                         class="botonpestaña !py-0 !text-left">
                                             <h1>
                                             👤 Mis Pedidos
                                             </h1>
                                         </div>
                                         <div
-                                        @click="TablaActual = 'Configuracion' ; MostrarMenu = false" 
+                                        @click="router.push('/configuracion') ; MostrarMenu = false" 
                                         v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': TablaActual === 'Configuracion'}"
+                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/configuracion'}"
                                         class="botonpestaña !py-0 !text-left">
                                             <h1>
                                             ⚙️ Configuracion
@@ -330,15 +330,8 @@
                     </div>
                 </div>
                 <div class="flex-col w-full">
-                    <Inicio v-if="TablaActual === 'Inicio'"/>
-                    <Productos v-if="TablaActual === 'Productos'"/>
-                    <Pedidos v-if="TablaActual === 'Pedidos'"/>
-                    <Clientes v-if="TablaActual === 'Clientes'"/>
-                    <Usuarios v-if="TablaActual === 'Usuarios'"/>
-                    <Carrito v-if="TablaActual === 'Carrito'" @CarritoVacio="TablaActual = 'Productos'"/>
-                    <Configuracion v-if="TablaActual === 'Configuracion'"/>
-                    <Mis_pedidos v-if="TablaActual === 'Mis_pedidos'"/>
-                    <Historial_precios v-if="TablaActual === 'Historial_precios'"/>
+                    <router-view>
+                    </router-view>
                 </div>
             </div>
         </div>
@@ -351,29 +344,24 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref } from 'vue'
+    import { useRouter, useRoute } from 'vue-router'
     import { CarritoLocal, LimpiarCompra, Iniciado, CerrarSesion, Rol } from './components/Estatus.js'
     import Login from './components/Login.vue'
-    import Inicio from './components/Inicio.vue'
-    import Pedidos from "./components/Pedidos.vue"
-    import Clientes from "./components/Clientes.vue"
-    import Usuarios from "./components/Usuarios.vue"
-    import Productos from "./components/Productos.vue"
-    import Carrito from "./components/Carrito.vue"
-    import Configuracion from './components/Configuracion.vue'
-    import Mis_pedidos from './components/Mis_pedidos.vue'
-    import Historial_precios from './components/Historial_precios.vue'
     // ----- Variables ----- //
+    const route = useRoute()
+    const router = useRouter()
+    const TablaActual = ref("")
     const MostrarMenu = ref (false)
     const BorrarCarrito = ref(false)
-    const TablaActual = ref("")
     const ActualizarCajaLogout = ref(false)
     // ----- Funciones Vue ----- //
     onMounted(async() => {
-        if (Rol.value === '3' || Rol.value === '6') {
-            TablaActual.value = 'Pedidos'
-        }
-        else {
-            TablaActual.value = 'Inicio'
+        if (route.path === '/') {
+            if (Rol.value === '3' || Rol.value === '6') {
+                router.push('/pedidos')
+            } else {
+                router.push('/')
+            }
         }
     })
     // ----- Para el Frontend ----- //

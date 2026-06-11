@@ -7,7 +7,7 @@
             <!-- Iniciar Sesion -->
             <div 
             v-if="MostrarLogin"
-            class=""
+            class="troncodentro"
             >
                 <form 
                 @submit.prevent="IniciarSesionUsuario" 
@@ -73,7 +73,7 @@
             <div v-else>
                 <form 
                 @submit.prevent="SubirNuevoCliente" 
-                class="popup">
+                class="troncodentro">
                     <h4 class="text-center">
                     Registrarse
                     </h4>

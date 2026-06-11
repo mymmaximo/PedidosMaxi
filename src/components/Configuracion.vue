@@ -3,12 +3,11 @@
     <div class="cuerpo">
         <div class="pagina">
             <div
-            class="popup !z-0"
+            class="troncodentro !z-0"
             >
                 <form @submit.prevent="ActualizarCliente">
-                    <h1>
-                    Actualizar Usuario 
-                    {{ ClienteConfig.nombre }}
+                    <h1 class="text-center">
+                    CONFIGURACION
                     </h1>
                     <h2>
                     Nombre

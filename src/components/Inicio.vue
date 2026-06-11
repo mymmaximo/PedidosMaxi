@@ -349,7 +349,7 @@
         <div class="pagina">
             <div class="flex w-full flex-col lg:flex-row">
                 <!-- Barra de Filtros -->
-                <div class="bar !z-30">
+                <div class="bar">
                     <div class="">
                         <h1
                         @click="MostrarFiltro = !MostrarFiltro"
@@ -520,25 +520,36 @@
                             :disabled="GetImg(PBanner.id) === 0"
                             class="botonflechagrande
                             flex-row absolute 
-                            left-4 top-1/2 -translate-y-1/2 z-30 
+                            left-4 top-1/2 -translate-y-1/2 z-20 
                             hidden md:flex"
                             >
                             🢀
                             </button>
-                            <img
-                            @touchstart="ComienzoToque"
-                            @touchend="FinToque($event, i)"
-                            :key="PBanner.imagenes[GetImg(PBanner.id)].s3_key"
-                            :src="ObtenerImgUrl(PBanner.imagenes[GetImg(PBanner.id)].s3_key)"
-                            class="banner"
-                            > 
+                            <div>
+                                <img
+                                @click="router.push(`/${PBanner.imagenes[GetImg(PBanner.id)].enlace}`)"
+                                @load="ImagenesCargando[PBanner.id] = false"
+                                v-show="ImagenesCargando[PBanner.id] === false"
+                                :src="ObtenerImgUrl(PBanner.imagenes[GetImg(PBanner.id)].s3_key)"
+                                class="banner"
+                                > 
+                                <div
+                                v-if="ImagenesCargando[PBanner.id] !== false" 
+                                class="mt-2"
+                                >
+                                    <img 
+                                    src="../assets/loading.gif" 
+                                    alt="Cargando..." 
+                                    class="banner">
+                                </div>
+                            </div>
                             <button
                             type="button"
                             @click="NextImg(PBanner)"
                             :disabled="GetImg(PBanner.id) === PBanner.imagenes.length - 1"
                             class="botonflechagrande 
                             flex-row absolute 
-                            right-4 top-1/2 -translate-y-1/2 z-30 
+                            right-4 top-1/2 -translate-y-1/2 z-20 
                             hidden md:flex"
                             >
                             🢂
@@ -567,13 +578,13 @@
                             :id="'carrusel-' + cat.categoria"
                             class="
                             flex flex-row 
-                            w-full overflow-hidden md:py-4 py-2
+                            w-full overflow-x-auto md:overflow-hidden md:py-4 py-2
                             scroll-smooth gap-5"
                             >
                                 <button
                                 @click="ScrollIzquierda(cat.categoria)"
                                 class="botonflechagrande 
-                                flex-row z-30
+                                flex-row z-20
                                 absolute self-center hidden md:flex"
                                 >
                                 🢀
@@ -582,8 +593,6 @@
                                 v-for="i in Productos.filter(p => p.categoria === cat.categoria)"
                                 :key="i.id"
                                 :class="Estatuscolor(i.activo)"
-                                @touchstart="ComienzoToque($event)"
-                                @touchend="FinToque($event, i)" 
                                 class="carta"
                                 >
                                     <div>
@@ -596,10 +605,20 @@
                                         w-full md:pb-2 pb-1 snap-x
                                         ">
                                             <img
-                                            :key="i.imagenes[GetImg(i.id)].s3_key"
+                                            v-show="ImagenesCargando[i.id] === false"
                                             :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                            @load="ImagenesCargando[i.id] = false"
                                             class="imagen"
                                             >
+                                            <div
+                                            v-if="ImagenesCargando[i.id] !== false" 
+                                            class="mt-2"
+                                            >
+                                                <img 
+                                                src="../assets/loading.gif" 
+                                                alt="Cargando..." 
+                                                class="imagen !p-15">
+                                            </div>
                                         </div>
                                         <img
                                         v-else
@@ -672,7 +691,7 @@
                                 <button
                                 @click="ScrollDerecha(cat.categoria)"
                                 :disabled="ScrollDerecha(cat.categoria) === 0"
-                                class="botonflechagrande absolute right-5 z:10 self-center hidden md:block"
+                                class="botonflechagrande absolute right-5 z:20 self-center hidden md:block"
                                 >
                                 🢂
                                 </button>
@@ -687,8 +706,9 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, onUnmounted, toRefs, ref, watch, computed } from 'vue'
+    import { useRouter, useRoute } from 'vue-router'
     import { supabase } from '../config/supebase.js'
+    import { onMounted, onUnmounted, toRefs, ref, watch, computed } from 'vue'
     import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
     // ----- Variables ----- //
     const prop = defineProps (['path','size'])
@@ -701,9 +721,13 @@
     const ListaCategoria = ref ("")
     const ArchivoSave = ref ([])
     const { path } = toRefs (prop)
+    const route = useRoute()
+    const router = useRouter()
     const uploading = ref (false)
     const filtroAct = ref (false)
     const VistaPrevia = ref ([])
+    const ImagenesCargando = ref({})
+    const Cargando = ref(true)
     const filtrocat = ref ("")
     const filtroRadio = ref(0)
     const IndiceImg = ref ({})
@@ -719,6 +743,7 @@
 	const Pagina = ref (0)
     const PBanner = ref(null)
     let inicioX = 0
+    let inicioY = 0
     let intervaloCarrusel = null
     // ----- Funciones Vue ----- //
     onMounted(async() => {
@@ -784,13 +809,14 @@
     })
     const IniciarCarruselAutomatico = () => {
         intervaloCarrusel = setInterval(() => {
-            if (PBanner) {
+            if (PBanner.value) {
                 const indexActual = GetImg(PBanner.value.id);
                 if (indexActual < PBanner.value.imagenes.length - 1) {
                     IndiceImg.value[PBanner.value.id] = indexActual + 1
                 } else {
                     IndiceImg.value[PBanner.value.id] = 0
                 }
+                ImagenesCargando.value[PBanner.value.id] = true
             }
         }, 40000)
     }
@@ -850,32 +876,47 @@
     }
     const ComienzoToque = (evento) => {
         inicioX = evento.changedTouches[0].clientX
+        inicioY = evento.changedTouches[0].clientY
     }
-
     const FinToque = (evento, producto) => {
         if (!producto) return
         const finX = evento.changedTouches[0].clientX
-        const diferencia = inicioX - finX
-        if (Math.abs(diferencia) < 50) {
+        const finY = evento.changedTouches[0].clientY
+        const diferenciaX = inicioX - finX
+        const diferenciaY = Math.abs(inicioY - finY)
+        if (diferenciaY > Math.abs(diferenciaX)) {
+            inicioX = 0
+            inicioY = 0
+            return
+        }
+        if (Math.abs(diferenciaX) < 50) {
+            inicioX = 0
+            inicioY = 0
+            return
+        }
+        if (Math.abs(diferenciaX) < 50) {
             inicioX = 0
             return
         }
-        if (diferencia > 0) {
+        if (diferenciaX > 0) {
             NextImg(producto)
         }
         else {
             BackImg(producto)
         }
         inicioX = 0
+        inicioY = 0
     }
     const Banner = async () => {
         try {
-            const respuesta = await fetch('http://localhost:8000/producto/?limit=1000')
+            const respuesta = await fetch('http://localhost:8000/banners/?limit=1000')
             if (respuesta.ok) {
-                const todosLosProductos = await respuesta.json()
-                const prodDestacado = todosLosProductos.find(p => p.id === 27)
-                if (prodDestacado) {
-                    PBanner.value = prodDestacado
+                const bananaer = await respuesta.json()
+                if (bananaer.length > 0) {
+                    PBanner.value = {
+                        id: "bananaer",
+                        imagenes: bananaer
+                    }
                 }
             }
         } catch (error) {
@@ -889,12 +930,14 @@
         const ImgActual = GetImg(imagen.id)
         if (ImgActual < imagen.imagenes.length - 1) {
             IndiceImg.value[imagen.id] = ImgActual + 1
+            ImagenesCargando.value[imagen.id] = true
         }
     }
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual > 0) {
             IndiceImg.value[imagen.id] = ImgActual - 1
+            ImagenesCargando.value[imagen.id] = true
         }
     }
     const ScrollIzquierda = (categoria) => {

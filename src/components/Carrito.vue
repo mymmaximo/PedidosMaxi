@@ -200,13 +200,14 @@
                     <h1>
                     Tu Carrito
                     </h1>
-                    <div class="flex">
-                        <div class="mr-15 sm:mr-50 md:mr-70  lg:mr-100  xl:mr-110  2xl:mr-130">
+                    <div class="flex flex-row 
+                                    gap-3 justify-evenly">
+                        <div class="mr-10 ml-5 sm:mr-50 md:mr-70  lg:mr-90  xl:mr-110  2xl:mr-130">
                             <h2>
                             Producto
                             </h2>
                         </div>
-                        <div class="flex gap-10 sm:gap-20 md:gap-25 lg:gap-35 xl:gap-48 2xl:gap-50 mr-20">
+                        <div class="flex gap-1 sm:gap-20 md:gap-25 lg:gap-35 xl:gap-48 2xl:gap-50 mr-20">
                             <h2>
                             Precio
                             </h2>

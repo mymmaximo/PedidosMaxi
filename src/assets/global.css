@@ -55,18 +55,24 @@
     flex-1 flex flex-col
     min-w-0
     h-fit
-    p-2
-    lg:p-3
-    2xl:p-5
+    pt-2
+    sm:pt-2
+    md:pt-2
+    lg:pt-2
+    xl:pt-2
+    2xl:pt-2
     px-0
     gap-2
-    lg:gap-3
-    2xl:gap-4
+    sm:gap-2
+    md:gap-2
+    lg:gap-2
+    xl:gap-2
+    2xl:gap-2
 }
 .bar {
     @apply 
     sticky shrink-0 flex flex-col
-    overflow-y-auto z-30
+    overflow-y-auto z-20
     text-white
     bg-green-500
     gap-5
@@ -144,14 +150,17 @@
     flex flex-col
     shrink-0 snap-center
     items-center text-center
-    overflow-hidden touch-pan-y
+    overflow-hidden
     bg-gradient-to-bl from-green-200 to-green-200/20
     rounded-2xl shadow-md
     h-auto
     p-2
     md:p-4
     w-36
-    lg:w-80
+    sm:w-60
+    md:w-70
+    lg:w-75
+    xl:w-80
     2xl:w-90
     m-2
 }
@@ -528,12 +537,21 @@ label {
 }
 .botonflecha {
     @apply
-    bg-green-100/50 text-center
+    bg-green-100/50 
+    text-center
     cursor-pointer
     rounded-3xl
+    px-3
+    sm:px-3
+    md:px-3
     lg:px-3
+    xl:px-3
     2xl:px-3
-    lg:py-1
+    py-10
+    sm:py-8
+    md:py-10
+    lg:py-12
+    xl:py-12
     2xl:py-15
     hover:text-gray-200
     hover:bg-green-300/40
@@ -544,7 +562,7 @@ label {
 }
 .botonflechagrande {
     @apply
-    bg-green-600 
+    bg-linear-to-r from-green-700 to-green-800
     text-white text-center
     border-4 border-green-500
     cursor-pointer
@@ -552,15 +570,18 @@ label {
     lg:px-3
     2xl:px-3
     lg:py-1
-    2xl:py-5
+    2xl:py-25
     m-3
     hover:text-gray-200
-    hover:bg-green-300/60
+    hover:from-green-300/60
+    hover:to-green-400/60
     hover:border-green-200/60
-    active:bg-gray-100
+    active:from-green-100 
+    active:to-green-300
     active:border-green-50
     disabled:text-gray-400/0
-    disabled:bg-gray-300/0
+    disabled:from-green-100/0
+    disabled:to-green-300/0
     disabled:cursor-default 
     disabled:border-green-500/0
 }
@@ -627,11 +648,17 @@ img {
 .imagen {
     @apply
     w-24
-    lg:w-36
-    2xl:w-48
-    h-24
+    sm:h-24
+    md:h-30
     lg:h-36
+    xl:h-42
     2xl:h-48
+    h-24
+    sm:w-24
+    md:w-30
+    lg:w-36
+    xl:w-42
+    2xl:w-48
     object-cover place-self-center
     rounded-xl drop-shadow-md
 }

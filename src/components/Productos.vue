@@ -64,7 +64,7 @@
         <Teleport to="body">
             <div class="fondo" v-if="VentanaCompra">
                 <div class="popup">
-                    <h1>
+                    <h1 class="text-center">
                     {{ ProductoActual.nombre }}
                     </h1>
                     <div>
@@ -114,13 +114,13 @@
                         <div class="botones !flex-row">
                             <button 
                             @click="SumarProducto(ProductoActual)"
-                            class="botoncon !bg-green-400 !px-2"
+                            class="botoncon !px-4"
                             >
                             ✚
                             </button>
                             <button 
                             @click="RestarProducto(ProductoActual)"
-                            class="botonc !bg-red-400 !px-2 !font-bold"
+                            class="botonc !px-4 !font-bold"
                             >
                             ━
                             </button>
@@ -348,7 +348,7 @@
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
             <div
-            class="flex w-full flex-col lg:flex-row">
+            class="flex w-full flex-col sm:flex-row">
                 <!-- Barra de Filtros -->
                 <div class="bar">
                     <div>
@@ -514,7 +514,7 @@
                             </button>
                         </div>
                     </div>
-                    <div>
+                    <div v-if="Rol === '1' || Rol === '2'">
                         <h1
                         @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
@@ -524,7 +524,7 @@
                     </div>
                     <div
                     class="flex flex-col lg:self-center"
-                    v-if="MostrarNuevo"
+                    v-if="MostrarNuevo && (Rol === '1' || Rol === '2')"
                     >
                         <form @submit.prevent="SubirNuevoProducto">
                             <h2>
@@ -653,7 +653,7 @@
                         v-if="Productos.length > 0"
                         class="
                         grid
-                        md:grid-cols-3
+                        lg:grid-cols-3
                         grid-cols-2
                         gap-6"
                         >
@@ -661,6 +661,8 @@
                             :class="Estatuscolor(i.activo)" 
                             v-for= "i in Productos" 
                             :key="i.id"
+                            @touchstart="ComienzoToque($event)"
+                            @touchend="FinToque($event, i)" 
                             class="carta"
                             >
                                 <div>
@@ -674,19 +676,31 @@
                                         <button
                                         @click="BackImg(i)"
                                         :disabled="GetImg(i.id) === 0"
-                                        class="botonflecha"
+                                        class="botonflecha hidden md:flex"
                                         >
                                         🢀
                                         </button>
-                                        <img
-                                        :key="i.imagenes[GetImg(i.id)].s3_key"
-                                        :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
-                                        class="imagen"
-                                        >
+                                        <div>
+                                            <img
+                                            v-show="ImagenesCargando[i.id] === false"
+                                            :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                            @load="ImagenesCargando[i.id] = false"
+                                            class="imagen"
+                                            >
+                                            <div
+                                            v-if="ImagenesCargando[i.id] !== false" 
+                                            class="mt-2"
+                                            >
+                                                <img 
+                                                src="../assets/loading.gif" 
+                                                alt="Cargando..." 
+                                                class="imagen !2xl:p-15">
+                                            </div>
+                                        </div>
                                         <button
                                         @click="NextImg(i)"
                                         :disabled="GetImg(i.id) === i.imagenes.length - 1"
-                                        class="botonflecha"
+                                        class="botonflecha hidden md:flex"
                                         >
                                         🢂
                                         </button>
@@ -754,7 +768,7 @@
                                             <button 
                                             @click="Compracion(i)" 
                                             :disabled="CarritoStock(i) === 0" 
-                                            class="botont !py-2 !text-2xl"
+                                            class="botoncon !py-2 !text-2xl"
                                             v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                             >
                                             𖠩 
@@ -818,6 +832,7 @@
     const MostrarNuevo = ref (false)
     const VentanaNuevo = ref (false)
     const ListaCategoria = ref ("")
+    const ImagenesCargando = ref({})
     const ArchivoSave = ref ([])
     const { path } = toRefs (prop)
     const uploading = ref (false)
@@ -836,6 +851,7 @@
     const menor = ref ("")
     const DelImg= ref ([])
 	const Pagina = ref (0)
+    let inicioX = 0
     // ----- Funciones Vue ----- //
     onMounted(async() => {
         BusquedaProducto()
@@ -954,13 +970,34 @@
         const ImgActual = GetImg(imagen.id)
         if (ImgActual < imagen.imagenes.length - 1) {
             IndiceImg.value[imagen.id] = ImgActual + 1
+            ImagenesCargando.value[imagen.id] = true
         }
     }
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual > 0) {
             IndiceImg.value[imagen.id] = ImgActual - 1
+            ImagenesCargando.value[imagen.id] = true
         }
+    }
+    const ComienzoToque = (evento) => {
+        inicioX = evento.changedTouches[0].clientX
+    }
+    const FinToque = (evento, producto) => {
+        if (!producto) return
+        const finX = evento.changedTouches[0].clientX
+        const diferencia = inicioX - finX
+        if (Math.abs(diferencia) < 50) {
+            inicioX = 0
+            return
+        }
+        if (diferencia > 0) {
+            NextImg(producto)
+        }
+        else {
+            BackImg(producto)
+        }
+        inicioX = 0
     }
     const Compracion = (producto_fila) => {
         VentanaComprar(producto_fila)
