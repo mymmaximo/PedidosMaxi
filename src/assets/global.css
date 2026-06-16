@@ -637,7 +637,7 @@ img {
     mx-auto
     object-contain
 }
-.imageno9 {
+.imageno {
     @apply
     flex items-center justify-center
     h-24

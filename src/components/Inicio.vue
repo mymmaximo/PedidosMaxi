@@ -152,10 +152,11 @@
             class="fondo 
             ">
                 <div class="popup">
-                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                    <form @submit.prevent="ActualizarProducto">
                         <h1>
                         {{ ProductoAct.nombre }}
                         </h1>
+                        <!-- Actualizar Nombre -->
                         <div v-if="Rol === '1' || Rol === '2'">
                             <h2>
                             Nombre
@@ -167,6 +168,7 @@
                             maxlength="50"
                             >
                         </div>
+                        <!-- Actualizar Precio -->
                         <div v-if="Rol === '1' || Rol === '2' || Rol === '4'">
                             <h2>
                             Precio
@@ -178,6 +180,7 @@
                             maxlength="8"
                             >
                         </div>
+                        <!-- Actualizar Stock -->
                         <div v-if="Rol === '1' || Rol === '2' || Rol === '5'">
                             <h2>
                             Stock
@@ -189,6 +192,7 @@
                             maxlength="8"
                             >
                         </div>
+                        <!-- Actualizar Categoria y Codigo de Barra -->
                         <div v-if="Rol === '1' || Rol === '2'">
                             <h2>
                             Categoria
@@ -222,6 +226,7 @@
                             maxlength="15"
                             >
                         </div>
+                        <!-- Actualizar Imagenes Actuales -->
                         <div v-if="Rol === '1' || Rol === '2'">
                             <h2>Imágenes actuales</h2>
                             <div 
@@ -272,6 +277,7 @@
                             class="imageno">
                             Sin imágenes
                             </div>
+                            <!-- Imagenes Nuevas -->
                             <div>
                                 <h2>
                                 Imagenes Nuevas
@@ -342,6 +348,168 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </Teleport>
+        <!-- Actualizar Banner -->
+        <Teleport to="body">
+            <div 
+            v-if="VentanaBanner"
+            class="fondo 
+            ">
+                <div class="popup">
+                    <h1 class="text-center">
+                    Banners:
+                    </h1>
+                    <!-- Subir Banners -->
+                    <div>
+                        <h1>
+                        Nuevos Banners
+                        </h1>
+                        <div
+                        v-if="BannersNuevos.length > 0"
+                        class="
+                        relative flex flex-row overflow-x-auto gap-4
+                        ">
+                            <div
+                            v-for="(pack, index) in BannersNuevos"
+                            :key="index"
+                            class="
+                            shrink-0 m-2
+                            relative"
+                            >
+                                <button
+                                type="button"
+                                @click="BannersNuevos.splice(index, 1)"
+                                title="Quitar imagen"
+                                class="botonx"
+                                >
+                                🗙
+                                </button>
+                                <img 
+                                :src="pack.vista_previa" 
+                                alt="Vista Previa"
+                                class="imagen !m-0" 
+                                />
+                                <input 
+                                v-model="pack.enlace"
+                                type="text"
+                                placeholder="Enlace..."
+                                class="mt-3"
+                                >
+                            </div>
+                        </div>
+                        <div
+                        v-else 
+                        class="imageno"
+                        >
+                        <h3 class="text-center">
+                        Sin vista previa
+                        </h3> 
+                        </div>
+                        <div class="md:mt-4 mt-2">
+                            <input
+                            type="file"
+                            accept="image/*"
+                            @change="SeleccionarBanner"
+                            multiple
+                            class="imagenu !w-full"
+                            ref="fileInput"
+                            />
+                        </div>
+                    </div>
+                    <!-- Actualizar Banners -->
+                    <div>
+                        <h1>
+                        Actualizar Banners
+                        </h1>
+                        <div 
+                        v-if="Bananaer && Bananaer.imagenes && Bananaer.imagenes.length > 0"
+                        class="
+                        relative flex flex-row overflow-x-auto gap-4"
+                        >
+                            <div
+                            v-for="(img, index) in Bananaer.imagenes"
+                            :key="img.id"
+                            class="carta
+                            !relative"
+                            >
+                                <div
+                                class="botones"
+                                >
+                                    <button
+                                    v-if="!DelBann.includes(img.id)"
+                                    type="button"
+                                    @click="DelBann.push(img.id)"
+                                    title="Desactivar"
+                                    class="botonc"
+                                    >
+                                    🗙
+                                    </button>
+                                    <button
+                                    v-else
+                                    type="button"
+                                    @click="DelSupaBann = DelSupaBann.filter(id => id !== img.id)"
+                                    title="Restaurar"
+                                    class="botoncon"
+                                    >
+                                    🐦‍🔥
+                                    </button>
+                                </div>
+                                <div v-if="DelBann.includes(img.id)">
+                                    <button
+                                    v-if="!DelSupaBann.includes(img.id)"
+                                    type="button"
+                                    @click="DelSupaBann.push(img.id)"
+                                    title="Quitar imagen"
+                                    class="botonx !top-20 !right-20"
+                                    >
+                                    🗑️
+                                    </button>
+                                    <button
+                                    v-else
+                                    type="button"
+                                    @click="DelSupaBann = DelSupaBann.filter(id => id !== img.id)"
+                                    title="Restaurar imagen"
+                                    class="botonx !top-20 !right-20"
+                                    >
+                                    🕊️
+                                    </button>
+                                </div>
+                                <img 
+                                :src="ObtenerImgUrl(img.s3_key)"
+                                :class="DelBann.includes(img.id) ? 'imagendel' : 'imagen'"
+                                >
+                                <input 
+                                v-model="img.enlace"
+                                type="text"
+                                placeholder="Enlace..."
+                                class="mt-3"
+                                >
+                            </div>
+                        </div>
+                        <div 
+                        v-else 
+                        class="imageno">
+                        Sin imágenes
+                        </div>
+                    </div>
+                    <div
+                    class="botones"
+                    >
+                        <button 
+                        @click="SaveBanner"
+                        class="botoncon
+                        ">
+                        Guardar Cambios
+                        </button>
+                        <button 
+                        @click="CerrarPopUp03"
+                        class="botonc"
+                        >
+                        Cancelar
+                        </button>
+                    </div>
                 </div>
             </div>
         </Teleport>
@@ -505,19 +673,19 @@
                         >
                     </div>
                     <div 
-                    v-if="PBanner"
+                    v-if="Bananaer"
                     class="flex flex-col relative group" 
                     >   
                         <div 
-                        v-if="PBanner.imagenes && PBanner.imagenes.length > 0"
+                        v-if="Bananaer.imagenes && Bananaer.imagenes.length > 0"
                         class="relative px-5"
                         @touchstart="ComienzoToque($event)"
-                        @touchend="FinToque($event, PBanner)"
+                        @touchend="FinToque($event, Bananaer)"
                         >
                             <button
                             type="button"
-                            @click="BackImg(PBanner)"
-                            :disabled="GetImg(PBanner.id) === 0"
+                            @click="BackImg(Bananaer)"
+                            :disabled="GetImg(Bananaer.id) === 0"
                             class="botonflechagrande
                             flex-row absolute 
                             left-4 top-1/2 -translate-y-1/2 z-20 
@@ -525,16 +693,24 @@
                             >
                             🢀
                             </button>
+                            <button
+                            v-if="Rol === '1'"
+                            type="button"
+                            @click="AbrirPopUp03"
+                            class="botonx !bg-gray-700"
+                            >
+                            ✏️
+                            </button>
                             <div>
                                 <img
-                                @click="router.push(`/${PBanner.imagenes[GetImg(PBanner.id)].enlace}`)"
-                                @load="ImagenesCargando[PBanner.id] = false"
-                                v-show="ImagenesCargando[PBanner.id] === false"
-                                :src="ObtenerImgUrl(PBanner.imagenes[GetImg(PBanner.id)].s3_key)"
+                                @click="router.push(`/${Bananaer.imagenes[GetImg(Bananaer.id)].enlace}`)"
+                                @load="ImagenesCargando[Bananaer.id] = false"
+                                v-show="ImagenesCargando[Bananaer.id] === false"
+                                :src="ObtenerImgUrl(Bananaer.imagenes[GetImg(Bananaer.id)].s3_key)"
                                 class="banner"
                                 > 
                                 <div
-                                v-if="ImagenesCargando[PBanner.id] !== false" 
+                                v-if="ImagenesCargando[Bananaer.id] !== false" 
                                 class="mt-2"
                                 >
                                     <img 
@@ -545,8 +721,8 @@
                             </div>
                             <button
                             type="button"
-                            @click="NextImg(PBanner)"
-                            :disabled="GetImg(PBanner.id) === PBanner.imagenes.length - 1"
+                            @click="NextImg(Bananaer)"
+                            :disabled="GetImg(Bananaer.id) === Bananaer.imagenes.length - 1"
                             class="botonflechagrande 
                             flex-row absolute 
                             right-4 top-1/2 -translate-y-1/2 z-20 
@@ -717,14 +893,16 @@
     const OpcionCategoria = ref ("new")
     const VentanaCompra = ref (false)
     const MostrarFiltro = ref (false)
-    const VentanaNuevo = ref (false)
+    const VentanaBanner = ref (false)
     const ListaCategoria = ref ("")
     const ArchivoSave = ref ([])
+    const BannersNuevos = ref ([])
     const { path } = toRefs (prop)
     const route = useRoute()
     const router = useRouter()
     const uploading = ref (false)
     const filtroAct = ref (false)
+    const BorrarImagenBanner = ref (false)
     const VistaPrevia = ref ([])
     const ImagenesCargando = ref({})
     const Cargando = ref(true)
@@ -739,9 +917,11 @@
     const NowImg = ref ([])
     const mayor = ref ("")
     const menor = ref ("")
-    const DelImg= ref ([])
+    const DelImg = ref ([])
+    const DelSupaBann = ref ([])
+    const DelBann = ref ([])
 	const Pagina = ref (0)
-    const PBanner = ref(null)
+    const Bananaer = ref(null)
     let inicioX = 0
     let inicioY = 0
     let intervaloCarrusel = null
@@ -783,17 +963,6 @@
         if (path.value) ObtenerImgUrl()
     })
     const confirboton = computed(() =>{
-        if (VentanaNuevo.value) {
-            const faltandatos01 = 
-                NuevoProducto.value.nombre === "" ||
-                NuevoProducto.value.precio === "" ||
-                NuevoProducto.value.stock === "" ||
-                NuevoProducto.value.stock < 0 ||
-                NuevoProducto.value.precio <= 0
-            const faltandatos02 = 
-                OpcionCategoria.value === "new" && NuevoProducto.value.categoria === ""
-            return faltandatos01 || faltandatos02
-        }
         if (ActualizarCajaP.value) {
             const faltandatos03 =
                 ProductoAct.value.nombre === "" ||
@@ -809,14 +978,14 @@
     })
     const IniciarCarruselAutomatico = () => {
         intervaloCarrusel = setInterval(() => {
-            if (PBanner.value) {
-                const indexActual = GetImg(PBanner.value.id);
-                if (indexActual < PBanner.value.imagenes.length - 1) {
-                    IndiceImg.value[PBanner.value.id] = indexActual + 1
+            if (Bananaer.value) {
+                const indexActual = GetImg(Bananaer.value.id);
+                if (indexActual < Bananaer.value.imagenes.length - 1) {
+                    IndiceImg.value[Bananaer.value.id] = indexActual + 1
                 } else {
-                    IndiceImg.value[PBanner.value.id] = 0
+                    IndiceImg.value[Bananaer.value.id] = 0
                 }
-                ImagenesCargando.value[PBanner.value.id] = true
+                ImagenesCargando.value[Bananaer.value.id] = true
             }
         }, 40000)
     }
@@ -844,16 +1013,11 @@
 		document.body.style.overflow = "auto";
 	}
 	const AbrirPopUp03 = () => {
-		VentanaNuevo.value = true
+		VentanaBanner.value = true
 		document.body.style.overflow = "hidden";
 	}
 	const CerrarPopUp03 = () => {
-		VentanaNuevo.value = false
-        LimpiarImagenes()
-        NuevoProducto.value.nombre = ""
-        NuevoProducto.value.precio = ""
-        NuevoProducto.value.stock = ""
-        OpcionCategoria.value = "new"
+		VentanaBanner.value = false
 		document.body.style.overflow = "auto";
 	}
 	const AbrirPopUp04 = () => {
@@ -913,7 +1077,7 @@
             if (respuesta.ok) {
                 const bananaer = await respuesta.json()
                 if (bananaer.length > 0) {
-                    PBanner.value = {
+                    Bananaer.value = {
                         id: "bananaer",
                         imagenes: bananaer
                     }
@@ -1000,17 +1164,18 @@
             }
         }
     }
-    const QuitarImagenNueva = (index) => {
-        ArchivoSave.value.splice(index, 1)
-        VistaPrevia.value.splice(index, 1)
-        if (fileInput.value) 
-            fileInput.value.value = ''
-    }
-    const LimpiarImagenes = () => {
-        VistaPrevia.value = []
-        ArchivoSave.value = []
-        if (fileInput.value) {
-            fileInput.value.value = ''
+    const SeleccionarBanner = (evt) => {
+        const files = evt.target.files
+        if (files) {
+            for (let i = 0 ; i < files.length ; i++) {
+                const BannerNuevo = {
+                    imagen: files[i],
+                    vista_previa: URL.createObjectURL(files[i]),
+                    enlace: "",
+                    orden: 0
+                }
+                BannersNuevos.value.push(BannerNuevo)
+            }
         }
     }
     const ObtenerImgUrl = (Imgenkey) => {
@@ -1062,6 +1227,17 @@
         AbrirPopUp02()
     }
     // ----- Para el Backend ----- //
+    const SaveBanner = async () => {
+        if (BannersNuevos.value.length > 0) {
+            await SubirBanner()
+        }
+        await ActualizarBanner()
+        if (DelBann.value.length > 0) {
+            await BorrarBanner()
+        }
+        Banner()
+        CerrarPopUp03()
+    }
     const CarritoStock = (Producto) => {
         let stockCarrito = 0
         CarritoLocal.value.forEach((itemCarrito) => {
@@ -1267,6 +1443,33 @@
         BusquedaProducto()
         CerrarPopUp03()
     }
+    const SubirBanner = async() => {
+        // ----- Subir Datos Banner ----- //
+        for (const BannerNew of BannersNuevos.value) {
+            const fileExt = BannerNew.imagen.name.split('.').pop()
+            const filePath = `${Math.random()}.${fileExt}`
+        // ----- Subir Datos Banner Supabase ----- //
+            let { error: uploadError } = await supabase.storage
+                .from('max_imagenes')
+                .upload(filePath, BannerNew.imagen)
+        // ----- Subir Datos Banner Backend ----- //
+            if (!uploadError) {
+                await fetch('http://localhost:8000/banners/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        s3_key: filePath,
+                        nombre_original: BannerNew.imagen.name,
+                        tipo_contenido: fileExt,
+                        tamanio: BannerNew.imagen.size,
+                        enlace: BannerNew.enlace,
+                        orden: BannerNew.orden
+                    })
+                })
+            }
+        }
+        BannersNuevos.value = []
+    }
     const Edicion = (producto_fila) => {
         ProductoAct.value.id = producto_fila.id
         ProductoAct.value.nombre = producto_fila.nombre
@@ -1347,6 +1550,44 @@
             console.error(error)
             alert("Hubo un error al guardar los cambios.")
         }
+    }
+    const ActualizarBanner = async() => {
+        // ----- Actualizar Datos Banner Backend ----- //
+        for (const BannerAct of Bananaer.value.imagenes) {
+            const BannerActData = {
+                enlace: BannerAct.enlace,
+                orden: BannerAct.orden
+            }
+            const ActBanner = await fetch(`http://localhost:8000/banners/id/${BannerAct.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(BannerActData)
+            })
+            if (ActBanner.status === 401) {
+                CerrarSesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                return
+            }
+        }
+    }
+    const BorrarBanner = async() => {
+        // ----- Borrar Banner Imagen ----- //
+        for (const id_banner of DelBann.value) {
+            const BannerDelete = Bananaer.value.imagenes.find(
+                (b) => b.id === id_banner
+            )
+            const BorrarDeSupabase = DelSupaBann.value.includes(id_banner)
+            if (BorrarDeSupabase && BannerDelete && BannerDelete.s3_key) {
+                await supabase.storage.from('max_imagenes').remove([BannerDelete.s3_key])
+            }
+            await fetch(`http://localhost:8000/banners/id/${BannerDelete.id}`, {
+                method: 'DELETE'
+            })
+        }
+        DelBann.value = []
+        DelSupaBann.value = []
     }
     const BorrarProducto = async() => {
         const EraseProducto = await fetch(`http://localhost:8000/productos/id/${ProductoEli.value.id}`, {

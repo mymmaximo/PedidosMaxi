@@ -193,13 +193,13 @@
                     </div>
                 </div>
             </div>
-            <div class="flex">
+            <div class="bar">
                 <div class="flex flex-row bg-green-600 sm:hidden">
                     <div class="m-2 p-2 !z-40"
                     >
                         <h1
                         @click="MostrarMenu = !MostrarMenu"
-                        class="sticky top-0 w-full p-0 m-0 text-white"
+                        class="sticky top-0 p-0 m-0 text-white"
                         >
                         ⫶☰
                         </h1>
