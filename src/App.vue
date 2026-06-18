@@ -61,9 +61,7 @@
                     v-if="Rol !== '3' && Rol !== '6'"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
                     class="botonpestaña">
-                        <h2 class="letra-Josefin">
-                        Inicio
-                        </h2>
+                    Inicios
                     </div>
                     <div 
                     @click="router.push('/productos')" 
@@ -71,19 +69,15 @@
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
                     class="botonpestaña"
                     >
-                        <h2>
-                        Productos
-                        </h2>
+                    Productos
                     </div>
                     <div 
-                        @click="router.push('/pedidos')" 
-                        v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
+                    @click="router.push('/pedidos')" 
+                    v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
                     class="botonpestaña"
                     >
-                        <h2>
-                        Pedidos
-                        </h2>
+                    Pedidos
                     </div>
                     <div
                     @click="router.push('/clientes')" 
@@ -91,9 +85,7 @@
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
                     class="botonpestaña"
                     >
-                        <h2>
-                        Clientes
-                        </h2>
+                    Clientes
                     </div>
                     <div 
                     @click="router.push('/usuarios')" 
@@ -101,9 +93,7 @@
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
                     class="botonpestaña"
                     >
-                        <h2>
-                        Usuarios
-                        </h2>
+                    Usuarios
                     </div>
                     <div 
                     @click="router.push('/historial_precios')" 
@@ -111,9 +101,7 @@
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
                     class="botonpestaña"
                     >
-                        <h2>
-                        Historial de Precios
-                        </h2>
+                    Historial de Precios
                     </div>
                 </div>
                 <div class="flex min-h-10">
@@ -122,9 +110,7 @@
                     v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
                     class="botont !rounded-none !px-5"
                     >
-                        <h2>
-                        🗑️
-                        </h2>
+                    🗑️
                     </div>
                     <div
                     v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
@@ -132,9 +118,7 @@
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
                     class="botonpestaña"
                     >
-                        <h2>
-                        Tu Carrito
-                        </h2>
+                    Tu Carrito
                     </div>
                     <div 
                     v-else
@@ -142,9 +126,7 @@
                     botonpestaña
                     group relative"
                     >
-                        <h2>
                         Tu Carrito
-                        </h2>
                         <h2
                         class="
                         hidden group-hover:flex
@@ -161,9 +143,7 @@
                     botonpestaña
                     group relative z-50"
                     >
-                        <h2>
-                        Mi Perfil
-                        </h2>
+                    Mi Perfil
                         <div 
                         class="
                         hidden group-hover:block 
@@ -193,7 +173,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bar">
+            <div class="">
                 <div class="flex flex-row bg-green-600 sm:hidden">
                     <div class="m-2 p-2 !z-40"
                     >

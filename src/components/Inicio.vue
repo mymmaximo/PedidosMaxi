@@ -366,47 +366,6 @@
                         <h1>
                         Nuevos Banners
                         </h1>
-                        <div
-                        v-if="BannersNuevos.length > 0"
-                        class="
-                        relative flex flex-row overflow-x-auto gap-4
-                        ">
-                            <div
-                            v-for="(pack, index) in BannersNuevos"
-                            :key="index"
-                            class="
-                            shrink-0 m-2
-                            relative"
-                            >
-                                <button
-                                type="button"
-                                @click="BannersNuevos.splice(index, 1)"
-                                title="Quitar imagen"
-                                class="botonx"
-                                >
-                                🗙
-                                </button>
-                                <img 
-                                :src="pack.vista_previa" 
-                                alt="Vista Previa"
-                                class="imagen !m-0" 
-                                />
-                                <input 
-                                v-model="pack.enlace"
-                                type="text"
-                                placeholder="Enlace..."
-                                class="mt-3"
-                                >
-                            </div>
-                        </div>
-                        <div
-                        v-else 
-                        class="imageno"
-                        >
-                        <h3 class="text-center">
-                        Sin vista previa
-                        </h3> 
-                        </div>
                         <div class="md:mt-4 mt-2">
                             <input
                             type="file"
@@ -424,64 +383,92 @@
                         Actualizar Banners
                         </h1>
                         <div 
-                        v-if="Bananaer && Bananaer.imagenes && Bananaer.imagenes.length > 0"
-                        class="
-                        relative flex flex-row overflow-x-auto gap-4"
+                        v-if="bannersorden.length > 0"
+                        class="relative flex flex-row overflow-x-auto gap-4"
                         >
                             <div
-                            v-for="(img, index) in Bananaer.imagenes"
-                            :key="img.id"
-                            class="carta
-                            !relative"
+                            v-for="(banner, index) in bannersorden"
+                            :key="banner.id || banner.vista_previa"
+                            :class="bannerdesactivado(banner) ? 'cartabannerdel' : 'cartabanner'"
+                            draggable="true"
+                            @dragstart="EmpezarArrastre(index)"
+                            @dragover.prevent
+                            @drop="Soltar(index)"
                             >
-                                <div
-                                class="botones"
-                                >
+                            <template v-if="banner.id">
+                                    <div class="botones">
+                                        <button
+                                        v-if="!bannerdesactivado(banner)"
+                                        type="button"
+                                        @click="bannerestatus(banner.id)"
+                                        title="Desactivar"
+                                        class="botonc"
+                                        >
+                                        🗙
+                                        </button>
+                                        <button
+                                        v-else
+                                        type="button"
+                                        @click="bannerestatus(banner.id)"
+                                        title="Restaurar"
+                                        class="botoncon"
+                                        >
+                                        🐦‍🔥
+                                        </button>
+                                    </div>
+                                    
+                                    <div v-if="bannerdesactivado(banner)">
+                                        <button
+                                        v-if="!DelSupaBann.includes(banner.id)"
+                                        type="button"
+                                        @click="DelSupaBann.push(banner.id)"
+                                        title="Quitar imagen"
+                                        class="botonx"
+                                        >
+                                        🗑️
+                                        </button>
+                                        <button
+                                        v-else
+                                        type="button"
+                                        @click="DelSupaBann = DelSupaBann.filter(id => id !== banner.id)"
+                                        title="Restaurar imagen"
+                                        class="botonx"
+                                        >
+                                        🕊️
+                                        </button>
+                                    </div>
+                                    <div class="banner-wrapper">
+                                        <img 
+                                        :src="ObtenerImgUrl(banner.s3_key)"
+                                        :class="bannerdesactivado(banner) ? 'imagendel' : 'imagen'"
+                                        >
+                                        <div 
+                                        v-if="bannerdesactivado(banner)" 
+                                        class="banner-overlay"
+                                        >
+                                        </div>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <h1>
+                                    Nuevo!
+                                    </h1>
                                     <button
-                                    v-if="!DelBann.includes(img.id)"
                                     type="button"
-                                    @click="DelBann.push(img.id)"
-                                    title="Desactivar"
-                                    class="botonc"
-                                    >
-                                    🗙
-                                    </button>
-                                    <button
-                                    v-else
-                                    type="button"
-                                    @click="DelSupaBann = DelSupaBann.filter(id => id !== img.id)"
-                                    title="Restaurar"
-                                    class="botoncon"
-                                    >
-                                    🐦‍🔥
-                                    </button>
-                                </div>
-                                <div v-if="DelBann.includes(img.id)">
-                                    <button
-                                    v-if="!DelSupaBann.includes(img.id)"
-                                    type="button"
-                                    @click="DelSupaBann.push(img.id)"
-                                    title="Quitar imagen"
+                                    @click="BannersNuevos.splice(BannersNuevos.indexOf(banner), 1)"
+                                    title="Quitar imagen nueva"
                                     class="botonx !top-20 !right-20"
                                     >
                                     🗑️
                                     </button>
-                                    <button
-                                    v-else
-                                    type="button"
-                                    @click="DelSupaBann = DelSupaBann.filter(id => id !== img.id)"
-                                    title="Restaurar imagen"
-                                    class="botonx !top-20 !right-20"
-                                    >
-                                    🕊️
-                                    </button>
-                                </div>
-                                <img 
-                                :src="ObtenerImgUrl(img.s3_key)"
-                                :class="DelBann.includes(img.id) ? 'imagendel' : 'imagen'"
-                                >
+                                    <img 
+                                    :src="banner.vista_previa" 
+                                    alt="Vista Previa"
+                                    class="imagen !m-0" 
+                                    />
+                                </template>
                                 <input 
-                                v-model="img.enlace"
+                                v-model="banner.enlace"
                                 type="text"
                                 placeholder="Enlace..."
                                 class="mt-3"
@@ -882,52 +869,80 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { useRouter, useRoute } from 'vue-router'
-    import { supabase } from '../config/supebase.js'
-    import { onMounted, onUnmounted, toRefs, ref, watch, computed } from 'vue'
     import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
-    // ----- Variables ----- //
-    const prop = defineProps (['path','size'])
+    import { onMounted, onUnmounted, toRefs, ref, watch, computed } from 'vue'
+    import { supabase } from '../config/supebase.js'
+    import { useRouter } from 'vue-router'
+    // ----- Variables Complejas ----- //
+    const NuevoProducto = ref({
+        nombre: "",
+        precio: "",
+        stock: "",
+        categoria: ""
+    })
+    const ProductoAct = ref({
+        id: "",
+        nombre: "",
+        precio: "",
+        stock: "",
+        categoria: "",
+        codigo_barra: "",
+        imagenes: []
+    })
+    const ProductoEli = ref({
+        id: "",
+        nombre: "",
+        imagenes: []
+    })
+    // ----- Variables Booleanas ----- //
     const ActualizarCajaPDel = ref (false)
-    const OpcionCategoriaA = ref ("new")
-    const OpcionCategoria = ref ("new")
+    const BorrarImagenBanner = ref (false)
     const VentanaCompra = ref (false)
     const MostrarFiltro = ref (false)
     const VentanaBanner = ref (false)
-    const ListaCategoria = ref ("")
-    const ArchivoSave = ref ([])
-    const BannersNuevos = ref ([])
-    const { path } = toRefs (prop)
-    const route = useRoute()
-    const router = useRouter()
     const uploading = ref (false)
     const filtroAct = ref (false)
-    const BorrarImagenBanner = ref (false)
-    const VistaPrevia = ref ([])
-    const ImagenesCargando = ref({})
     const Cargando = ref(true)
+    // ----- Variables Vacias ----- //
+    const ImagenesCargando = ref({})
+    const ListaCategoria = ref ("")
+    const BannersNuevos = ref ([])
+    const VistaPrevia = ref ([])
+    const ArchivoSave = ref ([])
+    const DelSupaBann = ref ([])
     const filtrocat = ref ("")
-    const filtroRadio = ref(0)
     const IndiceImg = ref ({})
     const Productos = ref ([])
     const fileInput = ref ('')
-    const filtroEst = ref (1)
     const Busqueda = ref ("")
+    const DelBann = ref ([])
     const NewImg = ref ([])
     const NowImg = ref ([])
+    const DelImg = ref ([])
     const mayor = ref ("")
     const menor = ref ("")
-    const DelImg = ref ([])
-    const DelSupaBann = ref ([])
-    const DelBann = ref ([])
-	const Pagina = ref (0)
+    // ----- Variables Simples ----- //
+    const OpcionCategoriaA = ref ("new")
+    const OpcionCategoria = ref ("new")
+    const Bananaeract = ref(null)
+    const filtroRadio = ref(0)
     const Bananaer = ref(null)
+    const filtroEst = ref (1)
+    // ----- Variables Temporales ----- //
+    let intervaloCarrusel = null
+    let cartagarrada = null
     let inicioX = 0
     let inicioY = 0
-    let intervaloCarrusel = null
+    // ----- Variables Vue ----- //
+    const prop = defineProps (['path','size'])
+    const { path } = toRefs (prop)
+    const router = useRouter()
     // ----- Funciones Vue ----- //
-    onMounted(async() => {
+    onMounted (async() => {
         Banner()
+        if (Rol.value === '1') {
+            Banneractu()
+        }
         BusquedaProducto()
         const respuesta = await fetch("http://localhost:8000/producto/categorias/")
         const categ = await respuesta.json()
@@ -939,7 +954,7 @@
         }
         IniciarCarruselAutomatico()
     })
-    onUnmounted(() => {
+    onUnmounted (() => {
         if (intervaloCarrusel) clearInterval(intervaloCarrusel)
     })
     watch (ProductoCantidad, (NuevaCantidad) => {
@@ -959,7 +974,7 @@
             }
         }
     })
-    watch(path, () => {
+    watch (path, () => {
         if (path.value) ObtenerImgUrl()
     })
     const confirboton = computed(() =>{
@@ -976,6 +991,29 @@
             return faltandatos03 || faltandatos04
         }
     })
+    const bannersorden = computed ({
+        get() {
+            const viejo = (Bananaeract.value && Bananaeract.value.imagenes) ? Bananaeract.value.imagenes : []
+            const nuevo = BannersNuevos.value
+            const todo = [...viejo, ...nuevo]
+            return todo.sort((a,b) => {
+                const desactA = bannerdesactivado (a)
+                const desactB = bannerdesactivado (b)
+                if (desactA && !desactB)
+                    return 1
+                if (desactB && !desactA)
+                    return -1
+                const ordenA = a.orden || 0
+                const ordenB = b.orden || 0
+                return ordenA - ordenB
+            })
+        },
+        set (bannersordenados) {
+            bannersordenados.forEach((banner, index) => {
+                banner.orden = index + 1
+            })
+        }
+    })
     const IniciarCarruselAutomatico = () => {
         intervaloCarrusel = setInterval(() => {
             if (Bananaer.value) {
@@ -989,7 +1027,7 @@
             }
         }, 40000)
     }
-    const emit = defineEmits([
+    const emit = defineEmits ([
         'upload',
         'update:path'
     ])
@@ -998,31 +1036,64 @@
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden";
 	}
+	const AbrirPopUp02 = () => {
+		ActualizarCajaPDel.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const AbrirPopUp03 = () => {
+		VentanaBanner.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const AbrirPopUp04 = () => {
+		VentanaCompra.value = true
+		document.body.style.overflow = "hidden";
+	}
+    const AplicarFiltro = () => {
+        BusquedaProducto();
+        menor.value = "";
+        mayor.value = "";
+    }
+    const BackImg = (imagen) => {
+        const ImgActual = GetImg(imagen.id)
+        if (ImgActual > 0) {
+            IndiceImg.value[imagen.id] = ImgActual - 1
+            ImagenesCargando.value[imagen.id] = true
+        }
+    }
+    const bannerdesactivado = (banner) => {
+        if (!banner.id) 
+            return false
+        if (banner.activo === true) 
+            return DelBann.value.includes(banner.id)
+        return !DelBann.value.includes(banner.id)
+    }
+    const bannerestatus = (id) => {
+        if (DelBann.value.includes(id)) {
+            DelBann.value = DelBann.value.filter(
+                b => b !== id
+            )
+            DelSupaBann.value = DelSupaBann.value.filter(
+                b => b !== id
+            )
+        } else {
+            DelBann.value.push(id)
+        }
+    }
 	const CerrarPopUp01 = () => {
 		ActualizarCajaP.value = false
         DelImg.value = []
         LimpiarImagenes()
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp02 = () => {
-		ActualizarCajaPDel.value = true
-		document.body.style.overflow = "hidden";
-	}
 	const CerrarPopUp02 = () => {
 		ActualizarCajaPDel.value = false
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp03 = () => {
-		VentanaBanner.value = true
-		document.body.style.overflow = "hidden";
-	}
 	const CerrarPopUp03 = () => {
 		VentanaBanner.value = false
+        DelBann.value = []
+        DelSupaBann.value = []
 		document.body.style.overflow = "auto";
-	}
-	const AbrirPopUp04 = () => {
-		VentanaCompra.value = true
-		document.body.style.overflow = "hidden";
 	}
 	const CerrarPopUp04 = () => {
         VentanaCompra.value = false
@@ -1030,6 +1101,23 @@
         ProductoCantidad.value = 1
 		document.body.style.overflow = "auto";
 	}
+    const ComienzoToque = (evento) => {
+        inicioX = evento.changedTouches[0].clientX
+        inicioY = evento.changedTouches[0].clientY
+    }
+    const Compracion = (producto_fila) => {
+        VentanaComprar(producto_fila)
+        AbrirPopUp04()
+    }
+    const Eliminacion = (producto_fila) => {
+        ProductoEli.value.id = producto_fila.id
+        ProductoEli.value.nombre = producto_fila.nombre
+        ProductoEli.value.imagenes = producto_fila.imagenes
+        AbrirPopUp02()
+    }
+    const EmpezarArrastre = (index) => {
+        cartagarrada = index
+    }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
             return "si"
@@ -1037,10 +1125,6 @@
         else if (id_estatus === false) {
             return "no"
         }
-    }
-    const ComienzoToque = (evento) => {
-        inicioX = evento.changedTouches[0].clientX
-        inicioY = evento.changedTouches[0].clientY
     }
     const FinToque = (evento, producto) => {
         if (!producto) return
@@ -1071,74 +1155,8 @@
         inicioX = 0
         inicioY = 0
     }
-    const Banner = async () => {
-        try {
-            const respuesta = await fetch('http://localhost:8000/banners/?limit=1000')
-            if (respuesta.ok) {
-                const bananaer = await respuesta.json()
-                if (bananaer.length > 0) {
-                    Bananaer.value = {
-                        id: "bananaer",
-                        imagenes: bananaer
-                    }
-                }
-            }
-        } catch (error) {
-            console.error("Error al cargar el banner:", error)
-        }
-    }
     const GetImg = (id) => {
         return IndiceImg.value[id] || 0
-    }
-    const NextImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id)
-        if (ImgActual < imagen.imagenes.length - 1) {
-            IndiceImg.value[imagen.id] = ImgActual + 1
-            ImagenesCargando.value[imagen.id] = true
-        }
-    }
-    const BackImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id)
-        if (ImgActual > 0) {
-            IndiceImg.value[imagen.id] = ImgActual - 1
-            ImagenesCargando.value[imagen.id] = true
-        }
-    }
-    const ScrollIzquierda = (categoria) => {
-        const carrusel = document.getElementById('carrusel-' + categoria)
-        if (carrusel) {
-            carrusel.scrollBy({ left: -carrusel.clientWidth, behavior: 'smooth' })
-        }
-    }
-    const ScrollDerecha = (categoria) => {
-        const carrusel = document.getElementById('carrusel-' + categoria)
-        if (carrusel) {
-            carrusel.scrollBy({ left: carrusel.clientWidth, behavior: 'smooth' })
-        }
-    }
-    const Compracion = (producto_fila) => {
-        VentanaComprar(producto_fila)
-        AbrirPopUp04()
-    }
-    const VentanaComprar = (ProductoSeleccionado) => {
-        AbrirPopUp04()
-        ProductoActual.value = ProductoSeleccionado
-        ProductoCantidad.value = 1
-    }
-    const SumarProducto = () => {
-        if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
-            ProductoCantidad.value++
-        }
-    }
-    const RestarProducto = () => {
-        if (ProductoCantidad.value > 1) {
-            ProductoCantidad.value--
-        }
-    }
-    const AplicarFiltro = () => {
-        BusquedaProducto();
-        menor.value = "";
-        mayor.value = "";
     }
     const LimpiarFiltro = () => {
         filtroRadio.value = 4
@@ -1147,12 +1165,65 @@
         BusquedaProducto();
         filtroAct.value = false
     }
-    const NuevoProducto = ref({
-        nombre: "",
-        precio: "",
-        stock: "",
-        categoria: ""
-    })
+    const LimpiarImagenes = () => {
+        VistaPrevia.value = []
+        ArchivoSave.value = []
+        if (fileInput.value) {
+            fileInput.value.value = ''
+        }
+    }
+    const MoreImages = (evt) => {
+        const file = evt.target.files[0]
+        if (file) {
+            NewImg.value.push(file)
+            ProductoAct.value.imagenes.push({
+                id_imagen: null,
+                s3_key: URL.createObjectURL(file),
+                es_nueva: true
+            })
+        }
+    }
+    const NextImg = (imagen) => {
+        const ImgActual = GetImg(imagen.id)
+        if (ImgActual < imagen.imagenes.length - 1) {
+            IndiceImg.value[imagen.id] = ImgActual + 1
+            ImagenesCargando.value[imagen.id] = true
+        }
+    }
+    const NoMoreImages = (img) => {
+        const index = DelImg.value.indexOf(
+            img.id_imagen
+        )
+        if (index === -1) {
+            DelImg.value.push(img.id_imagen)
+        } else {
+            DelImg.value.splice(index, 1);
+        }
+        IndiceImg.value[ProductoAct.value.id] = 0
+    }
+    const ObtenerImgUrl = (Imgenkey) => {
+        const respuesta = supabase.storage
+            .from('max_imagenes')
+            .getPublicUrl(Imgenkey)
+        return respuesta.data.publicUrl
+    }
+    const RestarProducto = () => {
+        if (ProductoCantidad.value > 1) {
+            ProductoCantidad.value--
+        }
+    }
+    const ScrollDerecha = (categoria) => {
+        const carrusel = document.getElementById('carrusel-' + categoria)
+        if (carrusel) {
+            carrusel.scrollBy({ left: carrusel.clientWidth, behavior: 'smooth' })
+        }
+    }
+    const ScrollIzquierda = (categoria) => {
+        const carrusel = document.getElementById('carrusel-' + categoria)
+        if (carrusel) {
+            carrusel.scrollBy({ left: -carrusel.clientWidth, behavior: 'smooth' })
+        }
+    }
     const SeleccionarImagen = (evt) => {
         const files = evt.target.files
         if (files) {
@@ -1167,321 +1238,75 @@
     const SeleccionarBanner = (evt) => {
         const files = evt.target.files
         if (files) {
+            let maxOrdenExistente = 0
+            if (Bananaer.value && Bananaer.value.imagenes) {
+                Bananaer.value.imagenes.forEach(b => {
+                    if (b.orden && b.orden > maxOrdenExistente) {
+                        maxOrdenExistente = b.orden
+                    }
+                })
+            }
+            let maxOrdenNuevos = 0
+            if (BannersNuevos.value.length > 0) {
+                BannersNuevos.value.forEach(b => {
+                    if (b.orden && b.orden > maxOrdenNuevos) {
+                        maxOrdenNuevos = b.orden
+                    }
+                })
+            }
+            let proximoOrden = Math.max(maxOrdenExistente, maxOrdenNuevos) + 1
             for (let i = 0 ; i < files.length ; i++) {
                 const BannerNuevo = {
                     imagen: files[i],
                     vista_previa: URL.createObjectURL(files[i]),
                     enlace: "",
-                    orden: 0
+                    orden: proximoOrden
                 }
                 BannersNuevos.value.push(BannerNuevo)
+                proximoOrden++
             }
         }
     }
-    const ObtenerImgUrl = (Imgenkey) => {
-        const respuesta = supabase.storage
-            .from('max_imagenes')
-            .getPublicUrl(Imgenkey)
-        return respuesta.data.publicUrl
+    const Soltar = (cartasoltada) => {
+        if (cartagarrada === null || cartagarrada === cartasoltada) return
+        const nuevalista = [...bannersorden.value]
+        const cartamovida = nuevalista.splice(cartagarrada, 1)[0]
+        nuevalista.splice(cartasoltada, 0, cartamovida)
+        bannersorden.value = nuevalista
+        cartagarrada = null
     }
-    const ProductoAct = ref({
-        id: "",
-        nombre: "",
-        precio: "",
-        stock: "",
-        categoria: "",
-        codigo_barra: "",
-        imagenes: []
-    })
-    const MoreImages = (evt) => {
-        const file = evt.target.files[0]
-        if (file) {
-            NewImg.value.push(file)
-            ProductoAct.value.imagenes.push({
-                id_imagen: null,
-                s3_key: URL.createObjectURL(file),
-                es_nueva: true
-            })
+    const SumarProducto = () => {
+        if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
+            ProductoCantidad.value++
         }
     }
-    const NoMoreImages = (img) => {
-        const index = DelImg.value.indexOf(
-            img.id_imagen
-        )
-        if (index === -1) {
-            DelImg.value.push(img.id_imagen)
-        } else {
-            DelImg.value.splice(index, 1);
-        }
-        IndiceImg.value[ProductoAct.value.id] = 0
-    }
-    const ProductoEli = ref({
-        id: "",
-        nombre: "",
-        imagenes: []
-    })
-    const Eliminacion = (producto_fila) => {
-        ProductoEli.value.id = producto_fila.id
-        ProductoEli.value.nombre = producto_fila.nombre
-        ProductoEli.value.imagenes = producto_fila.imagenes
-        AbrirPopUp02()
+    const VentanaComprar = (ProductoSeleccionado) => {
+        AbrirPopUp04()
+        ProductoActual.value = ProductoSeleccionado
+        ProductoCantidad.value = 1
     }
     // ----- Para el Backend ----- //
-    const SaveBanner = async () => {
-        if (BannersNuevos.value.length > 0) {
-            await SubirBanner()
-        }
-        await ActualizarBanner()
-        if (DelBann.value.length > 0) {
-            await BorrarBanner()
-        }
-        Banner()
-        CerrarPopUp03()
-    }
-    const CarritoStock = (Producto) => {
-        let stockCarrito = 0
-        CarritoLocal.value.forEach((itemCarrito) => {
-            if (itemCarrito.id_producto === Producto.id) {
-                stockCarrito = stockCarrito + itemCarrito.cantidad
+    const ActualizarBanner = async() => {
+        // ----- Actualizar Datos Banner Backend ----- //
+        for (const BannerAct of Bananaeract.value.imagenes) {
+            if (bannerdesactivado(BannerAct)) continue
+            const BannerActData = {
+                enlace: BannerAct.enlace,
+                orden: BannerAct.orden
             }
-        })
-        return Producto.stock - stockCarrito;
-    }
-    const SumarCarrito = () => {
-        if (!ProductoActual.value)
-            return; 
-        const nuevoProducto = {
-            id_pedido: PedidoActual.value,
-            nombre_producto: ProductoActual.value.nombre,
-            id_producto: ProductoActual.value.id,
-            cantidad: ProductoCantidad.value,
-            precio_unitario: ProductoActual.value.precio,
-            stock_producto: ProductoActual.value.stock
-        }
-        let CarritoExistente = CarritoLocal.value.find(
-            (item_exitente) =>
-            item_exitente.id_producto === ProductoActual.value.id
-        )
-        if (CarritoExistente){
-            CarritoExistente.cantidad = ProductoCantidad.value + CarritoExistente.cantidad
-        } else {
-            CarritoLocal.value.push(nuevoProducto);
-        }
-        localStorage.setItem(
-            'carrito_pendiente',
-            JSON.stringify(
-                CarritoLocal.value
-            )
-        )
-        CerrarPopUp04()    
-    }
-    const Confirmar = (async() => {
-        const tokenGuardado = leerCookie("token");
-        const ClienteGuardado = leerCookie("id_cliente");
-        if (PedidoActual.value) {
-            const respuesta = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + tokenGuardado
-                },
-                body: JSON.stringify([{
-                    id_pedido: PedidoActual.value,
-                    id_producto: ProductoActual.value.id,
-                    cantidad: ProductoCantidad.value
-                }])
-            })
-            if (respuesta.ok) {
-                CerrarPopUp04()
-                console.log ("funciono")
-            } else {
-                const error = await respuesta.text()
-                console.error("Error al agregar detalle:", error)
-            }
-        } else {
-            const respuesta = await fetch('http://localhost:8000/pedidos/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + tokenGuardado
-                },
-                body: JSON.stringify({
-                    id_cliente: parseInt(ClienteGuardado),
-                    id_direccion: 1,
-                    metodo_pago: " ",
-                    tiempo_estimado_entrega: 0,
-                    tiempo_entrega: 0
-                })
-            })
-            if (respuesta.status === 401) {
-                CerrarSesion();
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-                return;
-            }
-            if (respuesta.ok) {
-                const DatosPedido = await respuesta.json ()
-                PedidoActual.value = DatosPedido.id
-                localStorage.setItem(
-                    "pedido",
-                    PedidoActual.value
-                )
-                Confirmar() 
-            } else {
-                const error = await respuesta.text()
-                console.error("Error al agregar Pedido:", error)
-            }
-        }
-    })
-    const BusquedaProducto = async() => {
-        let url = new URL ('http://localhost:8000/producto/');
-		url.searchParams.append('limit', 100);
-        if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_producto', Busqueda.value);
-        }
-        let minfiltro = ""
-        let maxfiltro = ""
-        if (filtroRadio.value === 4) {
-            minfiltro = ""
-            maxfiltro = ""
-            menor.value = ""
-            mayor.value = ""
-        }
-        else if (filtroRadio.value === 3) {
-            maxfiltro = 10000
-        }
-        else if (filtroRadio.value === 2) {
-            minfiltro = 10000
-            maxfiltro = 50000
-        }
-        else if (filtroRadio.value === 1) {
-            minfiltro = 50000
-        }
-        else if (filtroRadio.value === 0) {
-            minfiltro = menor.value;
-            maxfiltro = mayor.value;
-        }
-        if (minfiltro !== "" && minfiltro != null) {
-            url.searchParams.append('precio_producto_min', minfiltro);
-            filtroAct.value = true
-        }
-        if (maxfiltro !== "" && maxfiltro != null) {
-            url.searchParams.append('precio_producto_max', maxfiltro);
-            filtroAct.value = true
-        }
-        if (filtroEst.value === 1) {
-            url.searchParams.append('bool_activo', 'true');
-            filtroAct.value = true;
-        }
-        if (filtroEst.value === 0) {
-            url.searchParams.append('bool_activo', 'false');
-            filtroAct.value = true;
-        }
-        if (filtrocat.value !== "") {
-            url.searchParams.append('filtrocat', filtrocat.value);
-            filtroAct.value = true;            
-        }
-        const BusqProducto = await fetch(url)
-        const datos = await BusqProducto.json();
-        Productos.value = datos;
-    }
-    const SubirNuevoProducto = async() => {
-        if (OpcionCategoria.value != "new") {
-            NuevoProducto.value.categoria = OpcionCategoria.value
-        }
-        const SubidaNuevoProducto = await fetch('http://localhost:8000/productos/', {
-            method: 'POST',
+            const ActBanner = await fetch(`http://localhost:8000/banners/id/${BannerAct.id}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(NuevoProducto.value)
-        })
-        if (SubidaNuevoProducto.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
-        }
-        const ProductoNew = await SubidaNuevoProducto.json()
-        const NewId = ProductoNew.id        
-        if (ArchivoSave.value.length > 0) {
-            uploading.value = true
-            for (
-                let i = 0 ; i < ArchivoSave.value.length ; i++
-            ) {
-                const file = ArchivoSave.value[i]
-                const fileExt = file.name.split('.').pop()
-                const filePath = `${Math.random()}.${fileExt}`
-                let { error: uploadError } = await supabase.storage
-                    .from('max_imagenes')
-                    .upload(filePath, file)
-                if (uploadError) {
-                    alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
-                } else {
-                    await fetch('http://localhost:8000/productos/archivos/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            id_producto: NewId,
-                            s3_key: filePath,
-                            nombre_original: file.name,
-                            tipo_contenido: fileExt,
-                            tamanio: file.size
-                        })
-                    })
-                }
-            }
-            uploading.value = false
-        }
-        NuevoProducto.value = {
-            nombre: "",
-            precio: "",
-            stock: "",
-            categoria: ""
-        }
-        LimpiarImagenes()
-        BusquedaProducto()
-        CerrarPopUp03()
-    }
-    const SubirBanner = async() => {
-        // ----- Subir Datos Banner ----- //
-        for (const BannerNew of BannersNuevos.value) {
-            const fileExt = BannerNew.imagen.name.split('.').pop()
-            const filePath = `${Math.random()}.${fileExt}`
-        // ----- Subir Datos Banner Supabase ----- //
-            let { error: uploadError } = await supabase.storage
-                .from('max_imagenes')
-                .upload(filePath, BannerNew.imagen)
-        // ----- Subir Datos Banner Backend ----- //
-            if (!uploadError) {
-                await fetch('http://localhost:8000/banners/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        s3_key: filePath,
-                        nombre_original: BannerNew.imagen.name,
-                        tipo_contenido: fileExt,
-                        tamanio: BannerNew.imagen.size,
-                        enlace: BannerNew.enlace,
-                        orden: BannerNew.orden
-                    })
-                })
+            body: JSON.stringify(BannerActData)
+            })
+            if (ActBanner.status === 401) {
+                CerrarSesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                return
             }
         }
-        BannersNuevos.value = []
-    }
-    const Edicion = (producto_fila) => {
-        ProductoAct.value.id = producto_fila.id
-        ProductoAct.value.nombre = producto_fila.nombre
-        ProductoAct.value.precio = producto_fila.precio
-        ProductoAct.value.stock = producto_fila.stock
-        OpcionCategoriaA.value = producto_fila.categoria
-        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
-        ProductoAct.value.imagenes = producto_fila.imagenes
-        DelImg.value = []
-        NewImg.value = []
-        VistaPrevia.value = []
-        AbrirPopUp01()
     }
     const ActualizarProducto = async() => {
         try {
@@ -1551,31 +1376,42 @@
             alert("Hubo un error al guardar los cambios.")
         }
     }
-    const ActualizarBanner = async() => {
-        // ----- Actualizar Datos Banner Backend ----- //
-        for (const BannerAct of Bananaer.value.imagenes) {
-            const BannerActData = {
-                enlace: BannerAct.enlace,
-                orden: BannerAct.orden
+    const Banner = async () => {
+        try {
+            const respuesta = await fetch('http://localhost:8000/banners/?bool_activo=true')
+            if (respuesta.ok) {
+                const bananaer = await respuesta.json()
+                if (bananaer.length > 0) {
+                    Bananaer.value = {
+                        id: "bananaer",
+                        imagenes: bananaer
+                    }
+                }
             }
-            const ActBanner = await fetch(`http://localhost:8000/banners/id/${BannerAct.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(BannerActData)
-            })
-            if (ActBanner.status === 401) {
-                CerrarSesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                return
+        } catch (error) {
+            console.error("Error al cargar el banner:", error)
+        }
+    }
+    const Banneractu = async () => {
+        try {
+            const respuesta = await fetch('http://localhost:8000/banners/')
+            if (respuesta.ok) {
+                const bananaeract = await respuesta.json()
+                if (bananaeract.length > 0) {
+                    Bananaeract.value = {
+                        id: "bananaeract",
+                        imagenes: bananaeract
+                    }
+                }
             }
+        } catch (error) {
+            console.error("Error al cargar el banner:", error)
         }
     }
     const BorrarBanner = async() => {
         // ----- Borrar Banner Imagen ----- //
         for (const id_banner of DelBann.value) {
-            const BannerDelete = Bananaer.value.imagenes.find(
+            const BannerDelete = Bananaeract.value.imagenes.find(
                 (b) => b.id === id_banner
             )
             const BorrarDeSupabase = DelSupaBann.value.includes(id_banner)
@@ -1608,5 +1444,264 @@
         }
         BusquedaProducto()
         CerrarPopUp02()
+    }
+    const BusquedaProducto = async() => {
+        let url = new URL ('http://localhost:8000/producto/');
+		url.searchParams.append('limit', 100);
+        if (Busqueda.value !== "") {
+            url.searchParams.append('busqueda_producto', Busqueda.value);
+        }
+        let minfiltro = ""
+        let maxfiltro = ""
+        if (filtroRadio.value === 4) {
+            minfiltro = ""
+            maxfiltro = ""
+            menor.value = ""
+            mayor.value = ""
+        }
+        else if (filtroRadio.value === 3) {
+            maxfiltro = 10000
+        }
+        else if (filtroRadio.value === 2) {
+            minfiltro = 10000
+            maxfiltro = 50000
+        }
+        else if (filtroRadio.value === 1) {
+            minfiltro = 50000
+        }
+        else if (filtroRadio.value === 0) {
+            minfiltro = menor.value;
+            maxfiltro = mayor.value;
+        }
+        if (minfiltro !== "" && minfiltro != null) {
+            url.searchParams.append('precio_producto_min', minfiltro);
+            filtroAct.value = true
+        }
+        if (maxfiltro !== "" && maxfiltro != null) {
+            url.searchParams.append('precio_producto_max', maxfiltro);
+            filtroAct.value = true
+        }
+        if (filtroEst.value === 1) {
+            url.searchParams.append('bool_activo', 'true');
+            filtroAct.value = true;
+        }
+        if (filtroEst.value === 0) {
+            url.searchParams.append('bool_activo', 'false');
+            filtroAct.value = true;
+        }
+        if (filtrocat.value !== "") {
+            url.searchParams.append('filtrocat', filtrocat.value);
+            filtroAct.value = true;            
+        }
+        const BusqProducto = await fetch(url)
+        const datos = await BusqProducto.json();
+        Productos.value = datos;
+    }
+    const CarritoStock = (Producto) => {
+        let stockCarrito = 0
+        CarritoLocal.value.forEach((itemCarrito) => {
+            if (itemCarrito.id_producto === Producto.id) {
+                stockCarrito = stockCarrito + itemCarrito.cantidad
+            }
+        })
+        return Producto.stock - stockCarrito;
+    }
+    const Confirmar = (async() => {
+        const tokenGuardado = leerCookie("token");
+        const ClienteGuardado = leerCookie("id_cliente");
+        if (PedidoActual.value) {
+            const respuesta = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + tokenGuardado
+                },
+                body: JSON.stringify([{
+                    id_pedido: PedidoActual.value,
+                    id_producto: ProductoActual.value.id,
+                    cantidad: ProductoCantidad.value
+                }])
+            })
+            if (respuesta.ok) {
+                CerrarPopUp04()
+                console.log ("funciono")
+            } else {
+                const error = await respuesta.text()
+                console.error("Error al agregar detalle:", error)
+            }
+        } else {
+            const respuesta = await fetch('http://localhost:8000/pedidos/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + tokenGuardado
+                },
+                body: JSON.stringify({
+                    id_cliente: parseInt(ClienteGuardado),
+                    id_direccion: 1,
+                    metodo_pago: " ",
+                    tiempo_estimado_entrega: 0,
+                    tiempo_entrega: 0
+                })
+            })
+            if (respuesta.status === 401) {
+                CerrarSesion();
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+                return;
+            }
+            if (respuesta.ok) {
+                const DatosPedido = await respuesta.json ()
+                PedidoActual.value = DatosPedido.id
+                localStorage.setItem(
+                    "pedido",
+                    PedidoActual.value
+                )
+                Confirmar() 
+            } else {
+                const error = await respuesta.text()
+                console.error("Error al agregar Pedido:", error)
+            }
+        }
+    })
+    const Edicion = (producto_fila) => {
+        ProductoAct.value.id = producto_fila.id
+        ProductoAct.value.nombre = producto_fila.nombre
+        ProductoAct.value.precio = producto_fila.precio
+        ProductoAct.value.stock = producto_fila.stock
+        OpcionCategoriaA.value = producto_fila.categoria
+        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
+        ProductoAct.value.imagenes = producto_fila.imagenes
+        DelImg.value = []
+        NewImg.value = []
+        VistaPrevia.value = []
+        AbrirPopUp01()
+    }
+    const SaveBanner = async () => {
+        if (BannersNuevos.value.length > 0) {
+            await SubirBanner()
+        }
+        await ActualizarBanner()
+        if (DelBann.value.length > 0) {
+            await BorrarBanner()
+        }
+        DelBann.value = []
+        DelSupaBann.value = []
+        Banner()
+        Banneractu()
+        CerrarPopUp03()
+    }
+    const SubirNuevoProducto = async() => {
+        if (OpcionCategoria.value != "new") {
+            NuevoProducto.value.categoria = OpcionCategoria.value
+        }
+        const SubidaNuevoProducto = await fetch('http://localhost:8000/productos/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(NuevoProducto.value)
+        })
+        if (SubidaNuevoProducto.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
+        const ProductoNew = await SubidaNuevoProducto.json()
+        const NewId = ProductoNew.id        
+        if (ArchivoSave.value.length > 0) {
+            uploading.value = true
+            for (
+                let i = 0 ; i < ArchivoSave.value.length ; i++
+            ) {
+                const file = ArchivoSave.value[i]
+                const fileExt = file.name.split('.').pop()
+                const filePath = `${Math.random()}.${fileExt}`
+                let { error: uploadError } = await supabase.storage
+                    .from('max_imagenes')
+                    .upload(filePath, file)
+                if (uploadError) {
+                    alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
+                } else {
+                    await fetch('http://localhost:8000/productos/archivos/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id_producto: NewId,
+                            s3_key: filePath,
+                            nombre_original: file.name,
+                            tipo_contenido: fileExt,
+                            tamanio: file.size
+                        })
+                    })
+                }
+            }
+            uploading.value = false
+        }
+        NuevoProducto.value = {
+            nombre: "",
+            precio: "",
+            stock: "",
+            categoria: ""
+        }
+        LimpiarImagenes()
+        BusquedaProducto()
+        CerrarPopUp03()
+    }
+    const SumarCarrito = () => {
+        if (!ProductoActual.value)
+            return; 
+        const nuevoProducto = {
+            id_pedido: PedidoActual.value,
+            nombre_producto: ProductoActual.value.nombre,
+            id_producto: ProductoActual.value.id,
+            cantidad: ProductoCantidad.value,
+            precio_unitario: ProductoActual.value.precio,
+            stock_producto: ProductoActual.value.stock
+        }
+        let CarritoExistente = CarritoLocal.value.find(
+            (item_exitente) =>
+            item_exitente.id_producto === ProductoActual.value.id
+        )
+        if (CarritoExistente){
+            CarritoExistente.cantidad = ProductoCantidad.value + CarritoExistente.cantidad
+        } else {
+            CarritoLocal.value.push(nuevoProducto);
+        }
+        localStorage.setItem(
+            'carrito_pendiente',
+            JSON.stringify(
+                CarritoLocal.value
+            )
+        )
+        CerrarPopUp04()    
+    }
+    const SubirBanner = async() => {
+        // ----- Subir Datos Banner ----- //
+        for (const BannerNew of BannersNuevos.value) {
+            const fileExt = BannerNew.imagen.name.split('.').pop()
+            const filePath = `${Math.random()}.${fileExt}`
+        // ----- Subir Datos Banner Supabase ----- //
+            let { error: uploadError } = await supabase.storage
+                .from('max_imagenes')
+                .upload(filePath, BannerNew.imagen)
+        // ----- Subir Datos Banner Backend ----- //
+            if (!uploadError) {
+                await fetch('http://localhost:8000/banners/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        s3_key: filePath,
+                        nombre_original: BannerNew.imagen.name,
+                        tipo_contenido: fileExt,
+                        tamanio: BannerNew.imagen.size,
+                        enlace: BannerNew.enlace,
+                        orden: Number(BannerNew.orden) || 1
+                    })
+                })
+            }
+        }
+        BannersNuevos.value = []
     }
 </script>
