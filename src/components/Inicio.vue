@@ -416,7 +416,6 @@
                                         🐦‍🔥
                                         </button>
                                     </div>
-                                    
                                     <div v-if="bannerdesactivado(banner)">
                                         <button
                                         v-if="!DelSupaBann.includes(banner.id)"
