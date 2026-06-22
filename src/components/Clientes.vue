@@ -460,24 +460,39 @@
     // ----- Imports ----- //
     import { onMounted, ref, computed } from 'vue'
     import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus'
-    // ----- Variantes ----- //
-	const Pagina = ref(0)
-    const filtroEst = ref(2)
-    const Busqueda = ref("")
-    const clientes =  ref([])
-    const filtroDirec = ref(2)
-    const ClienteEli = ref("")
-    const filtrociudad = ref ("")
-    const filtroprovincia = ref ("")
+    // ----- Variables Complejas ----- //
+    const ClienteAct = ref({
+        id: "",
+        nombre: "",
+        email: "",
+        contrasena: "",
+    })
+    const NuevoCliente = ref({
+        nombre: "",
+        email: "",
+        dni: "",
+        contrasena: ""
+    })
+    // ----- Variables Booleanas ----- //
     const filtroAct = ref(false)
-    const DireccionNow = ref(null)
     const MostrarFiltro = ref(false)
     const MostrarNuevo = ref(false)
     const VentanaFiltro = ref(false)
     const ActualizarCNew = ref(false)
-    const ListaCiudad = ref ("")
-    const ListaProvincia = ref ("")
     const ActualizarCajaCDel = ref(false)
+    // ----- Variables Vacias ----- //
+    const Busqueda = ref("")
+    const clientes =  ref([])
+    const ClienteEli = ref("")
+    const ListaCiudad = ref ("")
+    const filtrociudad = ref ("")
+    const ListaProvincia = ref ("")
+    const filtroprovincia = ref ("")
+    // ----- Variables Simples ----- //
+	const Pagina = ref(0)
+    const filtroEst = ref(2)
+    const filtroDirec = ref(2)
+    const DireccionNow = ref(null)
     // ----- Funciones Vue ----- //
     onMounted(async() => {
         BusquedaCliente()
@@ -510,39 +525,57 @@
 		VentanaFiltro.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const CerrarPopUp01 = () => {
-		VentanaFiltro.value = false
-		document.body.style.overflow = "auto"
-	}
 	const AbrirPopUp02 = () => {
 		ActualizarCajaCDel.value = true
 		document.body.style.overflow = "hidden"
-	}
-	const CerrarPopUp02 = () => {
-		ActualizarCajaCDel.value = false
-		document.body.style.overflow = "auto"
 	}
 	const AbrirPopUp03 = () => {
 		ActualizarCajaC.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const CerrarPopUp03 = () => {
-		ActualizarCajaC.value = false
-		document.body.style.overflow = "auto"
-	}
 	const AbrirPopUp04 = () => {
 		ActualizarCNew.value = true
 		document.body.style.overflow = "hidden";
-	}
-	const CerrarPopUp04 = () => {
-		ActualizarCNew.value = false
-		document.body.style.overflow = "auto";
 	}
     const AplicarFiltro = () => {
         BusquedaCliente()
         CerrarPopUp01()
         filtrociudad.value = ""
         filtroprovincia.value = ""
+    }
+	const CerrarPopUp01 = () => {
+		VentanaFiltro.value = false
+		document.body.style.overflow = "auto"
+	}
+	const CerrarPopUp02 = () => {
+		ActualizarCajaCDel.value = false
+		document.body.style.overflow = "auto"
+	}
+	const CerrarPopUp03 = () => {
+		ActualizarCajaC.value = false
+		document.body.style.overflow = "auto"
+	}
+	const CerrarPopUp04 = () => {
+		ActualizarCNew.value = false
+		document.body.style.overflow = "auto";
+	}
+    const DireccionCambio = (id) => {
+        if (DireccionNow.value === id) {
+            DireccionNow.value = null
+        }
+        else {
+            DireccionNow.value = id
+        }
+    }
+    const Edicion = (cliente_fila) => {
+        ClienteAct.value.id = cliente_fila.id
+        ClienteAct.value.nombre = cliente_fila.nombre
+        ClienteAct.value.email = cliente_fila.email
+        AbrirPopUp03()
+    }
+    const Eliminacion = (cliente_fila) => {
+        ClienteEli.value = cliente_fila.id
+        AbrirPopUp02()
     }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
@@ -552,12 +585,6 @@
             return "no"
         }
     }
-    const NuevoCliente = ref({
-        nombre: "",
-        email: "",
-        dni: "",
-        contrasena: ""
-    })
     const LimpiarFiltro = () => {
         filtroDirec.value = 2
         filtroEst.value = 1
@@ -567,31 +594,55 @@
         CerrarPopUp01();
         filtroAct.value = false
     }
-    const ClienteAct = ref({
-        id: "",
-        nombre: "",
-        email: "",
-        contrasena: "",
-    })
-    const Edicion = (cliente_fila) => {
-        ClienteAct.value.id = cliente_fila.id
-        ClienteAct.value.nombre = cliente_fila.nombre
-        ClienteAct.value.email = cliente_fila.email
-        AbrirPopUp03()
-    }
-    const DireccionCambio = (id) => {
-        if (DireccionNow.value === id) {
-            DireccionNow.value = null
-        }
-        else {
-            DireccionNow.value = id
-        }
-    }
-    const Eliminacion = (cliente_fila) => {
-        ClienteEli.value = cliente_fila.id
-        AbrirPopUp02()
-    }
     // ----- Para el Backend ----- //
+    const ActualizarClientes = async() => {
+        const ClienteUpd = {} 
+        if (ClienteAct.value.nombre !== "") {
+            ClienteUpd.nombre = ClienteAct.value.nombre
+        }
+        if (ClienteAct.value.email !== "") {
+            ClienteUpd.email = ClienteAct.value.email
+        }
+        if (ClienteAct.value.contrasena !== "") {
+            ClienteUpd.contrasena = ClienteAct.value.contrasena
+        }
+        const ActCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteAct.value.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ClienteUpd)
+        });
+        if (ActCliente.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
+        ClienteAct.value = {
+            id: "",
+            nombre: "",
+            email: "",
+            contrasena: "",
+        };
+        BusquedaCliente()
+        CerrarPopUp03()
+    }
+    const BorrarCliente = async() => {
+        const EraseCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteEli.value}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+        })
+        ClienteEli.value = ""
+        if (EraseCliente.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return
+        }
+        BusquedaCliente()
+        CerrarPopUp02()
+    }
     const BusquedaCliente = async() => {
         let url = new URL ('http://localhost:8000/cliente/');
 		url.searchParams.append('skip', Pagina.value);
@@ -647,53 +698,5 @@
         }
         BusquedaCliente()
         CerrarPopUp04()
-    }
-    const ActualizarClientes = async() => {
-        const ClienteUpd = {} 
-        if (ClienteAct.value.nombre !== "") {
-            ClienteUpd.nombre = ClienteAct.value.nombre
-        }
-        if (ClienteAct.value.email !== "") {
-            ClienteUpd.email = ClienteAct.value.email
-        }
-        if (ClienteAct.value.contrasena !== "") {
-            ClienteUpd.contrasena = ClienteAct.value.contrasena
-        }
-        const ActCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteAct.value.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(ClienteUpd)
-        });
-        if (ActCliente.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
-        }
-        ClienteAct.value = {
-            id: "",
-            nombre: "",
-            email: "",
-            contrasena: "",
-        };
-        BusquedaCliente()
-        CerrarPopUp03()
-    }
-    const BorrarCliente = async() => {
-        const EraseCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteEli.value}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-        })
-        ClienteEli.value = ""
-        if (EraseCliente.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return
-        }
-        BusquedaCliente()
-        CerrarPopUp02()
     }
 </script>

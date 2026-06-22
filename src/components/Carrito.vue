@@ -328,54 +328,7 @@
     import { ref, onMounted, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
     import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie } from './Estatus.js'
-    // ----- Variantes ----- //
-    const IndiceImg = ref ({})
-    const MetodoPago = ref ("")
-    const ProductoEli = ref("")
-    const ListaDirecciones = ref([])
-    const PantallaPagar = ref (false)
-    const DireccionExistente = ref ("")
-    const ActualizarCarritoDel = ref(false)
-    const idClienteCarrito = leerCookie("id_cliente")
-    // ----- Funciones Vue ----- //
-    const emit = defineEmits([
-        'CarritoVacio'
-    ])
-    onMounted(async() => {
-        const respuesta = await fetch(`http://localhost:8000/cliente/${idClienteCarrito}/direcciones`)
-        const datos = await respuesta.json();
-        ListaDirecciones.value = datos;
-    })
-    // ----- Para el Frontend ----- //
-	const AbrirPopUp01 = () => {
-		ActualizarCarritoDel.value = true
-		document.body.style.overflow = "hidden"
-	}
-	const CerrarPopUp01 = () => {
-		ActualizarCarritoDel.value = false
-		document.body.style.overflow = "auto"
-	}
-    const GetImg = (id) => {
-        return IndiceImg.value[id] || 0
-    }
-    const NextImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id_producto)
-        if (ImgActual < imagen.imagenes.length - 1) {
-            IndiceImg.value[imagen.id_producto] = ImgActual + 1
-        }
-    }
-    const BackImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id_producto)
-        if (ImgActual > 0) {
-            IndiceImg.value[imagen.id_producto] = ImgActual - 1
-        }
-    }
-    const ObtenerImgUrl = (Imgenkey) => {
-        const respuesta = supabase.storage
-            .from('max_imagenes')
-            .getPublicUrl(Imgenkey)
-        return respuesta.data.publicUrl
-    }
+    // ----- Variables Complejas ----- //
     const NuevaDireccion = ref ({
         calle: "",
         numero: null,
@@ -383,20 +336,22 @@
         ciudad: "",
         provincia: ""
     })
-    const Eliminacion = (producto_fila) => {
-        ProductoEli.value = producto_fila
-        AbrirPopUp01()
-    }
-    // ----- Para el Backend ----- //
-    const VerificarStock = (item) => {
-        if (item.cantidad < 1) {
-            item.cantidad = 1
-        }
-        if (item.cantidad > item.stock_producto) {
-            item.cantidad = item.stock_producto
-        }
-        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value));
-    }
+    const idClienteCarrito = leerCookie("id_cliente")
+    // ----- Variables Booleanas ----- //
+    const PantallaPagar = ref (false)
+    const ActualizarCarritoDel = ref(false)
+    // ----- Variables Vacias ----- //
+    const IndiceImg = ref ({})
+    const MetodoPago = ref ("")
+    const ProductoEli = ref("")
+    const ListaDirecciones = ref([])
+    const DireccionExistente = ref ("")
+    // ----- Funciones Vue ----- //
+    onMounted(async() => {
+        const respuesta = await fetch(`http://localhost:8000/cliente/${idClienteCarrito}/direcciones`)
+        const datos = await respuesta.json();
+        ListaDirecciones.value = datos;
+    })
     const confirboton = computed(() =>{
         if (MetodoPago.value === "") {
             return true
@@ -413,6 +368,52 @@
         }}
         return false
     })
+    const emit = defineEmits([
+        'CarritoVacio'
+    ])
+    // ----- Para el Frontend ----- //
+	const AbrirPopUp01 = () => {
+		ActualizarCarritoDel.value = true
+		document.body.style.overflow = "hidden"
+	}
+    const BackImg = (imagen) => {
+        const ImgActual = GetImg(imagen.id_producto)
+        if (ImgActual > 0) {
+            IndiceImg.value[imagen.id_producto] = ImgActual - 1
+        }
+    }
+	const CerrarPopUp01 = () => {
+		ActualizarCarritoDel.value = false
+		document.body.style.overflow = "auto"
+	}
+    const Eliminacion = (producto_fila) => {
+        ProductoEli.value = producto_fila
+        AbrirPopUp01()
+    }
+    const GetImg = (id) => {
+        return IndiceImg.value[id] || 0
+    }
+    const NextImg = (imagen) => {
+        const ImgActual = GetImg(imagen.id_producto)
+        if (ImgActual < imagen.imagenes.length - 1) {
+            IndiceImg.value[imagen.id_producto] = ImgActual + 1
+        }
+    }
+    const ObtenerImgUrl = (Imgenkey) => {
+        const respuesta = supabase.storage
+            .from('max_imagenes')
+            .getPublicUrl(Imgenkey)
+        return respuesta.data.publicUrl
+    }
+    // ----- Para el Backend ----- //
+    const BorrarDetalle = () => {
+        CarritoLocal.value.splice(ProductoEli.value, 1)
+        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value))
+        CerrarPopUp01()
+        if (CarritoLocal.value.length === 0) {
+            emit('CarritoVacio')
+        }
+    }
     const ConfirmarCompra = (async() => {
         let DireccionPedido = null
         if (DireccionExistente.value !== "") {
@@ -472,12 +473,13 @@
             emit('CarritoVacio')
             LimpiarCompra()
     })
-    const BorrarDetalle = () => {
-        CarritoLocal.value.splice(ProductoEli.value, 1)
-        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value))
-        CerrarPopUp01()
-        if (CarritoLocal.value.length === 0) {
-            emit('CarritoVacio')
+    const VerificarStock = (item) => {
+        if (item.cantidad < 1) {
+            item.cantidad = 1
         }
+        if (item.cantidad > item.stock_producto) {
+            item.cantidad = item.stock_producto
+        }
+        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value));
     }
 </script>

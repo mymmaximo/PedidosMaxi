@@ -176,16 +176,26 @@
     // ----- Imports ----- //
     import { computed, onMounted, ref } from 'vue';
     import { CerrarSesion, leerCookie } from './Estatus.js'
-    // ----- Variantes ----- //
-    const Herror = ref("")
+    // ----- Variables Complejas ----- //
+    const LoginBox = ref({
+        email: "",
+        contrasena: ""
+    })
+    const NuevoCliente = ref({
+        nombre: "",
+        email: "",
+        dni: "",
+        contrasena: "",
+        concontrasena: ""
+    })
+    // ----- Variantes Booleanas ----- //
     const Heror = ref(false)
-    const verContrasena = ref(false)
     const MostrarLogin = ref(true)
+    const verContrasena = ref(false)
     const SesionIniciada = ref(false)
+    // ----- Variantes Vacias ----- //
+    const Herror = ref("")
     // ----- Funciones Vue ----- //
-    const emit = defineEmits([
-        'LoginExitoso'
-    ])
     onMounted(() => {
         const tokenGuardado = leerCookie("token")
         if (tokenGuardado) {
@@ -203,19 +213,34 @@
             return faltandatos01
         }
     })
-    // ----- Para el Frontend ----- //
-    const LoginBox = ref({
-        email: "",
-        contrasena: ""
-    })
-    const NuevoCliente = ref({
-        nombre: "",
-        email: "",
-        dni: "",
-        contrasena: "",
-        concontrasena: ""
-    })
+    const emit = defineEmits([
+        'LoginExitoso'
+    ])
     // ----- Para el Backend ----- //
+    const IniciarSesionCliente = async() => {
+        const respuesta = await fetch('http://localhost:8000/cliente/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(LoginBox.value)
+        })
+        const datos = await respuesta.json();
+            if (respuesta.ok) {
+                document.cookie= `token=${datos.access_token}; path=/`
+                document.cookie= `id_cliente=${datos.id_cliente}; path=/`
+                SesionIniciada.value = true
+                emit('LoginExitoso')
+                LoginBox.value = {
+                    email: "",
+                    contrasena: ""
+                };
+                window.location.reload();
+            } else {
+                Herror.value = "Usuario o contraseña incorrectos"
+                Heror.value = true
+            } 
+    }
     const IniciarSesionUsuario = async() => {
         const respuesta = await fetch('http://localhost:8000/usuario/login/', {
             method: 'POST',
@@ -241,30 +266,6 @@
                 window.location.reload()
             } else {
                 IniciarSesionCliente()
-            } 
-    }
-    const IniciarSesionCliente = async() => {
-        const respuesta = await fetch('http://localhost:8000/cliente/login/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(LoginBox.value)
-        })
-        const datos = await respuesta.json();
-            if (respuesta.ok) {
-                document.cookie= `token=${datos.access_token}; path=/`
-                document.cookie= `id_cliente=${datos.id_cliente}; path=/`
-                SesionIniciada.value = true
-                emit('LoginExitoso')
-                LoginBox.value = {
-                    email: "",
-                    contrasena: ""
-                };
-                window.location.reload();
-            } else {
-                Herror.value = "Usuario o contraseña incorrectos"
-                Heror.value = true
             } 
     }
     const SubirNuevoCliente = async() => {

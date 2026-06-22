@@ -395,58 +395,58 @@
                             @dragover.prevent
                             @drop="Soltar(index)"
                             >
-                            <template v-if="banner.id">
-                                    <div class="botones">
-                                        <button
-                                        v-if="!bannerdesactivado(banner)"
-                                        type="button"
-                                        @click="bannerestatus(banner.id)"
-                                        title="Desactivar"
-                                        class="botonc"
-                                        >
-                                        🗙
-                                        </button>
-                                        <button
-                                        v-else
-                                        type="button"
-                                        @click="bannerestatus(banner.id)"
-                                        title="Restaurar"
-                                        class="botoncon"
-                                        >
-                                        🐦‍🔥
-                                        </button>
-                                    </div>
-                                    <div v-if="bannerdesactivado(banner)">
-                                        <button
-                                        v-if="!DelSupaBann.includes(banner.id)"
-                                        type="button"
-                                        @click="DelSupaBann.push(banner.id)"
-                                        title="Quitar imagen"
-                                        class="botonx"
-                                        >
-                                        🗑️
-                                        </button>
-                                        <button
-                                        v-else
-                                        type="button"
-                                        @click="DelSupaBann = DelSupaBann.filter(id => id !== banner.id)"
-                                        title="Restaurar imagen"
-                                        class="botonx"
-                                        >
-                                        🕊️
-                                        </button>
-                                    </div>
-                                    <div class="banner-wrapper">
-                                        <img 
-                                        :src="ObtenerImgUrl(banner.s3_key)"
-                                        :class="bannerdesactivado(banner) ? 'imagendel' : 'imagen'"
-                                        >
-                                        <div 
-                                        v-if="bannerdesactivado(banner)" 
-                                        class="banner-overlay"
-                                        >
+                                <template v-if="banner.id">
+                                        <div class="botones">
+                                            <button
+                                            v-if="!bannerdesactivado(banner)"
+                                            type="button"
+                                            @click="bannerestatus(banner.id)"
+                                            title="Desactivar"
+                                            class="botonc"
+                                            >
+                                            🗙
+                                            </button>
+                                            <button
+                                            v-else
+                                            type="button"
+                                            @click="bannerestatus(banner.id)"
+                                            title="Restaurar"
+                                            class="botoncon"
+                                            >
+                                            🐦‍🔥
+                                            </button>
                                         </div>
-                                    </div>
+                                        <div v-if="bannerdesactivado(banner)">
+                                            <button
+                                            v-if="!DelSupaBann.includes(banner.id)"
+                                            type="button"
+                                            @click="DelSupaBann.push(banner.id)"
+                                            title="Quitar imagen"
+                                            class="botonx"
+                                            >
+                                            🗑️
+                                            </button>
+                                            <button
+                                            v-else
+                                            type="button"
+                                            @click="DelSupaBann = DelSupaBann.filter(id => id !== banner.id)"
+                                            title="Restaurar imagen"
+                                            class="botonx"
+                                            >
+                                            🕊️
+                                            </button>
+                                        </div>
+                                        <div class="banner-wrapper">
+                                            <img 
+                                            :src="ObtenerImgUrl(banner.s3_key)"
+                                            :class="DelSupaBann.includes(banner.id) ? 'imagendel' : 'imagen'"
+                                            >
+                                            <div 
+                                            v-if="bannerdesactivado(banner)" 
+                                            class="banner-overlay"
+                                            >
+                                            </div>
+                                        </div>
                                 </template>
                                 <template v-else>
                                     <h1>
@@ -1409,19 +1409,19 @@
     }
     const BorrarBanner = async() => {
         // ----- Borrar Banner Imagen ----- //
-        for (const id_banner of DelBann.value) {
+        for (const id_banner of DelSupaBann.value) {
             const BannerDelete = Bananaeract.value.imagenes.find(
                 (b) => b.id === id_banner
             )
-            const BorrarDeSupabase = DelSupaBann.value.includes(id_banner)
-            if (BorrarDeSupabase && BannerDelete && BannerDelete.s3_key) {
-                await supabase.storage.from('max_imagenes').remove([BannerDelete.s3_key])
+            if (BannerDelete) {
+                if (BannerDelete.s3_key) {
+                    await supabase.storage.from('max_imagenes').remove([BannerDelete.s3_key])
+                }
+                await fetch(`http://localhost:8000/banners/id/${BannerDelete.id}`, {
+                    method: 'DELETE'
+                })
             }
-            await fetch(`http://localhost:8000/banners/id/${BannerDelete.id}`, {
-                method: 'DELETE'
-            })
         }
-        DelBann.value = []
         DelSupaBann.value = []
     }
     const BorrarProducto = async() => {
@@ -1562,6 +1562,20 @@
             }
         }
     })
+    const DesactivarBanner = async () => {
+        for (const id_banner of DelBann.value) {
+            if (DelSupaBann.value.includes(id_banner)) continue
+            const BannerDelete = Bananaeract.value.imagenes.find(
+                (b) => b.id === id_banner
+            )
+            if (BannerDelete) {
+                await fetch(`http://localhost:8000/banners/estado/id/${BannerDelete.id}`, {
+                    method: 'PUT'
+                })
+            }
+        }
+        DelBann.value = []
+    }
     const Edicion = (producto_fila) => {
         ProductoAct.value.id = producto_fila.id
         ProductoAct.value.nombre = producto_fila.nombre
@@ -1579,10 +1593,13 @@
         if (BannersNuevos.value.length > 0) {
             await SubirBanner()
         }
-        await ActualizarBanner()
         if (DelBann.value.length > 0) {
+            await DesactivarBanner()
+        }
+        if (DelSupaBann.value.length > 0) {
             await BorrarBanner()
         }
+        await ActualizarBanner()
         DelBann.value = []
         DelSupaBann.value = []
         Banner()

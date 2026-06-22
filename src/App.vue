@@ -130,7 +130,8 @@
                         <h2
                         class="
                         hidden group-hover:flex
-                        absolute top-full left-4
+                        absolute top-full 
+                        sm:right-0 md:right-0 lg:right-0 xl:left-4 2xl:left-4
                         p-4 whitespace-nowrap
                         bg-red-200
                         border-red-700 border-4 rounded-sm"
@@ -147,7 +148,8 @@
                         <div 
                         class="
                         hidden group-hover:block 
-                        absolute top-full left-4
+                        absolute top-full 
+                        sm:right-0 md:right-0 lg:right-0 xl:left-4 2xl:left-4
                         bg-green-800
                         text-white
                         border-green-700 border-4 rounded-sm
@@ -155,47 +157,48 @@
                             <h3
                             @click="router.push('/mis_pedidos')"
                             v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                            class="botonpestaña !p-2">
+                            class="botonpestaña !p-2 !truncate">
                             Mis Pedidos
                             </h3>
                             <h3
                             @click="router.push('/configuracion')" 
                             v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                            class="botonpestaña !p-2">
+                            class="botonpestaña !p-2 !truncate">
                             Configuracion
                             </h3>
                             <h3
                             @click="AbrirPopUp01()"
-                            class="botonc !rounded-none !p-2">
+                            class="botonc !rounded-none !p-2 !truncate">
                             Cerrar Sesion
                             </h3>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="">
-                <div class="flex flex-row bg-green-600 sm:hidden">
-                    <div class="m-2 p-2 !z-40"
-                    >
+            <div class="pagina">
+                <div class="sticky top-0 z-30 flex w-full flex-col bg-green-600 sm:hidden shadow-md">
+                    <div class="bar">
                         <h1
                         @click="MostrarMenu = !MostrarMenu"
-                        class="sticky top-0 p-0 m-0 text-white"
+                        class="botonfil"
                         >
                         ⫶☰
                         </h1>
-                        <div class="fondo"
-                        v-if="MostrarMenu">
+                    </div>
+                    <div class="m-2 p-2 !z-40"
+                    v-if="MostrarMenu"
+                    >
+                        <div class="fondo">
                             <div
                             class="fixed top-0 left-0 h-screen w-fit bg-green-800 z-40 shadow-2xl flex flex-col text-white"
                             >
                                 <div
                                 class="
                                 flex flex-col
-                                
                                 ">
                                     <h1
                                     @click="MostrarMenu = !MostrarMenu"
-                                    class="!py-0 !px-1 m-3 max-w-min"
+                                    class="botonpestaña !py-4 !text-left"
                                     >
                                     ⫶☰
                                     </h1>
@@ -204,104 +207,82 @@
                                         @click="router.push('/') ; MostrarMenu = false" 
                                         v-if="Rol !== '3' && Rol !== '6'"
                                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
-                                        class="botonpestaña !py-0 !text-left">
-                                            <h1>
-                                            🏠︎ Inicio
-                                            </h1>
+                                        class="botonpestaña !py-4 !text-left">
+                                        🏠︎ Inicio
                                         </div>
                                         <div 
                                         @click="router.push('/productos') ; MostrarMenu = false" 
                                         v-if="Rol !== '3' && Rol !== '6'"
                                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
-                                        class="botonpestaña !py-0 !text-left"
+                                        class="botonpestaña !py-4 !text-left"
                                         >
-                                            <h1>
-                                            📦 Productos
-                                            </h1>
+                                        📦 Productos
                                         </div>
                                         <div 
                                             @click="router.push('/pedidos') ; MostrarMenu = false" 
                                             v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
                                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
-                                        class="botonpestaña !py-0 !text-left"
+                                        class="botonpestaña !py-4 !text-left"
                                         >
-                                            <h1>
-                                            🚛 Pedidos
-                                            </h1>
+                                        🚛 Pedidos
                                         </div>
                                         <div
                                         @click="router.push('/clientes') ; MostrarMenu = false" 
                                         v-if="Rol === '1' || Rol === '3'"
                                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
-                                        class="botonpestaña !py-0 !text-left"
+                                        class="botonpestaña !py-4 !text-left"
                                         >
-                                            <h1>
-                                            👥 Clientes
-                                            </h1>
+                                        👥 Clientes
                                         </div>
                                         <div 
                                         @click="router.push('/usuarios') ; MostrarMenu = false" 
                                         v-if="Rol === '1'"
                                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
-                                        class="botonpestaña !py-0 !text-left"
+                                        class="botonpestaña !py-4 !text-left"
                                         >
-                                            <h1>
-                                            👨🏻‍💼 Usuarios
-                                            </h1>
+                                        👨🏻‍💼 Usuarios
                                         </div>
                                         <div 
                                         @click="router.push('/historial_precios') ; MostrarMenu = false" 
                                         v-if="Rol === '1' || Rol === '4'"
                                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
-                                        class="botonpestaña !py-0 !text-left"
+                                        class="botonpestaña !py-4 !text-left"
                                         >
-                                            <h1>
-                                            💲 Historial de Precios
-                                            </h1>
+                                        💲 Historial de Precios
                                         </div>
                                         <div
                                         v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                         @click="router.push('/carrito') ; MostrarMenu = false"
                                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
-                                        class="botonpestaña !py-0 !text-left"
+                                        class="botonpestaña !py-4 !text-left"
                                         >
-                                            <h1>
-                                            🛒 Tu Carrito
-                                            </h1>
+                                        🛒 Tu Carrito
                                         </div>
                                         <div
                                         @click="AbrirPopUp02()" 
                                         v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
-                                        class="botonpestaña !from-red-400/80 !to-red-500/80 !py-0 !text-left"
+                                        class="botonpestaña !from-red-400/80 !to-red-500/80 !py-4 !text-left"
                                         >
-                                            <h1>
-                                            🗑️ Vaciar Carrito
-                                            </h1>
+                                        🗑️ Vaciar Carrito
                                         </div>
                                         <div
                                         @click="router.push('/mis_pedidos') ; MostrarMenu = false"
                                         v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
-                                        class="botonpestaña !py-0 !text-left">
-                                            <h1>
-                                            👤 Mis Pedidos
-                                            </h1>
+                                        class="botonpestaña !py-4 !text-left">
+                                        👤 Mis Pedidos
                                         </div>
                                         <div
                                         @click="router.push('/configuracion') ; MostrarMenu = false" 
                                         v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/configuracion'}"
-                                        class="botonpestaña !py-0 !text-left">
-                                            <h1>
-                                            ⚙️ Configuracion
-                                            </h1>
+                                        class="botonpestaña !py-4 !text-left">
+                                        ⚙️ Configuracion
                                         </div>
                                         <div
                                         @click="AbrirPopUp01()"
-                                        class="botonpestaña !from-red-600/80 !to-red-800/80 !py-0 !text-left">
-                                            <h1>
-                                            ➜] Cerrar Sesion
-                                            </h1>
+                                        class="botonpestaña !from-red-600/80 !to-red-800/80 !py-4 !text-left">
+                                        ➜] Cerrar Sesion
                                         </div>
                                     </div>
                                 </div>
@@ -327,13 +308,15 @@
     import { useRouter, useRoute } from 'vue-router'
     import { CarritoLocal, LimpiarCompra, Iniciado, CerrarSesion, Rol } from './components/Estatus.js'
     import Login from './components/Login.vue'
-    // ----- Variables ----- //
+    // ----- Variables Complejas ----- //
     const route = useRoute()
     const router = useRouter()
-    const TablaActual = ref("")
+    // ----- Variables Booleanas ----- //
     const MostrarMenu = ref (false)
     const BorrarCarrito = ref(false)
     const ActualizarCajaLogout = ref(false)
+    // ----- Variables Vacias ----- //
+    const TablaActual = ref("")
     // ----- Funciones Vue ----- //
     onMounted(async() => {
         if (route.path === '/') {
@@ -349,13 +332,13 @@
 		ActualizarCajaLogout.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp01 = () => {
-		ActualizarCajaLogout.value = false
-		document.body.style.overflow = "auto";
-	}
 	const AbrirPopUp02 = () => {
 		BorrarCarrito.value = true
 		document.body.style.overflow = "hidden";
+	}
+	const CerrarPopUp01 = () => {
+		ActualizarCajaLogout.value = false
+		document.body.style.overflow = "auto";
 	}
 	const CerrarPopUp02 = () => {
 		BorrarCarrito.value = false

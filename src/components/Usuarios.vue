@@ -485,18 +485,35 @@
     // ----- Imports ----- //
     import { onMounted, ref, computed } from 'vue';
     import { Rol, CerrarSesion, ActualizarCajaC as ActualizarCajaU } from './Estatus';
-    // ----- Variantes ----- //
-	const Pagina = ref(0)
-    const filtroEst = ref(2)
+    // ----- Variables Complejas ----- //
+    const NuevoUsuario = ref({
+        nombre: "",
+        email: "",
+        dni: "",
+        contrasena: "",
+        id_rol: ""
+    })
+    const UsuarioAct = ref({
+        id: "",
+        nombre: "",
+        email: "",
+        contrasena: "",
+        id_rol: ""
+    })
+    // ----- Variables Booleanas ----- //
+    const MostrarNuevo = ref(false)
+    const VentanaFiltro = ref(false)
+    const MostrarFiltro = ref(false)
+    const ActualizarUNew = ref(false)
+    const ActualizarCajaUDel = ref(false)
+    // ----- Variables Vacias ----- //
     const Busqueda = ref("")
     const usuarios =  ref([])
     const UsuarioEli = ref("")
-    const MostrarFiltro = ref(false)
-    const MostrarNuevo = ref(false)
+    // ----- Variables Simples ----- //
+	const Pagina = ref(0)
+    const filtroEst = ref(2)
     const filtroAct = ref(false)
-    const VentanaFiltro = ref(false)
-    const ActualizarUNew = ref(false)
-    const ActualizarCajaUDel = ref(false)
     // ----- Funciones Vue ----- //
     onMounted(async() => {
         BusquedaUsuario()
@@ -522,34 +539,58 @@
 		VentanaFiltro.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const CerrarPopUp01 = () => {
-		VentanaFiltro.value = false
-		document.body.style.overflow = "auto"
-	}
 	const AbrirPopUp02 = () => {
 		ActualizarCajaUDel.value = true
 		document.body.style.overflow = "hidden"
-	}
-	const CerrarPopUp02 = () => {
-		ActualizarCajaUDel.value = false
-		document.body.style.overflow = "auto"
 	}
 	const AbrirPopUp03 = () => {
 		ActualizarCajaU.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const CerrarPopUp03 = () => {
-		ActualizarCajaU.value = false
-		document.body.style.overflow = "auto"
-	}
 	const AbrirPopUp04 = () => {
 		ActualizarUNew.value = true
 		document.body.style.overflow = "hidden";
+	}
+    const AplicarFiltro = () => {
+        BusquedaUsuario()
+        CerrarPopUp01()
+    }
+	const CerrarPopUp01 = () => {
+		VentanaFiltro.value = false
+		document.body.style.overflow = "auto"
+	}
+	const CerrarPopUp02 = () => {
+		ActualizarCajaUDel.value = false
+		document.body.style.overflow = "auto"
+	}
+	const CerrarPopUp03 = () => {
+		ActualizarCajaU.value = false
+		document.body.style.overflow = "auto"
 	}
 	const CerrarPopUp04 = () => {
 		ActualizarUNew.value = false
 		document.body.style.overflow = "auto";
 	}
+    const Edicion = (usuario_fila) => {
+        UsuarioAct.value.id = usuario_fila.id
+        UsuarioAct.value.nombre = usuario_fila.nombre
+        UsuarioAct.value.apellido = usuario_fila.apellido
+        UsuarioAct.value.email = usuario_fila.email
+        UsuarioAct.value.usuario = usuario_fila.usuario
+        AbrirPopUp03()
+    }
+    const Eliminacion = (usuario_fila) => {
+        UsuarioEli.value = usuario_fila.id
+        AbrirPopUp02()
+    }
+    const Estatuscolor = (id_estatus) => {
+        if (id_estatus === true) {
+            return "si"
+        }
+        else if (id_estatus === false) {
+            return "no"
+        }
+    }
     const Estatustxt = (id_estatus) => {
         if (id_estatus === true) {
             return "Activo"
@@ -558,12 +599,30 @@
             return "Eliminado"
         }
     }
-    const Estatuscolor = (id_estatus) => {
-        if (id_estatus === true) {
-            return "si"
+    const LimpiarFiltro = () => {
+        filtroEst.value = 1
+        BusquedaUsuario();
+        CerrarPopUp01();
+        filtroAct.value = false
+    }
+    const Rolcolor = (id_rol) => {
+        if (id_rol === 1) {
+            return "admin"
         }
-        else if (id_estatus === false) {
-            return "no"
+        else if (id_rol === 2) {
+            return "pgral"
+        }
+        else if (id_rol === 3) {
+            return "pedcli"
+        }
+        else if (id_rol === 4) {
+            return "preci"
+        }
+        else if (id_rol === 5) {
+            return "stoc"
+        }
+        else if (id_rol === 6) {
+            return "rider"
         }
     }
     const Roltxt = (id_rol) => {
@@ -586,81 +645,7 @@
             return "Rider"
         }
     }
-    const Rolcolor = (id_rol) => {
-        if (id_rol === 1) {
-            return "admin"
-        }
-        else if (id_rol === 2) {
-            return "pgral"
-        }
-        else if (id_rol === 3) {
-            return "pedcli"
-        }
-        else if (id_rol === 4) {
-            return "preci"
-        }
-        else if (id_rol === 5) {
-            return "stoc"
-        }
-        else if (id_rol === 6) {
-            return "rider"
-        }
-    }
-    const AplicarFiltro = () => {
-        BusquedaUsuario()
-        CerrarPopUp01()
-    }
-    const LimpiarFiltro = () => {
-        filtroEst.value = 1
-        BusquedaUsuario();
-        CerrarPopUp01();
-        filtroAct.value = false
-    }
-    const NuevoUsuario = ref({
-        nombre: "",
-        email: "",
-        dni: "",
-        contrasena: "",
-        id_rol: ""
-    })
-    const UsuarioAct = ref({
-        id: "",
-        nombre: "",
-        email: "",
-        contrasena: "",
-        id_rol: ""
-    })
-    const Edicion = (usuario_fila) => {
-        UsuarioAct.value.id = usuario_fila.id
-        UsuarioAct.value.nombre = usuario_fila.nombre
-        UsuarioAct.value.apellido = usuario_fila.apellido
-        UsuarioAct.value.email = usuario_fila.email
-        UsuarioAct.value.usuario = usuario_fila.usuario
-        AbrirPopUp03()
-    }
-    const Eliminacion = (usuario_fila) => {
-        UsuarioEli.value = usuario_fila.id
-        AbrirPopUp02()
-    }
     // ----- Para el Backend ----- //
-    const BusquedaUsuario = async() => {
-        let url = new URL ('http://localhost:8000/usuarios/');
-		url.searchParams.append('skip', Pagina.value);
-        if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_usuario', Busqueda.value)
-        }
-        if (filtroEst.value === 1) {
-            url.searchParams.append('bool_activo', 'true')
-            filtroAct.value = true
-        }
-        if (filtroEst.value === 0) {
-            url.searchParams.append('bool_activo', 'false')
-            filtroAct.value = true
-        }
-        const BusqUsuario = await fetch(url)
-        const datos = await BusqUsuario.json()
-        usuarios.value = datos;
-    }
     const ActualizarUsuarios = async() => {
         const UsuarioUpd = {} 
         if (UsuarioAct.value.nombre !== "") {
@@ -699,6 +684,40 @@
         BusquedaUsuario()
         CerrarPopUp03()
     }
+    const BorrarUsuario = async() => {
+        const EraseCliente = await fetch(`http://localhost:8000/usuarios/id/${UsuarioEli.value}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+        })
+        UsuarioEli.value = ""
+        if (EraseCliente.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return
+        }
+        BusquedaUsuario()
+        CerrarPopUp02()
+    }
+    const BusquedaUsuario = async() => {
+        let url = new URL ('http://localhost:8000/usuarios/');
+		url.searchParams.append('skip', Pagina.value);
+        if (Busqueda.value !== "") {
+            url.searchParams.append('busqueda_usuario', Busqueda.value)
+        }
+        if (filtroEst.value === 1) {
+            url.searchParams.append('bool_activo', 'true')
+            filtroAct.value = true
+        }
+        if (filtroEst.value === 0) {
+            url.searchParams.append('bool_activo', 'false')
+            filtroAct.value = true
+        }
+        const BusqUsuario = await fetch(url)
+        const datos = await BusqUsuario.json()
+        usuarios.value = datos;
+    }
     const SubirNuevoUsuario = async() => {
         const SubidaNuevoUsuario = await fetch('http://localhost:8000/usuarios/', {
             method: 'POST',
@@ -723,21 +742,5 @@
         }
         BusquedaUsuario()
         CerrarPopUp04()
-    }
-    const BorrarUsuario = async() => {
-        const EraseCliente = await fetch(`http://localhost:8000/usuarios/id/${UsuarioEli.value}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-        })
-        UsuarioEli.value = ""
-        if (EraseCliente.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return
-        }
-        BusquedaUsuario()
-        CerrarPopUp02()
     }
 </script>

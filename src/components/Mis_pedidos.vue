@@ -575,19 +575,22 @@
     // ----- Imports ----- //
     import { onMounted, ref } from 'vue';
     import { leerCookie } from './Estatus.js'
-    // ----- Variantes ----- //
-    const Pedidos = ref([])
-    const filtroMP = ref(4)
-    const filtroEst = ref(4)
-    const Busqueda = ref("")
+    // ----- Variables Complejas ----- //
+    const idUsuario = leerCookie("id_cliente")
+    // ----- Variables Booleanas ----- //
     const filtroAct = ref(false)
     const VentanaFiltro = ref(false)
     const MostrarFiltro = ref (false)
     const mostrarhistorial = ref(false)
+    // ----- Variables Vacias ----- //
+    const Pedidos = ref([])
+    const Busqueda = ref("")
     const PedidoNowEnCamino = ref(null)
     const PedidoNowHistorial = ref(null)
     const PedidoNowPreparando = ref(null)
-    const idUsuario = leerCookie("id_cliente")
+    // ----- Variables Simples ----- //
+    const filtroMP = ref(4)
+    const filtroEst = ref(4)
     // ----- Funciones Vue ----- //
     onMounted(async() => {
         const respuesta = await fetch(`http://localhost:8000/pedidos/cliente/${idUsuario}`)
@@ -596,6 +599,10 @@
         Pedidos.value = datos;
     })
     // ----- Para el Frontend ----- //
+    const AplicarFiltro = () => {
+        BusquedaPedido()
+        MostrarFiltro.value = false
+    }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
             return "botonc"
@@ -603,17 +610,6 @@
         else if (id_estatus === false) {
             return "botoncon"
         }
-    }
-    const AplicarFiltro = () => {
-        BusquedaPedido()
-        MostrarFiltro.value = false
-    }
-    const LimpiarFiltro = () => {
-        filtroMP.value = 4
-        filtroEst.value = 4
-        BusquedaPedido()
-        MostrarFiltro.value = false
-        filtroAct.value = false
     }
     const FormatoFecha = (fechai) => {
         if (fechai) {
@@ -623,13 +619,12 @@
             return "Pendiente"
         }
     }
-    const PedidoCambioHistorial = (id) => {
-        if (PedidoNowHistorial.value === id) {
-            PedidoNowHistorial.value = null
-        }
-        else {
-            PedidoNowHistorial.value = id
-        }
+    const LimpiarFiltro = () => {
+        filtroMP.value = 4
+        filtroEst.value = 4
+        BusquedaPedido()
+        MostrarFiltro.value = false
+        filtroAct.value = false
     }
     const PedidoCambioEnCamino = (id) => {
         if (PedidoNowEnCamino.value === id) {
@@ -637,6 +632,14 @@
         }
         else {
             PedidoNowEnCamino.value = id
+        }
+    }
+    const PedidoCambioHistorial = (id) => {
+        if (PedidoNowHistorial.value === id) {
+            PedidoNowHistorial.value = null
+        }
+        else {
+            PedidoNowHistorial.value = id
         }
     }
     const PedidoCambioPreparando = (id) => {

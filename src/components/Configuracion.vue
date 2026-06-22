@@ -77,7 +77,14 @@
     // ----- Imports ----- //
     import { onMounted, ref } from 'vue'
     import { CerrarSesion, leerCookie } from './Estatus.js'
-    // ----- Variantes ----- //
+    // ----- Variables Complejas ----- //
+    const ClienteConfig = ref({
+        nombre: "",
+        email: "",
+        contrasena: "",
+        concontrasena: ""
+    })
+    // ----- Variantes Booleanas ----- //
     const verContrasena = ref(false)
     const verConContrasena = ref(false)
     // ----- Funciones Vue ----- //
@@ -95,13 +102,6 @@
                 }
             }
         }
-    })
-    // ----- Para el Frontend ----- //
-    const ClienteConfig = ref({
-        nombre: "",
-        email: "",
-        contrasena: "",
-        concontrasena: ""
     })
     // ----- Para el Backend ----- //
     const ActualizarCliente = async() => {

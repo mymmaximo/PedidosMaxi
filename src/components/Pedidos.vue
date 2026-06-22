@@ -333,6 +333,7 @@
 						</div>
 					</div>
 				</div>
+				<!-- Tabla de Pedidos -->
 				<div class="start !px-5"
 				>
 					<!-- Barra de Busqueda -->
@@ -531,21 +532,33 @@
 <script setup>
     // ----- Imports ----- //
 	import { onMounted, ref } from 'vue'
-    // ----- Variantes ----- //
-	const Pagina = ref(0)
-	const Pedidos = ref([])
-	const filtroMP = ref(4)
-	const Busqueda = ref("")
-	const filtroEst = ref(4)
-	const PedidoNow = ref(null)
-	const MostrarFiltro = ref(false)
-    const filtrociudad = ref ("")
-    const filtroprovincia = ref ("")
+    // ----- Variables Complejas ----- //
+	const EstatusAct = ref({
+		id_pedido: "",
+		id_cliente: "",
+		id_direccion: "",
+		metodo_pago: "",
+		tiempo_estimado_entrega: "",
+		tiempo_entrega: "",
+		estatus: ""
+	})
+    // ----- Variables Booleanas ----- //
 	const filtroAct = ref(false)
-    const ListaCiudad = ref ("")
-    const ListaProvincia = ref ("")
+	const MostrarFiltro = ref(false)
 	const VentanaFiltro = ref(false)
 	const ActualizarCajaP = ref (false)
+    // ----- Variables Vacias ----- //
+	const Pedidos = ref([])
+	const Busqueda = ref("")
+	const PedidoNow = ref(null)
+    const ListaCiudad = ref ("")
+    const filtrociudad = ref ("")
+    const ListaProvincia = ref ("")
+    const filtroprovincia = ref ("")
+    // ----- Variables Simples ----- //
+	const Pagina = ref(0)
+	const filtroMP = ref(4)
+	const filtroEst = ref(4)
     // ----- Funciones Vue ----- //
 	onMounted(async() => {
 		BusquedaPedido()
@@ -561,29 +574,34 @@
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const CerrarPopUp01 = () => {
-		ActualizarCajaP.value = false
-		document.body.style.overflow = "auto"
-	}
 	const AbrirPopUp02 = () => {
 		VentanaFiltro.value = true
 		document.body.style.overflow = "hidden"
+	}
+	const AplicarFiltro = () => {
+		BusquedaPedido()
+		CerrarPopUp02()
+	}
+	const CerrarPopUp01 = () => {
+		ActualizarCajaP.value = false
+		document.body.style.overflow = "auto"
 	}
 	const CerrarPopUp02 = () => {
 		VentanaFiltro.value = false
 		document.body.style.overflow = "auto"
 	}
-	const Estatustxt = (id_estatus) => {
-		if (id_estatus === 1) {
-			return "Entregado"
+	const Edicion = (pedido_fila) => {
+		if (pedido_fila.estatus === 1) {
+			return
 		}
-		else if (id_estatus === 2) {
-			return "En Camino"
-		}
-		else if (id_estatus === 3) {
-			return "Preparando"
-		}
-			return "indefinido"
+		EstatusAct.value.id_pedido = pedido_fila.id_pedido
+		EstatusAct.value.id_cliente = pedido_fila.id_cliente
+		EstatusAct.value.id_direccion = pedido_fila.id_direccion
+		EstatusAct.value.metodo_pago = pedido_fila.metodo_pago
+		EstatusAct.value.tiempo_estimado_entrega = pedido_fila.tiempo_estimado_entrega
+		EstatusAct.value.tiempo_entrega = pedido_fila.tiempo_entrega
+		EstatusAct.value.estatus = pedido_fila.estatus - 1
+		AbrirPopUp01()
 	}
 	const Estatuscolor = (id_estatus) => {
 		if (id_estatus === 1) {
@@ -597,6 +615,18 @@
 		}
 			return "what";
 	}
+	const Estatustxt = (id_estatus) => {
+		if (id_estatus === 1) {
+			return "Entregado"
+		}
+		else if (id_estatus === 2) {
+			return "En Camino"
+		}
+		else if (id_estatus === 3) {
+			return "Preparando"
+		}
+			return "indefinido"
+	}
 	const FormatoFecha = (fechai) => {
 		if (fechai) {
 			return new Date(fechai).toLocaleDateString('es-ES')
@@ -604,10 +634,6 @@
 		else {
 			return "Pendiente"
 		}
-	}
-	const AplicarFiltro = () => {
-		BusquedaPedido()
-		CerrarPopUp02()
 	}
 	const LimpiarFiltro = () => {
 		filtroMP.value = 4
@@ -626,16 +652,32 @@
 			PedidoNow.value = id
 		}
 	}
-	const EstatusAct = ref({
-		id_pedido: "",
-		id_cliente: "",
-		id_direccion: "",
-		metodo_pago: "",
-		tiempo_estimado_entrega: "",
-		tiempo_entrega: "",
-		estatus: ""
-	})
     // ----- Para el Backend ----- //
+	const ActualizarEstatus = async() => {
+			const ActEst = await fetch(`http://localhost:8000/pedidos/id/${EstatusAct.value.id_pedido}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(EstatusAct.value)
+			})
+			if (ActEst.status === 401) {
+				CerrarSesion();
+				alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+				return
+			}
+			EstatusAct.value = {
+				id_pedido: "",
+				id_cliente: "",
+				id_direccion: "",
+				metodo_pago: "",
+				tiempo_estimado_entrega: "",
+				tiempo_entrega: "",
+				estatus: ""
+			}
+			BusquedaPedido()
+			CerrarPopUp01()
+	}
 	const BusquedaPedido = async() => {
 		let url = new URL ('http://localhost:8000/pedidos/all/');
 		url.searchParams.append('skip', Pagina.value);
@@ -677,43 +719,5 @@
 		const BusqPedido = await fetch(url)
 		const datos = await BusqPedido.json()
 		Pedidos.value = datos
-	}
-	const ActualizarEstatus = async() => {
-			const ActEst = await fetch(`http://localhost:8000/pedidos/id/${EstatusAct.value.id_pedido}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(EstatusAct.value)
-			})
-			if (ActEst.status === 401) {
-				CerrarSesion();
-				alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-				return
-			}
-			EstatusAct.value = {
-				id_pedido: "",
-				id_cliente: "",
-				id_direccion: "",
-				metodo_pago: "",
-				tiempo_estimado_entrega: "",
-				tiempo_entrega: "",
-				estatus: ""
-			}
-			BusquedaPedido()
-			CerrarPopUp01()
-	}
-	const Edicion = (pedido_fila) => {
-		if (pedido_fila.estatus === 1) {
-			return
-		}
-		EstatusAct.value.id_pedido = pedido_fila.id_pedido
-		EstatusAct.value.id_cliente = pedido_fila.id_cliente
-		EstatusAct.value.id_direccion = pedido_fila.id_direccion
-		EstatusAct.value.metodo_pago = pedido_fila.metodo_pago
-		EstatusAct.value.tiempo_estimado_entrega = pedido_fila.tiempo_estimado_entrega
-		EstatusAct.value.tiempo_entrega = pedido_fila.tiempo_entrega
-		EstatusAct.value.estatus = pedido_fila.estatus - 1
-		AbrirPopUp01()
 	}
 </script>

@@ -822,35 +822,59 @@
     import { onMounted, toRefs, ref, watch, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
     import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
-    // ----- Variables ----- //
+    // ----- Variables Complejas ----- //
+    const NuevoProducto = ref({
+        nombre: "",
+        precio: "",
+        stock: "",
+        categoria: ""
+    })
+    const ProductoAct = ref({
+        id: "",
+        nombre: "",
+        precio: "",
+        stock: "",
+        categoria: "",
+        codigo_barra: "",
+        imagenes: []
+    })
+    const ProductoEli = ref({
+        id: "",
+        nombre: "",
+        imagenes: []
+    })
     const prop = defineProps (['path','size'])
+    const { path } = toRefs (prop)
+    // ----- Variables Booleanas ----- //
     const ActualizarCajaPDel = ref (false)
-    const OpcionCategoriaA = ref ("new")
-    const OpcionCategoria = ref ("new")
     const VentanaCompra = ref (false)
     const MostrarFiltro = ref (true)
     const MostrarNuevo = ref (false)
     const VentanaNuevo = ref (false)
+    const uploading = ref (false)
+    const filtroAct = ref (false)
+    // ----- Variables Vacias ----- //
     const ListaCategoria = ref ("")
     const ImagenesCargando = ref({})
     const ArchivoSave = ref ([])
-    const { path } = toRefs (prop)
-    const uploading = ref (false)
-    const filtroAct = ref (false)
     const VistaPrevia = ref ([])
     const filtrocat = ref ("")
-    const filtroRadio = ref(0)
     const IndiceImg = ref ({})
     const Productos = ref ([])
     const fileInput = ref ('')
-    const filtroEst = ref (1)
     const Busqueda = ref ("")
     const NewImg = ref ([])
     const NowImg = ref ([])
     const mayor = ref ("")
     const menor = ref ("")
     const DelImg= ref ([])
+    // ----- Variables Simples ----- //
+    const OpcionCategoriaA = ref ("new")
+    const OpcionCategoria = ref ("new")
+    const filtroRadio = ref(0)
+    const filtroEst = ref (1)
 	const Pagina = ref (0)
+    // ----- Variables Temporales ----- //
     let inicioX = 0
     // ----- Funciones Vue ----- //
     onMounted(async() => {
@@ -918,23 +942,39 @@
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden";
 	}
+	const AbrirPopUp02 = () => {
+		ActualizarCajaPDel.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const AbrirPopUp03 = () => {
+		VentanaNuevo.value = true
+		document.body.style.overflow = "hidden";
+	}
+	const AbrirPopUp04 = () => {
+		VentanaCompra.value = true
+		document.body.style.overflow = "hidden";
+	}
+    const AplicarFiltro = () => {
+        BusquedaProducto();
+        menor.value = "";
+        mayor.value = "";
+    }
+    const BackImg = (imagen) => {
+        const ImgActual = GetImg(imagen.id)
+        if (ImgActual > 0) {
+            IndiceImg.value[imagen.id] = ImgActual - 1
+            ImagenesCargando.value[imagen.id] = true
+        }
+    }
 	const CerrarPopUp01 = () => {
 		ActualizarCajaP.value = false
         DelImg.value = []
         LimpiarImagenes()
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp02 = () => {
-		ActualizarCajaPDel.value = true
-		document.body.style.overflow = "hidden";
-	}
 	const CerrarPopUp02 = () => {
 		ActualizarCajaPDel.value = false
 		document.body.style.overflow = "auto";
-	}
-	const AbrirPopUp03 = () => {
-		VentanaNuevo.value = true
-		document.body.style.overflow = "hidden";
 	}
 	const CerrarPopUp03 = () => {
 		VentanaNuevo.value = false
@@ -945,16 +985,25 @@
         OpcionCategoria.value = "new"
 		document.body.style.overflow = "auto";
 	}
-	const AbrirPopUp04 = () => {
-		VentanaCompra.value = true
-		document.body.style.overflow = "hidden";
-	}
 	const CerrarPopUp04 = () => {
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
 		document.body.style.overflow = "auto";
 	}
+    const ComienzoToque = (evento) => {
+        inicioX = evento.changedTouches[0].clientX
+    }
+    const Compracion = (producto_fila) => {
+        VentanaComprar(producto_fila)
+        AbrirPopUp04()
+    }
+    const Eliminacion = (producto_fila) => {
+        ProductoEli.value.id = producto_fila.id
+        ProductoEli.value.nombre = producto_fila.nombre
+        ProductoEli.value.imagenes = producto_fila.imagenes
+        AbrirPopUp02()
+    }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
             return "si"
@@ -962,26 +1011,6 @@
         else if (id_estatus === false) {
             return "no"
         }
-    }
-    const GetImg = (id) => {
-        return IndiceImg.value[id] || 0
-    }
-    const NextImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id)
-        if (ImgActual < imagen.imagenes.length - 1) {
-            IndiceImg.value[imagen.id] = ImgActual + 1
-            ImagenesCargando.value[imagen.id] = true
-        }
-    }
-    const BackImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id)
-        if (ImgActual > 0) {
-            IndiceImg.value[imagen.id] = ImgActual - 1
-            ImagenesCargando.value[imagen.id] = true
-        }
-    }
-    const ComienzoToque = (evento) => {
-        inicioX = evento.changedTouches[0].clientX
     }
     const FinToque = (evento, producto) => {
         if (!producto) return
@@ -999,29 +1028,8 @@
         }
         inicioX = 0
     }
-    const Compracion = (producto_fila) => {
-        VentanaComprar(producto_fila)
-        AbrirPopUp04()
-    }
-    const VentanaComprar = (ProductoSeleccionado) => {
-        AbrirPopUp04()
-        ProductoActual.value = ProductoSeleccionado
-        ProductoCantidad.value = 1
-    }
-    const SumarProducto = () => {
-        if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
-            ProductoCantidad.value++
-        }
-    }
-    const RestarProducto = () => {
-        if (ProductoCantidad.value > 1) {
-            ProductoCantidad.value--
-        }
-    }
-    const AplicarFiltro = () => {
-        BusquedaProducto();
-        menor.value = "";
-        mayor.value = "";
+    const GetImg = (id) => {
+        return IndiceImg.value[id] || 0
     }
     const LimpiarFiltro = () => {
         filtroRadio.value = 4
@@ -1030,29 +1038,6 @@
         BusquedaProducto();
         filtroAct.value = false
     }
-    const NuevoProducto = ref({
-        nombre: "",
-        precio: "",
-        stock: "",
-        categoria: ""
-    })
-    const SeleccionarImagen = (evt) => {
-        const files = evt.target.files
-        if (files) {
-            for (
-                let i = 0 ; i < files.length ; i++ 
-            ) {
-                ArchivoSave.value.push(files[i])
-                VistaPrevia.value.push(URL.createObjectURL(files[i]))
-            }
-        }
-    }
-    const QuitarImagenNueva = (index) => {
-        ArchivoSave.value.splice(index, 1)
-        VistaPrevia.value.splice(index, 1)
-        if (fileInput.value) 
-            fileInput.value.value = ''
-    }
     const LimpiarImagenes = () => {
         VistaPrevia.value = []
         ArchivoSave.value = []
@@ -1060,21 +1045,6 @@
             fileInput.value.value = ''
         }
     }
-    const ObtenerImgUrl = (Imgenkey) => {
-        const respuesta = supabase.storage
-            .from('max_imagenes')
-            .getPublicUrl(Imgenkey)
-        return respuesta.data.publicUrl
-    }
-    const ProductoAct = ref({
-        id: "",
-        nombre: "",
-        precio: "",
-        stock: "",
-        categoria: "",
-        codigo_barra: "",
-        imagenes: []
-    })
     const MoreImages = (evt) => {
         const file = evt.target.files[0]
         if (file) {
@@ -1084,6 +1054,13 @@
                 s3_key: URL.createObjectURL(file),
                 es_nueva: true
             })
+        }
+    }
+    const NextImg = (imagen) => {
+        const ImgActual = GetImg(imagen.id)
+        if (ImgActual < imagen.imagenes.length - 1) {
+            IndiceImg.value[imagen.id] = ImgActual + 1
+            ImagenesCargando.value[imagen.id] = true
         }
     }
     const NoMoreImages = (img) => {
@@ -1097,237 +1074,45 @@
         }
         IndiceImg.value[ProductoAct.value.id] = 0
     }
-    const ProductoEli = ref({
-        id: "",
-        nombre: "",
-        imagenes: []
-    })
-    const Eliminacion = (producto_fila) => {
-        ProductoEli.value.id = producto_fila.id
-        ProductoEli.value.nombre = producto_fila.nombre
-        ProductoEli.value.imagenes = producto_fila.imagenes
-        AbrirPopUp02()
+    const ObtenerImgUrl = (Imgenkey) => {
+        const respuesta = supabase.storage
+            .from('max_imagenes')
+            .getPublicUrl(Imgenkey)
+        return respuesta.data.publicUrl
+    }
+    const QuitarImagenNueva = (index) => {
+        ArchivoSave.value.splice(index, 1)
+        VistaPrevia.value.splice(index, 1)
+        if (fileInput.value) 
+            fileInput.value.value = ''
+    }
+    const RestarProducto = () => {
+        if (ProductoCantidad.value > 1) {
+            ProductoCantidad.value--
+        }
+    }
+    const SeleccionarImagen = (evt) => {
+        const files = evt.target.files
+        if (files) {
+            for (
+                let i = 0 ; i < files.length ; i++ 
+            ) {
+                ArchivoSave.value.push(files[i])
+                VistaPrevia.value.push(URL.createObjectURL(files[i]))
+            }
+        }
+    }
+    const SumarProducto = () => {
+        if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
+            ProductoCantidad.value++
+        }
+    }
+    const VentanaComprar = (ProductoSeleccionado) => {
+        AbrirPopUp04()
+        ProductoActual.value = ProductoSeleccionado
+        ProductoCantidad.value = 1
     }
     // ----- Para el Backend ----- //
-    const CarritoStock = (Producto) => {
-        let stockCarrito = 0
-        CarritoLocal.value.forEach((itemCarrito) => {
-            if (itemCarrito.id_producto === Producto.id) {
-                stockCarrito = stockCarrito + itemCarrito.cantidad
-            }
-        })
-        return Producto.stock - stockCarrito;
-    }
-    const SumarCarrito = () => {
-        if (!ProductoActual.value)
-            return; 
-        const nuevoProducto = {
-            id_pedido: PedidoActual.value,
-            nombre_producto: ProductoActual.value.nombre,
-            id_producto: ProductoActual.value.id,
-            cantidad: ProductoCantidad.value,
-            precio_unitario: ProductoActual.value.precio,
-            stock_producto: ProductoActual.value.stock,
-            imagenes: ProductoActual.value.imagenes
-        }
-        let CarritoExistente = CarritoLocal.value.find(
-            (item_exitente) =>
-            item_exitente.id_producto === ProductoActual.value.id
-        )
-        if (CarritoExistente){
-            CarritoExistente.cantidad = ProductoCantidad.value + CarritoExistente.cantidad
-        } else {
-            CarritoLocal.value.push(nuevoProducto);
-        }
-        localStorage.setItem(
-            'carrito_pendiente',
-            JSON.stringify(
-                CarritoLocal.value
-            )
-        )
-        CerrarPopUp04()    
-    }
-    const Confirmar = (async() => {
-        const tokenGuardado = leerCookie("token");
-        const ClienteGuardado = leerCookie("id_cliente");
-        if (PedidoActual.value) {
-            const respuesta = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + tokenGuardado
-                },
-                body: JSON.stringify([{
-                    id_pedido: PedidoActual.value,
-                    id_producto: ProductoActual.value.id,
-                    cantidad: ProductoCantidad.value
-                }])
-            })
-            if (respuesta.ok) {
-                CerrarPopUp04()
-                console.log ("funciono")
-            } else {
-                const error = await respuesta.text()
-                console.error("Error al agregar detalle:", error)
-            }
-        } else {
-            const respuesta = await fetch('http://localhost:8000/pedidos/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + tokenGuardado
-                },
-                body: JSON.stringify({
-                    id_cliente: parseInt(ClienteGuardado),
-                    id_direccion: 1,
-                    metodo_pago: " ",
-                    tiempo_estimado_entrega: 0,
-                    tiempo_entrega: 0
-                })
-            })
-            if (respuesta.status === 401) {
-                CerrarSesion();
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-                return;
-            }
-            if (respuesta.ok) {
-                const DatosPedido = await respuesta.json ()
-                PedidoActual.value = DatosPedido.id
-                localStorage.setItem(
-                    "pedido",
-                    PedidoActual.value
-                )
-                Confirmar() 
-            } else {
-                const error = await respuesta.text()
-                console.error("Error al agregar Pedido:", error)
-            }
-        }
-    })
-    const BusquedaProducto = async() => {
-        let url = new URL ('http://localhost:8000/producto/');
-		url.searchParams.append('skip', Pagina.value);
-        if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_producto', Busqueda.value);
-        }
-        let minfiltro = ""
-        let maxfiltro = ""
-        if (filtroRadio.value === 4) {
-            minfiltro = ""
-            maxfiltro = ""
-            menor.value = ""
-            mayor.value = ""
-        }
-        else if (filtroRadio.value === 3) {
-            maxfiltro = 10000
-        }
-        else if (filtroRadio.value === 2) {
-            minfiltro = 10000
-            maxfiltro = 50000
-        }
-        else if (filtroRadio.value === 1) {
-            minfiltro = 50000
-        }
-        else if (filtroRadio.value === 0) {
-            minfiltro = menor.value;
-            maxfiltro = mayor.value;
-        }
-        if (minfiltro !== "" && minfiltro != null) {
-            url.searchParams.append('precio_producto_min', minfiltro);
-            filtroAct.value = true
-        }
-        if (maxfiltro !== "" && maxfiltro != null) {
-            url.searchParams.append('precio_producto_max', maxfiltro);
-            filtroAct.value = true
-        }
-        if (filtroEst.value === 1) {
-            url.searchParams.append('bool_activo', 'true');
-            filtroAct.value = true;
-        }
-        if (filtroEst.value === 0) {
-            url.searchParams.append('bool_activo', 'false');
-            filtroAct.value = true;
-        }
-        if (filtrocat.value !== "") {
-            url.searchParams.append('filtrocat', filtrocat.value);
-            filtroAct.value = true;            
-        }
-        const BusqProducto = await fetch(url)
-        const datos = await BusqProducto.json();
-        Productos.value = datos;
-    }
-    const SubirNuevoProducto = async() => {
-        if (OpcionCategoria.value != "new") {
-            NuevoProducto.value.categoria = OpcionCategoria.value
-        }
-        const SubidaNuevoProducto = await fetch('http://localhost:8000/productos/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(NuevoProducto.value)
-        })
-        if (SubidaNuevoProducto.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
-        }
-        const ProductoNew = await SubidaNuevoProducto.json()
-        const NewId = ProductoNew.id        
-        if (ArchivoSave.value.length > 0) {
-            uploading.value = true
-            for (
-                let i = 0 ; i < ArchivoSave.value.length ; i++
-            ) {
-                const file = ArchivoSave.value[i]
-                const fileExt = file.name.split('.').pop()
-                const filePath = `${Math.random()}.${fileExt}`
-                let { error: uploadError } = await supabase.storage
-                    .from('max_imagenes')
-                    .upload(filePath, file)
-                if (uploadError) {
-                    alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
-                } else {
-                    await fetch('http://localhost:8000/productos/archivos/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            id_producto: NewId,
-                            s3_key: filePath,
-                            nombre_original: file.name,
-                            tipo_contenido: fileExt,
-                            tamanio: file.size
-                        })
-                    })
-                }
-            }
-            uploading.value = false
-        }
-        NuevoProducto.value = {
-            nombre: "",
-            precio: "",
-            stock: "",
-            categoria: ""
-        }
-        LimpiarImagenes()
-        BusquedaProducto()
-        CerrarPopUp03()
-    }
-    const Edicion = (producto_fila) => {
-        ProductoAct.value.id = producto_fila.id
-        ProductoAct.value.nombre = producto_fila.nombre
-        ProductoAct.value.precio = producto_fila.precio
-        ProductoAct.value.stock = producto_fila.stock
-        OpcionCategoriaA.value = producto_fila.categoria
-        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
-        ProductoAct.value.imagenes = producto_fila.imagenes
-        DelImg.value = []
-        NewImg.value = []
-        VistaPrevia.value = []
-        AbrirPopUp01()
-    }
     const ActualizarProducto = async() => {
         try {
             // ----- Datos Texto Backend ----- //
@@ -1415,5 +1200,224 @@
         }
         BusquedaProducto()
         CerrarPopUp02()
+    }
+    const BusquedaProducto = async() => {
+        let url = new URL ('http://localhost:8000/producto/');
+		url.searchParams.append('skip', Pagina.value);
+        if (Busqueda.value !== "") {
+            url.searchParams.append('busqueda_producto', Busqueda.value);
+        }
+        let minfiltro = ""
+        let maxfiltro = ""
+        if (filtroRadio.value === 4) {
+            minfiltro = ""
+            maxfiltro = ""
+            menor.value = ""
+            mayor.value = ""
+        }
+        else if (filtroRadio.value === 3) {
+            maxfiltro = 10000
+        }
+        else if (filtroRadio.value === 2) {
+            minfiltro = 10000
+            maxfiltro = 50000
+        }
+        else if (filtroRadio.value === 1) {
+            minfiltro = 50000
+        }
+        else if (filtroRadio.value === 0) {
+            minfiltro = menor.value;
+            maxfiltro = mayor.value;
+        }
+        if (minfiltro !== "" && minfiltro != null) {
+            url.searchParams.append('precio_producto_min', minfiltro);
+            filtroAct.value = true
+        }
+        if (maxfiltro !== "" && maxfiltro != null) {
+            url.searchParams.append('precio_producto_max', maxfiltro);
+            filtroAct.value = true
+        }
+        if (filtroEst.value === 1) {
+            url.searchParams.append('bool_activo', 'true');
+            filtroAct.value = true;
+        }
+        if (filtroEst.value === 0) {
+            url.searchParams.append('bool_activo', 'false');
+            filtroAct.value = true;
+        }
+        if (filtrocat.value !== "") {
+            url.searchParams.append('filtrocat', filtrocat.value);
+            filtroAct.value = true;            
+        }
+        const BusqProducto = await fetch(url)
+        const datos = await BusqProducto.json();
+        Productos.value = datos;
+    }
+    const CarritoStock = (Producto) => {
+        let stockCarrito = 0
+        CarritoLocal.value.forEach((itemCarrito) => {
+            if (itemCarrito.id_producto === Producto.id) {
+                stockCarrito = stockCarrito + itemCarrito.cantidad
+            }
+        })
+        return Producto.stock - stockCarrito;
+    }
+    const Confirmar = (async() => {
+        const tokenGuardado = leerCookie("token");
+        const ClienteGuardado = leerCookie("id_cliente");
+        if (PedidoActual.value) {
+            const respuesta = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + tokenGuardado
+                },
+                body: JSON.stringify([{
+                    id_pedido: PedidoActual.value,
+                    id_producto: ProductoActual.value.id,
+                    cantidad: ProductoCantidad.value
+                }])
+            })
+            if (respuesta.ok) {
+                CerrarPopUp04()
+                console.log ("funciono")
+            } else {
+                const error = await respuesta.text()
+                console.error("Error al agregar detalle:", error)
+            }
+        } else {
+            const respuesta = await fetch('http://localhost:8000/pedidos/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + tokenGuardado
+                },
+                body: JSON.stringify({
+                    id_cliente: parseInt(ClienteGuardado),
+                    id_direccion: 1,
+                    metodo_pago: " ",
+                    tiempo_estimado_entrega: 0,
+                    tiempo_entrega: 0
+                })
+            })
+            if (respuesta.status === 401) {
+                CerrarSesion();
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+                return;
+            }
+            if (respuesta.ok) {
+                const DatosPedido = await respuesta.json ()
+                PedidoActual.value = DatosPedido.id
+                localStorage.setItem(
+                    "pedido",
+                    PedidoActual.value
+                )
+                Confirmar() 
+            } else {
+                const error = await respuesta.text()
+                console.error("Error al agregar Pedido:", error)
+            }
+        }
+    })
+    const Edicion = (producto_fila) => {
+        ProductoAct.value.id = producto_fila.id
+        ProductoAct.value.nombre = producto_fila.nombre
+        ProductoAct.value.precio = producto_fila.precio
+        ProductoAct.value.stock = producto_fila.stock
+        OpcionCategoriaA.value = producto_fila.categoria
+        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
+        ProductoAct.value.imagenes = producto_fila.imagenes
+        DelImg.value = []
+        NewImg.value = []
+        VistaPrevia.value = []
+        AbrirPopUp01()
+    }
+    const SubirNuevoProducto = async() => {
+        if (OpcionCategoria.value != "new") {
+            NuevoProducto.value.categoria = OpcionCategoria.value
+        }
+        const SubidaNuevoProducto = await fetch('http://localhost:8000/productos/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(NuevoProducto.value)
+        })
+        if (SubidaNuevoProducto.status === 401) {
+            CerrarSesion();
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            return;
+        }
+        const ProductoNew = await SubidaNuevoProducto.json()
+        const NewId = ProductoNew.id        
+        if (ArchivoSave.value.length > 0) {
+            uploading.value = true
+            for (
+                let i = 0 ; i < ArchivoSave.value.length ; i++
+            ) {
+                const file = ArchivoSave.value[i]
+                const fileExt = file.name.split('.').pop()
+                const filePath = `${Math.random()}.${fileExt}`
+                let { error: uploadError } = await supabase.storage
+                    .from('max_imagenes')
+                    .upload(filePath, file)
+                if (uploadError) {
+                    alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
+                } else {
+                    await fetch('http://localhost:8000/productos/archivos/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id_producto: NewId,
+                            s3_key: filePath,
+                            nombre_original: file.name,
+                            tipo_contenido: fileExt,
+                            tamanio: file.size
+                        })
+                    })
+                }
+            }
+            uploading.value = false
+        }
+        NuevoProducto.value = {
+            nombre: "",
+            precio: "",
+            stock: "",
+            categoria: ""
+        }
+        LimpiarImagenes()
+        BusquedaProducto()
+        CerrarPopUp03()
+    }
+    const SumarCarrito = () => {
+        if (!ProductoActual.value)
+            return; 
+        const nuevoProducto = {
+            id_pedido: PedidoActual.value,
+            nombre_producto: ProductoActual.value.nombre,
+            id_producto: ProductoActual.value.id,
+            cantidad: ProductoCantidad.value,
+            precio_unitario: ProductoActual.value.precio,
+            stock_producto: ProductoActual.value.stock,
+            imagenes: ProductoActual.value.imagenes
+        }
+        let CarritoExistente = CarritoLocal.value.find(
+            (item_exitente) =>
+            item_exitente.id_producto === ProductoActual.value.id
+        )
+        if (CarritoExistente){
+            CarritoExistente.cantidad = ProductoCantidad.value + CarritoExistente.cantidad
+        } else {
+            CarritoLocal.value.push(nuevoProducto);
+        }
+        localStorage.setItem(
+            'carrito_pendiente',
+            JSON.stringify(
+                CarritoLocal.value
+            )
+        )
+        CerrarPopUp04()    
     }
 </script>

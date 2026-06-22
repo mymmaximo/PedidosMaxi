@@ -146,6 +146,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- Tabla de Historial de Precios -->
                 <div class="start !px-5">
                     <!-- Barra de Busqueda -->
                     <input
@@ -160,9 +161,7 @@
                     Historial de Pedidos
                     </h1>
                     <!-- Tabla de Historial de Precios -->
-                    <div
-                    v-if="Historial.length > 0"
-                    >
+                    <div v-if="Historial.length > 0">
                         <div
                         class="mb-2 lg:mb-5"
                         v-for= "i in Historial" 
@@ -260,21 +259,23 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref } from 'vue'
-    // ----- Variantes ----- //
-	const Busqueda = ref ("")
+    // ----- Variables Booleanas ----- //
+	const filtroAct = ref (false)
 	const FiltroCaja = ref (false)
 	const MostrarFiltro = ref (false)
-	const filtroAct = ref (false)
-	const fecha_upgrade_max = ref ("")
-	const fecha_upgrade_min = ref ("")
+    // ----- Variables Vacias ----- //
+    const Historial = ref([])
+	const Busqueda = ref ("")
+	const filtrocat = ref ("")
+	const bool_activo = ref ("")
+    const ListaCategoria = ref ("")
 	const precio_nuevo_max = ref ("")
 	const precio_nuevo_min = ref ("")
 	const precio_viejo_max = ref ("")
 	const precio_viejo_min = ref ("")
-    const ListaCategoria = ref ("")
-	const bool_activo = ref ("")
-	const filtrocat = ref ("")
-    const Historial = ref([])
+	const fecha_upgrade_max = ref ("")
+	const fecha_upgrade_min = ref ("")
+    // ----- Variables Simples ----- //
 	const Pagina = ref (0)
     // ----- Funciones Vue ----- //
     onMounted(async() => {
@@ -288,14 +289,38 @@
 		FiltroCaja.value = true
 		document.body.style.overflow = "hidden";
 	}
-	const CerrarPopUp01 = () => {
-		FiltroCaja.value = false
-		document.body.style.overflow = "auto";
-	}
     const AplicarFiltro = () => {
         BusquedaHistorial();
         CerrarPopUp01()
     }
+	const CerrarPopUp01 = () => {
+		FiltroCaja.value = false
+		document.body.style.overflow = "auto";
+	}
+    const Estatuscolor = (id_estatus) => {
+        if (id_estatus === true) {
+            return "si"
+        }
+        else if (id_estatus === false) {
+            return "no"
+        }
+    }
+    const Estatustxt = (id_estatus) => {
+        if (id_estatus === true) {
+            return "Activo"
+        }
+        else if (id_estatus === false) {
+            return "Eliminado"
+        }
+    }
+	const FormatoFecha = (fechai) => {
+		if (fechai) {
+			return new Date(fechai).toLocaleDateString('es-ES')
+		}
+		else {
+			return "Pendiente"
+		}
+	}
     const LimpiarFiltro = () => {
 		fecha_upgrade_max.value = ""
 		fecha_upgrade_min.value = ""
@@ -309,30 +334,6 @@
         CerrarPopUp01()
         filtroAct.value = true;            
     }
-    const Estatustxt = (id_estatus) => {
-        if (id_estatus === true) {
-            return "Activo"
-        }
-        else if (id_estatus === false) {
-            return "Eliminado"
-        }
-    }
-    const Estatuscolor = (id_estatus) => {
-        if (id_estatus === true) {
-            return "si"
-        }
-        else if (id_estatus === false) {
-            return "no"
-        }
-    }
-	const FormatoFecha = (fechai) => {
-		if (fechai) {
-			return new Date(fechai).toLocaleDateString('es-ES')
-		}
-		else {
-			return "Pendiente"
-		}
-	}
     // ----- Para el Backend ----- //
     const BusquedaHistorial = async() => {
         let url = new URL ('http://localhost:8000/historial/');
