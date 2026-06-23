@@ -638,177 +638,213 @@
                     </div>
                 </div>
                 <!-- Tabla de Productos -->
-                <div
-                class="start">
-                    <div class="px-5">
-                        <input
-                        @input="BusquedaProducto"
-                        type="text" 
-                        v-model="Busqueda" 
-                        placeholder="Busqueda..."
-                        class="busqueda"
-                        maxlength="50"
+                <div class="start">
+                    <div v-if="CargandoTrue" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh]"
+                    >
+                        <img 
+                        src="../assets/loading.gif" 
+                        alt="Cargando productos..." 
+                        class="w-32 h-32 object-contain mb-4"
                         >
-                        <div 
-                        v-if="Productos.length > 0"
-                        class="
-                        grid
-                        lg:grid-cols-3
-                        grid-cols-2
-                        gap-6"
+                        <h2 
+                        class="text-green-800 
+                        font-bold text-xl animate-pulse"
                         >
-                            <div 
-                            :class="Estatuscolor(i.activo)" 
-                            v-for= "i in Productos" 
-                            :key="i.id"
-                            @touchstart="ComienzoToque($event)"
-                            @touchend="FinToque($event, i)" 
-                            class="carta"
+                        Cargando productos, un momento...
+                        </h2>
+                    </div>
+                    <div v-else-if="ErrorCarga" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh] gap-4"
+                    >
+                        <h1 class="text-3xl font-bold text-red-600 text-center">
+                        ¡Ups! La conexión tardó demasiado 🔌
+                        </h1>
+                        <h2 class="text-xl text-gray-700 text-center px-4">
+                        El servidor no responde o tu conexión es inestable.
+                        </h2>
+                        <button 
+                        @click="CargarDatos" 
+                        class="botoncon mt-4"
+                        >
+                        🔄 Recargar Página
+                        </button>
+                    </div>
+                    <div v-else>
+                        <div class="px-5">
+                            <input
+                            @input="BusquedaProducto"
+                            type="text" 
+                            v-model="Busqueda" 
+                            placeholder="Busqueda..."
+                            class="busqueda"
+                            maxlength="50"
                             >
-                                <div>
-                                    <div 
-                                    v-if="i.imagenes.length > 0"
-                                    class="flex flex-row 
-                                    gap-3 overflow-x-auto
-                                    items-center justify-center 
-                                    w-full pb-2 snap-x
-                                    ">
-                                        <button
-                                        @click="BackImg(i)"
-                                        :disabled="GetImg(i.id) === 0"
-                                        class="botonflecha hidden md:flex"
-                                        >
-                                        🢀
-                                        </button>
-                                        <div>
-                                            <img
-                                            v-show="ImagenesCargando[i.id] === false"
-                                            :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
-                                            @load="ImagenesCargando[i.id] = false"
-                                            class="imagen"
+                            <div 
+                            v-if="Productos.length > 0"
+                            class="
+                            grid
+                            lg:grid-cols-3
+                            grid-cols-2
+                            gap-6"
+                            >
+                                <div 
+                                :class="Estatuscolor(i.activo)" 
+                                v-for= "i in Productos" 
+                                :key="i.id"
+                                @touchstart="ComienzoToque($event)"
+                                @touchend="FinToque($event, i)" 
+                                class="carta"
+                                >
+                                    <div>
+                                        <div 
+                                        v-if="i.imagenes.length > 0"
+                                        class="flex flex-row 
+                                        gap-3 overflow-x-auto
+                                        items-center justify-center 
+                                        w-full pb-2 snap-x
+                                        ">
+                                            <button
+                                            @click="BackImg(i)"
+                                            :disabled="GetImg(i.id) === 0"
+                                            class="botonflecha hidden md:flex"
                                             >
-                                            <div
-                                            v-if="ImagenesCargando[i.id] !== false" 
-                                            class="mt-2"
-                                            >
-                                                <img 
-                                                src="../assets/loading.gif" 
-                                                alt="Cargando..." 
-                                                class="imagen !2xl:p-15">
-                                            </div>
-                                        </div>
-                                        <button
-                                        @click="NextImg(i)"
-                                        :disabled="GetImg(i.id) === i.imagenes.length - 1"
-                                        class="botonflecha hidden md:flex"
-                                        >
-                                        🢂
-                                        </button>
-                                    </div>
-                                    <img
-                                    v-else
-                                    src="../assets/images.png"
-                                    class="imagen"
-                                    >
-                                    <div
-                                    >
-                                        <h2 class="font-bold">
-                                        {{ i.nombre }}
-                                        </h2>
-                                        <h3>
-                                        Categoria: 
-                                        {{ i.categoria }}
-                                        </h3>
-                                        <h2>
-                                        ${{ i.precio }}
-                                        </h2>
-                                        <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
-                                            <h3>
-                                            {{ i.codigo_barra }} <br>
-                                            Stock: 
-                                            {{ i.stock }}
-                                            </h3>
-                                        </div>
-                                        <div class="botones">
-                                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
-                                                <button 
-                                                @click="Edicion(i)" 
-                                                v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
-                                                class="botont !py-2">
-                                                ✏️
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Editar
-                                                </span>
-                                                </button>
-                                            </div>
-                                            <div 
-                                            v-if="Rol === '1' || Rol === '2'"
-                                            >
-                                                <button 
-                                                @click="Eliminacion(i)" 
-                                                v-if="i.activo" 
-                                                class="botonc !py-2"
-                                                >
-                                                ❌
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Eliminar
-                                                </span>
-                                                </button>
-                                                <button 
-                                                @click="Eliminacion(i)" 
-                                                v-else 
-                                                class="botoncon"
-                                                >
-                                                🕊️
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Reactivar
-                                                </span>
-                                                </button>
-                                            </div>
-                                            <button 
-                                            @click="Compracion(i)" 
-                                            :disabled="CarritoStock(i) === 0" 
-                                            class="botoncon !py-2 !text-2xl"
-                                            v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                            >
-                                            𖠩 
+                                            🢀
                                             </button>
+                                            <div>
+                                                <img
+                                                v-show="ImagenesCargando[i.id] === false"
+                                                :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                                @load="ImagenesCargando[i.id] = false"
+                                                class="imagen"
+                                                >
+                                                <div
+                                                v-if="ImagenesCargando[i.id] !== false" 
+                                                class="mt-2"
+                                                >
+                                                    <img 
+                                                    src="../assets/loading.gif" 
+                                                    alt="Cargando..." 
+                                                    class="imagen !2xl:p-15">
+                                                </div>
+                                            </div>
+                                            <button
+                                            @click="NextImg(i)"
+                                            :disabled="GetImg(i.id) === i.imagenes.length - 1"
+                                            class="botonflecha hidden md:flex"
+                                            >
+                                            🢂
+                                            </button>
+                                        </div>
+                                        <img
+                                        v-else
+                                        src="../assets/images.png"
+                                        class="imagen"
+                                        >
+                                        <div
+                                        >
+                                            <h2 class="font-bold truncate ">
+                                            {{ i.nombre }}
+                                            </h2>
+                                            <h3>
+                                            Categoria: 
+                                            {{ i.categoria }}
+                                            </h3>
+                                            <h2>
+                                            ${{ i.precio }}
+                                            </h2>
+                                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                <h3>
+                                                {{ i.codigo_barra }} <br>
+                                                Stock: 
+                                                {{ i.stock }}
+                                                </h3>
+                                            </div>
+                                            <div class="botones">
+                                                <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                    <button 
+                                                    @click="Edicion(i)" 
+                                                    v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                                    class="botont !py-2">
+                                                    ✏️
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Editar
+                                                    </span>
+                                                    </button>
+                                                </div>
+                                                <div 
+                                                v-if="Rol === '1' || Rol === '2'"
+                                                >
+                                                    <button 
+                                                    @click="Eliminacion(i)" 
+                                                    v-if="i.activo" 
+                                                    class="botonc !py-2"
+                                                    >
+                                                    ❌
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Eliminar
+                                                    </span>
+                                                    </button>
+                                                    <button 
+                                                    @click="Eliminacion(i)" 
+                                                    v-else 
+                                                    class="botoncon"
+                                                    >
+                                                    🕊️
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Reactivar
+                                                    </span>
+                                                    </button>
+                                                </div>
+                                                <button 
+                                                @click="Compracion(i)" 
+                                                :disabled="CarritoStock(i) === 0" 
+                                                class="botoncon !py-2 !text-2xl"
+                                                v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                                >
+                                                𖠩 
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div v-else>
-                            <h2>No se encontraron productos 😔</h2>
-                            <h3>Prueba buscando con otro termino</h3>
-                        </div>
-                        <div
-                        class="
-                        flex justify-center p-5
-                        ">
-                            <button 
-                            @click="Pagina = Pagina - 21 ; BusquedaProducto()" 
-                            :disabled="Pagina < 21"
-                            class="botona"
-                            >
-                            🢀
-                            </button>
-                            <h2
+                            <div v-else>
+                                <h2>No se encontraron productos 😔</h2>
+                                <h3>Prueba buscando con otro termino</h3>
+                            </div>
+                            <div
                             class="
-                            self-center p-5
+                            flex justify-center p-5
                             ">
-                            Items 
-                            {{ 0 + Pagina }} 
-                            - 
-                            {{ Pagina + Productos.length }}
-                            </h2>
-                            <button 
-                            @click="Pagina = Pagina + 21 ; BusquedaProducto()" 
-                            :disabled="Productos.length < 21"
-                            class="botona"
-                            >
-                            🢂
-                            </button>
+                                <button 
+                                @click="Pagina = Pagina - 21 ; BusquedaProducto()" 
+                                :disabled="Pagina < 21"
+                                class="botona"
+                                >
+                                🢀
+                                </button>
+                                <h2
+                                class="
+                                self-center p-5
+                                ">
+                                Items 
+                                {{ 0 + Pagina }} 
+                                - 
+                                {{ Pagina + Productos.length }}
+                                </h2>
+                                <button 
+                                @click="Pagina = Pagina + 21 ; BusquedaProducto()" 
+                                :disabled="Productos.length < 21"
+                                class="botona"
+                                >
+                                🢂
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -851,6 +887,8 @@
     const MostrarFiltro = ref (true)
     const MostrarNuevo = ref (false)
     const VentanaNuevo = ref (false)
+    const CargandoTrue = ref(true)
+    const ErrorCarga = ref(false)
     const uploading = ref (false)
     const filtroAct = ref (false)
     // ----- Variables Vacias ----- //
@@ -877,15 +915,39 @@
     // ----- Variables Temporales ----- //
     let inicioX = 0
     // ----- Funciones Vue ----- //
-    onMounted(async() => {
-        BusquedaProducto()
-        const respuesta = await fetch("http://localhost:8000/producto/categorias/")
-        const categ = await respuesta.json()
-        ListaCategoria.value = categ
-        const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
-        if (CarritoOlvidado) {
-            CarritoLocal.value = JSON.parse(CarritoOlvidado)
-            console.log("Carrito recuperado:", CarritoLocal.value)
+    onMounted (() => {
+        CargarDatos()
+    })
+    const CargarDatos = (async() => {
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        const temporizador = setTimeout(() => {
+            if (CargandoTrue.value) {
+                CargandoTrue.value = false
+                ErrorCarga.value = true
+                console.warn("Se agotó el tiempo de espera de la petición.")
+            }
+        }, 15000)
+        try {
+            BusquedaProducto()
+            const respuesta = await fetch("https://x1sjqnzh-8000.brs.devtunnels.ms/producto/categorias/")
+            const categ = await respuesta.json()
+            ListaCategoria.value = categ
+            const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
+            if (CarritoOlvidado) {
+                CarritoLocal.value = JSON.parse(CarritoOlvidado)
+                console.log("Carrito recuperado:", CarritoLocal.value)
+            }
+            clearTimeout(temporizador)
+        } catch (error) {
+            console.error("Error cargando la pagina:", error)
+            clearTimeout(temporizador)
+            ErrorCarga.value = true
+            CargandoTrue.value = false
+        } finally {
+            if (!ErrorCarga.value) {
+                CargandoTrue.value = false
+            }
         }
     })
     watch (ProductoCantidad, (NuevaCantidad) => {
@@ -933,6 +995,9 @@
             return faltandatos03 || faltandatos04
         }
     })
+    const RecargarPagina = () => {
+        window.location.reload()
+    }
     const emit = defineEmits([
         'upload',
         'update:path'
@@ -1126,7 +1191,7 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`http://localhost:8000/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1147,7 +1212,7 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`http://localhost:8000/productos/archivos/id/${id_img}`, {
+                await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/id/${id_img}`, {
                     method: 'DELETE'
                 })
             }
@@ -1161,7 +1226,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch('http://localhost:8000/productos/archivos/', {
+                    await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1182,7 +1247,7 @@
         }
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`http://localhost:8000/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -1202,7 +1267,7 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL ('http://localhost:8000/producto/');
+        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/producto/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value);
@@ -1266,7 +1331,7 @@
         const tokenGuardado = leerCookie("token");
         const ClienteGuardado = leerCookie("id_cliente");
         if (PedidoActual.value) {
-            const respuesta = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
+            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/detalles_pedido/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1286,7 +1351,7 @@
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch('http://localhost:8000/pedidos/', {
+            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1336,7 +1401,7 @@
         if (OpcionCategoria.value != "new") {
             NuevoProducto.value.categoria = OpcionCategoria.value
         }
-        const SubidaNuevoProducto = await fetch('http://localhost:8000/productos/', {
+        const SubidaNuevoProducto = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/productos/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1364,7 +1429,7 @@
                 if (uploadError) {
                     alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
                 } else {
-                    await fetch('http://localhost:8000/productos/archivos/', {
+                    await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

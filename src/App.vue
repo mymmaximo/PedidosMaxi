@@ -297,7 +297,7 @@
             </div>
         </div>
         <div v-else>
-            <Login @LoginExitoso="Iniciado = true"/>
+            <Login @LoginExitoso="ProcesarLogin"/>
         </div>
     </div>
 </template>
@@ -319,7 +319,8 @@
     const TablaActual = ref("")
     // ----- Funciones Vue ----- //
     onMounted(async() => {
-        if (route.path === '/') {
+        if (sessionStorage.getItem('recien_logueado') === 'true') {
+            sessionStorage.removeItem('recien_logueado')
             if (Rol.value === '3' || Rol.value === '6') {
                 router.push('/pedidos')
             } else {
@@ -327,6 +328,10 @@
             }
         }
     })
+    const ProcesarLogin = () => {
+        Iniciado.value = true
+        sessionStorage.setItem('recien_logueado', 'true')
+    }
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaLogout.value = true

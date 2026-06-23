@@ -148,107 +148,142 @@
                 </div>
                 <!-- Tabla de Historial de Precios -->
                 <div class="start !px-5">
-                    <!-- Barra de Busqueda -->
-                    <input
-                    @input="BusquedaHistorial"
-                    type="text" 
-                    v-model="Busqueda" 
-                    placeholder="Busqueda de Historial..."
-                    class="busqueda"
-                    maxlength="50"
+                    <div v-if="CargandoTrue" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh]"
                     >
-                    <h1 class="text-center">
-                    Historial de Pedidos
-                    </h1>
-                    <!-- Tabla de Historial de Precios -->
-                    <div v-if="Historial.length > 0">
-                        <div
-                        class="mb-2 lg:mb-5"
-                        v-for= "i in Historial" 
-                        :key="i.id">
-                            <div 
-                            :class="Estatuscolor(i.activo)"
-                            class="tab"
-                            >
-                                <div class="flex flex-col">
-                                    <div class="flex flex-row">
-                                        <h1>
-                                        {{ i.nombre }}
-                                        </h1>
-                                    </div>
+                        <img 
+                        src="../assets/loading.gif" 
+                        alt="Cargando historial de precios..." 
+                        class="w-32 h-32 object-contain mb-4"
+                        >
+                        <h2 
+                        class="text-green-800 
+                        font-bold text-xl animate-pulse"
+                        >
+                        Cargando historial de precios, un momento...
+                        </h2>
+                    </div>
+                    <div v-else-if="ErrorCarga" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh] gap-4"
+                    >
+                        <h1 class="text-3xl font-bold text-red-600 text-center">
+                        ¡Ups! La conexión tardó demasiado 🔌
+                        </h1>
+                        <h2 class="text-xl text-gray-700 text-center px-4">
+                        El servidor no responde o tu conexión es inestable.
+                        </h2>
+                        <button 
+                        @click="CargarDatos" 
+                        class="botoncon mt-4"
+                        >
+                        🔄 Recargar Página
+                        </button>
+                    </div>
+                    <div v-else>
+                        <!-- Barra de Busqueda -->
+                        <input
+                        @input="BusquedaHistorial"
+                        type="text" 
+                        v-model="Busqueda" 
+                        placeholder="Busqueda de Historial..."
+                        class="busqueda"
+                        maxlength="50"
+                        >
+                        <h1 class="text-center">
+                        Historial de Precios
+                        </h1>
+                        <!-- Tabla de Historial de Precios -->
+                        <div v-if="Historial.length > 0">
+                            <div
+                            class="mb-2 lg:mb-5"
+                            v-for= "i in Historial" 
+                            :key="i.id">
+                                <div 
+                                :class="Estatuscolor(i.activo)"
+                                class="tab"
+                                >
                                     <div class="flex flex-col">
+                                        <div class="flex flex-row">
+                                            <h1>
+                                            {{ i.nombre }}
+                                            </h1>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <h2>
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Categoria: 
+                                            </span>
+                                            {{ i.categoria }}
+                                            </h2>
+                                            <h2>
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Codigo de Barras: 
+                                            </span>
+                                            {{ i.codigo_barra }}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col ml-auto text-right items-end">
                                         <h2>
                                         <span class="hidden lg:inline 2xl:inline">
-                                        Categoria: 
+                                        Precio Viejo: 
                                         </span>
-                                        {{ i.categoria }}
+                                        {{ i.precio_viejo }}
                                         </h2>
                                         <h2>
                                         <span class="hidden lg:inline 2xl:inline">
-                                        Codigo de Barras: 
+                                        Precio Nuevo: 
                                         </span>
-                                        {{ i.codigo_barra }}
+                                        {{ i.precio_nuevo }}
+                                        </h2>
+                                        <h2>
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Fecha de Act: 
+                                        </span>
+                                        {{ FormatoFecha(i.updated_at) }}
                                         </h2>
                                     </div>
-                                </div>
-                                <div class="flex flex-col ml-auto text-right items-end">
-                                    <h2>
-                                    <span class="hidden lg:inline 2xl:inline">
-                                    Precio Viejo: 
-                                    </span>
-                                    {{ i.precio_viejo }}
-                                    </h2>
-                                    <h2>
-                                    <span class="hidden lg:inline 2xl:inline">
-                                    Precio Nuevo: 
-                                    </span>
-                                    {{ i.precio_nuevo }}
-                                    </h2>
-                                    <h2>
-                                    <span class="hidden lg:inline 2xl:inline">
-                                    Fecha de Act: 
-                                    </span>
-                                    {{ FormatoFecha(i.updated_at) }}
-                                    </h2>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div 
-                    v-else
-                    >
-                        <h2>
-                        No se encontraron Cambios en Precios
-                        </h2>
-                        <h3>
-                        Prueba buscando con otro termino
-                        </h3>
-                    </div>
-                    <div 
-                    class="
-                    flex justify-center
-                    p-3"
-                    >
-                        <button 
-                        @click="Pagina = Pagina - 20 ; BusquedaHistorial()" 
-                        :disabled="Pagina < 20"
-                        class="botona"
+                        <div v-else>
+                            <h2>
+                            No se encontraron Cambios en Precios
+                            </h2>
+                            <h3>
+                            Prueba buscando con otro termino
+                            </h3>
+                        </div>
+                        <div 
+                        class="
+                        flex justify-center
+                        p-3"
                         >
-                        🢀
-                        </button>
-                        <h2 class="item">
-                        Items 
-                        {{ 0 + Pagina }}
-                        - 
-                        {{ Pagina + Historial.length }}
-                        </h2>
-                        <button 
-                        @click="Pagina = Pagina + 20 ; BusquedaHistorial()" 
-                        :disabled="Historial.length < 20"
-                        class="botona"
-                        >
-                        🢂
-                        </button>
+                            <button 
+                            @click="Pagina = Pagina - 20 ; BusquedaHistorial()" 
+                            :disabled="Pagina < 20"
+                            class="botona"
+                            >
+                            🢀
+                            </button>
+                            <h2 class="item">
+                            Items 
+                            {{ 0 + Pagina }}
+                            - 
+                            {{ Pagina + Historial.length }}
+                            </h2>
+                            <button 
+                            @click="Pagina = Pagina + 20 ; BusquedaHistorial()" 
+                            :disabled="Historial.length < 20"
+                            class="botona"
+                            >
+                            🢂
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -261,6 +296,8 @@
     import { onMounted, ref } from 'vue'
     // ----- Variables Booleanas ----- //
 	const filtroAct = ref (false)
+    const ErrorCarga = ref(false)
+    const CargandoTrue = ref(true)
 	const FiltroCaja = ref (false)
 	const MostrarFiltro = ref (false)
     // ----- Variables Vacias ----- //
@@ -278,12 +315,39 @@
     // ----- Variables Simples ----- //
 	const Pagina = ref (0)
     // ----- Funciones Vue ----- //
-    onMounted(async() => {
-        BusquedaHistorial()
-        const respuesta = await fetch("http://localhost:8000/producto/categorias/")
-        const categ = await respuesta.json()
-        ListaCategoria.value = categ
+    onMounted (() => {
+        CargarDatos()
+    })
+    const CargarDatos = (async() => {
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        const temporizador = setTimeout(() => {
+            if (CargandoTrue.value) {
+                CargandoTrue.value = false
+                ErrorCarga.value = true
+                console.warn("Se agotó el tiempo de espera de la petición.")
+            }
+        }, 15000)
+        try {
+            BusquedaHistorial()
+            const respuesta = await fetch("https://x1sjqnzh-8000.brs.devtunnels.ms/producto/categorias/")
+            const categ = await respuesta.json()
+            ListaCategoria.value = categ
+            clearTimeout(temporizador)
+        } catch (error) {
+            console.error("Error cargando la pagina:", error)
+            clearTimeout(temporizador)
+            ErrorCarga.value = true
+            CargandoTrue.value = false
+        } finally {
+            if (!ErrorCarga.value) {
+                CargandoTrue.value = false
+            }
+        }
 	})
+    const RecargarPagina = () => {
+        window.location.reload()
+    }
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		FiltroCaja.value = true
@@ -336,7 +400,7 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaHistorial = async() => {
-        let url = new URL ('http://localhost:8000/historial/');
+        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/historial/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value);

@@ -197,124 +197,161 @@
             <div class="flex w-full flex-col lg:flex-row">
                 <!-- Tabla de Detalles -->
                 <div class="start">
-                    <h1>
-                    Tu Carrito
-                    </h1>
-                    <div class="flex flex-row 
-                                    gap-3 justify-evenly">
-                        <div class="mr-10 ml-5 sm:mr-50 md:mr-70  lg:mr-90  xl:mr-110  2xl:mr-130">
-                            <h2>
-                            Producto
-                            </h2>
-                        </div>
-                        <div class="flex gap-1 sm:gap-20 md:gap-25 lg:gap-35 xl:gap-48 2xl:gap-50 mr-20">
-                            <h2>
-                            Precio
-                            </h2>
-                            <h2>
-                            Cantidad
-                            </h2>
-                            <h2>
-                            Subtotal
-                            </h2>   
-                            <h2>
-                            Borrar
-                            </h2>   
-                        </div>
-                    </div>
-                    <div v-if="CarritoLocal.length > 0">
-                        <div
-                        class="mb-2 lg:mb-5"
-                        v-for="(item, index) in CarritoLocal" 
-                        :key="index"
+                    <div v-if="CargandoTrue" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh]"
+                    >
+                        <img 
+                        src="../assets/loading.gif" 
+                        alt="Cargando carrito..." 
+                        class="w-32 h-32 object-contain mb-4"
                         >
-                            <div class="tab bg-green-500/30">
-                                <div class="flex-1 hidden sm:flex justify-center items-center min-w-0">
-                                    <div 
-                                    v-if="item.imagenes && item.imagenes.length > 0"
-                                    class="flex flex-row 
-                                    gap-3 justify-evenly
-                                    ">
-                                        <button
-                                        @click="BackImg(item)"
-                                        :disabled="GetImg(item.id_producto) === 0"
-                                        class="
-                                        botonflecha"
-                                        >
-                                        🢀
-                                        </button>
-                                        <img
-                                        :key="item.imagenes[GetImg(item.id_producto)].s3_key"
-                                        :src=ObtenerImgUrl(item.imagenes[GetImg(item.id_producto)].s3_key)
-                                        class="imagencar"
-                                        >
-                                        <button
-                                        @click="NextImg(item)"
-                                        :disabled="GetImg(item.id_producto) === item.imagenes.length - 1"
-                                        class="botonflecha"
-                                        >
-                                        🢂
-                                        </button>
-                                    </div>
-                                    <img
-                                    v-else
-                                    src="../assets/images.png"
-                                    class="imagen"
-                                    >
-                                </div>
-                                <div class="flex-1 flex items-center min-w-0">
-                                    <div class="flex flex-row">
-                                        <h1>
-                                        {{ item.nombre_producto }}
-                                        </h1>
-                                    </div>
-                                </div>
-                                <div class="flex-1 flex justify-center items-center min-w-0">
-                                    <h2>
-                                    ${{ item.precio_unitario }}
-                                    </h2>
-                                </div>
-                                <div class="flex-1 flex justify-center items-center min-w-0">
-                                    <input 
-                                    type="number"
-                                    v-model="item.cantidad"
-                                    @change="VerificarStock(item)" 
-                                    class="
-                                    max-w-20
-                                    lg:max-w-100
-                                    2xl:max-w-200"
-                                    >
-                                </div>
-                                <div class="flex-1 flex justify-center items-center min-w-0">
-                                    <h2 class="font-bold">
-                                    ${{ item.cantidad * item.precio_unitario }}
-                                    </h2>
-                                </div>
-                                <div class="flex-1 flex justify-center items-center min-w-0">
-                                    <button @click="Eliminacion(index)" class="text-2xl">
-                                    🗑️
-                                    </button>
-                                </div>
+                        <h2 
+                        class="text-green-800 
+                        font-bold text-xl animate-pulse"
+                        >
+                        Cargando carrito, un momento...
+                        </h2>
+                    </div>
+                    <div v-else-if="ErrorCarga" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh] gap-4"
+                    >
+                        <h1 class="text-3xl font-bold text-red-600 text-center">
+                        ¡Ups! La conexión tardó demasiado 🔌
+                        </h1>
+                        <h2 class="text-xl text-gray-700 text-center px-4">
+                        El servidor no responde o tu conexión es inestable.
+                        </h2>
+                        <button 
+                        @click="CargarDatos" 
+                        class="botoncon mt-4"
+                        >
+                        🔄 Recargar Página
+                        </button>
+                    </div>
+                    <div v-else>
+                        <h1>
+                        Tu Carrito
+                        </h1>
+                        <div class="flex flex-row 
+                        gap-3 justify-evenly">
+                            <div class="mr-10 ml-5 sm:mr-50 md:mr-70  lg:mr-90  xl:mr-110  2xl:mr-130">
+                                <h2>
+                                Producto
+                                </h2>
+                            </div>
+                            <div class="flex gap-1 sm:gap-20 md:gap-25 lg:gap-35 xl:gap-48 2xl:gap-50 mr-20">
+                                <h2>
+                                Precio
+                                </h2>
+                                <h2>
+                                Cantidad
+                                </h2>
+                                <h2>
+                                Subtotal
+                                </h2>   
+                                <h2>
+                                Borrar
+                                </h2>   
                             </div>
                         </div>
-                        <div class="botones">
-                            <h1
-                            class="
-                            place-self-center
-                            text-center
-                            bg-green-100 
-                            border-green-500 rounded-2xl border-4
-                            my-1
-                            lg:my-3
-                            2xl:my-5"
+                        <div v-if="CarritoLocal.length > 0">
+                            <div
+                            class="mb-2 lg:mb-5"
+                            v-for="(item, index) in CarritoLocal" 
+                            :key="index"
                             >
-                            Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
-                            </h1>
-                            <button 
-                            @click="PantallaPagar = true"
-                            class="botoncon">
-                            Completar Pedido
-                            </button>
+                                <div class="tab bg-green-500/30">
+                                    <div class="flex-1 hidden sm:flex justify-center items-center min-w-0">
+                                        <div 
+                                        v-if="item.imagenes && item.imagenes.length > 0"
+                                        class="flex flex-row 
+                                        gap-3 justify-evenly
+                                        ">
+                                            <button
+                                            @click="BackImg(item)"
+                                            :disabled="GetImg(item.id_producto) === 0"
+                                            class="
+                                            botonflecha"
+                                            >
+                                            🢀
+                                            </button>
+                                            <img
+                                            :key="item.imagenes[GetImg(item.id_producto)].s3_key"
+                                            :src=ObtenerImgUrl(item.imagenes[GetImg(item.id_producto)].s3_key)
+                                            class="imagencar"
+                                            >
+                                            <button
+                                            @click="NextImg(item)"
+                                            :disabled="GetImg(item.id_producto) === item.imagenes.length - 1"
+                                            class="botonflecha"
+                                            >
+                                            🢂
+                                            </button>
+                                        </div>
+                                        <img
+                                        v-else
+                                        src="../assets/images.png"
+                                        class="imagen"
+                                        >
+                                    </div>
+                                    <div class="flex-1 flex items-center min-w-0">
+                                        <div class="flex flex-row">
+                                            <h1>
+                                            {{ item.nombre_producto }}
+                                            </h1>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 flex justify-center items-center min-w-0">
+                                        <h2>
+                                        ${{ item.precio_unitario }}
+                                        </h2>
+                                    </div>
+                                    <div class="flex-1 flex justify-center items-center min-w-0">
+                                        <input 
+                                        type="number"
+                                        v-model="item.cantidad"
+                                        @change="VerificarStock(item)" 
+                                        class="
+                                        max-w-20
+                                        lg:max-w-100
+                                        2xl:max-w-200"
+                                        >
+                                    </div>
+                                    <div class="flex-1 flex justify-center items-center min-w-0">
+                                        <h2 class="font-bold">
+                                        ${{ item.cantidad * item.precio_unitario }}
+                                        </h2>
+                                    </div>
+                                    <div class="flex-1 flex justify-center items-center min-w-0">
+                                        <button @click="Eliminacion(index)" class="text-2xl">
+                                        🗑️
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="botones">
+                                <h1
+                                class="
+                                place-self-center
+                                text-center
+                                bg-green-100 
+                                border-green-500 rounded-2xl border-4
+                                my-1
+                                lg:my-3
+                                2xl:my-5"
+                                >
+                                Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
+                                </h1>
+                                <button 
+                                @click="PantallaPagar = true"
+                                class="botoncon">
+                                Completar Pedido
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -338,6 +375,8 @@
     })
     const idClienteCarrito = leerCookie("id_cliente")
     // ----- Variables Booleanas ----- //
+    const ErrorCarga = ref(false)
+    const CargandoTrue = ref(true)
     const PantallaPagar = ref (false)
     const ActualizarCarritoDel = ref(false)
     // ----- Variables Vacias ----- //
@@ -347,12 +386,39 @@
     const ListaDirecciones = ref([])
     const DireccionExistente = ref ("")
     // ----- Funciones Vue ----- //
-    onMounted(async() => {
-        const respuesta = await fetch(`http://localhost:8000/cliente/${idClienteCarrito}/direcciones`)
-        const datos = await respuesta.json();
-        ListaDirecciones.value = datos;
+    onMounted (() => {
+        CargarDatos()
+    })
+    const CargarDatos = (async() => {
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        const temporizador = setTimeout(() => {
+            if (CargandoTrue.value) {
+                CargandoTrue.value = false
+                ErrorCarga.value = true
+                console.warn("Se agotó el tiempo de espera de la petición.")
+            }
+        }, 15000)
+        try {
+            const respuesta = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/cliente/${idClienteCarrito}/direcciones/`)
+            const datos = await respuesta.json();
+            ListaDirecciones.value = datos;
+            clearTimeout(temporizador)
+        } catch (error) {
+            console.error("Error cargando la pagina:", error)
+            clearTimeout(temporizador)
+            ErrorCarga.value = true
+            CargandoTrue.value = false
+        } finally {
+            if (!ErrorCarga.value) {
+                CargandoTrue.value = false
+            }
+        }
     })
     const confirboton = computed(() =>{
+        if (Rol.value && Rol.value !== "") {
+            return true
+        }
         if (MetodoPago.value === "") {
             return true
         }
@@ -368,6 +434,9 @@
         }}
         return false
     })
+    const RecargarPagina = () => {
+        window.location.reload()
+    }
     const emit = defineEmits([
         'CarritoVacio'
     ])
@@ -420,7 +489,7 @@
             DireccionPedido = DireccionExistente.value
         } else {
             DireccionPedido = NuevaDireccion.value
-            const SubidaNuevaDireccion = await fetch('http://localhost:8000/direcciones/', {
+            const SubidaNuevaDireccion = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/direcciones/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -430,7 +499,7 @@
             const datos = await SubidaNuevaDireccion.json()
             DireccionPedido = datos.id
         }
-        const SubidaNuevoPedido = await fetch('http://localhost:8000/pedidos/', {
+        const SubidaNuevoPedido = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -457,7 +526,7 @@
                 precio_unitario: item.precio_unitario
             }
         })
-        const SubidaNuevoDetalle = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
+        const SubidaNuevoDetalle = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/detalles_pedido/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

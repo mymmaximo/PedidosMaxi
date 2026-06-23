@@ -357,123 +357,160 @@
                     </div>
                 </div>
                 <div class="start !px-5">
-                    <!-- Barra de Busqueda -->
-                    <input
-                    @input="BusquedaUsuario"
-                    type="text" v-model="Busqueda" 
-                    placeholder="Busqueda de Usuarios..."
-                    class="busqueda"
-                    maxlength="50"
+                    <div v-if="CargandoTrue" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh]"
                     >
-                    <h1 class="text-center">
-                    Usuarios
-                    </h1>
-                    <div
-                    v-if="usuarios.length > 0"
+                        <img 
+                        src="../assets/loading.gif" 
+                        alt="Cargando usuarios..." 
+                        class="w-32 h-32 object-contain mb-4"
+                        >
+                        <h2 
+                        class="text-green-800 
+                        font-bold text-xl animate-pulse"
+                        >
+                        Cargando usuarios, un momento...
+                        </h2>
+                    </div>
+                    <div v-else-if="ErrorCarga" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh] gap-4"
                     >
+                        <h1 class="text-3xl font-bold text-red-600 text-center">
+                        ¡Ups! La conexión tardó demasiado 🔌
+                        </h1>
+                        <h2 class="text-xl text-gray-700 text-center px-4">
+                        El servidor no responde o tu conexión es inestable.
+                        </h2>
+                        <button 
+                        @click="CargarDatos" 
+                        class="botoncon mt-4"
+                        >
+                        🔄 Recargar Página
+                        </button>
+                    </div>
+                    <div v-else>
+                        <!-- Barra de Busqueda -->
+                        <input
+                        @input="BusquedaUsuario"
+                        type="text" v-model="Busqueda" 
+                        placeholder="Busqueda de Usuarios..."
+                        class="busqueda"
+                        maxlength="50"
+                        >
+                        <h1 class="text-center">
+                        Usuarios
+                        </h1>
                         <div
-                        class="mb-2 lg:mb-5"
-                        v-for= "i in usuarios" 
-                        :key="i.id">
-                            <div 
-                            :class="Rolcolor(i.id_rol)"
-                            class="tab"
-                            >
-                                <div class="flex flex-col">
-                                    <div class="flex flex-row">
-                                        <h1>
-                                        {{ i.nombre }} ({{ Roltxt(i.id_rol) }})
-                                        </h1>
-                                    </div>
+                        v-if="usuarios.length > 0"
+                        >
+                            <div
+                            class="mb-2 lg:mb-5"
+                            v-for= "i in usuarios" 
+                            :key="i.id">
+                                <div 
+                                :class="Rolcolor(i.id_rol)"
+                                class="tab"
+                                >
                                     <div class="flex flex-col">
-                                        <h2>
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        E-Mail: 
-                                        </span>
-                                        {{ i.email }}
-                                        </h2>
-                                        <h2>
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        DNI: 
-                                        </span>
-                                        {{ i.dni }}
-                                        </h2>
-                                        <h2>
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Estatus: 
-                                        </span>
-                                        {{ Estatustxt(i.activo) }}
-                                        </h2>
+                                        <div class="flex flex-row">
+                                            <h1>
+                                            {{ i.nombre }} ({{ Roltxt(i.id_rol) }})
+                                            </h1>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <h2>
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            E-Mail: 
+                                            </span>
+                                            {{ i.email }}
+                                            </h2>
+                                            <h2>
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            DNI: 
+                                            </span>
+                                            {{ i.dni }}
+                                            </h2>
+                                            <h2>
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Estatus: 
+                                            </span>
+                                            {{ Estatustxt(i.activo) }}
+                                            </h2>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="flex flex-col ml-auto text-right items-end">
-                                    <button 
-                                    @click="Eliminacion(i)" 
-                                    v-if="i.activo"
-                                    class="botonc !p-2"
-                                    >
-                                    ❌
-                                    <span class="hidden lg:inline 2xl:inline">
-                                    Eliminar
-                                    </span>
-                                    </button>
-                                    <button 
-                                    @click="Eliminacion(i)" 
-                                    v-else
-                                    class="botoncon !p-2"
-                                    >
-                                    🕊️
-                                    <span class="hidden lg:inline 2xl:inline">
-                                    Reactivar
-                                    </span>
-                                    </button>
-                                    <button 
-                                    @click="Edicion(i)"
-                                    class="botont !p-2"
-                                    >
-                                    ✏️
-                                    <span class="hidden lg:inline 2xl:inline">
-                                    Editar
-                                    </span>
-                                    </button>
+                                    <div class="flex flex-col ml-auto text-right items-end">
+                                        <button 
+                                        @click="Eliminacion(i)" 
+                                        v-if="i.activo"
+                                        class="botonc !p-2"
+                                        >
+                                        ❌
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Eliminar
+                                        </span>
+                                        </button>
+                                        <button 
+                                        @click="Eliminacion(i)" 
+                                        v-else
+                                        class="botoncon !p-2"
+                                        >
+                                        🕊️
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Reactivar
+                                        </span>
+                                        </button>
+                                        <button 
+                                        @click="Edicion(i)"
+                                        class="botont !p-2"
+                                        >
+                                        ✏️
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Editar
+                                        </span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+                        </div>  
+                        <div 
+                        v-else>
+                            <h2>
+                            No se encontraran usuarios 😔
+                            </h2>
+                            <h3>
+                            Prueba buscando con otro termino
+                            </h3>
                         </div>
-                    </div>  
-                    <div 
-                    v-else>
-                        <h2>
-                        No se encontraran usuarios 😔
-                        </h2>
-                        <h3>
-                        Prueba buscando con otro termino
-                        </h3>
-                    </div>
-                    <div 
-                    class="
-                    flex justify-center
-                    p-3"
-                    >
-                        <button 
-                        @click="Pagina = Pagina - 20 ; BusquedaUsuario()" 
-                        :disabled="Pagina < 20"
-                        class="botona"
+                        <div 
+                        class="
+                        flex justify-center
+                        p-3"
                         >
-                        🢀
-                        </button>
-                        <h2 class="item">
-                        Items 
-                        {{ 0 + Pagina }} 
-                        - 
-                        {{ Pagina + usuarios.length }}
-                        </h2>
-                        <button 
-                        @click="Pagina = Pagina + 20 ; BusquedaUsuario()" 
-                        :disabled="usuarios.length < 20"
-                        class="botona"
-                        >
-                        🢂
-                        </button>
+                            <button 
+                            @click="Pagina = Pagina - 20 ; BusquedaUsuario()" 
+                            :disabled="Pagina < 20"
+                            class="botona"
+                            >
+                            🢀
+                            </button>
+                            <h2 class="item">
+                            Items 
+                            {{ 0 + Pagina }} 
+                            - 
+                            {{ Pagina + usuarios.length }}
+                            </h2>
+                            <button 
+                            @click="Pagina = Pagina + 20 ; BusquedaUsuario()" 
+                            :disabled="usuarios.length < 20"
+                            class="botona"
+                            >
+                            🢂
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -501,6 +538,8 @@
         id_rol: ""
     })
     // ----- Variables Booleanas ----- //
+    const ErrorCarga = ref(false)
+    const CargandoTrue = ref(true)
     const MostrarNuevo = ref(false)
     const VentanaFiltro = ref(false)
     const MostrarFiltro = ref(false)
@@ -515,8 +554,32 @@
     const filtroEst = ref(2)
     const filtroAct = ref(false)
     // ----- Funciones Vue ----- //
-    onMounted(async() => {
-        BusquedaUsuario()
+    onMounted (() => {
+        CargarDatos()
+    })
+    const CargarDatos = (async() => {
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        const temporizador = setTimeout(() => {
+            if (CargandoTrue.value) {
+                CargandoTrue.value = false
+                ErrorCarga.value = true
+                console.warn("Se agotó el tiempo de espera de la petición.")
+            }
+        }, 15000)
+        try {
+            BusquedaUsuario()
+            clearTimeout(temporizador)
+        } catch (error) {
+            console.error("Error cargando la pagina:", error)
+            clearTimeout(temporizador)
+            ErrorCarga.value = true
+            CargandoTrue.value = false
+        } finally {
+            if (!ErrorCarga.value) {
+                CargandoTrue.value = false
+            }
+        }
     })
     const confirboton = computed(() =>{
         if (ActualizarUNew.value) {
@@ -534,6 +597,9 @@
             return faltandatos02
         }
     })
+    const RecargarPagina = () => {
+        window.location.reload()
+    }
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		VentanaFiltro.value = true
@@ -660,7 +726,7 @@
         if (UsuarioAct.value.id_rol !== "") {
             UsuarioUpd.id_rol = UsuarioAct.value.id_rol
         }
-        const ActUsuario = await fetch(`http://localhost:8000/usuarios/id/${UsuarioAct.value.id}`, {
+        const ActUsuario = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/usuarios/id/${UsuarioAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -685,7 +751,7 @@
         CerrarPopUp03()
     }
     const BorrarUsuario = async() => {
-        const EraseCliente = await fetch(`http://localhost:8000/usuarios/id/${UsuarioEli.value}`, {
+        const EraseCliente = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/usuarios/id/${UsuarioEli.value}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -701,7 +767,7 @@
         CerrarPopUp02()
     }
     const BusquedaUsuario = async() => {
-        let url = new URL ('http://localhost:8000/usuarios/');
+        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/usuarios/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_usuario', Busqueda.value)
@@ -719,7 +785,7 @@
         usuarios.value = datos;
     }
     const SubirNuevoUsuario = async() => {
-        const SubidaNuevoUsuario = await fetch('http://localhost:8000/usuarios/', {
+        const SubidaNuevoUsuario = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/usuarios/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

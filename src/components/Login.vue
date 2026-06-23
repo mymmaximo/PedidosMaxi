@@ -4,164 +4,201 @@
         v-if="!SesionIniciada"
         class="pagina !md:items-center"
         >
-            <!-- Iniciar Sesion -->
-            <div 
-            v-if="MostrarLogin"
-            class="troncodentro"
+            <div v-if="CargandoTrue" 
+            class="flex flex-col 
+            items-center justify-center 
+            w-full h-[60vh]"
             >
-                <form 
-                @submit.prevent="IniciarSesionUsuario" 
-                class="popup"
+                <img 
+                src="../assets/loading.gif" 
+                alt="Cargando pagina..." 
+                class="w-32 h-32 object-contain mb-4"
                 >
-                    <h4 class="text-center">
-                    Iniciar Sesion
-                    </h4>
-                    <h2>
-                    Ingresa tu E-Mail
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="LoginBox.email" 
-                    placeholder="Email"
-                    :class="{'!border-red-500' : Heror === true}"
+                <h2 
+                class="text-green-800 
+                font-bold text-xl animate-pulse"
+                >
+                Cargando pagina, un momento...
+                </h2>
+            </div>
+            <div v-else-if="ErrorCarga" 
+            class="flex flex-col 
+            items-center justify-center 
+            w-full h-[60vh] gap-4"
+            >
+                <h1 class="text-3xl font-bold text-red-600 text-center">
+                ¡Ups! La conexión tardó demasiado 🔌
+                </h1>
+                <h2 class="text-xl text-gray-700 text-center px-4">
+                El servidor no responde o tu conexión es inestable.
+                </h2>
+                <button 
+                @click="CargarDatos" 
+                class="botoncon mt-4"
+                >
+                🔄 Recargar Página
+                </button>
+            </div>
+            <div v-else>
+                <!-- Iniciar Sesion -->
+                <div 
+                v-if="MostrarLogin"
+                class="troncodentro"
+                >
+                    <form 
+                    @submit.prevent="IniciarSesionUsuario" 
+                    class="popup"
                     >
-                    <h2>
-                    Ingresa tu Contraseña
-                    </h2>
-                    <div class="flex">
+                        <h4 class="text-center">
+                        Iniciar Sesion
+                        </h4>
+                        <h2>
+                        Ingresa tu E-Mail
+                        </h2>
                         <input 
-                        :type="verContrasena ? 'text' : 'password'"
-                        v-model="LoginBox.contrasena" 
-                        placeholder="Contraseña"
+                        type="text" 
+                        v-model="LoginBox.email" 
+                        placeholder="Email"
                         :class="{'!border-red-500' : Heror === true}"
                         >
-                        <button 
-                        type="button" 
-                        @click="verContrasena = !verContrasena"
-                        class="botont !p-1"
-                        >
-                        {{ verContrasena ? '🔒' : '👁️' }}
-                        </button>
-                    </div>
-                    <div class="botones">
-                        <button 
-                        type="submit" 
-                        class="botoncon">
-                        Iniciar Sesion
-                        </button>
-                    </div>
-                    <h4 
-                    v-if="Heror"
-                    class="botonc">
-                    {{ Herror }}
-                    </h4>
-                    <h2 class="text-center">
-                    ¿No Tienes Cuenta?
-                    </h2>
-                    <div class="botones">
-                        <button 
-                        type="button" 
-                        @click="MostrarLogin = false; Heror = false"
-                        class="botont"
-                        >
-                        Registrate
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <!-- Registrarse -->
-            <div v-else>
-                <form 
-                @submit.prevent="SubirNuevoCliente" 
-                class="troncodentro">
-                    <h4 class="text-center">
-                    Registrarse
-                    </h4>
-                    <h3>
-                    Ingresa tu E-Mail
-                    </h3>
-                    <input
-                    type="text" 
-                    v-model="NuevoCliente.email" 
-                    placeholder="E-Mail"
-                    >
-                    <h3>
-                    Ingresa tu Contraseña
-                    </h3>
-                    <div class="flex">
-                        <input 
-                        :type="verContrasena ? 'text' : 'password'"
-                        v-model="NuevoCliente.contrasena" 
-                        placeholder="Contraseña"
-                        >
-                        <button 
-                        type="button" 
-                        @click="verContrasena = !verContrasena"
-                        class="botont !p-1"
-                        >
-                        {{ verContrasena ? '🔒' : '👁️' }}
-                        </button>
-                    </div>
-                    <h3>
-                    Confirmar Contraseña
-                    </h3>
-                    <div class="flex">
-                        <input 
-                        :type="verConContrasena ? 'text' : 'password'"
-                        v-model="NuevoCliente.concontrasena" 
-                        placeholder="Confirmar Contraseña"
-                        >
-                        <button 
-                        type="button" 
-                        @click="verConContrasena = !verConContrasena"
-                        class="botont !p-1"
-                        >
-                        {{ verConContrasena ? '🔒' : '👁️' }}
-                        </button>
-                    </div>
-                    <h3>
-                    Ingresa tu Nombre
-                    </h3>
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.nombre" 
-                    placeholder="Nombre"
-                    >
-                    <h3>
-                    Ingresa tu DNI
-                    </h3>
-                    <input 
-                    type="text" 
-                    v-model="NuevoCliente.dni" 
-                    placeholder="DNI"
-                    >
-                    <div class="botones">
-                        <button 
-                        type="submit" 
-                                :disabled="confirboton" 
-                        class="botoncon"
-                        >
-                        Registrarte
-                        </button>
-                    </div>
-                    <h2 
-                    v-if="Heror"
-                    class="text-red-500">
-                    {{ Herror }}
-                    </h2>
-                    <div class="botones">
+                        <h2>
+                        Ingresa tu Contraseña
+                        </h2>
+                        <div class="flex">
+                            <input 
+                            :type="verContrasena ? 'text' : 'password'"
+                            v-model="LoginBox.contrasena" 
+                            placeholder="Contraseña"
+                            :class="{'!border-red-500' : Heror === true}"
+                            >
+                            <button 
+                            type="button" 
+                            @click="verContrasena = !verContrasena"
+                            class="botont !p-1"
+                            >
+                            {{ verContrasena ? '🔒' : '👁️' }}
+                            </button>
+                        </div>
+                        <div class="botones">
+                            <button 
+                            type="submit" 
+                            class="botoncon">
+                            Iniciar Sesion
+                            </button>
+                        </div>
+                        <h4 
+                        v-if="Heror"
+                        class="botonc">
+                        {{ Herror }}
+                        </h4>
+                        <h2 class="text-center">
+                        ¿No Tienes Cuenta?
+                        </h2>
+                        <div class="botones">
+                            <button 
+                            type="button" 
+                            @click="MostrarLogin = false; Heror = false"
+                            class="botont"
+                            >
+                            Registrate
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Registrarse -->
+                <div v-else>
+                    <form 
+                    @submit.prevent="SubirNuevoCliente" 
+                    class="troncodentro">
+                        <h4 class="text-center">
+                        Registrarse
+                        </h4>
                         <h3>
-                        ¿Ya Tienes Cuenta?
+                        Ingresa tu E-Mail
                         </h3>
-                        <button 
-                        type="button" 
-                        @click="MostrarLogin = true; Heror = false"
-                        class="botont !p-1"
+                        <input
+                        type="text" 
+                        v-model="NuevoCliente.email" 
+                        placeholder="E-Mail"
                         >
-                        Iniciar Sesion
-                        </button>
-                    </div>
-                </form>
+                        <h3>
+                        Ingresa tu Contraseña
+                        </h3>
+                        <div class="flex">
+                            <input 
+                            :type="verContrasena ? 'text' : 'password'"
+                            v-model="NuevoCliente.contrasena" 
+                            placeholder="Contraseña"
+                            >
+                            <button 
+                            type="button" 
+                            @click="verContrasena = !verContrasena"
+                            class="botont !p-1"
+                            >
+                            {{ verContrasena ? '🔒' : '👁️' }}
+                            </button>
+                        </div>
+                        <h3>
+                        Confirmar Contraseña
+                        </h3>
+                        <div class="flex">
+                            <input 
+                            :type="verConContrasena ? 'text' : 'password'"
+                            v-model="NuevoCliente.concontrasena" 
+                            placeholder="Confirmar Contraseña"
+                            >
+                            <button 
+                            type="button" 
+                            @click="verConContrasena = !verConContrasena"
+                            class="botont !p-1"
+                            >
+                            {{ verConContrasena ? '🔒' : '👁️' }}
+                            </button>
+                        </div>
+                        <h3>
+                        Ingresa tu Nombre
+                        </h3>
+                        <input 
+                        type="text" 
+                        v-model="NuevoCliente.nombre" 
+                        placeholder="Nombre"
+                        >
+                        <h3>
+                        Ingresa tu DNI
+                        </h3>
+                        <input 
+                        type="text" 
+                        v-model="NuevoCliente.dni" 
+                        placeholder="DNI"
+                        >
+                        <div class="botones">
+                            <button 
+                            type="submit" 
+                                    :disabled="confirboton" 
+                            class="botoncon"
+                            >
+                            Registrarte
+                            </button>
+                        </div>
+                        <h2 
+                        v-if="Heror"
+                        class="text-red-500">
+                        {{ Herror }}
+                        </h2>
+                        <div class="botones">
+                            <h3>
+                            ¿Ya Tienes Cuenta?
+                            </h3>
+                            <button 
+                            type="button" 
+                            @click="MostrarLogin = true; Heror = false"
+                            class="botont !p-1"
+                            >
+                            Iniciar Sesion
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <div v-else>
@@ -190,16 +227,42 @@
     })
     // ----- Variantes Booleanas ----- //
     const Heror = ref(false)
+    const ErrorCarga = ref(false)
+    const CargandoTrue = ref(true)
     const MostrarLogin = ref(true)
     const verContrasena = ref(false)
     const SesionIniciada = ref(false)
     // ----- Variantes Vacias ----- //
     const Herror = ref("")
     // ----- Funciones Vue ----- //
-    onMounted(() => {
-        const tokenGuardado = leerCookie("token")
-        if (tokenGuardado) {
-            SesionIniciada.value = true
+    onMounted (() => {
+        CargarDatos()
+    })
+    const CargarDatos = (() => {
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        const temporizador = setTimeout(() => {
+            if (CargandoTrue.value) {
+                CargandoTrue.value = false
+                ErrorCarga.value = true
+                console.warn("Se agotó el tiempo de espera de la petición.")
+            }
+        }, 15000)
+        try {
+            const tokenGuardado = leerCookie("token")
+            if (tokenGuardado) {
+                SesionIniciada.value = true
+            }
+            clearTimeout(temporizador)
+        } catch (error) {
+            console.error("Error cargando la pagina:", error)
+            clearTimeout(temporizador)
+            ErrorCarga.value = true
+            CargandoTrue.value = false
+        } finally {
+            if (!ErrorCarga.value) {
+                CargandoTrue.value = false
+            }
         }
     })
     const confirboton = computed(() =>{
@@ -213,12 +276,15 @@
             return faltandatos01
         }
     })
+    const RecargarPagina = () => {
+        window.location.reload()
+    }
     const emit = defineEmits([
         'LoginExitoso'
     ])
     // ----- Para el Backend ----- //
     const IniciarSesionCliente = async() => {
-        const respuesta = await fetch('http://localhost:8000/cliente/login/', {
+        const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/cliente/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -242,7 +308,7 @@
             } 
     }
     const IniciarSesionUsuario = async() => {
-        const respuesta = await fetch('http://localhost:8000/usuario/login/', {
+        const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/usuario/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -275,7 +341,7 @@
                 return
             }
         }
-        const respuesta = await fetch('http://localhost:8000/clientes/', {
+        const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/clientes/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

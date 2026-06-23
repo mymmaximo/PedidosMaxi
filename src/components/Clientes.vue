@@ -279,177 +279,214 @@
                 </div>
                 <!-- Tabla de Clientes -->
                 <div class="start !px-5">
-                    <!-- Barra de Busqueda -->
-                    <input
-                    @input="BusquedaCliente"
-                    type="text" v-model="Busqueda" 
-                    placeholder="Busqueda..."
-                    class="busqueda"
-                    maxlength="50"
+                    <div v-if="CargandoTrue" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh]"
                     >
-                    <h1 class="text-center">
-                    Clientes
-                    </h1>
-                    <div>
-                        <div
-                        v-if="clientes.length > 0"
+                        <img 
+                        src="../assets/loading.gif" 
+                        alt="Cargando clientes..." 
+                        class="w-32 h-32 object-contain mb-4"
                         >
+                        <h2 
+                        class="text-green-800 
+                        font-bold text-xl animate-pulse"
+                        >
+                        Cargando clientes, un momento...
+                        </h2>
+                    </div>
+                    <div v-else-if="ErrorCarga" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh] gap-4"
+                    >
+                        <h1 class="text-3xl font-bold text-red-600 text-center">
+                        ¡Ups! La conexión tardó demasiado 🔌
+                        </h1>
+                        <h2 class="text-xl text-gray-700 text-center px-4">
+                        El servidor no responde o tu conexión es inestable.
+                        </h2>
+                        <button 
+                        @click="CargarDatos" 
+                        class="botoncon mt-4"
+                        >
+                        🔄 Recargar Página
+                        </button>
+                    </div>
+                    <div v-else>
+                        <input
+                        @input="BusquedaCliente"
+                        type="text" v-model="Busqueda" 
+                        placeholder="Busqueda..."
+                        class="busqueda"
+                        maxlength="50"
+                        >
+                        <h1 class="text-center">
+                        Clientes
+                        </h1>
+                        <div>
                             <div
-                            class="mb-2 lg:mb-5"
-                            v-for= "i in clientes" 
-                            :key="i.id">
-                                <div 
-                                :class="Estatuscolor(i.activo)"
-                                class="tab"
-                                >
-                                    <div class="flex flex-col">
-                                        <div class="flex flex-row">
-                                            <h1>
-                                            {{ i.nombre }}
-                                            </h1>
-                                        </div>
-                                        <div class="flex flex-col">
-                                            <h2>
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            E-Mail: 
-                                            </span>
-                                            {{ i.email }}
-                                            </h2>
-                                            <h2>
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            DNI: 
-                                            </span>
-                                            {{ i.dni }}
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-col ml-auto text-right items-end">
-                                        <button 
-                                        @click="Eliminacion(i)" 
-                                        v-if="i.activo"
-                                        class="botonc !p-2"
-                                        >
-                                        ❌
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Eliminar
-                                        </span>
-                                        </button>
-                                        <button 
-                                        @click="Eliminacion(i)" 
-                                        v-else
-                                        class="botoncon !p-2"
-                                        >
-                                        🕊️
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Reactivar
-                                        </span>
-                                        </button>
-                                        <button 
-                                        @click="Edicion(i)"
-                                        class="botont !p-2"
-                                        >
-                                        ✏️
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Editar
-                                        </span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div 
-                                v-if="i.direcciones.length > 0 && DireccionNow === i.id" 
-                                @click= "DireccionCambio(i.id)"
-                                class="botonc"
-                                >
-                                Ocultar Direcciones
-                                </div>
+                            v-if="clientes.length > 0"
+                            >
                                 <div
-                                v-else-if="i.direcciones.length > 0 && DireccionNow !== i.id" 
-                                @click= "DireccionCambio(i.id)" 
-                                class="botoncon"
-                                >
-                                Ver Direcciones
-                                </div>
-                                <button
-                                v-else
-                                disabled
-                                class="botont w-full"
-                                >
-                                No hay Direcciones Adjuntas
-                                </button>
-                                <div v-if = "DireccionNow === i.id">
-                                    <div
-                                    v-for = "e in i.direcciones" 
-                                    :key="e.id"
-                                    class="tab !bg-green-100/50"
+                                class="mb-2 lg:mb-5"
+                                v-for= "i in clientes" 
+                                :key="i.id">
+                                    <div 
+                                    :class="Estatuscolor(i.activo)"
+                                    class="tab"
                                     >
                                         <div class="flex flex-col">
                                             <div class="flex flex-row">
-                                                <h2>
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Calle: 
-                                                </span>
-                                                {{ e.calle }} 
-                                                {{ e.numero }}
-                                                </h2>
+                                                <h1>
+                                                {{ i.nombre }}
+                                                </h1>
                                             </div>
                                             <div class="flex flex-col">
-                                                <h3>
+                                                <h2>
                                                 <span class="hidden lg:inline 2xl:inline">
-                                                Barrio: 
+                                                E-Mail: 
                                                 </span>
-                                                {{ e.barrio }}
-                                                </h3>
+                                                {{ i.email }}
+                                                </h2>
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                DNI: 
+                                                </span>
+                                                {{ i.dni }}
+                                                </h2>
                                             </div>
                                         </div>
                                         <div class="flex flex-col ml-auto text-right items-end">
-                                            <h2>
+                                            <button 
+                                            @click="Eliminacion(i)" 
+                                            v-if="i.activo"
+                                            class="botonc !p-2"
+                                            >
+                                            ❌
                                             <span class="hidden lg:inline 2xl:inline">
-                                            Ciudad: 
+                                            Eliminar
                                             </span>
-                                            {{ e.ciudad }}
-                                            </h2>
-                                            <h2>
+                                            </button>
+                                            <button 
+                                            @click="Eliminacion(i)" 
+                                            v-else
+                                            class="botoncon !p-2"
+                                            >
+                                            🕊️
                                             <span class="hidden lg:inline 2xl:inline">
-                                            Provincia:  
+                                            Reactivar
                                             </span>
-                                            {{ e.provincia }}
-                                            </h2>
+                                            </button>
+                                            <button 
+                                            @click="Edicion(i)"
+                                            class="botont !p-2"
+                                            >
+                                            ✏️
+                                            <span class="hidden lg:inline 2xl:inline">
+                                            Editar
+                                            </span>
+                                            </button>
                                         </div>
                                     </div>
+                                    <div v-if = "DireccionNow === i.id">
+                                        <div
+                                        v-for = "e in i.direcciones" 
+                                        :key="e.id"
+                                        class="tab !bg-green-100/50"
+                                        >
+                                            <div class="flex flex-col">
+                                                <div class="flex flex-row">
+                                                    <h2>
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Calle: 
+                                                    </span>
+                                                    {{ e.calle }} 
+                                                    {{ e.numero }}
+                                                    </h2>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <h3>
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Barrio: 
+                                                    </span>
+                                                    {{ e.barrio }}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col ml-auto text-right items-end">
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Ciudad: 
+                                                </span>
+                                                {{ e.ciudad }}
+                                                </h2>
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Provincia:  
+                                                </span>
+                                                {{ e.provincia }}
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div 
+                                    v-if="i.direcciones.length > 0 && DireccionNow === i.id" 
+                                    @click= "DireccionCambio(i.id)"
+                                    class="botonc"
+                                    >
+                                    Ocultar Direcciones
+                                    </div>
+                                    <div
+                                    v-else-if="i.direcciones.length > 0 && DireccionNow !== i.id" 
+                                    @click= "DireccionCambio(i.id)" 
+                                    class="botoncon"
+                                    >
+                                    Ver Direcciones
+                                    </div>
+                                    <button
+                                    v-else
+                                    disabled
+                                    class="botont w-full"
+                                    >
+                                    No hay Direcciones Adjuntas
+                                    </button>
                                 </div>
+                            </div>  
+                            <div v-else>
+                                <h2>No se encontraran clientes 😔</h2>
+                                <h3>Prueba buscando con otro termino</h3>
                             </div>
-                        </div>  
-                        <div v-else>
-                            <h2>No se encontraran clientes 😔</h2>
-                            <h3>Prueba buscando con otro termino</h3>
-                        </div>
-                        <div 
-                        class="
-                        flex justify-center
-                        p-3"
-                        >
-                            <button
-                            @click="Pagina = Pagina - 20 ; BusquedaCliente()" 
-                            :disabled="Pagina < 20"
-                            class="botona"
+                            <div 
+                            class="
+                            flex justify-center
+                            p-3"
                             >
-                            🢀
-                            </button>
-                            <h2 class="item">
-                            Items 
-                            {{ 0 + Pagina }} 
-                            - 
-                            {{ Pagina + clientes.length }}
-                            </h2>
-                            <button 
-                            @click="Pagina = Pagina + 20 ; BusquedaCliente()" 
-                            :disabled="clientes.length < 20"
-                            class="botona"
-                            >
-                            🢂
-                            </button>
+                                <button
+                                @click="Pagina = Pagina - 20 ; BusquedaCliente()" 
+                                :disabled="Pagina < 20"
+                                class="botona"
+                                >
+                                🢀
+                                </button>
+                                <h2 class="item">
+                                Items 
+                                {{ 0 + Pagina }} 
+                                - 
+                                {{ Pagina + clientes.length }}
+                                </h2>
+                                <button 
+                                @click="Pagina = Pagina + 20 ; BusquedaCliente()" 
+                                :disabled="clientes.length < 20"
+                                class="botona"
+                                >
+                                🢂
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    <!-- Barra de Busqueda -->
                 </div>
             </div>
         </div>
@@ -475,8 +512,10 @@
     })
     // ----- Variables Booleanas ----- //
     const filtroAct = ref(false)
-    const MostrarFiltro = ref(false)
+    const ErrorCarga = ref(false)
+    const CargandoTrue = ref(true)
     const MostrarNuevo = ref(false)
+    const MostrarFiltro = ref(false)
     const VentanaFiltro = ref(false)
     const ActualizarCNew = ref(false)
     const ActualizarCajaCDel = ref(false)
@@ -494,14 +533,38 @@
     const filtroDirec = ref(2)
     const DireccionNow = ref(null)
     // ----- Funciones Vue ----- //
-    onMounted(async() => {
-        BusquedaCliente()
-        const respuestac = await fetch("http://localhost:8000/direccion/ciudad")
-        const ciudad = await respuestac.json()
-        ListaCiudad.value = ciudad
-        const respuestap = await fetch("http://localhost:8000/direccion/provincia")
-        const provincia = await respuestap.json()
-        ListaProvincia.value = provincia
+    onMounted (() => {
+        CargarDatos()
+    })
+    const CargarDatos = (async() => {
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        const temporizador = setTimeout(() => {
+            if (CargandoTrue.value) {
+                CargandoTrue.value = false
+                ErrorCarga.value = true
+                console.warn("Se agotó el tiempo de espera de la petición.")
+            }
+        }, 15000)
+        try {
+            BusquedaCliente()
+            const respuestac = await fetch("http://localhost:8000/direccion/ciudad")
+            const ciudad = await respuestac.json()
+            ListaCiudad.value = ciudad
+            const respuestap = await fetch("http://localhost:8000/direccion/provincia")
+            const provincia = await respuestap.json()
+            ListaProvincia.value = provincia
+            clearTimeout(temporizador)
+        } catch (error) {
+            console.error("Error cargando la pagina:", error)
+            clearTimeout(temporizador)
+            ErrorCarga.value = true
+            CargandoTrue.value = false
+        } finally {
+            if (!ErrorCarga.value) {
+                CargandoTrue.value = false
+            }
+        }
     })
     const confirboton = computed(() =>{
         if (MostrarNuevo.value) {
@@ -520,6 +583,9 @@
             return faltandatos02
         }
     })
+    const RecargarPagina = () => {
+        window.location.reload()
+    }
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		VentanaFiltro.value = true
@@ -606,7 +672,7 @@
         if (ClienteAct.value.contrasena !== "") {
             ClienteUpd.contrasena = ClienteAct.value.contrasena
         }
-        const ActCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteAct.value.id}`, {
+        const ActCliente = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/clientes/id/${ClienteAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -628,7 +694,7 @@
         CerrarPopUp03()
     }
     const BorrarCliente = async() => {
-        const EraseCliente = await fetch(`http://localhost:8000/clientes/id/${ClienteEli.value}`, {
+        const EraseCliente = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/clientes/id/${ClienteEli.value}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -644,7 +710,7 @@
         CerrarPopUp02()
     }
     const BusquedaCliente = async() => {
-        let url = new URL ('http://localhost:8000/cliente/');
+        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/cliente/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_cliente', Busqueda.value)
@@ -678,7 +744,7 @@
         clientes.value = datos
     }
     const SubirNuevoCliente = async() => {
-        const SubidaNuevoCliente = await fetch('http://localhost:8000/clientes/', {
+        const SubidaNuevoCliente = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/clientes/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

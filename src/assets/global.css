@@ -132,11 +132,6 @@ form{
     lg:items-center
     xl:items-center
     2xl:items-center
-    sm:to-blue-600
-    md:to-pink-600
-    lg:to-yellow-600
-    xl:to-purple-600
-    2xl:to-red-600
 }
 .pestaña {
     @apply

@@ -648,215 +648,253 @@
                 </div>
                 <!-- Tabla de Productos -->
                 <div class="start">
-                    <div class="px-5">
-                        <input
-                        @input="BusquedaProducto"
-                        type="text" 
-                        v-model="Busqueda" 
-                        placeholder="Busqueda..."
-                        class="busqueda"
-                        maxlength="50"
-                        >
-                    </div>
-                    <div 
-                    v-if="Bananaer"
-                    class="flex flex-col relative group" 
-                    >   
-                        <div 
-                        v-if="Bananaer.imagenes && Bananaer.imagenes.length > 0"
-                        class="relative px-5"
-                        @touchstart="ComienzoToque($event)"
-                        @touchend="FinToque($event, Bananaer)"
-                        >
-                            <button
-                            type="button"
-                            @click="BackImg(Bananaer)"
-                            :disabled="GetImg(Bananaer.id) === 0"
-                            class="botonflechagrande
-                            flex-row absolute 
-                            left-4 top-1/2 -translate-y-1/2 z-20 
-                            hidden md:flex"
-                            >
-                            🢀
-                            </button>
-                            <button
-                            v-if="Rol === '1'"
-                            type="button"
-                            @click="AbrirPopUp03"
-                            class="botonx !bg-gray-700"
-                            >
-                            ✏️
-                            </button>
-                            <div>
-                                <img
-                                @click="router.push(`/${Bananaer.imagenes[GetImg(Bananaer.id)].enlace}`)"
-                                @load="ImagenesCargando[Bananaer.id] = false"
-                                v-show="ImagenesCargando[Bananaer.id] === false"
-                                :src="ObtenerImgUrl(Bananaer.imagenes[GetImg(Bananaer.id)].s3_key)"
-                                class="banner"
-                                > 
-                                <div
-                                v-if="ImagenesCargando[Bananaer.id] !== false" 
-                                class="mt-2"
-                                >
-                                    <img 
-                                    src="../assets/loading.gif" 
-                                    alt="Cargando..." 
-                                    class="banner">
-                                </div>
-                            </div>
-                            <button
-                            type="button"
-                            @click="NextImg(Bananaer)"
-                            :disabled="GetImg(Bananaer.id) === Bananaer.imagenes.length - 1"
-                            class="botonflechagrande 
-                            flex-row absolute 
-                            right-4 top-1/2 -translate-y-1/2 z-20 
-                            hidden md:flex"
-                            >
-                            🢂
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                    v-for="cat in ListaCategoria" 
-                    :key="cat.categoria" 
+                    <div v-if="CargandoTrue" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh]"
                     >
-                        <div 
-                        v-if="Productos.filter(p => p.categoria === cat.categoria).length > 0"
-                        class="
-                        flex flex-col
-                        md:mb-8 mb-2
-                        bg-gradient-to-tr from-green-600/50 to-green-300/50"
+                        <img 
+                        src="../assets/loading.gif" 
+                        alt="Cargando catálogo..." 
+                        class="w-32 h-32 object-contain mb-4"
                         >
-                            <h1
-                            class="
-                            text-3xl font-extrabold text-green-900  
-                            md:mb-2 mb-0 drop-shadow-sm"
+                        <h2 
+                        class="text-green-800 
+                        font-bold text-xl animate-pulse"
+                        >
+                        Cargando catálogo, un momento...
+                        </h2>
+                    </div>
+                    <div v-else-if="ErrorCarga" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh] gap-4"
+                    >
+                        <h1 class="text-3xl font-bold text-red-600 text-center">
+                        ¡Ups! La conexión tardó demasiado 🔌
+                        </h1>
+                        <h2 class="text-xl text-gray-700 text-center px-4">
+                        El servidor no responde o tu conexión es inestable.
+                        </h2>
+                        <button 
+                        @click="CargarDatos" 
+                        class="botoncon mt-4"
+                        >
+                        🔄 Recargar Página
+                        </button>
+                    </div>
+                    <div v-else>
+                        <div class="px-5">
+                            <input
+                            @input="BusquedaProducto"
+                            type="text" 
+                            v-model="Busqueda" 
+                            placeholder="Busqueda..."
+                            class="busqueda"
+                            maxlength="50"
                             >
-                            {{ cat.categoria }}
-                            </h1>
+                        </div>
+                        <div 
+                        v-if="Bananaer"
+                        class="flex flex-col relative group" 
+                        >   
                             <div 
-                            :id="'carrusel-' + cat.categoria"
-                            class="
-                            flex flex-row 
-                            w-full overflow-x-auto md:overflow-hidden md:py-4 py-2
-                            scroll-smooth gap-5"
+                            v-if="Bananaer.imagenes && Bananaer.imagenes.length > 0"
+                            class="relative px-5"
+                            @touchstart="ComienzoToque($event)"
+                            @touchend="FinToque($event, Bananaer)"
                             >
                                 <button
-                                @click="ScrollIzquierda(cat.categoria)"
-                                class="botonflechagrande 
-                                flex-row z-20
-                                absolute self-center hidden md:flex"
+                                type="button"
+                                @click="IndiceBanner--"
+                                :disabled="IndiceBanner === 0"
+                                class="botonflechagrande
+                                flex-row absolute 
+                                left-4 top-1/2 -translate-y-1/2 z-20 
+                                hidden md:flex"
                                 >
                                 🢀
                                 </button>
-                                <div 
-                                v-for="i in Productos.filter(p => p.categoria === cat.categoria)"
-                                :key="i.id"
-                                :class="Estatuscolor(i.activo)"
-                                class="carta"
+                                <button
+                                v-if="Rol === '1'"
+                                type="button"
+                                @click="AbrirPopUp03"
+                                class="botonx !bg-gray-700"
                                 >
-                                    <div>
-                                        <div 
-                                        v-if="i.imagenes.length > 0"
-                                        class="
-                                        flex flex-row 
-                                        2xl:gap-3 gap-1
-                                        items-center justify-center 
-                                        w-full md:pb-2 pb-1 snap-x
-                                        ">
+                                ✏️
+                                </button>
+                                <div>
+                                    <img
+                                    @click="router.push(`/${Bananaer.imagenes[IndiceBanner].enlace}`)"
+                                    @load="ImagenesCargando[Bananaer.id] = false"
+                                    v-show="ImagenesCargando[Bananaer.id] === false"
+                                    :src="ObtenerImgUrl(Bananaer.imagenes[IndiceBanner].s3_key)"
+                                    class="banner"
+                                    > 
+                                    <div
+                                    v-if="ImagenesCargando[Bananaer.id] !== false" 
+                                    class="mt-2"
+                                    >
+                                        <img 
+                                        src="../assets/loading.gif" 
+                                        alt="Cargando..." 
+                                        class="banner">
+                                    </div>
+                                </div>
+                                <button
+                                type="button"
+                                @click="IndiceBanner++"
+                                :disabled="IndiceBanner === Bananaer.imagenes.length - 1"
+                                class="botonflechagrande 
+                                flex-row absolute 
+                                right-4 top-1/2 -translate-y-1/2 z-20 
+                                hidden md:flex"
+                                >
+                                🢂
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                        v-for="cat in ListaCategoria" 
+                        :key="cat.categoria" 
+                        >
+                            <div 
+                            v-if="ProductosPorCategoria[cat.categoria] && ProductosPorCategoria[cat.categoria].length > 0"
+                            class="
+                            flex flex-col
+                            md:mb-8 mb-2
+                            bg-gradient-to-tr from-green-600/50 to-green-300/50"
+                            >
+                                <h1
+                                class="
+                                text-3xl font-extrabold text-green-900  
+                                md:mb-2 mb-0 drop-shadow-sm"
+                                >
+                                {{ cat.categoria }}
+                                </h1>
+                                <div 
+                                :id="'carrusel-' + cat.categoria"
+                                class="
+                                flex flex-row 
+                                w-full overflow-x-auto md:overflow-hidden md:py-4 py-2
+                                scroll-smooth gap-5"
+                                >
+                                    <button
+                                    @click="CarruselIzquierda(cat.categoria)"
+                                    :disabled="ObtenerIndiceCarrusel(cat.categoria) === 0"
+                                    class="botonflechagrande 
+                                    flex-row z-20
+                                    absolute self-center hidden md:flex"
+                                    >
+                                    🢀
+                                    </button>
+                                    <div
+                                    v-for="i in ProductosPorCategoria[cat.categoria]"
+                                    :key="cat.categoria + '-' + i.id"
+                                    :class="Estatuscolor(i.activo)"
+                                    class="carta"
+                                        >
+                                        <div>
+                                            <div 
+                                            v-if="i.imagenes.length > 0"
+                                            class="
+                                            flex flex-row 
+                                            2xl:gap-3 gap-1
+                                            items-center justify-center 
+                                            w-full md:pb-2 pb-1 snap-x
+                                            ">
+                                                <img
+                                                v-show="ImagenesCargando[i.id] === false"
+                                                :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                                @load="ImagenesCargando[i.id] = false"
+                                                class="imagen"
+                                                >
+                                                <div
+                                                v-if="ImagenesCargando[i.id] !== false" 
+                                                class="mt-2"
+                                                >
+                                                    <img 
+                                                    src="../assets/loading.gif" 
+                                                    alt="Cargando..." 
+                                                    class="imagen !p-15">
+                                                </div>
+                                            </div>
                                             <img
-                                            v-show="ImagenesCargando[i.id] === false"
-                                            :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
-                                            @load="ImagenesCargando[i.id] = false"
+                                            v-else
+                                            src="../assets/images.png"
                                             class="imagen"
                                             >
                                             <div
-                                            v-if="ImagenesCargando[i.id] !== false" 
-                                            class="mt-2"
                                             >
-                                                <img 
-                                                src="../assets/loading.gif" 
-                                                alt="Cargando..." 
-                                                class="imagen !p-15">
-                                            </div>
-                                        </div>
-                                        <img
-                                        v-else
-                                        src="../assets/images.png"
-                                        class="imagen"
-                                        >
-                                        <div
-                                        >
-                                            <h2 class="font-bold">
-                                            {{ i.nombre }}
-                                            </h2>
-                                            <h2>
-                                            ${{ i.precio }}
-                                            </h2>
-                                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
-                                                <h3>
-                                                {{ i.codigo_barra }} <br>
-                                                Stock: 
-                                                {{ i.stock }}
-                                                </h3>
-                                            </div>
-                                            <div class="flex flex-row lg:flex-col justify-center">
-                                                <div class="botones">
-                                                    <div v-if="Rol === '1' || Rol === '2'">
+                                                <h2 class="font-bold">
+                                                {{ i.nombre }}
+                                                </h2>
+                                                <h2>
+                                                ${{ i.precio }}
+                                                </h2>
+                                                <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                    <h3>
+                                                    {{ i.codigo_barra }} <br>
+                                                    Stock: 
+                                                    {{ i.stock }}
+                                                    </h3>
+                                                </div>
+                                                <div class="flex flex-row lg:flex-col justify-center">
+                                                    <div class="botones">
+                                                        <div v-if="Rol === '1' || Rol === '2'">
+                                                            <button 
+                                                            @click="Eliminacion(i)" 
+                                                            v-if="i.activo" 
+                                                            class="botonc !py-2"
+                                                            >
+                                                            ❌ 
+                                                            <span class="hidden lg:inline 2xl:inline">
+                                                            Eliminar
+                                                            </span>
+                                                            </button>
+                                                            <button 
+                                                            @click="Eliminacion(i)" 
+                                                            v-else 
+                                                            class="botoncon !py-2"
+                                                            >
+                                                            🕊️
+                                                            <span class="hidden lg:inline 2xl:inline">
+                                                            Reactivar
+                                                            </span> 
+                                                            </button>
+                                                        </div>
+                                                        <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                            <button 
+                                                            @click="Edicion(i)" 
+                                                            v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                                            class="botont !py-2">
+                                                            ✏️ 
+                                                            <span class="hidden lg:inline 2xl:inline">
+                                                            Editar
+                                                            </span>
+                                                            </button>
+                                                        </div>
                                                         <button 
-                                                        @click="Eliminacion(i)" 
-                                                        v-if="i.activo" 
-                                                        class="botonc !py-2"
+                                                        @click="Compracion(i)" 
+                                                        :disabled="CarritoStock(i) === 0" 
+                                                        class="botoncon !py-2 !text-2xl"
+                                                        v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                                         >
-                                                        ❌ 
-                                                        <span class="hidden lg:inline 2xl:inline">
-                                                        Eliminar
-                                                        </span>
-                                                        </button>
-                                                        <button 
-                                                        @click="Eliminacion(i)" 
-                                                        v-else 
-                                                        class="botoncon !py-2"
-                                                        >
-                                                        🕊️
-                                                        <span class="hidden lg:inline 2xl:inline">
-                                                        Reactivar
-                                                        </span> 
+                                                        𖠩
                                                         </button>
                                                     </div>
-                                                    <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
-                                                        <button 
-                                                        @click="Edicion(i)" 
-                                                        v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
-                                                        class="botont !py-2">
-                                                        ✏️ 
-                                                        <span class="hidden lg:inline 2xl:inline">
-                                                        Editar
-                                                        </span>
-                                                        </button>
-                                                    </div>
-                                                    <button 
-                                                    @click="Compracion(i)" 
-                                                    :disabled="CarritoStock(i) === 0" 
-                                                    class="botoncon !py-2 !text-2xl"
-                                                    v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                                    >
-                                                    𖠩
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <button
+                                    @click="CarruselDerecha(cat.categoria, ProductosPorCategoria[cat.categoria].length)"
+                                    :disabled="ObtenerIndiceCarrusel(cat.categoria) >= ProductosPorCategoria[cat.categoria].length - 1"
+                                    class="botonflechagrande absolute right-5 z:20 self-center hidden md:block"
+                                    >
+                                    🢂
+                                    </button>
                                 </div>
-                                <button
-                                @click="ScrollDerecha(cat.categoria)"
-                                :disabled="ScrollDerecha(cat.categoria) === 0"
-                                class="botonflechagrande absolute right-5 z:20 self-center hidden md:block"
-                                >
-                                🢂
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -873,12 +911,6 @@
     import { supabase } from '../config/supebase.js'
     import { useRouter } from 'vue-router'
     // ----- Variables Complejas ----- //
-    const NuevoProducto = ref({
-        nombre: "",
-        precio: "",
-        stock: "",
-        categoria: ""
-    })
     const ProductoAct = ref({
         id: "",
         nombre: "",
@@ -899,13 +931,16 @@
     const VentanaCompra = ref (false)
     const MostrarFiltro = ref (false)
     const VentanaBanner = ref (false)
+    const CargandoTrue = ref(true)
     const uploading = ref (false)
     const filtroAct = ref (false)
+    const ErrorCarga = ref(false)
     const Cargando = ref(true)
     // ----- Variables Vacias ----- //
     const ImagenesCargando = ref({})
     const ListaCategoria = ref ("")
     const BannersNuevos = ref ([])
+    const IndiceCarrusel = ref({})
     const VistaPrevia = ref ([])
     const ArchivoSave = ref ([])
     const DelSupaBann = ref ([])
@@ -924,6 +959,7 @@
     const OpcionCategoriaA = ref ("new")
     const OpcionCategoria = ref ("new")
     const Bananaeract = ref(null)
+    const IndiceBanner = ref(0)
     const filtroRadio = ref(0)
     const Bananaer = ref(null)
     const filtroEst = ref (1)
@@ -937,21 +973,8 @@
     const { path } = toRefs (prop)
     const router = useRouter()
     // ----- Funciones Vue ----- //
-    onMounted (async() => {
-        Banner()
-        if (Rol.value === '1') {
-            Banneractu()
-        }
-        BusquedaProducto()
-        const respuesta = await fetch("http://localhost:8000/producto/categorias/")
-        const categ = await respuesta.json()
-        ListaCategoria.value = categ
-        const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
-        if (CarritoOlvidado) {
-            CarritoLocal.value = JSON.parse(CarritoOlvidado)
-            console.log("Carrito recuperado:", CarritoLocal.value)
-        }
-        IniciarCarruselAutomatico()
+    onMounted (() => {
+        CargarDatos()
     })
     onUnmounted (() => {
         if (intervaloCarrusel) clearInterval(intervaloCarrusel)
@@ -975,6 +998,44 @@
     })
     watch (path, () => {
         if (path.value) ObtenerImgUrl()
+    })
+    const CargarDatos = (async() => {
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        const temporizador = setTimeout(() => {
+            if (CargandoTrue.value) {
+                CargandoTrue.value = false
+                ErrorCarga.value = true
+                console.warn("Se agotó el tiempo de espera de la petición.")
+            }
+        }, 15000)
+        try {
+            await Banner()
+            if (Rol.value === '1') {
+                await Banneractu()
+            }
+            await BusquedaProducto()
+            const respuesta = await fetch("https://x1sjqnzh-8000.brs.devtunnels.ms/producto/categorias/")
+            if (!respuesta.ok) throw new Error("Error de conexión con el servidor")
+            const categ = await respuesta.json()
+            ListaCategoria.value = categ
+            const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
+            if (CarritoOlvidado) {
+                CarritoLocal.value = JSON.parse(CarritoOlvidado)
+                console.log("Carrito recuperado:", CarritoLocal.value)
+            }
+            IniciarCarruselAutomatico()
+            clearTimeout(temporizador)
+        } catch (error) {
+            console.error("Error cargando la pagina:", error)
+            clearTimeout(temporizador)
+            ErrorCarga.value = true
+            CargandoTrue.value = false
+        } finally {
+            if (!ErrorCarga.value) {
+                CargandoTrue.value = false
+            }
+        }
     })
     const confirboton = computed(() =>{
         if (ActualizarCajaP.value) {
@@ -1013,18 +1074,28 @@
             })
         }
     })
+    const ProductosPorCategoria = computed(() => {
+        const agrupados = {}
+        if (ListaCategoria.value && Productos.value) {
+            ListaCategoria.value.forEach(cat => {
+                agrupados[cat.categoria] = Productos.value.filter(p => p.categoria === cat.categoria)
+            })
+        }
+        return agrupados
+    })
+    const RecargarPagina = () => {
+        window.location.reload()
+    }
     const IniciarCarruselAutomatico = () => {
         intervaloCarrusel = setInterval(() => {
-            if (Bananaer.value) {
-                const indexActual = GetImg(Bananaer.value.id);
-                if (indexActual < Bananaer.value.imagenes.length - 1) {
-                    IndiceImg.value[Bananaer.value.id] = indexActual + 1
+            if (Bananaer.value && Bananaer.value.imagenes) {
+                if (IndiceBanner.value < Bananaer.value.imagenes.length - 1) {
+                    IndiceBanner.value++
                 } else {
-                    IndiceImg.value[Bananaer.value.id] = 0
+                    IndiceBanner.value = 0
                 }
-                ImagenesCargando.value[Bananaer.value.id] = true
             }
-        }, 40000)
+        }, 4000)
     }
     const emit = defineEmits ([
         'upload',
@@ -1076,6 +1147,26 @@
             )
         } else {
             DelBann.value.push(id)
+        }
+    }
+    const CarruselDerecha = (categoria, totalProductos) => {
+        const current = ObtenerIndiceCarrusel(categoria)
+        if (current < totalProductos - 1) {
+            IndiceCarrusel.value[categoria] = current + 1
+            const carrusel = document.getElementById('carrusel-' + categoria)
+            if (carrusel) {
+                carrusel.scrollBy({ left: 1000, behavior: 'smooth' })
+            }
+        }
+    }
+    const CarruselIzquierda = (categoria) => {
+        const current = ObtenerIndiceCarrusel(categoria)
+        if (current > 0) {
+            IndiceCarrusel.value[categoria] = current - 1
+            const carrusel = document.getElementById('carrusel-' + categoria)
+            if (carrusel) {
+                carrusel.scrollBy({ left: -1000, behavior: 'smooth' })
+            }
         }
     }
 	const CerrarPopUp01 = () => {
@@ -1206,6 +1297,9 @@
             .getPublicUrl(Imgenkey)
         return respuesta.data.publicUrl
     }
+    const ObtenerIndiceCarrusel = (categoria) => {
+        return IndiceCarrusel.value[categoria] || 0
+    }
     const RestarProducto = () => {
         if (ProductoCantidad.value > 1) {
             ProductoCantidad.value--
@@ -1293,7 +1387,7 @@
                 enlace: BannerAct.enlace,
                 orden: BannerAct.orden
             }
-            const ActBanner = await fetch(`http://localhost:8000/banners/id/${BannerAct.id}`, {
+            const ActBanner = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/banners/id/${BannerAct.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1320,7 +1414,7 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`http://localhost:8000/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1341,7 +1435,7 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`http://localhost:8000/productos/archivos/id/${id_img}`, {
+                await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/id/${id_img}`, {
                     method: 'DELETE'
                 })
             }
@@ -1355,7 +1449,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch('http://localhost:8000/productos/archivos/', {
+                    await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1377,7 +1471,7 @@
     }
     const Banner = async () => {
         try {
-            const respuesta = await fetch('http://localhost:8000/banners/?bool_activo=true')
+            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/banners/?bool_activo=true')
             if (respuesta.ok) {
                 const bananaer = await respuesta.json()
                 if (bananaer.length > 0) {
@@ -1393,7 +1487,7 @@
     }
     const Banneractu = async () => {
         try {
-            const respuesta = await fetch('http://localhost:8000/banners/')
+            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/banners/')
             if (respuesta.ok) {
                 const bananaeract = await respuesta.json()
                 if (bananaeract.length > 0) {
@@ -1417,7 +1511,7 @@
                 if (BannerDelete.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([BannerDelete.s3_key])
                 }
-                await fetch(`http://localhost:8000/banners/id/${BannerDelete.id}`, {
+                await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/banners/id/${BannerDelete.id}`, {
                     method: 'DELETE'
                 })
             }
@@ -1425,7 +1519,7 @@
         DelSupaBann.value = []
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`http://localhost:8000/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -1445,7 +1539,7 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL ('http://localhost:8000/producto/');
+        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/producto/');
 		url.searchParams.append('limit', 100);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value);
@@ -1509,7 +1603,7 @@
         const tokenGuardado = leerCookie("token");
         const ClienteGuardado = leerCookie("id_cliente");
         if (PedidoActual.value) {
-            const respuesta = await fetch('http://localhost:8000/pedidos/detalles_pedido/', {
+            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/detalles_pedido/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1529,7 +1623,7 @@
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch('http://localhost:8000/pedidos/', {
+            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1569,7 +1663,7 @@
                 (b) => b.id === id_banner
             )
             if (BannerDelete) {
-                await fetch(`http://localhost:8000/banners/estado/id/${BannerDelete.id}`, {
+                await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/banners/estado/id/${BannerDelete.id}`, {
                     method: 'PUT'
                 })
             }
@@ -1604,65 +1698,6 @@
         DelSupaBann.value = []
         Banner()
         Banneractu()
-        CerrarPopUp03()
-    }
-    const SubirNuevoProducto = async() => {
-        if (OpcionCategoria.value != "new") {
-            NuevoProducto.value.categoria = OpcionCategoria.value
-        }
-        const SubidaNuevoProducto = await fetch('http://localhost:8000/productos/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(NuevoProducto.value)
-        })
-        if (SubidaNuevoProducto.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
-        }
-        const ProductoNew = await SubidaNuevoProducto.json()
-        const NewId = ProductoNew.id        
-        if (ArchivoSave.value.length > 0) {
-            uploading.value = true
-            for (
-                let i = 0 ; i < ArchivoSave.value.length ; i++
-            ) {
-                const file = ArchivoSave.value[i]
-                const fileExt = file.name.split('.').pop()
-                const filePath = `${Math.random()}.${fileExt}`
-                let { error: uploadError } = await supabase.storage
-                    .from('max_imagenes')
-                    .upload(filePath, file)
-                if (uploadError) {
-                    alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
-                } else {
-                    await fetch('http://localhost:8000/productos/archivos/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            id_producto: NewId,
-                            s3_key: filePath,
-                            nombre_original: file.name,
-                            tipo_contenido: fileExt,
-                            tamanio: file.size
-                        })
-                    })
-                }
-            }
-            uploading.value = false
-        }
-        NuevoProducto.value = {
-            nombre: "",
-            precio: "",
-            stock: "",
-            categoria: ""
-        }
-        LimpiarImagenes()
-        BusquedaProducto()
         CerrarPopUp03()
     }
     const SumarCarrito = () => {
@@ -1704,7 +1739,7 @@
                 .upload(filePath, BannerNew.imagen)
         // ----- Subir Datos Banner Backend ----- //
             if (!uploadError) {
-                await fetch('http://localhost:8000/banners/', {
+                await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/banners/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
