@@ -208,58 +208,60 @@
                         ᯤ
                         </h1>
                     </div>
-                    <div
-                    class="flex flex-col lg:self-center"
-                    v-if="MostrarFiltro"
-                    >
+                    <transition name="slide">
                         <div
-                        class="flex flex-col"
+                        class="flex flex-col lg:self-center"
+                        v-if="MostrarFiltro"
                         >
-                            <h1>
-                            ¿El Usuario esta Activo?
-                            </h1>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="2"
-                            v-model="filtroEst"
-                            > 
-                            Todos los Usuarios
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="1"
-                            v-model="filtroEst"
-                            > 
-                            Usuario Activo
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="0"
-                            v-model="filtroEst"
-                            > 
-                            Usuario Eliminado
-                            </label>
-                        </div>
-                        <div
-                        class="botones"
-                        >
-                            <button 
-                            @click="AplicarFiltro" 
-                            class="botoncon">
-                            Aplicar Filtros
-                            </button>
-                            <button 
-                            @click="LimpiarFiltro" 
-                            v-if="filtroAct === true"
-                            class="botont" 
+                            <div
+                            class="flex flex-col"
                             >
-                            🗑️ Limpiar Filtro
-                            </button>
+                                <h1>
+                                ¿El Usuario esta Activo?
+                                </h1>
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="2"
+                                v-model="filtroEst"
+                                > 
+                                Todos los Usuarios
+                                </label>
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="1"
+                                v-model="filtroEst"
+                                > 
+                                Usuario Activo
+                                </label>
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="0"
+                                v-model="filtroEst"
+                                > 
+                                Usuario Eliminado
+                                </label>
+                            </div>
+                            <div
+                            class="botones"
+                            >
+                                <button 
+                                @click="AplicarFiltro" 
+                                class="botoncon">
+                                Aplicar Filtros
+                                </button>
+                                <button 
+                                @click="LimpiarFiltro" 
+                                v-if="filtroAct === true"
+                                class="botont" 
+                                >
+                                🗑️ Limpiar Filtro
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </transition>
                     <div>
                         <h1
                         @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
@@ -268,93 +270,95 @@
                         +
                         </h1>
                     </div>
-                    <div
-                    class="flex flex-col lg:self-center"
-                    v-if="MostrarNuevo"
-                    >
-                        <h1>
-                        Nuevo Usuario
-                        </h1>
-                        <form 
-                        @submit.prevent="SubirNuevoUsuario" 
+                    <transition name="slide">
+                        <div
+                        class="flex flex-col lg:self-center"
+                        v-if="MostrarNuevo"
                         >
-                            <h2>
-                            Nombre
-                            </h2>
-                            <input 
-                            type="text" 
-                            v-model="NuevoUsuario.nombre" 
-                            placeholder="Nombre"
-                            maxlength="50"
+                            <h1>
+                            Nuevo Usuario
+                            </h1>
+                            <form 
+                            @submit.prevent="SubirNuevoUsuario" 
                             >
-                            <h2>
-                            E-Mail
-                            </h2>
-                            <input 
-                            type="text" 
-                            v-model="NuevoUsuario.email" 
-                            placeholder="E-Mail"
-                            maxlength="50"
+                                <h2>
+                                Nombre
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="NuevoUsuario.nombre" 
+                                placeholder="Nombre"
+                                maxlength="50"
+                                >
+                                <h2>
+                                E-Mail
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="NuevoUsuario.email" 
+                                placeholder="E-Mail"
+                                maxlength="50"
+                                >
+                                <h2>
+                                Documento
+                                </h2>
+                                <input 
+                                type="number" 
+                                v-model="NuevoUsuario.dni" 
+                                placeholder="Documento"
+                                maxlength="8"
+                                >
+                                <h2>
+                                Contraseña
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="NuevoUsuario.contrasena" 
+                                placeholder="Contraseña"
+                                maxlength="30"
+                                >
+                                <h2>
+                                Rol
+                                </h2>
+                                <select 
+                                v-model="NuevoUsuario.id_rol" 
+                                >
+                                    <option value="" disabled>
+                                    Selecciona un Rol...
+                                    </option>
+                                    <option value=1>
+                                    Administrador
+                                    </option>
+                                    <option value=2>
+                                    Editor de Productos General
+                                    </option>
+                                    <option value=3>
+                                    Gestor de Pedidos General y Editor de Clientes
+                                    </option>
+                                    <option value=4>
+                                    Gestor de Precios
+                                    </option>
+                                    <option value=5>
+                                    Gestor de Stock
+                                    </option>
+                                    <option value=6>
+                                    Rider
+                                    </option>
+                                </select>
+                            </form>
+                            <div 
+                            class="botones"
                             >
-                            <h2>
-                            Documento
-                            </h2>
-                            <input 
-                            type="number" 
-                            v-model="NuevoUsuario.dni" 
-                            placeholder="Documento"
-                            maxlength="8"
-                            >
-                            <h2>
-                            Contraseña
-                            </h2>
-                            <input 
-                            type="text" 
-                            v-model="NuevoUsuario.contrasena" 
-                            placeholder="Contraseña"
-                            maxlength="30"
-                            >
-                            <h2>
-                            Rol
-                            </h2>
-                            <select 
-                            v-model="NuevoUsuario.id_rol" 
-                            >
-                                <option value="" disabled>
-                                Selecciona un Rol...
-                                </option>
-                                <option value=1>
-                                Administrador
-                                </option>
-                                <option value=2>
-                                Editor de Productos General
-                                </option>
-                                <option value=3>
-                                Gestor de Pedidos General y Editor de Clientes
-                                </option>
-                                <option value=4>
-                                Gestor de Precios
-                                </option>
-                                <option value=5>
-                                Gestor de Stock
-                                </option>
-                                <option value=6>
-                                Rider
-                                </option>
-                            </select>
-                        </form>
-                        <div 
-                        class="botones"
-                        >
-                            <button 
-                            type="submit" 
-                            :disabled="confirboton"
-                            class="botoncon"
-                            >
-                            Crear Cliente
-                            </button>
+                                <button 
+                                type="submit" 
+                                :disabled="confirboton"
+                                class="botoncon"
+                                >
+                                Crear Cliente
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </transition>
                 </div>
                 <div class="start !px-5">
                     <div v-if="CargandoTrue" 
@@ -491,7 +495,7 @@
                         p-3"
                         >
                             <button 
-                            @click="Pagina = Pagina - 20 ; BusquedaUsuario()" 
+                            @click="Pagina = Pagina - 20 ; CargarDatos()" 
                             :disabled="Pagina < 20"
                             class="botona"
                             >
@@ -504,7 +508,7 @@
                             {{ Pagina + usuarios.length }}
                             </h2>
                             <button 
-                            @click="Pagina = Pagina + 20 ; BusquedaUsuario()" 
+                            @click="Pagina = Pagina + 20 ; CargarDatos()" 
                             :disabled="usuarios.length < 20"
                             class="botona"
                             >
@@ -522,6 +526,23 @@
     // ----- Imports ----- //
     import { onMounted, ref, computed } from 'vue';
     import { Rol, CerrarSesion, ActualizarCajaC as ActualizarCajaU } from './Estatus';
+    // ----- Variables Vue ----- //
+    const confirboton = computed(() =>{
+        if (ActualizarUNew.value) {
+            const faltandatos01 = 
+                NuevoUsuario.value.nombre === ""||
+                NuevoUsuario.value.email === ""||
+                NuevoUsuario.value.dni === ""||
+                NuevoUsuario.value.contrasena === ""||
+                NuevoUsuario.value.id_rol === ""
+            return faltandatos01
+        }
+        if (ActualizarCajaU.value) {
+            const faltandatos02 = 
+                UsuarioAct.value.id_rol === ""
+            return faltandatos02
+        }
+    })
     // ----- Variables Complejas ----- //
     const NuevoUsuario = ref({
         nombre: "",
@@ -568,7 +589,7 @@
             }
         }, 15000)
         try {
-            BusquedaUsuario()
+            await BusquedaUsuario()
             clearTimeout(temporizador)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
@@ -579,22 +600,6 @@
             if (!ErrorCarga.value) {
                 CargandoTrue.value = false
             }
-        }
-    })
-    const confirboton = computed(() =>{
-        if (ActualizarUNew.value) {
-            const faltandatos01 = 
-                NuevoUsuario.value.nombre === ""||
-                NuevoUsuario.value.email === ""||
-                NuevoUsuario.value.dni === ""||
-                NuevoUsuario.value.contrasena === ""||
-                NuevoUsuario.value.id_rol === ""
-            return faltandatos01
-        }
-        if (ActualizarCajaU.value) {
-            const faltandatos02 = 
-                UsuarioAct.value.id_rol === ""
-            return faltandatos02
         }
     })
     const RecargarPagina = () => {
@@ -726,7 +731,7 @@
         if (UsuarioAct.value.id_rol !== "") {
             UsuarioUpd.id_rol = UsuarioAct.value.id_rol
         }
-        const ActUsuario = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/usuarios/id/${UsuarioAct.value.id}`, {
+        const ActUsuario = await fetch(`http://10.250.4.36:8000/usuarios/id/${UsuarioAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -751,7 +756,7 @@
         CerrarPopUp03()
     }
     const BorrarUsuario = async() => {
-        const EraseCliente = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/usuarios/id/${UsuarioEli.value}`, {
+        const EraseCliente = await fetch(`http://10.250.4.36:8000/usuarios/id/${UsuarioEli.value}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -767,7 +772,7 @@
         CerrarPopUp02()
     }
     const BusquedaUsuario = async() => {
-        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/usuarios/');
+        let url = new URL ('http://10.250.4.36:8000/usuarios/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_usuario', Busqueda.value)
@@ -785,7 +790,7 @@
         usuarios.value = datos;
     }
     const SubirNuevoUsuario = async() => {
-        const SubidaNuevoUsuario = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/usuarios/', {
+        const SubidaNuevoUsuario = await fetch('http://10.250.4.36:8000/usuarios/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

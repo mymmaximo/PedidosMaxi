@@ -213,6 +213,18 @@
     // ----- Imports ----- //
     import { computed, onMounted, ref } from 'vue';
     import { CerrarSesion, leerCookie } from './Estatus.js'
+    // ----- Variables Vue ----- //
+    const confirboton = computed(() =>{
+        if (!MostrarLogin.value) {
+            const faltandatos01 = 
+                NuevoCliente.value.nombre === "" ||
+                NuevoCliente.value.email === "" ||
+                NuevoCliente.value.dni === "" ||
+                NuevoCliente.value.contrasena === "" ||
+                NuevoCliente.value.concontrasena === "" 
+            return faltandatos01
+        }
+    })
     // ----- Variables Complejas ----- //
     const LoginBox = ref({
         email: "",
@@ -265,17 +277,6 @@
             }
         }
     })
-    const confirboton = computed(() =>{
-        if (!MostrarLogin.value) {
-            const faltandatos01 = 
-                NuevoCliente.value.nombre === "" ||
-                NuevoCliente.value.email === "" ||
-                NuevoCliente.value.dni === "" ||
-                NuevoCliente.value.contrasena === "" ||
-                NuevoCliente.value.concontrasena === "" 
-            return faltandatos01
-        }
-    })
     const RecargarPagina = () => {
         window.location.reload()
     }
@@ -284,7 +285,7 @@
     ])
     // ----- Para el Backend ----- //
     const IniciarSesionCliente = async() => {
-        const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/cliente/login/', {
+        const respuesta = await fetch('http://10.250.4.36:8000/cliente/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -308,7 +309,7 @@
             } 
     }
     const IniciarSesionUsuario = async() => {
-        const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/usuario/login/', {
+        const respuesta = await fetch('http://10.250.4.36:8000/usuario/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -341,7 +342,7 @@
                 return
             }
         }
-        const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/clientes/', {
+        const respuesta = await fetch('http://10.250.4.36:8000/clientes/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

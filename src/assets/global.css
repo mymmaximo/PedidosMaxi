@@ -19,7 +19,8 @@
     sticky shrink-0 flex flex-col
     overflow-y-auto z-20
     text-white
-    bg-green-500
+    bg-green-600/85 border-green-400/30 border-b sm:border-r
+    backdrop-blur-md shadow-lg
     gap-5
     p-2
     sm:p-4
@@ -44,6 +45,7 @@
     overflow-hidden
     bg-gradient-to-bl from-green-200 to-green-200/20
     rounded-2xl shadow-md
+    transition-transform
     h-auto
     p-2
     md:p-4
@@ -54,16 +56,18 @@
     xl:w-80
     2xl:w-90
     m-2
+    hover:-translate-y-1
+    hover:shadow-xl hover:shadow-green-600/10 hover:border-green-400/60
 }
 .cartabanner {
     @apply
     flex flex-col
-    relative cursor-grab active:cursor-grabbing
     shrink-0 snap-center
     items-center text-center
     overflow-hidden
     bg-gradient-to-bl from-green-200 to-green-200/20
     rounded-2xl shadow-md
+    transition-transform
     h-auto
     p-2
     md:p-4
@@ -74,16 +78,20 @@
     xl:w-80
     2xl:w-90
     m-2
+    hover:-translate-y-1 
+    relative 
+    cursor-grab 
+    active:cursor-grabbing
 }
 .cartabannerdel {
     @apply
     flex flex-col
-    relative cursor-grab active:cursor-grabbing
     shrink-0 snap-center
     items-center text-center
     overflow-hidden
-    bg-gradient-to-bl from-red-500 to-green-200/20
+    bg-gradient-to-bl from-green-200 to-green-200/20
     rounded-2xl shadow-md
+    transition-transform
     h-auto
     p-2
     md:p-4
@@ -94,8 +102,11 @@
     xl:w-80
     2xl:w-90
     m-2
+    hover:-translate-y-1
+    from-red-500 
+    to-green-200/20
 }
-.cuerpo{
+.cuerpo {
     @apply
     w-full
     min-h-screen
@@ -105,10 +116,11 @@
     @apply 
     flex fixed inset-0
     justify-center items-center
-    bg-black/70
+    bg-black/40 
+    backdrop-blur-sm transition-all duration-300
     z-40
 }
-form{
+form {
     @apply
     flex flex-col
     gap-2
@@ -144,7 +156,7 @@ form{
     lg:p-2
     2xl:p-3
 }
-.popup{
+.popup {
     @apply
     flex flex-col
     translate-z-15 z-50
@@ -171,7 +183,7 @@ form{
     max-h-full
     max-w-[90vh]
 }
-.start{
+.start {
     @apply
     flex-1 flex flex-col
     min-w-0
@@ -190,15 +202,28 @@ form{
     xl:gap-2
     2xl:gap-2
 }
+.slide-enter-active, .slide-leave-active {
+    @apply 
+    transition-all 
+    duration-300 
+    ease-out
+}
+.slide-enter-from, .slide-leave-to {
+    @apply 
+    opacity-0 
+    -translate-y-4 
+    scale-95
+}
 .tab {
     @apply
-    flex
-    overflow-hidden justify-between
-    bg-gradient-to-bl from-green-800/10 to-green-100
-    rounded-2xl shadow-md
-    p-4
-    max-h-fit
-    w-full items-center gap-4
+    flex items-center justify-between
+    w-full max-h-fit gap-4
+    p-4 lg:p-5
+    bg-gradient-to-br from-green-50 to-green-200
+    border-2 border-green-300/40
+    rounded-2xl shadow-sm
+    transition-all duration-300 ease-out
+    hover:shadow-md hover:border-green-400/80 hover:from-green-100 hover:to-green-300/60 hover:-translate-y-0.5;
 }
 table {
     @apply 
@@ -235,7 +260,7 @@ table td {
     bg-green-100
     max-w-0
 }
-.troncodentro{
+.troncodentro {
     @apply
     flex flex-col
     translate-z-15 z-50
@@ -267,14 +292,22 @@ table td {
     @apply
     object-contain
     cursor-text
-    bg-green-100 bg-gradient-to-br from-green-200 to-green-100
-    border-black border-1 rounded-xl
-    text-base text-left
+    bg-white/80 backdrop-blur-md
+    border-green-400/50 border-2 rounded-xl
+    text-base lg:text-lg text-left
+    transition-all duration-300 ease-out
+    shadow-sm
     w-full
     p-2
     lg:p-2
     2xl:p-3
     mb-5
+    focus:bg-white 
+    focus:border-green-600 
+    focus:ring-green-600/20
+    focus:shadow-md 
+    focus:ring-4  
+    focus:outline-none
 }
 h1 {
     @apply
@@ -331,13 +364,14 @@ h4 {
     2xl:p-3
     select-none
 }
-input{
+input {
     @apply
     place-self-center
     cursor-text
     text-gray-700 text-center font-semibold
     bg-green-100
     border-green-800 rounded-sm border-2
+    outline-none transition-all
     w-full
     p-1
     px-2
@@ -357,6 +391,7 @@ input[type="number"] {
     text-gray-700 text-center font-semibold
     bg-green-100
     border-green-800 rounded-sm border-1
+    outline-none transition-all
     text-xl
     sm:text-base
     md:text-base
@@ -368,12 +403,18 @@ input[type="number"] {
     px-2
     lg:px-2
     2xl:px-2
+    focus:border-green-800 
+    focus:ring-4 
+    focus:ring-green-500/30
+    focus:-translate-y-0.5 focus:shadow-md
 }
 input[type="radio"] {
     @apply 
     w-3
     lg:w-5
     2xl:w-7
+    accent-green-600 
+    cursor-pointer
 }
 .item {
     @apply
@@ -386,13 +427,14 @@ label {
     @apply
     select-none
 }
-select{
+select {
     @apply
     place-self-center
     cursor-pointer
-    text-gray-400 text-center font-semibold
+    text-black text-center font-semibold
     bg-green-100 
     border-green-800 rounded-sm border-1
+    outline-none transition-all
     text-base
     lg:text-base
     2xl:text-base
@@ -401,6 +443,15 @@ select{
     px-2
     lg:px-2
     2xl:px-2
+    focus:border-green-800 
+    focus:ring-4 
+    focus:ring-green-500/30
+}
+::selection {
+    @apply bg-green-500 text-white;
+}
+::-moz-selection {
+    @apply bg-green-500 text-white;
 }
 /* botones */
 .botona {
@@ -416,9 +467,11 @@ select{
     lg:px-4
     2xl:px-5
     py-0
+    transition-all duration-200
     hover:text-gray-200
     hover:bg-gray-800
     active:bg-gray-100
+    active:scale-95
     disabled:text-gray-200 
     disabled:bg-gray-100 
     disabled:cursor-not-allowed
@@ -441,12 +494,14 @@ select{
     lg:text-base
     xl:text-base
     2xl:text-base
+    transition-all duration-200
     hover:text-gray-200
     hover:from-red-800 
     hover:to-red-500
     active:text-black
     active:from-red-400 
     active:to-red-200
+    active:scale-95
     disabled:text-gray-500 
     disabled:from-gray-300 
     disabled:to-gray-400
@@ -469,12 +524,14 @@ select{
     lg:text-base
     xl:text-base
     2xl:text-base
+    transition-all duration-200
     hover:text-white
     hover:from-green-800 
     hover:to-green-500
     active:text-black
     active:from-green-400 
     active:to-green-200
+    active:scale-95
     disabled:text-gray-400 
     disabled:from-gray-300 
     disabled:to-gray-400
@@ -512,9 +569,11 @@ select{
     lg:py-12
     xl:py-12
     2xl:py-15
+    transition-all duration-200
     hover:text-gray-200
     hover:bg-green-300/40
     active:bg-gray-100
+    active:scale-95
     disabled:text-gray-400/0
     disabled:bg-gray-300/0
     disabled:cursor-default 
@@ -531,6 +590,7 @@ select{
     lg:py-1
     2xl:py-25
     m-3
+    transition-all duration-200
     hover:text-gray-200
     hover:from-green-300/60
     hover:to-green-400/60
@@ -538,6 +598,7 @@ select{
     active:from-green-100 
     active:to-green-300
     active:border-green-50
+    active:scale-95
     disabled:text-gray-400/0
     disabled:from-green-100/0
     disabled:to-green-300/0
@@ -562,9 +623,11 @@ select{
     lg:py-2
     xl:py-3
     2xl:py-3
+    transition-all duration-200
     hover:text-white
     hover:bg-green-600
     active:bg-green-300
+    active:scale-95
     disabled:text-gray-500 
     disabled:from-gray-300 
     disabled:to-gray-400
@@ -612,10 +675,12 @@ select{
     lg:py-3
     xl:py-3
     2xl:py-2
+    transition-all duration-200
     hover:text-black
     hover:from-green-100 
     hover:to-green-300
     active:bg-green-100
+    active:scale-95
     disabled:text-black
     disabled:from-gray-300 
     disabled:to-gray-400
@@ -639,12 +704,14 @@ select{
     lg:text-base
     xl:text-base
     2xl:text-base
+    transition-all duration-200
     hover:text-gray-200
     hover:from-gray-800 
     hover:to-gray-500
     active:text-black
     active:from-gray-400 
     active:to-gray-200
+    active:scale-95
     disabled:text-gray-500 
     disabled:from-gray-300 
     disabled:to-gray-400
@@ -672,9 +739,11 @@ select{
     py-1
     lg:py-1
     2xl:py-1
+    transition-all duration-200
     hover:text-gray-200
     hover:bg-red-800
     active:bg-red-100
+    active:scale-95
 }
 /* imagen */
 .banner {
@@ -760,56 +829,282 @@ img {
     file:bg-green-50 file:text-green-700 
     hover:file:bg-green-100
 }
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 15px
+}
+::-webkit-scrollbar-track {
+    @apply 
+    bg-green-100
+}
+::-webkit-scrollbar-thumb {
+    @apply 
+    bg-green-700 
+    rounded-xs
+}
+::-webkit-scrollbar-thumb:hover {
+    @apply 
+    bg-green-900
+}
+/* carrito */
+.carrito-contenedor {
+    @apply 
+    w-full 
+    max-w-6xl 
+    mx-auto 
+    p-2 
+    sm:p-4 
+    lg:p-8
+}
+.carrito-header {
+    @apply 
+    flex 
+    items-center justify-between 
+    border-b-2 border-green-300/50 
+    pb-4 mb-8
+}
+.carrito-contador {
+    @apply 
+    text-gray-500 font-bold 
+    bg-white 
+    px-4 
+    py-1 
+    rounded-full 
+    shadow-sm
+}
+.carrito-tabla-cabecera {
+    @apply
+    hidden
+    bg-green-700 rounded-t-2xl shadow-md
+    text-white font-bold text-center items-center
+    grid-cols-12
+    sm:grid
+    gap-4
+    p-4
+}
+.col-producto-titulo { 
+    @apply 
+    col-span-5 text-left 
+    pl-4
+}
+.col-titulo {
+    @apply 
+    col-span-2 
+}
+.carrito-lista {
+    @apply 
+    flex flex-col 
+    gap-3 
+    mt-3
+}
+.carrito-fila {
+    @apply
+    items-center
+    text-center
+    bg-gradient-to-br from-green-50 to-green-200/60 
+    border-2 border-green-300/40 rounded-2xl shadow-sm 
+    grid grid-cols-1
+    sm:grid-cols-12
+    gap-4
+    w-full max-h-fit
+    p-4 sm:p-3
+    transition-all duration-300 
+    ease-out 
+    hover:shadow-md 
+    hover:border-green-400/80
+    hover:from-green-100 
+    hover:to-green-300/60
+    hover:-translate-y-0.5
+}
+.carrito-col-producto {
+    @apply
+    flex flex-col
+    sm:flex-row
+    items-center
+    text-center sm:text-left
+    col-span-1
+    sm:col-span-5
+    gap-4
+}
+.carrito-carrusel {
+    @apply 
+    shrink-0 
+    flex 
+    items-center justify-center
+    w-24
+}
+.carrito-btn-flecha {
+    @apply
+    text-xl text-green-600
+    transition-colors
+    cursor-pointer
+    hover:text-green-800
+    disabled:opacity-0
+}
+.carrito-nombre-producto {
+    @apply 
+    text-lg font-bold text-gray-800 
+    leading-tight select-none
+}
+.carrito-col-precio {
+    @apply 
+    col-span-1 sm:col-span-2 
+    text-lg text-gray-600 font-semibold 
+}
+.carrito-label-movil {
+    @apply 
+    sm:hidden 
+    text-gray-400 text-sm font-normal 
+    mr-2
+}
+.carrito-col-cantidad {
+    @apply 
+    col-span-1 
+    sm:col-span-2 
+    flex justify-center
+    w-full
+}
+.carrito-input-cantidad {
+    @apply
+    text-lg text-center
+    bg-white shadow-sm
+    border-gray-300
+    w-24
+    p-1
+    focus:border-green-500
+}
+.carrito-col-subtotal {
+    @apply 
+    col-span-1 
+    sm:col-span-2 
+    text-xl font-black text-green-700
+}
+.carrito-col-borrar {
+    @apply 
+    col-span-1 
+    sm:col-span-1 
+    flex justify-center
+}
+.carrito-btn-borrar {
+    @apply
+    text-2xl text-red-400
+    bg-red-50  rounded-full
+    p-2
+    transition-all
+    duration-200
+    cursor-pointer
+    hover:scale-125
+    hover:text-red-600
+    hover:bg-red-100
+}
+.carrito-resumen-seccion {
+    @apply
+    flex
+    justify-center
+    sm:justify-end
+    mt-8
+    mb-20
+}
+.carrito-tarjeta-resumen {
+    @apply
+    flex flex-col
+    relative
+    overflow-hidden
+    bg-white
+    border-green-100 border-2
+    shadow-lg rounded-3xl
+    p-6
+    gap-4 
+    w-full 
+    sm:w-96
+}
+.carrito-resumen-titulo {
+    @apply 
+    text-xl font-bold text-gray-800 
+    border-b border-gray-100 
+    pb-3
+    z-10
+}
+.carrito-total-bloque {
+    @apply 
+    flex 
+    justify-between items-center 
+    text-3xl font-black text-green-700 
+    z-10 
+    my-2
+}
+.carrito-resumen-decoracion {
+    @apply 
+    absolute top-0 right-0 
+    bg-gradient-to-br from-green-300 to-green-100 rounded-full 
+    blur-3xl opacity-30 
+    pointer-events-none
+    w-32 
+    h-32 
+    -mr-10 
+    -mt-10 
+}
 /* estados */
+.fade-enter-active, .fade-leave-active {
+    @apply 
+    transition-all 
+    duration-300 
+    ease-out
+}
+.fade-enter-from, .fade-leave-to {
+    @apply 
+    opacity-0 
+    scale-95
+}
 .admin {
     @apply
-    bg-green-500 
+    from-green-300 to-green-600 
 }
 .box {
     @apply
-    bg-red-200 
+    from-red-50 to-red-200 
     cursor-pointer
 }
 .no {
     @apply
-    bg-red-200 
+    from-red-50 to-red-200
 }
 .pedcli {
     @apply
-    bg-blue-200 
+    from-blue-100 to-blue-400 
 }
 .pgral {
     @apply
-    bg-green-300 
+    from-green-100 to-green-400 
 }
 .preci {
     @apply
-    bg-yellow-200 
+    from-yellow-100 to-yellow-200 
 }
 .rider {
     @apply
-    bg-red-200 
+    from-red-100 to-red-400 
 }
 .sent {
     @apply
-    bg-green-100
+    from-green-50 to-green-200 
     !cursor-not-allowed
 }
 .si {
     @apply
-    bg-green-100 
+    from-green-50 to-green-200
 }
 .stoc {
     @apply
-    bg-orange-200 
+    from-orange-100 to-orange-200 
 }
 .way {
     @apply
-    bg-yellow-200 
+    from-yellow-50 to-yellow-200 
     cursor-pointer
 }
 .what {
     @apply
-    bg-gray-200 
+    from-gray-100 to-gray-200 
     cursor-pointer
 }

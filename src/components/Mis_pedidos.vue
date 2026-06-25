@@ -10,107 +10,109 @@
                     >
                     ᯤ
                     </h1>
-                    <div
-                    class="flex flex-col self-center"
-                    v-if="MostrarFiltro"
-                    >
+                    <transition name="slide">
                         <div
-                        class="
-                        flex flex-col w-full gap-2.5
-                        ">
-                            <h2>
-                            Filtro de Metodo de Pago
-                            </h2>
+                        class="flex flex-col self-center"
+                        v-if="MostrarFiltro"
+                        >
                             <div
                             class="
-                            flex flex-col
-                            gap-3
+                            flex flex-col w-full gap-2.5
                             ">
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="3"
-                                v-model="filtroMP"
-                                > 
-                                Tarjeta de Credito / Debito
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="2"
-                                v-model="filtroMP"
-                                > 
-                                Mercado Pago
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="1"
-                                v-model="filtroMP"
-                                > 
-                                Transferencia Bancaria
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="0"
-                                v-model="filtroMP"
-                                > 
-                                Efectivo
-                                </label>
-                            </div>
-                            <h2>
-                            Filtro de Estatus
-                            </h2>
-                            <div
-                            class="
-                            flex flex-col
-                            gap-3
-                            ">
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="3"
-                                v-model="filtroEst"
-                                > 
-                                Preparando
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="2"
-                                v-model="filtroEst"
-                                > 
-                                En Camino
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="1"
-                                v-model="filtroEst"
-                                > 
-                                Entregado
-                                </label>
-                            </div>
-                            <div 
-                            class="botones"
-                            >
-                                <button 
-                                @click="AplicarFiltro" 
-                                class="botoncon"
+                                <h2>
+                                Filtro de Metodo de Pago
+                                </h2>
+                                <div
+                                class="
+                                flex flex-col
+                                gap-3
+                                ">
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="3"
+                                    v-model="filtroMP"
+                                    > 
+                                    Tarjeta de Credito / Debito
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="2"
+                                    v-model="filtroMP"
+                                    > 
+                                    Mercado Pago
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="1"
+                                    v-model="filtroMP"
+                                    > 
+                                    Transferencia Bancaria
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="0"
+                                    v-model="filtroMP"
+                                    > 
+                                    Efectivo
+                                    </label>
+                                </div>
+                                <h2>
+                                Filtro de Estatus
+                                </h2>
+                                <div
+                                class="
+                                flex flex-col
+                                gap-3
+                                ">
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="3"
+                                    v-model="filtroEst"
+                                    > 
+                                    Preparando
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="2"
+                                    v-model="filtroEst"
+                                    > 
+                                    En Camino
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="1"
+                                    v-model="filtroEst"
+                                    > 
+                                    Entregado
+                                    </label>
+                                </div>
+                                <div 
+                                class="botones"
                                 >
-                                Aplicar Filtros
-                                </button>
-                                <button 
-                                @click="LimpiarFiltro" 
-                                v-if="filtroAct === true"
-                                class="botont" 
-                                >
-                                🗑️ Limpiar Filtro
-                                </button>
+                                    <button 
+                                    @click="AplicarFiltro" 
+                                    class="botoncon"
+                                    >
+                                    Aplicar Filtros
+                                    </button>
+                                    <button 
+                                    @click="LimpiarFiltro" 
+                                    v-if="filtroAct === true"
+                                    class="botont" 
+                                    >
+                                    🗑️ Limpiar Filtro
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </transition>
                 </div>
                 <!-- Tabla de Mis Pedidos -->
                 <div class="start !px-5">
@@ -645,7 +647,7 @@
             }
         }, 15000)
         try {
-            const respuesta = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/cliente/${idUsuario}`)
+            const respuesta = await fetch(`http://10.250.4.36:8000/pedidos/cliente/${idUsuario}`)
             const datos = await respuesta.json();
             console.log("aca che",datos)
             Pedidos.value = datos;
@@ -718,7 +720,7 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaPedido = async() => {
-        let url = new URL (`https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/cliente/${idUsuario}/`);
+        let url = new URL (`http://10.250.4.36:8000/pedidos/cliente/${idUsuario}/`);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_pedido', Busqueda.value)
         }

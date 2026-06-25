@@ -22,11 +22,23 @@
                             >
                             🢀
                             </button>
-                            <img
-                            :key="ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key"
-                            :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
-                            class="imagen"
-                            >
+                            <div>
+                                <img
+                                v-show="ImagenesCargando[ProductoEli.id] === false"
+                                :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
+                                @load="ImagenesCargando[ProductoEli.id] = false"
+                                class="imagen"
+                                >
+                                <div
+                                v-if="ImagenesCargando[ProductoEli.id] !== false" 
+                                class="mt-2"
+                                >
+                                    <img 
+                                    src="../assets/loading.gif" 
+                                    alt="Cargando..." 
+                                    class="imagen !2xl:p-15">
+                                </div>
+                            </div>
                             <button
                             @click="NextImg(ProductoEli)"
                             :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
@@ -82,11 +94,23 @@
                             >
                             🢀
                             </button>
-                            <img
-                            :key="ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key"
-                            :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
-                            class="imagen"
-                            >
+                            <div>
+                                <img
+                                v-show="ImagenesCargando[ProductoActual.id] === false"
+                                :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
+                                @load="ImagenesCargando[ProductoActual.id] = false"
+                                class="imagen"
+                                >
+                                <div
+                                v-if="ImagenesCargando[ProductoActual.id] !== false" 
+                                class="mt-2"
+                                >
+                                    <img 
+                                    src="../assets/loading.gif" 
+                                    alt="Cargando..." 
+                                    class="imagen !2xl:p-15">
+                                </div>
+                            </div>
                             <button
                             @click="NextImg(ProductoActual)"
                             :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
@@ -144,6 +168,14 @@
                     </div>
                 </div>
             </div>
+        </Teleport>
+        <!-- Comprar Notificacion -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="MostrarConfir" class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg z-[100] font-bold">
+                    ✅ ¡Agregado al carrito!
+                </div>
+            </transition>
         </Teleport>
         <!-- Actualizar Producto -->
         <Teleport to="body">
@@ -251,18 +283,29 @@
                                 ">
                                     <button
                                     type="button"
-                                    @click="NoMoreImages(
-                                        ProductoAct.imagenes[GetImg(ProductoAct.id)]
-                                    )"
+                                    @click="NoMoreImages(ProductoAct.imagenes[GetImg(ProductoAct.id)])"
                                     title="Quitar imagen"
                                     class="botonx"
                                     >
                                     🗙
                                     </button>
-                                    <img 
-                                    :src="ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)"
-                                    :class="DelImg.includes(ProductoAct.imagenes[GetImg(ProductoAct.id)].id_imagen) ? 'imagendel' : 'imagen'"
-                                    >
+                                    <div>
+                                        <img
+                                        v-show="ImagenesCargando[ProductoAct.id] === false"
+                                        :src=ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)
+                                        @load="ImagenesCargando[ProductoAct.id] = false"
+                                        :class="DelImg.includes(ProductoAct.imagenes[GetImg(ProductoAct.id)].id_imagen) ? 'imagendel' : 'imagen'"
+                                        >
+                                        <div
+                                        v-if="ImagenesCargando[ProductoAct.id] !== false" 
+                                        class="mt-2"
+                                        >
+                                            <img 
+                                            src="../assets/loading.gif" 
+                                            alt="Cargando..." 
+                                            class="imagen !2xl:p-15">
+                                        </div>
+                                    </div>
                                 </div>
                                 <button 
                                 type="button" 
@@ -504,7 +547,7 @@
             <div class="flex w-full flex-col lg:flex-row">
                 <!-- Barra de Filtros -->
                 <div class="bar">
-                    <div class="">
+                    <div>
                         <h1
                         @click="MostrarFiltro = !MostrarFiltro"
                         class="botonfil"
@@ -512,139 +555,141 @@
                         ᯤ
                         </h1>
                     </div>
-                    <div
-                    class="flex flex-col lg:self-center"
-                    v-if="MostrarFiltro"
-                    >
+                    <transition name="slide">
                         <div
-                        class="
-                        flex flex-col
-                        p-2 md:p-4
-                        ">
-                            <h2>
-                            Filtros de Precio
-                            </h2>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="3"
-                            v-model="filtroRadio"
-                            > 
-                            Hasta $10,000
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="2"
-                            v-model="filtroRadio"
-                            > 
-                            $10,000 a $50,000
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="1"
-                            v-model="filtroRadio"
-                            > 
-                            Más de $50,000
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="0"
-                            v-model="filtroRadio"
-                            > 
-                            Personalizado
-                            </label>
-                        </div>
-                        <div
-                        v-if="filtroRadio === 0" 
-                        class="
-                        flex flex-col
-                        md:p-4 p-2
-                        ">
-                            <h3
-                            class="
-                            flex flex-cols
-                            ">
-                            Precio Mayor
-                            </h3>
-                            <input 
-                            type="number"
-                            v-model="mayor" 
-                            placeholder="Precio Max..."
-                            maxlength="10"
-                            >
-                            <h3
-                            class="
-                            flex flex-col
-                            md:p-4 p-2
-                            ">
-                            Precio Minimo
-                            </h3>
-                            <input
-                            type="number"
-                            v-model="menor" 
-                            placeholder="Precio Min..."
-                            maxlength="10"
-                            >
-                        </div>
-                        <div 
-                        v-if="Rol === '1' || Rol === '2' || Rol === '4'"
+                        class="flex flex-col lg:self-center"
+                        v-if="MostrarFiltro"
                         >
-                            <h2>
-                            ¿El Productos esta Activo?
-                            </h2>
                             <div
                             class="
                             flex flex-col
-                            p-1
-                            lg:p-2
-                            2xl:p-4
+                            p-2 md:p-4
                             ">
+                                <h2>
+                                Filtros de Precio
+                                </h2>
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="3"
+                                v-model="filtroRadio"
+                                > 
+                                Hasta $10,000
+                                </label>
                                 <label>
                                 <input 
                                 type="radio" 
                                 :value="2"
-                                v-model="filtroEst"
+                                v-model="filtroRadio"
                                 > 
-                                Todos los Productos
+                                $10,000 a $50,000
                                 </label>
                                 <label>
                                 <input 
                                 type="radio" 
                                 :value="1"
-                                v-model="filtroEst"
+                                v-model="filtroRadio"
                                 > 
-                                Productos Activos
+                                Más de $50,000
                                 </label>
                                 <label>
                                 <input 
                                 type="radio" 
                                 :value="0"
-                                v-model="filtroEst"
+                                v-model="filtroRadio"
                                 > 
-                                Productos Eliminados
+                                Personalizado
                                 </label>
                             </div>
-                        </div>
-                        <div
-                        class="botones"
-                        >
-                            <button 
-                            @click="AplicarFiltro" 
-                            class="botoncon">
-                            Aplicar Filtros
-                            </button>
-                            <button 
-                            @click="LimpiarFiltro" 
-                            v-if="filtroAct === true"
-                            class="botont" 
+                            <div
+                            v-if="filtroRadio === 0" 
+                            class="
+                            flex flex-col
+                            md:p-4 p-2
+                            ">
+                                <h3
+                                class="
+                                flex flex-cols
+                                ">
+                                Precio Mayor
+                                </h3>
+                                <input 
+                                type="number"
+                                v-model="mayor" 
+                                placeholder="Precio Max..."
+                                maxlength="10"
+                                >
+                                <h3
+                                class="
+                                flex flex-col
+                                md:p-4 p-2
+                                ">
+                                Precio Minimo
+                                </h3>
+                                <input
+                                type="number"
+                                v-model="menor" 
+                                placeholder="Precio Min..."
+                                maxlength="10"
+                                >
+                            </div>
+                            <div 
+                            v-if="Rol === '1' || Rol === '2' || Rol === '4'"
                             >
-                            🗑️ Limpiar Filtro
-                            </button>
+                                <h2>
+                                ¿El Productos esta Activo?
+                                </h2>
+                                <div
+                                class="
+                                flex flex-col
+                                p-1
+                                lg:p-2
+                                2xl:p-4
+                                ">
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="2"
+                                    v-model="filtroEst"
+                                    > 
+                                    Todos los Productos
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="1"
+                                    v-model="filtroEst"
+                                    > 
+                                    Productos Activos
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="0"
+                                    v-model="filtroEst"
+                                    > 
+                                    Productos Eliminados
+                                    </label>
+                                </div>
+                            </div>
+                            <div
+                            class="botones"
+                            >
+                                <button 
+                                @click="AplicarFiltro" 
+                                class="botoncon">
+                                Aplicar Filtros
+                                </button>
+                                <button 
+                                @click="LimpiarFiltro" 
+                                v-if="filtroAct === true"
+                                class="botont" 
+                                >
+                                🗑️ Limpiar Filtro
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </transition>
                 </div>
                 <!-- Tabla de Productos -->
                 <div class="start">
@@ -677,7 +722,7 @@
                         El servidor no responde o tu conexión es inestable.
                         </h2>
                         <button 
-                        @click="CargarDatos" 
+                        @click="CargarDatos()" 
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
@@ -890,7 +935,7 @@
                                     <button
                                     @click="CarruselDerecha(cat.categoria, ProductosPorCategoria[cat.categoria].length)"
                                     :disabled="ObtenerIndiceCarrusel(cat.categoria) >= ProductosPorCategoria[cat.categoria].length - 1"
-                                    class="botonflechagrande absolute right-5 z:20 self-center hidden md:block"
+                                    class="botonflechagrande absolute right-5 z:20 self-center hidden md:flex"
                                     >
                                     🢂
                                     </button>
@@ -910,6 +955,53 @@
     import { onMounted, onUnmounted, toRefs, ref, watch, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
     import { useRouter } from 'vue-router'
+    // ----- Variables Vue ----- //
+    const bannersorden = computed ({
+        get() {
+            const viejo = (Bananaeract.value && Bananaeract.value.imagenes) ? Bananaeract.value.imagenes : []
+            const nuevo = BannersNuevos.value
+            const todo = [...viejo, ...nuevo]
+            return todo.sort((a,b) => {
+                const desactA = bannerdesactivado (a)
+                const desactB = bannerdesactivado (b)
+                if (desactA && !desactB)
+                    return 1
+                if (desactB && !desactA)
+                    return -1
+                const ordenA = a.orden || 0
+                const ordenB = b.orden || 0
+                return ordenA - ordenB
+            })
+        },
+        set (bannersordenados) {
+            bannersordenados.forEach((banner, index) => {
+                banner.orden = index + 1
+            })
+        }
+    })
+    const confirboton = computed(() =>{
+        if (ActualizarCajaP.value) {
+            const faltandatos03 =
+                ProductoAct.value.nombre === "" ||
+                ProductoAct.value.precio === "" ||
+                ProductoAct.value.stock === "" ||
+                ProductoAct.value.codigo_barra === "" ||
+                ProductoAct.value.stock < 0 ||
+                ProductoAct.value.precio <= 0
+            const faltandatos04 = 
+                OpcionCategoriaA.value === "new" && ProductoAct.value.categoria === ""
+            return faltandatos03 || faltandatos04
+        }
+    })
+    const ProductosPorCategoria = computed(() => {
+        const agrupados = {}
+        if (ListaCategoria.value && Productos.value) {
+            ListaCategoria.value.forEach(cat => {
+                agrupados[cat.categoria] = Productos.value.filter(p => p.categoria === cat.categoria)
+            })
+        }
+        return agrupados
+    })
     // ----- Variables Complejas ----- //
     const ProductoAct = ref({
         id: "",
@@ -925,6 +1017,9 @@
         nombre: "",
         imagenes: []
     })
+    const prop = defineProps (['path','size'])
+    const { path } = toRefs (prop)
+    const router = useRouter()
     // ----- Variables Booleanas ----- //
     const ActualizarCajaPDel = ref (false)
     const BorrarImagenBanner = ref (false)
@@ -968,10 +1063,6 @@
     let cartagarrada = null
     let inicioX = 0
     let inicioY = 0
-    // ----- Variables Vue ----- //
-    const prop = defineProps (['path','size'])
-    const { path } = toRefs (prop)
-    const router = useRouter()
     // ----- Funciones Vue ----- //
     onMounted (() => {
         CargarDatos()
@@ -1011,11 +1102,15 @@
         }, 15000)
         try {
             await Banner()
+            await BusquedaProducto()
             if (Rol.value === '1') {
                 await Banneractu()
             }
-            await BusquedaProducto()
-            const respuesta = await fetch("https://x1sjqnzh-8000.brs.devtunnels.ms/producto/categorias/")
+            const respuesta = await fetch("http://10.250.4.36:8000/producto/categorias/", {
+                headers: {
+                    "X-Tunnel-Skip-AntiPhishing-Page": "true"
+                }
+            })
             if (!respuesta.ok) throw new Error("Error de conexión con el servidor")
             const categ = await respuesta.json()
             ListaCategoria.value = categ
@@ -1036,52 +1131,6 @@
                 CargandoTrue.value = false
             }
         }
-    })
-    const confirboton = computed(() =>{
-        if (ActualizarCajaP.value) {
-            const faltandatos03 =
-                ProductoAct.value.nombre === "" ||
-                ProductoAct.value.precio === "" ||
-                ProductoAct.value.stock === "" ||
-                ProductoAct.value.codigo_barra === "" ||
-                ProductoAct.value.stock < 0 ||
-                ProductoAct.value.precio <= 0
-            const faltandatos04 = 
-                OpcionCategoriaA.value === "new" && ProductoAct.value.categoria === ""
-            return faltandatos03 || faltandatos04
-        }
-    })
-    const bannersorden = computed ({
-        get() {
-            const viejo = (Bananaeract.value && Bananaeract.value.imagenes) ? Bananaeract.value.imagenes : []
-            const nuevo = BannersNuevos.value
-            const todo = [...viejo, ...nuevo]
-            return todo.sort((a,b) => {
-                const desactA = bannerdesactivado (a)
-                const desactB = bannerdesactivado (b)
-                if (desactA && !desactB)
-                    return 1
-                if (desactB && !desactA)
-                    return -1
-                const ordenA = a.orden || 0
-                const ordenB = b.orden || 0
-                return ordenA - ordenB
-            })
-        },
-        set (bannersordenados) {
-            bannersordenados.forEach((banner, index) => {
-                banner.orden = index + 1
-            })
-        }
-    })
-    const ProductosPorCategoria = computed(() => {
-        const agrupados = {}
-        if (ListaCategoria.value && Productos.value) {
-            ListaCategoria.value.forEach(cat => {
-                agrupados[cat.categoria] = Productos.value.filter(p => p.categoria === cat.categoria)
-            })
-        }
-        return agrupados
     })
     const RecargarPagina = () => {
         window.location.reload()
@@ -1387,7 +1436,7 @@
                 enlace: BannerAct.enlace,
                 orden: BannerAct.orden
             }
-            const ActBanner = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/banners/id/${BannerAct.id}`, {
+            const ActBanner = await fetch(`http://10.250.4.36:8000/banners/id/${BannerAct.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1414,7 +1463,7 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`http://10.250.4.36:8000/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1435,7 +1484,7 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/id/${id_img}`, {
+                await fetch(`http://10.250.4.36:8000/productos/archivos/id/${id_img}`, {
                     method: 'DELETE'
                 })
             }
@@ -1449,7 +1498,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/', {
+                    await fetch('http://10.250.4.36:8000/productos/archivos/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1471,7 +1520,11 @@
     }
     const Banner = async () => {
         try {
-            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/banners/?bool_activo=true')
+            const respuesta = await fetch('http://10.250.4.36:8000/banners/?bool_activo=true', {
+                headers: {
+                    "X-Tunnel-Skip-AntiPhishing-Page": "true"
+                }
+            })
             if (respuesta.ok) {
                 const bananaer = await respuesta.json()
                 if (bananaer.length > 0) {
@@ -1487,7 +1540,11 @@
     }
     const Banneractu = async () => {
         try {
-            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/banners/')
+            const respuesta = await fetch('http://10.250.4.36:8000/banners/', {
+                headers: {
+                    "X-Tunnel-Skip-AntiPhishing-Page": "true"
+                }
+            })
             if (respuesta.ok) {
                 const bananaeract = await respuesta.json()
                 if (bananaeract.length > 0) {
@@ -1511,7 +1568,7 @@
                 if (BannerDelete.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([BannerDelete.s3_key])
                 }
-                await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/banners/id/${BannerDelete.id}`, {
+                await fetch(`http://10.250.4.36:8000/banners/id/${BannerDelete.id}`, {
                     method: 'DELETE'
                 })
             }
@@ -1519,7 +1576,7 @@
         DelSupaBann.value = []
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`http://10.250.4.36:8000/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -1539,8 +1596,8 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/producto/');
-		url.searchParams.append('limit', 100);
+        let url = new URL ('http://10.250.4.36:8000/producto/')
+		url.searchParams.append('limit', 1000);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value);
         }
@@ -1586,7 +1643,11 @@
             url.searchParams.append('filtrocat', filtrocat.value);
             filtroAct.value = true;            
         }
-        const BusqProducto = await fetch(url)
+        const BusqProducto = await fetch(url, {
+            headers: {
+                "X-Tunnel-Skip-AntiPhishing-Page": "true"
+            }
+        })
         const datos = await BusqProducto.json();
         Productos.value = datos;
     }
@@ -1603,7 +1664,7 @@
         const tokenGuardado = leerCookie("token");
         const ClienteGuardado = leerCookie("id_cliente");
         if (PedidoActual.value) {
-            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/detalles_pedido/', {
+            const respuesta = await fetch('http://10.250.4.36:8000/pedidos/detalles_pedido/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1623,7 +1684,7 @@
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/', {
+            const respuesta = await fetch('http://10.250.4.36:8000/pedidos/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1663,7 +1724,7 @@
                 (b) => b.id === id_banner
             )
             if (BannerDelete) {
-                await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/banners/estado/id/${BannerDelete.id}`, {
+                await fetch(`http://10.250.4.36:8000/banners/estado/id/${BannerDelete.id}`, {
                     method: 'PUT'
                 })
             }
@@ -1696,8 +1757,8 @@
         await ActualizarBanner()
         DelBann.value = []
         DelSupaBann.value = []
-        Banner()
-        Banneractu()
+        await Banner()
+        await Banneractu()
         CerrarPopUp03()
     }
     const SumarCarrito = () => {
@@ -1718,7 +1779,7 @@
         if (CarritoExistente){
             CarritoExistente.cantidad = ProductoCantidad.value + CarritoExistente.cantidad
         } else {
-            CarritoLocal.value.push(nuevoProducto);
+            CarritoLocal.value.push(nuevoProducto)
         }
         localStorage.setItem(
             'carrito_pendiente',
@@ -1726,7 +1787,9 @@
                 CarritoLocal.value
             )
         )
-        CerrarPopUp04()    
+        CerrarPopUp04()
+        MostrarConfir.value = true
+        setTimeout(() => { MostrarConfir.value = false }, 2000)
     }
     const SubirBanner = async() => {
         // ----- Subir Datos Banner ----- //
@@ -1739,7 +1802,7 @@
                 .upload(filePath, BannerNew.imagen)
         // ----- Subir Datos Banner Backend ----- //
             if (!uploadError) {
-                await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/banners/', {
+                await fetch('http://10.250.4.36:8000/banners/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

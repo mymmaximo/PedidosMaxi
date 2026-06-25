@@ -232,62 +232,61 @@
                         🔄 Recargar Página
                         </button>
                     </div>
-                    <div v-else>
+                    <div v-else class="carrito-contenedor">
                         <h1>
                         Tu Carrito
                         </h1>
-                        <div class="flex flex-row 
-                        gap-3 justify-evenly">
-                            <div class="mr-10 ml-5 sm:mr-50 md:mr-70  lg:mr-90  xl:mr-110  2xl:mr-130">
-                                <h2>
-                                Producto
-                                </h2>
+                        <div class="carrito-tabla-cabecera">
+                            <div class="col-producto-titulo">
+                            Producto
                             </div>
-                            <div class="flex gap-1 sm:gap-20 md:gap-25 lg:gap-35 xl:gap-48 2xl:gap-50 mr-20">
-                                <h2>
-                                Precio
-                                </h2>
-                                <h2>
-                                Cantidad
-                                </h2>
-                                <h2>
-                                Subtotal
-                                </h2>   
-                                <h2>
-                                Borrar
-                                </h2>   
+                            <div class="col-titulo">
+                            Precio
+                            </div>
+                            <div class="col-titulo">
+                            Cantidad
+                            </div>
+                            <div class="col-titulo">
+                            Subtotal
                             </div>
                         </div>
-                        <div v-if="CarritoLocal.length > 0">
+                        <div class="carrito-lista">
                             <div
-                            class="mb-2 lg:mb-5"
                             v-for="(item, index) in CarritoLocal" 
                             :key="index"
+                            class="carrito-fila"
                             >
-                                <div class="tab bg-green-500/30">
-                                    <div class="flex-1 hidden sm:flex justify-center items-center min-w-0">
+                                <div class="carrito-col-producto">
+                                    <div class="carrito-carrusel">
                                         <div 
                                         v-if="item.imagenes && item.imagenes.length > 0"
-                                        class="flex flex-row 
-                                        gap-3 justify-evenly
-                                        ">
+                                        class="flex flex-row gap-1 items-center">
                                             <button
                                             @click="BackImg(item)"
                                             :disabled="GetImg(item.id_producto) === 0"
-                                            class="
-                                            botonflecha"
+                                            class="carrito-btn-flecha"
                                             >
                                             🢀
                                             </button>
-                                            <img
-                                            :key="item.imagenes[GetImg(item.id_producto)].s3_key"
-                                            :src=ObtenerImgUrl(item.imagenes[GetImg(item.id_producto)].s3_key)
-                                            class="imagencar"
-                                            >
+                                            <div>
+                                                <img
+                                                v-show="ImagenesCargando[item.id_producto] === false"
+                                                :key="item.imagenes[GetImg(item.id_producto)].s3_key"
+                                                :src="ObtenerImgUrl(item.imagenes[GetImg(item.id_producto)].s3_key)"
+                                                @load="ImagenesCargando[item.id_producto] = false"
+                                                class="imagencar !w-16 !h-16 shadow-sm"
+                                                >
+                                                <div
+                                                v-if="ImagenesCargando[item.id_producto] !== false" 
+                                                class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-xl"
+                                                >
+                                                    <span class="animate-pulse text-xs text-gray-400">...</span>
+                                                </div>
+                                            </div>
                                             <button
                                             @click="NextImg(item)"
                                             :disabled="GetImg(item.id_producto) === item.imagenes.length - 1"
-                                            class="botonflecha"
+                                            class="carrito-btn-flecha"
                                             >
                                             🢂
                                             </button>
@@ -295,62 +294,64 @@
                                         <img
                                         v-else
                                         src="../assets/images.png"
-                                        class="imagen"
+                                        class="imagencar !w-16 !h-16 opacity-50"
                                         >
                                     </div>
-                                    <div class="flex-1 flex items-center min-w-0">
-                                        <div class="flex flex-row">
-                                            <h1>
-                                            {{ item.nombre_producto }}
-                                            </h1>
-                                        </div>
-                                    </div>
-                                    <div class="flex-1 flex justify-center items-center min-w-0">
-                                        <h2>
+                                    <h2 class="carrito-nombre-producto">
+                                    {{ item.nombre_producto }}
+                                    </h2>
+                                    <div class="carrito-col-precio">
+                                        <span class="carrito-label-movil">
+                                        Precio:
+                                        </span>
                                         ${{ item.precio_unitario }}
-                                        </h2>
                                     </div>
-                                    <div class="flex-1 flex justify-center items-center min-w-0">
+                                    <div class="carrito-col-cantidad">
                                         <input 
                                         type="number"
                                         v-model="item.cantidad"
                                         @change="VerificarStock(item)" 
-                                        class="
-                                        max-w-20
-                                        lg:max-w-100
-                                        2xl:max-w-200"
+                                        class="carrito-input-cantidad"
                                         >
                                     </div>
-                                    <div class="flex-1 flex justify-center items-center min-w-0">
-                                        <h2 class="font-bold">
-                                        ${{ item.cantidad * item.precio_unitario }}
-                                        </h2>
+                                    <div class="carrito-col-subtotal">
+                                        <span class="carrito-label-movil">
+                                        Subtotal:
+                                        </span>
+                                        ${{ item.item_subtotal || item.cantidad * item.precio_unitario }}
                                     </div>
-                                    <div class="flex-1 flex justify-center items-center min-w-0">
-                                        <button @click="Eliminacion(index)" class="text-2xl">
+                                    <div class="carrito-col-borrar">
+                                        <button 
+                                        @click="Eliminacion(index)" 
+                                        title="Eliminar"
+                                        class="carrito-btn-borrar"
+                                        >
                                         🗑️
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="botones">
-                                <h1
-                                class="
-                                place-self-center
-                                text-center
-                                bg-green-100 
-                                border-green-500 rounded-2xl border-4
-                                my-1
-                                lg:my-3
-                                2xl:my-5"
-                                >
-                                Total: ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
-                                </h1>
-                                <button 
-                                @click="PantallaPagar = true"
-                                class="botoncon">
-                                Completar Pedido
-                                </button>
+                            <div class="carrito-resumen-seccion">
+                                <div class="carrito-tarjeta-resumen">
+                                    <div class="carrito-resumen-decoracion">
+                                    </div>
+                                    <h2 class="carrito-resumen-titulo">
+                                    Resumen de Compra
+                                    </h2>
+                                    <div class="carrito-total-bloque">
+                                        <span>
+                                        Total:
+                                        </span>
+                                        <span>
+                                        ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
+                                        </span>
+                                    </div>
+                                    <button 
+                                    @click="PantallaPagar = true"
+                                    class="botoncon w-full !text-xl !py-4 z-10 hover:-translate-y-1">
+                                    Completar Pedido
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -365,56 +366,7 @@
     import { ref, onMounted, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
     import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie } from './Estatus.js'
-    // ----- Variables Complejas ----- //
-    const NuevaDireccion = ref ({
-        calle: "",
-        numero: null,
-        barrio: "",
-        ciudad: "",
-        provincia: ""
-    })
-    const idClienteCarrito = leerCookie("id_cliente")
-    // ----- Variables Booleanas ----- //
-    const ErrorCarga = ref(false)
-    const CargandoTrue = ref(true)
-    const PantallaPagar = ref (false)
-    const ActualizarCarritoDel = ref(false)
-    // ----- Variables Vacias ----- //
-    const IndiceImg = ref ({})
-    const MetodoPago = ref ("")
-    const ProductoEli = ref("")
-    const ListaDirecciones = ref([])
-    const DireccionExistente = ref ("")
-    // ----- Funciones Vue ----- //
-    onMounted (() => {
-        CargarDatos()
-    })
-    const CargarDatos = (async() => {
-        CargandoTrue.value = true
-        ErrorCarga.value = false
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
-                console.warn("Se agotó el tiempo de espera de la petición.")
-            }
-        }, 15000)
-        try {
-            const respuesta = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/cliente/${idClienteCarrito}/direcciones/`)
-            const datos = await respuesta.json();
-            ListaDirecciones.value = datos;
-            clearTimeout(temporizador)
-        } catch (error) {
-            console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
-        } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
-            }
-        }
-    })
+    // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (Rol.value && Rol.value !== "") {
             return true
@@ -434,6 +386,61 @@
         }}
         return false
     })
+    // ----- Variables Complejas ----- //
+    const NuevaDireccion = ref ({
+        calle: "",
+        numero: null,
+        barrio: "",
+        ciudad: "",
+        provincia: ""
+    })
+    const idClienteCarrito = leerCookie("id_cliente")
+    // ----- Variables Booleanas ----- //
+    const ErrorCarga = ref(false)
+    const CargandoTrue = ref(true)
+    const PantallaPagar = ref (false)
+    const ActualizarCarritoDel = ref(false)
+    // ----- Variables Vacias ----- //
+    const IndiceImg = ref ({})
+    const MetodoPago = ref ("")
+    const ProductoEli = ref("")
+    const ListaDirecciones = ref([])
+    const ImagenesCargando = ref({})
+    const DireccionExistente = ref ("")
+    // ----- Funciones Vue ----- //
+    onMounted (() => {
+        CargarDatos()
+    })
+    const CargarDatos = (async() => {
+        if (!idClienteCarrito || idClienteCarrito === "null") {
+            CargandoTrue.value = false
+            return
+        }
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        const temporizador = setTimeout(() => {
+            if (CargandoTrue.value) {
+                CargandoTrue.value = false
+                ErrorCarga.value = true
+                console.warn("Se agotó el tiempo de espera de la petición.")
+            }
+        }, 15000)
+        try {
+            const respuesta = await fetch(`http://10.250.4.36:8000/cliente/${idClienteCarrito}/direcciones/`)
+            const datos = await respuesta.json();
+            ListaDirecciones.value = datos;
+            clearTimeout(temporizador)
+        } catch (error) {
+            console.error("Error cargando la pagina:", error)
+            clearTimeout(temporizador)
+            ErrorCarga.value = true
+            CargandoTrue.value = false
+        } finally {
+            if (!ErrorCarga.value) {
+                CargandoTrue.value = false
+            }
+        }
+    })
     const RecargarPagina = () => {
         window.location.reload()
     }
@@ -449,6 +456,7 @@
         const ImgActual = GetImg(imagen.id_producto)
         if (ImgActual > 0) {
             IndiceImg.value[imagen.id_producto] = ImgActual - 1
+            ImagenesCargando.value[imagen.id_producto] = true
         }
     }
 	const CerrarPopUp01 = () => {
@@ -466,6 +474,7 @@
         const ImgActual = GetImg(imagen.id_producto)
         if (ImgActual < imagen.imagenes.length - 1) {
             IndiceImg.value[imagen.id_producto] = ImgActual + 1
+            ImagenesCargando.value[imagen.id_producto] = true
         }
     }
     const ObtenerImgUrl = (Imgenkey) => {
@@ -489,7 +498,7 @@
             DireccionPedido = DireccionExistente.value
         } else {
             DireccionPedido = NuevaDireccion.value
-            const SubidaNuevaDireccion = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/direcciones/', {
+            const SubidaNuevaDireccion = await fetch('http://10.250.4.36:8000/direcciones/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -499,7 +508,7 @@
             const datos = await SubidaNuevaDireccion.json()
             DireccionPedido = datos.id
         }
-        const SubidaNuevoPedido = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/', {
+        const SubidaNuevoPedido = await fetch('http://10.250.4.36:8000/pedidos/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -526,7 +535,7 @@
                 precio_unitario: item.precio_unitario
             }
         })
-        const SubidaNuevoDetalle = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/detalles_pedido/', {
+        const SubidaNuevoDetalle = await fetch('http://10.250.4.36:8000/pedidos/detalles_pedido/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

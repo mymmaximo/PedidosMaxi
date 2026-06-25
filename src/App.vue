@@ -202,89 +202,91 @@
                                     >
                                     ⫶☰
                                     </h1>
-                                    <div>
-                                        <div
-                                        @click="router.push('/') ; MostrarMenu = false" 
-                                        v-if="Rol !== '3' && Rol !== '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
-                                        class="botonpestaña !py-4 !text-left">
-                                        🏠︎ Inicio
+                                    <transition name="slide">
+                                        <div>
+                                            <div
+                                            @click="router.push('/') ; MostrarMenu = false" 
+                                            v-if="Rol !== '3' && Rol !== '6'"
+                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
+                                            class="botonpestaña !py-4 !text-left">
+                                            🏠︎ Inicio
+                                            </div>
+                                            <div 
+                                            @click="router.push('/productos') ; MostrarMenu = false" 
+                                            v-if="Rol !== '3' && Rol !== '6'"
+                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
+                                            class="botonpestaña !py-4 !text-left"
+                                            >
+                                            📦 Productos
+                                            </div>
+                                            <div 
+                                                @click="router.push('/pedidos') ; MostrarMenu = false" 
+                                                v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
+                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
+                                            class="botonpestaña !py-4 !text-left"
+                                            >
+                                            🚛 Pedidos
+                                            </div>
+                                            <div
+                                            @click="router.push('/clientes') ; MostrarMenu = false" 
+                                            v-if="Rol === '1' || Rol === '3'"
+                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
+                                            class="botonpestaña !py-4 !text-left"
+                                            >
+                                            👥 Clientes
+                                            </div>
+                                            <div 
+                                            @click="router.push('/usuarios') ; MostrarMenu = false" 
+                                            v-if="Rol === '1'"
+                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
+                                            class="botonpestaña !py-4 !text-left"
+                                            >
+                                            👨🏻‍💼 Usuarios
+                                            </div>
+                                            <div 
+                                            @click="router.push('/historial_precios') ; MostrarMenu = false" 
+                                            v-if="Rol === '1' || Rol === '4'"
+                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
+                                            class="botonpestaña !py-4 !text-left"
+                                            >
+                                            💲 Historial de Precios
+                                            </div>
+                                            <div
+                                            v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                            @click="router.push('/carrito') ; MostrarMenu = false"
+                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
+                                            class="botonpestaña !py-4 !text-left"
+                                            >
+                                            🛒 Tu Carrito
+                                            </div>
+                                            <div
+                                            @click="AbrirPopUp02()" 
+                                            v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
+                                            class="botonpestaña !from-red-400/80 !to-red-500/80 !py-4 !text-left"
+                                            >
+                                            🗑️ Vaciar Carrito
+                                            </div>
+                                            <div
+                                            @click="router.push('/mis_pedidos') ; MostrarMenu = false"
+                                            v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
+                                            class="botonpestaña !py-4 !text-left">
+                                            👤 Mis Pedidos
+                                            </div>
+                                            <div
+                                            @click="router.push('/configuracion') ; MostrarMenu = false" 
+                                            v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/configuracion'}"
+                                            class="botonpestaña !py-4 !text-left">
+                                            ⚙️ Configuracion
+                                            </div>
+                                            <div
+                                            @click="AbrirPopUp01()"
+                                            class="botonpestaña !from-red-600/80 !to-red-800/80 !py-4 !text-left">
+                                            ➜] Cerrar Sesion
+                                            </div>
                                         </div>
-                                        <div 
-                                        @click="router.push('/productos') ; MostrarMenu = false" 
-                                        v-if="Rol !== '3' && Rol !== '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
-                                        class="botonpestaña !py-4 !text-left"
-                                        >
-                                        📦 Productos
-                                        </div>
-                                        <div 
-                                            @click="router.push('/pedidos') ; MostrarMenu = false" 
-                                            v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
-                                        class="botonpestaña !py-4 !text-left"
-                                        >
-                                        🚛 Pedidos
-                                        </div>
-                                        <div
-                                        @click="router.push('/clientes') ; MostrarMenu = false" 
-                                        v-if="Rol === '1' || Rol === '3'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
-                                        class="botonpestaña !py-4 !text-left"
-                                        >
-                                        👥 Clientes
-                                        </div>
-                                        <div 
-                                        @click="router.push('/usuarios') ; MostrarMenu = false" 
-                                        v-if="Rol === '1'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
-                                        class="botonpestaña !py-4 !text-left"
-                                        >
-                                        👨🏻‍💼 Usuarios
-                                        </div>
-                                        <div 
-                                        @click="router.push('/historial_precios') ; MostrarMenu = false" 
-                                        v-if="Rol === '1' || Rol === '4'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
-                                        class="botonpestaña !py-4 !text-left"
-                                        >
-                                        💲 Historial de Precios
-                                        </div>
-                                        <div
-                                        v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                        @click="router.push('/carrito') ; MostrarMenu = false"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
-                                        class="botonpestaña !py-4 !text-left"
-                                        >
-                                        🛒 Tu Carrito
-                                        </div>
-                                        <div
-                                        @click="AbrirPopUp02()" 
-                                        v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
-                                        class="botonpestaña !from-red-400/80 !to-red-500/80 !py-4 !text-left"
-                                        >
-                                        🗑️ Vaciar Carrito
-                                        </div>
-                                        <div
-                                        @click="router.push('/mis_pedidos') ; MostrarMenu = false"
-                                        v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
-                                        class="botonpestaña !py-4 !text-left">
-                                        👤 Mis Pedidos
-                                        </div>
-                                        <div
-                                        @click="router.push('/configuracion') ; MostrarMenu = false" 
-                                        v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/configuracion'}"
-                                        class="botonpestaña !py-4 !text-left">
-                                        ⚙️ Configuracion
-                                        </div>
-                                        <div
-                                        @click="AbrirPopUp01()"
-                                        class="botonpestaña !from-red-600/80 !to-red-800/80 !py-4 !text-left">
-                                        ➜] Cerrar Sesion
-                                        </div>
-                                    </div>
+                                    </transition>
                                 </div>
                             </div>
                         </div>
@@ -305,9 +307,9 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref } from 'vue'
+    import Login from './components/Login.vue'
     import { useRouter, useRoute } from 'vue-router'
     import { CarritoLocal, LimpiarCompra, Iniciado, CerrarSesion, Rol } from './components/Estatus.js'
-    import Login from './components/Login.vue'
     // ----- Variables Complejas ----- //
     const route = useRoute()
     const router = useRouter()

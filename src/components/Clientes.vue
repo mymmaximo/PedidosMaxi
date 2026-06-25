@@ -90,126 +90,128 @@
                         >
                         ᯤ
                         </h1>
-                        <div
-                        class="flex flex-col lg:self-center"
-                        v-if="MostrarFiltro"
-                        >
+                        <transition name="slide">
                             <div
-                            class="flex flex-col md:p-4 p-2"
+                            class="flex flex-col lg:self-center"
+                            v-if="MostrarFiltro"
                             >
-                                <h1>
-                                ¿Realizo un Pedido?
-                                </h1>
+                                <div
+                                class="flex flex-col md:p-4 p-2"
+                                >
+                                    <h1>
+                                    ¿Realizo un Pedido?
+                                    </h1>
+                                    <div 
+                                    class="
+                                    flex flex-col
+                                    ">
+                                        <label>
+                                        <input 
+                                        type="radio" 
+                                        :value="1"
+                                        v-model="filtroDirec"
+                                        > 
+                                        Realizo uno o mas Pedidos
+                                        </label>
+                                        <label>
+                                        <input 
+                                        type="radio" 
+                                        :value="0"
+                                        v-model="filtroDirec"
+                                        > 
+                                        No Realizo Pedidos
+                                        </label>
+                                    </div>
+                                </div>
+                                <div
+                                class="flex flex-col p-2"
+                                >
+                                    <h1>
+                                    ¿El Cliente esta Activo?
+                                    </h1>
+                                    <div 
+                                    class="
+                                    flex flex-col
+                                    ">
+                                        <label>
+                                        <input 
+                                        type="radio" 
+                                        :value="2"
+                                        v-model="filtroEst"
+                                        > 
+                                        Todos los Clientes
+                                        </label>
+                                        <label>
+                                        <input 
+                                        type="radio" 
+                                        :value="1"
+                                        v-model="filtroEst"
+                                        > 
+                                        Cliente Activo
+                                        </label>
+                                        <label>
+                                        <input 
+                                        type="radio" 
+                                        :value="0"
+                                        v-model="filtroEst"
+                                        > 
+                                        Cliente Eliminado
+                                        </label>
+                                    </div>
+                                </div>
+                                <div
+                                class="flex flex-col p-2"
+                                >
                                 <div 
-                                class="
-                                flex flex-col
-                                ">
-                                    <label>
-                                    <input 
-                                    type="radio" 
-                                    :value="1"
-                                    v-model="filtroDirec"
-                                    > 
-                                    Realizo uno o mas Pedidos
-                                    </label>
-                                    <label>
-                                    <input 
-                                    type="radio" 
-                                    :value="0"
-                                    v-model="filtroDirec"
-                                    > 
-                                    No Realizo Pedidos
-                                    </label>
+                                v-if="filtroDirec === 1"
+                                >
+                                    <h2>
+                                    Ciudad del Cliente
+                                    </h2>
+                                    <select 
+                                    v-model="filtrociudad" 
+                                    class="sel"
+                                    >
+                                        <option value="" disabled>
+                                        Selecciona una Ciudad...
+                                        </option>
+                                        <option v-for="i in ListaCiudad" :key="i.ciudad" :value="i.ciudad">
+                                        {{ i.ciudad }}
+                                        </option>
+                                    </select>
+                                    <h2>
+                                    Provincia del Cliente
+                                    </h2>
+                                    <select 
+                                    v-model="filtroprovincia" 
+                                    class="sel">
+                                        <option value="" disabled>
+                                        Selecciona una Provincia...
+                                        </option>
+                                        <option v-for="i in ListaProvincia" :key="i.provincia" :value="i.provincia">
+                                        {{ i.provincia }}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
-                            <div
-                            class="flex flex-col p-2"
-                            >
-                                <h1>
-                                ¿El Cliente esta Activo?
-                                </h1>
-                                <div 
-                                class="
-                                flex flex-col
-                                ">
-                                    <label>
-                                    <input 
-                                    type="radio" 
-                                    :value="2"
-                                    v-model="filtroEst"
-                                    > 
-                                    Todos los Clientes
-                                    </label>
-                                    <label>
-                                    <input 
-                                    type="radio" 
-                                    :value="1"
-                                    v-model="filtroEst"
-                                    > 
-                                    Cliente Activo
-                                    </label>
-                                    <label>
-                                    <input 
-                                    type="radio" 
-                                    :value="0"
-                                    v-model="filtroEst"
-                                    > 
-                                    Cliente Eliminado
-                                    </label>
+                                <div
+                                class="botones">
+                                    <button 
+                                    @click="AplicarFiltro" 
+                                    class="botoncon"
+                                    >
+                                    Filtrar
+                                    </button>
+                                    <button 
+                                    @click="LimpiarFiltro" 
+                                    v-if="filtroAct === true"
+                                    class="botont" 
+                                    >
+                                    🗑️ Limpiar Filtro
+                                    </button>
                                 </div>
                             </div>
-                            <div
-                            class="flex flex-col p-2"
-                            >
-                            <div 
-                            v-if="filtroDirec === 1"
-                            >
-                                <h2>
-                                Ciudad del Cliente
-                                </h2>
-                                <select 
-                                v-model="filtrociudad" 
-                                class="sel"
-                                >
-                                    <option value="" disabled>
-                                    Selecciona una Ciudad...
-                                    </option>
-                                    <option v-for="i in ListaCiudad" :key="i.ciudad" :value="i.ciudad">
-                                    {{ i.ciudad }}
-                                    </option>
-                                </select>
-                                <h2>
-                                Provincia del Cliente
-                                </h2>
-                                <select 
-                                v-model="filtroprovincia" 
-                                class="sel">
-                                    <option value="" disabled>
-                                    Selecciona una Provincia...
-                                    </option>
-                                    <option v-for="i in ListaProvincia" :key="i.provincia" :value="i.provincia">
-                                    {{ i.provincia }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                            <div
-                            class="botones">
-                                <button 
-                                @click="AplicarFiltro" 
-                                class="botoncon"
-                                >
-                                Filtrar
-                                </button>
-                                <button 
-                                @click="LimpiarFiltro" 
-                                v-if="filtroAct === true"
-                                class="botont" 
-                                >
-                                🗑️ Limpiar Filtro
-                                </button>
-                            </div>
-                        </div>
+                        </transition>
                     </div>
                     <div>
                         <h1
@@ -218,63 +220,65 @@
                         >
                         +
                         </h1>
-                        <div
-                        class="flex flex-col lg:self-center"
-                        v-if="MostrarNuevo"
-                        >
-                            <h1>
-                            Nuevo Cliente
-                            </h1>
-                            <form @submit.prevent="SubirNuevoCliente">
-                                <h2>
-                                Nombre
-                                </h2>
-                                <input 
-                                type="text" 
-                                v-model="NuevoCliente.nombre" 
-                                placeholder="Nombre"
-                                maxlength="20"
-                                >
-                                <h2>
-                                E-Mail
-                                </h2>
-                                <input 
-                                type="text" 
-                                v-model="NuevoCliente.email" 
-                                placeholder="E-Mail"
-                                maxlength="50"
-                                >
-                                <h2>
-                                Documento
-                                </h2>
-                                <input 
-                                type="text" 
-                                v-model="NuevoCliente.dni" 
-                                placeholder="Documento"
-                                maxlength="8"
-                                >
-                                <h2>
-                                Contraseña
-                                </h2>
-                                <input 
-                                type="text" 
-                                v-model="NuevoCliente.contrasena" 
-                                placeholder="Contraseña"
-                                maxlength="20"
-                                >
-                                <div
-                                class="botones"
-                                >
-                                    <button 
-                                    type="submit" 
-                                    :disabled="confirboton"
-                                    class="botoncon"
+                        <transition name="slide">
+                            <div
+                            class="flex flex-col lg:self-center"
+                            v-if="MostrarNuevo"
+                            >
+                                <h1>
+                                Nuevo Cliente
+                                </h1>
+                                <form @submit.prevent="SubirNuevoCliente">
+                                    <h2>
+                                    Nombre
+                                    </h2>
+                                    <input 
+                                    type="text" 
+                                    v-model="NuevoCliente.nombre" 
+                                    placeholder="Nombre"
+                                    maxlength="20"
                                     >
-                                    Crear Cliente
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                                    <h2>
+                                    E-Mail
+                                    </h2>
+                                    <input 
+                                    type="text" 
+                                    v-model="NuevoCliente.email" 
+                                    placeholder="E-Mail"
+                                    maxlength="50"
+                                    >
+                                    <h2>
+                                    Documento
+                                    </h2>
+                                    <input 
+                                    type="text" 
+                                    v-model="NuevoCliente.dni" 
+                                    placeholder="Documento"
+                                    maxlength="8"
+                                    >
+                                    <h2>
+                                    Contraseña
+                                    </h2>
+                                    <input 
+                                    type="text" 
+                                    v-model="NuevoCliente.contrasena" 
+                                    placeholder="Contraseña"
+                                    maxlength="20"
+                                    >
+                                    <div
+                                    class="botones"
+                                    >
+                                        <button 
+                                        type="submit" 
+                                        :disabled="confirboton"
+                                        class="botoncon"
+                                        >
+                                        Crear Cliente
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </transition>
                     </div>
                 </div>
                 <!-- Tabla de Clientes -->
@@ -464,7 +468,7 @@
                             p-3"
                             >
                                 <button
-                                @click="Pagina = Pagina - 20 ; BusquedaCliente()" 
+                                @click="Pagina = Pagina - 20 ; CargarDatos()" 
                                 :disabled="Pagina < 20"
                                 class="botona"
                                 >
@@ -477,7 +481,7 @@
                                 {{ Pagina + clientes.length }}
                                 </h2>
                                 <button 
-                                @click="Pagina = Pagina + 20 ; BusquedaCliente()" 
+                                @click="Pagina = Pagina + 20 ; CargarDatos()" 
                                 :disabled="clientes.length < 20"
                                 class="botona"
                                 >
@@ -497,6 +501,24 @@
     // ----- Imports ----- //
     import { onMounted, ref, computed } from 'vue'
     import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus'
+    // ----- Variables Vue ----- //
+    const confirboton = computed(() =>{
+        if (MostrarNuevo.value) {
+            const faltandatos01 = 
+                NuevoCliente.value.nombre === ""||
+                NuevoCliente.value.email === ""||
+                !NuevoCliente.value.email.includes("@") ||
+                NuevoCliente.value.dni === ""||
+                NuevoCliente.value.contrasena === ""
+            return faltandatos01
+        }
+        if (ActualizarCajaC.value) {
+            const faltandatos02 = 
+                ClienteAct.value.nombre === ""||
+                ClienteAct.value.email === ""
+            return faltandatos02
+        }
+    })
     // ----- Variables Complejas ----- //
     const ClienteAct = ref({
         id: "",
@@ -547,7 +569,7 @@
             }
         }, 15000)
         try {
-            BusquedaCliente()
+            await BusquedaCliente()
             const respuestac = await fetch("http://localhost:8000/direccion/ciudad")
             const ciudad = await respuestac.json()
             ListaCiudad.value = ciudad
@@ -564,23 +586,6 @@
             if (!ErrorCarga.value) {
                 CargandoTrue.value = false
             }
-        }
-    })
-    const confirboton = computed(() =>{
-        if (MostrarNuevo.value) {
-            const faltandatos01 = 
-                NuevoCliente.value.nombre === ""||
-                NuevoCliente.value.email === ""||
-                !NuevoCliente.value.email.includes("@") ||
-                NuevoCliente.value.dni === ""||
-                NuevoCliente.value.contrasena === ""
-            return faltandatos01
-        }
-        if (ActualizarCajaC.value) {
-            const faltandatos02 = 
-                ClienteAct.value.nombre === ""||
-                ClienteAct.value.email === ""
-            return faltandatos02
         }
     })
     const RecargarPagina = () => {
@@ -672,7 +677,7 @@
         if (ClienteAct.value.contrasena !== "") {
             ClienteUpd.contrasena = ClienteAct.value.contrasena
         }
-        const ActCliente = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/clientes/id/${ClienteAct.value.id}`, {
+        const ActCliente = await fetch(`http://10.250.4.36:8000/clientes/id/${ClienteAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -694,7 +699,7 @@
         CerrarPopUp03()
     }
     const BorrarCliente = async() => {
-        const EraseCliente = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/clientes/id/${ClienteEli.value}`, {
+        const EraseCliente = await fetch(`http://10.250.4.36:8000/clientes/id/${ClienteEli.value}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -710,7 +715,7 @@
         CerrarPopUp02()
     }
     const BusquedaCliente = async() => {
-        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/cliente/');
+        let url = new URL ('http://10.250.4.36:8000/cliente/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_cliente', Busqueda.value)
@@ -744,7 +749,7 @@
         clientes.value = datos
     }
     const SubirNuevoCliente = async() => {
-        const SubidaNuevoCliente = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/clientes/', {
+        const SubidaNuevoCliente = await fetch('http://10.250.4.36:8000/clientes/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -11,140 +11,142 @@
                         ᯤ
                         </h1>
                     </div>
-                    <div
-                    class="flex flex-col lg:self-center"
-                    v-if="MostrarFiltro"
-                    >
+                    <transition name="slide">
                         <div
-                        class="flex flex-col md:p-4 p-2"
+                        class="flex flex-col lg:self-center"
+                        v-if="MostrarFiltro"
                         >
-                            <h2 class="p-2">
-                            Filtros de Fecha de Actualizacion
-                            </h2>
-                            <input 
-                            type="date"
-                            v-model="fecha_upgrade_max" 
-                            placeholder="Fecha de Actualizacion Max..."
+                            <div
+                            class="flex flex-col md:p-4 p-2"
                             >
-                            <input
-                            type="date"
-                            v-model="fecha_upgrade_min" 
-                            placeholder="Fecha de Actualizacion Min..."
-                            >
-                        </div>
-                        <div
-                        class="flex flex-col md:p-4 p-2"
-                        >
-                            <h2 class="p-2">
-                            Filtros de Precio Viejo
-                            </h2>
-                            <input 
-                            type="date"
-                            v-model="precio_viejo_max" 
-                            placeholder="Precio Viejo Max..."
-                            maxlength="10"
-                            >
-                            <input
-                            type="date"
-                            v-model="precio_viejo_min" 
-                            placeholder="Precio Viejo Min..."
-                            maxlength="10"
-                            >
-                        </div>
-                        <div
-                        class="flex flex-col md:p-4 p-2"
-                        >
-                            <h2 class="p-2">
-                            Filtros de Precio Nuevo
-                            </h2>
-                            <input 
-                            type="number"
-                            v-model="precio_nuevo_max" 
-                            placeholder="Precio Nuevo Max..."
-                            maxlength="10"
-                            >
-                            <input
-                            type="number"
-                            v-model="precio_nuevo_min" 
-                            placeholder="Precio Nuevo Min..."
-                            maxlength="10"
-                            >
-                        </div>
-                        <div
-                        class="flex flex-col md:p-4 p-2"
-                        >
-                            <h2 class="p-2">
-                            Filtro Categoria
-                            </h2>
-                            <div>
-                                <select 
-                                v-model="filtrocat" 
+                                <h2 class="p-2">
+                                Filtros de Fecha de Actualizacion
+                                </h2>
+                                <input 
+                                type="date"
+                                v-model="fecha_upgrade_max" 
+                                placeholder="Fecha de Actualizacion Max..."
                                 >
-                                    <option value="" disabled>
-                                    Categorias...
-                                    </option>
-                                    <option 
-                                    v-for="i in ListaCategoria" 
-                                    :key="i.categoria" 
-                                    :value="i.categoria"
-                                    >
-                                    {{ i.categoria }}
-                                    </option>
-                                </select>
+                                <input
+                                type="date"
+                                v-model="fecha_upgrade_min" 
+                                placeholder="Fecha de Actualizacion Min..."
+                                >
                             </div>
-                        </div>
-                        <div
-                        class="flex flex-col md:p-4 p-2"
-                        >
-                            <h2 class="p-2">
-                            ¿El Productos esta Activo?
-                            </h2>
-                            <div 
-                            class="
-                            flex flex-col 
-                            p-2 gap-2
-                            ">
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="2"
-                                v-model="bool_activo "
-                                > 
-                                Todos los Productos
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="1"
-                                v-model="bool_activo"
-                                > 
-                                Productos Activos
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="0"
-                                v-model="bool_activo"
-                                > 
-                                Productos Eliminados
-                                </label>
-                            </div>
-                        </div>
-                        <div class="botones">
-                            <button 
-                            @click="AplicarFiltro" 
-                            class="botoncon">
-                            Aplicar Filtros
-                            </button>
-                            <button 
-                            @click="LimpiarFiltro"
-                            v-if="filtroAct === true" 
-                            class="botont"
+                            <div
+                            class="flex flex-col md:p-4 p-2"
                             >
-                            🗑️ Limpiar Filtro
-                            </button>
+                                <h2 class="p-2">
+                                Filtros de Precio Viejo
+                                </h2>
+                                <input 
+                                type="date"
+                                v-model="precio_viejo_max" 
+                                placeholder="Precio Viejo Max..."
+                                maxlength="10"
+                                >
+                                <input
+                                type="date"
+                                v-model="precio_viejo_min" 
+                                placeholder="Precio Viejo Min..."
+                                maxlength="10"
+                                >
+                            </div>
+                            <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h2 class="p-2">
+                                Filtros de Precio Nuevo
+                                </h2>
+                                <input 
+                                type="number"
+                                v-model="precio_nuevo_max" 
+                                placeholder="Precio Nuevo Max..."
+                                maxlength="10"
+                                >
+                                <input
+                                type="number"
+                                v-model="precio_nuevo_min" 
+                                placeholder="Precio Nuevo Min..."
+                                maxlength="10"
+                                >
+                            </div>
+                            <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h2 class="p-2">
+                                Filtro Categoria
+                                </h2>
+                                <div>
+                                    <select 
+                                    v-model="filtrocat" 
+                                    >
+                                        <option value="" disabled>
+                                        Categorias...
+                                        </option>
+                                        <option 
+                                        v-for="i in ListaCategoria" 
+                                        :key="i.categoria" 
+                                        :value="i.categoria"
+                                        >
+                                        {{ i.categoria }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h2 class="p-2">
+                                ¿El Productos esta Activo?
+                                </h2>
+                                <div 
+                                class="
+                                flex flex-col 
+                                p-2 gap-2
+                                ">
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="2"
+                                    v-model="bool_activo "
+                                    > 
+                                    Todos los Productos
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="1"
+                                    v-model="bool_activo"
+                                    > 
+                                    Productos Activos
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="0"
+                                    v-model="bool_activo"
+                                    > 
+                                    Productos Eliminados
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="botones">
+                                <button 
+                                @click="AplicarFiltro" 
+                                class="botoncon">
+                                Aplicar Filtros
+                                </button>
+                                <button 
+                                @click="LimpiarFiltro"
+                                v-if="filtroAct === true" 
+                                class="botont"
+                                >
+                                🗑️ Limpiar Filtro
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </transition>
                 </div>
                 <!-- Tabla de Historial de Precios -->
                 <div class="start !px-5">
@@ -264,7 +266,7 @@
                         p-3"
                         >
                             <button 
-                            @click="Pagina = Pagina - 20 ; BusquedaHistorial()" 
+                            @click="Pagina = Pagina - 20 ; CargarDatos()" 
                             :disabled="Pagina < 20"
                             class="botona"
                             >
@@ -277,7 +279,7 @@
                             {{ Pagina + Historial.length }}
                             </h2>
                             <button 
-                            @click="Pagina = Pagina + 20 ; BusquedaHistorial()" 
+                            @click="Pagina = Pagina + 20 ; CargarDatos()" 
                             :disabled="Historial.length < 20"
                             class="botona"
                             >
@@ -329,8 +331,8 @@
             }
         }, 15000)
         try {
-            BusquedaHistorial()
-            const respuesta = await fetch("https://x1sjqnzh-8000.brs.devtunnels.ms/producto/categorias/")
+            await BusquedaHistorial()
+            const respuesta = await fetch("http://10.250.4.36:8000/producto/categorias/")
             const categ = await respuesta.json()
             ListaCategoria.value = categ
             clearTimeout(temporizador)
@@ -400,7 +402,7 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaHistorial = async() => {
-        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/historial/');
+        let url = new URL ('http://10.250.4.36:8000/historial/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value);

@@ -143,7 +143,7 @@
         try {
             const idConfig = leerCookie("id_cliente");
             if (idConfig) {
-                const respuesta = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/cliente/?id_cliente=${idConfig}`);
+                const respuesta = await fetch(`http://10.250.4.36:8000/cliente/?id_cliente=${idConfig}`);
                 const datos = await respuesta.json();
                 if (datos.length > 0) {
                     const miPerfil = datos.find(cliente => cliente.id === parseInt(idConfig))
@@ -188,7 +188,7 @@
             UsuarioUpd.contrasena = ClienteConfig.value.contrasena
         }
         const idUsuarioAct = leerCookie("id_cliente");
-        const ActUsuario = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/clientes/id/${idUsuarioAct}`, {
+        const ActUsuario = await fetch(`http://10.250.4.36:8000/clientes/id/${idUsuarioAct}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

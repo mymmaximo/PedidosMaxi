@@ -190,148 +190,150 @@
 						ᯤ
 						</h1>
 					</div>
-					<div
-					class="flex flex-col lg:self-center gap-5"
-					v-if="MostrarFiltro"
-					>
+                    <transition name="slide">
 						<div
-						class="flex flex-col"
+						class="flex flex-col lg:self-center gap-5"
+						v-if="MostrarFiltro"
 						>
-							<h1>
-							Filtro de Metodo de Pago
-							</h1>
-							<label>
-							<input 
-							type="radio" 
-							:value="3"
-							v-model="filtroMP"
-							> 
-							Tarjeta de Credito / Debito
-							</label>
-							<label>
-							<input 
-							type="radio" 
-							:value="2"
-							v-model="filtroMP"
-							> 
-							Mercado Pago
-							</label>
-							<label>
-							<input 
-							type="radio" 
-							:value="1"
-							v-model="filtroMP"
-							> 
-							Transferencia Bancaria
-							</label>
-							<label>
-							<input 
-							type="radio" 
-							:value="0"
-							v-model="filtroMP"
-							> 
-							Efectivo
-							</label>
-						</div>
-						<div
-						class="flex flex-col"
-						>
-							<h1>
-							Filtro de Estatus
-							</h1>
-							<label>
-							<input 
-							type="radio" 
-							:value="3"
-							v-model="filtroEst"
-							> 
-							Preparando
-							</label>
-							<label>
-							<input 
-							type="radio" 
-							:value="2"
-							v-model="filtroEst"
-							> 
-							En Camino
-							</label>
-							<label>
-							<input 
-							type="radio" 
-							:value="1"
-							v-model="filtroEst"
-							> 
-							Entregado
-							</label>
-						</div>
-						<div
-						class="flex flex-col"
-						>
-							<h1>
-							Ciudad del Cliente
-							</h1>
-							<div>
-								<select 
-								v-model="filtrociudad"
-								>
-									<option 
-									value="" disabled
-									>
-									Selecciona una Ciudad...
-									</option>
-									<option 
-									v-for="i in ListaCiudad" 
-									:key="i.ciudad" 
-									:value="i.ciudad"
-									>
-									{{ i.ciudad }}
-									</option>
-								</select>
-							</div>
-						</div>
-						<div
-						class="flex flex-col"
-						>
-							<h1>
-							Provincia del Cliente
-							</h1>
-							<div>
-								<select 
-								v-model="filtroprovincia" 
-								>
-									<option 
-									value="" 
-									disabled
-									>
-									Selecciona una Provincia...
-									</option>
-									<option 
-									v-for="i in ListaProvincia" 
-									:key="i.provincia" 
-									:value="i.provincia"
-									>
-									{{ i.provincia }}
-									</option>
-								</select>
-							</div>
-						</div>
-						<div
-						class="botones"
-						>
-							<button 
-							@click="AplicarFiltro" 
-							class="botoncon">
-							Aplicar Filtros
-							</button>
-							<button 
-							@click="LimpiarFiltro" 
-							v-if="filtroAct === true"
-							class="botont" 
+							<div
+							class="flex flex-col"
 							>
-							🗑️ Limpiar Filtro
-							</button>
+								<h1>
+								Filtro de Metodo de Pago
+								</h1>
+								<label>
+								<input 
+								type="radio" 
+								:value="3"
+								v-model="filtroMP"
+								> 
+								Tarjeta de Credito / Debito
+								</label>
+								<label>
+								<input 
+								type="radio" 
+								:value="2"
+								v-model="filtroMP"
+								> 
+								Mercado Pago
+								</label>
+								<label>
+								<input 
+								type="radio" 
+								:value="1"
+								v-model="filtroMP"
+								> 
+								Transferencia Bancaria
+								</label>
+								<label>
+								<input 
+								type="radio" 
+								:value="0"
+								v-model="filtroMP"
+								> 
+								Efectivo
+								</label>
+							</div>
+							<div
+							class="flex flex-col"
+							>
+								<h1>
+								Filtro de Estatus
+								</h1>
+								<label>
+								<input 
+								type="radio" 
+								:value="3"
+								v-model="filtroEst"
+								> 
+								Preparando
+								</label>
+								<label>
+								<input 
+								type="radio" 
+								:value="2"
+								v-model="filtroEst"
+								> 
+								En Camino
+								</label>
+								<label>
+								<input 
+								type="radio" 
+								:value="1"
+								v-model="filtroEst"
+								> 
+								Entregado
+								</label>
+							</div>
+							<div
+							class="flex flex-col"
+							>
+								<h1>
+								Ciudad del Cliente
+								</h1>
+								<div>
+									<select 
+									v-model="filtrociudad"
+									>
+										<option 
+										value="" disabled
+										>
+										Selecciona una Ciudad...
+										</option>
+										<option 
+										v-for="i in ListaCiudad" 
+										:key="i.ciudad" 
+										:value="i.ciudad"
+										>
+										{{ i.ciudad }}
+										</option>
+									</select>
+								</div>
+							</div>
+							<div
+							class="flex flex-col"
+							>
+								<h1>
+								Provincia del Cliente
+								</h1>
+								<div>
+									<select 
+									v-model="filtroprovincia" 
+									>
+										<option 
+										value="" 
+										disabled
+										>
+										Selecciona una Provincia...
+										</option>
+										<option 
+										v-for="i in ListaProvincia" 
+										:key="i.provincia" 
+										:value="i.provincia"
+										>
+										{{ i.provincia }}
+										</option>
+									</select>
+								</div>
+							</div>
+							<div
+							class="botones"
+							>
+								<button 
+								@click="AplicarFiltro" 
+								class="botoncon">
+								Aplicar Filtros
+								</button>
+								<button 
+								@click="LimpiarFiltro" 
+								v-if="filtroAct === true"
+								class="botont" 
+								>
+								🗑️ Limpiar Filtro
+								</button>
+							</div>
 						</div>
-					</div>
+                    </transition>
 				</div>
 				<!-- Tabla de Pedidos -->
 				<div class="start !px-5"
@@ -424,7 +426,7 @@
 									</div>
 								</div>
 								<div v-if = "PedidoNow === i.id_pedido">
-									<div class="tab !bg-gray-400">
+									<div class="tab !from-gray-50 !to-gray-200">
 										<div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
 											<div class="flex flex-col gap-1">
 												<div class="flex flex-row">
@@ -539,7 +541,7 @@
 						p-3"
 						>
 							<button 
-							@click="Pagina = Pagina - 20 ; BusquedaPedido()" 
+							@click="Pagina = Pagina - 20 ; CargarDatos()" 
 							:disabled="Pagina < 20"
 							class="botona"
 							>
@@ -552,7 +554,7 @@
 							{{ Pagina + Pedidos.length }}
 							</h2>
 							<button 
-							@click="Pagina = Pagina + 20 ; BusquedaPedido()" 
+							@click="Pagina = Pagina + 20 ; CargarDatos()" 
 							:disabled="Pedidos.length < 20"
 							class="botona"
 							>
@@ -613,11 +615,11 @@
             }
         }, 15000)
         try {
-			BusquedaPedido()
-			const respuestac = await fetch("https://x1sjqnzh-8000.brs.devtunnels.ms/direccion/ciudad/")
+			await BusquedaPedido()
+			const respuestac = await fetch("http://10.250.4.36:8000/direccion/ciudad/")
 			const ciudad = await respuestac.json()
 			ListaCiudad.value = ciudad
-			const respuestap = await fetch("https://x1sjqnzh-8000.brs.devtunnels.ms/direccion/provincia/")
+			const respuestap = await fetch("http://10.250.4.36:8000/direccion/provincia/")
 			const provincia = await respuestap.json()
 			ListaProvincia.value = provincia
             clearTimeout(temporizador)
@@ -720,7 +722,7 @@
 	}
     // ----- Para el Backend ----- //
 	const ActualizarEstatus = async() => {
-			const ActEst = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/id/${EstatusAct.value.id_pedido}`, {
+			const ActEst = await fetch(`http://10.250.4.36:8000/pedidos/id/${EstatusAct.value.id_pedido}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
@@ -745,7 +747,7 @@
 			CerrarPopUp01()
 	}
 	const BusquedaPedido = async() => {
-		let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/all/');
+		let url = new URL ('http://10.250.4.36:8000/pedidos/all/');
 		url.searchParams.append('skip', Pagina.value);
 		if (Busqueda.value !== "") {
 			url.searchParams.append('busqueda_pedido', Busqueda.value);

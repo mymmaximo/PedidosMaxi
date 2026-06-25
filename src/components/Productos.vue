@@ -22,11 +22,23 @@
                             >
                             🢀
                             </button>
-                            <img
-                            :key="ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key"
-                            :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
-                            class="imagen"
-                            >
+                            <div>
+                                <img
+                                v-show="ImagenesCargando[ProductoEli.id] === false"
+                                :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
+                                @load="ImagenesCargando[ProductoEli.id] = false"
+                                class="imagen"
+                                >
+                                <div
+                                v-if="ImagenesCargando[ProductoEli.id] !== false" 
+                                class="mt-2"
+                                >
+                                    <img 
+                                    src="../assets/loading.gif" 
+                                    alt="Cargando..." 
+                                    class="imagen !2xl:p-15">
+                                </div>
+                            </div>
                             <button
                             @click="NextImg(ProductoEli)"
                             :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
@@ -82,11 +94,23 @@
                             >
                             🢀
                             </button>
-                            <img
-                            :key="ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key"
-                            :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
-                            class="imagen"
-                            >
+                            <div>
+                                <img
+                                v-show="ImagenesCargando[ProductoActual.id] === false"
+                                :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
+                                @load="ImagenesCargando[ProductoActual.id] = false"
+                                class="imagen"
+                                >
+                                <div
+                                v-if="ImagenesCargando[ProductoActual.id] !== false" 
+                                class="mt-2"
+                                >
+                                    <img 
+                                    src="../assets/loading.gif" 
+                                    alt="Cargando..." 
+                                    class="imagen !2xl:p-15">
+                                </div>
+                            </div>
                             <button
                             @click="NextImg(ProductoActual)"
                             :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
@@ -144,6 +168,14 @@
                     </div>
                 </div>
             </div>
+        </Teleport>
+        <!-- Comprar Notificacion -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="MostrarConfir" class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg z-[100] font-bold">
+                    ✅ ¡Agregado al carrito!
+                </div>
+            </transition>
         </Teleport>
         <!-- Actualizar Producto -->
         <Teleport to="body">
@@ -254,10 +286,23 @@
                                     >
                                     🗙
                                     </button>
-                                    <img 
-                                    :src="ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)"
-                                    :class="DelImg.includes(ProductoAct.imagenes[GetImg(ProductoAct.id)].id_imagen) ? 'imagendel' : 'imagen'"
-                                    >
+                                    <div>
+                                        <img
+                                        v-show="ImagenesCargando[ProductoAct.id] === false"
+                                        :src=ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)
+                                        @load="ImagenesCargando[ProductoAct.id] = false"
+                                        class="imagen"
+                                        >
+                                        <div
+                                        v-if="ImagenesCargando[ProductoAct.id] !== false" 
+                                        class="mt-2"
+                                        >
+                                            <img 
+                                            src="../assets/loading.gif" 
+                                            alt="Cargando..." 
+                                            class="imagen !2xl:p-15">
+                                        </div>
+                                    </div>
                                 </div>
                                 <button 
                                 type="button" 
@@ -359,161 +404,163 @@
                         ᯤ
                         </h1>
                     </div>
-                    <div
-                    class="flex flex-col lg:self-center"
-                    v-if="MostrarFiltro"
-                    >
+                    <transition name="slide">
                         <div
-                        class="flex flex-col md:p-4 p-2"
+                        class="flex flex-col lg:self-center"
+                        v-if="MostrarFiltro"
                         >
-                            <h2>
-                            Filtro Categoria
-                            </h2>
-                            <div>
-                                <select 
-                                v-model="filtrocat"
-                                >
-                                    <option value="" disabled>
-                                    Categorias...
-                                    </option>
-                                    <option 
-                                    v-for="i in ListaCategoria" 
-                                    :key="i.categoria" 
-                                    :value="i.categoria"
+                            <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h2>
+                                Filtro Categoria
+                                </h2>
+                                <div>
+                                    <select 
+                                    v-model="filtrocat"
                                     >
-                                    {{ i.categoria }}
-                                    </option>
-                                </select>
+                                        <option value="" disabled>
+                                        Categorias...
+                                        </option>
+                                        <option 
+                                        v-for="i in ListaCategoria" 
+                                        :key="i.categoria" 
+                                        :value="i.categoria"
+                                        >
+                                        {{ i.categoria }}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div
-                        class="
-                        flex flex-col
-                        md:p-4 p-2
-                        ">
-                            <h2>
-                            Filtros de Precio
-                            </h2>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="3"
-                            v-model="filtroRadio"
-                            > 
-                            Hasta $10,000
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="2"
-                            v-model="filtroRadio"
-                            > 
-                            $10,000 a $50,000
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="1"
-                            v-model="filtroRadio"
-                            > 
-                            Más de $50,000
-                            </label>
-                            <label>
-                            <input 
-                            type="radio" 
-                            :value="0"
-                            v-model="filtroRadio"
-                            > 
-                            Personalizado
-                            </label>
-                        </div>
-                        <div
-                        v-if="filtroRadio === 0" 
-                        class="
-                        flex flex-col
-                        md:p-4 p-2
-                        ">
-                            <h3
-                            class="
-                            flex flex-col
-                            md:p-4 p-2
-                            ">
-                            Precio Mayor
-                            </h3>
-                            <input 
-                            type="number"
-                            v-model="mayor" 
-                            placeholder="Precio Max..."
-                            maxlength="10"
-                            >
-                            <h3
-                            class="
-                            flex flex-col
-                            md:p-4 p-2
-                            ">
-                            Precio Minimo
-                            </h3>
-                            <input
-                            type="number"
-                            v-model="menor" 
-                            placeholder="Precio Min..."
-                            maxlength="10"
-                            >
-                        </div>
-                        <div 
-                        v-if="Rol === '1' || Rol === '2' || Rol === '4'"
-                        >
-                            <h2>
-                            ¿El Productos esta Activo?
-                            </h2>
                             <div
                             class="
                             flex flex-col
                             md:p-4 p-2
                             ">
+                                <h2>
+                                Filtros de Precio
+                                </h2>
+                                <label>
+                                <input 
+                                type="radio" 
+                                :value="3"
+                                v-model="filtroRadio"
+                                > 
+                                Hasta $10,000
+                                </label>
                                 <label>
                                 <input 
                                 type="radio" 
                                 :value="2"
-                                v-model="filtroEst"
+                                v-model="filtroRadio"
                                 > 
-                                Todos los Productos
+                                $10,000 a $50,000
                                 </label>
                                 <label>
                                 <input 
                                 type="radio" 
                                 :value="1"
-                                v-model="filtroEst"
+                                v-model="filtroRadio"
                                 > 
-                                Productos Activos
+                                Más de $50,000
                                 </label>
                                 <label>
                                 <input 
                                 type="radio" 
                                 :value="0"
-                                v-model="filtroEst"
+                                v-model="filtroRadio"
                                 > 
-                                Productos Eliminados
+                                Personalizado
                                 </label>
                             </div>
-                        </div>
-                        <div
-                        class="botones"
-                        >
-                            <button 
-                            @click="AplicarFiltro" 
-                            class="botoncon">
-                            Aplicar Filtros
-                            </button>
-                            <button 
-                            @click="LimpiarFiltro" 
-                            v-if="filtroAct === true"
-                            class="botont" 
+                            <div
+                            v-if="filtroRadio === 0" 
+                            class="
+                            flex flex-col
+                            md:p-4 p-2
+                            ">
+                                <h3
+                                class="
+                                flex flex-col
+                                md:p-4 p-2
+                                ">
+                                Precio Mayor
+                                </h3>
+                                <input 
+                                type="number"
+                                v-model="mayor" 
+                                placeholder="Precio Max..."
+                                maxlength="10"
+                                >
+                                <h3
+                                class="
+                                flex flex-col
+                                md:p-4 p-2
+                                ">
+                                Precio Minimo
+                                </h3>
+                                <input
+                                type="number"
+                                v-model="menor" 
+                                placeholder="Precio Min..."
+                                maxlength="10"
+                                >
+                            </div>
+                            <div 
+                            v-if="Rol === '1' || Rol === '2' || Rol === '4'"
                             >
-                            🗑️ Limpiar Filtro
-                            </button>
+                                <h2>
+                                ¿El Productos esta Activo?
+                                </h2>
+                                <div
+                                class="
+                                flex flex-col
+                                md:p-4 p-2
+                                ">
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="2"
+                                    v-model="filtroEst"
+                                    > 
+                                    Todos los Productos
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="1"
+                                    v-model="filtroEst"
+                                    > 
+                                    Productos Activos
+                                    </label>
+                                    <label>
+                                    <input 
+                                    type="radio" 
+                                    :value="0"
+                                    v-model="filtroEst"
+                                    > 
+                                    Productos Eliminados
+                                    </label>
+                                </div>
+                            </div>
+                            <div
+                            class="botones"
+                            >
+                                <button 
+                                @click="AplicarFiltro" 
+                                class="botoncon">
+                                Aplicar Filtros
+                                </button>
+                                <button 
+                                @click="LimpiarFiltro" 
+                                v-if="filtroAct === true"
+                                class="botont" 
+                                >
+                                🗑️ Limpiar Filtro
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </transition>
                     <div v-if="Rol === '1' || Rol === '2'">
                         <h1
                         @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
@@ -522,120 +569,122 @@
                         +
                         </h1>
                     </div>
-                    <div
-                    class="flex flex-col lg:self-center"
-                    v-if="MostrarNuevo && (Rol === '1' || Rol === '2')"
-                    >
-                        <form @submit.prevent="SubirNuevoProducto">
-                            <h2>
-                            Nombre
-                            </h2>
-                            <input 
-                            type="text" 
-                            v-model="NuevoProducto.nombre" 
-                            placeholder="Nombre"
-                            maxlength="50"
-                            >
-                            <h2>
-                            Precio
-                            </h2>
-                            <input 
-                            type="number" 
-                            v-model="NuevoProducto.precio" 
-                            placeholder="Precio"
-                            maxlength="8"
-                            >
-                            <h2>
-                            Stock
-                            </h2>
-                            <input 
-                            type="number" 
-                            v-model="NuevoProducto.stock" 
-                            placeholder="Stock"
-                            maxlength="8"
-                            >
-                            <h2>
-                            Categoria
-                            </h2>
-                            <select v-model="OpcionCategoria" class="seleccion">
-                                <option value="new">
-                                + Agrega una Categoria
-                                </option>
-                                <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
-                                {{ i.categoria }}
-                                </option>
-                            </select>
-                            <h3 v-if="OpcionCategoria === 'new'">
-                            Nueva Categoria
-                            </h3>
-                            <input 
-                            v-if="OpcionCategoria === 'new'" 
-                            type="text" 
-                            v-model="NuevoProducto.categoria" 
-                            placeholder="Categoria"
-                            maxlength="20"
-                            >
-                            <div>
-                                <div
-                                v-if="VistaPrevia.length > 0"
-                                class="
-                                flex flex-row
-                                gap-3 pb-2
-                                w-full overflow-x-auto
-                                "> 
+                    <transition name="slide">
+                        <div
+                        class="flex flex-col lg:self-center"
+                        v-if="MostrarNuevo && (Rol === '1' || Rol === '2')"
+                        >
+                            <form @submit.prevent="SubirNuevoProducto">
+                                <h2>
+                                Nombre
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="NuevoProducto.nombre" 
+                                placeholder="Nombre"
+                                maxlength="50"
+                                >
+                                <h2>
+                                Precio
+                                </h2>
+                                <input 
+                                type="number" 
+                                v-model="NuevoProducto.precio" 
+                                placeholder="Precio"
+                                maxlength="8"
+                                >
+                                <h2>
+                                Stock
+                                </h2>
+                                <input 
+                                type="number" 
+                                v-model="NuevoProducto.stock" 
+                                placeholder="Stock"
+                                maxlength="8"
+                                >
+                                <h2>
+                                Categoria
+                                </h2>
+                                <select v-model="OpcionCategoria" class="seleccion">
+                                    <option value="new">
+                                    + Agrega una Categoria
+                                    </option>
+                                    <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                    {{ i.categoria }}
+                                    </option>
+                                </select>
+                                <h3 v-if="OpcionCategoria === 'new'">
+                                Nueva Categoria
+                                </h3>
+                                <input 
+                                v-if="OpcionCategoria === 'new'" 
+                                type="text" 
+                                v-model="NuevoProducto.categoria" 
+                                placeholder="Categoria"
+                                maxlength="20"
+                                >
+                                <div>
                                     <div
-                                    v-for="(img, index) in VistaPrevia"
-                                    :key="index"
+                                    v-if="VistaPrevia.length > 0"
                                     class="
-                                    shrink-0 mt-2
-                                    relative
+                                    flex flex-row
+                                    gap-3 pb-2
+                                    w-full overflow-x-auto
+                                    "> 
+                                        <div
+                                        v-for="(img, index) in VistaPrevia"
+                                        :key="index"
+                                        class="
+                                        shrink-0 mt-2
+                                        relative
+                                        ">
+                                            <button
+                                            @click="QuitarImagenNueva"
+                                            title="Quitar imagen"
+                                            class="botonx"
+                                            >
+                                            🗙
+                                            </button>
+                                            <img 
+                                            :src="img" 
+                                            alt="Vista Previa"
+                                            class="imagen !m-0" 
+                                            />
+                                        </div>
+                                    </div>
+                                    <div
+                                    v-else 
+                                    class="
+                                    imageno
                                     ">
-                                        <button
-                                        @click="QuitarImagenNueva"
-                                        title="Quitar imagen"
-                                        class="botonx"
-                                        >
-                                        🗙
-                                        </button>
-                                        <img 
-                                        :src="img" 
-                                        alt="Vista Previa"
-                                        class="imagen !m-0" 
+                                    <span>
+                                    Sin vista previa
+                                    </span> 
+                                    </div>
+                                    <div class="mt-4">
+                                        <input
+                                        type="file"
+                                        accept="image/*"
+                                        @change="SeleccionarImagen"
+                                        multiple
+                                        class="imagenu !w-full"
                                         />
                                     </div>
                                 </div>
                                 <div
-                                v-else 
-                                class="
-                                imageno
-                                ">
-                                <span>
-                                Sin vista previa
-                                </span> 
-                                </div>
-                                <div class="mt-4">
-                                    <input
-                                    type="file"
-                                    accept="image/*"
-                                    @change="SeleccionarImagen"
-                                    multiple
-                                    class="imagenu !w-full"
-                                    />
-                                </div>
-                            </div>
-                            <div
-                            class="botones"
-                            >
-                                <button 
-                                type="submit" 
-                                :disabled="confirboton" 
-                                class="botoncon"
+                                class="botones"
                                 >
-                                Crear
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                                    <button 
+                                    type="submit" 
+                                    :disabled="confirboton" 
+                                    class="botoncon"
+                                    >
+                                    Crear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </transition>
                 </div>
                 <!-- Tabla de Productos -->
                 <div class="start">
@@ -668,7 +717,7 @@
                         El servidor no responde o tu conexión es inestable.
                         </h2>
                         <button 
-                        @click="CargarDatos" 
+                        @click="CargarDatos()" 
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
@@ -822,8 +871,8 @@
                             flex justify-center p-5
                             ">
                                 <button 
-                                @click="Pagina = Pagina - 21 ; BusquedaProducto()" 
-                                :disabled="Pagina < 21"
+                                @click="CambiarPagina('back')" 
+                                :disabled="Pagina < 21 || CargandoTrue"
                                 class="botona"
                                 >
                                 🢀
@@ -838,8 +887,8 @@
                                 {{ Pagina + Productos.length }}
                                 </h2>
                                 <button 
-                                @click="Pagina = Pagina + 21 ; BusquedaProducto()" 
-                                :disabled="Productos.length < 21"
+                                @click="CambiarPagina('next')" 
+                                :disabled="Productos.length < 21 || CargandoTrue"
                                 class="botona"
                                 >
                                 🢂
@@ -858,6 +907,32 @@
     import { onMounted, toRefs, ref, watch, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
     import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
+    // ----- Variables Vue ----- //
+    const confirboton = computed(() =>{
+        if (VentanaNuevo.value) {
+            const faltandatos01 = 
+                NuevoProducto.value.nombre === "" ||
+                NuevoProducto.value.precio === "" ||
+                NuevoProducto.value.stock === "" ||
+                NuevoProducto.value.stock < 0 ||
+                NuevoProducto.value.precio <= 0
+            const faltandatos02 = 
+                OpcionCategoria.value === "new" && NuevoProducto.value.categoria === ""
+            return faltandatos01 || faltandatos02
+        }
+        if (ActualizarCajaP.value) {
+            const faltandatos03 =
+                ProductoAct.value.nombre === "" ||
+                ProductoAct.value.precio === "" ||
+                ProductoAct.value.stock === "" ||
+                ProductoAct.value.codigo_barra === "" ||
+                ProductoAct.value.stock < 0 ||
+                ProductoAct.value.precio <= 0
+            const faltandatos04 = 
+                OpcionCategoriaA.value === "new" && ProductoAct.value.categoria === ""
+            return faltandatos03 || faltandatos04
+        }
+    })
     // ----- Variables Complejas ----- //
     const NuevoProducto = ref({
         nombre: "",
@@ -883,7 +958,9 @@
     const { path } = toRefs (prop)
     // ----- Variables Booleanas ----- //
     const ActualizarCajaPDel = ref (false)
+    const BloqueoPeticion = ref(false)
     const VentanaCompra = ref (false)
+    const MostrarConfir = ref (false)
     const MostrarFiltro = ref (true)
     const MostrarNuevo = ref (false)
     const VentanaNuevo = ref (false)
@@ -918,38 +995,6 @@
     onMounted (() => {
         CargarDatos()
     })
-    const CargarDatos = (async() => {
-        CargandoTrue.value = true
-        ErrorCarga.value = false
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
-                console.warn("Se agotó el tiempo de espera de la petición.")
-            }
-        }, 15000)
-        try {
-            BusquedaProducto()
-            const respuesta = await fetch("https://x1sjqnzh-8000.brs.devtunnels.ms/producto/categorias/")
-            const categ = await respuesta.json()
-            ListaCategoria.value = categ
-            const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
-            if (CarritoOlvidado) {
-                CarritoLocal.value = JSON.parse(CarritoOlvidado)
-                console.log("Carrito recuperado:", CarritoLocal.value)
-            }
-            clearTimeout(temporizador)
-        } catch (error) {
-            console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
-        } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
-            }
-        }
-    })
     watch (ProductoCantidad, (NuevaCantidad) => {
         let CantidadnCarrito = 0
         if (ProductoActual.value) {
@@ -970,31 +1015,68 @@
     watch(path, () => {
         if (path.value) ObtenerImgUrl()
     })
-    const confirboton = computed(() =>{
-        if (VentanaNuevo.value) {
-            const faltandatos01 = 
-                NuevoProducto.value.nombre === "" ||
-                NuevoProducto.value.precio === "" ||
-                NuevoProducto.value.stock === "" ||
-                NuevoProducto.value.stock < 0 ||
-                NuevoProducto.value.precio <= 0
-            const faltandatos02 = 
-                OpcionCategoria.value === "new" && NuevoProducto.value.categoria === ""
-            return faltandatos01 || faltandatos02
-        }
-        if (ActualizarCajaP.value) {
-            const faltandatos03 =
-                ProductoAct.value.nombre === "" ||
-                ProductoAct.value.precio === "" ||
-                ProductoAct.value.stock === "" ||
-                ProductoAct.value.codigo_barra === "" ||
-                ProductoAct.value.stock < 0 ||
-                ProductoAct.value.precio <= 0
-            const faltandatos04 = 
-                OpcionCategoriaA.value === "new" && ProductoAct.value.categoria === ""
-            return faltandatos03 || faltandatos04
+    const CargarDatos = (async() => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        const temporizador = setTimeout(() => {
+            if (CargandoTrue.value) {
+                CargandoTrue.value = false
+                ErrorCarga.value = true
+                console.warn("Se agotó el tiempo de espera de la petición.")
+            }
+        }, 15000)
+        try {
+            await BusquedaProducto()
+            const respuesta = await fetch("http://10.250.4.36:8000/producto/categorias/", {
+                headers: {
+                    "X-Tunnel-Skip-AntiPhishing-Page": "true"
+                }
+            })
+            const categ = await respuesta.json()
+            ListaCategoria.value = categ
+            const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
+            if (CarritoOlvidado) {
+                CarritoLocal.value = JSON.parse(CarritoOlvidado)
+                console.log("Carrito recuperado:", CarritoLocal.value)
+            }
+            clearTimeout(temporizador)
+        } catch (error) {
+            console.error("Error cargando la pagina:", error)
+            clearTimeout(temporizador)
+            ErrorCarga.value = true
+            CargandoTrue.value = false
+        } finally {
+            if (!ErrorCarga.value) {
+                CargandoTrue.value = false
+            }
+            BloqueoPeticion.value = false
         }
     })
+    const CambiarPagina = async (direccion) => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        if (direccion === 'next') {
+            Pagina.value += 21
+        } else if (direccion === 'back') {
+            Pagina.value -= 21
+            if (Pagina.value < 0) Pagina.value = 0
+        }
+        try {
+            await BusquedaProducto()
+        } catch (error) {
+            console.error(error)
+            ErrorCarga.value = true
+        } finally {
+            CargandoTrue.value = false
+            BloqueoPeticion.value = false
+        }
+    }
     const RecargarPagina = () => {
         window.location.reload()
     }
@@ -1191,7 +1273,7 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`http://10.250.4.36:8000/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1212,7 +1294,7 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/id/${id_img}`, {
+                await fetch(`http://10.250.4.36:8000/productos/archivos/id/${id_img}`, {
                     method: 'DELETE'
                 })
             }
@@ -1226,7 +1308,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/', {
+                    await fetch('http://10.250.4.36:8000/productos/archivos/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1247,7 +1329,7 @@
         }
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`https://x1sjqnzh-8000.brs.devtunnels.ms/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`http://10.250.4.36:8000/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -1267,10 +1349,10 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL ('https://x1sjqnzh-8000.brs.devtunnels.ms/producto/');
-		url.searchParams.append('skip', Pagina.value);
+        let url = new URL ('http://10.250.4.36:8000/producto/')
+		url.searchParams.append('skip', Pagina.value)
         if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_producto', Busqueda.value);
+            url.searchParams.append('busqueda_producto', Busqueda.value)
         }
         let minfiltro = ""
         let maxfiltro = ""
@@ -1291,32 +1373,36 @@
             minfiltro = 50000
         }
         else if (filtroRadio.value === 0) {
-            minfiltro = menor.value;
-            maxfiltro = mayor.value;
+            minfiltro = menor.value
+            maxfiltro = mayor.value
         }
         if (minfiltro !== "" && minfiltro != null) {
-            url.searchParams.append('precio_producto_min', minfiltro);
+            url.searchParams.append('precio_producto_min', minfiltro)
             filtroAct.value = true
         }
         if (maxfiltro !== "" && maxfiltro != null) {
-            url.searchParams.append('precio_producto_max', maxfiltro);
+            url.searchParams.append('precio_producto_max', maxfiltro)
             filtroAct.value = true
         }
         if (filtroEst.value === 1) {
-            url.searchParams.append('bool_activo', 'true');
+            url.searchParams.append('bool_activo', 'true')
             filtroAct.value = true;
         }
         if (filtroEst.value === 0) {
-            url.searchParams.append('bool_activo', 'false');
-            filtroAct.value = true;
+            url.searchParams.append('bool_activo', 'false')
+            filtroAct.value = true
         }
         if (filtrocat.value !== "") {
-            url.searchParams.append('filtrocat', filtrocat.value);
-            filtroAct.value = true;            
+            url.searchParams.append('filtrocat', filtrocat.value)
+            filtroAct.value = true
         }
-        const BusqProducto = await fetch(url)
-        const datos = await BusqProducto.json();
-        Productos.value = datos;
+        const BusqProducto = await fetch(url.toString(), {
+            headers: {
+                "X-Tunnel-Skip-AntiPhishing-Page": "true"
+            }
+        })
+        const datos = await BusqProducto.json()
+        Productos.value = datos
     }
     const CarritoStock = (Producto) => {
         let stockCarrito = 0
@@ -1331,7 +1417,7 @@
         const tokenGuardado = leerCookie("token");
         const ClienteGuardado = leerCookie("id_cliente");
         if (PedidoActual.value) {
-            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/detalles_pedido/', {
+            const respuesta = await fetch('http://10.250.4.36:8000/pedidos/detalles_pedido/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1351,7 +1437,7 @@
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/pedidos/', {
+            const respuesta = await fetch('http://10.250.4.36:8000/pedidos/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1401,7 +1487,7 @@
         if (OpcionCategoria.value != "new") {
             NuevoProducto.value.categoria = OpcionCategoria.value
         }
-        const SubidaNuevoProducto = await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/productos/', {
+        const SubidaNuevoProducto = await fetch('http://10.250.4.36:8000/productos/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1429,7 +1515,7 @@
                 if (uploadError) {
                     alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
                 } else {
-                    await fetch('https://x1sjqnzh-8000.brs.devtunnels.ms/productos/archivos/', {
+                    await fetch('http://10.250.4.36:8000/productos/archivos/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1483,6 +1569,8 @@
                 CarritoLocal.value
             )
         )
-        CerrarPopUp04()    
+        CerrarPopUp04()
+        MostrarConfir.value = true
+        setTimeout(() => { MostrarConfir.value = false }, 2000)
     }
 </script>
