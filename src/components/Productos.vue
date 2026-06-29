@@ -1,173 +1,398 @@
 <template>
     <div class="cuerpo">
-        <!-- Confirmacion Eliminar -->
+        <!-- Actualizar Producto -->
         <Teleport to="body">
-            <div class="fondo" v-if="ActualizarCajaPDel">
-                <div class="popup">
-                    <h1 class="text-center">
-                    ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
-                    </h1>
-                    <div>
-                        <div 
-                        v-if="ProductoEli.imagenes.length > 0"
-                        class="flex flex-row 
-                        gap-3 overflow-x-auto
-                        items-center justify-center 
-                        w-full pb-2 snap-x
-                        ">
-                            <button
-                            @click="BackImg(ProductoEli)"
-                            :disabled="GetImg(ProductoEli.id) === 0"
-                            class="botonflecha"
-                            >
-                            🢀
-                            </button>
-                            <div>
-                                <img
-                                v-show="ImagenesCargando[ProductoEli.id] === false"
-                                :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
-                                @load="ImagenesCargando[ProductoEli.id] = false"
-                                class="imagen"
+            <transition name="fade">
+                <div v-if="ActualizarCajaP"
+                @click.self="CerrarPopUp01"
+                class="fondo 
+                ">
+                    <div class="popup">
+                        <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                            <h1>
+                            {{ ProductoAct.nombre }}
+                            </h1>
+                            <div v-if="Rol === '1' || Rol === '2'">
+                                <h2>
+                                Nombre
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="ProductoAct.nombre" 
+                                placeholder="Nombre"
+                                maxlength="50"
                                 >
-                                <div
-                                v-if="ImagenesCargando[ProductoEli.id] !== false" 
-                                class="mt-2"
+                            </div>
+                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4'">
+                                <h2>
+                                Precio
+                                </h2>
+                                <input 
+                                type="number" 
+                                v-model="ProductoAct.precio" 
+                                placeholder="Precio"
+                                maxlength="8"
                                 >
-                                    <img 
-                                    src="../assets/loading.gif" 
-                                    alt="Cargando..." 
-                                    class="imagen !2xl:p-15">
+                            </div>
+                            <div v-if="Rol === '1' || Rol === '2' || Rol === '5'">
+                                <h2>
+                                Stock
+                                </h2>
+                                <input 
+                                type="number" 
+                                v-model="ProductoAct.stock" 
+                                placeholder="Stock"
+                                maxlength="8"
+                                >
+                            </div>
+                            <div v-if="Rol === '1' || Rol === '2'">
+                                <h2>
+                                Categoria
+                                </h2>
+                                <select v-model="OpcionCategoriaA">
+                                    <option value="new">
+                                    + Agrega una Categoria
+                                    </option>
+                                    <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                    {{ i.categoria }}
+                                    </option>
+                                </select>
+                                <div v-if="OpcionCategoriaA === 'new'">
+                                    <h2>
+                                    Nueva Categoria
+                                    </h2>
+                                    <input 
+                                    type="text" 
+                                    v-model="ProductoAct.categoria" 
+                                    placeholder="Categoria"
+                                    maxlength="20"
+                                    >
+                                </div>
+                                <h2>
+                                Codigo de Barras
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="ProductoAct.codigo_barra" 
+                                placeholder="Codigo de Barras"
+                                maxlength="15"
+                                >
+                            </div>
+                            <div v-if="Rol === '1' || Rol === '2'">
+                                <h2>Imágenes actuales</h2>
+                                <div 
+                                v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
+                                class="
+                                flex flex-row
+                                gap-3
+                                items-center justify-center
+                                w-full pb-2
+                                ">
+                                    <button 
+                                    type="button" 
+                                    @click="BackImg(ProductoAct)"
+                                    :disabled="GetImg(ProductoAct.id) === 0"
+                                    class="botonflecha">
+                                    ❮
+                                    </button>
+                                    <div
+                                    class="
+                                    relative 
+                                    w-fit mx-auto mt-2
+                                    ">
+                                        <button
+                                        type="button"
+                                        @click="NoMoreImages(
+                                            ProductoAct.imagenes[GetImg(ProductoAct.id)]
+                                        )"
+                                        title="Quitar imagen"
+                                        class="botonx"
+                                        >
+                                        🗙
+                                        </button>
+                                        <div>
+                                            <img
+                                            v-show="ImagenesCargando[ProductoAct.id] === false"
+                                            :src=ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)
+                                            @load="ImagenesCargando[ProductoAct.id] = false"
+                                            class="imagen"
+                                            >
+                                            <div
+                                            v-if="ImagenesCargando[ProductoAct.id] !== false" 
+                                            class="mt-2"
+                                            >
+                                                <img 
+                                                src="../assets/loading.gif" 
+                                                alt="Cargando..." 
+                                                class="imagen !2xl:p-15">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button 
+                                    type="button" 
+                                    @click="NextImg(ProductoAct)"
+                                    :disabled="GetImg(ProductoAct.id) === ProductoAct.imagenes.length - 1"
+                                    class="botonflecha">
+                                    ❯
+                                    </button>
+                                </div>
+                                <div 
+                                v-else 
+                                class="imageno">
+                                Sin imágenes
+                                </div>
+                                <div>
+                                    <h2>
+                                    Imagenes Nuevas
+                                    </h2>
+                                    <div
+                                    v-if="VistaPrevia.length > 0"
+                                    class="
+                                    relative
+                                    w-fit mx-auto mt-2
+                                    ">
+                                        <div
+                                        v-for="(img, index) in VistaPrevia"
+                                        :key="index"
+                                        class="
+                                        shrink-0 mt-2 
+                                        relative"
+                                        >
+                                            <button
+                                            type="button"
+                                            @click="LimpiarImagenes"
+                                            title="Quitar imagen"
+                                            class="botonx"
+                                            >
+                                            🗙
+                                            </button>
+                                            <img 
+                                            :src="VistaPrevia" 
+                                            alt="Vista Previa"
+                                            class="imagen !m-0" 
+                                            />
+                                        </div>
+                                    </div>
+                                    <div
+                                    v-else 
+                                    class="imageno"
+                                    >
+                                    <span>
+                                    Sin vista previa
+                                    </span> 
+                                    </div>
+                                    <div class="mt-4">
+                                        <input
+                                        type="file"
+                                        accept="image/*"
+                                        @change="SeleccionarImagen"
+                                        multiple
+                                        class="imagenu !w-full"
+                                        ref="fileInput"
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <button
-                            @click="NextImg(ProductoEli)"
-                            :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
-                            class="botonflecha"
+                            <div 
+                            class="botones"
                             >
-                            🢂
-                            </button>
-                        </div>
-                        <img
-                        v-else
-                        src="../assets/images.png"
-                        class="imagen"
-                        >
-                    </div>
-                    <div
-                    class="botones"
-                    >
-                        <button 
-                        @click="BorrarProducto()"
-                        class="botoncon"
-                        >
-                        Confirmo
-                        </button>
-                        <button 
-                        @click="CerrarPopUp02"
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
+                                <button 
+                                type="submit" 
+                                :disabled="confirboton" 
+                                class="botoncon
+                                ">
+                                Actualizar
+                                </button>
+                                <button 
+                                type="button"
+                                @click="CerrarPopUp01" 
+                                class="botonc">
+                                Cancelar
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </div>
+            </transition>
+        </Teleport>
+        <!-- Confirmacion Eliminar -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="ActualizarCajaPDel"
+                @click.self="CerrarPopUp02"
+                class="fondo"
+                >
+                    <div class="popup">
+                        <h1 class="text-center">
+                        ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
+                        </h1>
+                        <div>
+                            <div 
+                            v-if="ProductoEli.imagenes.length > 0"
+                            class="flex flex-row 
+                            gap-3 overflow-x-auto
+                            items-center justify-center 
+                            w-full pb-2 snap-x
+                            ">
+                                <button
+                                @click="BackImg(ProductoEli)"
+                                :disabled="GetImg(ProductoEli.id) === 0"
+                                class="botonflecha"
+                                >
+                                ❮
+                                </button>
+                                <div>
+                                    <img
+                                    v-show="ImagenesCargando[ProductoEli.id] === false"
+                                    :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
+                                    @load="ImagenesCargando[ProductoEli.id] = false"
+                                    class="imagen"
+                                    >
+                                    <div
+                                    v-if="ImagenesCargando[ProductoEli.id] !== false" 
+                                    class="mt-2"
+                                    >
+                                        <img 
+                                        src="../assets/loading.gif" 
+                                        alt="Cargando..." 
+                                        class="imagen !2xl:p-15">
+                                    </div>
+                                </div>
+                                <button
+                                @click="NextImg(ProductoEli)"
+                                :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
+                                class="botonflecha"
+                                >
+                                ❯
+                                </button>
+                            </div>
+                            <img
+                            v-else
+                            src="../assets/images.png"
+                            class="imagen"
+                            >
+                        </div>
+                        <div
+                        class="botones"
+                        >
+                            <button 
+                            @click="BorrarProducto()"
+                            class="botoncon"
+                            >
+                            Confirmo
+                            </button>
+                            <button 
+                            @click="CerrarPopUp02"
+                            class="botonc"
+                            >
+                            Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </transition>
         </Teleport>
         <!-- Comprar Ventana -->
         <Teleport to="body">
-            <div class="fondo" v-if="VentanaCompra">
-                <div class="popup">
-                    <h1 class="text-center">
-                    {{ ProductoActual.nombre }}
-                    </h1>
-                    <div>
-                        <div 
-                        v-if="ProductoActual.imagenes.length > 0"
-                        class="flex flex-row 
-                        gap-3 overflow-x-auto
-                        items-center justify-center 
-                        w-full pb-2 snap-x
-                        ">
-                            <button
-                            @click="BackImg(ProductoActual)"
-                            :disabled="GetImg(ProductoActual.id) === 0"
-                            class="botonflecha"
-                            >
-                            🢀
-                            </button>
-                            <div>
-                                <img
-                                v-show="ImagenesCargando[ProductoActual.id] === false"
-                                :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
-                                @load="ImagenesCargando[ProductoActual.id] = false"
-                                class="imagen"
+            <transition name="fade">
+                <div v-if="VentanaCompra"
+                @click.self="CerrarPopUp03"
+                class="fondo" 
+                >
+                    <div class="popup">
+                        <h1 class="text-center">
+                        {{ ProductoActual.nombre }}
+                        </h1>
+                        <div>
+                            <div 
+                            v-if="ProductoActual.imagenes.length > 0"
+                            class="flex flex-row 
+                            gap-3 overflow-x-auto
+                            items-center justify-center 
+                            w-full pb-2 snap-x
+                            ">
+                                <button
+                                @click="BackImg(ProductoActual)"
+                                :disabled="GetImg(ProductoActual.id) === 0"
+                                class="botonflecha"
                                 >
-                                <div
-                                v-if="ImagenesCargando[ProductoActual.id] !== false" 
-                                class="mt-2"
-                                >
-                                    <img 
-                                    src="../assets/loading.gif" 
-                                    alt="Cargando..." 
-                                    class="imagen !2xl:p-15">
+                                ❮
+                                </button>
+                                <div>
+                                    <img
+                                    v-show="ImagenesCargando[ProductoActual.id] === false"
+                                    :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
+                                    @load="ImagenesCargando[ProductoActual.id] = false"
+                                    class="imagen"
+                                    >
+                                    <div
+                                    v-if="ImagenesCargando[ProductoActual.id] !== false" 
+                                    class="mt-2"
+                                    >
+                                        <img 
+                                        src="../assets/loading.gif" 
+                                        alt="Cargando..." 
+                                        class="imagen !2xl:p-15">
+                                    </div>
                                 </div>
+                                <button
+                                @click="NextImg(ProductoActual)"
+                                :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
+                                class="botonflecha"
+                                >
+                                ❯
+                                </button>
                             </div>
-                            <button
-                            @click="NextImg(ProductoActual)"
-                            :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
-                            class="botonflecha"
+                            <img
+                            v-else
+                            src="../assets/images.png"
+                            class="imagen"
                             >
-                            🢂
+                        </div>
+                        <div
+                        class="
+                        flex flex-col
+                        ">
+                            <input 
+                            type="number" 
+                            v-model="ProductoCantidad"
+                            maxlength="8"
+                            class="!w-30 mb-5"
+                            >
+                            <div class="botones !flex-row">
+                                <button 
+                                @click="SumarProducto(ProductoActual)"
+                                class="botoncon !px-4"
+                                >
+                                ✚
+                                </button>
+                                <button 
+                                @click="RestarProducto(ProductoActual)"
+                                class="botonc !px-4 !font-bold"
+                                >
+                                ━
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                        class="botones"
+                        >
+                            <button 
+                            @click="SumarCarrito"
+                            class="botoncon"
+                            >
+                            Agregar al Carrito
+                            </button>
+                            <button 
+                            @click="CerrarPopUp03"
+                            class="botonc"
+                            >
+                            Cancelar
                             </button>
                         </div>
-                        <img
-                        v-else
-                        src="../assets/images.png"
-                        class="imagen"
-                        >
-                    </div>
-                    <div
-                    class="
-                    flex flex-col
-                    ">
-                        <input 
-                        type="number" 
-                        v-model="ProductoCantidad"
-                        maxlength="8"
-                        class="!w-30 mb-5"
-                        >
-                        <div class="botones !flex-row">
-                            <button 
-                            @click="SumarProducto(ProductoActual)"
-                            class="botoncon !px-4"
-                            >
-                            ✚
-                            </button>
-                            <button 
-                            @click="RestarProducto(ProductoActual)"
-                            class="botonc !px-4 !font-bold"
-                            >
-                            ━
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                    class="botones"
-                    >
-                        <button 
-                        @click="SumarCarrito"
-                        class="botoncon"
-                        >
-                        Agregar al Carrito
-                        </button>
-                        <button 
-                        @click="CerrarPopUp04"
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
                     </div>
                 </div>
-            </div>
+            </transition>
         </Teleport>
         <!-- Comprar Notificacion -->
         <Teleport to="body">
@@ -176,219 +401,6 @@
                     ✅ ¡Agregado al carrito!
                 </div>
             </transition>
-        </Teleport>
-        <!-- Actualizar Producto -->
-        <Teleport to="body">
-            <div 
-            v-if="ActualizarCajaP"
-            class="fondo 
-            ">
-                <div class="popup">
-                    <form @submit.prevent="ActualizarProducto" class="Texto_producto">
-                        <h1>
-                        {{ ProductoAct.nombre }}
-                        </h1>
-                        <div v-if="Rol === '1' || Rol === '2'">
-                            <h2>
-                            Nombre
-                            </h2>
-                            <input 
-                            type="text" 
-                            v-model="ProductoAct.nombre" 
-                            placeholder="Nombre"
-                            maxlength="50"
-                            >
-                        </div>
-                        <div v-if="Rol === '1' || Rol === '2' || Rol === '4'">
-                            <h2>
-                            Precio
-                            </h2>
-                            <input 
-                            type="number" 
-                            v-model="ProductoAct.precio" 
-                            placeholder="Precio"
-                            maxlength="8"
-                            >
-                        </div>
-                        <div v-if="Rol === '1' || Rol === '2' || Rol === '5'">
-                            <h2>
-                            Stock
-                            </h2>
-                            <input 
-                            type="number" 
-                            v-model="ProductoAct.stock" 
-                            placeholder="Stock"
-                            maxlength="8"
-                            >
-                        </div>
-                        <div v-if="Rol === '1' || Rol === '2'">
-                            <h2>
-                            Categoria
-                            </h2>
-                            <select v-model="OpcionCategoriaA">
-                                <option value="new">
-                                + Agrega una Categoria
-                                </option>
-                                <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
-                                {{ i.categoria }}
-                                </option>
-                            </select>
-                            <div v-if="OpcionCategoriaA === 'new'">
-                                <h2>
-                                Nueva Categoria
-                                </h2>
-                                <input 
-                                type="text" 
-                                v-model="ProductoAct.categoria" 
-                                placeholder="Categoria"
-                                maxlength="20"
-                                >
-                            </div>
-                            <h2>
-                            Codigo de Barras
-                            </h2>
-                            <input 
-                            type="text" 
-                            v-model="ProductoAct.codigo_barra" 
-                            placeholder="Codigo de Barras"
-                            maxlength="15"
-                            >
-                        </div>
-                        <div v-if="Rol === '1' || Rol === '2'">
-                            <h2>Imágenes actuales</h2>
-                            <div 
-                            v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
-                            class="
-                            flex flex-row
-                            gap-3
-                            items-center justify-center
-                            w-full pb-2
-                            ">
-                                <button 
-                                type="button" 
-                                @click="BackImg(ProductoAct)"
-                                :disabled="GetImg(ProductoAct.id) === 0"
-                                class="botonflecha">
-                                🢀
-                                </button>
-                                <div
-                                class="
-                                relative 
-                                w-fit mx-auto mt-2
-                                ">
-                                    <button
-                                    type="button"
-                                    @click="NoMoreImages(
-                                        ProductoAct.imagenes[GetImg(ProductoAct.id)]
-                                    )"
-                                    title="Quitar imagen"
-                                    class="botonx"
-                                    >
-                                    🗙
-                                    </button>
-                                    <div>
-                                        <img
-                                        v-show="ImagenesCargando[ProductoAct.id] === false"
-                                        :src=ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)
-                                        @load="ImagenesCargando[ProductoAct.id] = false"
-                                        class="imagen"
-                                        >
-                                        <div
-                                        v-if="ImagenesCargando[ProductoAct.id] !== false" 
-                                        class="mt-2"
-                                        >
-                                            <img 
-                                            src="../assets/loading.gif" 
-                                            alt="Cargando..." 
-                                            class="imagen !2xl:p-15">
-                                        </div>
-                                    </div>
-                                </div>
-                                <button 
-                                type="button" 
-                                @click="NextImg(ProductoAct)"
-                                :disabled="GetImg(ProductoAct.id) === ProductoAct.imagenes.length - 1"
-                                class="botonflecha">
-                                🢂
-                                </button>
-                            </div>
-                            <div 
-                            v-else 
-                            class="imageno">
-                            Sin imágenes
-                            </div>
-                            <div>
-                                <h2>
-                                Imagenes Nuevas
-                                </h2>
-                                <div
-                                v-if="VistaPrevia.length > 0"
-                                class="
-                                relative
-                                w-fit mx-auto mt-2
-                                ">
-                                    <div
-                                    v-for="(img, index) in VistaPrevia"
-                                    :key="index"
-                                    class="
-                                    shrink-0 mt-2 
-                                    relative"
-                                    >
-                                        <button
-                                        type="button"
-                                        @click="LimpiarImagenes"
-                                        title="Quitar imagen"
-                                        class="botonx"
-                                        >
-                                        🗙
-                                        </button>
-                                        <img 
-                                        :src="VistaPrevia" 
-                                        alt="Vista Previa"
-                                        class="imagen !m-0" 
-                                        />
-                                    </div>
-                                </div>
-                                <div
-                                v-else 
-                                class="imageno"
-                                >
-                                <span>
-                                Sin vista previa
-                                </span> 
-                                </div>
-                                <div class="mt-4">
-                                    <input
-                                    type="file"
-                                    accept="image/*"
-                                    @change="SeleccionarImagen"
-                                    multiple
-                                    class="imagenu !w-full"
-                                    ref="fileInput"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div 
-                        class="botones"
-                        >
-                            <button 
-                            type="submit" 
-                            :disabled="confirboton" 
-                            class="botoncon
-                            ">
-                            Actualizar
-                            </button>
-                            <button 
-                            type="button"
-                            @click="CerrarPopUp01" 
-                            class="botonc">
-                            Cancelar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </Teleport>
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
@@ -409,6 +421,45 @@
                         class="flex flex-col lg:self-center"
                         v-if="MostrarFiltro"
                         >
+                            <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h1>
+                                Ordenar
+                                </h1>
+                                <select 
+                                v-model="orden" 
+                                placeholder=""
+                                >
+                                    <option value="" disabled>
+                                    Orden...
+                                    </option>
+                                    <option value="1">
+                                    Nombre A-Z
+                                    </option>
+                                    <option value="2">
+                                    Nombre Z-A
+                                    </option>
+                                    <option value="3">
+                                    Mayor Precio
+                                    </option>
+                                    <option value="4">
+                                    Menor Precio
+                                    </option>
+                                    <option value="5">
+                                    Mayor Stock
+                                    </option>
+                                    <option value="6">
+                                    Menor Stock
+                                    </option>
+                                    <option value="7">
+                                    Productos Antiguos
+                                    </option>
+                                    <option value="8">
+                                    Productos Recientes
+                                    </option>
+                                </select>
+                            </div>
                             <div
                             class="flex flex-col md:p-4 p-2"
                             >
@@ -762,7 +813,7 @@
                                             :disabled="GetImg(i.id) === 0"
                                             class="botonflecha hidden md:flex"
                                             >
-                                            🢀
+                                            ❮
                                             </button>
                                             <div>
                                                 <img
@@ -786,7 +837,7 @@
                                             :disabled="GetImg(i.id) === i.imagenes.length - 1"
                                             class="botonflecha hidden md:flex"
                                             >
-                                            🢂
+                                            ❯
                                             </button>
                                         </div>
                                         <img
@@ -855,7 +906,7 @@
                                                 class="botoncon !py-2 !text-2xl"
                                                 v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                                 >
-                                                𖠩 
+                                                🛍️ 
                                                 </button>
                                             </div>
                                         </div>
@@ -875,7 +926,7 @@
                                 :disabled="Pagina < 21 || CargandoTrue"
                                 class="botona"
                                 >
-                                🢀
+                                ❮
                                 </button>
                                 <h2
                                 class="
@@ -891,7 +942,7 @@
                                 :disabled="Productos.length < 21 || CargandoTrue"
                                 class="botona"
                                 >
-                                🢂
+                                ❯
                                 </button>
                             </div>
                         </div>
@@ -979,7 +1030,7 @@
     const fileInput = ref ('')
     const Busqueda = ref ("")
     const NewImg = ref ([])
-    const NowImg = ref ([])
+    const orden = ref ("")
     const mayor = ref ("")
     const menor = ref ("")
     const DelImg= ref ([])
@@ -1030,7 +1081,7 @@
         }, 15000)
         try {
             await BusquedaProducto()
-            const respuesta = await fetch("http://10.250.4.36:8000/producto/categorias/", {
+            const respuesta = await fetch("http://10.250.4.34:8000/producto/categorias/", {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
                 }
@@ -1094,10 +1145,6 @@
 		document.body.style.overflow = "hidden";
 	}
 	const AbrirPopUp03 = () => {
-		VentanaNuevo.value = true
-		document.body.style.overflow = "hidden";
-	}
-	const AbrirPopUp04 = () => {
 		VentanaCompra.value = true
 		document.body.style.overflow = "hidden";
 	}
@@ -1124,15 +1171,6 @@
 		document.body.style.overflow = "auto";
 	}
 	const CerrarPopUp03 = () => {
-		VentanaNuevo.value = false
-        LimpiarImagenes()
-        NuevoProducto.value.nombre = ""
-        NuevoProducto.value.precio = ""
-        NuevoProducto.value.stock = ""
-        OpcionCategoria.value = "new"
-		document.body.style.overflow = "auto";
-	}
-	const CerrarPopUp04 = () => {
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
@@ -1143,7 +1181,7 @@
     }
     const Compracion = (producto_fila) => {
         VentanaComprar(producto_fila)
-        AbrirPopUp04()
+        AbrirPopUp03()
     }
     const Eliminacion = (producto_fila) => {
         ProductoEli.value.id = producto_fila.id
@@ -1255,7 +1293,7 @@
         }
     }
     const VentanaComprar = (ProductoSeleccionado) => {
-        AbrirPopUp04()
+        AbrirPopUp03()
         ProductoActual.value = ProductoSeleccionado
         ProductoCantidad.value = 1
     }
@@ -1273,7 +1311,7 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`http://10.250.4.36:8000/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`http://10.250.4.34:8000/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1294,7 +1332,7 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`http://10.250.4.36:8000/productos/archivos/id/${id_img}`, {
+                await fetch(`http://10.250.4.34:8000/productos/archivos/id/${id_img}`, {
                     method: 'DELETE'
                 })
             }
@@ -1308,7 +1346,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch('http://10.250.4.36:8000/productos/archivos/', {
+                    await fetch('http://10.250.4.34:8000/productos/archivos/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1329,7 +1367,7 @@
         }
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`http://10.250.4.36:8000/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`http://10.250.4.34:8000/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -1349,10 +1387,14 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL ('http://10.250.4.36:8000/producto/')
+        let url = new URL ('http://10.250.4.34:8000/producto/')
 		url.searchParams.append('skip', Pagina.value)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value)
+        }
+        if (orden.value !== "") {
+            url.searchParams.append('orden', orden.value)
+            filtroAct.value = true
         }
         let minfiltro = ""
         let maxfiltro = ""
@@ -1417,7 +1459,7 @@
         const tokenGuardado = leerCookie("token");
         const ClienteGuardado = leerCookie("id_cliente");
         if (PedidoActual.value) {
-            const respuesta = await fetch('http://10.250.4.36:8000/pedidos/detalles_pedido/', {
+            const respuesta = await fetch('http://10.250.4.34:8000/pedidos/detalles_pedido/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1430,14 +1472,14 @@
                 }])
             })
             if (respuesta.ok) {
-                CerrarPopUp04()
+                CerrarPopUp03()
                 console.log ("funciono")
             } else {
                 const error = await respuesta.text()
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch('http://10.250.4.36:8000/pedidos/', {
+            const respuesta = await fetch('http://10.250.4.34:8000/pedidos/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1487,7 +1529,7 @@
         if (OpcionCategoria.value != "new") {
             NuevoProducto.value.categoria = OpcionCategoria.value
         }
-        const SubidaNuevoProducto = await fetch('http://10.250.4.36:8000/productos/', {
+        const SubidaNuevoProducto = await fetch('http://10.250.4.34:8000/productos/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1515,7 +1557,7 @@
                 if (uploadError) {
                     alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
                 } else {
-                    await fetch('http://10.250.4.36:8000/productos/archivos/', {
+                    await fetch('http://10.250.4.34:8000/productos/archivos/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1540,7 +1582,6 @@
         }
         LimpiarImagenes()
         BusquedaProducto()
-        CerrarPopUp03()
     }
     const SumarCarrito = () => {
         if (!ProductoActual.value)
@@ -1569,7 +1610,7 @@
                 CarritoLocal.value
             )
         )
-        CerrarPopUp04()
+        CerrarPopUp03()
         MostrarConfir.value = true
         setTimeout(() => { MostrarConfir.value = false }, 2000)
     }

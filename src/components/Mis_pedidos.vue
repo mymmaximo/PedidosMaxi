@@ -16,6 +16,27 @@
                         v-if="MostrarFiltro"
                         >
                             <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h1>
+                                Ordenar
+                                </h1>
+                                <select 
+                                v-model="orden" 
+                                placeholder=""
+                                >
+                                    <option value="" disabled>
+                                    Orden...
+                                    </option>
+                                    <option value="1">
+                                    Pedidos Antiguos
+                                    </option>
+                                    <option value="2">
+                                    Pedidos Recientes
+                                    </option>
+                                </select>
+                            </div>
+                            <div
                             class="
                             flex flex-col w-full gap-2.5
                             ">
@@ -620,10 +641,10 @@
     const filtroAct = ref(false)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
-    const VentanaFiltro = ref(false)
     const MostrarFiltro = ref (false)
     const mostrarhistorial = ref(false)
     // ----- Variables Vacias ----- //
+    const orden = ref("")
     const Pedidos = ref([])
     const Busqueda = ref("")
     const PedidoNowEnCamino = ref(null)
@@ -647,7 +668,7 @@
             }
         }, 15000)
         try {
-            const respuesta = await fetch(`http://10.250.4.36:8000/pedidos/cliente/${idUsuario}`)
+            const respuesta = await fetch(`http://10.250.4.34:8000/pedidos/cliente/${idUsuario}`)
             const datos = await respuesta.json();
             console.log("aca che",datos)
             Pedidos.value = datos;
@@ -663,9 +684,6 @@
             }
         }
     })
-    const RecargarPagina = () => {
-        window.location.reload()
-    }
     // ----- Para el Frontend ----- //
     const AplicarFiltro = () => {
         BusquedaPedido()
@@ -720,9 +738,13 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaPedido = async() => {
-        let url = new URL (`http://10.250.4.36:8000/pedidos/cliente/${idUsuario}/`);
+        let url = new URL (`http://10.250.4.34:8000/pedidos/cliente/${idUsuario}/`);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_pedido', Busqueda.value)
+        }
+        if (orden.value !== "") {
+            url.searchParams.append('orden', orden.value)
+            filtroAct.value = true
         }
         let mpfiltro = ""
         if (filtroMP.value === 4) {

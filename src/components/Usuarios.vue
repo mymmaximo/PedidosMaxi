@@ -1,199 +1,103 @@
 <template>
     <!-- Confirmacion Eliminar -->
     <Teleport to="body">
-        <div 
-        v-if="ActualizarCajaUDel" 
-        class="fondo"
-        >
-            <div 
-            class="popup"
+        <transition name="fade">
+            <div v-if="ActualizarCajaUDel" 
+            @click.self="CerrarPopUp01"
+            class="fondo"
             >
-                <h1>
-                ¿Desear Eliminar/Reactivar el Usuario {{ UsuarioAct.nombre }}?
-                </h1>
-                <div
-                class="botones">
-                    <button 
-                    @click="BorrarUsuario()"
-                    class="botoncon"
-                    >
-                    Si Confirmo
-                    </button>
-                    <button 
-                    @click="CerrarPopUp02"
-                    class="botonc"
-                    >
-                    Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </Teleport>
-    <!-- Actualizar Usuario -->
-    <Teleport to="body">
-        <div 
-        v-if="ActualizarCajaU"
-        class="fondo"
-        >
-            <div 
-            class="popup"
-            >
-                <h1>
-                Actualizar Usuario {{ UsuarioAct.nombre }}
-                </h1>
-                <form 
-                @submit.prevent="ActualizarUsuarios" 
+                <div 
+                class="popup"
                 >
-                    <h2 
-                    class="!self-center font-bold"
-                    >
-                    Rol
-                    </h2>
-                    <select 
-                    v-model="UsuarioAct.id_rol"
-                    >
-                        <option value="" disabled>
-                        Selecciona un Rol...
-                        </option>
-                        <option value=1>
-                        Administrador
-                        </option>
-                        <option value=2>
-                        Editor de Productos General
-                        </option>
-                        <option value=3>
-                        Gestor de Pedidos General y Editor de Clientes
-                        </option>
-                        <option value=4>
-                        Gestor de Precios
-                        </option>
-                        <option value=5>
-                        Gestor de Stock
-                        </option>
-                        <option value=6>
-                        Rider
-                        </option>
-                    </select>
+                    <h1>
+                    ¿Desear Eliminar/Reactivar el Usuario {{ UsuarioAct.nombre }}?
+                    </h1>
                     <div
-                    class="botones"
-                    >
+                    class="botones">
                         <button 
-                        type="submit" 
-                        :disabled="confirboton"
+                        @click="BorrarUsuario()"
                         class="botoncon"
                         >
-                        Actualizar
+                        Si Confirmo
                         </button>
                         <button 
-                        @click="CerrarPopUp03" 
+                        @click="CerrarPopUp01"
                         class="botonc"
                         >
                         Cancelar
                         </button>
                     </div>
-                </form>
-            </div>
-        </div>
-    </Teleport>
-    <!-- Nuevo Usuario -->
-    <Teleport to="body">
-        <div 
-        v-if="ActualizarUNew"
-        class="fondo" >
-            <div 
-            v-if="Rol === '1'"
-            class="popup" 
-            >
-                <h1>
-                Nuevo Usuario
-                </h1>
-                <form 
-                @submit.prevent="SubirNuevoUsuario" 
-                >
-                    <h2>
-                    Nombre
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoUsuario.nombre" 
-                    placeholder="Nombre"
-                    maxlength="50"
-                    >
-                    <h2>
-                    E-Mail
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoUsuario.email" 
-                    placeholder="E-Mail"
-                    maxlength="50"
-                    >
-                    <h2>
-                    Documento
-                    </h2>
-                    <input 
-                    type="number" 
-                    v-model="NuevoUsuario.dni" 
-                    placeholder="Documento"
-                    maxlength="8"
-                    >
-                    <h2>
-                    Contraseña
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="NuevoUsuario.contrasena" 
-                    placeholder="Contraseña"
-                    maxlength="30"
-                    >
-                    <h2>
-                    Rol
-                    </h2>
-                    <select 
-                    v-model="NuevoUsuario.id_rol" 
-                    >
-                        <option value="" disabled>
-                        Selecciona un Rol...
-                        </option>
-                        <option value=1>
-                        Administrador
-                        </option>>
-                        <option value=2>
-                        Editor de Productos General
-                        </option>
-                        <option value=3>
-                        Gestor de Pedidos General y Editor de Clientes
-                        </option>
-                        <option value=4>
-                        Gestor de Precios
-                        </option>
-                        <option value=5>
-                        Gestor de Stock
-                        </option>
-                        <option value=6>
-                        Rider
-                        </option>
-                    </select>
-                </form>
-                <div 
-                class="botones"
-                >
-                    <button 
-                    type="submit" 
-                    :disabled="confirboton"
-                    class="botoncon"
-                    >
-                    Crear Cliente
-                    </button>
-                    <button 
-                    @click="CerrarPopUp01"
-                    class="botonc"
-                    >
-                    Cancelar
-                    </button>
                 </div>
             </div>
-        </div>
+        </transition>
+    </Teleport>
+    <!-- Actualizar Usuario -->
+    <Teleport to="body">
+        <transition name="fade">
+            <div v-if="ActualizarCajaU"
+            @click.self="CerrarPopUp02"
+            class="fondo"
+            >
+                <div 
+                class="popup"
+                >
+                    <h1>
+                    Actualizar Usuario {{ UsuarioAct.nombre }}
+                    </h1>
+                    <form 
+                    @submit.prevent="ActualizarUsuarios" 
+                    >
+                        <h2 
+                        class="!self-center font-bold"
+                        >
+                        Rol
+                        </h2>
+                        <select 
+                        v-model="UsuarioAct.id_rol"
+                        >
+                            <option value="" disabled>
+                            Selecciona un Rol...
+                            </option>
+                            <option value=1>
+                            Administrador
+                            </option>
+                            <option value=2>
+                            Editor de Productos General
+                            </option>
+                            <option value=3>
+                            Gestor de Pedidos General y Editor de Clientes
+                            </option>
+                            <option value=4>
+                            Gestor de Precios
+                            </option>
+                            <option value=5>
+                            Gestor de Stock
+                            </option>
+                            <option value=6>
+                            Rider
+                            </option>
+                        </select>
+                        <div
+                        class="botones"
+                        >
+                            <button 
+                            type="submit" 
+                            :disabled="confirboton"
+                            class="botoncon"
+                            >
+                            Actualizar
+                            </button>
+                            <button 
+                            @click="CerrarPopUp02" 
+                            class="botonc"
+                            >
+                            Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </transition>
     </Teleport>
     <div class="cuerpo">
         <!-- Tabla de Usuarios -->
@@ -213,6 +117,39 @@
                         class="flex flex-col lg:self-center"
                         v-if="MostrarFiltro"
                         >
+                            <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h1>
+                                Ordenar
+                                </h1>
+                                <select 
+                                v-model="orden" 
+                                placeholder=""
+                                >
+                                    <option value="" disabled>
+                                    Orden...
+                                    </option>
+                                    <option value="1">
+                                    Usuario A-Z
+                                    </option>
+                                    <option value="2">
+                                    Usuario Z-A
+                                    </option>
+                                    <option value="3">
+                                    Mayor Relevancia
+                                    </option>
+                                    <option value="4">
+                                    Menor Relevancia
+                                    </option>
+                                    <option value="5">
+                                    Usuarios Antiguos
+                                    </option>
+                                    <option value="6">
+                                    Usuarios Recientes
+                                    </option>
+                                </select>
+                            </div>
                             <div
                             class="flex flex-col"
                             >
@@ -416,13 +353,13 @@
                             v-for= "i in usuarios" 
                             :key="i.id">
                                 <div 
-                                :class="Rolcolor(i.id_rol)"
+                                :class="Rolcolor(i.id_rol,i.activo)"
                                 class="tab"
                                 >
                                     <div class="flex flex-col">
                                         <div class="flex flex-row">
                                             <h1>
-                                            {{ i.nombre }} ({{ Roltxt(i.id_rol) }})
+                                            {{ i.nombre }} ({{ Roltxt(i.id_rol,i.activo) }})
                                             </h1>
                                         </div>
                                         <div class="flex flex-col">
@@ -440,9 +377,9 @@
                                             </h2>
                                             <h2>
                                             <span class="hidden lg:inline 2xl:inline">
-                                            Estatus: 
+                                            Usuario creado el: 
                                             </span>
-                                            {{ Estatustxt(i.activo) }}
+                                            {{ FormatoFecha(i.created_at) }}
                                             </h2>
                                         </div>
                                     </div>
@@ -499,7 +436,7 @@
                             :disabled="Pagina < 20"
                             class="botona"
                             >
-                            🢀
+                            ❮
                             </button>
                             <h2 class="item">
                             Items 
@@ -512,7 +449,7 @@
                             :disabled="usuarios.length < 20"
                             class="botona"
                             >
-                            🢂
+                            ❯
                             </button>
                         </div>
                     </div>
@@ -567,6 +504,7 @@
     const ActualizarUNew = ref(false)
     const ActualizarCajaUDel = ref(false)
     // ----- Variables Vacias ----- //
+    const orden = ref("")
     const Busqueda = ref("")
     const usuarios =  ref([])
     const UsuarioEli = ref("")
@@ -607,40 +545,23 @@
     }
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
-		VentanaFiltro.value = true
-		document.body.style.overflow = "hidden"
-	}
-	const AbrirPopUp02 = () => {
 		ActualizarCajaUDel.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const AbrirPopUp03 = () => {
+	const AbrirPopUp02 = () => {
 		ActualizarCajaU.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const AbrirPopUp04 = () => {
-		ActualizarUNew.value = true
-		document.body.style.overflow = "hidden";
-	}
     const AplicarFiltro = () => {
         BusquedaUsuario()
-        CerrarPopUp01()
     }
 	const CerrarPopUp01 = () => {
-		VentanaFiltro.value = false
-		document.body.style.overflow = "auto"
-	}
-	const CerrarPopUp02 = () => {
 		ActualizarCajaUDel.value = false
 		document.body.style.overflow = "auto"
 	}
-	const CerrarPopUp03 = () => {
+	const CerrarPopUp02 = () => {
 		ActualizarCajaU.value = false
 		document.body.style.overflow = "auto"
-	}
-	const CerrarPopUp04 = () => {
-		ActualizarUNew.value = false
-		document.body.style.overflow = "auto";
 	}
     const Edicion = (usuario_fila) => {
         UsuarioAct.value.id = usuario_fila.id
@@ -648,72 +569,89 @@
         UsuarioAct.value.apellido = usuario_fila.apellido
         UsuarioAct.value.email = usuario_fila.email
         UsuarioAct.value.usuario = usuario_fila.usuario
-        AbrirPopUp03()
+        AbrirPopUp02()
     }
     const Eliminacion = (usuario_fila) => {
         UsuarioEli.value = usuario_fila.id
-        AbrirPopUp02()
+        AbrirPopUp01()
     }
-    const Estatuscolor = (id_estatus) => {
-        if (id_estatus === true) {
-            return "si"
+	const FormatoFecha = (fechai) => {
+		if (fechai) {
+			return new Date(fechai).toLocaleDateString('es-ES')
+		}
+		else {
+			return "Pendiente"
+		}
+	}
+    const LimpiarFiltro = () => {
+        filtroEst.value = 1
+        BusquedaUsuario()
+        filtroAct.value = false
+    }
+    const Rolcolor = (id_rol,activo) => {
+        if (activo) {
+            if (id_rol === 1) {
+                return "admin"
+            }
+            else if (id_rol === 2) {
+                return "pgral"
+            }
+            else if (id_rol === 3) {
+                return "pedcli"
+            }
+            else if (id_rol === 4) {
+                return "preci"
+            }
+            else if (id_rol === 5) {
+                return "stoc"
+            }
+            else if (id_rol === 6) {
+                return "rider"
+            }
         }
-        else if (id_estatus === false) {
+        else {
             return "no"
         }
     }
-    const Estatustxt = (id_estatus) => {
-        if (id_estatus === true) {
-            return "Activo"
-        }
-        else if (id_estatus === false) {
-            return "Eliminado"
-        }
-    }
-    const LimpiarFiltro = () => {
-        filtroEst.value = 1
-        BusquedaUsuario();
-        CerrarPopUp01();
-        filtroAct.value = false
-    }
-    const Rolcolor = (id_rol) => {
-        if (id_rol === 1) {
-            return "admin"
-        }
-        else if (id_rol === 2) {
-            return "pgral"
-        }
-        else if (id_rol === 3) {
-            return "pedcli"
-        }
-        else if (id_rol === 4) {
-            return "preci"
-        }
-        else if (id_rol === 5) {
-            return "stoc"
-        }
-        else if (id_rol === 6) {
-            return "rider"
-        }
-    }
-    const Roltxt = (id_rol) => {
-        if (id_rol === 1) {
-            return "Administrador"
-        }
-        else if (id_rol === 2) {
-            return "Editor de Productos Gral."
-        }
-        else if (id_rol === 3) {
-            return "Gestor de Pedidos y Clientes"
-        }
-        else if (id_rol === 4) {
-            return "Gestor de Precios"
-        }
-        else if (id_rol === 5) {
-            return "Gestor de Stock"
-        }
-        else if (id_rol === 6) {
-            return "Rider"
+    const Roltxt = (id_rol,activo) => {
+        if (activo) {
+            if (id_rol === 1) {
+                return "Administrador"
+            }
+            else if (id_rol === 2) {
+                return "Editor de Productos Gral."
+            }
+            else if (id_rol === 3) {
+                return "Gestor de Pedidos y Clientes"
+            }
+            else if (id_rol === 4) {
+                return "Gestor de Precios"
+            }
+            else if (id_rol === 5) {
+                return "Gestor de Stock"
+            }
+            else if (id_rol === 6) {
+                return "Rider"
+            }
+        } else {
+            if (id_rol === 1) {
+                return "Ex-Administrador"
+            }
+            else if (id_rol === 2) {
+                return "Ex-Editor de Productos Gral."
+            }
+            else if (id_rol === 3) {
+                return "Ex-Gestor de Pedidos y Clientes"
+            }
+            else if (id_rol === 4) {
+                return "Ex-Gestor de Precios"
+            }
+            else if (id_rol === 5) {
+                return "Ex-Gestor de Stock"
+            }
+            else if (id_rol === 6) {
+                return "Ex-Rider"
+            }
         }
     }
     // ----- Para el Backend ----- //
@@ -731,7 +669,7 @@
         if (UsuarioAct.value.id_rol !== "") {
             UsuarioUpd.id_rol = UsuarioAct.value.id_rol
         }
-        const ActUsuario = await fetch(`http://10.250.4.36:8000/usuarios/id/${UsuarioAct.value.id}`, {
+        const ActUsuario = await fetch(`http://10.250.4.34:8000/usuarios/id/${UsuarioAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -753,10 +691,10 @@
             id_rol: ""
         }
         BusquedaUsuario()
-        CerrarPopUp03()
+        CerrarPopUp02()
     }
     const BorrarUsuario = async() => {
-        const EraseCliente = await fetch(`http://10.250.4.36:8000/usuarios/id/${UsuarioEli.value}`, {
+        const EraseCliente = await fetch(`http://10.250.4.34:8000/usuarios/id/${UsuarioEli.value}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -769,13 +707,17 @@
             return
         }
         BusquedaUsuario()
-        CerrarPopUp02()
+        CerrarPopUp01()
     }
     const BusquedaUsuario = async() => {
-        let url = new URL ('http://10.250.4.36:8000/usuarios/');
+        let url = new URL ('http://10.250.4.34:8000/usuarios/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_usuario', Busqueda.value)
+        }
+        if (orden.value !== "") {
+            url.searchParams.append('orden', orden.value)
+            filtroAct.value = true
         }
         if (filtroEst.value === 1) {
             url.searchParams.append('bool_activo', 'true')
@@ -790,7 +732,7 @@
         usuarios.value = datos;
     }
     const SubirNuevoUsuario = async() => {
-        const SubidaNuevoUsuario = await fetch('http://10.250.4.36:8000/usuarios/', {
+        const SubidaNuevoUsuario = await fetch('http://10.250.4.34:8000/usuarios/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -812,6 +754,5 @@
             id_rol: ""
         }
         BusquedaUsuario()
-        CerrarPopUp04()
     }
 </script>

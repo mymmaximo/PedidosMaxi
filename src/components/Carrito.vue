@@ -2,8 +2,8 @@
     <div class="cuerpo">
         <!-- Confirmacion Eliminar Detalle -->
         <Teleport to="body">
-            <div
-            v-if="ActualizarCarritoDel"
+            <div v-if="ActualizarCarritoDel"
+            @click.self="CerrarPopUp01" 
             class="fondo"
             >
                 <div class="popup">
@@ -27,7 +27,10 @@
         </Teleport>   
         <!-- Pantalla de Pagar -->
         <Teleport to="body">
-            <div class="fondo" v-if="PantallaPagar">
+            <div v-if="PantallaPagar"
+            @click.self="CerrarPopUp02"
+            class="fondo"
+            >
                 <div class="popup">
                     <h1>
                     Método de Pago:
@@ -177,7 +180,7 @@
                     </div>
                     <div class="botones">
                         <button 
-                        @click="PantallaPagar = false"
+                        @click="CerrarPopUp02"
                         class="botonc"
                         >
                         Cancelar
@@ -233,9 +236,12 @@
                         </button>
                     </div>
                     <div v-else class="carrito-contenedor">
-                        <h1>
-                        Tu Carrito
-                        </h1>
+                        <div class="carrito-header">
+                            <h1>
+                            Tu Carrito
+                            </h1>
+                        </div>
+
                         <div class="carrito-tabla-cabecera">
                             <div class="col-producto-titulo">
                             Producto
@@ -249,7 +255,11 @@
                             <div class="col-titulo">
                             Subtotal
                             </div>
+                            <div class="col_borrar_titulo">
+                            Borrar
+                            </div>
                         </div>
+
                         <div class="carrito-lista">
                             <div
                             v-for="(item, index) in CarritoLocal" 
@@ -266,7 +276,7 @@
                                             :disabled="GetImg(item.id_producto) === 0"
                                             class="carrito-btn-flecha"
                                             >
-                                            🢀
+                                            ❮
                                             </button>
                                             <div>
                                                 <img
@@ -278,9 +288,11 @@
                                                 >
                                                 <div
                                                 v-if="ImagenesCargando[item.id_producto] !== false" 
-                                                class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-xl"
+                                                class="imagencar !w-16 !h-16"
                                                 >
-                                                    <span class="animate-pulse text-xs text-gray-400">...</span>
+                                                    <img 
+                                                    src="../assets/loading.gif" 
+                                                    alt="Cargando...">
                                                 </div>
                                             </div>
                                             <button
@@ -288,7 +300,7 @@
                                             :disabled="GetImg(item.id_producto) === item.imagenes.length - 1"
                                             class="carrito-btn-flecha"
                                             >
-                                            🢂
+                                            ❯
                                             </button>
                                         </div>
                                         <img
@@ -300,35 +312,36 @@
                                     <h2 class="carrito-nombre-producto">
                                     {{ item.nombre_producto }}
                                     </h2>
-                                    <div class="carrito-col-precio">
-                                        <span class="carrito-label-movil">
-                                        Precio:
-                                        </span>
-                                        ${{ item.precio_unitario }}
-                                    </div>
-                                    <div class="carrito-col-cantidad">
-                                        <input 
-                                        type="number"
-                                        v-model="item.cantidad"
-                                        @change="VerificarStock(item)" 
-                                        class="carrito-input-cantidad"
-                                        >
-                                    </div>
-                                    <div class="carrito-col-subtotal">
-                                        <span class="carrito-label-movil">
-                                        Subtotal:
-                                        </span>
-                                        ${{ item.item_subtotal || item.cantidad * item.precio_unitario }}
-                                    </div>
-                                    <div class="carrito-col-borrar">
-                                        <button 
-                                        @click="Eliminacion(index)" 
-                                        title="Eliminar"
-                                        class="carrito-btn-borrar"
-                                        >
-                                        🗑️
-                                        </button>
-                                    </div>
+                                </div>
+                                <div class="carrito-col-precio">
+                                    <span class="carrito-label-movil">
+                                    Precio:
+                                    </span>
+                                    ${{ item.precio_unitario }}
+                                </div>
+                                <div class="carrito-col-cantidad">
+                                    <input 
+                                    type="number"
+                                    v-model="item.cantidad"
+                                    @change="VerificarStock(item)" 
+                                    class="carrito-input-cantidad"
+                                    >
+                                </div>
+                                <div class="carrito-col-subtotal">
+                                    <span class="carrito-label-movil">
+                                    Subtotal:
+                                    </span>
+                                    ${{ item.item_subtotal || item.cantidad * item.precio_unitario }}
+                                </div>
+
+                                <div class="carrito-col-borrar">
+                                    <button 
+                                    @click="Eliminacion(index)" 
+                                    title="Eliminar"
+                                    class="carrito-btn-borrar"
+                                    >
+                                    🗑️
+                                    </button>
                                 </div>
                             </div>
                             <div class="carrito-resumen-seccion">
@@ -347,7 +360,7 @@
                                         </span>
                                     </div>
                                     <button 
-                                    @click="PantallaPagar = true"
+                                    @click="AbrirPopUp02"
                                     class="botoncon w-full !text-xl !py-4 z-10 hover:-translate-y-1">
                                     Completar Pedido
                                     </button>
@@ -365,7 +378,7 @@
     // ----- Imports ----- //
     import { ref, onMounted, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
-    import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie } from './Estatus.js'
+    import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie, Rol } from './Estatus.js'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (Rol.value && Rol.value !== "") {
@@ -426,7 +439,7 @@
             }
         }, 15000)
         try {
-            const respuesta = await fetch(`http://10.250.4.36:8000/cliente/${idClienteCarrito}/direcciones/`)
+            const respuesta = await fetch(`http://10.250.4.34:8000/cliente/${idClienteCarrito}/direcciones/`)
             const datos = await respuesta.json();
             ListaDirecciones.value = datos;
             clearTimeout(temporizador)
@@ -452,6 +465,10 @@
 		ActualizarCarritoDel.value = true
 		document.body.style.overflow = "hidden"
 	}
+	const AbrirPopUp02 = () => {
+		PantallaPagar.value = true
+		document.body.style.overflow = "hidden"
+	}
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id_producto)
         if (ImgActual > 0) {
@@ -461,6 +478,10 @@
     }
 	const CerrarPopUp01 = () => {
 		ActualizarCarritoDel.value = false
+		document.body.style.overflow = "auto"
+	}
+	const CerrarPopUp02 = () => {
+		PantallaPagar.value = false
 		document.body.style.overflow = "auto"
 	}
     const Eliminacion = (producto_fila) => {
@@ -498,7 +519,7 @@
             DireccionPedido = DireccionExistente.value
         } else {
             DireccionPedido = NuevaDireccion.value
-            const SubidaNuevaDireccion = await fetch('http://10.250.4.36:8000/direcciones/', {
+            const SubidaNuevaDireccion = await fetch('http://10.250.4.34:8000/direcciones/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -508,7 +529,7 @@
             const datos = await SubidaNuevaDireccion.json()
             DireccionPedido = datos.id
         }
-        const SubidaNuevoPedido = await fetch('http://10.250.4.36:8000/pedidos/', {
+        const SubidaNuevoPedido = await fetch('http://10.250.4.34:8000/pedidos/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -535,7 +556,7 @@
                 precio_unitario: item.precio_unitario
             }
         })
-        const SubidaNuevoDetalle = await fetch('http://10.250.4.36:8000/pedidos/detalles_pedido/', {
+        const SubidaNuevoDetalle = await fetch('http://10.250.4.34:8000/pedidos/detalles_pedido/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

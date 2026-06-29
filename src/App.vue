@@ -1,53 +1,59 @@
 <template>
     <div class="cuerpo">
+        <!-- Cerrar Sesion -->
         <Teleport to="body">
-            <div 
-            v-if="ActualizarCajaLogout"
-            class="fondo
-            ">
-                <div class="popup">
-                    <h1>
-                    ¿Desear Cerrar Sesion?
-                    </h1>
-                    <div
-                    class="botones">
-                        <button 
-                        @click="CerrarSesion() ; CerrarPopUp01() ; TablaActual = 'Productos'"
-                        class="botonc">
-                        Si Confirmo
-                        </button>
-                        <button @click="CerrarPopUp01()"
-                        class="botoncon">
-                        Cancelar
-                        </button>
+            <transition name="fade">
+                <div v-if="ActualizarCajaLogout"
+                @click.self="CerrarPopUp01"
+                class="fondo
+                ">
+                    <div class="popup">
+                        <h1>
+                        ¿Desear Cerrar Sesion?
+                        </h1>
+                        <div
+                        class="botones">
+                            <button 
+                            @click="CerrarSesion() ; CerrarPopUp01() ; TablaActual = 'Productos'"
+                            class="botonc">
+                            Si Confirmo
+                            </button>
+                            <button @click="CerrarPopUp01()"
+                            class="botoncon">
+                            Cancelar
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Teleport>   
+            </transition>
+        </Teleport>
+        <!-- Confirmacion Borrar Carrito -->
         <Teleport to="body">
-            <div 
-            v-if="BorrarCarrito"
-            class="fondo">
-                <div
-                class="popup">
-                    <h1>
-                    ¿Desear Vaciar tu Carrito?
-                    </h1>
+            <transition name="fade">
+                <div v-if="BorrarCarrito"
+                @click.self="CerrarPopUp02"
+                class="fondo">
                     <div
-                    class="botones">
-                        <button 
-                        @click="LimpiarCompra() ; CerrarPopUp02()"
-                        class="botonc">
-                        Si Confirmo
-                        </button>
-                        <button 
-                        @click="CerrarPopUp02()"
-                        class="botoncon">
-                        Cancelar
-                        </button>
+                    class="popup">
+                        <h1>
+                        ¿Desear Vaciar tu Carrito?
+                        </h1>
+                        <div
+                        class="botones">
+                            <button 
+                            @click="LimpiarCompra() ; CerrarPopUp02()"
+                            class="botonc">
+                            Si Confirmo
+                            </button>
+                            <button 
+                            @click="CerrarPopUp02()"
+                            class="botoncon">
+                            Cancelar
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </transition>
         </Teleport>   
         <div 
         v-if="Iniciado">
@@ -176,7 +182,7 @@
                 </div>
             </div>
             <div class="pagina">
-                <div class="sticky top-0 z-30 flex w-full flex-col bg-green-600 sm:hidden shadow-md">
+                <div class="ticky top-0 z-30 flex w-full flex-col bg-green-600 sm:hidden shadow-md">
                     <div class="bar">
                         <h1
                         @click="MostrarMenu = !MostrarMenu"
@@ -185,112 +191,118 @@
                         ⫶☰
                         </h1>
                     </div>
-                    <div class="m-2 p-2 !z-40"
-                    v-if="MostrarMenu"
-                    >
-                        <div class="fondo">
+                    <transition name="fade">
+                        <div 
+                        v-if="MostrarMenu" 
+                        @click="MostrarMenu = false"
+                        class="fondo !z-40 cursor-pointer"
+                        >
+                        </div>
+                    </transition>
+                    <transition name="slide-left">
+                        <div v-if="MostrarMenu"
+                        class="fixed top-0 left-0 h-screen w-[75%] max-w-sm bg-green-800 z-50 shadow-2xl flex flex-col text-white overflow-y-auto"
+                        >
                             <div
-                            class="fixed top-0 left-0 h-screen w-fit bg-green-800 z-40 shadow-2xl flex flex-col text-white"
-                            >
+                            class="
+                            flex flex-col
+                            ">
+                                <h1 v-if="!MostrarMenu"
+                                @click="MostrarMenu = !MostrarMenu"
+                                class="botonpestaña !py-4 !text-left"
+                                >
+                                ⫶☰
+                                </h1>
+                                <h1
+                                @click="MostrarMenu = !MostrarMenu"
+                                class="botonpestaña !py-4 !text-left bg-green-900 border-b border-green-700"
+                                >
+                                ⫶☰ Cerrar Menu
+                                </h1>
                                 <div
-                                class="
-                                flex flex-col
-                                ">
-                                    <h1
-                                    @click="MostrarMenu = !MostrarMenu"
-                                    class="botonpestaña !py-4 !text-left"
-                                    >
-                                    ⫶☰
-                                    </h1>
-                                    <transition name="slide">
-                                        <div>
-                                            <div
-                                            @click="router.push('/') ; MostrarMenu = false" 
-                                            v-if="Rol !== '3' && Rol !== '6'"
-                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
-                                            class="botonpestaña !py-4 !text-left">
-                                            🏠︎ Inicio
-                                            </div>
-                                            <div 
-                                            @click="router.push('/productos') ; MostrarMenu = false" 
-                                            v-if="Rol !== '3' && Rol !== '6'"
-                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
-                                            class="botonpestaña !py-4 !text-left"
-                                            >
-                                            📦 Productos
-                                            </div>
-                                            <div 
-                                                @click="router.push('/pedidos') ; MostrarMenu = false" 
-                                                v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
-                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
-                                            class="botonpestaña !py-4 !text-left"
-                                            >
-                                            🚛 Pedidos
-                                            </div>
-                                            <div
-                                            @click="router.push('/clientes') ; MostrarMenu = false" 
-                                            v-if="Rol === '1' || Rol === '3'"
-                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
-                                            class="botonpestaña !py-4 !text-left"
-                                            >
-                                            👥 Clientes
-                                            </div>
-                                            <div 
-                                            @click="router.push('/usuarios') ; MostrarMenu = false" 
-                                            v-if="Rol === '1'"
-                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
-                                            class="botonpestaña !py-4 !text-left"
-                                            >
-                                            👨🏻‍💼 Usuarios
-                                            </div>
-                                            <div 
-                                            @click="router.push('/historial_precios') ; MostrarMenu = false" 
-                                            v-if="Rol === '1' || Rol === '4'"
-                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
-                                            class="botonpestaña !py-4 !text-left"
-                                            >
-                                            💲 Historial de Precios
-                                            </div>
-                                            <div
-                                            v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                            @click="router.push('/carrito') ; MostrarMenu = false"
-                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
-                                            class="botonpestaña !py-4 !text-left"
-                                            >
-                                            🛒 Tu Carrito
-                                            </div>
-                                            <div
-                                            @click="AbrirPopUp02()" 
-                                            v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
-                                            class="botonpestaña !from-red-400/80 !to-red-500/80 !py-4 !text-left"
-                                            >
-                                            🗑️ Vaciar Carrito
-                                            </div>
-                                            <div
-                                            @click="router.push('/mis_pedidos') ; MostrarMenu = false"
-                                            v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
-                                            class="botonpestaña !py-4 !text-left">
-                                            👤 Mis Pedidos
-                                            </div>
-                                            <div
-                                            @click="router.push('/configuracion') ; MostrarMenu = false" 
-                                            v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
-                                            :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/configuracion'}"
-                                            class="botonpestaña !py-4 !text-left">
-                                            ⚙️ Configuracion
-                                            </div>
-                                            <div
-                                            @click="AbrirPopUp01()"
-                                            class="botonpestaña !from-red-600/80 !to-red-800/80 !py-4 !text-left">
-                                            ➜] Cerrar Sesion
-                                            </div>
-                                        </div>
-                                    </transition>
+                                @click="router.push('/') ; MostrarMenu = false" 
+                                v-if="Rol !== '3' && Rol !== '6'"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
+                                class="botonpestaña !py-4 !text-left">
+                                🏠︎ Inicio
+                                </div>
+                                <div 
+                                @click="router.push('/productos') ; MostrarMenu = false" 
+                                v-if="Rol !== '3' && Rol !== '6'"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
+                                class="botonpestaña !py-4 !text-left"
+                                >
+                                📦 Productos
+                                </div>
+                                <div 
+                                    @click="router.push('/pedidos') ; MostrarMenu = false" 
+                                    v-if="Rol === '1'|| Rol === '3' || Rol === '6'"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
+                                class="botonpestaña !py-4 !text-left"
+                                >
+                                🚛 Pedidos
+                                </div>
+                                <div
+                                @click="router.push('/clientes') ; MostrarMenu = false" 
+                                v-if="Rol === '1' || Rol === '3'"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
+                                class="botonpestaña !py-4 !text-left"
+                                >
+                                👥 Clientes
+                                </div>
+                                <div 
+                                @click="router.push('/usuarios') ; MostrarMenu = false" 
+                                v-if="Rol === '1'"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
+                                class="botonpestaña !py-4 !text-left"
+                                >
+                                👨🏻‍💼 Usuarios
+                                </div>
+                                <div 
+                                @click="router.push('/historial_precios') ; MostrarMenu = false" 
+                                v-if="Rol === '1' || Rol === '4'"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
+                                class="botonpestaña !py-4 !text-left"
+                                >
+                                💲 Historial de Precios
+                                </div>
+                                <div
+                                v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                @click="router.push('/carrito') ; MostrarMenu = false"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
+                                class="botonpestaña !py-4 !text-left"
+                                >
+                                🛒 Tu Carrito
+                                </div>
+                                <div
+                                @click="AbrirPopUp02()" 
+                                v-if="CarritoLocal.length > 0 && Rol !== '2' && Rol !== '3'&& Rol !== '4'&& Rol !== '5'&& Rol !== '6'"
+                                class="botonpestaña !from-red-400/80 !to-red-500/80 !py-4 !text-left"
+                                >
+                                🗑️ Vaciar Carrito
+                                </div>
+                                <div
+                                @click="router.push('/mis_pedidos') ; MostrarMenu = false"
+                                v-if="Rol !== '2' && Rol !== '3'&& Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
+                                class="botonpestaña !py-4 !text-left">
+                                👤 Mis Pedidos
+                                </div>
+                                <div
+                                @click="router.push('/configuracion') ; MostrarMenu = false" 
+                                v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/configuracion'}"
+                                class="botonpestaña !py-4 !text-left">
+                                ⚙️ Configuracion
+                                </div>
+                                <div
+                                @click="AbrirPopUp01()"
+                                class="botonpestaña !from-red-600/80 !to-red-800/80 !py-4 !text-left">
+                                ➜] Cerrar Sesion
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </transition>
                 </div>
                 <div class="flex-col w-full">
                     <router-view>

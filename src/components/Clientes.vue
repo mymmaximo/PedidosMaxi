@@ -1,83 +1,87 @@
 <template>
     <!-- Confirmacion Eliminar -->
     <Teleport to="body">
-        <div 
-        v-if="ActualizarCajaCDel" 
-        class="fondo"
-        >
-            <div 
-            class="popup"
+        <transition name="fade">
+            <div v-if="ActualizarCajaCDel" 
+            @click.self="CerrarPopUp02"
+            class="fondo"
             >
-                <h1>
-                ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
-                </h1>
-                <div
-                class="botones">
-                    <button 
-                    @click="BorrarCliente()"
-                    class="botoncon"
-                    >
-                    Si Confirmo
-                    </button>
-                    <button 
-                    @click="CerrarPopUp02"
-                    class="botonc"
-                    >
-                    Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </Teleport>
-    <!-- Actualizar Cliente -->
-    <Teleport to="body">
-        <div  
-        v-if="ActualizarCajaC"
-        class="fondo"
-        >
-            <div 
-            class="popup"
-            >
-                <h1>
-                Actualizar Cliente {{ ClienteAct.nombre }}
-                </h1>
-                <form @submit.prevent="ActualizarClientes">
-                    <h2>
-                    Nombre
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="ClienteAct.nombre" 
-                    placeholder="Nombre"
-                    maxlength="20"
-                    >
-                    <h2>
-                    E-mail
-                    </h2>
-                    <input 
-                    type="text" 
-                    v-model="ClienteAct.email" 
-                    placeholder="Email@email.com"
-                    maxlength="50"
-                    >
+                <div 
+                class="popup"
+                >
+                    <h1>
+                    ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
+                    </h1>
                     <div
                     class="botones">
                         <button 
-                        type="submit" 
-                        :disabled="confirboton"
-                        class="botoncon
-                        ">
-                        Actualizar
+                        @click="BorrarCliente()"
+                        class="botoncon"
+                        >
+                        Si Confirmo
                         </button>
                         <button 
-                        @click="CerrarPopUp03" 
-                        class="botonc">
+                        @click="CerrarPopUp02"
+                        class="botonc"
+                        >
                         Cancelar
                         </button>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </transition>
+    </Teleport>
+    <!-- Actualizar Cliente -->
+    <Teleport to="body">
+        <transition name="fade">
+            <div v-if="ActualizarCajaC"
+            @click.self="CerrarPopUp01"
+            class="fondo"
+            >
+                <div 
+                class="popup"
+                >
+                    <h1>
+                    Actualizar Cliente {{ ClienteAct.nombre }}
+                    </h1>
+                    <form @submit.prevent="ActualizarClientes">
+                        <h2>
+                        Nombre
+                        </h2>
+                        <input 
+                        type="text" 
+                        v-model="ClienteAct.nombre" 
+                        placeholder="Nombre"
+                        maxlength="20"
+                        >
+                        <h2>
+                        E-mail
+                        </h2>
+                        <input 
+                        type="text" 
+                        v-model="ClienteAct.email" 
+                        placeholder="Email@email.com"
+                        maxlength="50"
+                        >
+                        <div
+                        class="botones">
+                            <button 
+                            type="submit" 
+                            :disabled="confirboton"
+                            class="botoncon
+                            ">
+                            Actualizar
+                            </button>
+                            <button 
+                            @click="CerrarPopUp01" 
+                            class="botonc">
+                            Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </transition>
     </Teleport>
     <div class="cuerpo">
         <div class="pagina">
@@ -95,6 +99,33 @@
                             class="flex flex-col lg:self-center"
                             v-if="MostrarFiltro"
                             >
+                                <div
+                                class="flex flex-col md:p-4 p-2"
+                                >
+                                    <h1>
+                                    Ordenar
+                                    </h1>
+                                    <select 
+                                    v-model="orden" 
+                                    placeholder=""
+                                    >
+                                        <option value="" disabled>
+                                        Orden...
+                                        </option> 
+                                        <option value="1">
+                                        Nombre A-Z
+                                        </option>
+                                        <option value="2">
+                                        Nombre Z-A
+                                        </option>
+                                        <option value="3">
+                                        Clientes Antiguos
+                                        </option>
+                                        <option value="4">
+                                        Clientes Recientes
+                                        </option>
+                                    </select>
+                                </div>
                                 <div
                                 class="flex flex-col md:p-4 p-2"
                                 >
@@ -360,6 +391,12 @@
                                                 </span>
                                                 {{ i.dni }}
                                                 </h2>
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Cliente creado el: 
+                                                </span>
+                                                {{ FormatoFecha(i.created_at) }}
+                                                </h2>
                                             </div>
                                         </div>
                                         <div class="flex flex-col ml-auto text-right items-end">
@@ -472,7 +509,7 @@
                                 :disabled="Pagina < 20"
                                 class="botona"
                                 >
-                                🢀
+                                ❮
                                 </button>
                                 <h2 class="item">
                                 Items 
@@ -485,7 +522,7 @@
                                 :disabled="clientes.length < 20"
                                 class="botona"
                                 >
-                                🢂
+                                ❯
                                 </button>
                             </div>
                         </div>
@@ -500,7 +537,7 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref, computed } from 'vue'
-    import { Rol, CerrarSesion, ActualizarCajaC } from './Estatus'
+    import { CerrarSesion, ActualizarCajaC } from './Estatus'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (MostrarNuevo.value) {
@@ -538,10 +575,9 @@
     const CargandoTrue = ref(true)
     const MostrarNuevo = ref(false)
     const MostrarFiltro = ref(false)
-    const VentanaFiltro = ref(false)
-    const ActualizarCNew = ref(false)
     const ActualizarCajaCDel = ref(false)
     // ----- Variables Vacias ----- //
+    const orden = ref("")
     const Busqueda = ref("")
     const clientes =  ref([])
     const ClienteEli = ref("")
@@ -588,47 +624,27 @@
             }
         }
     })
-    const RecargarPagina = () => {
-        window.location.reload()
-    }
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
-		VentanaFiltro.value = true
+		ActualizarCajaC.value = true
 		document.body.style.overflow = "hidden"
 	}
 	const AbrirPopUp02 = () => {
 		ActualizarCajaCDel.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const AbrirPopUp03 = () => {
-		ActualizarCajaC.value = true
-		document.body.style.overflow = "hidden"
-	}
-	const AbrirPopUp04 = () => {
-		ActualizarCNew.value = true
-		document.body.style.overflow = "hidden";
-	}
     const AplicarFiltro = () => {
         BusquedaCliente()
-        CerrarPopUp01()
         filtrociudad.value = ""
         filtroprovincia.value = ""
     }
 	const CerrarPopUp01 = () => {
-		VentanaFiltro.value = false
+		ActualizarCajaC.value = false
 		document.body.style.overflow = "auto"
 	}
 	const CerrarPopUp02 = () => {
 		ActualizarCajaCDel.value = false
 		document.body.style.overflow = "auto"
-	}
-	const CerrarPopUp03 = () => {
-		ActualizarCajaC.value = false
-		document.body.style.overflow = "auto"
-	}
-	const CerrarPopUp04 = () => {
-		ActualizarCNew.value = false
-		document.body.style.overflow = "auto";
 	}
     const DireccionCambio = (id) => {
         if (DireccionNow.value === id) {
@@ -642,7 +658,7 @@
         ClienteAct.value.id = cliente_fila.id
         ClienteAct.value.nombre = cliente_fila.nombre
         ClienteAct.value.email = cliente_fila.email
-        AbrirPopUp03()
+        AbrirPopUp01()
     }
     const Eliminacion = (cliente_fila) => {
         ClienteEli.value = cliente_fila.id
@@ -656,13 +672,20 @@
             return "no"
         }
     }
+	const FormatoFecha = (fechai) => {
+		if (fechai) {
+			return new Date(fechai).toLocaleDateString('es-ES')
+		}
+		else {
+			return "Pendiente"
+		}
+	}
     const LimpiarFiltro = () => {
         filtroDirec.value = 2
         filtroEst.value = 1
         filtrociudad.value = ""
         filtroprovincia.value = ""
-        BusquedaCliente();
-        CerrarPopUp01();
+        BusquedaCliente()
         filtroAct.value = false
     }
     // ----- Para el Backend ----- //
@@ -677,7 +700,7 @@
         if (ClienteAct.value.contrasena !== "") {
             ClienteUpd.contrasena = ClienteAct.value.contrasena
         }
-        const ActCliente = await fetch(`http://10.250.4.36:8000/clientes/id/${ClienteAct.value.id}`, {
+        const ActCliente = await fetch(`http://10.250.4.34:8000/clientes/id/${ClienteAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -696,10 +719,10 @@
             contrasena: "",
         };
         BusquedaCliente()
-        CerrarPopUp03()
+        CerrarPopUp01()
     }
     const BorrarCliente = async() => {
-        const EraseCliente = await fetch(`http://10.250.4.36:8000/clientes/id/${ClienteEli.value}`, {
+        const EraseCliente = await fetch(`http://10.250.4.34:8000/clientes/id/${ClienteEli.value}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -715,10 +738,14 @@
         CerrarPopUp02()
     }
     const BusquedaCliente = async() => {
-        let url = new URL ('http://10.250.4.36:8000/cliente/');
+        let url = new URL ('http://10.250.4.34:8000/cliente/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_cliente', Busqueda.value)
+        }
+        if (orden.value !== "") {
+            url.searchParams.append('orden', orden.value)
+            filtroAct.value = true
         }
         if (filtroDirec.value === 1) {
             url.searchParams.append('bool_direccion', 'true')
@@ -749,7 +776,7 @@
         clientes.value = datos
     }
     const SubirNuevoCliente = async() => {
-        const SubidaNuevoCliente = await fetch('http://10.250.4.36:8000/clientes/', {
+        const SubidaNuevoCliente = await fetch('http://10.250.4.34:8000/clientes/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -768,6 +795,5 @@
             contrasena: ""
         }
         BusquedaCliente()
-        CerrarPopUp04()
     }
 </script>

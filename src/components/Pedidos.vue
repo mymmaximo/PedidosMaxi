@@ -1,182 +1,36 @@
 <template>
 	<!-- Confirmar Actualizar Estatus -->
 	<Teleport to="body">
-		<div
-		v-if="ActualizarCajaP" 
-		class="fondo" 
-		>
-			<div 
-			class="popup"
+		<transition name="fade">
+			<div v-if="ActualizarCajaP" 
+			@click.self="CerrarPopUp01"
+			class="fondo" 
 			>
-				<h1>
-				¿Quiere Actualizar el Estado del Pedido?
-				</h1>
-				<div
-				class="botones"
+				<div 
+				class="popup"
 				>
-					<button 
-					@click="ActualizarEstatus()"
-					class="botoncon"
+					<h1>
+					¿Quiere Actualizar el Estado del Pedido?
+					</h1>
+					<div
+					class="botones"
 					>
-					Si Confirmo
-					</button>
-					<button 
-					@click="CerrarPopUp01"
-					class="botonc"
-					>
-					Cancelar
-					</button>
+						<button 
+						@click="ActualizarEstatus()"
+						class="botoncon"
+						>
+						Si Confirmo
+						</button>
+						<button 
+						@click="CerrarPopUp01"
+						class="botonc"
+						>
+						Cancelar
+						</button>
+					</div>
 				</div>
 			</div>
-		</div>
-	</Teleport>
-	<!-- Filtro -->
-	<Teleport to="body">
-		<div
-		v-if="VentanaFiltro" 
-		class="fondo" 
-		>
-			<div 
-			class="popup"
-			>
-				<h1>
-				Filtro de Metodo de Pago
-				</h1>
-				<div 
-				class="
-				flex flex-col
-				">
-					<label>
-					<input 
-					type="radio" 
-					:value="3"
-					v-model="filtroMP"
-					> 
-					Tarjeta de Credito / Debito
-					</label>
-					<label>
-					<input 
-					type="radio" 
-					:value="2"
-					v-model="filtroMP"
-					> 
-					Mercado Pago
-					</label>
-					<label>
-					<input 
-					type="radio" 
-					:value="1"
-					v-model="filtroMP"
-					> 
-					Transferencia Bancaria
-					</label>
-					<label>
-					<input 
-					type="radio" 
-					:value="0"
-					v-model="filtroMP"
-					> 
-					Efectivo
-					</label>
-				</div>
-				<h1>
-				Filtro de Estatus
-				</h1>
-				<div 
-				class="
-				flex flex-col
-				">
-					<label>
-					<input 
-					type="radio" 
-					:value="3"
-					v-model="filtroEst"
-					> 
-					Preparando
-					</label>
-					<label>
-					<input 
-					type="radio" 
-					:value="2"
-					v-model="filtroEst"
-					> 
-					En Camino
-					</label>
-					<label>
-					<input 
-					type="radio" 
-					:value="1"
-					v-model="filtroEst"
-					> 
-					Entregado
-					</label>
-				</div>
-				<h2>
-				Ciudad del Cliente
-				</h2>
-				<div>
-					<select 
-					v-model="filtrociudad"
-					>
-						<option 
-						value="" disabled
-						>
-						Selecciona una Ciudad...
-						</option>
-						<option 
-						v-for="i in ListaCiudad" 
-						:key="i.ciudad" 
-						:value="i.ciudad"
-						>
-						{{ i.ciudad }}
-						</option>
-					</select>
-				</div>
-				<h2>
-				Provincia del Cliente
-				</h2>
-				<div>
-					<select 
-					v-model="filtroprovincia" 
-					>
-						<option 
-						value="" 
-						disabled
-						>
-						Selecciona una Provincia...
-						</option>
-						<option 
-						v-for="i in ListaProvincia" 
-						:key="i.provincia" 
-						:value="i.provincia"
-						>
-						{{ i.provincia }}
-						</option>
-					</select>
-				</div>
-				<div
-				class="botones"
-				>
-					<button 
-					@click="AplicarFiltro" 
-					class="botoncon">
-					Aplicar Filtros
-					</button>
-					<button 
-					@click="LimpiarFiltro" 
-					v-if="filtroAct === true"
-					class="botont" 
-					>
-					🗑️ Limpiar Filtro
-					</button>
-					<button 
-					@click="CerrarPopUp02" 
-					class="botonc">
-					Cerrar
-					</button>
-				</div>
-			</div>
-		</div>
+		</transition>
 	</Teleport>
 	<div class="cuerpo">
 		<div class="pagina">
@@ -195,6 +49,27 @@
 						class="flex flex-col lg:self-center gap-5"
 						v-if="MostrarFiltro"
 						>
+                            <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h1>
+                                Ordenar
+                                </h1>
+                                <select 
+                                v-model="orden" 
+                                placeholder=""
+                                >
+                                    <option value="" disabled>
+                                    Orden...
+                                    </option>
+                                    <option value="1">
+                                    Pedidos Antiguos
+                                    </option>
+                                    <option value="2">
+                                    Pedidos Recientes
+                                    </option>
+                                </select>
+                            </div>
 							<div
 							class="flex flex-col"
 							>
@@ -545,7 +420,7 @@
 							:disabled="Pagina < 20"
 							class="botona"
 							>
-							🢀
+							❮
 							</button>
 							<h2 class="item">
 							Items 
@@ -558,7 +433,7 @@
 							:disabled="Pedidos.length < 20"
 							class="botona"
 							>
-							🢂
+							❯
 							</button>
 						</div>
 					</div>
@@ -586,9 +461,9 @@
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
 	const MostrarFiltro = ref(false)
-	const VentanaFiltro = ref(false)
 	const ActualizarCajaP = ref (false)
     // ----- Variables Vacias ----- //
+	const orden = ref("")
 	const Pedidos = ref([])
 	const Busqueda = ref("")
 	const PedidoNow = ref(null)
@@ -616,10 +491,10 @@
         }, 15000)
         try {
 			await BusquedaPedido()
-			const respuestac = await fetch("http://10.250.4.36:8000/direccion/ciudad/")
+			const respuestac = await fetch("http://10.250.4.34:8000/direccion/ciudad/")
 			const ciudad = await respuestac.json()
 			ListaCiudad.value = ciudad
-			const respuestap = await fetch("http://10.250.4.36:8000/direccion/provincia/")
+			const respuestap = await fetch("http://10.250.4.34:8000/direccion/provincia/")
 			const provincia = await respuestap.json()
 			ListaProvincia.value = provincia
             clearTimeout(temporizador)
@@ -642,20 +517,11 @@
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden"
 	}
-	const AbrirPopUp02 = () => {
-		VentanaFiltro.value = true
-		document.body.style.overflow = "hidden"
-	}
 	const AplicarFiltro = () => {
 		BusquedaPedido()
-		CerrarPopUp02()
 	}
 	const CerrarPopUp01 = () => {
 		ActualizarCajaP.value = false
-		document.body.style.overflow = "auto"
-	}
-	const CerrarPopUp02 = () => {
-		VentanaFiltro.value = false
 		document.body.style.overflow = "auto"
 	}
 	const Edicion = (pedido_fila) => {
@@ -709,7 +575,6 @@
         filtrociudad.value = ""
         filtroprovincia.value = ""
 		BusquedaPedido()
-		CerrarPopUp02()
 		filtroAct.value = false
 	}
 	const PedidoCambio = (id) => {
@@ -722,7 +587,7 @@
 	}
     // ----- Para el Backend ----- //
 	const ActualizarEstatus = async() => {
-			const ActEst = await fetch(`http://10.250.4.36:8000/pedidos/id/${EstatusAct.value.id_pedido}`, {
+			const ActEst = await fetch(`http://10.250.4.34:8000/pedidos/id/${EstatusAct.value.id_pedido}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
@@ -747,11 +612,15 @@
 			CerrarPopUp01()
 	}
 	const BusquedaPedido = async() => {
-		let url = new URL ('http://10.250.4.36:8000/pedidos/all/');
+		let url = new URL ('http://10.250.4.34:8000/pedidos/all/');
 		url.searchParams.append('skip', Pagina.value);
 		if (Busqueda.value !== "") {
 			url.searchParams.append('busqueda_pedido', Busqueda.value);
 		}
+        if (orden.value !== "") {
+            url.searchParams.append('orden', orden.value)
+            filtroAct.value = true
+        }
 		let mpfiltro = ""
 		if (filtroMP.value === 4) {
 			mpfiltro = ""

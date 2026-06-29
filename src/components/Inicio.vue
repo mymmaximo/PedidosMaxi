@@ -2,172 +2,182 @@
     <div class="cuerpo">
         <!-- Confirmacion Eliminar -->
         <Teleport to="body">
-            <div class="fondo" v-if="ActualizarCajaPDel">
-                <div class="popup">
-                    <h1>
-                    ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
-                    </h1>
-                    <div>
-                        <div 
-                        v-if="ProductoEli.imagenes.length > 0"
-                        class="flex flex-row gap-1
-                        md:gap-3 overflow-x-auto
-                        items-center justify-center 
-                        w-full md:pb-2 snap-x pb-1
-                        ">
-                            <button
-                            @click="BackImg(ProductoEli)"
-                            :disabled="GetImg(ProductoEli.id) === 0"
-                            class="botonflecha"
-                            >
-                            🢀
-                            </button>
-                            <div>
-                                <img
-                                v-show="ImagenesCargando[ProductoEli.id] === false"
-                                :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
-                                @load="ImagenesCargando[ProductoEli.id] = false"
-                                class="imagen"
+            <transition name="fade">
+                <div v-if="ActualizarCajaPDel"
+                @click.self="CerrarPopUp02"
+                class="fondo" 
+                >
+                    <div class="popup">
+                        <h1>
+                        ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
+                        </h1>
+                        <div>
+                            <div 
+                            v-if="ProductoEli.imagenes.length > 0"
+                            class="flex flex-row gap-1
+                            md:gap-3 overflow-x-auto
+                            items-center justify-center 
+                            w-full md:pb-2 snap-x pb-1
+                            ">
+                                <button
+                                @click="BackImg(ProductoEli)"
+                                :disabled="GetImg(ProductoEli.id) === 0"
+                                class="botonflecha"
                                 >
-                                <div
-                                v-if="ImagenesCargando[ProductoEli.id] !== false" 
-                                class="mt-2"
-                                >
-                                    <img 
-                                    src="../assets/loading.gif" 
-                                    alt="Cargando..." 
-                                    class="imagen !2xl:p-15">
+                                ❮
+                                </button>
+                                <div>
+                                    <img
+                                    v-show="ImagenesCargando[ProductoEli.id] === false"
+                                    :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
+                                    @load="ImagenesCargando[ProductoEli.id] = false"
+                                    class="imagen"
+                                    >
+                                    <div
+                                    v-if="ImagenesCargando[ProductoEli.id] !== false" 
+                                    class="mt-2"
+                                    >
+                                        <img 
+                                        src="../assets/loading.gif" 
+                                        alt="Cargando..." 
+                                        class="imagen !2xl:p-15">
+                                    </div>
                                 </div>
+                                <button
+                                @click="NextImg(ProductoEli)"
+                                :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
+                                class="botonflecha"
+                                >
+                                ❯
+                                </button>
                             </div>
-                            <button
-                            @click="NextImg(ProductoEli)"
-                            :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
-                            class="botonflecha"
+                            <img
+                            v-else
+                            src="../assets/images.png"
+                            class="imagen"
                             >
-                            🢂
+                        </div>
+                        <div
+                        class="botones"
+                        >
+                            <button 
+                            @click="BorrarProducto()"
+                            class="botoncon"
+                            >
+                            Si Confirmo
+                            </button>
+                            <button 
+                            @click="CerrarPopUp02"
+                            class="botonc"
+                            >
+                            Cancelar
                             </button>
                         </div>
-                        <img
-                        v-else
-                        src="../assets/images.png"
-                        class="imagen"
-                        >
-                    </div>
-                    <div
-                    class="botones"
-                    >
-                        <button 
-                        @click="BorrarProducto()"
-                        class="botoncon"
-                        >
-                        Si Confirmo
-                        </button>
-                        <button 
-                        @click="CerrarPopUp02"
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
                     </div>
                 </div>
-            </div>
+            </transition>
         </Teleport>
         <!-- Comprar Ventana -->
         <Teleport to="body">
-            <div class="fondo" v-if="VentanaCompra">
-                <div class="popup">
-                    <h1>
-                    {{ ProductoActual.nombre }}
-                    </h1>
-                    <div>
-                        <div 
-                        v-if="ProductoActual.imagenes.length > 0"
-                        class="flex flex-row 
-                        md:gap-3 gap-1 overflow-x-auto
-                        items-center justify-center 
-                        w-full md:pb-2 pb-1 snap-x
-                        ">
-                            <button
-                            @click="BackImg(ProductoActual)"
-                            :disabled="GetImg(ProductoActual.id) === 0"
-                            class="botonflecha"
-                            >
-                            🢀
-                            </button>
-                            <div>
-                                <img
-                                v-show="ImagenesCargando[ProductoActual.id] === false"
-                                :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
-                                @load="ImagenesCargando[ProductoActual.id] = false"
-                                class="imagen"
+            <transition name="fade">
+                <div v-if="VentanaCompra" 
+                class="fondo"
+                @click.self="CerrarPopUp04"
+                >
+                    <div class="popup !p-0 !max-w-sm !w-full !overflow-hidden relative">
+                        <h1>
+                        {{ ProductoActual.nombre }}
+                        </h1>
+                        <div>
+                            <div 
+                            v-if="ProductoActual.imagenes.length > 0"
+                            class="flex flex-row 
+                            md:gap-3 gap-1 overflow-x-auto
+                            items-center justify-center 
+                            w-full md:pb-2 pb-1 snap-x
+                            ">
+                                <button
+                                @click="BackImg(ProductoActual)"
+                                :disabled="GetImg(ProductoActual.id) === 0"
+                                class="botonflecha"
                                 >
-                                <div
-                                v-if="ImagenesCargando[ProductoActual.id] !== false" 
-                                class="mt-2"
-                                >
-                                    <img 
-                                    src="../assets/loading.gif" 
-                                    alt="Cargando..." 
-                                    class="imagen !2xl:p-15">
+                                ❮
+                                </button>
+                                <div>
+                                    <img
+                                    v-show="ImagenesCargando[ProductoActual.id] === false"
+                                    :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
+                                    @load="ImagenesCargando[ProductoActual.id] = false"
+                                    class="imagen"
+                                    >
+                                    <div
+                                    v-if="ImagenesCargando[ProductoActual.id] !== false" 
+                                    class="mt-2"
+                                    >
+                                        <img 
+                                        src="../assets/loading.gif" 
+                                        alt="Cargando..." 
+                                        class="imagen !2xl:p-15">
+                                    </div>
                                 </div>
+                                <button
+                                @click="NextImg(ProductoActual)"
+                                :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
+                                class="botonflecha"
+                                >
+                                ❯
+                                </button>
                             </div>
-                            <button
-                            @click="NextImg(ProductoActual)"
-                            :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
-                            class="botonflecha"
+                            <img
+                            v-else
+                            src="../assets/images.png"
+                            class="imagen"
                             >
-                            🢂
+                        </div>
+                        <div
+                        class="
+                        flex flex-col
+                        ">
+                            <input 
+                            type="number" 
+                            v-model="ProductoCantidad"
+                            maxlength="8"
+                            class="md:w-30 md:mb-5 w-30 mb-5"
+                            >
+                            <div class="flex justify-center">
+                                <button 
+                                @click="SumarProducto(ProductoActual)"
+                                class="w-10 h-10 flex items-center justify-center text-green-600 hover:bg-white hover:shadow-sm rounded-full transition-all font-bold text-xl cursor-pointer"
+                                >
+                                ✚
+                                </button>
+                                <button 
+                                @click="RestarProducto(ProductoActual)"
+                                class="w-10 h-10 flex items-center justify-center text-red-500 font-bold hover:bg-white hover:shadow-sm rounded-full transition-all text-xl cursor-pointer"
+                                >
+                                ―
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                        class="botones"
+                        >
+                            <button 
+                            @click="SumarCarrito"
+                            class="botoncon"
+                            >
+                            Agregar al Carrito
+                            </button>
+                            <button 
+                            @click="CerrarPopUp04"
+                            class="botonc"
+                            >
+                            Cancelar
                             </button>
                         </div>
-                        <img
-                        v-else
-                        src="../assets/images.png"
-                        class="imagen"
-                        >
-                    </div>
-                    <div
-                    class="
-                    flex flex-col
-                    ">
-                        <input 
-                        type="number" 
-                        v-model="ProductoCantidad"
-                        maxlength="8"
-                        class="md:w-30 md:mb-5 w-30 mb-5"
-                        >
-                        <div class="flex justify-center">
-                            <button 
-                            @click="SumarProducto(ProductoActual)"
-                            class="botoncon !bg-green-400 !px-1 !md:px-2"
-                            >
-                            ➕
-                            </button>
-                            <button 
-                            @click="RestarProducto(ProductoActual)"
-                            class="botonc !bg-red-400 !px-1 !md:px-2"
-                            >
-                            ➖
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                    class="botones"
-                    >
-                        <button 
-                        @click="SumarCarrito"
-                        class="botoncon"
-                        >
-                        Agregar al Carrito
-                        </button>
-                        <button 
-                        @click="CerrarPopUp04"
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
                     </div>
                 </div>
-            </div>
+            </transition>
         </Teleport>
         <!-- Comprar Notificacion -->
         <Teleport to="body">
@@ -179,518 +189,376 @@
         </Teleport>
         <!-- Actualizar Producto -->
         <Teleport to="body">
-            <div 
-            v-if="ActualizarCajaP"
-            class="fondo 
-            ">
-                <div class="popup">
-                    <form @submit.prevent="ActualizarProducto">
-                        <h1>
-                        {{ ProductoAct.nombre }}
-                        </h1>
-                        <!-- Actualizar Nombre -->
-                        <div v-if="Rol === '1' || Rol === '2'">
-                            <h2>
-                            Nombre
-                            </h2>
-                            <input 
-                            type="text" 
-                            v-model="ProductoAct.nombre" 
-                            placeholder="Nombre"
-                            maxlength="50"
-                            >
-                        </div>
-                        <!-- Actualizar Precio -->
-                        <div v-if="Rol === '1' || Rol === '2' || Rol === '4'">
-                            <h2>
-                            Precio
-                            </h2>
-                            <input 
-                            type="number" 
-                            v-model="ProductoAct.precio" 
-                            placeholder="Precio"
-                            maxlength="8"
-                            >
-                        </div>
-                        <!-- Actualizar Stock -->
-                        <div v-if="Rol === '1' || Rol === '2' || Rol === '5'">
-                            <h2>
-                            Stock
-                            </h2>
-                            <input 
-                            type="number" 
-                            v-model="ProductoAct.stock" 
-                            placeholder="Stock"
-                            maxlength="8"
-                            >
-                        </div>
-                        <!-- Actualizar Categoria y Codigo de Barra -->
-                        <div v-if="Rol === '1' || Rol === '2'">
-                            <h2>
-                            Categoria
-                            </h2>
-                            <select v-model="OpcionCategoriaA" class="seleccion">
-                                <option value="new">
-                                + Agrega una Categoria
-                                </option>
-                                <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
-                                {{ i.categoria }}
-                                </option>
-                            </select>
-                            <div v-if="OpcionCategoriaA === 'new'">
-                                <h3>
-                                Nueva Categoria
-                                </h3>
+            <transition name="fade">
+                <div v-if="ActualizarCajaP"
+                @click.self="CerrarPopUp01" 
+                class="fondo 
+                ">
+                    <div class="popup">
+                        <form @submit.prevent="ActualizarProducto">
+                            <h1>
+                            {{ ProductoAct.nombre }}
+                            </h1>
+                            <!-- Actualizar Nombre -->
+                            <div v-if="Rol === '1' || Rol === '2'">
+                                <h2>
+                                Nombre
+                                </h2>
                                 <input 
                                 type="text" 
-                                v-model="ProductoAct.categoria" 
-                                placeholder="Categoria"
-                                maxlength="20"
+                                v-model="ProductoAct.nombre" 
+                                placeholder="Nombre"
+                                maxlength="50"
                                 >
                             </div>
-                            <h2>
-                            Codigo de Barras
-                            </h2>
-                            <input 
-                            type="text" 
-                            v-model="ProductoAct.codigo_barra" 
-                            placeholder="Codigo de Barras"
-                            maxlength="15"
-                            >
-                        </div>
-                        <!-- Actualizar Imagenes Actuales -->
-                        <div v-if="Rol === '1' || Rol === '2'">
-                            <h2>Imágenes actuales</h2>
-                            <div 
-                            v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
-                            class="
-                            flex flex-row
-                            md:gap-3 gap-1
-                            items-center justify-center
-                            w-full md:pb-2 pb-1
-                            ">
-                                <button 
-                                type="button" 
-                                @click="BackImg(ProductoAct)"
-                                :disabled="GetImg(ProductoAct.id) === 0"
-                                class="botonflecha">
-                                🢀
-                                </button>
-                                <div
-                                class="
-                                relative 
-                                w-fit mx-auto mt-2
-                                ">
-                                    <button
-                                    type="button"
-                                    @click="NoMoreImages(ProductoAct.imagenes[GetImg(ProductoAct.id)])"
-                                    title="Quitar imagen"
-                                    class="botonx"
+                            <!-- Actualizar Precio -->
+                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4'">
+                                <h2>
+                                Precio
+                                </h2>
+                                <input 
+                                type="number" 
+                                v-model="ProductoAct.precio" 
+                                placeholder="Precio"
+                                maxlength="8"
+                                >
+                            </div>
+                            <!-- Actualizar Stock -->
+                            <div v-if="Rol === '1' || Rol === '2' || Rol === '5'">
+                                <h2>
+                                Stock
+                                </h2>
+                                <input 
+                                type="number" 
+                                v-model="ProductoAct.stock" 
+                                placeholder="Stock"
+                                maxlength="8"
+                                >
+                            </div>
+                            <!-- Actualizar Categoria y Codigo de Barra -->
+                            <div v-if="Rol === '1' || Rol === '2'">
+                                <h2>
+                                Categoria
+                                </h2>
+                                <select v-model="OpcionCategoriaA" class="seleccion">
+                                    <option value="new">
+                                    + Agrega una Categoria
+                                    </option>
+                                    <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                    {{ i.categoria }}
+                                    </option>
+                                </select>
+                                <div v-if="OpcionCategoriaA === 'new'">
+                                    <h3>
+                                    Nueva Categoria
+                                    </h3>
+                                    <input 
+                                    type="text" 
+                                    v-model="ProductoAct.categoria" 
+                                    placeholder="Categoria"
+                                    maxlength="20"
                                     >
-                                    🗙
+                                </div>
+                                <h2>
+                                Codigo de Barras
+                                </h2>
+                                <input 
+                                type="text" 
+                                v-model="ProductoAct.codigo_barra" 
+                                placeholder="Codigo de Barras"
+                                maxlength="15"
+                                >
+                            </div>
+                            <!-- Actualizar Imagenes Actuales -->
+                            <div v-if="Rol === '1' || Rol === '2'">
+                                <h2>Imágenes actuales</h2>
+                                <div 
+                                v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
+                                class="
+                                flex flex-row
+                                md:gap-3 gap-1
+                                items-center justify-center
+                                w-full md:pb-2 pb-1
+                                ">
+                                    <button 
+                                    type="button" 
+                                    @click="BackImg(ProductoAct)"
+                                    :disabled="GetImg(ProductoAct.id) === 0"
+                                    class="botonflecha">
+                                    ❮
                                     </button>
-                                    <div>
-                                        <img
-                                        v-show="ImagenesCargando[ProductoAct.id] === false"
-                                        :src=ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)
-                                        @load="ImagenesCargando[ProductoAct.id] = false"
-                                        :class="DelImg.includes(ProductoAct.imagenes[GetImg(ProductoAct.id)].id_imagen) ? 'imagendel' : 'imagen'"
+                                    <div
+                                    class="
+                                    relative 
+                                    w-fit mx-auto mt-2
+                                    ">
+                                        <button
+                                        type="button"
+                                        @click="NoMoreImages(ProductoAct.imagenes[GetImg(ProductoAct.id)])"
+                                        title="Quitar imagen"
+                                        class="botonx"
                                         >
-                                        <div
-                                        v-if="ImagenesCargando[ProductoAct.id] !== false" 
-                                        class="mt-2"
-                                        >
-                                            <img 
-                                            src="../assets/loading.gif" 
-                                            alt="Cargando..." 
-                                            class="imagen !2xl:p-15">
+                                        🗙
+                                        </button>
+                                        <div>
+                                            <img
+                                            v-show="ImagenesCargando[ProductoAct.id] === false"
+                                            :src=ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)
+                                            @load="ImagenesCargando[ProductoAct.id] = false"
+                                            :class="DelImg.includes(ProductoAct.imagenes[GetImg(ProductoAct.id)].id_imagen) ? 'imagendel' : 'imagen'"
+                                            >
+                                            <div
+                                            v-if="ImagenesCargando[ProductoAct.id] !== false" 
+                                            class="mt-2"
+                                            >
+                                                <img 
+                                                src="../assets/loading.gif" 
+                                                alt="Cargando..." 
+                                                class="imagen !2xl:p-15">
+                                            </div>
                                         </div>
                                     </div>
+                                    <button 
+                                    type="button" 
+                                    @click="NextImg(ProductoAct)"
+                                    :disabled="GetImg(ProductoAct.id) === ProductoAct.imagenes.length - 1"
+                                    class="botonflecha">
+                                    ❯
+                                    </button>
                                 </div>
+                                <div 
+                                v-else 
+                                class="imageno">
+                                Sin imágenes
+                                </div>
+                                <!-- Imagenes Nuevas -->
+                                <div>
+                                    <h2>
+                                    Imagenes Nuevas
+                                    </h2>
+                                    <div
+                                    v-if="VistaPrevia.length > 0"
+                                    class="
+                                    relative
+                                    w-fit mx-auto mt-2
+                                    ">
+                                        <div
+                                        v-for="(img, index) in VistaPrevia"
+                                        :key="index"
+                                        class="
+                                        shrink-0 mt-2 
+                                        relative"
+                                        >
+                                            <button
+                                            type="button"
+                                            @click="LimpiarImagenes"
+                                            title="Quitar imagen"
+                                            class="botonx"
+                                            >
+                                            🗙
+                                            </button>
+                                            <img 
+                                            :src="VistaPrevia" 
+                                            alt="Vista Previa"
+                                            class="imagen !m-0" 
+                                            />
+                                        </div>
+                                    </div>
+                                    <div
+                                    v-else 
+                                    class="imageno"
+                                    >
+                                    <span>
+                                    Sin vista previa
+                                    </span> 
+                                    </div>
+                                    <div class="md:mt-4 mt-2">
+                                        <input
+                                        type="file"
+                                        accept="image/*"
+                                        @change="SeleccionarImagen"
+                                        multiple
+                                        class="imagenu !w-full"
+                                        ref="fileInput"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div 
+                            class="botones"
+                            >
                                 <button 
-                                type="button" 
-                                @click="NextImg(ProductoAct)"
-                                :disabled="GetImg(ProductoAct.id) === ProductoAct.imagenes.length - 1"
-                                class="botonflecha">
-                                🢂
+                                type="submit" 
+                                :disabled="confirboton" 
+                                class="botoncon
+                                ">
+                                Actualizar
                                 </button>
+                                <button 
+                                type="button"
+                                @click="CerrarPopUp01" 
+                                class="botonc">
+                                Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </transition>
+        </Teleport>
+        <!-- Actualizar Banner -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="VentanaBanner"
+                @click.self="CerrarPopUp03" 
+                class="fondo 
+                ">
+                    <div class="popup">
+                        <h1 class="text-center">
+                        Banners:
+                        </h1>
+                        <!-- Subir Banners -->
+                        <div>
+                            <h1>
+                            Nuevos Banners
+                            </h1>
+                            <div class="md:mt-4 mt-2">
+                                <input
+                                type="file"
+                                accept="image/*"
+                                @change="SeleccionarBanner"
+                                multiple
+                                class="imagenu !w-full"
+                                ref="fileInput"
+                                />
+                            </div>
+                        </div>
+                        <!-- Actualizar Banners -->
+                        <div>
+                            <h1>
+                            Actualizar Banners
+                            </h1>
+                            <div 
+                            v-if="bannersorden.length > 0"
+                            class="relative flex flex-row overflow-x-auto gap-4"
+                            >
+                                <div
+                                v-for="(banner, index) in bannersorden"
+                                :key="banner.id || banner.vista_previa"
+                                :class="bannerdesactivado(banner) ? 'cartabannerdel' : 'cartabanner'"
+                                draggable="true"
+                                @dragstart="EmpezarArrastre(index)"
+                                @dragover.prevent
+                                @drop="Soltar(index)"
+                                >
+                                    <template v-if="banner.id">
+                                            <div class="botones">
+                                                <button
+                                                v-if="!bannerdesactivado(banner)"
+                                                type="button"
+                                                @click="bannerestatus(banner.id)"
+                                                title="Desactivar"
+                                                class="botonc"
+                                                >
+                                                🗙
+                                                </button>
+                                                <button
+                                                v-else
+                                                type="button"
+                                                @click="bannerestatus(banner.id)"
+                                                title="Restaurar"
+                                                class="botoncon"
+                                                >
+                                                🐦‍🔥
+                                                </button>
+                                            </div>
+                                            <div v-if="bannerdesactivado(banner)">
+                                                <button
+                                                v-if="!DelSupaBann.includes(banner.id)"
+                                                type="button"
+                                                @click="DelSupaBann.push(banner.id)"
+                                                title="Quitar imagen"
+                                                class="botonx"
+                                                >
+                                                🗑️
+                                                </button>
+                                                <button
+                                                v-else
+                                                type="button"
+                                                @click="DelSupaBann = DelSupaBann.filter(id => id !== banner.id)"
+                                                title="Restaurar imagen"
+                                                class="botonx"
+                                                >
+                                                🕊️
+                                                </button>
+                                            </div>
+                                            <div class="banner-wrapper">
+                                                <img 
+                                                :src="ObtenerImgUrl(banner.s3_key)"
+                                                :class="DelSupaBann.includes(banner.id) ? 'imagendel' : 'imagen'"
+                                                >
+                                                <div 
+                                                v-if="bannerdesactivado(banner)" 
+                                                class="banner-overlay"
+                                                >
+                                                </div>
+                                            </div>
+                                    </template>
+                                    <template v-else>
+                                        <h1>
+                                        Nuevo!
+                                        </h1>
+                                        <button
+                                        type="button"
+                                        @click="BannersNuevos.splice(BannersNuevos.indexOf(banner), 1)"
+                                        title="Quitar imagen nueva"
+                                        class="botonx !top-20 !right-20"
+                                        >
+                                        🗑️
+                                        </button>
+                                        <img 
+                                        :src="banner.vista_previa" 
+                                        alt="Vista Previa"
+                                        class="imagen !m-0" 
+                                        />
+                                    </template>
+                                    <input 
+                                    v-model="banner.enlace"
+                                    type="text"
+                                    placeholder="Enlace..."
+                                    class="mt-3"
+                                    >
+                                </div>
                             </div>
                             <div 
                             v-else 
                             class="imageno">
                             Sin imágenes
                             </div>
-                            <!-- Imagenes Nuevas -->
-                            <div>
-                                <h2>
-                                Imagenes Nuevas
-                                </h2>
-                                <div
-                                v-if="VistaPrevia.length > 0"
-                                class="
-                                relative
-                                w-fit mx-auto mt-2
-                                ">
-                                    <div
-                                    v-for="(img, index) in VistaPrevia"
-                                    :key="index"
-                                    class="
-                                    shrink-0 mt-2 
-                                    relative"
-                                    >
-                                        <button
-                                        type="button"
-                                        @click="LimpiarImagenes"
-                                        title="Quitar imagen"
-                                        class="botonx"
-                                        >
-                                        🗙
-                                        </button>
-                                        <img 
-                                        :src="VistaPrevia" 
-                                        alt="Vista Previa"
-                                        class="imagen !m-0" 
-                                        />
-                                    </div>
-                                </div>
-                                <div
-                                v-else 
-                                class="imageno"
-                                >
-                                <span>
-                                Sin vista previa
-                                </span> 
-                                </div>
-                                <div class="md:mt-4 mt-2">
-                                    <input
-                                    type="file"
-                                    accept="image/*"
-                                    @change="SeleccionarImagen"
-                                    multiple
-                                    class="imagenu !w-full"
-                                    ref="fileInput"
-                                    />
-                                </div>
-                            </div>
                         </div>
-                        <div 
+                        <div
                         class="botones"
                         >
                             <button 
-                            type="submit" 
-                            :disabled="confirboton" 
+                            @click="SaveBanner"
                             class="botoncon
                             ">
-                            Actualizar
+                            Guardar Cambios
                             </button>
                             <button 
-                            type="button"
-                            @click="CerrarPopUp01" 
-                            class="botonc">
+                            @click="CerrarPopUp03"
+                            class="botonc"
+                            >
                             Cancelar
                             </button>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </Teleport>
-        <!-- Actualizar Banner -->
-        <Teleport to="body">
-            <div 
-            v-if="VentanaBanner"
-            class="fondo 
-            ">
-                <div class="popup">
-                    <h1 class="text-center">
-                    Banners:
-                    </h1>
-                    <!-- Subir Banners -->
-                    <div>
-                        <h1>
-                        Nuevos Banners
-                        </h1>
-                        <div class="md:mt-4 mt-2">
-                            <input
-                            type="file"
-                            accept="image/*"
-                            @change="SeleccionarBanner"
-                            multiple
-                            class="imagenu !w-full"
-                            ref="fileInput"
-                            />
-                        </div>
-                    </div>
-                    <!-- Actualizar Banners -->
-                    <div>
-                        <h1>
-                        Actualizar Banners
-                        </h1>
-                        <div 
-                        v-if="bannersorden.length > 0"
-                        class="relative flex flex-row overflow-x-auto gap-4"
-                        >
-                            <div
-                            v-for="(banner, index) in bannersorden"
-                            :key="banner.id || banner.vista_previa"
-                            :class="bannerdesactivado(banner) ? 'cartabannerdel' : 'cartabanner'"
-                            draggable="true"
-                            @dragstart="EmpezarArrastre(index)"
-                            @dragover.prevent
-                            @drop="Soltar(index)"
-                            >
-                                <template v-if="banner.id">
-                                        <div class="botones">
-                                            <button
-                                            v-if="!bannerdesactivado(banner)"
-                                            type="button"
-                                            @click="bannerestatus(banner.id)"
-                                            title="Desactivar"
-                                            class="botonc"
-                                            >
-                                            🗙
-                                            </button>
-                                            <button
-                                            v-else
-                                            type="button"
-                                            @click="bannerestatus(banner.id)"
-                                            title="Restaurar"
-                                            class="botoncon"
-                                            >
-                                            🐦‍🔥
-                                            </button>
-                                        </div>
-                                        <div v-if="bannerdesactivado(banner)">
-                                            <button
-                                            v-if="!DelSupaBann.includes(banner.id)"
-                                            type="button"
-                                            @click="DelSupaBann.push(banner.id)"
-                                            title="Quitar imagen"
-                                            class="botonx"
-                                            >
-                                            🗑️
-                                            </button>
-                                            <button
-                                            v-else
-                                            type="button"
-                                            @click="DelSupaBann = DelSupaBann.filter(id => id !== banner.id)"
-                                            title="Restaurar imagen"
-                                            class="botonx"
-                                            >
-                                            🕊️
-                                            </button>
-                                        </div>
-                                        <div class="banner-wrapper">
-                                            <img 
-                                            :src="ObtenerImgUrl(banner.s3_key)"
-                                            :class="DelSupaBann.includes(banner.id) ? 'imagendel' : 'imagen'"
-                                            >
-                                            <div 
-                                            v-if="bannerdesactivado(banner)" 
-                                            class="banner-overlay"
-                                            >
-                                            </div>
-                                        </div>
-                                </template>
-                                <template v-else>
-                                    <h1>
-                                    Nuevo!
-                                    </h1>
-                                    <button
-                                    type="button"
-                                    @click="BannersNuevos.splice(BannersNuevos.indexOf(banner), 1)"
-                                    title="Quitar imagen nueva"
-                                    class="botonx !top-20 !right-20"
-                                    >
-                                    🗑️
-                                    </button>
-                                    <img 
-                                    :src="banner.vista_previa" 
-                                    alt="Vista Previa"
-                                    class="imagen !m-0" 
-                                    />
-                                </template>
-                                <input 
-                                v-model="banner.enlace"
-                                type="text"
-                                placeholder="Enlace..."
-                                class="mt-3"
-                                >
-                            </div>
-                        </div>
-                        <div 
-                        v-else 
-                        class="imageno">
-                        Sin imágenes
-                        </div>
-                    </div>
-                    <div
-                    class="botones"
-                    >
-                        <button 
-                        @click="SaveBanner"
-                        class="botoncon
-                        ">
-                        Guardar Cambios
-                        </button>
-                        <button 
-                        @click="CerrarPopUp03"
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
                     </div>
                 </div>
-            </div>
+            </transition>
         </Teleport>
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
             <div class="flex w-full flex-col lg:flex-row">
-                <!-- Barra de Filtros -->
-                <div class="bar">
-                    <div>
-                        <h1
-                        @click="MostrarFiltro = !MostrarFiltro"
-                        class="botonfil"
-                        >
-                        ᯤ
-                        </h1>
-                    </div>
-                    <transition name="slide">
-                        <div
-                        class="flex flex-col lg:self-center"
-                        v-if="MostrarFiltro"
-                        >
-                            <div
-                            class="
-                            flex flex-col
-                            p-2 md:p-4
-                            ">
-                                <h2>
-                                Filtros de Precio
-                                </h2>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="3"
-                                v-model="filtroRadio"
-                                > 
-                                Hasta $10,000
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="2"
-                                v-model="filtroRadio"
-                                > 
-                                $10,000 a $50,000
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="1"
-                                v-model="filtroRadio"
-                                > 
-                                Más de $50,000
-                                </label>
-                                <label>
-                                <input 
-                                type="radio" 
-                                :value="0"
-                                v-model="filtroRadio"
-                                > 
-                                Personalizado
-                                </label>
-                            </div>
-                            <div
-                            v-if="filtroRadio === 0" 
-                            class="
-                            flex flex-col
-                            md:p-4 p-2
-                            ">
-                                <h3
-                                class="
-                                flex flex-cols
-                                ">
-                                Precio Mayor
-                                </h3>
-                                <input 
-                                type="number"
-                                v-model="mayor" 
-                                placeholder="Precio Max..."
-                                maxlength="10"
-                                >
-                                <h3
-                                class="
-                                flex flex-col
-                                md:p-4 p-2
-                                ">
-                                Precio Minimo
-                                </h3>
-                                <input
-                                type="number"
-                                v-model="menor" 
-                                placeholder="Precio Min..."
-                                maxlength="10"
-                                >
-                            </div>
-                            <div 
-                            v-if="Rol === '1' || Rol === '2' || Rol === '4'"
-                            >
-                                <h2>
-                                ¿El Productos esta Activo?
-                                </h2>
-                                <div
-                                class="
-                                flex flex-col
-                                p-1
-                                lg:p-2
-                                2xl:p-4
-                                ">
-                                    <label>
-                                    <input 
-                                    type="radio" 
-                                    :value="2"
-                                    v-model="filtroEst"
-                                    > 
-                                    Todos los Productos
-                                    </label>
-                                    <label>
-                                    <input 
-                                    type="radio" 
-                                    :value="1"
-                                    v-model="filtroEst"
-                                    > 
-                                    Productos Activos
-                                    </label>
-                                    <label>
-                                    <input 
-                                    type="radio" 
-                                    :value="0"
-                                    v-model="filtroEst"
-                                    > 
-                                    Productos Eliminados
-                                    </label>
-                                </div>
-                            </div>
-                            <div
-                            class="botones"
-                            >
-                                <button 
-                                @click="AplicarFiltro" 
-                                class="botoncon">
-                                Aplicar Filtros
-                                </button>
-                                <button 
-                                @click="LimpiarFiltro" 
-                                v-if="filtroAct === true"
-                                class="botont" 
-                                >
-                                🗑️ Limpiar Filtro
-                                </button>
-                            </div>
-                        </div>
-                    </transition>
-                </div>
                 <!-- Tabla de Productos -->
                 <div class="start">
                     <div v-if="CargandoTrue" 
@@ -758,7 +626,7 @@
                                 left-4 top-1/2 -translate-y-1/2 z-20 
                                 hidden md:flex"
                                 >
-                                🢀
+                                ❮
                                 </button>
                                 <button
                                 v-if="Rol === '1'"
@@ -795,7 +663,7 @@
                                 right-4 top-1/2 -translate-y-1/2 z-20 
                                 hidden md:flex"
                                 >
-                                🢂
+                                ❯
                                 </button>
                             </div>
                         </div>
@@ -831,7 +699,7 @@
                                     flex-row z-20
                                     absolute self-center hidden md:flex"
                                     >
-                                    🢀
+                                    ❮
                                     </button>
                                     <div
                                     v-for="i in ProductosPorCategoria[cat.categoria]"
@@ -925,7 +793,7 @@
                                                         class="botoncon !py-2 !text-2xl"
                                                         v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
                                                         >
-                                                        𖠩
+                                                        🛍️
                                                         </button>
                                                     </div>
                                                 </div>
@@ -934,10 +802,9 @@
                                     </div>
                                     <button
                                     @click="CarruselDerecha(cat.categoria, ProductosPorCategoria[cat.categoria].length)"
-                                    :disabled="ObtenerIndiceCarrusel(cat.categoria) >= ProductosPorCategoria[cat.categoria].length - 1"
                                     class="botonflechagrande absolute right-5 z:20 self-center hidden md:flex"
                                     >
-                                    🢂
+                                    ❯
                                     </button>
                                 </div>
                             </div>
@@ -1022,15 +889,11 @@
     const router = useRouter()
     // ----- Variables Booleanas ----- //
     const ActualizarCajaPDel = ref (false)
-    const BorrarImagenBanner = ref (false)
     const VentanaCompra = ref (false)
-    const MostrarFiltro = ref (false)
     const VentanaBanner = ref (false)
     const CargandoTrue = ref(true)
-    const uploading = ref (false)
     const filtroAct = ref (false)
     const ErrorCarga = ref(false)
-    const Cargando = ref(true)
     // ----- Variables Vacias ----- //
     const ImagenesCargando = ref({})
     const ListaCategoria = ref ("")
@@ -1046,13 +909,11 @@
     const Busqueda = ref ("")
     const DelBann = ref ([])
     const NewImg = ref ([])
-    const NowImg = ref ([])
     const DelImg = ref ([])
     const mayor = ref ("")
     const menor = ref ("")
     // ----- Variables Simples ----- //
     const OpcionCategoriaA = ref ("new")
-    const OpcionCategoria = ref ("new")
     const Bananaeract = ref(null)
     const IndiceBanner = ref(0)
     const filtroRadio = ref(0)
@@ -1106,7 +967,7 @@
             if (Rol.value === '1') {
                 await Banneractu()
             }
-            const respuesta = await fetch("http://10.250.4.36:8000/producto/categorias/", {
+            const respuesta = await fetch("http://10.250.4.34:8000/producto/categorias/", {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
                 }
@@ -1132,9 +993,6 @@
             }
         }
     })
-    const RecargarPagina = () => {
-        window.location.reload()
-    }
     const IniciarCarruselAutomatico = () => {
         intervaloCarrusel = setInterval(() => {
             if (Bananaer.value && Bananaer.value.imagenes) {
@@ -1167,11 +1025,6 @@
 		VentanaCompra.value = true
 		document.body.style.overflow = "hidden";
 	}
-    const AplicarFiltro = () => {
-        BusquedaProducto();
-        menor.value = "";
-        mayor.value = "";
-    }
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual > 0) {
@@ -1297,29 +1150,11 @@
     const GetImg = (id) => {
         return IndiceImg.value[id] || 0
     }
-    const LimpiarFiltro = () => {
-        filtroRadio.value = 4
-        filtrocat.value = ""
-        filtroEst.value =  1
-        BusquedaProducto();
-        filtroAct.value = false
-    }
     const LimpiarImagenes = () => {
         VistaPrevia.value = []
         ArchivoSave.value = []
         if (fileInput.value) {
             fileInput.value.value = ''
-        }
-    }
-    const MoreImages = (evt) => {
-        const file = evt.target.files[0]
-        if (file) {
-            NewImg.value.push(file)
-            ProductoAct.value.imagenes.push({
-                id_imagen: null,
-                s3_key: URL.createObjectURL(file),
-                es_nueva: true
-            })
         }
     }
     const NextImg = (imagen) => {
@@ -1347,23 +1182,12 @@
         return respuesta.data.publicUrl
     }
     const ObtenerIndiceCarrusel = (categoria) => {
-        return IndiceCarrusel.value[categoria] || 0
+        const ind = (IndiceCarrusel.value[categoria])
+        return ind || 0
     }
     const RestarProducto = () => {
         if (ProductoCantidad.value > 1) {
             ProductoCantidad.value--
-        }
-    }
-    const ScrollDerecha = (categoria) => {
-        const carrusel = document.getElementById('carrusel-' + categoria)
-        if (carrusel) {
-            carrusel.scrollBy({ left: carrusel.clientWidth, behavior: 'smooth' })
-        }
-    }
-    const ScrollIzquierda = (categoria) => {
-        const carrusel = document.getElementById('carrusel-' + categoria)
-        if (carrusel) {
-            carrusel.scrollBy({ left: -carrusel.clientWidth, behavior: 'smooth' })
         }
     }
     const SeleccionarImagen = (evt) => {
@@ -1436,7 +1260,7 @@
                 enlace: BannerAct.enlace,
                 orden: BannerAct.orden
             }
-            const ActBanner = await fetch(`http://10.250.4.36:8000/banners/id/${BannerAct.id}`, {
+            const ActBanner = await fetch(`http://10.250.4.34:8000/banners/id/${BannerAct.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1463,7 +1287,7 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`http://10.250.4.36:8000/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`http://10.250.4.34:8000/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1484,7 +1308,7 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`http://10.250.4.36:8000/productos/archivos/id/${id_img}`, {
+                await fetch(`http://10.250.4.34:8000/productos/archivos/id/${id_img}`, {
                     method: 'DELETE'
                 })
             }
@@ -1498,7 +1322,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch('http://10.250.4.36:8000/productos/archivos/', {
+                    await fetch('http://10.250.4.34:8000/productos/archivos/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1520,7 +1344,7 @@
     }
     const Banner = async () => {
         try {
-            const respuesta = await fetch('http://10.250.4.36:8000/banners/?bool_activo=true', {
+            const respuesta = await fetch('http://10.250.4.34:8000/banners/?bool_activo=true', {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
                 }
@@ -1540,7 +1364,7 @@
     }
     const Banneractu = async () => {
         try {
-            const respuesta = await fetch('http://10.250.4.36:8000/banners/', {
+            const respuesta = await fetch('http://10.250.4.34:8000/banners/', {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
                 }
@@ -1568,7 +1392,7 @@
                 if (BannerDelete.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([BannerDelete.s3_key])
                 }
-                await fetch(`http://10.250.4.36:8000/banners/id/${BannerDelete.id}`, {
+                await fetch(`http://10.250.4.34:8000/banners/id/${BannerDelete.id}`, {
                     method: 'DELETE'
                 })
             }
@@ -1576,7 +1400,7 @@
         DelSupaBann.value = []
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`http://10.250.4.36:8000/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`http://10.250.4.34:8000/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -1596,7 +1420,7 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL ('http://10.250.4.36:8000/producto/')
+        let url = new URL ('http://10.250.4.34:8000/producto/')
 		url.searchParams.append('limit', 1000);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value);
@@ -1664,7 +1488,7 @@
         const tokenGuardado = leerCookie("token");
         const ClienteGuardado = leerCookie("id_cliente");
         if (PedidoActual.value) {
-            const respuesta = await fetch('http://10.250.4.36:8000/pedidos/detalles_pedido/', {
+            const respuesta = await fetch('http://10.250.4.34:8000/pedidos/detalles_pedido/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1684,7 +1508,7 @@
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch('http://10.250.4.36:8000/pedidos/', {
+            const respuesta = await fetch('http://10.250.4.34:8000/pedidos/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1724,7 +1548,7 @@
                 (b) => b.id === id_banner
             )
             if (BannerDelete) {
-                await fetch(`http://10.250.4.36:8000/banners/estado/id/${BannerDelete.id}`, {
+                await fetch(`http://10.250.4.34:8000/banners/estado/id/${BannerDelete.id}`, {
                     method: 'PUT'
                 })
             }
@@ -1802,7 +1626,7 @@
                 .upload(filePath, BannerNew.imagen)
         // ----- Subir Datos Banner Backend ----- //
             if (!uploadError) {
-                await fetch('http://10.250.4.36:8000/banners/', {
+                await fetch('http://10.250.4.34:8000/banners/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

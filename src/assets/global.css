@@ -202,18 +202,6 @@ form {
     xl:gap-2
     2xl:gap-2
 }
-.slide-enter-active, .slide-leave-active {
-    @apply 
-    transition-all 
-    duration-300 
-    ease-out
-}
-.slide-enter-from, .slide-leave-to {
-    @apply 
-    opacity-0 
-    -translate-y-4 
-    scale-95
-}
 .tab {
     @apply
     flex items-center justify-between
@@ -891,6 +879,10 @@ img {
     @apply 
     col-span-2 
 }
+.col_borrar_titulo {
+    @apply 
+    col-span-1 
+}
 .carrito-lista {
     @apply 
     flex flex-col 
@@ -1056,6 +1048,25 @@ img {
     opacity-0 
     scale-95
 }
+.slide-enter-active, .slide-leave-active {
+    @apply 
+    transition-all 
+    duration-300 
+    ease-out
+}
+.slide-enter-from, .slide-leave-to {
+    @apply 
+    opacity-0 
+    -translate-y-4 
+    scale-95
+}
+.slide-left-enter-active, .slide-left-leave-active {
+    @apply transition-all duration-300 ease-out
+}
+.slide-left-enter-from, .slide-left-leave-to {
+    @apply opacity-0 -translate-x-full
+}
+/* estatus */
 .admin {
     @apply
     from-green-300 to-green-600 
@@ -1083,7 +1094,7 @@ img {
 }
 .rider {
     @apply
-    from-red-100 to-red-400 
+    from-orange-100 to-orange-200 
 }
 .sent {
     @apply
@@ -1096,7 +1107,7 @@ img {
 }
 .stoc {
     @apply
-    from-orange-100 to-orange-200 
+    from-purple-100 to-purple-400 
 }
 .way {
     @apply

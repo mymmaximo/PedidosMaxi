@@ -19,6 +19,51 @@
                             <div
                             class="flex flex-col md:p-4 p-2"
                             >
+                                <h1>
+                                Ordenar
+                                </h1>
+                                <select 
+                                v-model="orden" 
+                                placeholder=""
+                                >
+                                    <option value="" disabled>
+                                    Orden...
+                                    </option>
+                                    <option value="1">
+                                    Nombre producto A-Z
+                                    </option>
+                                    <option value="2">
+                                    Nombre producto Z-A
+                                    </option>
+                                    <option value="3">
+                                    Fecha ascendente
+                                    </option>
+                                    <option value="4">
+                                    Fecha descendente
+                                    </option>
+                                    <option value="5">
+                                    Precio nuevo menor
+                                    </option>
+                                    <option value="6">
+                                    Precio nuevo mayor
+                                    </option>
+                                    <option value="7">
+                                    Precio viejo menor
+                                    </option>
+                                    <option value="8">
+                                    Precio viejo mayor
+                                    </option>
+                                    <option value="9">
+                                    Categoria A-Z
+                                    </option>
+                                    <option value="10">
+                                    Categoria Z-A
+                                    </option>
+                                </select>
+                            </div>
+                            <div
+                            class="flex flex-col md:p-4 p-2"
+                            >
                                 <h2 class="p-2">
                                 Filtros de Fecha de Actualizacion
                                 </h2>
@@ -270,7 +315,7 @@
                             :disabled="Pagina < 20"
                             class="botona"
                             >
-                            🢀
+                            ❮
                             </button>
                             <h2 class="item">
                             Items 
@@ -283,7 +328,7 @@
                             :disabled="Historial.length < 20"
                             class="botona"
                             >
-                            🢂
+                            ❯
                             </button>
                         </div>
                     </div>
@@ -303,6 +348,7 @@
 	const FiltroCaja = ref (false)
 	const MostrarFiltro = ref (false)
     // ----- Variables Vacias ----- //
+	const orden = ref ("")
     const Historial = ref([])
 	const Busqueda = ref ("")
 	const filtrocat = ref ("")
@@ -332,7 +378,7 @@
         }, 15000)
         try {
             await BusquedaHistorial()
-            const respuesta = await fetch("http://10.250.4.36:8000/producto/categorias/")
+            const respuesta = await fetch("http://10.250.4.34:8000/producto/categorias/")
             const categ = await respuesta.json()
             ListaCategoria.value = categ
             clearTimeout(temporizador)
@@ -347,14 +393,7 @@
             }
         }
 	})
-    const RecargarPagina = () => {
-        window.location.reload()
-    }
     // ----- Para el Frontend ----- //
-	const AbrirPopUp01 = () => {
-		FiltroCaja.value = true
-		document.body.style.overflow = "hidden";
-	}
     const AplicarFiltro = () => {
         BusquedaHistorial();
         CerrarPopUp01()
@@ -369,14 +408,6 @@
         }
         else if (id_estatus === false) {
             return "no"
-        }
-    }
-    const Estatustxt = (id_estatus) => {
-        if (id_estatus === true) {
-            return "Activo"
-        }
-        else if (id_estatus === false) {
-            return "Eliminado"
         }
     }
 	const FormatoFecha = (fechai) => {
@@ -402,50 +433,54 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaHistorial = async() => {
-        let url = new URL ('http://10.250.4.36:8000/historial/');
+        let url = new URL ('http://10.250.4.34:8000/historial/');
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_producto', Busqueda.value);
+            url.searchParams.append('busqueda_historial', Busqueda.value);
+        }
+        if (orden.value !== "") {
+            url.searchParams.append('orden', orden.value)
+            filtroAct.value = true
         }
         if (fecha_upgrade_max.value !== "") {
-            url.searchParams.append('fecha_upgrade_max', fecha_upgrade_max.value);
-            filtroAct.value = true;
+            url.searchParams.append('fecha_upgrade_max', fecha_upgrade_max.value)
+            filtroAct.value = true
         }
         if (fecha_upgrade_min.value !== "") {
-            url.searchParams.append('fecha_upgrade_min', fecha_upgrade_min.value);
-            filtroAct.value = true;
+            url.searchParams.append('fecha_upgrade_min', fecha_upgrade_min.value)
+            filtroAct.value = true
         }
         if (precio_nuevo_max.value !== "") {
-            url.searchParams.append('precio_nuevo_max', precio_nuevo_max.value);
-            filtroAct.value = true;
+            url.searchParams.append('precio_nuevo_max', precio_nuevo_max.value)
+            filtroAct.value = true
         }
         if (precio_nuevo_min.value !== "") {
-            url.searchParams.append('precio_nuevo_min', precio_nuevo_min.value);
-            filtroAct.value = true;
+            url.searchParams.append('precio_nuevo_min', precio_nuevo_min.value)
+            filtroAct.value = true
         }
         if (precio_viejo_max.value !== "") {
-            url.searchParams.append('precio_viejo_max', precio_viejo_max.value);
-            filtroAct.value = true;
+            url.searchParams.append('precio_viejo_max', precio_viejo_max.value)
+            filtroAct.value = true
         }
         if (precio_viejo_min.value !== "") {
-            url.searchParams.append('precio_viejo_min', precio_viejo_min.value);
-            filtroAct.value = true;
+            url.searchParams.append('precio_viejo_min', precio_viejo_min.value)
+            filtroAct.value = true
         }
         if (bool_activo.value === 1) {
-            url.searchParams.append('bool_activo', 'true');
-            filtroAct.value = true;
+            url.searchParams.append('bool_activo', 'true')
+            filtroAct.value = true
         }
         if (bool_activo.value === 0) {
-            url.searchParams.append('bool_activo', 'false');
-            filtroAct.value = true;
+            url.searchParams.append('bool_activo', 'false')
+            filtroAct.value = true
         }
         if (filtrocat.value !== "") {
-            url.searchParams.append('filtrocat', filtrocat.value);
-            filtroAct.value = true;            
+            url.searchParams.append('filtrocat', filtrocat.value)
+            filtroAct.value = true
         }
         const BusqProducto = await fetch(url)
-        const datos = await BusqProducto.json();
-        Historial.value = datos;
+        const datos = await BusqProducto.json()
+        Historial.value = datos
 		CerrarPopUp01()
     }
 </script>

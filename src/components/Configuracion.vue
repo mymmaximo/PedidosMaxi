@@ -43,7 +43,7 @@
                 >
                     <form @submit.prevent="ActualizarCliente">
                         <h1 class="text-center">
-                        CONFIGURACION
+                        DETALLES DE LA CUENTA
                         </h1>
                         <h2>
                         Nombre
@@ -143,7 +143,7 @@
         try {
             const idConfig = leerCookie("id_cliente");
             if (idConfig) {
-                const respuesta = await fetch(`http://10.250.4.36:8000/cliente/?id_cliente=${idConfig}`);
+                const respuesta = await fetch(`http://10.250.4.34:8000/cliente/?id_cliente=${idConfig}`);
                 const datos = await respuesta.json();
                 if (datos.length > 0) {
                     const miPerfil = datos.find(cliente => cliente.id === parseInt(idConfig))
@@ -188,7 +188,7 @@
             UsuarioUpd.contrasena = ClienteConfig.value.contrasena
         }
         const idUsuarioAct = leerCookie("id_cliente");
-        const ActUsuario = await fetch(`http://10.250.4.36:8000/clientes/id/${idUsuarioAct}`, {
+        const ActUsuario = await fetch(`http://10.250.4.34:8000/clientes/id/${idUsuarioAct}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
