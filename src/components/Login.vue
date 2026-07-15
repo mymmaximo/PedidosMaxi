@@ -1,7 +1,7 @@
 <template>
     <div class="cuerpo">
         <div 
-        v-if="!SesionIniciada"
+        v-if="!Iniciado"
         class="pagina !md:items-center"
         >
             <div v-if="CargandoTrue" 
@@ -82,6 +82,7 @@
                         <div class="botones">
                             <button 
                             type="submit" 
+                            :disabled="confirbotonlog" 
                             class="botoncon">
                             Iniciar Sesion
                             </button>
@@ -174,7 +175,7 @@
                         <div class="botones">
                             <button 
                             type="submit" 
-                                    :disabled="confirboton" 
+                            :disabled="confirbotonreg" 
                             class="botoncon"
                             >
                             Registrarte
@@ -212,16 +213,24 @@
 <script setup>
     // ----- Imports ----- //
     import { computed, onMounted, ref } from 'vue';
-    import { CerrarSesion, leerCookie } from './Estatus.js'
+    import { CerrarSesion, ValidadSesionBack, Iniciado, urlover8000 } from './Estatus.js'
     // ----- Variables Vue ----- //
-    const confirboton = computed(() =>{
+    const confirbotonreg = computed(() =>{
         if (!MostrarLogin.value) {
-            const faltandatos01 = 
+            const faltandatos02 = 
                 NuevoCliente.value.nombre === "" ||
                 NuevoCliente.value.email === "" ||
                 NuevoCliente.value.dni === "" ||
                 NuevoCliente.value.contrasena === "" ||
                 NuevoCliente.value.concontrasena === "" 
+            return faltandatos02
+        }
+    })
+    const confirbotonlog = computed(() =>{
+        if (MostrarLogin.value) {
+            const faltandatos01 = 
+                LoginBox.value.email === "" ||
+                LoginBox.value.contrasena === ""
             return faltandatos01
         }
     })
@@ -243,14 +252,14 @@
     const CargandoTrue = ref(true)
     const MostrarLogin = ref(true)
     const verContrasena = ref(false)
-    const SesionIniciada = ref(false)
+    const verConContrasena = ref(false)
     // ----- Variantes Vacias ----- //
     const Herror = ref("")
     // ----- Funciones Vue ----- //
     onMounted (() => {
         CargarDatos()
     })
-    const CargarDatos = (() => {
+    const CargarDatos = ( async () => {
         CargandoTrue.value = true
         ErrorCarga.value = false
         const temporizador = setTimeout(() => {
@@ -261,10 +270,7 @@
             }
         }, 15000)
         try {
-            const tokenGuardado = leerCookie("token")
-            if (tokenGuardado) {
-                SesionIniciada.value = true
-            }
+            await ValidadSesionBack()
             clearTimeout(temporizador)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
@@ -277,63 +283,56 @@
             }
         }
     })
-    const RecargarPagina = () => {
-        window.location.reload()
-    }
     const emit = defineEmits([
         'LoginExitoso'
     ])
     // ----- Para el Backend ----- //
     const IniciarSesionCliente = async() => {
-        const respuesta = await fetch('http://10.250.4.34:8000/cliente/login/', {
+        const respuesta = await fetch(`${urlover8000}/cliente/login/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(LoginBox.value)
+            body: JSON.stringify(LoginBox.value),
+            credentials: 'include'
         })
-        const datos = await respuesta.json();
-            if (respuesta.ok) {
-                document.cookie= `token=${datos.access_token}; path=/`
-                document.cookie= `id_cliente=${datos.id_cliente}; path=/`
-                SesionIniciada.value = true
-                emit('LoginExitoso')
-                LoginBox.value = {
-                    email: "",
-                    contrasena: ""
-                };
-                window.location.reload();
-            } else {
-                Herror.value = "Usuario o contraseña incorrectos"
-                Heror.value = true
-            } 
+        if (respuesta.ok) {
+            await ValidadSesionBack()
+            emit('LoginExitoso')
+            LoginBox.value = {
+                email: "",
+                contrasena: ""
+            };
+            window.location.reload();
+        } else {
+            Herror.value = "Usuario o contraseña incorrectos"
+            Heror.value = true
+        } 
     }
     const IniciarSesionUsuario = async() => {
-        const respuesta = await fetch('http://10.250.4.34:8000/usuario/login/', {
+        const respuesta = await fetch(`${urlover8000}/usuario/login/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(LoginBox.value)
+            body: JSON.stringify(LoginBox.value),
+            credentials: 'include'
         })
         if (respuesta.status === 401) {
-            IniciarSesionCliente()
+            await IniciarSesionCliente()
+            return
         }
-        const datos = await respuesta.json()
-            if (respuesta.ok) {
-                document.cookie= `token=${datos.access_token}; path=/`
-                document.cookie= `id_usuario=${datos.id_usuario}; path=/`
-                document.cookie= `id_rol=${datos.id_rol}; path=/`
-                SesionIniciada.value = true
-                emit('LoginExitoso')
-                LoginBox.value = {
-                    email: "",
-                    contrasena: ""
-                }
-                window.location.reload()
-            } else {
-                IniciarSesionCliente()
-            } 
+        if (respuesta.ok) {
+            await ValidadSesionBack()
+            emit('LoginExitoso')
+            LoginBox.value = {
+                email: "",
+                contrasena: ""
+            }
+            window.location.reload()
+        } else {
+            await IniciarSesionCliente()
+        } 
     }
     const SubirNuevoCliente = async() => {
         if (NuevoCliente.value.contrasena !== "" || NuevoCliente.value.concontrasena !== "") {
@@ -342,25 +341,26 @@
                 return
             }
         }
-        const respuesta = await fetch('http://10.250.4.34:8000/clientes/', {
+        const respuesta = await fetch(`${urlover8000}/clientes/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(NuevoCliente.value)
+            body: JSON.stringify(NuevoCliente.value),
+            credentials: 'include'
             })
         if (respuesta.status === 401) {
-            CerrarSesion()
+            await CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
             return
         }
-        const datos = await respuesta.json();
         if (respuesta.ok) {
             NuevoCliente.value = {
                 nombre: "",
                 email: "",
                 dni: "",
-                contrasena: ""
+                contrasena: "",
+                concontrasena: ""
             }
             MostrarLogin.value = true
         } else {

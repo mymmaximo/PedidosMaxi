@@ -34,7 +34,7 @@
 	</Teleport>
 	<div class="cuerpo">
 		<div class="pagina">
-            <div class="flex w-full flex-col lg:flex-row">
+            <div class="flex w-full flex-col sm:flex-row">
 				<div class="bar">
 					<div>
 						<h1
@@ -446,6 +446,7 @@
 <script setup>
     // ----- Imports ----- //
 	import { onMounted, ref } from 'vue'
+    import { urlover8000 } from './Estatus.js'
     // ----- Variables Complejas ----- //
 	const EstatusAct = ref({
 		id_pedido: "",
@@ -491,10 +492,10 @@
         }, 15000)
         try {
 			await BusquedaPedido()
-			const respuestac = await fetch("http://10.250.4.34:8000/direccion/ciudad/")
+			const respuestac = await fetch(`${urlover8000}/direccion/ciudad/`)
 			const ciudad = await respuestac.json()
 			ListaCiudad.value = ciudad
-			const respuestap = await fetch("http://10.250.4.34:8000/direccion/provincia/")
+			const respuestap = await fetch(`${urlover8000}/direccion/provincia/`)
 			const provincia = await respuestap.json()
 			ListaProvincia.value = provincia
             clearTimeout(temporizador)
@@ -509,9 +510,6 @@
             }
         }
 	})
-    const RecargarPagina = () => {
-        window.location.reload()
-    }
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaP.value = true
@@ -587,12 +585,13 @@
 	}
     // ----- Para el Backend ----- //
 	const ActualizarEstatus = async() => {
-			const ActEst = await fetch(`http://10.250.4.34:8000/pedidos/id/${EstatusAct.value.id_pedido}`, {
+			const ActEst = await fetch(`${urlover8000}/pedidos/id/${EstatusAct.value.id_pedido}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(EstatusAct.value)
+				body: JSON.stringify(EstatusAct.value),
+           		credentials: 'include'
 			})
 			if (ActEst.status === 401) {
 				CerrarSesion();
@@ -612,7 +611,7 @@
 			CerrarPopUp01()
 	}
 	const BusquedaPedido = async() => {
-		let url = new URL ('http://10.250.4.34:8000/pedidos/all/');
+		let url = new URL (`${urlover8000}/pedidos/all/`)
 		url.searchParams.append('skip', Pagina.value);
 		if (Busqueda.value !== "") {
 			url.searchParams.append('busqueda_pedido', Busqueda.value);
@@ -653,7 +652,10 @@
             url.searchParams.append('busqueda_pedido', filtroprovincia.value)
             filtroAct.value = true
         }
-		const BusqPedido = await fetch(url)
+		const BusqPedido = await fetch(url, {
+			method: 'GET',
+            credentials: 'include'
+		})
 		const datos = await BusqPedido.json()
 		Pedidos.value = datos
 	}

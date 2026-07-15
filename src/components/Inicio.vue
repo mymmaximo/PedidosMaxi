@@ -200,7 +200,7 @@
                             {{ ProductoAct.nombre }}
                             </h1>
                             <!-- Actualizar Nombre -->
-                            <div v-if="Rol === '1' || Rol === '2'">
+                            <div v-if="Rol === 1 || Rol === 2">
                                 <h2>
                                 Nombre
                                 </h2>
@@ -212,7 +212,7 @@
                                 >
                             </div>
                             <!-- Actualizar Precio -->
-                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4'">
+                            <div v-if="Rol === 1 || Rol === 2 || Rol === 4">
                                 <h2>
                                 Precio
                                 </h2>
@@ -224,7 +224,7 @@
                                 >
                             </div>
                             <!-- Actualizar Stock -->
-                            <div v-if="Rol === '1' || Rol === '2' || Rol === '5'">
+                            <div v-if="Rol === 1 || Rol === 2 || Rol === 5">
                                 <h2>
                                 Stock
                                 </h2>
@@ -236,7 +236,7 @@
                                 >
                             </div>
                             <!-- Actualizar Categoria y Codigo de Barra -->
-                            <div v-if="Rol === '1' || Rol === '2'">
+                            <div v-if="Rol === 1 || Rol === 2">
                                 <h2>
                                 Categoria
                                 </h2>
@@ -270,7 +270,7 @@
                                 >
                             </div>
                             <!-- Actualizar Imagenes Actuales -->
-                            <div v-if="Rol === '1' || Rol === '2'">
+                            <div v-if="Rol === 1 || Rol === 2">
                                 <h2>Imágenes actuales</h2>
                                 <div 
                                 v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
@@ -629,7 +629,7 @@
                                 ❮
                                 </button>
                                 <button
-                                v-if="Rol === '1'"
+                                v-if="Rol === 1"
                                 type="button"
                                 @click="AbrirPopUp03"
                                 class="botonx !bg-gray-700"
@@ -745,7 +745,7 @@
                                                 <h2>
                                                 ${{ i.precio }}
                                                 </h2>
-                                                <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                <div v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5">
                                                     <h3>
                                                     {{ i.codigo_barra }} <br>
                                                     Stock: 
@@ -754,7 +754,7 @@
                                                 </div>
                                                 <div class="flex flex-row lg:flex-col justify-center">
                                                     <div class="botones">
-                                                        <div v-if="Rol === '1' || Rol === '2'">
+                                                        <div v-if="Rol === 1 || Rol === 2">
                                                             <button 
                                                             @click="Eliminacion(i)" 
                                                             v-if="i.activo" 
@@ -776,10 +776,10 @@
                                                             </span> 
                                                             </button>
                                                         </div>
-                                                        <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                        <div v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5">
                                                             <button 
                                                             @click="Edicion(i)" 
-                                                            v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                                            v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5" 
                                                             class="botont !py-2">
                                                             ✏️ 
                                                             <span class="hidden lg:inline 2xl:inline">
@@ -791,7 +791,7 @@
                                                         @click="Compracion(i)" 
                                                         :disabled="CarritoStock(i) === 0" 
                                                         class="botoncon !py-2 !text-2xl"
-                                                        v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                                        v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
                                                         >
                                                         🛍️
                                                         </button>
@@ -818,7 +818,7 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
+    import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual, leerCookie, urlover8000, CargarCarrito } from './Estatus.js'
     import { onMounted, onUnmounted, toRefs, ref, watch, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
     import { useRouter } from 'vue-router'
@@ -891,6 +891,7 @@
     const ActualizarCajaPDel = ref (false)
     const VentanaCompra = ref (false)
     const VentanaBanner = ref (false)
+    const MostrarConfir = ref(false)
     const CargandoTrue = ref(true)
     const filtroAct = ref (false)
     const ErrorCarga = ref(false)
@@ -967,19 +968,16 @@
             if (Rol.value === '1') {
                 await Banneractu()
             }
-            const respuesta = await fetch("http://10.250.4.34:8000/producto/categorias/", {
+            const respuesta = await fetch(`${urlover8000}/producto/categorias/`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
-                }
+                },
+                credentials: 'include'
             })
             if (!respuesta.ok) throw new Error("Error de conexión con el servidor")
             const categ = await respuesta.json()
             ListaCategoria.value = categ
-            const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
-            if (CarritoOlvidado) {
-                CarritoLocal.value = JSON.parse(CarritoOlvidado)
-                console.log("Carrito recuperado:", CarritoLocal.value)
-            }
+            CargarCarrito()
             IniciarCarruselAutomatico()
             clearTimeout(temporizador)
         } catch (error) {
@@ -1260,15 +1258,16 @@
                 enlace: BannerAct.enlace,
                 orden: BannerAct.orden
             }
-            const ActBanner = await fetch(`http://10.250.4.34:8000/banners/id/${BannerAct.id}`, {
+            const ActBanner = await fetch(`${urlover8000}/banners/id/${BannerAct.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(BannerActData)
+            body: JSON.stringify(BannerActData),
+            credentials: 'include'
             })
             if (ActBanner.status === 401) {
-                CerrarSesion()
+                await CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
                 return
             }
@@ -1287,15 +1286,16 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`http://10.250.4.34:8000/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`${urlover8000}/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(ProductoActNoImg)
+            body: JSON.stringify(ProductoActNoImg),
+            credentials: 'include'
             })
             if (ActProducto.status === 401) {
-                CerrarSesion()
+                await CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
                 return
             }
@@ -1308,8 +1308,9 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`http://10.250.4.34:8000/productos/archivos/id/${id_img}`, {
-                    method: 'DELETE'
+                await fetch(`${urlover8000}/productos/archivos/id/${id_img}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
                 })
             }
             // ----- Subir Datos Imagen ----- //
@@ -1322,7 +1323,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch('http://10.250.4.34:8000/productos/archivos/', {
+                    await fetch(`${urlover8000}/productos/archivos/`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1331,7 +1332,8 @@
                             nombre_original: file.name,
                             tipo_contenido: fileExt,
                             tamanio: file.size
-                        })
+                        }),
+                        credentials: 'include'
                     })
                 }
             }
@@ -1344,10 +1346,11 @@
     }
     const Banner = async () => {
         try {
-            const respuesta = await fetch('http://10.250.4.34:8000/banners/?bool_activo=true', {
+            const respuesta = await fetch(`${urlover8000}/banners/?bool_activo=true`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
-                }
+                },
+                credentials: 'include'
             })
             if (respuesta.ok) {
                 const bananaer = await respuesta.json()
@@ -1364,10 +1367,11 @@
     }
     const Banneractu = async () => {
         try {
-            const respuesta = await fetch('http://10.250.4.34:8000/banners/', {
+            const respuesta = await fetch(`${urlover8000}/banners/`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
-                }
+                },
+                credentials: 'include'
             })
             if (respuesta.ok) {
                 const bananaeract = await respuesta.json()
@@ -1392,22 +1396,24 @@
                 if (BannerDelete.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([BannerDelete.s3_key])
                 }
-                await fetch(`http://10.250.4.34:8000/banners/id/${BannerDelete.id}`, {
-                    method: 'DELETE'
+                await fetch(`${urlover8000}/banners/id/${BannerDelete.id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
                 })
             }
         }
         DelSupaBann.value = []
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`http://10.250.4.34:8000/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            credentials: 'include'
         })
         if (EraseProducto.status === 401) {
-            CerrarSesion();
+            await CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;
         }
@@ -1420,8 +1426,8 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL ('http://10.250.4.34:8000/producto/')
-		url.searchParams.append('limit', 1000);
+        let url = new URL (`${urlover8000}/producto/`)
+		url.searchParams.append('limit', 1000)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value);
         }
@@ -1470,7 +1476,8 @@
         const BusqProducto = await fetch(url, {
             headers: {
                 "X-Tunnel-Skip-AntiPhishing-Page": "true"
-            }
+            },
+            credentials: 'include'
         })
         const datos = await BusqProducto.json();
         Productos.value = datos;
@@ -1488,7 +1495,7 @@
         const tokenGuardado = leerCookie("token");
         const ClienteGuardado = leerCookie("id_cliente");
         if (PedidoActual.value) {
-            const respuesta = await fetch('http://10.250.4.34:8000/pedidos/detalles_pedido/', {
+            const respuesta = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1498,7 +1505,8 @@
                     id_pedido: PedidoActual.value,
                     id_producto: ProductoActual.value.id,
                     cantidad: ProductoCantidad.value
-                }])
+                }]),
+                credentials: 'include'
             })
             if (respuesta.ok) {
                 CerrarPopUp04()
@@ -1508,7 +1516,7 @@
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch('http://10.250.4.34:8000/pedidos/', {
+            const respuesta = await fetch(`${urlover8000}/pedidos/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1520,10 +1528,11 @@
                     metodo_pago: " ",
                     tiempo_estimado_entrega: 0,
                     tiempo_entrega: 0
-                })
+                }),
+                credentials: 'include'
             })
             if (respuesta.status === 401) {
-                CerrarSesion();
+                await CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
                 return;
             }
@@ -1548,8 +1557,9 @@
                 (b) => b.id === id_banner
             )
             if (BannerDelete) {
-                await fetch(`http://10.250.4.34:8000/banners/estado/id/${BannerDelete.id}`, {
-                    method: 'PUT'
+                await fetch(`${urlover8000}/banners/estado/id/${BannerDelete.id}`, {
+                    method: 'PUT',
+                    credentials: 'include'
                 })
             }
         }
@@ -1594,7 +1604,8 @@
             id_producto: ProductoActual.value.id,
             cantidad: ProductoCantidad.value,
             precio_unitario: ProductoActual.value.precio,
-            stock_producto: ProductoActual.value.stock
+            stock_producto: ProductoActual.value.stock,
+            imagenes: ProductoActual.value.imagenes
         }
         let CarritoExistente = CarritoLocal.value.find(
             (item_exitente) =>
@@ -1626,7 +1637,7 @@
                 .upload(filePath, BannerNew.imagen)
         // ----- Subir Datos Banner Backend ----- //
             if (!uploadError) {
-                await fetch('http://10.250.4.34:8000/banners/', {
+                await fetch(`${urlover8000}/banners/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1636,7 +1647,8 @@
                         tamanio: BannerNew.imagen.size,
                         enlace: BannerNew.enlace,
                         orden: Number(BannerNew.orden) || 1
-                    })
+                    }),
+                    credentials: 'include'
                 })
             }
         }

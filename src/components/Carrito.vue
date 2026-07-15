@@ -197,7 +197,7 @@
             </div>
         </Teleport>
         <div class="pagina">
-            <div class="flex w-full flex-col lg:flex-row">
+            <div class="flex w-full flex-col sm:flex-row">
                 <!-- Tabla de Detalles -->
                 <div class="start">
                     <div v-if="CargandoTrue" 
@@ -376,10 +376,12 @@
 
 <script setup>
     // ----- Imports ----- //
+    import { useRouter } from 'vue-router'
     import { ref, onMounted, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
-    import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie, Rol } from './Estatus.js'
+    import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie, Rol, urlover8000, ValidadCarrito, ClienteID } from './Estatus.js'
     // ----- Variables Vue ----- //
+    const router = useRouter()
     const confirboton = computed(() =>{
         if (Rol.value && Rol.value !== "") {
             return true
@@ -407,7 +409,6 @@
         ciudad: "",
         provincia: ""
     })
-    const idClienteCarrito = leerCookie("id_cliente")
     // ----- Variables Booleanas ----- //
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
@@ -425,7 +426,7 @@
         CargarDatos()
     })
     const CargarDatos = (async() => {
-        if (!idClienteCarrito || idClienteCarrito === "null") {
+        if (!ClienteID.value) { 
             CargandoTrue.value = false
             return
         }
@@ -439,7 +440,9 @@
             }
         }, 15000)
         try {
-            const respuesta = await fetch(`http://10.250.4.34:8000/cliente/${idClienteCarrito}/direcciones/`)
+            const respuesta = await fetch(`${urlover8000}/cliente/${ClienteID.value}/direcciones/`, {
+                credentials: 'include'
+            })
             const datos = await respuesta.json();
             ListaDirecciones.value = datos;
             clearTimeout(temporizador)
@@ -454,9 +457,6 @@
             }
         }
     })
-    const RecargarPagina = () => {
-        window.location.reload()
-    }
     const emit = defineEmits([
         'CarritoVacio'
     ])
@@ -514,32 +514,45 @@
         }
     }
     const ConfirmarCompra = (async() => {
+        if (!ValidadCarrito(CarritoLocal.value)) {
+            alert("Manipulación detectada. Tu carrito ha sido vaciado por seguridad.")
+            LimpiarCompra()
+            emit('CarritoVacio')
+            return
+        }
         let DireccionPedido = null
         if (DireccionExistente.value !== "") {
             DireccionPedido = DireccionExistente.value
         } else {
-            DireccionPedido = NuevaDireccion.value
-            const SubidaNuevaDireccion = await fetch('http://10.250.4.34:8000/direcciones/', {
+            const DatosNuevaDireccion = {
+                calle: NuevaDireccion.value.calle,
+                numero: parseInt(NuevaDireccion.value.numero),
+                barrio: NuevaDireccion.value.barrio,
+                ciudad: NuevaDireccion.value.ciudad,
+                provincia: NuevaDireccion.value.provincia
+            }
+            const SubidaNuevaDireccion = await fetch(`${urlover8000}/direcciones/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(NuevaDireccion.value)
+                body: JSON.stringify(DatosNuevaDireccion),
+                credentials: 'include'
             })
             const datos = await SubidaNuevaDireccion.json()
             DireccionPedido = datos.id
         }
-        const SubidaNuevoPedido = await fetch('http://10.250.4.34:8000/pedidos/', {
+        const SubidaNuevoPedido = await fetch(`${urlover8000}/pedidos/`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${leerCookie("token")}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id_cliente: idClienteCarrito,
+                id_cliente: parseInt(ClienteID.value),
                 id_direccion: DireccionPedido,
                 metodo_pago: MetodoPago.value
-            })
+            }),
+            credentials: 'include'
         })
         if (SubidaNuevoPedido.status === 401) {
             CerrarSesion()
@@ -556,14 +569,14 @@
                 precio_unitario: item.precio_unitario
             }
         })
-        const SubidaNuevoDetalle = await fetch('http://10.250.4.34:8000/pedidos/detalles_pedido/', {
+        const SubidaNuevoDetalle = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${leerCookie("token")}`
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(DetallesLista)
-            })   
+            body: JSON.stringify(DetallesLista),
+            credentials: 'include'
+            })  
             if (SubidaNuevoDetalle.status === 401) {
                 CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
@@ -571,6 +584,7 @@
             }
             emit('CarritoVacio')
             LimpiarCompra()
+            router.push('/mis_pedidos')
     })
     const VerificarStock = (item) => {
         if (item.cantidad < 1) {

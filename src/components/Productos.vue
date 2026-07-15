@@ -12,7 +12,7 @@
                             <h1>
                             {{ ProductoAct.nombre }}
                             </h1>
-                            <div v-if="Rol === '1' || Rol === '2'">
+                            <div v-if="Rol === 1 || Rol === 2">
                                 <h2>
                                 Nombre
                                 </h2>
@@ -23,7 +23,7 @@
                                 maxlength="50"
                                 >
                             </div>
-                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4'">
+                            <div v-if="Rol === 1 || Rol === 2 || Rol === 4">
                                 <h2>
                                 Precio
                                 </h2>
@@ -34,7 +34,7 @@
                                 maxlength="8"
                                 >
                             </div>
-                            <div v-if="Rol === '1' || Rol === '2' || Rol === '5'">
+                            <div v-if="Rol === 1 || Rol === 2 || Rol === 5">
                                 <h2>
                                 Stock
                                 </h2>
@@ -45,7 +45,7 @@
                                 maxlength="8"
                                 >
                             </div>
-                            <div v-if="Rol === '1' || Rol === '2'">
+                            <div v-if="Rol === 1 || Rol === 2">
                                 <h2>
                                 Categoria
                                 </h2>
@@ -78,7 +78,7 @@
                                 maxlength="15"
                                 >
                             </div>
-                            <div v-if="Rol === '1' || Rol === '2'">
+                            <div v-if="Rol === 1 || Rol === 2">
                                 <h2>Imágenes actuales</h2>
                                 <div 
                                 v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
@@ -558,7 +558,7 @@
                                 >
                             </div>
                             <div 
-                            v-if="Rol === '1' || Rol === '2' || Rol === '4'"
+                            v-if="Rol === 1 || Rol === 2 || Rol === 4"
                             >
                                 <h2>
                                 ¿El Productos esta Activo?
@@ -612,7 +612,7 @@
                             </div>
                         </div>
                     </transition>
-                    <div v-if="Rol === '1' || Rol === '2'">
+                    <div v-if="Rol === 1 || Rol === 2">
                         <h1
                         @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
@@ -623,7 +623,7 @@
                     <transition name="slide">
                         <div
                         class="flex flex-col lg:self-center"
-                        v-if="MostrarNuevo && (Rol === '1' || Rol === '2')"
+                        v-if="MostrarNuevo && (Rol === 1 || Rol === 2)"
                         >
                             <form @submit.prevent="SubirNuevoProducto">
                                 <h2>
@@ -857,7 +857,7 @@
                                             <h2>
                                             ${{ i.precio }}
                                             </h2>
-                                            <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                            <div v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5">
                                                 <h3>
                                                 {{ i.codigo_barra }} <br>
                                                 Stock: 
@@ -865,10 +865,10 @@
                                                 </h3>
                                             </div>
                                             <div class="botones">
-                                                <div v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'">
+                                                <div v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5">
                                                     <button 
                                                     @click="Edicion(i)" 
-                                                    v-if="Rol === '1' || Rol === '2' || Rol === '4' || Rol === '5'" 
+                                                    v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5" 
                                                     class="botont !py-2">
                                                     ✏️
                                                     <span class="hidden lg:inline 2xl:inline">
@@ -877,7 +877,7 @@
                                                     </button>
                                                 </div>
                                                 <div 
-                                                v-if="Rol === '1' || Rol === '2'"
+                                                v-if="Rol === 1 || Rol === 2"
                                                 >
                                                     <button 
                                                     @click="Eliminacion(i)" 
@@ -904,7 +904,7 @@
                                                 @click="Compracion(i)" 
                                                 :disabled="CarritoStock(i) === 0" 
                                                 class="botoncon !py-2 !text-2xl"
-                                                v-if="Rol !== '2' && Rol !== '3' && Rol !== '4' && Rol !== '5' && Rol !== '6'"
+                                                v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
                                                 >
                                                 🛍️ 
                                                 </button>
@@ -957,7 +957,7 @@
     // ----- Imports ----- //
     import { onMounted, toRefs, ref, watch, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
-    import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual } from './Estatus.js'
+    import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual, ClienteID, urlover8000, CargarCarrito } from './Estatus.js'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (VentanaNuevo.value) {
@@ -1081,18 +1081,14 @@
         }, 15000)
         try {
             await BusquedaProducto()
-            const respuesta = await fetch("http://10.250.4.34:8000/producto/categorias/", {
+            const respuesta = await fetch(`${urlover8000}/producto/categorias/`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
                 }
             })
             const categ = await respuesta.json()
             ListaCategoria.value = categ
-            const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
-            if (CarritoOlvidado) {
-                CarritoLocal.value = JSON.parse(CarritoOlvidado)
-                console.log("Carrito recuperado:", CarritoLocal.value)
-            }
+            CargarCarrito()
             clearTimeout(temporizador)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
@@ -1127,9 +1123,6 @@
             CargandoTrue.value = false
             BloqueoPeticion.value = false
         }
-    }
-    const RecargarPagina = () => {
-        window.location.reload()
     }
     const emit = defineEmits([
         'upload',
@@ -1311,15 +1304,16 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`http://10.250.4.34:8000/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`${urlover8000}/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(ProductoActNoImg)
+            body: JSON.stringify(ProductoActNoImg),
+            credentials: 'include'
             })
             if (ActProducto.status === 401) {
-                CerrarSesion()
+                await CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
                 return
             }
@@ -1332,8 +1326,9 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`http://10.250.4.34:8000/productos/archivos/id/${id_img}`, {
-                    method: 'DELETE'
+                await fetch(`${urlover8000}/productos/archivos/id/${id_img}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
                 })
             }
             // ----- Subir Datos Imagen ----- //
@@ -1346,7 +1341,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch('http://10.250.4.34:8000/productos/archivos/', {
+                    await fetch(`${urlover8000}/productos/archivos/`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1355,7 +1350,8 @@
                             nombre_original: file.name,
                             tipo_contenido: fileExt,
                             tamanio: file.size
-                        })
+                        }),
+                        credentials: 'include'
                     })
                 }
             }
@@ -1367,14 +1363,15 @@
         }
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`http://10.250.4.34:8000/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            credentials: 'include'
         })
         if (EraseProducto.status === 401) {
-            CerrarSesion();
+            await CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;
         }
@@ -1387,7 +1384,7 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL ('http://10.250.4.34:8000/producto/')
+        let url = new URL (`${urlover8000}/producto/`)
 		url.searchParams.append('skip', Pagina.value)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value)
@@ -1441,7 +1438,8 @@
         const BusqProducto = await fetch(url.toString(), {
             headers: {
                 "X-Tunnel-Skip-AntiPhishing-Page": "true"
-            }
+            },
+            credentials: 'include'
         })
         const datos = await BusqProducto.json()
         Productos.value = datos
@@ -1456,20 +1454,19 @@
         return Producto.stock - stockCarrito;
     }
     const Confirmar = (async() => {
-        const tokenGuardado = leerCookie("token");
-        const ClienteGuardado = leerCookie("id_cliente");
+        const ClienteGuardado = ClienteID.value
         if (PedidoActual.value) {
-            const respuesta = await fetch('http://10.250.4.34:8000/pedidos/detalles_pedido/', {
+            const respuesta = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + tokenGuardado
                 },
                 body: JSON.stringify([{
                     id_pedido: PedidoActual.value,
                     id_producto: ProductoActual.value.id,
                     cantidad: ProductoCantidad.value
-                }])
+                }]),
+                credentials: 'include'
             })
             if (respuesta.ok) {
                 CerrarPopUp03()
@@ -1479,11 +1476,10 @@
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch('http://10.250.4.34:8000/pedidos/', {
+            const respuesta = await fetch(`${urlover8000}/pedidos/`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + tokenGuardado
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     id_cliente: parseInt(ClienteGuardado),
@@ -1491,12 +1487,13 @@
                     metodo_pago: " ",
                     tiempo_estimado_entrega: 0,
                     tiempo_entrega: 0
-                })
+                }),
+                credentials: 'include'
             })
             if (respuesta.status === 401) {
-                CerrarSesion();
+                await CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-                return;
+                return
             }
             if (respuesta.ok) {
                 const DatosPedido = await respuesta.json ()
@@ -1529,15 +1526,16 @@
         if (OpcionCategoria.value != "new") {
             NuevoProducto.value.categoria = OpcionCategoria.value
         }
-        const SubidaNuevoProducto = await fetch('http://10.250.4.34:8000/productos/', {
+        const SubidaNuevoProducto = await fetch(`${urlover8000}/productos/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(NuevoProducto.value)
+            body: JSON.stringify(NuevoProducto.value),
+            credentials: 'include'
         })
         if (SubidaNuevoProducto.status === 401) {
-            CerrarSesion();
+            await CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;
         }
@@ -1557,7 +1555,7 @@
                 if (uploadError) {
                     alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
                 } else {
-                    await fetch('http://10.250.4.34:8000/productos/archivos/', {
+                    await fetch(`${urlover8000}/productos/archivos/`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1568,7 +1566,8 @@
                             nombre_original: file.name,
                             tipo_contenido: fileExt,
                             tamanio: file.size
-                        })
+                        }),
+                        credentials: 'include'
                     })
                 }
             }

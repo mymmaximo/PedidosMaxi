@@ -1,28 +1,18 @@
 import { ref } from 'vue'
 
-export const LimpiarCompra = () =>{
-    localStorage.removeItem("carrito_pendiente")
-    CarritoLocal.value = []
-}
+export const urlbase5173 = "http://10.250.4.38:5173"
 
-export const leerCookie = (nombre) => {
-  const valor = `; ${document.cookie}`
-  const partes = valor.split(`; ${nombre}=`)
-  if (partes.length === 2) return partes.pop().split(';').shift()
-  return null
-}
+export const urlover8000 = "http://10.250.4.38:8000"
 
-export const CerrarSesion = () =>{
-    document.cookie = "token=; max-age=0; path=/"
-    document.cookie = "id_usuario=; max-age=0; path=/"
-    document.cookie = "id_cliente=; max-age=0; path=/"
-    document.cookie = "id_rol=; max-age=0; path=/"
-    LimpiarCompra()
-    Iniciado.value = false
-    window.location.reload()
-}
+export const Rol = ref(null)
+
+export const ClienteID = ref(null)
+
+export const Iniciado = ref(false)
 
 export const CarritoLocal = ref ([])
+
+export const MostrarError = ref(false)
 
 export const ProductoCantidad = ref(1)
 
@@ -32,10 +22,145 @@ export const ActualizarCajaP = ref(false)
 
 export const ActualizarCajaC = ref(false)
 
-export const Iniciado = ref(leerCookie("token") !== null)
-
-export const Rol = ref(leerCookie("id_rol"))
-
 export const PedidoGuardado = parseInt(localStorage.getItem("pedido"))
 
 export const PedidoActual = ref(PedidoGuardado ? parseInt(PedidoGuardado) : null)
+
+export const CerrarSesion = async () =>{
+    try {
+        await fetch (`${urlover8000}/logout/`, {
+            method: 'POST',
+            credentials: 'include'
+        })
+    } catch (error) {
+        console.error (
+            "Error al cerrar sesion en el servidor:",
+            error
+        )
+    }
+    LimpiarCompra()
+    Rol.value = null
+    ClienteID.value = null
+    Iniciado.value = false
+    window.location.reload()
+}
+
+
+
+const Decodificar = (token) => {
+    try{
+        const Base64Url = token.split('.')[1]
+        const Base64 = Base64Url.replace(/-/g, '+').replace(/_/g,'/')
+        return JSON.parse(window.atob(Base64))
+    } catch (error) {
+        return null
+    }
+}
+
+export const leerCookie = (nombre) => {
+    const valor = `; ${document.cookie}`
+    const partes = valor.split(`; ${nombre}=`)
+    if (partes.length === 2)
+        return partes.pop().split(';').shift()
+    return null
+}
+
+export const LimpiarCompra = () =>{
+    localStorage.removeItem("carrito_pendiente")
+    CarritoLocal.value = []
+}
+
+export const ValidadSesionBack = async () => {
+    try {
+        const respuesta = await fetch(`${urlover8000}/reload/`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+        if (respuesta.ok) {
+            const datos = await respuesta.json()
+            Iniciado.value = true
+            Rol.value = datos.id_rol
+            ClienteID.value = datos.id_cliente
+        } else {
+            Iniciado.value = false
+            Rol.value = null
+            ClienteID.value = null
+        }
+    } catch (error) {
+        console.error("Error validando la sesión:", error)
+        Iniciado.value = false
+    }
+}
+
+export const ValidadSesionBackold = async () => {
+    const token = leerCookie("token_seguro")
+    if (token) {
+        const payload = Decodificar(token)
+        if (payload && payload.exp * 1000 > Date.now()) {
+            Iniciado.value = true
+            Rol.value = payload.id_rol
+        } else {
+            await CerrarSesion()
+        }
+    } else {
+        Iniciado.value = false
+    }
+}
+
+export const ValidadCarrito = (carrito_check) => {
+    if (!Array.isArray(carrito_check)) {
+            return false
+    }
+    for (const item of carrito_check) {
+        if (typeof item !== 'object' || item === null) {
+            return false
+        }
+        const claves = [
+            'id_pedido',
+            'nombre_producto',
+            'id_producto',
+            'cantidad',
+            'precio_unitario',
+            'stock_producto',
+            'imagenes'
+        ]
+        for (const clave of claves) {
+            if (!(clave in item)) {
+                return false
+            }
+        }
+        if (
+            typeof item.id_producto !== 'number' ||
+            typeof item.cantidad !== 'number' ||
+            typeof item.precio_unitario !== 'number' ||
+            typeof item.stock_producto !== 'number' ||
+            typeof item.nombre_producto !== 'string' ||
+            !Array.isArray(item.imagenes)
+        ) {
+            return false
+        }
+        if (item.cantidad < 1 || item.cantidad > item.stock_producto) {
+            return false
+        }
+    }
+    return true
+}
+
+export const CargarCarrito = () => {
+    const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
+    if (CarritoOlvidado) {
+        try {
+            const carrito_parse = JSON.parse(CarritoOlvidado)
+            if (ValidadCarrito(carrito_parse)) {
+                CarritoLocal.value = carrito_parse
+                console.log("Carrito valido y recuperado")
+            } else {
+                console.log("Carrito destruido")
+                LimpiarCompra
+            }
+        } catch(error) {
+            console.log("Carrito destruido")
+            LimpiarCompra
+        }
+    }
+}

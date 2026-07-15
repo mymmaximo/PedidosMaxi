@@ -1,7 +1,7 @@
 <template>
     <div class="cuerpo">
         <div class="pagina">
-            <div class="flex w-full flex-col lg:flex-row">
+            <div class="flex w-full flex-col sm:flex-row">
                 <div class="bar">
                     <div>
                         <h1
@@ -341,6 +341,7 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref } from 'vue'
+    import { urlover8000 } from './Estatus.js'
     // ----- Variables Booleanas ----- //
 	const filtroAct = ref (false)
     const ErrorCarga = ref(false)
@@ -378,7 +379,7 @@
         }, 15000)
         try {
             await BusquedaHistorial()
-            const respuesta = await fetch("http://10.250.4.34:8000/producto/categorias/")
+            const respuesta = await fetch(`${urlover8000}/producto/categorias/`)
             const categ = await respuesta.json()
             ListaCategoria.value = categ
             clearTimeout(temporizador)
@@ -433,7 +434,7 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaHistorial = async() => {
-        let url = new URL ('http://10.250.4.34:8000/historial/');
+        let url = new URL (`${urlover8000}/historial/`);
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_historial', Busqueda.value);
@@ -478,7 +479,10 @@
             url.searchParams.append('filtrocat', filtrocat.value)
             filtroAct.value = true
         }
-        const BusqProducto = await fetch(url)
+        const BusqProducto = await fetch(url, {
+            method: 'GET',
+            credentials: 'include'
+        })
         const datos = await BusqProducto.json()
         Historial.value = datos
 		CerrarPopUp01()

@@ -634,9 +634,7 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref } from 'vue';
-    import { leerCookie } from './Estatus.js'
-    // ----- Variables Complejas ----- //
-    const idUsuario = leerCookie("id_cliente")
+    import { ClienteID, CerrarSesion, urlover8000 } from './Estatus.js'
     // ----- Variables Booleanas ----- //
     const filtroAct = ref(false)
     const ErrorCarga = ref(false)
@@ -658,6 +656,7 @@
         CargarDatos()
     })
     const CargarDatos = (async() => {
+        if (!ClienteID.value) return
         CargandoTrue.value = true
         ErrorCarga.value = false
         const temporizador = setTimeout(() => {
@@ -668,7 +667,9 @@
             }
         }, 15000)
         try {
-            const respuesta = await fetch(`http://10.250.4.34:8000/pedidos/cliente/${idUsuario}`)
+            const respuesta = await fetch(`${urlover8000}/pedidos/cliente/${ClienteID.value}`, {
+                credentials: 'include'
+            })
             const datos = await respuesta.json();
             console.log("aca che",datos)
             Pedidos.value = datos;
@@ -738,7 +739,7 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaPedido = async() => {
-        let url = new URL (`http://10.250.4.34:8000/pedidos/cliente/${idUsuario}/`);
+        let url = new URL (`${urlover8000}/pedidos/cliente/${ClienteID.value}/`);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_pedido', Busqueda.value)
         }
@@ -770,7 +771,10 @@
             url.searchParams.append('filtroest', filtroEst.value)
             filtroAct.value = true
         }
-        const BusqPedido = await fetch(url)
+        const BusqPedido = await fetch(url, {
+            method: 'GET',
+            credentials: 'include'
+        })
         const datos = await BusqPedido.json()
         Pedidos.value = datos
     }

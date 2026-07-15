@@ -85,7 +85,7 @@
     </Teleport>
     <div class="cuerpo">
         <div class="pagina">
-            <div class="flex w-full flex-col lg:flex-row">
+            <div class="flex w-full flex-col sm:flex-row">
                 <div class="bar">
                     <div>
                         <h1
@@ -537,7 +537,7 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref, computed } from 'vue'
-    import { CerrarSesion, ActualizarCajaC } from './Estatus'
+    import { CerrarSesion, ActualizarCajaC, urlover8000 } from './Estatus'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (MostrarNuevo.value) {
@@ -700,13 +700,14 @@
         if (ClienteAct.value.contrasena !== "") {
             ClienteUpd.contrasena = ClienteAct.value.contrasena
         }
-        const ActCliente = await fetch(`http://10.250.4.34:8000/clientes/id/${ClienteAct.value.id}`, {
+        const ActCliente = await fetch(`${urlover8000}/clientes/id/${ClienteAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(ClienteUpd)
-        });
+            body: JSON.stringify(ClienteUpd),
+            credentials: 'include'
+        })
         if (ActCliente.status === 401) {
             CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
@@ -722,11 +723,12 @@
         CerrarPopUp01()
     }
     const BorrarCliente = async() => {
-        const EraseCliente = await fetch(`http://10.250.4.34:8000/clientes/id/${ClienteEli.value}`, {
+        const EraseCliente = await fetch(`${urlover8000}/clientes/id/${ClienteEli.value}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-        }
+        },
+        credentials: 'include'
         })
         ClienteEli.value = ""
         if (EraseCliente.status === 401) {
@@ -738,7 +740,7 @@
         CerrarPopUp02()
     }
     const BusquedaCliente = async() => {
-        let url = new URL ('http://10.250.4.34:8000/cliente/');
+        let url = new URL (`${urlover8000}/cliente/`);
 		url.searchParams.append('skip', Pagina.value);
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_cliente', Busqueda.value)
@@ -771,17 +773,21 @@
             url.searchParams.append('filtroprovincia', filtroprovincia.value)
             filtroAct.value = true            
         }
-        const BusqCliente = await fetch(url)
+        const BusqCliente = await fetch(url, {
+            method: 'GET',
+            credentials: 'include'
+        })
         const datos = await BusqCliente.json()
         clientes.value = datos
     }
     const SubirNuevoCliente = async() => {
-        const SubidaNuevoCliente = await fetch('http://10.250.4.34:8000/clientes/', {
+        const SubidaNuevoCliente = await fetch(`${urlover8000}/clientes/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(NuevoCliente.value)
+            body: JSON.stringify(NuevoCliente.value),
+            credentials: 'include'
         })
         if (SubidaNuevoCliente.status === 401) {
             CerrarSesion()

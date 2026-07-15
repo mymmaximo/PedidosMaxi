@@ -102,7 +102,7 @@
     <div class="cuerpo">
         <!-- Tabla de Usuarios -->
         <div class="pagina">
-            <div class="flex w-full flex-col lg:flex-row">
+            <div class="flex w-full flex-col sm:flex-row">
                 <div class="bar">
                     <div>
                         <h1
@@ -462,7 +462,7 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref, computed } from 'vue';
-    import { Rol, CerrarSesion, ActualizarCajaC as ActualizarCajaU } from './Estatus';
+    import { urlover8000, CerrarSesion, ActualizarCajaC as ActualizarCajaU } from './Estatus';
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (ActualizarUNew.value) {
@@ -540,9 +540,6 @@
             }
         }
     })
-    const RecargarPagina = () => {
-        window.location.reload()
-    }
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaUDel.value = true
@@ -566,9 +563,7 @@
     const Edicion = (usuario_fila) => {
         UsuarioAct.value.id = usuario_fila.id
         UsuarioAct.value.nombre = usuario_fila.nombre
-        UsuarioAct.value.apellido = usuario_fila.apellido
         UsuarioAct.value.email = usuario_fila.email
-        UsuarioAct.value.usuario = usuario_fila.usuario
         AbrirPopUp02()
     }
     const Eliminacion = (usuario_fila) => {
@@ -669,24 +664,23 @@
         if (UsuarioAct.value.id_rol !== "") {
             UsuarioUpd.id_rol = UsuarioAct.value.id_rol
         }
-        const ActUsuario = await fetch(`http://10.250.4.34:8000/usuarios/id/${UsuarioAct.value.id}`, {
+        const ActUsuario = await fetch(`${urlover8000}/usuarios/id/${UsuarioAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(UsuarioUpd)
+            body: JSON.stringify(UsuarioUpd),
+            credentials: 'include'
         })
         if (ActUsuario.status === 401) {
-            CerrarSesion();
+            await CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return;
         }
         UsuarioAct.value = {
             id: "",
             nombre: "",
-            apellido: "",
             email: "",
-            usuario: "",
             contrasena: "",
             id_rol: ""
         }
@@ -694,15 +688,16 @@
         CerrarPopUp02()
     }
     const BorrarUsuario = async() => {
-        const EraseCliente = await fetch(`http://10.250.4.34:8000/usuarios/id/${UsuarioEli.value}`, {
+        const EraseCliente = await fetch(`${urlover8000}/usuarios/id/${UsuarioEli.value}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-        }
+        },
+        credentials: 'include'
         })
         UsuarioEli.value = ""
         if (EraseCliente.status === 401) {
-            CerrarSesion();
+            await CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
             return
         }
@@ -710,8 +705,8 @@
         CerrarPopUp01()
     }
     const BusquedaUsuario = async() => {
-        let url = new URL ('http://10.250.4.34:8000/usuarios/');
-		url.searchParams.append('skip', Pagina.value);
+        let url = new URL (`${urlover8000}/usuarios/`)
+		url.searchParams.append('skip', Pagina.value)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_usuario', Busqueda.value)
         }
@@ -727,29 +722,31 @@
             url.searchParams.append('bool_activo', 'false')
             filtroAct.value = true
         }
-        const BusqUsuario = await fetch(url)
+        const BusqUsuario = await fetch(url, {
+            method: 'GET',
+            credentials: 'include'
+        })
         const datos = await BusqUsuario.json()
-        usuarios.value = datos;
+        usuarios.value = datos
     }
     const SubirNuevoUsuario = async() => {
-        const SubidaNuevoUsuario = await fetch('http://10.250.4.34:8000/usuarios/', {
+        const SubidaNuevoUsuario = await fetch(`${urlover8000}/usuarios/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(NuevoUsuario.value)
+            body: JSON.stringify(NuevoUsuario.value),
+            credentials: 'include'
         })
         if (SubidaNuevoUsuario.status === 401) {
-            CerrarSesion();
+            await CerrarSesion();
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
+            return
         }
         NuevoUsuario.value = {
             nombre: "",
-            apellido: "",
             email: "",
-            email: "",
-            usuario: "",
+            dni: "",
             contrasena: "",
             id_rol: ""
         }

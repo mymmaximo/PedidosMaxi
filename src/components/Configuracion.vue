@@ -113,7 +113,7 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref } from 'vue'
-    import { CerrarSesion, leerCookie } from './Estatus.js'
+    import { CerrarSesion, leerCookie, urlover8000 } from './Estatus.js'
     // ----- Variables Complejas ----- //
     const ClienteConfig = ref({
         nombre: "",
@@ -143,7 +143,7 @@
         try {
             const idConfig = leerCookie("id_cliente");
             if (idConfig) {
-                const respuesta = await fetch(`http://10.250.4.34:8000/cliente/?id_cliente=${idConfig}`);
+                const respuesta = await fetch(`${urlover8000}/cliente/?id_cliente=${idConfig}`);
                 const datos = await respuesta.json();
                 if (datos.length > 0) {
                     const miPerfil = datos.find(cliente => cliente.id === parseInt(idConfig))
@@ -166,9 +166,6 @@
             }
         }
     })
-    const RecargarPagina = () => {
-        window.location.reload()
-    }
     // ----- Para el Backend ----- //
     const ActualizarCliente = async() => {
         if (ClienteConfig.value.contrasena !== "" || ClienteConfig.value.concontrasena !== "") {
@@ -188,12 +185,13 @@
             UsuarioUpd.contrasena = ClienteConfig.value.contrasena
         }
         const idUsuarioAct = leerCookie("id_cliente");
-        const ActUsuario = await fetch(`http://10.250.4.34:8000/clientes/id/${idUsuarioAct}`, {
+        const ActUsuario = await fetch(`${urlover8000}/clientes/id/${idUsuarioAct}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(UsuarioUpd)
+            body: JSON.stringify(UsuarioUpd),
+            credentials: 'include'
         })
         if (ActUsuario.status === 401) {
             CerrarSesion()
