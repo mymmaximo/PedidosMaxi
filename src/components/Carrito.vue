@@ -27,31 +27,11 @@
         </Teleport>   
         <!-- Pantalla de Pagar -->
         <Teleport to="body">
-            <div v-if="PantallaPagar"
+            <div v-if="PantallaDirecto"
             @click.self="CerrarPopUp02"
             class="fondo"
             >
                 <div class="popup">
-                    <h1>
-                    Método de Pago:
-                    </h1>
-                    <select v-model="MetodoPago">
-                        <option value="" disabled>
-                        Selecciona un método...
-                        </option>
-                        <option value="Tarjeta">
-                        Tarjeta de Crédito / Débito
-                        </option>
-                        <option value="MercadoPago">
-                        Mercado Pago
-                        </option>
-                        <option value="Transferencia">
-                        Transferencia Bancaria
-                        </option>
-                        <option value="Efectivo">
-                        Efectivo al recibir
-                        </option>
-                    </select>
                     <h1>
                     Dirección de Envío:
                     </h1>
@@ -186,11 +166,11 @@
                         Cancelar
                         </button>
                         <button 
-                        :disabled="confirboton" 
+                        :disabled="confirboton || ProcesandoPago" 
                         @click="ConfirmarCompra"
                         class="botoncon"
                         >
-                        Finalizar Compra
+                        {{ ProcesandoPago ? 'Cargando...' : 'Realizar Pago' }}
                         </button>   
                     </div>
                 </div>
@@ -377,16 +357,14 @@
 <script setup>
     // ----- Imports ----- //
     import { useRouter } from 'vue-router'
+    import { initializePaddle } from '@paddle/paddle-js'
     import { ref, onMounted, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
-    import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie, Rol, urlover8000, ValidadCarrito, ClienteID } from './Estatus.js'
+    import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie, Rol, urlover8000, ValidadCarrito, ClienteID, CargarCarrito, SesionExpirada, Iniciado } from './Estatus.js'
     // ----- Variables Vue ----- //
     const router = useRouter()
     const confirboton = computed(() =>{
         if (Rol.value && Rol.value !== "") {
-            return true
-        }
-        if (MetodoPago.value === "") {
             return true
         }
         if (DireccionExistente.value === "") {
@@ -412,18 +390,35 @@
     // ----- Variables Booleanas ----- //
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
-    const PantallaPagar = ref (false)
+    const ProcesandoPago = ref(false)
+    const PantallaDirecto = ref (false)
     const ActualizarCarritoDel = ref(false)
     // ----- Variables Vacias ----- //
     const IndiceImg = ref ({})
-    const MetodoPago = ref ("")
     const ProductoEli = ref("")
     const ListaDirecciones = ref([])
     const ImagenesCargando = ref({})
+    const InstanciaPaddle = ref(null)
     const DireccionExistente = ref ("")
     // ----- Funciones Vue ----- //
-    onMounted (() => {
+    onMounted (async () => {
         CargarDatos()
+        CargarCarrito()
+        InstanciaPaddle.value = await initializePaddle({
+            environment: 'sandbox', 
+            token: 'test_04e1ed8d821a1fd086eaaa9ec0b',
+            eventCallback: function(evento) {
+                if (evento.name === "checkout.completed") {
+                    emit('CarritoVacio')
+                    LimpiarCompra()
+                    document.body.style.overflow = "auto"
+                    router.push('/mis_pedidos')
+                } else if (evento.name === "checkout.closed") {
+                    console.log("El usuario cerró la ventana sin pagar")
+                    ProcesandoPago.value = false
+                }
+            }
+        })
     })
     const CargarDatos = (async() => {
         if (!ClienteID.value) { 
@@ -443,8 +438,8 @@
             const respuesta = await fetch(`${urlover8000}/cliente/${ClienteID.value}/direcciones/`, {
                 credentials: 'include'
             })
-            const datos = await respuesta.json();
-            ListaDirecciones.value = datos;
+            const datos = await respuesta.json()
+            ListaDirecciones.value = datos
             clearTimeout(temporizador)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
@@ -466,8 +461,10 @@
 		document.body.style.overflow = "hidden"
 	}
 	const AbrirPopUp02 = () => {
-		PantallaPagar.value = true
+		PantallaDirecto.value = true
 		document.body.style.overflow = "hidden"
+        if (ListaDirecciones.value.length > 0)
+            DireccionExistente.value = ListaDirecciones.value[0].id_direccion
 	}
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id_producto)
@@ -481,7 +478,7 @@
 		document.body.style.overflow = "auto"
 	}
 	const CerrarPopUp02 = () => {
-		PantallaPagar.value = false
+		PantallaDirecto.value = false
 		document.body.style.overflow = "auto"
 	}
     const Eliminacion = (producto_fila) => {
@@ -511,13 +508,17 @@
         CerrarPopUp01()
         if (CarritoLocal.value.length === 0) {
             emit('CarritoVacio')
+            router.push('/')
         }
     }
     const ConfirmarCompra = (async() => {
+        if (ProcesandoPago.value) return
+        ProcesandoPago.value = true
         if (!ValidadCarrito(CarritoLocal.value)) {
             alert("Manipulación detectada. Tu carrito ha sido vaciado por seguridad.")
             LimpiarCompra()
             emit('CarritoVacio')
+            ProcesandoPago.value = false
             return
         }
         let DireccionPedido = null
@@ -549,14 +550,16 @@
             },
             body: JSON.stringify({
                 id_cliente: parseInt(ClienteID.value),
-                id_direccion: DireccionPedido,
-                metodo_pago: MetodoPago.value
+                id_direccion: DireccionPedido
             }),
             credentials: 'include'
         })
         if (SubidaNuevoPedido.status === 401) {
             CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
+            ProcesandoPago.value = false
             return
         }
         const datosPedido = await SubidaNuevoPedido.json()
@@ -579,12 +582,41 @@
             })  
             if (SubidaNuevoDetalle.status === 401) {
                 CerrarSesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
+                ProcesandoPago.value = false
                 return
             }
-            emit('CarritoVacio')
-            LimpiarCompra()
-            router.push('/mis_pedidos')
+            const subidaTransaccion = await fetch(`${urlover8000}/crear-transaccion-paddle/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_pedido: Pedidoid
+                }),
+                credentials: 'include'
+            })
+
+            if (subidaTransaccion.status === 401) {
+                CerrarSesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
+                ProcesandoPago.value = false
+                return
+            }
+
+            const datosTransaccion = await subidaTransaccion.json()
+            InstanciaPaddle.value?.Checkout.open({
+            settings: {
+                displayMode: "overlay",
+                theme: "light",
+                locale: "es"
+            },
+            transactionId: datosTransaccion.transaction_id
+        })
     })
     const VerificarStock = (item) => {
         if (item.cantidad < 1) {
@@ -593,6 +625,6 @@
         if (item.cantidad > item.stock_producto) {
             item.cantidad = item.stock_producto
         }
-        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value));
+        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value))
     }
 </script>

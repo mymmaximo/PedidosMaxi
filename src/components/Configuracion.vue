@@ -113,7 +113,7 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref } from 'vue'
-    import { CerrarSesion, leerCookie, urlover8000 } from './Estatus.js'
+    import { CerrarSesion, leerCookie, urlover8000, SesionExpirada, Iniciado } from './Estatus.js'
     // ----- Variables Complejas ----- //
     const ClienteConfig = ref({
         nombre: "",
@@ -141,10 +141,10 @@
             }
         }, 15000)
         try {
-            const idConfig = leerCookie("id_cliente");
+            const idConfig = leerCookie("id_cliente")
             if (idConfig) {
-                const respuesta = await fetch(`${urlover8000}/cliente/?id_cliente=${idConfig}`);
-                const datos = await respuesta.json();
+                const respuesta = await fetch(`${urlover8000}/cliente/?id_cliente=${idConfig}`)
+                const datos = await respuesta.json()
                 if (datos.length > 0) {
                     const miPerfil = datos.find(cliente => cliente.id === parseInt(idConfig))
                     if (miPerfil) {
@@ -184,7 +184,7 @@
         if (ClienteConfig.value.contrasena !== "") {
             UsuarioUpd.contrasena = ClienteConfig.value.contrasena
         }
-        const idUsuarioAct = leerCookie("id_cliente");
+        const idUsuarioAct = leerCookie("id_cliente")
         const ActUsuario = await fetch(`${urlover8000}/clientes/id/${idUsuarioAct}`, {
             method: 'PUT',
             headers: {
@@ -195,7 +195,9 @@
         })
         if (ActUsuario.status === 401) {
             CerrarSesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
             return
         }
         ClienteConfig.value = {

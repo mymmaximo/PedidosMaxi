@@ -212,8 +212,8 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { computed, onMounted, ref } from 'vue';
-    import { CerrarSesion, ValidadSesionBack, Iniciado, urlover8000 } from './Estatus.js'
+    import { computed, onMounted, ref } from 'vue'
+    import { CerrarSesion, ValidadSesionBack, Iniciado, urlover8000, SesionExpirada } from './Estatus.js'
     // ----- Variables Vue ----- //
     const confirbotonreg = computed(() =>{
         if (!MostrarLogin.value) {
@@ -302,8 +302,8 @@
             LoginBox.value = {
                 email: "",
                 contrasena: ""
-            };
-            window.location.reload();
+            }
+            window.location.reload()
         } else {
             Herror.value = "Usuario o contraseña incorrectos"
             Heror.value = true
@@ -320,6 +320,8 @@
         })
         if (respuesta.status === 401) {
             await IniciarSesionCliente()
+            SesionExpirada.value = true
+            Iniciado.value = false
             return
         }
         if (respuesta.ok) {
@@ -352,6 +354,8 @@
         if (respuesta.status === 401) {
             await CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
             return
         }
         if (respuesta.ok) {

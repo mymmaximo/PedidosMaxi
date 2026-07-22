@@ -537,7 +537,7 @@
 <script setup>
     // ----- Imports ----- //
     import { onMounted, ref, computed } from 'vue'
-    import { CerrarSesion, ActualizarCajaC, urlover8000 } from './Estatus'
+    import { CerrarSesion, ActualizarCajaC, urlover8000, SesionExpirada, Iniciado } from './Estatus'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (MostrarNuevo.value) {
@@ -709,16 +709,18 @@
             credentials: 'include'
         })
         if (ActCliente.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
+            CerrarSesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
+            return
         }
         ClienteAct.value = {
             id: "",
             nombre: "",
             email: "",
             contrasena: "",
-        };
+        }
         BusquedaCliente()
         CerrarPopUp01()
     }
@@ -732,16 +734,18 @@
         })
         ClienteEli.value = ""
         if (EraseCliente.status === 401) {
-            CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            CerrarSesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
             return
         }
         BusquedaCliente()
         CerrarPopUp02()
     }
     const BusquedaCliente = async() => {
-        let url = new URL (`${urlover8000}/cliente/`);
-		url.searchParams.append('skip', Pagina.value);
+        let url = new URL (`${urlover8000}/cliente/`)
+		url.searchParams.append('skip', Pagina.value)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_cliente', Busqueda.value)
         }
@@ -792,6 +796,8 @@
         if (SubidaNuevoCliente.status === 401) {
             CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
             return
         }
         NuevoCliente.value = {

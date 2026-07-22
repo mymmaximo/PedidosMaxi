@@ -446,7 +446,7 @@
 <script setup>
     // ----- Imports ----- //
 	import { onMounted, ref } from 'vue'
-    import { urlover8000 } from './Estatus.js'
+    import { urlover8000, SesionExpirada, Iniciado } from './Estatus.js'
     // ----- Variables Complejas ----- //
 	const EstatusAct = ref({
 		id_pedido: "",
@@ -545,7 +545,7 @@
 		else if (id_estatus === 3) {
 			return "box"
 		}
-			return "what";
+			return "what"
 	}
 	const Estatustxt = (id_estatus) => {
 		if (id_estatus === 1) {
@@ -594,8 +594,10 @@
            		credentials: 'include'
 			})
 			if (ActEst.status === 401) {
-				CerrarSesion();
-				alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+				CerrarSesion()
+				alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
 				return
 			}
 			EstatusAct.value = {
@@ -612,9 +614,9 @@
 	}
 	const BusquedaPedido = async() => {
 		let url = new URL (`${urlover8000}/pedidos/all/`)
-		url.searchParams.append('skip', Pagina.value);
+		url.searchParams.append('skip', Pagina.value)
 		if (Busqueda.value !== "") {
-			url.searchParams.append('busqueda_pedido', Busqueda.value);
+			url.searchParams.append('busqueda_pedido', Busqueda.value)
 		}
         if (orden.value !== "") {
             url.searchParams.append('orden', orden.value)

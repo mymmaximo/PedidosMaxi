@@ -1,8 +1,12 @@
 import { ref } from 'vue'
 
-export const urlbase5173 = "http://10.250.4.38:5173"
+export const urlbase5173a = "http://10.250.4.62:5173"
 
-export const urlover8000 = "http://10.250.4.38:8000"
+export const urlover8000a = "http://10.250.4.62:8000"
+
+export const urlbase5173 = "http://localhost:5173"
+
+export const urlover8000 = "http://localhost:8000"
 
 export const Rol = ref(null)
 
@@ -11,6 +15,8 @@ export const ClienteID = ref(null)
 export const Iniciado = ref(false)
 
 export const CarritoLocal = ref ([])
+
+export const VolverCarro = ref(false)
 
 export const MostrarError = ref(false)
 
@@ -22,9 +28,30 @@ export const ActualizarCajaP = ref(false)
 
 export const ActualizarCajaC = ref(false)
 
+export const SesionExpirada = ref(false)
+
 export const PedidoGuardado = parseInt(localStorage.getItem("pedido"))
 
 export const PedidoActual = ref(PedidoGuardado ? parseInt(PedidoGuardado) : null)
+
+export const CargarCarrito = () => {
+    const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
+    if (CarritoOlvidado) {
+        try {
+            const carrito_parse = JSON.parse(CarritoOlvidado)
+            if (ValidadCarrito(carrito_parse)) {
+                CarritoLocal.value = carrito_parse
+                console.log("Carrito valido y recuperado")
+            } else {
+                console.log("Carrito destruido")
+                LimpiarCompra
+            }
+        } catch(error) {
+            console.log("Carrito destruido")
+            LimpiarCompra
+        }
+    }
+}
 
 export const CerrarSesion = async () =>{
     try {
@@ -42,10 +69,8 @@ export const CerrarSesion = async () =>{
     Rol.value = null
     ClienteID.value = null
     Iniciado.value = false
-    window.location.reload()
+    window.location.href = '/'
 }
-
-
 
 const Decodificar = (token) => {
     try{
@@ -82,9 +107,13 @@ export const ValidadSesionBack = async () => {
             Rol.value = datos.id_rol
             ClienteID.value = datos.id_cliente
         } else {
+            if (Iniciado.value === true) {
+                SesionExpirada.value = true
+            }
             Iniciado.value = false
             Rol.value = null
             ClienteID.value = null
+            LimpiarCompra()
         }
     } catch (error) {
         console.error("Error validando la sesión:", error)
@@ -144,23 +173,4 @@ export const ValidadCarrito = (carrito_check) => {
         }
     }
     return true
-}
-
-export const CargarCarrito = () => {
-    const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
-    if (CarritoOlvidado) {
-        try {
-            const carrito_parse = JSON.parse(CarritoOlvidado)
-            if (ValidadCarrito(carrito_parse)) {
-                CarritoLocal.value = carrito_parse
-                console.log("Carrito valido y recuperado")
-            } else {
-                console.log("Carrito destruido")
-                LimpiarCompra
-            }
-        } catch(error) {
-            console.log("Carrito destruido")
-            LimpiarCompra
-        }
-    }
 }

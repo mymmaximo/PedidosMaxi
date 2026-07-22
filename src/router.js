@@ -8,7 +8,7 @@ import Carrito from './components/Carrito.vue'
 import Configuracion from './components/Configuracion.vue'
 import Mis_pedidos from './components/Mis_pedidos.vue'
 import Historial_precios from './components/Historial_precios.vue'
-import { ValidadSesionBack, Rol, Iniciado, MostrarError, CarritoLocal, ValidadCarrito } from './components/Estatus.js'
+import { ValidadSesionBack, Rol, Iniciado, MostrarError, CarritoLocal, ValidadCarrito, VolverCarro } from './components/Estatus.js'
 
 const routes = [
     { 
@@ -110,8 +110,8 @@ router.beforeEach(async (to, from, next) => {
             }
         }
         if (!carrito_valido) {
-            MostrarError.value = true
-            setTimeout(() => { MostrarError.value = false }, 3000)
+            VolverCarro.value = true
+            setTimeout(() => { VolverCarro.value = false }, 3000)
             return next('/')
         }
     }

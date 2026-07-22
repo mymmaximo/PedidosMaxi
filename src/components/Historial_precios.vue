@@ -396,12 +396,12 @@
 	})
     // ----- Para el Frontend ----- //
     const AplicarFiltro = () => {
-        BusquedaHistorial();
+        BusquedaHistorial()
         CerrarPopUp01()
     }
 	const CerrarPopUp01 = () => {
 		FiltroCaja.value = false
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
@@ -428,16 +428,16 @@
 		precio_viejo_min.value = ""
         filtrocat.value = ""
 		bool_activo.value = 1
-        BusquedaHistorial();
+        BusquedaHistorial()
         CerrarPopUp01()
-        filtroAct.value = true;            
+        filtroAct.value = true
     }
     // ----- Para el Backend ----- //
     const BusquedaHistorial = async() => {
-        let url = new URL (`${urlover8000}/historial/`);
-		url.searchParams.append('skip', Pagina.value);
+        let url = new URL (`${urlover8000}/historial/`)
+		url.searchParams.append('skip', Pagina.value)
         if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_historial', Busqueda.value);
+            url.searchParams.append('busqueda_historial', Busqueda.value)
         }
         if (orden.value !== "") {
             url.searchParams.append('orden', orden.value)

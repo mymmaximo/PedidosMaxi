@@ -7,4 +7,9 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
+  server: {
+    allowedHosts: [
+      'hence-usage-airports-parks.trycloudflare.com'
+    ]
+  }
 })

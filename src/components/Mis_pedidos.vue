@@ -633,8 +633,8 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, ref } from 'vue';
-    import { ClienteID, CerrarSesion, urlover8000 } from './Estatus.js'
+    import { onMounted, ref } from 'vue'
+    import { ClienteID, urlover8000 } from './Estatus.js'
     // ----- Variables Booleanas ----- //
     const filtroAct = ref(false)
     const ErrorCarga = ref(false)
@@ -670,9 +670,9 @@
             const respuesta = await fetch(`${urlover8000}/pedidos/cliente/${ClienteID.value}`, {
                 credentials: 'include'
             })
-            const datos = await respuesta.json();
+            const datos = await respuesta.json()
             console.log("aca che",datos)
-            Pedidos.value = datos;
+            Pedidos.value = datos
             clearTimeout(temporizador)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
@@ -739,7 +739,7 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaPedido = async() => {
-        let url = new URL (`${urlover8000}/pedidos/cliente/${ClienteID.value}/`);
+        let url = new URL (`${urlover8000}/pedidos/cliente/${ClienteID.value}/`)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_pedido', Busqueda.value)
         }

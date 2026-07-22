@@ -818,7 +818,7 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual, leerCookie, urlover8000, CargarCarrito } from './Estatus.js'
+    import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual, leerCookie, urlover8000, CargarCarrito, Iniciado, SesionExpirada } from './Estatus.js'
     import { onMounted, onUnmounted, toRefs, ref, watch, computed } from 'vue'
     import { supabase } from '../config/supebase.js'
     import { useRouter } from 'vue-router'
@@ -1009,19 +1009,19 @@
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaP.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
 	const AbrirPopUp02 = () => {
 		ActualizarCajaPDel.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
 	const AbrirPopUp03 = () => {
 		VentanaBanner.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
 	const AbrirPopUp04 = () => {
 		VentanaCompra.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
@@ -1073,23 +1073,23 @@
 		ActualizarCajaP.value = false
         DelImg.value = []
         LimpiarImagenes()
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
 	const CerrarPopUp02 = () => {
 		ActualizarCajaPDel.value = false
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
 	const CerrarPopUp03 = () => {
 		VentanaBanner.value = false
         DelBann.value = []
         DelSupaBann.value = []
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
 	const CerrarPopUp04 = () => {
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
     const ComienzoToque = (evento) => {
         inicioX = evento.changedTouches[0].clientX
@@ -1169,7 +1169,7 @@
         if (index === -1) {
             DelImg.value.push(img.id_imagen)
         } else {
-            DelImg.value.splice(index, 1);
+            DelImg.value.splice(index, 1)
         }
         IndiceImg.value[ProductoAct.value.id] = 0
     }
@@ -1269,6 +1269,8 @@
             if (ActBanner.status === 401) {
                 await CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
                 return
             }
         }
@@ -1297,6 +1299,8 @@
             if (ActProducto.status === 401) {
                 await CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
                 return
             }
             // ----- Borrar Datos Imagen ----- //
@@ -1414,8 +1418,10 @@
         })
         if (EraseProducto.status === 401) {
             await CerrarSesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
+            return
         }
         ProductoEli.value = {
         id: "",
@@ -1429,7 +1435,7 @@
         let url = new URL (`${urlover8000}/producto/`)
 		url.searchParams.append('limit', 1000)
         if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_producto', Busqueda.value);
+            url.searchParams.append('busqueda_producto', Busqueda.value)
         }
         let minfiltro = ""
         let maxfiltro = ""
@@ -1450,28 +1456,28 @@
             minfiltro = 50000
         }
         else if (filtroRadio.value === 0) {
-            minfiltro = menor.value;
-            maxfiltro = mayor.value;
+            minfiltro = menor.value
+            maxfiltro = mayor.value
         }
         if (minfiltro !== "" && minfiltro != null) {
-            url.searchParams.append('precio_producto_min', minfiltro);
+            url.searchParams.append('precio_producto_min', minfiltro)
             filtroAct.value = true
         }
         if (maxfiltro !== "" && maxfiltro != null) {
-            url.searchParams.append('precio_producto_max', maxfiltro);
+            url.searchParams.append('precio_producto_max', maxfiltro)
             filtroAct.value = true
         }
         if (filtroEst.value === 1) {
-            url.searchParams.append('bool_activo', 'true');
-            filtroAct.value = true;
+            url.searchParams.append('bool_activo', 'true')
+            filtroAct.value = true
         }
         if (filtroEst.value === 0) {
-            url.searchParams.append('bool_activo', 'false');
-            filtroAct.value = true;
+            url.searchParams.append('bool_activo', 'false')
+            filtroAct.value = true
         }
         if (filtrocat.value !== "") {
-            url.searchParams.append('filtrocat', filtrocat.value);
-            filtroAct.value = true;            
+            url.searchParams.append('filtrocat', filtrocat.value)
+            filtroAct.value = true
         }
         const BusqProducto = await fetch(url, {
             headers: {
@@ -1479,8 +1485,8 @@
             },
             credentials: 'include'
         })
-        const datos = await BusqProducto.json();
-        Productos.value = datos;
+        const datos = await BusqProducto.json()
+        Productos.value = datos
     }
     const CarritoStock = (Producto) => {
         let stockCarrito = 0
@@ -1489,11 +1495,11 @@
                 stockCarrito = stockCarrito + itemCarrito.cantidad
             }
         })
-        return Producto.stock - stockCarrito;
+        return Producto.stock - stockCarrito
     }
     const Confirmar = (async() => {
-        const tokenGuardado = leerCookie("token");
-        const ClienteGuardado = leerCookie("id_cliente");
+        const tokenGuardado = leerCookie("token")
+        const ClienteGuardado = leerCookie("id_cliente")
         if (PedidoActual.value) {
             const respuesta = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
                 method: 'POST',
@@ -1533,8 +1539,10 @@
             })
             if (respuesta.status === 401) {
                 await CerrarSesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-                return;
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
+                return
             }
             if (respuesta.ok) {
                 const DatosPedido = await respuesta.json ()
@@ -1597,7 +1605,7 @@
     }
     const SumarCarrito = () => {
         if (!ProductoActual.value)
-            return; 
+            return
         const nuevoProducto = {
             id_pedido: PedidoActual.value,
             nombre_producto: ProductoActual.value.nombre,

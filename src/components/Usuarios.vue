@@ -461,8 +461,8 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, ref, computed } from 'vue';
-    import { urlover8000, CerrarSesion, ActualizarCajaC as ActualizarCajaU } from './Estatus';
+    import { onMounted, ref, computed } from 'vue'
+    import { urlover8000, CerrarSesion, SesionExpirada, Iniciado, ActualizarCajaC as ActualizarCajaU } from './Estatus'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (ActualizarUNew.value) {
@@ -673,9 +673,11 @@
             credentials: 'include'
         })
         if (ActUsuario.status === 401) {
-            await CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
-            return;
+            await CerrarSesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
+            return
         }
         UsuarioAct.value = {
             id: "",
@@ -698,7 +700,9 @@
         UsuarioEli.value = ""
         if (EraseCliente.status === 401) {
             await CerrarSesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
             return
         }
         BusquedaUsuario()
@@ -739,8 +743,10 @@
             credentials: 'include'
         })
         if (SubidaNuevoUsuario.status === 401) {
-            await CerrarSesion();
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.");
+            await CerrarSesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
             return
         }
         NuevoUsuario.value = {

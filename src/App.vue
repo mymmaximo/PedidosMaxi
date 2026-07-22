@@ -27,11 +27,64 @@
                 </div>
             </transition>
         </Teleport>
+        <!-- Notificacion Sesion Expirada -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="SesionExpirada" 
+                class="fondo">
+                    <div class="popup">
+                        <h1>
+                        Tu sesión ha expirado
+                        </h1>
+                        <div
+                        class="botones">
+                            <button 
+                            @click="SesionExpirada = false"
+                            class="botonc">
+                            Iniciar Sesion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </Teleport>
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="ActualizarCajaLogout"
+                @click.self="CerrarPopUp01">
+                    <div class="popup">
+                        <h1>
+                        ¿Desear Cerrar Sesion?
+                        </h1>
+                        <div
+                        class="botones">
+                            <button 
+                            @click="CerrarSesion()"
+                            class="botonc">
+                            Si Confirmo
+                            </button>
+                            <button @click="CerrarPopUp01()"
+                            class="botoncon">
+                            Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </Teleport>
         <!-- Notificacion de rol invalido -->
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="MostrarError" class="fixed top-4 right-4 bg-yellow-600 text-black px-6 py-3 rounded-xl shadow-lg z-[100] font-bold">
                     ¡Acceso Denegado!, revisa tus privilegios
+                </div>
+            </transition>
+        </Teleport>
+        <!-- Noticacion Carro Vacio -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="VolverCarro" class="fixed top-4 right-4 bg-red-600 text-black px-6 py-3 rounded-xl shadow-lg z-[100] font-bold">
+                    ¡Carrito Vacio!
                 </div>
             </transition>
         </Teleport>
@@ -329,7 +382,7 @@
     import { ref } from 'vue'
     import Login from './components/Login.vue'
     import { useRouter, useRoute } from 'vue-router'
-    import { CarritoLocal, LimpiarCompra, Iniciado, CerrarSesion, Rol, MostrarError } from './components/Estatus.js'
+    import { CarritoLocal, LimpiarCompra, Iniciado, CerrarSesion, Rol, MostrarError, VolverCarro, SesionExpirada } from './components/Estatus.js'
     // ----- Variables Complejas ----- //
     const route = useRoute()
     const router = useRouter()
@@ -351,18 +404,18 @@
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaLogout.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
 	const AbrirPopUp02 = () => {
 		BorrarCarrito.value = true
-		document.body.style.overflow = "hidden";
+		document.body.style.overflow = "hidden"
 	}
 	const CerrarPopUp01 = () => {
 		ActualizarCajaLogout.value = false
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
 	const CerrarPopUp02 = () => {
 		BorrarCarrito.value = false
-		document.body.style.overflow = "auto";
+		document.body.style.overflow = "auto"
 	}
 </script>
