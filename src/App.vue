@@ -40,32 +40,8 @@
                         class="botones">
                             <button 
                             @click="SesionExpirada = false"
-                            class="botonc">
-                            Iniciar Sesion
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </transition>
-        </Teleport>
-        <Teleport to="body">
-            <transition name="fade">
-                <div v-if="ActualizarCajaLogout"
-                @click.self="CerrarPopUp01">
-                    <div class="popup">
-                        <h1>
-                        ¿Desear Cerrar Sesion?
-                        </h1>
-                        <div
-                        class="botones">
-                            <button 
-                            @click="CerrarSesion()"
-                            class="botonc">
-                            Si Confirmo
-                            </button>
-                            <button @click="CerrarPopUp01()"
                             class="botoncon">
-                            Cancelar
+                            Iniciar Sesion
                             </button>
                         </div>
                     </div>

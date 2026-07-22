@@ -1,12 +1,12 @@
 import { ref } from 'vue'
 
-export const urlbase5173a = "http://10.250.4.62:5173"
+export const urlbase5173 = "http://10.250.4.50:5173"
 
-export const urlover8000a = "http://10.250.4.62:8000"
+export const urlover8000 = "http://10.250.4.50:8000"
 
-export const urlbase5173 = "http://localhost:5173"
+export const urlbase5173a = "http://localhost:5173"
 
-export const urlover8000 = "http://localhost:8000"
+export const urlover8000a = "http://localhost:8000"
 
 export const Rol = ref(null)
 
