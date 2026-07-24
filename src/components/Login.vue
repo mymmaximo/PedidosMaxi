@@ -1,7 +1,6 @@
 <template>
     <div class="cuerpo">
-        <div 
-        v-if="!Iniciado"
+        <div v-if="!Iniciado"
         class="pagina !md:items-center"
         >
             <div v-if="CargandoTrue" 
@@ -41,12 +40,10 @@
             </div>
             <div v-else>
                 <!-- Iniciar Sesion -->
-                <div 
-                v-if="MostrarLogin"
+                <div v-if="MostrarLogin"
                 class="troncodentro"
                 >
-                    <form 
-                    @submit.prevent="IniciarSesionUsuario" 
+                    <form @submit.prevent="IniciarSesionUsuario" 
                     class="popup"
                     >
                         <h4 class="text-center">
@@ -55,50 +52,46 @@
                         <h2>
                         Ingresa tu E-Mail
                         </h2>
-                        <input 
+                        <input placeholder="Email"
                         type="text" 
                         v-model="LoginBox.email" 
-                        placeholder="Email"
                         :class="{'!border-red-500' : Heror === true}"
                         >
                         <h2>
                         Ingresa tu Contraseña
                         </h2>
                         <div class="flex">
-                            <input 
+                            <input placeholder="Contraseña"
                             :type="verContrasena ? 'text' : 'password'"
                             v-model="LoginBox.contrasena" 
-                            placeholder="Contraseña"
                             :class="{'!border-red-500' : Heror === true}"
                             >
-                            <button 
+                            <button @click="verContrasena = !verContrasena"
                             type="button" 
-                            @click="verContrasena = !verContrasena"
                             class="botont !p-1"
                             >
                             {{ verContrasena ? '🔒' : '👁️' }}
                             </button>
                         </div>
                         <div class="botones">
-                            <button 
+                            <button :disabled="confirbotonlog" 
                             type="submit" 
-                            :disabled="confirbotonlog" 
-                            class="botoncon">
+                            class="botoncon"
+                            >
                             Iniciar Sesion
                             </button>
                         </div>
-                        <h4 
-                        v-if="Heror"
-                        class="botonc">
+                        <h4 v-if="Heror"
+                        class="botonc"
+                        >
                         {{ Herror }}
                         </h4>
                         <h2 class="text-center">
                         ¿No Tienes Cuenta?
                         </h2>
                         <div class="botones">
-                            <button 
+                            <button @click="MostrarLogin = false; Heror = false"
                             type="button" 
-                            @click="MostrarLogin = false; Heror = false"
                             class="botont"
                             >
                             Registrate
@@ -108,32 +101,29 @@
                 </div>
                 <!-- Registrarse -->
                 <div v-else>
-                    <form 
-                    @submit.prevent="SubirNuevoCliente" 
-                    class="troncodentro">
+                    <form @submit.prevent="SubirNuevoCliente" 
+                    class="troncodentro"
+                    >
                         <h4 class="text-center">
                         Registrarse
                         </h4>
                         <h3>
                         Ingresa tu E-Mail
                         </h3>
-                        <input
+                        <input placeholder="E-Mail"
                         type="text" 
                         v-model="NuevoCliente.email" 
-                        placeholder="E-Mail"
                         >
                         <h3>
                         Ingresa tu Contraseña
                         </h3>
                         <div class="flex">
-                            <input 
+                            <input placeholder="Contraseña"
                             :type="verContrasena ? 'text' : 'password'"
                             v-model="NuevoCliente.contrasena" 
-                            placeholder="Contraseña"
                             >
-                            <button 
+                            <button @click="verContrasena = !verContrasena"
                             type="button" 
-                            @click="verContrasena = !verContrasena"
                             class="botont !p-1"
                             >
                             {{ verContrasena ? '🔒' : '👁️' }}
@@ -143,14 +133,12 @@
                         Confirmar Contraseña
                         </h3>
                         <div class="flex">
-                            <input 
+                            <input placeholder="Confirmar Contraseña"
                             :type="verConContrasena ? 'text' : 'password'"
                             v-model="NuevoCliente.concontrasena" 
-                            placeholder="Confirmar Contraseña"
                             >
-                            <button 
+                            <button @click="verConContrasena = !verConContrasena"
                             type="button" 
-                            @click="verConContrasena = !verConContrasena"
                             class="botont !p-1"
                             >
                             {{ verConContrasena ? '🔒' : '👁️' }}
@@ -159,40 +147,36 @@
                         <h3>
                         Ingresa tu Nombre
                         </h3>
-                        <input 
+                        <input placeholder="Nombre"
                         type="text" 
                         v-model="NuevoCliente.nombre" 
-                        placeholder="Nombre"
                         >
                         <h3>
                         Ingresa tu DNI
                         </h3>
-                        <input 
+                        <input placeholder="DNI"
                         type="text" 
                         v-model="NuevoCliente.dni" 
-                        placeholder="DNI"
                         >
                         <div class="botones">
-                            <button 
+                            <button :disabled="confirbotonreg" 
                             type="submit" 
-                            :disabled="confirbotonreg" 
                             class="botoncon"
                             >
                             Registrarte
                             </button>
                         </div>
-                        <h2 
-                        v-if="Heror"
-                        class="text-red-500">
+                        <h2 v-if="Heror"
+                        class="text-red-500"
+                        >
                         {{ Herror }}
                         </h2>
                         <div class="botones">
                             <h3>
                             ¿Ya Tienes Cuenta?
                             </h3>
-                            <button 
+                            <button @click="MostrarLogin = true; Heror = false"
                             type="button" 
-                            @click="MostrarLogin = true; Heror = false"
                             class="botont !p-1"
                             >
                             Iniciar Sesion
@@ -212,8 +196,16 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { computed, onMounted, ref } from 'vue'
-    import { CerrarSesion, ValidadSesionBack, Iniciado, urlover8000, SesionExpirada } from './Estatus.js'
+    import { 
+        computed, 
+        onMounted, 
+        ref 
+    } from 'vue'
+    import { 
+        ValidadSesionBack, 
+        Iniciado, 
+        urlover8000
+    } from './Estatus.js'
     // ----- Variables Vue ----- //
     const confirbotonreg = computed(() =>{
         if (!MostrarLogin.value) {
@@ -303,7 +295,7 @@
                 email: "",
                 contrasena: ""
             }
-            window.location.reload()
+            window.location.href = '/'
         } else {
             Herror.value = "Usuario o contraseña incorrectos"
             Heror.value = true
@@ -320,8 +312,6 @@
         })
         if (respuesta.status === 401) {
             await IniciarSesionCliente()
-            SesionExpirada.value = true
-            Iniciado.value = false
             return
         }
         if (respuesta.ok) {
@@ -331,7 +321,7 @@
                 email: "",
                 contrasena: ""
             }
-            window.location.reload()
+            window.location.href = '/'
         } else {
             await IniciarSesionCliente()
         } 
@@ -351,13 +341,6 @@
             body: JSON.stringify(NuevoCliente.value),
             credentials: 'include'
             })
-        if (respuesta.status === 401) {
-            await CerrarSesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
-            Iniciado.value = false
-            return
-        }
         if (respuesta.ok) {
             NuevoCliente.value = {
                 nombre: "",

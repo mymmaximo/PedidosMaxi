@@ -6,22 +6,17 @@
             @click.self="CerrarPopUp01"
             class="fondo"
             >
-                <div 
-                class="popup"
-                >
+                <div class="popup">
                     <h1>
                     ¿Desear Eliminar/Reactivar el Usuario {{ UsuarioAct.nombre }}?
                     </h1>
-                    <div
-                    class="botones">
-                        <button 
-                        @click="BorrarUsuario()"
+                    <div class="botones">
+                        <button @click="BorrarUsuario()"
                         class="botoncon"
                         >
                         Si Confirmo
                         </button>
-                        <button 
-                        @click="CerrarPopUp01"
+                        <button @click="CerrarPopUp01"
                         class="botonc"
                         >
                         Cancelar
@@ -38,23 +33,15 @@
             @click.self="CerrarPopUp02"
             class="fondo"
             >
-                <div 
-                class="popup"
-                >
+                <div class="popup">
                     <h1>
                     Actualizar Usuario {{ UsuarioAct.nombre }}
                     </h1>
-                    <form 
-                    @submit.prevent="ActualizarUsuarios" 
-                    >
-                        <h2 
-                        class="!self-center font-bold"
-                        >
+                    <form @submit.prevent="ActualizarUsuarios">
+                        <h2 class="!self-center font-bold">
                         Rol
                         </h2>
-                        <select 
-                        v-model="UsuarioAct.id_rol"
-                        >
+                        <select v-model="UsuarioAct.id_rol">
                             <option value="" disabled>
                             Selecciona un Rol...
                             </option>
@@ -77,18 +64,14 @@
                             Rider
                             </option>
                         </select>
-                        <div
-                        class="botones"
-                        >
-                            <button 
+                        <div class="botones">
+                            <button :disabled="confirboton"
                             type="submit" 
-                            :disabled="confirboton"
                             class="botoncon"
                             >
                             Actualizar
                             </button>
-                            <button 
-                            @click="CerrarPopUp02" 
+                            <button @click="CerrarPopUp02" 
                             class="botonc"
                             >
                             Cancelar
@@ -105,26 +88,21 @@
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="bar">
                     <div>
-                        <h1
-                        @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
+                        <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
                         >
                         ᯤ
                         </h1>
                     </div>
                     <transition name="slide">
-                        <div
+                        <div v-if="MostrarFiltro"
                         class="flex flex-col lg:self-center"
-                        v-if="MostrarFiltro"
                         >
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h1>
                                 Ordenar
                                 </h1>
-                                <select 
-                                v-model="orden" 
+                                <select v-model="orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
@@ -150,47 +128,39 @@
                                     </option>
                                 </select>
                             </div>
-                            <div
-                            class="flex flex-col"
-                            >
+                            <div class="flex flex-col">
                                 <h1>
                                 ¿El Usuario esta Activo?
                                 </h1>
                                 <label>
-                                <input 
+                                <input :value="2"
                                 type="radio" 
-                                :value="2"
                                 v-model="filtroEst"
                                 > 
                                 Todos los Usuarios
                                 </label>
                                 <label>
-                                <input 
-                                type="radio" 
-                                :value="1"
+                                <input :value="1"
+                                type="radio"
                                 v-model="filtroEst"
                                 > 
                                 Usuario Activo
                                 </label>
                                 <label>
-                                <input 
+                                <input :value="0"
                                 type="radio" 
-                                :value="0"
                                 v-model="filtroEst"
                                 > 
                                 Usuario Eliminado
                                 </label>
                             </div>
-                            <div
-                            class="botones"
-                            >
-                                <button 
-                                @click="AplicarFiltro" 
-                                class="botoncon">
+                            <div class="botones">
+                                <button @click="AplicarFiltro" 
+                                class="botoncon"
+                                >
                                 Aplicar Filtros
                                 </button>
-                                <button 
-                                @click="LimpiarFiltro" 
+                                <button @click="LimpiarFiltro" 
                                 v-if="filtroAct === true"
                                 class="botont" 
                                 >
@@ -200,66 +170,56 @@
                         </div>
                     </transition>
                     <div>
-                        <h1
-                        @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
+                        <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
                         >
                         +
                         </h1>
                     </div>
                     <transition name="slide">
-                        <div
+                        <div v-if="MostrarNuevo"
                         class="flex flex-col lg:self-center"
-                        v-if="MostrarNuevo"
                         >
                             <h1>
                             Nuevo Usuario
                             </h1>
-                            <form 
-                            @submit.prevent="SubirNuevoUsuario" 
-                            >
+                            <form @submit.prevent="SubirNuevoUsuario">
                                 <h2>
                                 Nombre
                                 </h2>
-                                <input 
+                                <input placeholder="Nombre"
                                 type="text" 
                                 v-model="NuevoUsuario.nombre" 
-                                placeholder="Nombre"
                                 maxlength="50"
                                 >
                                 <h2>
                                 E-Mail
                                 </h2>
-                                <input 
+                                <input placeholder="E-Mail"
                                 type="text" 
                                 v-model="NuevoUsuario.email" 
-                                placeholder="E-Mail"
                                 maxlength="50"
                                 >
                                 <h2>
                                 Documento
                                 </h2>
-                                <input 
+                                <input placeholder="Documento"
                                 type="number" 
-                                v-model="NuevoUsuario.dni" 
-                                placeholder="Documento"
+                                v-model="NuevoUsuario.dni"
                                 maxlength="8"
                                 >
                                 <h2>
                                 Contraseña
                                 </h2>
-                                <input 
+                                <input placeholder="Contraseña"
                                 type="text" 
-                                v-model="NuevoUsuario.contrasena" 
-                                placeholder="Contraseña"
+                                v-model="NuevoUsuario.contrasena"
                                 maxlength="30"
                                 >
                                 <h2>
                                 Rol
                                 </h2>
-                                <select 
-                                v-model="NuevoUsuario.id_rol" 
-                                >
+                                <select v-model="NuevoUsuario.id_rol">
                                     <option value="" disabled>
                                     Selecciona un Rol...
                                     </option>
@@ -283,12 +243,9 @@
                                     </option>
                                 </select>
                             </form>
-                            <div 
-                            class="botones"
-                            >
-                                <button 
+                            <div class="botones">
+                                <button :disabled="confirboton"
                                 type="submit" 
-                                :disabled="confirboton"
                                 class="botoncon"
                                 >
                                 Crear Cliente
@@ -303,20 +260,16 @@
                     items-center justify-center 
                     w-full h-[60vh]"
                     >
-                        <img 
-                        src="../assets/loading.gif" 
+                        <img src="../assets/loading.gif" 
                         alt="Cargando usuarios..." 
                         class="w-32 h-32 object-contain mb-4"
                         >
-                        <h2 
-                        class="text-green-800 
-                        font-bold text-xl animate-pulse"
-                        >
+                        <h2 class="text-green-800 font-bold text-xl animate-pulse">
                         Cargando usuarios, un momento...
                         </h2>
                     </div>
-                    <div v-else-if="ErrorCarga" 
-                    class="flex flex-col 
+                    <div v-else-if="ErrorCarga"
+                    class="flex flex-col
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
                     >
@@ -326,8 +279,7 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button 
-                        @click="CargarDatos" 
+                        <button @click="CargarDatos" 
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
@@ -335,8 +287,7 @@
                     </div>
                     <div v-else>
                         <!-- Barra de Busqueda -->
-                        <input
-                        @input="BusquedaUsuario"
+                        <input @input="BusquedaUsuario"
                         type="text" v-model="Busqueda" 
                         placeholder="Busqueda de Usuarios..."
                         class="busqueda"
@@ -345,15 +296,12 @@
                         <h1 class="text-center">
                         Usuarios
                         </h1>
-                        <div
-                        v-if="usuarios.length > 0"
-                        >
-                            <div
+                        <div v-if="usuarios.length > 0">
+                            <div v-for= "i in usuarios" 
+                            :key="i.id"
                             class="mb-2 lg:mb-5"
-                            v-for= "i in usuarios" 
-                            :key="i.id">
-                                <div 
-                                :class="Rolcolor(i.id_rol,i.activo)"
+                            >
+                                <div :class="Rolcolor(i.id_rol,i.activo)"
                                 class="tab"
                                 >
                                     <div class="flex flex-col">
@@ -384,8 +332,7 @@
                                         </div>
                                     </div>
                                     <div class="flex flex-col ml-auto text-right items-end">
-                                        <button 
-                                        @click="Eliminacion(i)" 
+                                        <button @click="Eliminacion(i)" 
                                         v-if="i.activo"
                                         class="botonc !p-2"
                                         >
@@ -394,9 +341,7 @@
                                         Eliminar
                                         </span>
                                         </button>
-                                        <button 
-                                        @click="Eliminacion(i)" 
-                                        v-else
+                                        <button v-else @click="Eliminacion(i)"
                                         class="botoncon !p-2"
                                         >
                                         🕊️
@@ -404,8 +349,7 @@
                                         Reactivar
                                         </span>
                                         </button>
-                                        <button 
-                                        @click="Edicion(i)"
+                                        <button @click="Edicion(i)"
                                         class="botont !p-2"
                                         >
                                         ✏️
@@ -417,8 +361,7 @@
                                 </div>
                             </div>
                         </div>  
-                        <div 
-                        v-else>
+                        <div v-else>
                             <h2>
                             No se encontraran usuarios 😔
                             </h2>
@@ -426,13 +369,8 @@
                             Prueba buscando con otro termino
                             </h3>
                         </div>
-                        <div 
-                        class="
-                        flex justify-center
-                        p-3"
-                        >
-                            <button 
-                            @click="Pagina = Pagina - 20 ; CargarDatos()" 
+                        <div class="flex justify-center p-3">
+                            <button @click="Pagina = Pagina - 20 ; CargarDatos()" 
                             :disabled="Pagina < 20"
                             class="botona"
                             >
@@ -444,8 +382,7 @@
                             - 
                             {{ Pagina + usuarios.length }}
                             </h2>
-                            <button 
-                            @click="Pagina = Pagina + 20 ; CargarDatos()" 
+                            <button @click="Pagina = Pagina + 20 ; CargarDatos()" 
                             :disabled="usuarios.length < 20"
                             class="botona"
                             >
@@ -460,9 +397,19 @@
 </template>
 
 <script setup>
-    // ----- Imports ----- //
-    import { onMounted, ref, computed } from 'vue'
-    import { urlover8000, CerrarSesion, SesionExpirada, Iniciado, ActualizarCajaC as ActualizarCajaU } from './Estatus'
+    // ----- Imports ----- //6+
+    import { 
+        onMounted, 
+        ref, 
+        computed 
+    } from 'vue'
+    import { 
+        urlover8000, 
+        CerrarSesion, 
+        SesionExpirada, 
+        Iniciado, 
+        ActualizarCajaC as ActualizarCajaU 
+    } from './Estatus'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (ActualizarUNew.value) {

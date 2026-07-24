@@ -4,25 +4,20 @@
             <div class="flex w-full flex-col sm:flex-row">
                 <!-- Filtros -->
                 <div class="bar">
-                    <h1
-                    @click="MostrarFiltro = !MostrarFiltro"
+                    <h1 @click="MostrarFiltro = !MostrarFiltro"
                     class="botonfil"
                     >
                     ᯤ
                     </h1>
                     <transition name="slide">
-                        <div
+                        <div v-if="MostrarFiltro"
                         class="flex flex-col self-center"
-                        v-if="MostrarFiltro"
                         >
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h1>
                                 Ordenar
                                 </h1>
-                                <select 
-                                v-model="orden" 
+                                <select v-model="orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
@@ -36,46 +31,35 @@
                                     </option>
                                 </select>
                             </div>
-                            <div
-                            class="
-                            flex flex-col w-full gap-2.5
-                            ">
+                            <div class="flex flex-col w-full gap-2.5">
                                 <h2>
                                 Filtro de Metodo de Pago
                                 </h2>
-                                <div
-                                class="
-                                flex flex-col
-                                gap-3
-                                ">
+                                <div class="flex flex-col gap-3">
                                     <label>
-                                    <input 
+                                    <input :value="3"
                                     type="radio" 
-                                    :value="3"
                                     v-model="filtroMP"
                                     > 
                                     Tarjeta de Credito / Debito
                                     </label>
                                     <label>
-                                    <input 
+                                    <input :value="2"
                                     type="radio" 
-                                    :value="2"
                                     v-model="filtroMP"
                                     > 
                                     Mercado Pago
                                     </label>
                                     <label>
-                                    <input 
+                                    <input :value="1"
                                     type="radio" 
-                                    :value="1"
                                     v-model="filtroMP"
                                     > 
                                     Transferencia Bancaria
                                     </label>
                                     <label>
-                                    <input 
+                                    <input :value="0"
                                     type="radio" 
-                                    :value="0"
                                     v-model="filtroMP"
                                     > 
                                     Efectivo
@@ -84,47 +68,36 @@
                                 <h2>
                                 Filtro de Estatus
                                 </h2>
-                                <div
-                                class="
-                                flex flex-col
-                                gap-3
-                                ">
+                                <div class="flex flex-col gap-3">
                                     <label>
-                                    <input 
+                                    <input :value="3"
                                     type="radio" 
-                                    :value="3"
                                     v-model="filtroEst"
                                     > 
                                     Preparando
                                     </label>
                                     <label>
-                                    <input 
+                                    <input :value="2"
                                     type="radio" 
-                                    :value="2"
                                     v-model="filtroEst"
                                     > 
                                     En Camino
                                     </label>
                                     <label>
-                                    <input 
+                                    <input :value="1"
                                     type="radio" 
-                                    :value="1"
                                     v-model="filtroEst"
                                     > 
                                     Entregado
                                     </label>
                                 </div>
-                                <div 
-                                class="botones"
-                                >
-                                    <button 
-                                    @click="AplicarFiltro" 
+                                <div class="botones">
+                                    <button @click="AplicarFiltro" 
                                     class="botoncon"
                                     >
                                     Aplicar Filtros
                                     </button>
-                                    <button 
-                                    @click="LimpiarFiltro" 
+                                    <button @click="LimpiarFiltro" 
                                     v-if="filtroAct === true"
                                     class="botont" 
                                     >
@@ -142,15 +115,11 @@
                     items-center justify-center 
                     w-full h-[60vh]"
                     >
-                        <img 
-                        src="../assets/loading.gif" 
+                        <img src="../assets/loading.gif" 
                         alt="Cargando tus pedidos..." 
                         class="w-32 h-32 object-contain mb-4"
                         >
-                        <h2 
-                        class="text-green-800 
-                        font-bold text-xl animate-pulse"
-                        >
+                        <h2 class="text-green-800 font-bold text-xl animate-pulse">
                         Cargando tus pedidos, un momento...
                         </h2>
                     </div>
@@ -165,8 +134,7 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button 
-                        @click="CargarDatos" 
+                        <button @click="CargarDatos" 
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
@@ -175,8 +143,7 @@
                     <div v-else>
                         <div>
                             <!-- Barra de Busqueda -->
-                            <input
-                            @input="BusquedaPedido"
+                            <input @input="BusquedaPedido"
                             type="text" v-model="Busqueda" 
                             placeholder="Busqueda..."
                             class="busqueda"
@@ -188,14 +155,12 @@
                             <h1 class="text-center">
                             Mis Pedidos en Preparacion
                             </h1>
-                            <div 
-                            v-if="Pedidos.length > 0"
+                            <div v-if="Pedidos.length > 0"
                             class="w-full"
                             >
-                                <div
-                                class="mb-2 lg:mb-5"
-                                v-for= "i in Pedidos" 
+                                <div v-for= "i in Pedidos" 
                                 :key="i.id && i.estatus === 3"
+                                class="mb-2 lg:mb-5"
                                 >
                                     <div v-if="i.estatus === 3">
                                         <div class="tab !bg-green-200">
@@ -232,10 +197,10 @@
                                             </div>
                                         </div>
                                         <div v-if = "PedidoNowPreparando === i.id_pedido">
-                                            <div
+                                            <div v-for = "e in i.detalle_pedido" 
+                                            :key="e.id_detalle_pedido"
                                             class="tab !bg-green-100/50 !p-5"
-                                            v-for = "e in i.detalle_pedido" 
-                                            :key="e.id_detalle_pedido">
+                                            >
                                                 <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                     <div class="flex flex-row">
                                                         <h3 class="font-bold overflow-hidden text-ellipsis">
@@ -298,16 +263,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div 
+                                        <div @click="PedidoCambioPreparando(i.id_pedido)"
                                         v-if = "PedidoNowPreparando === i.id_pedido"
-                                        @click="PedidoCambioPreparando(i.id_pedido)"
                                         class="botont text-center"
                                         >
                                         Ocultar Detalles
                                         </div>
-                                        <div
-                                        v-else 
-                                        @click="PedidoCambioPreparando(i.id_pedido)"
+                                        <div v-else @click="PedidoCambioPreparando(i.id_pedido)"
                                         class="botoncon text-center"
                                         >
                                         Ver Detalles
@@ -315,9 +277,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div 
-                            v-else
-                            >
+                            <div v-else>
                                 <h2>
                                 No se encontraron Pedidos 😔
                                 </h2>
@@ -325,177 +285,20 @@
                                 Prueba buscando con otro termino
                                 </h3>
                             </div>
-                        <div>
-                        <!-- Tabla de Pedidos en Camino -->
-                            <h1 class="text-center">
-                            Mis Pedidos En Camino
-                            </h1>
-                            <div 
-                            v-if="Pedidos.length > 0"
-                            class="
-                            w-full"
-                            >
-                                <div
-                                class="mb-2 lg:mb-5"
-                                v-for= "i in Pedidos" 
-                                :key="i.id && i.estatus === 2"
+                            <div>
+                            <!-- Tabla de Pedidos en Camino -->
+                                <h1 class="text-center">
+                                Mis Pedidos En Camino
+                                </h1>
+                                <div v-if="Pedidos.length > 0"
+                                class="w-full"
                                 >
-                                    <div v-if="i.estatus === 2">
-                                        <div class="tab !bg-yellow-200">
-                                            <div class="flex flex-col">
-                                                <div class="flex flex-row">
-                                                    <h1>
-                                                    Pedido a
-                                                    {{ i.direccion[0].calle }} 
-                                                    {{ i.direccion[0].numero }}
-                                                    </h1>
-                                                </div>
-                                                <div class="flex flex-col">
-                                                    <h2>
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    Pagado con: 
-                                                    </span>
-                                                    {{ i.metodo_pago }}
-                                                    </h2>
-                                                    <h2 class="font-bold">
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    Total:
-                                                    </span>
-                                                    ${{ i.total }}
-                                                    </h2>
-                                                </div>
-                                            </div>
-                                            <div class="flex flex-col ml-auto text-right items-end">
-                                                <h3>
-                                                Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
-                                                </h3>
-                                                <h3>
-                                                Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
-                                                </h3>
-                                            </div>
-                                        </div>
-                                        <div v-if = "PedidoNowEnCamino === i.id_pedido">
-                                            <div
-                                            class="tab !bg-yellow-100/50"
-                                            v-for = "e in i.detalle_pedido" 
-                                            :key="e.id_detalle_pedido">
-                                                <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
-                                                    <div class="flex flex-row">
-                                                        <h3 class="font-bold overflow-hidden text-ellipsis">
-                                                        {{ e.producto.nombre }}
-                                                        </h3>
-                                                    </div>
-                                                    <div class="flex flex-col gap-1">
-                                                        <h3>
-                                                        Categoria: {{ e.producto.categoria }}
-                                                        </h3>
-                                                        <h3>
-                                                        Precio Unitario: ${{ e.precio_unitario }}
-                                                        </h3>
-                                                        <h3>
-                                                        Cantidad: {{ e.cantidad }}
-                                                        </h3>
-                                                        <div class="flex flex-row">
-                                                            <h2 class="font-bold mr-2">
-                                                            Subtotal:
-                                                            </h2>
-                                                            <h2>
-                                                            ${{ e.subtotal }}
-                                                            </h2>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex flex-col gap-1">
-                                                        <div class="flex flex-row">
-                                                            <h2 class="mr-2">
-                                                            Pedido Creado el Dia: 
-                                                            </h2>
-                                                            <h3>
-                                                            {{ FormatoFecha(i.created_at) }}
-                                                            </h3>
-                                                        </div>
-                                                        <div class="flex flex-row">
-                                                            <h3 class="mr-2">
-                                                            Pedido Act. el Dia: 
-                                                            </h3>
-                                                            <h3>
-                                                            {{ FormatoFecha(i.updated_at) }}
-                                                            </h3>
-                                                        </div>
-                                                        <div class="flex flex-row">
-                                                            <h2 class="font-bold mr-2">
-                                                            Ciudad: 
-                                                            </h2>
-                                                            <h2>
-                                                            {{ i.direccion[0].ciudad }}
-                                                            </h2>
-                                                        </div>
-                                                        <div class="flex flex-row">
-                                                            <h2 class="font-bold mr-2">
-                                                            Provincia:
-                                                            </h2>
-                                                            <h2>
-                                                            {{ i.direccion[0].provincia }}
-                                                            </h2>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div 
-                                        v-if = "PedidoNowEnCamino === i.id_pedido"
-                                        @click="PedidoCambioEnCamino(i.id_pedido)"
-                                        class="botont text-center"
-                                        >
-                                        Ocultar Detalles
-                                        </div>
-                                        <div
-                                        v-else 
-                                        @click="PedidoCambioEnCamino(i.id_pedido)"
-                                        class="botoncon text-center"
-                                        >
-                                        Ver Detalles
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div 
-                            v-else
-                            >
-                                <h2>
-                                No se encontraron Pedidos 😔
-                                </h2>
-                                <h3>
-                                Prueba buscando con otro termino
-                                </h3>
-                            </div>
-                        </div>
-                        <!-- Boton Historial -->
-                        <div class="botones">
-                            <button 
-                            @click="mostrarhistorial = !mostrarhistorial" 
-                            :class="Estatuscolor(mostrarhistorial)">
-                                <h2 v-if="!mostrarhistorial">
-                                Ver Historial de Pedidos
-                                </h2>
-                                <h2 v-if="mostrarhistorial">
-                                Ocultar Historial de Pedidos
-                                </h2>
-                            </button>
-                        </div>
-                        <!-- Tabla Historial de Pedidos -->
-                            <div v-if="mostrarhistorial">
-                                <div 
-                                v-if="Pedidos.length > 0"
-                                class="
-                                w-full"
-                                >
-                                    <div
+                                    <div v-for= "i in Pedidos" 
+                                    :key="i.id && i.estatus === 2"
                                     class="mb-2 lg:mb-5"
-                                    v-for= "i in Pedidos" 
-                                    :key="i.id && i.estatus === 3"
                                     >
-                                        <div v-if="i.estatus === 3">
-                                            <div class="tab !bg-red-200">
+                                        <div v-if="i.estatus === 2">
+                                            <div class="tab !bg-yellow-200">
                                                 <div class="flex flex-col">
                                                     <div class="flex flex-row">
                                                         <h1>
@@ -528,25 +331,11 @@
                                                     </h3>
                                                 </div>
                                             </div>
-                                            <div 
-                                            v-if = "PedidoNowHistorial === i.id_pedido"
-                                            @click="PedidoCambioHistorial(i.id_pedido)"
-                                            class="botont text-center"
-                                            >
-                                            Ocultar Detalles
-                                            </div>
-                                            <div
-                                            v-else 
-                                            @click="PedidoCambioHistorial(i.id_pedido)"
-                                            class="botoncon text-center"
-                                            >
-                                            Ver Detalles
-                                            </div>
-                                            <div v-if = "PedidoNowHistorial === i.id_pedido">
-                                                <div
-                                                class="tab !bg-red-100/50"
-                                                v-for = "e in i.detalle_pedido" 
-                                                :key="e.id_detalle_pedido">
+                                            <div v-if = "PedidoNowEnCamino === i.id_pedido">
+                                                <div v-for = "e in i.detalle_pedido" 
+                                                :key="e.id_detalle_pedido"
+                                                class="tab !bg-yellow-100/50"
+                                                >
                                                     <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                         <div class="flex flex-row">
                                                             <h3 class="font-bold overflow-hidden text-ellipsis">
@@ -609,6 +398,163 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div @click="PedidoCambioEnCamino(i.id_pedido)"
+                                            v-if = "PedidoNowEnCamino === i.id_pedido"
+                                            class="botont text-center"
+                                            >
+                                            Ocultar Detalles
+                                            </div>
+                                            <div v-else @click="PedidoCambioEnCamino(i.id_pedido)"
+                                            class="botoncon text-center"
+                                            >
+                                            Ver Detalles
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <h2>
+                                    No se encontraron Pedidos 😔
+                                    </h2>
+                                    <h3>
+                                    Prueba buscando con otro termino
+                                    </h3>
+                                </div>
+                            </div>
+                            <!-- Boton Historial -->
+                            <div class="botones">
+                                <button @click="mostrarhistorial = !mostrarhistorial" 
+                                :class="Estatuscolor(mostrarhistorial)"
+                                >
+                                    <h2 v-if="!mostrarhistorial">
+                                    Ver Historial de Pedidos
+                                    </h2>
+                                    <h2 v-if="mostrarhistorial">
+                                    Ocultar Historial de Pedidos
+                                    </h2>
+                                </button>
+                            </div>
+                            <!-- Tabla Historial de Pedidos -->
+                            <div v-if="mostrarhistorial">
+                                <div v-if="Pedidos.length > 0"
+                                class="w-full"
+                                >
+                                    <div v-for= "i in Pedidos" 
+                                    :key="i.id && i.estatus === 3"
+                                    class="mb-2 lg:mb-5"
+                                    >
+                                        <div v-if="i.estatus === 3">
+                                            <div class="tab !bg-red-200">
+                                                <div class="flex flex-col">
+                                                    <div class="flex flex-row">
+                                                        <h1>
+                                                        Pedido a
+                                                        {{ i.direccion[0].calle }} 
+                                                        {{ i.direccion[0].numero }}
+                                                        </h1>
+                                                    </div>
+                                                    <div class="flex flex-col">
+                                                        <h2>
+                                                        <span class="hidden lg:inline 2xl:inline">
+                                                        Pagado con: 
+                                                        </span>
+                                                        {{ i.metodo_pago }}
+                                                        </h2>
+                                                        <h2 class="font-bold">
+                                                        <span class="hidden lg:inline 2xl:inline">
+                                                        Total:
+                                                        </span>
+                                                        ${{ i.total }}
+                                                        </h2>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-col ml-auto text-right items-end">
+                                                    <h3>
+                                                    Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
+                                                    </h3>
+                                                    <h3>
+                                                    Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div v-if = "PedidoNowHistorial === i.id_pedido">
+                                                <div v-for = "e in i.detalle_pedido" 
+                                                :key="e.id_detalle_pedido"
+                                                class="tab !bg-red-100/50"
+                                                >
+                                                    <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
+                                                        <div class="flex flex-row">
+                                                            <h3 class="font-bold overflow-hidden text-ellipsis">
+                                                            {{ e.producto.nombre }}
+                                                            </h3>
+                                                        </div>
+                                                        <div class="flex flex-col gap-1">
+                                                            <h3>
+                                                            Categoria: {{ e.producto.categoria }}
+                                                            </h3>
+                                                            <h3>
+                                                            Precio Unitario: ${{ e.precio_unitario }}
+                                                            </h3>
+                                                            <h3>
+                                                            Cantidad: {{ e.cantidad }}
+                                                            </h3>
+                                                            <div class="flex flex-row">
+                                                                <h2 class="font-bold mr-2">
+                                                                Subtotal:
+                                                                </h2>
+                                                                <h2>
+                                                                ${{ e.subtotal }}
+                                                                </h2>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex flex-col gap-1">
+                                                            <div class="flex flex-row">
+                                                                <h2 class="mr-2">
+                                                                Pedido Creado el Dia: 
+                                                                </h2>
+                                                                <h3>
+                                                                {{ FormatoFecha(i.created_at) }}
+                                                                </h3>
+                                                            </div>
+                                                            <div class="flex flex-row">
+                                                                <h3 class="mr-2">
+                                                                Pedido Act. el Dia: 
+                                                                </h3>
+                                                                <h3>
+                                                                {{ FormatoFecha(i.updated_at) }}
+                                                                </h3>
+                                                            </div>
+                                                            <div class="flex flex-row">
+                                                                <h2 class="font-bold mr-2">
+                                                                Ciudad: 
+                                                                </h2>
+                                                                <h2>
+                                                                {{ i.direccion[0].ciudad }}
+                                                                </h2>
+                                                            </div>
+                                                            <div class="flex flex-row">
+                                                                <h2 class="font-bold mr-2">
+                                                                Provincia:
+                                                                </h2>
+                                                                <h2>
+                                                                {{ i.direccion[0].provincia }}
+                                                                </h2>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div @click="PedidoCambioHistorial(i.id_pedido)"
+                                            v-if = "PedidoNowHistorial === i.id_pedido"
+                                            class="botont text-center"
+                                            >
+                                            Ocultar Detalles
+                                            </div>
+                                            <div v-else @click="PedidoCambioHistorial(i.id_pedido)"
+                                            class="botoncon text-center"
+                                            >
+                                            Ver Detalles
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -633,8 +579,14 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, ref } from 'vue'
-    import { ClienteID, urlover8000 } from './Estatus.js'
+    import { 
+        onMounted, 
+        ref 
+    } from 'vue'
+    import { 
+        ClienteID, 
+        urlover8000 
+    } from './Estatus.js'
     // ----- Variables Booleanas ----- //
     const filtroAct = ref(false)
     const ErrorCarga = ref(false)
@@ -671,7 +623,6 @@
                 credentials: 'include'
             })
             const datos = await respuesta.json()
-            console.log("aca che",datos)
             Pedidos.value = datos
             clearTimeout(temporizador)
         } catch (error) {

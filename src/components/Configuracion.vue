@@ -7,15 +7,11 @@
             items-center justify-center 
             w-full h-[60vh]"
             >
-                <img 
-                src="../assets/loading.gif" 
+                <img src="../assets/loading.gif" 
                 alt="Cargando configuracion..." 
                 class="w-32 h-32 object-contain mb-4"
                 >
-                <h2 
-                class="text-green-800 
-                font-bold text-xl animate-pulse"
-                >
+                <h2 class="text-green-800 font-bold text-xl animate-pulse">
                 Cargando configuracion, un momento...
                 </h2>
             </div>
@@ -30,17 +26,14 @@
                 <h2 class="text-xl text-gray-700 text-center px-4">
                 El servidor no responde o tu conexión es inestable.
                 </h2>
-                <button 
-                @click="CargarDatos" 
+                <button @click="CargarDatos" 
                 class="botoncon mt-4"
                 >
                 🔄 Recargar Página
                 </button>
             </div>
             <div v-else>
-                <div
-                class="troncodentro !z-0"
-                >
+                <div class="troncodentro !z-0">
                     <form @submit.prevent="ActualizarCliente">
                         <h1 class="text-center">
                         DETALLES DE LA CUENTA
@@ -48,31 +41,27 @@
                         <h2>
                         Nombre
                         </h2>
-                        <input 
-                        type="text" 
-                        v-model="ClienteConfig.nombre" 
-                        placeholder="Nombre"
+                        <input placeholder="Nombre"
+                        type="text"
+                        v-model="ClienteConfig.nombre"
                         >
                         <h2>
                         E-mail
                         </h2>
-                        <input 
-                        type="text" 
-                        v-model="ClienteConfig.email" 
-                        placeholder="Email@email.com"
+                        <input placeholder="Email@email.com"
+                        type="text"
+                        v-model="ClienteConfig.email"
                         >
                         <h2>
                         Contraseña
                         </h2>
                         <div class="flex">
-                            <input 
+                            <input placeholder="Contraseña"
                             :type="verContrasena ? 'text' : 'password'"
-                            v-model="ClienteConfig.contrasena" 
-                            placeholder="Contraseña"
+                            v-model="ClienteConfig.contrasena"
                             >
-                            <button 
-                            type="button" 
-                            @click="verContrasena = !verContrasena"
+                            <button @click="verContrasena = !verContrasena"
+                            type="button"
                             class="botont !p-1"
                             >
                             {{ verContrasena ? '🔒' : '👁️' }}
@@ -82,22 +71,19 @@
                         Confirmar Contraseña
                         </h2>
                         <div class="flex">
-                            <input 
+                            <input placeholder="Confirmar Contraseña"
                             :type="verConContrasena ? 'text' : 'password'"
-                            v-model="ClienteConfig.concontrasena" 
-                            placeholder="Confirmar Contraseña"
+                            v-model="ClienteConfig.concontrasena"
                             >
-                            <button 
+                            <button @click="verConContrasena = !verConContrasena"
                             type="button" 
-                            @click="verConContrasena = !verConContrasena"
                             class="botont !p-1"
                             >
                             {{ verConContrasena ? '🔒' : '👁️' }}
                             </button>
                         </div>
                         <div class="botones !p-0">
-                            <button 
-                            type="submit" 
+                            <button type="submit" 
                             class="botoncon"
                             >
                             Actualizar
@@ -112,8 +98,17 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, ref } from 'vue'
-    import { CerrarSesion, leerCookie, urlover8000, SesionExpirada, Iniciado } from './Estatus.js'
+    import { 
+        onMounted, 
+        ref 
+    } from 'vue'
+    import { 
+        CerrarSesion, 
+        leerCookie, 
+        urlover8000, 
+        SesionExpirada, 
+        Iniciado 
+    } from './Estatus.js'
     // ----- Variables Complejas ----- //
     const ClienteConfig = ref({
         nombre: "",

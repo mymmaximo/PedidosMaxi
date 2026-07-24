@@ -4,26 +4,21 @@
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="bar">
                     <div>
-                        <h1
-                        @click="MostrarFiltro = !MostrarFiltro"
+                        <h1 @click="MostrarFiltro = !MostrarFiltro"
                         class="botonfil"
                         >
                         ᯤ
                         </h1>
                     </div>
                     <transition name="slide">
-                        <div
+                        <div v-if="MostrarFiltro"
                         class="flex flex-col lg:self-center"
-                        v-if="MostrarFiltro"
                         >
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h1>
                                 Ordenar
                                 </h1>
-                                <select 
-                                v-model="orden" 
+                                <select v-model="orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
@@ -61,76 +56,59 @@
                                     </option>
                                 </select>
                             </div>
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h2 class="p-2">
                                 Filtros de Fecha de Actualizacion
                                 </h2>
-                                <input 
+                                <input placeholder="Fecha de Actualizacion Max..."
                                 type="date"
                                 v-model="fecha_upgrade_max" 
-                                placeholder="Fecha de Actualizacion Max..."
                                 >
-                                <input
+                                <input placeholder="Fecha de Actualizacion Min..."
                                 type="date"
                                 v-model="fecha_upgrade_min" 
-                                placeholder="Fecha de Actualizacion Min..."
                                 >
                             </div>
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h2 class="p-2">
                                 Filtros de Precio Viejo
                                 </h2>
-                                <input 
+                                <input placeholder="Precio Viejo Max..."
                                 type="date"
                                 v-model="precio_viejo_max" 
-                                placeholder="Precio Viejo Max..."
                                 maxlength="10"
                                 >
-                                <input
+                                <input placeholder="Precio Viejo Min..."
                                 type="date"
                                 v-model="precio_viejo_min" 
-                                placeholder="Precio Viejo Min..."
                                 maxlength="10"
                                 >
                             </div>
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h2 class="p-2">
                                 Filtros de Precio Nuevo
                                 </h2>
-                                <input 
+                                <input placeholder="Precio Nuevo Max..."
                                 type="number"
                                 v-model="precio_nuevo_max" 
-                                placeholder="Precio Nuevo Max..."
                                 maxlength="10"
                                 >
-                                <input
+                                <input placeholder="Precio Nuevo Min..."
                                 type="number"
-                                v-model="precio_nuevo_min" 
-                                placeholder="Precio Nuevo Min..."
+                                v-model="precio_nuevo_min"
                                 maxlength="10"
                                 >
                             </div>
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h2 class="p-2">
                                 Filtro Categoria
                                 </h2>
                                 <div>
-                                    <select 
-                                    v-model="filtrocat" 
-                                    >
+                                    <select v-model="filtrocat">
                                         <option value="" disabled>
                                         Categorias...
                                         </option>
-                                        <option 
-                                        v-for="i in ListaCategoria" 
+                                        <option v-for="i in ListaCategoria" 
                                         :key="i.categoria" 
                                         :value="i.categoria"
                                         >
@@ -139,37 +117,28 @@
                                     </select>
                                 </div>
                             </div>
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h2 class="p-2">
                                 ¿El Productos esta Activo?
                                 </h2>
-                                <div 
-                                class="
-                                flex flex-col 
-                                p-2 gap-2
-                                ">
+                                <div class="flex flex-col p-2 gap-2">
                                     <label>
-                                    <input 
+                                    <input :value="2"
                                     type="radio" 
-                                    :value="2"
-                                    v-model="bool_activo "
+                                    v-model="bool_activo"
                                     > 
                                     Todos los Productos
                                     </label>
                                     <label>
-                                    <input 
+                                    <input :value="1"
                                     type="radio" 
-                                    :value="1"
                                     v-model="bool_activo"
                                     > 
                                     Productos Activos
                                     </label>
                                     <label>
-                                    <input 
+                                    <input :value="0"
                                     type="radio" 
-                                    :value="0"
                                     v-model="bool_activo"
                                     > 
                                     Productos Eliminados
@@ -177,13 +146,11 @@
                                 </div>
                             </div>
                             <div class="botones">
-                                <button 
-                                @click="AplicarFiltro" 
+                                <button @click="AplicarFiltro" 
                                 class="botoncon">
                                 Aplicar Filtros
                                 </button>
-                                <button 
-                                @click="LimpiarFiltro"
+                                <button @click="LimpiarFiltro"
                                 v-if="filtroAct === true" 
                                 class="botont"
                                 >
@@ -200,21 +167,17 @@
                     items-center justify-center 
                     w-full h-[60vh]"
                     >
-                        <img 
-                        src="../assets/loading.gif" 
+                        <img src="../assets/loading.gif" 
                         alt="Cargando historial de precios..." 
                         class="w-32 h-32 object-contain mb-4"
                         >
-                        <h2 
-                        class="text-green-800 
-                        font-bold text-xl animate-pulse"
-                        >
+                        <h2 class="text-green-800 font-bold text-xl animate-pulse">
                         Cargando historial de precios, un momento...
                         </h2>
                     </div>
-                    <div v-else-if="ErrorCarga" 
-                    class="flex flex-col 
-                    items-center justify-center 
+                    <div v-else-if="ErrorCarga"
+                    class="flex flex-col
+                    items-center justify-center
                     w-full h-[60vh] gap-4"
                     >
                         <h1 class="text-3xl font-bold text-red-600 text-center">
@@ -223,8 +186,7 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button 
-                        @click="CargarDatos" 
+                        <button @click="CargarDatos"
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
@@ -232,11 +194,10 @@
                     </div>
                     <div v-else>
                         <!-- Barra de Busqueda -->
-                        <input
-                        @input="BusquedaHistorial"
+                        <input @input="BusquedaHistorial"
+                        placeholder="Busqueda de Historial..."
                         type="text" 
                         v-model="Busqueda" 
-                        placeholder="Busqueda de Historial..."
                         class="busqueda"
                         maxlength="50"
                         >
@@ -245,12 +206,11 @@
                         </h1>
                         <!-- Tabla de Historial de Precios -->
                         <div v-if="Historial.length > 0">
-                            <div
+                            <div v-for= "i in Historial" 
+                            :key="i.id"
                             class="mb-2 lg:mb-5"
-                            v-for= "i in Historial" 
-                            :key="i.id">
-                                <div 
-                                :class="Estatuscolor(i.activo)"
+                            >
+                                <div :class="Estatuscolor(i.activo)"
                                 class="tab"
                                 >
                                     <div class="flex flex-col">
@@ -305,13 +265,8 @@
                             Prueba buscando con otro termino
                             </h3>
                         </div>
-                        <div 
-                        class="
-                        flex justify-center
-                        p-3"
-                        >
-                            <button 
-                            @click="Pagina = Pagina - 20 ; CargarDatos()" 
+                        <div class="flex justify-center p-3">
+                            <button @click="Pagina = Pagina - 20 ; CargarDatos()" 
                             :disabled="Pagina < 20"
                             class="botona"
                             >
@@ -323,8 +278,7 @@
                             - 
                             {{ Pagina + Historial.length }}
                             </h2>
-                            <button 
-                            @click="Pagina = Pagina + 20 ; CargarDatos()" 
+                            <button @click="Pagina = Pagina + 20 ; CargarDatos()" 
                             :disabled="Historial.length < 20"
                             class="botona"
                             >
@@ -340,8 +294,13 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, ref } from 'vue'
-    import { urlover8000 } from './Estatus.js'
+    import { 
+        onMounted, 
+        ref 
+    } from 'vue'
+    import { 
+        urlover8000 
+    } from './Estatus.js'
     // ----- Variables Booleanas ----- //
 	const filtroAct = ref (false)
     const ErrorCarga = ref(false)

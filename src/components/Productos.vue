@@ -5,10 +5,12 @@
             <transition name="fade">
                 <div v-if="ActualizarCajaP"
                 @click.self="CerrarPopUp01"
-                class="fondo 
-                ">
+                class="fondo"
+                >
                     <div class="popup">
-                        <form @submit.prevent="ActualizarProducto" class="Texto_producto">
+                        <form @submit.prevent="ActualizarProducto" 
+                        class="Texto_producto"
+                        >
                             <h1>
                             {{ ProductoAct.nombre }}
                             </h1>
@@ -16,10 +18,9 @@
                                 <h2>
                                 Nombre
                                 </h2>
-                                <input 
+                                <input placeholder="Nombre"
                                 type="text" 
                                 v-model="ProductoAct.nombre" 
-                                placeholder="Nombre"
                                 maxlength="50"
                                 >
                             </div>
@@ -27,10 +28,9 @@
                                 <h2>
                                 Precio
                                 </h2>
-                                <input 
+                                <input placeholder="Precio"
                                 type="number" 
                                 v-model="ProductoAct.precio" 
-                                placeholder="Precio"
                                 maxlength="8"
                                 >
                             </div>
@@ -38,10 +38,9 @@
                                 <h2>
                                 Stock
                                 </h2>
-                                <input 
+                                <input placeholder="Stock"
                                 type="number" 
                                 v-model="ProductoAct.stock" 
-                                placeholder="Stock"
                                 maxlength="8"
                                 >
                             </div>
@@ -53,7 +52,10 @@
                                     <option value="new">
                                     + Agrega una Categoria
                                     </option>
-                                    <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                    <option v-for="i in ListaCategoria" 
+                                    :key="i.categoria" 
+                                    :value="i.categoria"
+                                    >
                                     {{ i.categoria }}
                                     </option>
                                 </select>
@@ -61,131 +63,105 @@
                                     <h2>
                                     Nueva Categoria
                                     </h2>
-                                    <input 
+                                    <input placeholder="Categoria"
                                     type="text" 
                                     v-model="ProductoAct.categoria" 
-                                    placeholder="Categoria"
                                     maxlength="20"
                                     >
                                 </div>
                                 <h2>
                                 Codigo de Barras
                                 </h2>
-                                <input 
+                                <input placeholder="Codigo de Barras"
                                 type="text" 
                                 v-model="ProductoAct.codigo_barra" 
-                                placeholder="Codigo de Barras"
                                 maxlength="15"
                                 >
                             </div>
                             <div v-if="Rol === 1 || Rol === 2">
-                                <h2>Imágenes actuales</h2>
-                                <div 
-                                v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
-                                class="
-                                flex flex-row
-                                gap-3
+                                <h2>
+                                Imágenes actuales
+                                </h2>
+                                <div v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
+                                class="flex flex-row gap-3
                                 items-center justify-center
-                                w-full pb-2
-                                ">
-                                    <button 
+                                w-full pb-2"
+                                >
+                                    <button @click="BackImg(ProductoAct)"
                                     type="button" 
-                                    @click="BackImg(ProductoAct)"
                                     :disabled="GetImg(ProductoAct.id) === 0"
-                                    class="botonflecha">
+                                    class="botonflecha"
+                                    >
                                     ❮
                                     </button>
-                                    <div
-                                    class="
-                                    relative 
-                                    w-fit mx-auto mt-2
-                                    ">
-                                        <button
+                                    <div class="relative w-fit mx-auto mt-2">
+                                        <button @click="NoMoreImages(ProductoAct.imagenes[GetImg(ProductoAct.id)])"
                                         type="button"
-                                        @click="NoMoreImages(
-                                            ProductoAct.imagenes[GetImg(ProductoAct.id)]
-                                        )"
                                         title="Quitar imagen"
                                         class="botonx"
                                         >
                                         🗙
                                         </button>
                                         <div>
-                                            <img
-                                            v-show="ImagenesCargando[ProductoAct.id] === false"
+                                            <img v-show="ImagenesCargando[ProductoAct.id] === false"
                                             :src=ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)
                                             @load="ImagenesCargando[ProductoAct.id] = false"
                                             class="imagen"
                                             >
-                                            <div
-                                            v-if="ImagenesCargando[ProductoAct.id] !== false" 
+                                            <div v-if="ImagenesCargando[ProductoAct.id] !== false" 
                                             class="mt-2"
                                             >
-                                                <img 
-                                                src="../assets/loading.gif" 
+                                                <img src="../assets/loading.gif" 
                                                 alt="Cargando..." 
-                                                class="imagen !2xl:p-15">
+                                                class="imagen !2xl:p-15"
+                                                >
                                             </div>
                                         </div>
                                     </div>
-                                    <button 
+                                    <button @click="NextImg(ProductoAct)"
                                     type="button" 
-                                    @click="NextImg(ProductoAct)"
                                     :disabled="GetImg(ProductoAct.id) === ProductoAct.imagenes.length - 1"
-                                    class="botonflecha">
+                                    class="botonflecha"
+                                    >
                                     ❯
                                     </button>
                                 </div>
-                                <div 
-                                v-else 
-                                class="imageno">
+                                <div v-else class="imageno">
                                 Sin imágenes
                                 </div>
                                 <div>
                                     <h2>
                                     Imagenes Nuevas
                                     </h2>
-                                    <div
-                                    v-if="VistaPrevia.length > 0"
-                                    class="
-                                    relative
-                                    w-fit mx-auto mt-2
-                                    ">
-                                        <div
-                                        v-for="(img, index) in VistaPrevia"
+                                    <div v-if="VistaPrevia.length > 0"
+                                    class="relative w-fit mx-auto mt-2"
+                                    >
+                                        <div v-for="(img, index) in VistaPrevia"
                                         :key="index"
-                                        class="
-                                        shrink-0 mt-2 
-                                        relative"
+                                        class="shrink-0 mt-2 relative"
                                         >
-                                            <button
+                                            <button @click="LimpiarImagenes"
                                             type="button"
-                                            @click="LimpiarImagenes"
                                             title="Quitar imagen"
                                             class="botonx"
                                             >
                                             🗙
                                             </button>
-                                            <img 
-                                            :src="VistaPrevia" 
+                                            <img :src="VistaPrevia" 
                                             alt="Vista Previa"
                                             class="imagen !m-0" 
                                             />
                                         </div>
                                     </div>
-                                    <div
-                                    v-else 
-                                    class="imageno"
-                                    >
+                                    <div v-else class="imageno">
                                     <span>
                                     Sin vista previa
                                     </span> 
                                     </div>
                                     <div class="mt-4">
-                                        <input
+                                        <input @change="SeleccionarImagen"
                                         type="file"
                                         accept="image/*"
-                                        @change="SeleccionarImagen"
                                         multiple
                                         class="imagenu !w-full"
                                         ref="fileInput"
@@ -193,20 +169,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div 
-                            class="botones"
-                            >
-                                <button 
+                            <div class="botones">
+                                <button :disabled="confirboton" 
                                 type="submit" 
-                                :disabled="confirboton" 
-                                class="botoncon
-                                ">
+                                class="botoncon"
+                                >
                                 Actualizar
                                 </button>
-                                <button 
-                                type="button"
-                                @click="CerrarPopUp01" 
-                                class="botonc">
+                                <button @click="CerrarPopUp01"
+                                type="button" 
+                                class="botonc"
+                                >
                                 Cancelar
                                 </button>
                             </div>
@@ -227,62 +200,51 @@
                         ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
                         </h1>
                         <div>
-                            <div 
-                            v-if="ProductoEli.imagenes.length > 0"
+                            <div v-if="ProductoEli.imagenes.length > 0"
                             class="flex flex-row 
                             gap-3 overflow-x-auto
                             items-center justify-center 
-                            w-full pb-2 snap-x
-                            ">
-                                <button
-                                @click="BackImg(ProductoEli)"
+                            w-full pb-2 snap-x"
+                            >
+                                <button @click="BackImg(ProductoEli)"
                                 :disabled="GetImg(ProductoEli.id) === 0"
                                 class="botonflecha"
                                 >
                                 ❮
                                 </button>
                                 <div>
-                                    <img
-                                    v-show="ImagenesCargando[ProductoEli.id] === false"
+                                    <img v-show="ImagenesCargando[ProductoEli.id] === false"
                                     :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
                                     @load="ImagenesCargando[ProductoEli.id] = false"
                                     class="imagen"
                                     >
-                                    <div
-                                    v-if="ImagenesCargando[ProductoEli.id] !== false" 
+                                    <div v-if="ImagenesCargando[ProductoEli.id] !== false" 
                                     class="mt-2"
                                     >
-                                        <img 
-                                        src="../assets/loading.gif" 
+                                        <img src="../assets/loading.gif" 
                                         alt="Cargando..." 
-                                        class="imagen !2xl:p-15">
+                                        class="imagen !2xl:p-15"
+                                        >
                                     </div>
                                 </div>
-                                <button
-                                @click="NextImg(ProductoEli)"
+                                <button @click="NextImg(ProductoEli)"
                                 :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
                                 class="botonflecha"
                                 >
                                 ❯
                                 </button>
                             </div>
-                            <img
-                            v-else
-                            src="../assets/images.png"
+                            <img v-else src="../assets/images.png"
                             class="imagen"
                             >
                         </div>
-                        <div
-                        class="botones"
-                        >
-                            <button 
-                            @click="BorrarProducto()"
+                        <div class="botones">
+                            <button @click="BorrarProducto()"
                             class="botoncon"
                             >
                             Confirmo
                             </button>
-                            <button 
-                            @click="CerrarPopUp02"
+                            <button @click="CerrarPopUp02"
                             class="botonc"
                             >
                             Cancelar
@@ -304,87 +266,70 @@
                         {{ ProductoActual.nombre }}
                         </h1>
                         <div>
-                            <div 
-                            v-if="ProductoActual.imagenes.length > 0"
+                            <div v-if="ProductoActual.imagenes.length > 0"
                             class="flex flex-row 
                             gap-3 overflow-x-auto
                             items-center justify-center 
                             w-full pb-2 snap-x
                             ">
-                                <button
-                                @click="BackImg(ProductoActual)"
+                                <button @click="BackImg(ProductoActual)"
                                 :disabled="GetImg(ProductoActual.id) === 0"
                                 class="botonflecha"
                                 >
                                 ❮
                                 </button>
                                 <div>
-                                    <img
-                                    v-show="ImagenesCargando[ProductoActual.id] === false"
+                                    <img v-show="ImagenesCargando[ProductoActual.id] === false"
                                     :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
                                     @load="ImagenesCargando[ProductoActual.id] = false"
                                     class="imagen"
                                     >
-                                    <div
-                                    v-if="ImagenesCargando[ProductoActual.id] !== false" 
+                                    <div v-if="ImagenesCargando[ProductoActual.id] !== false" 
                                     class="mt-2"
                                     >
-                                        <img 
-                                        src="../assets/loading.gif" 
+                                        <img src="../assets/loading.gif" 
                                         alt="Cargando..." 
-                                        class="imagen !2xl:p-15">
+                                        class="imagen !2xl:p-15"
+                                        >
                                     </div>
                                 </div>
-                                <button
-                                @click="NextImg(ProductoActual)"
+                                <button @click="NextImg(ProductoActual)"
                                 :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
                                 class="botonflecha"
                                 >
                                 ❯
                                 </button>
                             </div>
-                            <img
-                            v-else
-                            src="../assets/images.png"
+                            <img v-else src="../assets/images.png"
                             class="imagen"
                             >
                         </div>
-                        <div
-                        class="
-                        flex flex-col
-                        ">
-                            <input 
+                        <div class="flex flex-col">
+                            <input v-model="ProductoCantidad"
                             type="number" 
-                            v-model="ProductoCantidad"
                             maxlength="8"
                             class="!w-30 mb-5"
                             >
                             <div class="botones !flex-row">
-                                <button 
-                                @click="SumarProducto(ProductoActual)"
+                                <button @click="SumarProducto(ProductoActual)"
                                 class="botoncon !px-4"
                                 >
                                 ✚
                                 </button>
-                                <button 
-                                @click="RestarProducto(ProductoActual)"
+                                <button @click="RestarProducto(ProductoActual)"
                                 class="botonc !px-4 !font-bold"
                                 >
                                 ━
                                 </button>
                             </div>
                         </div>
-                        <div
-                        class="botones"
-                        >
-                            <button 
-                            @click="SumarCarrito"
+                        <div class="botones">
+                            <button @click="SumarCarrito"
                             class="botoncon"
                             >
                             Agregar al Carrito
                             </button>
-                            <button 
-                            @click="CerrarPopUp03"
+                            <button @click="CerrarPopUp03"
                             class="botonc"
                             >
                             Cancelar
@@ -397,38 +342,37 @@
         <!-- Comprar Notificacion -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="MostrarConfir" class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg z-[100] font-bold">
-                    ✅ ¡Agregado al carrito!
+                <div v-if="MostrarConfir" 
+                class="fixed top-4 right-4 
+                bg-green-600 text-white 
+                px-6 py-3 rounded-xl shadow-lg 
+                z-[100] font-bold"
+                >
+                ✅ ¡Agregado al carrito!
                 </div>
             </transition>
         </Teleport>
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
-            <div
-            class="flex w-full flex-col sm:flex-row">
+            <div class="flex w-full flex-col sm:flex-row">
                 <!-- Barra de Filtros -->
                 <div class="bar">
                     <div>
-                        <h1
-                        @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
+                        <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
                         >
                         ᯤ
                         </h1>
                     </div>
                     <transition name="slide">
-                        <div
+                        <div v-if="MostrarFiltro"
                         class="flex flex-col lg:self-center"
-                        v-if="MostrarFiltro"
                         >
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h1>
                                 Ordenar
                                 </h1>
-                                <select 
-                                v-model="orden" 
+                                <select v-model="orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
@@ -460,21 +404,16 @@
                                     </option>
                                 </select>
                             </div>
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h2>
                                 Filtro Categoria
                                 </h2>
                                 <div>
-                                    <select 
-                                    v-model="filtrocat"
-                                    >
+                                    <select v-model="filtrocat">
                                         <option value="" disabled>
                                         Categorias...
                                         </option>
-                                        <option 
-                                        v-for="i in ListaCategoria" 
+                                        <option v-for="i in ListaCategoria" 
                                         :key="i.categoria" 
                                         :value="i.categoria"
                                         >
@@ -483,127 +422,94 @@
                                     </select>
                                 </div>
                             </div>
-                            <div
-                            class="
-                            flex flex-col
-                            md:p-4 p-2
-                            ">
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h2>
                                 Filtros de Precio
                                 </h2>
                                 <label>
-                                <input 
+                                <input :value="3"
                                 type="radio" 
-                                :value="3"
                                 v-model="filtroRadio"
-                                > 
+                                >
                                 Hasta $10,000
                                 </label>
                                 <label>
-                                <input 
-                                type="radio" 
-                                :value="2"
+                                <input :value="2"
+                                type="radio"
                                 v-model="filtroRadio"
                                 > 
                                 $10,000 a $50,000
                                 </label>
                                 <label>
-                                <input 
-                                type="radio" 
-                                :value="1"
+                                <input :value="1"
+                                type="radio"
                                 v-model="filtroRadio"
                                 > 
                                 Más de $50,000
                                 </label>
                                 <label>
-                                <input 
-                                type="radio" 
-                                :value="0"
+                                <input :value="0"
+                                type="radio"
                                 v-model="filtroRadio"
                                 > 
                                 Personalizado
                                 </label>
                             </div>
-                            <div
-                            v-if="filtroRadio === 0" 
-                            class="
-                            flex flex-col
-                            md:p-4 p-2
-                            ">
-                                <h3
-                                class="
-                                flex flex-col
-                                md:p-4 p-2
-                                ">
+                            <div v-if="filtroRadio === 0" 
+                            class="flex flex-col md:p-4 p-2"
+                            >
+                                <h3 class="flex flex-col md:p-4 p-2">
                                 Precio Mayor
                                 </h3>
-                                <input 
+                                <input placeholder="Precio Max..."
                                 type="number"
                                 v-model="mayor" 
-                                placeholder="Precio Max..."
                                 maxlength="10"
                                 >
-                                <h3
-                                class="
-                                flex flex-col
-                                md:p-4 p-2
-                                ">
+                                <h3 class="flex flex-col md:p-4 p-2">
                                 Precio Minimo
                                 </h3>
-                                <input
+                                <input placeholder="Precio Min..."
                                 type="number"
                                 v-model="menor" 
-                                placeholder="Precio Min..."
                                 maxlength="10"
                                 >
                             </div>
-                            <div 
-                            v-if="Rol === 1 || Rol === 2 || Rol === 4"
-                            >
+                            <div v-if="Rol === 1 || Rol === 2 || Rol === 4">
                                 <h2>
                                 ¿El Productos esta Activo?
                                 </h2>
-                                <div
-                                class="
-                                flex flex-col
-                                md:p-4 p-2
-                                ">
+                                <div class="flex flex-col md:p-4 p-2">
                                     <label>
-                                    <input 
+                                    <input :value="2"
                                     type="radio" 
-                                    :value="2"
                                     v-model="filtroEst"
                                     > 
                                     Todos los Productos
                                     </label>
                                     <label>
-                                    <input 
+                                    <input :value="1"
                                     type="radio" 
-                                    :value="1"
                                     v-model="filtroEst"
                                     > 
                                     Productos Activos
                                     </label>
                                     <label>
-                                    <input 
-                                    type="radio" 
-                                    :value="0"
+                                    <input :value="0"
+                                    type="radio"
                                     v-model="filtroEst"
                                     > 
                                     Productos Eliminados
                                     </label>
                                 </div>
                             </div>
-                            <div
-                            class="botones"
-                            >
-                                <button 
-                                @click="AplicarFiltro" 
-                                class="botoncon">
+                            <div class="botones">
+                                <button @click="AplicarFiltro" 
+                                class="botoncon"
+                                >
                                 Aplicar Filtros
                                 </button>
-                                <button 
-                                @click="LimpiarFiltro" 
+                                <button @click="LimpiarFiltro" 
                                 v-if="filtroAct === true"
                                 class="botont" 
                                 >
@@ -613,121 +519,103 @@
                         </div>
                     </transition>
                     <div v-if="Rol === 1 || Rol === 2">
-                        <h1
-                        @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
+                        <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
                         >
                         +
                         </h1>
                     </div>
                     <transition name="slide">
-                        <div
+                        <div v-if="MostrarNuevo && (Rol === 1 || Rol === 2)"
                         class="flex flex-col lg:self-center"
-                        v-if="MostrarNuevo && (Rol === 1 || Rol === 2)"
                         >
                             <form @submit.prevent="SubirNuevoProducto">
                                 <h2>
                                 Nombre
                                 </h2>
-                                <input 
+                                <input placeholder="Nombre"
                                 type="text" 
                                 v-model="NuevoProducto.nombre" 
-                                placeholder="Nombre"
                                 maxlength="50"
                                 >
                                 <h2>
                                 Precio
                                 </h2>
-                                <input 
+                                <input placeholder="Precio"
                                 type="number" 
                                 v-model="NuevoProducto.precio" 
-                                placeholder="Precio"
                                 maxlength="8"
                                 >
                                 <h2>
                                 Stock
                                 </h2>
-                                <input 
+                                <input placeholder="Stock"
                                 type="number" 
-                                v-model="NuevoProducto.stock" 
-                                placeholder="Stock"
+                                v-model="NuevoProducto.stock"
                                 maxlength="8"
                                 >
                                 <h2>
                                 Categoria
                                 </h2>
-                                <select v-model="OpcionCategoria" class="seleccion">
+                                <select v-model="OpcionCategoria" 
+                                class="seleccion"
+                                >
                                     <option value="new">
                                     + Agrega una Categoria
                                     </option>
-                                    <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                    <option v-for="i in ListaCategoria" 
+                                    :key="i.categoria" 
+                                    :value="i.categoria"
+                                    >
                                     {{ i.categoria }}
                                     </option>
                                 </select>
                                 <h3 v-if="OpcionCategoria === 'new'">
                                 Nueva Categoria
                                 </h3>
-                                <input 
-                                v-if="OpcionCategoria === 'new'" 
+                                <input v-if="OpcionCategoria === 'new'" 
                                 type="text" 
                                 v-model="NuevoProducto.categoria" 
                                 placeholder="Categoria"
                                 maxlength="20"
                                 >
                                 <div>
-                                    <div
-                                    v-if="VistaPrevia.length > 0"
-                                    class="
-                                    flex flex-row
-                                    gap-3 pb-2
-                                    w-full overflow-x-auto
-                                    "> 
-                                        <div
-                                        v-for="(img, index) in VistaPrevia"
+                                    <div v-if="VistaPrevia.length > 0"
+                                    class="flex flex-row gap-3 pb-2 w-full overflow-x-auto"
+                                    > 
+                                        <div v-for="(img, index) in VistaPrevia"
                                         :key="index"
-                                        class="
-                                        shrink-0 mt-2
-                                        relative
-                                        ">
-                                            <button
-                                            @click="QuitarImagenNueva"
+                                        class="shrink-0 mt-2 relative"
+                                        >
+                                            <button @click="QuitarImagenNueva"
                                             title="Quitar imagen"
                                             class="botonx"
                                             >
                                             🗙
                                             </button>
-                                            <img 
-                                            :src="img" 
+                                            <img :src="img" 
                                             alt="Vista Previa"
                                             class="imagen !m-0" 
                                             />
                                         </div>
                                     </div>
-                                    <div
-                                    v-else 
-                                    class="
-                                    imageno
-                                    ">
+                                    <div v-else class="imageno">
                                     <span>
                                     Sin vista previa
                                     </span> 
                                     </div>
                                     <div class="mt-4">
-                                        <input
+                                        <input @change="SeleccionarImagen"
                                         type="file"
                                         accept="image/*"
-                                        @change="SeleccionarImagen"
                                         multiple
                                         class="imagenu !w-full"
                                         />
                                     </div>
                                 </div>
-                                <div
-                                class="botones"
-                                >
-                                    <button 
+                                <div class="botones">
+                                    <button :disabled="confirboton" 
                                     type="submit" 
-                                    :disabled="confirboton" 
                                     class="botoncon"
                                     >
                                     Crear
@@ -744,21 +632,17 @@
                     items-center justify-center 
                     w-full h-[60vh]"
                     >
-                        <img 
-                        src="../assets/loading.gif" 
+                        <img src="../assets/loading.gif" 
                         alt="Cargando productos..." 
                         class="w-32 h-32 object-contain mb-4"
                         >
-                        <h2 
-                        class="text-green-800 
-                        font-bold text-xl animate-pulse"
-                        >
+                        <h2 class="text-green-800 font-bold text-xl animate-pulse">
                         Cargando productos, un momento...
                         </h2>
                     </div>
-                    <div v-else-if="ErrorCarga" 
-                    class="flex flex-col 
-                    items-center justify-center 
+                    <div v-else-if="ErrorCarga"
+                    class="flex flex-col
+                    items-center justify-center
                     w-full h-[60vh] gap-4"
                     >
                         <h1 class="text-3xl font-bold text-red-600 text-center">
@@ -767,8 +651,7 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button 
-                        @click="CargarDatos()" 
+                        <button @click="CargarDatos()" 
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
@@ -776,24 +659,17 @@
                     </div>
                     <div v-else>
                         <div class="px-5">
-                            <input
-                            @input="BusquedaProducto"
+                            <input @input="BusquedaProducto"
                             type="text" 
                             v-model="Busqueda" 
                             placeholder="Busqueda..."
                             class="busqueda"
                             maxlength="50"
                             >
-                            <div 
-                            v-if="Productos.length > 0"
-                            class="
-                            grid
-                            lg:grid-cols-3
-                            grid-cols-2
-                            gap-6"
+                            <div v-if="Productos.length > 0"
+                            class="grid lg:grid-cols-3 grid-cols-2 gap-6"
                             >
-                                <div 
-                                :class="Estatuscolor(i.activo)" 
+                                <div :class="Estatuscolor(i.activo)" 
                                 v-for= "i in Productos" 
                                 :key="i.id"
                                 @touchstart="ComienzoToque($event)"
@@ -801,52 +677,43 @@
                                 class="carta"
                                 >
                                     <div>
-                                        <div 
-                                        v-if="i.imagenes.length > 0"
+                                        <div v-if="i.imagenes.length > 0"
                                         class="flex flex-row 
                                         gap-3 overflow-x-auto
                                         items-center justify-center 
-                                        w-full pb-2 snap-x
-                                        ">
-                                            <button
-                                            @click="BackImg(i)"
+                                        w-full pb-2 snap-x"
+                                        >
+                                            <button @click="BackImg(i)"
                                             :disabled="GetImg(i.id) === 0"
                                             class="botonflecha hidden md:flex"
                                             >
                                             ❮
                                             </button>
                                             <div>
-                                                <img
-                                                v-show="ImagenesCargando[i.id] === false"
+                                                <img v-show="ImagenesCargando[i.id] === false"
                                                 :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
                                                 @load="ImagenesCargando[i.id] = false"
                                                 class="imagen"
                                                 >
-                                                <div
-                                                v-if="ImagenesCargando[i.id] !== false" 
+                                                <div v-if="ImagenesCargando[i.id] !== false" 
                                                 class="mt-2"
                                                 >
-                                                    <img 
-                                                    src="../assets/loading.gif" 
+                                                    <img src="../assets/loading.gif" 
                                                     alt="Cargando..." 
                                                     class="imagen !2xl:p-15">
                                                 </div>
                                             </div>
-                                            <button
-                                            @click="NextImg(i)"
+                                            <button @click="NextImg(i)"
                                             :disabled="GetImg(i.id) === i.imagenes.length - 1"
                                             class="botonflecha hidden md:flex"
                                             >
                                             ❯
                                             </button>
                                         </div>
-                                        <img
-                                        v-else
-                                        src="../assets/images.png"
+                                        <img v-else src="../assets/images.png"
                                         class="imagen"
                                         >
-                                        <div
-                                        >
+                                        <div>
                                             <h2 class="font-bold truncate ">
                                             {{ i.nombre }}
                                             </h2>
@@ -866,21 +733,18 @@
                                             </div>
                                             <div class="botones">
                                                 <div v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5">
-                                                    <button 
-                                                    @click="Edicion(i)" 
+                                                    <button @click="Edicion(i)" 
                                                     v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5" 
-                                                    class="botont !py-2">
+                                                    class="botont !py-2"
+                                                    >
                                                     ✏️
                                                     <span class="hidden lg:inline 2xl:inline">
                                                     Editar
                                                     </span>
                                                     </button>
                                                 </div>
-                                                <div 
-                                                v-if="Rol === 1 || Rol === 2"
-                                                >
-                                                    <button 
-                                                    @click="Eliminacion(i)" 
+                                                <div v-if="Rol === 1 || Rol === 2">
+                                                    <button @click="Eliminacion(i)" 
                                                     v-if="i.activo" 
                                                     class="botonc !py-2"
                                                     >
@@ -889,9 +753,7 @@
                                                     Eliminar
                                                     </span>
                                                     </button>
-                                                    <button 
-                                                    @click="Eliminacion(i)" 
-                                                    v-else 
+                                                    <button v-else @click="Eliminacion(i)" 
                                                     class="botoncon"
                                                     >
                                                     🕊️
@@ -900,11 +762,10 @@
                                                     </span>
                                                     </button>
                                                 </div>
-                                                <button 
-                                                @click="Compracion(i)" 
-                                                :disabled="CarritoStock(i) === 0" 
-                                                class="botoncon !py-2 !text-2xl"
+                                                <button @click="Compracion(i)"
+                                                :disabled="CarritoStock(i) === 0"
                                                 v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                                                class="botoncon !py-2 !text-2xl"
                                                 >
                                                 🛍️ 
                                                 </button>
@@ -914,31 +775,27 @@
                                 </div>
                             </div>
                             <div v-else>
-                                <h2>No se encontraron productos 😔</h2>
-                                <h3>Prueba buscando con otro termino</h3>
+                                <h2>
+                                No se encontraron productos 😔
+                                </h2>
+                                <h3>
+                                Prueba buscando con otro termino
+                                </h3>
                             </div>
-                            <div
-                            class="
-                            flex justify-center p-5
-                            ">
-                                <button 
-                                @click="CambiarPagina('back')" 
+                            <div class="flex justify-center p-5">
+                                <button @click="CambiarPagina('back')" 
                                 :disabled="Pagina < 21 || CargandoTrue"
                                 class="botona"
                                 >
                                 ❮
                                 </button>
-                                <h2
-                                class="
-                                self-center p-5
-                                ">
+                                <h2 class="self-center p-5">
                                 Items 
                                 {{ 0 + Pagina }} 
                                 - 
                                 {{ Pagina + Productos.length }}
                                 </h2>
-                                <button 
-                                @click="CambiarPagina('next')" 
+                                <button @click="CambiarPagina('next')" 
                                 :disabled="Productos.length < 21 || CargandoTrue"
                                 class="botona"
                                 >
@@ -955,9 +812,30 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, toRefs, ref, watch, computed } from 'vue'
-    import { supabase } from '../config/supebase.js'
-    import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual, ClienteID, urlover8000, CargarCarrito, Iniciado, SesionExpirada } from './Estatus.js'
+    import { 
+        onMounted, 
+        toRefs, 
+        ref, 
+        watch, 
+        computed 
+    } from 'vue'
+    import { 
+        supabase 
+    } from '../config/supebase.js'
+    import { 
+        CarritoLocal, 
+        CerrarSesion, 
+        Rol, 
+        ActualizarCajaP, 
+        ProductoActual, 
+        ProductoCantidad, 
+        PedidoActual, 
+        ClienteID, 
+        urlover8000,
+        CargarCarrito, 
+        Iniciado, 
+        SesionExpirada 
+    } from './Estatus.js'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (VentanaNuevo.value) {

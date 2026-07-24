@@ -8,18 +8,32 @@ import Carrito from './components/Carrito.vue'
 import Configuracion from './components/Configuracion.vue'
 import Mis_pedidos from './components/Mis_pedidos.vue'
 import Historial_precios from './components/Historial_precios.vue'
-import { ValidadSesionBack, Rol, Iniciado, MostrarError, CarritoLocal, ValidadCarrito, VolverCarro } from './components/Estatus.js'
+import { 
+    ValidadSesionBack, 
+    Rol, 
+    Iniciado, 
+    MostrarError, 
+    CarritoLocal, 
+    ValidadCarrito, 
+    VolverCarro 
+} from './components/Estatus.js'
 
 const routes = [
     { 
         path: '/', 
         name: 'inicio', 
-        component: Inicio 
+        component: Inicio,
+        meta: {
+            requireAuth: true,
+        }
     },
     { 
         path: '/productos', 
         name: 'productos', 
-        component: Productos 
+        component: Productos,
+        meta: {
+            requireAuth: true,
+        }
     },
     { 
         path: '/pedidos', 
@@ -59,12 +73,18 @@ const routes = [
     { 
         path: '/configuracion',
         name: 'configuracion', 
-        component: Configuracion 
+        component: Configuracion,
+        meta: {
+            requireAuth: true,
+        }
     },
     { 
         path: '/mis_pedidos', 
         name: 'mis_pedidos', 
-        component: Mis_pedidos 
+        component: Mis_pedidos,
+        meta: {
+            requireAuth: true,
+        }
     },
     { 
         path: '/historial_precios', 
@@ -76,6 +96,7 @@ const routes = [
         }
     },
 ]
+
 const router = createRouter({
   history: createWebHistory(),
   routes,

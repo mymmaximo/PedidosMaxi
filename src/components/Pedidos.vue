@@ -6,23 +6,17 @@
 			@click.self="CerrarPopUp01"
 			class="fondo" 
 			>
-				<div 
-				class="popup"
-				>
+				<div class="popup">
 					<h1>
 					¿Quiere Actualizar el Estado del Pedido?
 					</h1>
-					<div
-					class="botones"
-					>
-						<button 
-						@click="ActualizarEstatus()"
+					<div class="botones">
+						<button @click="ActualizarEstatus()"
 						class="botoncon"
 						>
 						Si Confirmo
 						</button>
-						<button 
-						@click="CerrarPopUp01"
+						<button @click="CerrarPopUp01"
 						class="botonc"
 						>
 						Cancelar
@@ -37,26 +31,21 @@
             <div class="flex w-full flex-col sm:flex-row">
 				<div class="bar">
 					<div>
-						<h1
-						@click="MostrarFiltro = !MostrarFiltro"
+						<h1 @click="MostrarFiltro = !MostrarFiltro"
 						class="botonfil"
 						>
 						ᯤ
 						</h1>
 					</div>
                     <transition name="slide">
-						<div
+						<div v-if="MostrarFiltro"
 						class="flex flex-col lg:self-center gap-5"
-						v-if="MostrarFiltro"
 						>
-                            <div
-                            class="flex flex-col md:p-4 p-2"
-                            >
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h1>
                                 Ordenar
                                 </h1>
-                                <select 
-                                v-model="orden" 
+                                <select v-model="orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
@@ -70,93 +59,82 @@
                                     </option>
                                 </select>
                             </div>
-							<div
-							class="flex flex-col"
-							>
+							<div class="flex flex-col">
 								<h1>
 								Filtro de Metodo de Pago
 								</h1>
 								<label>
-								<input 
+								<input :value="4"
 								type="radio" 
-								:value="3"
+								v-model="filtroMP"
+								> 
+								Paddle
+								</label>
+								<label>
+								<input :value="3"
+								type="radio" 
 								v-model="filtroMP"
 								> 
 								Tarjeta de Credito / Debito
 								</label>
 								<label>
-								<input 
-								type="radio" 
-								:value="2"
+								<input :value="2"
+								type="radio"
 								v-model="filtroMP"
 								> 
 								Mercado Pago
 								</label>
 								<label>
-								<input 
-								type="radio" 
-								:value="1"
+								<input :value="1"
+								type="radio"
 								v-model="filtroMP"
 								> 
 								Transferencia Bancaria
 								</label>
 								<label>
-								<input 
-								type="radio" 
-								:value="0"
+								<input :value="0"
+								type="radio"
 								v-model="filtroMP"
 								> 
 								Efectivo
 								</label>
 							</div>
-							<div
-							class="flex flex-col"
-							>
+							<div class="flex flex-col">
 								<h1>
 								Filtro de Estatus
 								</h1>
 								<label>
-								<input 
-								type="radio" 
-								:value="3"
+								<input :value="3"
+								type="radio"
 								v-model="filtroEst"
 								> 
 								Preparando
 								</label>
 								<label>
-								<input 
+								<input :value="2"
 								type="radio" 
-								:value="2"
 								v-model="filtroEst"
 								> 
 								En Camino
 								</label>
 								<label>
-								<input 
+								<input :value="1"
 								type="radio" 
-								:value="1"
 								v-model="filtroEst"
 								> 
 								Entregado
 								</label>
 							</div>
-							<div
-							class="flex flex-col"
-							>
+							<div class="flex flex-col">
 								<h1>
 								Ciudad del Cliente
 								</h1>
 								<div>
-									<select 
-									v-model="filtrociudad"
-									>
-										<option 
-										value="" disabled
-										>
+									<select v-model="filtrociudad">
+										<option value="" disabled>
 										Selecciona una Ciudad...
 										</option>
-										<option 
-										v-for="i in ListaCiudad" 
+										<option v-for="i in ListaCiudad" 
 										:key="i.ciudad" 
 										:value="i.ciudad"
 										>
@@ -165,24 +143,16 @@
 									</select>
 								</div>
 							</div>
-							<div
-							class="flex flex-col"
-							>
+							<div class="flex flex-col">
 								<h1>
 								Provincia del Cliente
 								</h1>
 								<div>
-									<select 
-									v-model="filtroprovincia" 
-									>
-										<option 
-										value="" 
-										disabled
-										>
+									<select v-model="filtroprovincia">
+										<option value="" disabled>
 										Selecciona una Provincia...
 										</option>
-										<option 
-										v-for="i in ListaProvincia" 
+										<option v-for="i in ListaProvincia" 
 										:key="i.provincia" 
 										:value="i.provincia"
 										>
@@ -191,16 +161,13 @@
 									</select>
 								</div>
 							</div>
-							<div
-							class="botones"
-							>
-								<button 
-								@click="AplicarFiltro" 
-								class="botoncon">
+							<div class="botones">
+								<button @click="AplicarFiltro" 
+								class="botoncon"
+								>
 								Aplicar Filtros
 								</button>
-								<button 
-								@click="LimpiarFiltro" 
+								<button @click="LimpiarFiltro" 
 								v-if="filtroAct === true"
 								class="botont" 
 								>
@@ -211,22 +178,17 @@
                     </transition>
 				</div>
 				<!-- Tabla de Pedidos -->
-				<div class="start !px-5"
-				>
+				<div class="start !px-5">
 					<div v-if="CargandoTrue" 
 					class="flex flex-col 
 					items-center justify-center 
 					w-full h-[60vh]"
 					>
-						<img 
-						src="../assets/loading.gif" 
+						<img src="../assets/loading.gif" 
 						alt="Cargando todos los pedidos..." 
 						class="w-32 h-32 object-contain mb-4"
 						>
-						<h2 
-						class="text-green-800 
-						font-bold text-xl animate-pulse"
-						>
+						<h2 class="text-green-800 font-bold text-xl animate-pulse">
 						Cargando todos los pedidos, un momento...
 						</h2>
 					</div>
@@ -241,8 +203,7 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button 
-                        @click="CargarDatos" 
+                        <button @click="CargarDatos" 
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
@@ -250,8 +211,7 @@
                     </div>
 					<div v-else>
 						<!-- Barra de Busqueda -->
-						<input
-						@input="BusquedaPedido"
+						<input @input="BusquedaPedido"
 						type="text" v-model="Busqueda" 
 						placeholder="Busqueda..."
 						class="busqueda"
@@ -262,12 +222,11 @@
 						</h1>
 						<!-- Tabla de Pedidos -->
 						<div v-if="Pedidos.length > 0">
-							<div 
-							v-for= "i in Pedidos" 
+							<div v-for= "i in Pedidos" 
 							:key="i.id"
-							class="mb-2 lg:mb-5">
-								<div 
-								@click="Edicion(i)" 
+							class="mb-2 lg:mb-5"
+							>
+								<div @click="Edicion(i)" 
 								:class="Estatuscolor(i.estatus)"
 								class="tab"
 								>
@@ -349,10 +308,10 @@
 											</div>
 										</div>
 									</div>
-									<div
+									<div v-for = "e in i.detalle_pedido" 
+									:key="e.id_detalle_pedido"
 									class="tab !bg-green-100/50"
-									v-for = "e in i.detalle_pedido" 
-									:key="e.id_detalle_pedido">
+									>
 										<div class="flex flex-col">
 											<div class="flex flex-row">
 												<h3 class="font-bold">
@@ -386,16 +345,13 @@
 										</div>
 									</div>
 								</div>
-								<div 
-								v-if = "PedidoNow === i.id_pedido" 
-								@click= "PedidoCambio(i.id_pedido)" 
+								<div @click= "PedidoCambio(i.id_pedido)"
+								v-if = "PedidoNow === i.id_pedido"  
 								class="botonc text-center"
 								>
 								Ocultar Detalles
 								</div>
-								<div
-								v-else 
-								@click= "PedidoCambio(i.id_pedido)"
+								<div v-else @click= "PedidoCambio(i.id_pedido)"
 								class="botoncon text-center"
 								>
 								Ver Detalles
@@ -410,13 +366,8 @@
 							Prueba buscando con otro termino
 							</h3>
 						</div>
-						<div 
-						class="
-						flex justify-center
-						p-3"
-						>
-							<button 
-							@click="Pagina = Pagina - 20 ; CargarDatos()" 
+						<div class="flex justify-center p-3">
+							<button @click="Pagina = Pagina - 20 ; CargarDatos()" 
 							:disabled="Pagina < 20"
 							class="botona"
 							>
@@ -428,8 +379,7 @@
 							- 
 							{{ Pagina + Pedidos.length }}
 							</h2>
-							<button 
-							@click="Pagina = Pagina + 20 ; CargarDatos()" 
+							<button @click="Pagina = Pagina + 20 ; CargarDatos()" 
 							:disabled="Pedidos.length < 20"
 							class="botona"
 							>
@@ -445,8 +395,15 @@
 
 <script setup>
     // ----- Imports ----- //
-	import { onMounted, ref } from 'vue'
-    import { urlover8000, SesionExpirada, Iniciado } from './Estatus.js'
+	import { 
+		onMounted, 
+		ref 
+	} from 'vue'
+    import { 
+		urlover8000, 
+		SesionExpirada, 
+		Iniciado 
+	} from './Estatus.js'
     // ----- Variables Complejas ----- //
 	const EstatusAct = ref({
 		id_pedido: "",
@@ -545,6 +502,9 @@
 		else if (id_estatus === 3) {
 			return "box"
 		}
+		else if (id_estatus === 4) {
+			return "box"
+		}
 			return "what"
 	}
 	const Estatustxt = (id_estatus) => {
@@ -556,6 +516,9 @@
 		}
 		else if (id_estatus === 3) {
 			return "Preparando"
+		}
+		else if (id_estatus === 4) {
+			return "Pendiente"
 		}
 			return "indefinido"
 	}
@@ -623,8 +586,11 @@
             filtroAct.value = true
         }
 		let mpfiltro = ""
-		if (filtroMP.value === 4) {
+		if (filtroMP.value === 5) {
 			mpfiltro = ""
+		}
+		else if (filtroMP.value === 4) {
+			mpfiltro = "Paddle"
 		}
 		else if (filtroMP.value === 3) {
 			mpfiltro = "Tarjeta de Crédito"

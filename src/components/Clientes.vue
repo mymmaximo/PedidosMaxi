@@ -6,22 +6,17 @@
             @click.self="CerrarPopUp02"
             class="fondo"
             >
-                <div 
-                class="popup"
-                >
+                <div class="popup">
                     <h1>
                     ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
                     </h1>
-                    <div
-                    class="botones">
-                        <button 
-                        @click="BorrarCliente()"
+                    <div class="botones">
+                        <button @click="BorrarCliente()"
                         class="botoncon"
                         >
                         Si Confirmo
                         </button>
-                        <button 
-                        @click="CerrarPopUp02"
+                        <button @click="CerrarPopUp02"
                         class="botonc"
                         >
                         Cancelar
@@ -38,9 +33,7 @@
             @click.self="CerrarPopUp01"
             class="fondo"
             >
-                <div 
-                class="popup"
-                >
+                <div class="popup">
                     <h1>
                     Actualizar Cliente {{ ClienteAct.nombre }}
                     </h1>
@@ -48,33 +41,29 @@
                         <h2>
                         Nombre
                         </h2>
-                        <input 
+                        <input placeholder="Nombre"
                         type="text" 
                         v-model="ClienteAct.nombre" 
-                        placeholder="Nombre"
                         maxlength="20"
                         >
                         <h2>
                         E-mail
                         </h2>
-                        <input 
+                        <input placeholder="Email@email.com"
                         type="text" 
                         v-model="ClienteAct.email" 
-                        placeholder="Email@email.com"
                         maxlength="50"
                         >
-                        <div
-                        class="botones">
-                            <button 
+                        <div class="botones">
+                            <button :disabled="confirboton"
                             type="submit" 
-                            :disabled="confirboton"
-                            class="botoncon
-                            ">
+                            class="botoncon"
+                            >
                             Actualizar
                             </button>
-                            <button 
-                            @click="CerrarPopUp01" 
-                            class="botonc">
+                            <button @click="CerrarPopUp01" 
+                            class="botonc"
+                            >
                             Cancelar
                             </button>
                         </div>
@@ -88,26 +77,21 @@
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="bar">
                     <div>
-                        <h1
-                        @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
+                        <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
                         >
                         ᯤ
                         </h1>
                         <transition name="slide">
-                            <div
+                            <div v-if="MostrarFiltro"
                             class="flex flex-col lg:self-center"
-                            v-if="MostrarFiltro"
                             >
-                                <div
-                                class="flex flex-col md:p-4 p-2"
-                                >
+                                <div class="flex flex-col md:p-4 p-2">
                                     <h1>
                                     Ordenar
                                     </h1>
-                                    <select 
+                                    <select placeholder=""
                                     v-model="orden" 
-                                    placeholder=""
                                     >
                                         <option value="" disabled>
                                         Orden...
@@ -126,81 +110,61 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div
-                                class="flex flex-col md:p-4 p-2"
-                                >
+                                <div class="flex flex-col md:p-4 p-2">
                                     <h1>
                                     ¿Realizo un Pedido?
                                     </h1>
-                                    <div 
-                                    class="
-                                    flex flex-col
-                                    ">
+                                    <div class="flex flex-col">
                                         <label>
-                                        <input 
+                                        <input :value="1"
                                         type="radio" 
-                                        :value="1"
                                         v-model="filtroDirec"
                                         > 
                                         Realizo uno o mas Pedidos
                                         </label>
                                         <label>
-                                        <input 
-                                        type="radio" 
-                                        :value="0"
+                                        <input :value="0"
+                                        type="radio"
                                         v-model="filtroDirec"
                                         > 
                                         No Realizo Pedidos
                                         </label>
                                     </div>
                                 </div>
-                                <div
-                                class="flex flex-col p-2"
-                                >
+                                <div class="flex flex-col p-2">
                                     <h1>
                                     ¿El Cliente esta Activo?
                                     </h1>
-                                    <div 
-                                    class="
-                                    flex flex-col
-                                    ">
+                                    <div class="flex flex-col">
                                         <label>
-                                        <input 
+                                        <input :value="2"
                                         type="radio" 
-                                        :value="2"
                                         v-model="filtroEst"
                                         > 
                                         Todos los Clientes
                                         </label>
                                         <label>
-                                        <input 
+                                        <input :value="1"
                                         type="radio" 
-                                        :value="1"
                                         v-model="filtroEst"
                                         > 
                                         Cliente Activo
                                         </label>
                                         <label>
-                                        <input 
-                                        type="radio" 
-                                        :value="0"
+                                        <input :value="0"
+                                        type="radio"
                                         v-model="filtroEst"
                                         > 
                                         Cliente Eliminado
                                         </label>
                                     </div>
                                 </div>
-                                <div
-                                class="flex flex-col p-2"
-                                >
-                                <div 
-                                v-if="filtroDirec === 1"
-                                >
+                                <div class="flex flex-col p-2">
+                                <div v-if="filtroDirec === 1">
                                     <h2>
                                     Ciudad del Cliente
                                     </h2>
-                                    <select 
-                                    v-model="filtrociudad" 
+                                    <select v-model="filtrociudad" 
                                     class="sel"
                                     >
                                         <option value="" disabled>
@@ -213,9 +177,9 @@
                                     <h2>
                                     Provincia del Cliente
                                     </h2>
-                                    <select 
-                                    v-model="filtroprovincia" 
-                                    class="sel">
+                                    <select v-model="filtroprovincia" 
+                                    class="sel"
+                                    >
                                         <option value="" disabled>
                                         Selecciona una Provincia...
                                         </option>
@@ -225,16 +189,13 @@
                                     </select>
                                 </div>
                             </div>
-                                <div
-                                class="botones">
-                                    <button 
-                                    @click="AplicarFiltro" 
+                                <div class="botones">
+                                    <button @click="AplicarFiltro" 
                                     class="botoncon"
                                     >
                                     Filtrar
                                     </button>
-                                    <button 
-                                    @click="LimpiarFiltro" 
+                                    <button @click="LimpiarFiltro" 
                                     v-if="filtroAct === true"
                                     class="botont" 
                                     >
@@ -245,16 +206,14 @@
                         </transition>
                     </div>
                     <div>
-                        <h1
-                        @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
+                        <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
                         >
                         +
                         </h1>
                         <transition name="slide">
-                            <div
+                            <div v-if="MostrarNuevo"
                             class="flex flex-col lg:self-center"
-                            v-if="MostrarNuevo"
                             >
                                 <h1>
                                 Nuevo Cliente
@@ -263,45 +222,38 @@
                                     <h2>
                                     Nombre
                                     </h2>
-                                    <input 
+                                    <input placeholder="Nombre"
                                     type="text" 
                                     v-model="NuevoCliente.nombre" 
-                                    placeholder="Nombre"
                                     maxlength="20"
                                     >
                                     <h2>
                                     E-Mail
                                     </h2>
-                                    <input 
+                                    <input placeholder="E-Mail"
                                     type="text" 
                                     v-model="NuevoCliente.email" 
-                                    placeholder="E-Mail"
                                     maxlength="50"
                                     >
                                     <h2>
                                     Documento
                                     </h2>
-                                    <input 
-                                    type="text" 
-                                    v-model="NuevoCliente.dni" 
-                                    placeholder="Documento"
+                                    <input placeholder="Documento"
+                                    type="text"
+                                    v-model="NuevoCliente.dni"
                                     maxlength="8"
                                     >
                                     <h2>
                                     Contraseña
                                     </h2>
-                                    <input 
-                                    type="text" 
-                                    v-model="NuevoCliente.contrasena" 
-                                    placeholder="Contraseña"
+                                    <input placeholder="Contraseña"
+                                    type="text"
+                                    v-model="NuevoCliente.contrasena"
                                     maxlength="20"
                                     >
-                                    <div
-                                    class="botones"
-                                    >
-                                        <button 
+                                    <div class="botones">
+                                        <button :disabled="confirboton"
                                         type="submit" 
-                                        :disabled="confirboton"
                                         class="botoncon"
                                         >
                                         Crear Cliente
@@ -319,15 +271,11 @@
                     items-center justify-center 
                     w-full h-[60vh]"
                     >
-                        <img 
-                        src="../assets/loading.gif" 
+                        <img src="../assets/loading.gif" 
                         alt="Cargando clientes..." 
                         class="w-32 h-32 object-contain mb-4"
                         >
-                        <h2 
-                        class="text-green-800 
-                        font-bold text-xl animate-pulse"
-                        >
+                        <h2 class="text-green-800 font-bold text-xl animate-pulse">
                         Cargando clientes, un momento...
                         </h2>
                     </div>
@@ -342,16 +290,14 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button 
-                        @click="CargarDatos" 
+                        <button @click="CargarDatos" 
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
                         </button>
                     </div>
                     <div v-else>
-                        <input
-                        @input="BusquedaCliente"
+                        <input @input="BusquedaCliente"
                         type="text" v-model="Busqueda" 
                         placeholder="Busqueda..."
                         class="busqueda"
@@ -361,15 +307,12 @@
                         Clientes
                         </h1>
                         <div>
-                            <div
-                            v-if="clientes.length > 0"
-                            >
-                                <div
+                            <div v-if="clientes.length > 0">
+                                <div v-for= "i in clientes"
+                                :key="i.id"
                                 class="mb-2 lg:mb-5"
-                                v-for= "i in clientes" 
-                                :key="i.id">
-                                    <div 
-                                    :class="Estatuscolor(i.activo)"
+                                >
+                                    <div :class="Estatuscolor(i.activo)"
                                     class="tab"
                                     >
                                         <div class="flex flex-col">
@@ -400,8 +343,7 @@
                                             </div>
                                         </div>
                                         <div class="flex flex-col ml-auto text-right items-end">
-                                            <button 
-                                            @click="Eliminacion(i)" 
+                                            <button @click="Eliminacion(i)" 
                                             v-if="i.activo"
                                             class="botonc !p-2"
                                             >
@@ -410,9 +352,7 @@
                                             Eliminar
                                             </span>
                                             </button>
-                                            <button 
-                                            @click="Eliminacion(i)" 
-                                            v-else
+                                            <button v-else @click="Eliminacion(i)" 
                                             class="botoncon !p-2"
                                             >
                                             🕊️
@@ -420,8 +360,7 @@
                                             Reactivar
                                             </span>
                                             </button>
-                                            <button 
-                                            @click="Edicion(i)"
+                                            <button @click="Edicion(i)"
                                             class="botont !p-2"
                                             >
                                             ✏️
@@ -432,8 +371,7 @@
                                         </div>
                                     </div>
                                     <div v-if = "DireccionNow === i.id">
-                                        <div
-                                        v-for = "e in i.direcciones" 
+                                        <div v-for = "e in i.direcciones" 
                                         :key="e.id"
                                         class="tab !bg-green-100/50"
                                         >
@@ -472,23 +410,19 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div 
-                                    v-if="i.direcciones.length > 0 && DireccionNow === i.id" 
-                                    @click= "DireccionCambio(i.id)"
+                                    <div @click= "DireccionCambio(i.id)"
+                                    v-if="i.direcciones.length > 0 && DireccionNow === i.id"
                                     class="botonc"
                                     >
                                     Ocultar Direcciones
                                     </div>
-                                    <div
+                                    <div @click= "DireccionCambio(i.id)" 
                                     v-else-if="i.direcciones.length > 0 && DireccionNow !== i.id" 
-                                    @click= "DireccionCambio(i.id)" 
                                     class="botoncon"
                                     >
                                     Ver Direcciones
                                     </div>
-                                    <button
-                                    v-else
-                                    disabled
+                                    <button v-else disabled
                                     class="botont w-full"
                                     >
                                     No hay Direcciones Adjuntas
@@ -496,16 +430,15 @@
                                 </div>
                             </div>  
                             <div v-else>
-                                <h2>No se encontraran clientes 😔</h2>
-                                <h3>Prueba buscando con otro termino</h3>
+                                <h2>
+                                No se encontraran clientes 😔
+                                </h2>
+                                <h3>
+                                Prueba buscando con otro termino
+                                </h3>
                             </div>
-                            <div 
-                            class="
-                            flex justify-center
-                            p-3"
-                            >
-                                <button
-                                @click="Pagina = Pagina - 20 ; CargarDatos()" 
+                            <div class="flex justify-center p-3">
+                                <button @click="Pagina = Pagina - 20 ; CargarDatos()" 
                                 :disabled="Pagina < 20"
                                 class="botona"
                                 >
@@ -517,8 +450,7 @@
                                 - 
                                 {{ Pagina + clientes.length }}
                                 </h2>
-                                <button 
-                                @click="Pagina = Pagina + 20 ; CargarDatos()" 
+                                <button @click="Pagina = Pagina + 20 ; CargarDatos()" 
                                 :disabled="clientes.length < 20"
                                 class="botona"
                                 >
@@ -527,7 +459,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Barra de Busqueda -->
                 </div>
             </div>
         </div>
@@ -536,8 +467,18 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { onMounted, ref, computed } from 'vue'
-    import { CerrarSesion, ActualizarCajaC, urlover8000, SesionExpirada, Iniciado } from './Estatus'
+    import { 
+        onMounted, 
+        ref, 
+        computed 
+    } from 'vue'
+    import { 
+        CerrarSesion, 
+        ActualizarCajaC, 
+        urlover8000, 
+        SesionExpirada, 
+        Iniciado 
+    } from './Estatus'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (MostrarNuevo.value) {

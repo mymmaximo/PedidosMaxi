@@ -11,13 +11,11 @@
                     ¿Desear Eliminar el Detalle?
                     </h1>
                     <div class="botones">
-                        <button 
-                        @click="BorrarDetalle()"
+                        <button @click="BorrarDetalle()"
                         class="botoncon">
                         Si Confirmo
                         </button>
-                        <button
-                        @click="CerrarPopUp01"
+                        <button @click="CerrarPopUp01"
                         class="botonc">
                         Cancelar
                         </button>
@@ -42,8 +40,7 @@
                         <option value="">
                         + Agrega una direccion
                         </option>
-                        <option 
-                        v-for="i in ListaDirecciones" 
+                        <option v-for="i in ListaDirecciones" 
                         :key="i.id_direccion" 
                         :value="i.id_direccion"
                         >
@@ -59,25 +56,21 @@
                             Nueva Direccion:
                             </h3>
                         <div class="botones">
-                            <input 
+                            <input placeholder="Calle"
                             type="text" 
                             v-model="NuevaDireccion.calle" 
-                            placeholder="Calle"
                             >
-                            <input 
+                            <input placeholder="Numero"
                             type="number" 
                             v-model="NuevaDireccion.numero" 
-                            placeholder="Numero"
                             >
-                            <input 
+                            <input placeholder="Barrio"
                             type="text" 
                             v-model="NuevaDireccion.barrio" 
-                            placeholder="Barrio"
                             >
-                            <input 
+                            <input placeholder="Ciudad"
                             type="text" 
                             v-model="NuevaDireccion.ciudad" 
-                            placeholder="Ciudad"
                             >
                             <select v-model="NuevaDireccion.provincia">
                                 <option value="" disabled>
@@ -159,15 +152,13 @@
                         </div>
                     </div>
                     <div class="botones">
-                        <button 
-                        @click="CerrarPopUp02"
+                        <button @click="CerrarPopUp02"
                         class="botonc"
                         >
                         Cancelar
                         </button>
-                        <button 
+                        <button @click="ConfirmarCompra"
                         :disabled="confirboton || ProcesandoPago" 
-                        @click="ConfirmarCompra"
                         class="botoncon"
                         >
                         {{ ProcesandoPago ? 'Cargando...' : 'Realizar Pago' }}
@@ -176,24 +167,20 @@
                 </div>
             </div>
         </Teleport>
+        <!-- Tabla de Detalles -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-                <!-- Tabla de Detalles -->
                 <div class="start">
                     <div v-if="CargandoTrue" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh]"
                     >
-                        <img 
-                        src="../assets/loading.gif" 
+                        <img src="../assets/loading.gif" 
                         alt="Cargando carrito..." 
                         class="w-32 h-32 object-contain mb-4"
                         >
-                        <h2 
-                        class="text-green-800 
-                        font-bold text-xl animate-pulse"
-                        >
+                        <h2 class="text-green-800 font-bold text-xl animate-pulse">
                         Cargando carrito, un momento...
                         </h2>
                     </div>
@@ -208,8 +195,7 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button 
-                        @click="CargarDatos" 
+                        <button @click="CargarDatos" 
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
@@ -221,7 +207,6 @@
                             Tu Carrito
                             </h1>
                         </div>
-
                         <div class="carrito-tabla-cabecera">
                             <div class="col-producto-titulo">
                             Producto
@@ -239,53 +224,43 @@
                             Borrar
                             </div>
                         </div>
-
                         <div class="carrito-lista">
-                            <div
-                            v-for="(item, index) in CarritoLocal" 
+                            <div v-for="(item, index) in CarritoLocal" 
                             :key="index"
                             class="carrito-fila"
                             >
                                 <div class="carrito-col-producto">
                                     <div class="carrito-carrusel">
-                                        <div 
-                                        v-if="item.imagenes && item.imagenes.length > 0"
+                                        <div v-if="item.imagenes && item.imagenes.length > 0"
                                         class="flex flex-row gap-1 items-center">
-                                            <button
-                                            @click="BackImg(item)"
+                                            <button @click="BackImg(item)"
                                             :disabled="GetImg(item.id_producto) === 0"
                                             class="carrito-btn-flecha"
                                             >
                                             ❮
                                             </button>
                                             <div>
-                                                <img
-                                                v-show="ImagenesCargando[item.id_producto] === false"
+                                                <img v-show="ImagenesCargando[item.id_producto] === false"
                                                 :key="item.imagenes[GetImg(item.id_producto)].s3_key"
                                                 :src="ObtenerImgUrl(item.imagenes[GetImg(item.id_producto)].s3_key)"
                                                 @load="ImagenesCargando[item.id_producto] = false"
                                                 class="imagencar !w-16 !h-16 shadow-sm"
                                                 >
-                                                <div
-                                                v-if="ImagenesCargando[item.id_producto] !== false" 
+                                                <div v-if="ImagenesCargando[item.id_producto] !== false" 
                                                 class="imagencar !w-16 !h-16"
                                                 >
-                                                    <img 
-                                                    src="../assets/loading.gif" 
+                                                    <img src="../assets/loading.gif" 
                                                     alt="Cargando...">
                                                 </div>
                                             </div>
-                                            <button
-                                            @click="NextImg(item)"
+                                            <button @click="NextImg(item)"
                                             :disabled="GetImg(item.id_producto) === item.imagenes.length - 1"
                                             class="carrito-btn-flecha"
                                             >
                                             ❯
                                             </button>
                                         </div>
-                                        <img
-                                        v-else
-                                        src="../assets/images.png"
+                                        <img v-else src="../assets/images.png"
                                         class="imagencar !w-16 !h-16 opacity-50"
                                         >
                                     </div>
@@ -300,9 +275,8 @@
                                     ${{ item.precio_unitario }}
                                 </div>
                                 <div class="carrito-col-cantidad">
-                                    <input 
+                                    <input v-model="item.cantidad"
                                     type="number"
-                                    v-model="item.cantidad"
                                     @change="VerificarStock(item)" 
                                     class="carrito-input-cantidad"
                                     >
@@ -315,8 +289,7 @@
                                 </div>
 
                                 <div class="carrito-col-borrar">
-                                    <button 
-                                    @click="Eliminacion(index)" 
+                                    <button @click="Eliminacion(index)" 
                                     title="Eliminar"
                                     class="carrito-btn-borrar"
                                     >
@@ -356,11 +329,32 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { useRouter } from 'vue-router'
-    import { initializePaddle } from '@paddle/paddle-js'
-    import { ref, onMounted, computed } from 'vue'
-    import { supabase } from '../config/supebase.js'
-    import { CarritoLocal, LimpiarCompra, CerrarSesion, leerCookie, Rol, urlover8000, ValidadCarrito, ClienteID, CargarCarrito, SesionExpirada, Iniciado } from './Estatus.js'
+    import { 
+        useRouter 
+    } from 'vue-router'
+    import { 
+        initializePaddle 
+    } from '@paddle/paddle-js'
+    import { 
+        ref, 
+        onMounted, 
+        computed 
+    } from 'vue'
+    import { 
+        supabase 
+    } from '../config/supebase.js'
+    import { 
+        CarritoLocal, 
+        LimpiarCompra, 
+        CerrarSesion, 
+        Rol, 
+        urlover8000, 
+        ValidadCarrito, 
+        ClienteID, 
+        CargarCarrito, 
+        SesionExpirada, 
+        Iniciado 
+    } from './Estatus.js'
     // ----- Variables Vue ----- //
     const router = useRouter()
     const confirboton = computed(() =>{
@@ -402,6 +396,7 @@
     const DireccionExistente = ref ("")
     // ----- Funciones Vue ----- //
     onMounted (async () => {
+        let PagoExito = false
         CargarDatos()
         CargarCarrito()
         InstanciaPaddle.value = await initializePaddle({
@@ -409,12 +404,15 @@
             token: 'test_04e1ed8d821a1fd086eaaa9ec0b',
             eventCallback: function(evento) {
                 if (evento.name === "checkout.completed") {
+                    PagoExito = true
                     emit('CarritoVacio')
                     LimpiarCompra()
                     document.body.style.overflow = "auto"
                     router.push('/mis_pedidos')
                 } else if (evento.name === "checkout.closed") {
-                    console.log("El usuario cerró la ventana sin pagar")
+                    if (!PagoExito) {
+                        console.log("El usuario cerró la ventana sin pagar")
+                    }
                     ProcesandoPago.value = false
                 }
             }

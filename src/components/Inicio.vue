@@ -12,62 +12,50 @@
                         ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
                         </h1>
                         <div>
-                            <div 
-                            v-if="ProductoEli.imagenes.length > 0"
+                            <div v-if="ProductoEli.imagenes.length > 0"
                             class="flex flex-row gap-1
                             md:gap-3 overflow-x-auto
                             items-center justify-center 
                             w-full md:pb-2 snap-x pb-1
                             ">
-                                <button
-                                @click="BackImg(ProductoEli)"
+                                <button @click="BackImg(ProductoEli)"
                                 :disabled="GetImg(ProductoEli.id) === 0"
                                 class="botonflecha"
                                 >
                                 ❮
                                 </button>
                                 <div>
-                                    <img
-                                    v-show="ImagenesCargando[ProductoEli.id] === false"
+                                    <img v-show="ImagenesCargando[ProductoEli.id] === false"
                                     :src=ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)
                                     @load="ImagenesCargando[ProductoEli.id] = false"
                                     class="imagen"
                                     >
-                                    <div
-                                    v-if="ImagenesCargando[ProductoEli.id] !== false" 
+                                    <div v-if="ImagenesCargando[ProductoEli.id] !== false" 
                                     class="mt-2"
                                     >
-                                        <img 
-                                        src="../assets/loading.gif" 
+                                        <img src="../assets/loading.gif" 
                                         alt="Cargando..." 
                                         class="imagen !2xl:p-15">
                                     </div>
                                 </div>
-                                <button
-                                @click="NextImg(ProductoEli)"
+                                <button @click="NextImg(ProductoEli)"
                                 :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
                                 class="botonflecha"
                                 >
                                 ❯
                                 </button>
                             </div>
-                            <img
-                            v-else
-                            src="../assets/images.png"
+                            <img v-else src="../assets/images.png"
                             class="imagen"
                             >
                         </div>
-                        <div
-                        class="botones"
-                        >
-                            <button 
-                            @click="BorrarProducto()"
+                        <div class="botones">
+                            <button @click="BorrarProducto()"
                             class="botoncon"
                             >
                             Si Confirmo
                             </button>
-                            <button 
-                            @click="CerrarPopUp02"
+                            <button @click="CerrarPopUp02"
                             class="botonc"
                             >
                             Cancelar
@@ -80,96 +68,86 @@
         <!-- Comprar Ventana -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="VentanaCompra" 
-                class="fondo"
+                <div v-if="VentanaCompra"
                 @click.self="CerrarPopUp04"
+                class="fondo"
                 >
                     <div class="popup !p-0 !max-w-sm !w-full !overflow-hidden relative">
                         <h1>
                         {{ ProductoActual.nombre }}
                         </h1>
                         <div>
-                            <div 
-                            v-if="ProductoActual.imagenes.length > 0"
+                            <div v-if="ProductoActual.imagenes.length > 0"
                             class="flex flex-row 
                             md:gap-3 gap-1 overflow-x-auto
                             items-center justify-center 
                             w-full md:pb-2 pb-1 snap-x
                             ">
-                                <button
-                                @click="BackImg(ProductoActual)"
+                                <button @click="BackImg(ProductoActual)"
                                 :disabled="GetImg(ProductoActual.id) === 0"
                                 class="botonflecha"
                                 >
                                 ❮
                                 </button>
                                 <div>
-                                    <img
-                                    v-show="ImagenesCargando[ProductoActual.id] === false"
+                                    <img v-show="ImagenesCargando[ProductoActual.id] === false"
                                     :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
                                     @load="ImagenesCargando[ProductoActual.id] = false"
                                     class="imagen"
                                     >
-                                    <div
-                                    v-if="ImagenesCargando[ProductoActual.id] !== false" 
+                                    <div v-if="ImagenesCargando[ProductoActual.id] !== false" 
                                     class="mt-2"
                                     >
-                                        <img 
-                                        src="../assets/loading.gif" 
+                                        <img src="../assets/loading.gif" 
                                         alt="Cargando..." 
                                         class="imagen !2xl:p-15">
                                     </div>
                                 </div>
-                                <button
-                                @click="NextImg(ProductoActual)"
+                                <button @click="NextImg(ProductoActual)"
                                 :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
                                 class="botonflecha"
                                 >
                                 ❯
                                 </button>
                             </div>
-                            <img
-                            v-else
-                            src="../assets/images.png"
+                            <img v-else src="../assets/images.png"
                             class="imagen"
                             >
                         </div>
-                        <div
-                        class="
-                        flex flex-col
-                        ">
-                            <input 
+                        <div class="flex flex-col">
+                            <input v-model="ProductoCantidad"
                             type="number" 
-                            v-model="ProductoCantidad"
                             maxlength="8"
                             class="md:w-30 md:mb-5 w-30 mb-5"
                             >
                             <div class="flex justify-center">
-                                <button 
-                                @click="SumarProducto(ProductoActual)"
-                                class="w-10 h-10 flex items-center justify-center text-green-600 hover:bg-white hover:shadow-sm rounded-full transition-all font-bold text-xl cursor-pointer"
+                                <button @click="SumarProducto(ProductoActual)"
+                                class="w-10 h-10 
+                                flex items-center justify-center
+                                text-green-600 hover:bg-white hover:shadow-sm 
+                                rounded-full transition-all 
+                                font-bold text-xl cursor-pointer"
                                 >
                                 ✚
                                 </button>
-                                <button 
-                                @click="RestarProducto(ProductoActual)"
-                                class="w-10 h-10 flex items-center justify-center text-red-500 font-bold hover:bg-white hover:shadow-sm rounded-full transition-all text-xl cursor-pointer"
+                                <button @click="RestarProducto(ProductoActual)"
+                                class="w-10 h-10 
+                                flex items-center justify-center 
+                                text-red-500 font-bold hover:bg-white hover:shadow-sm 
+                                rounded-full transition-all 
+                                text-xl cursor-pointer"
                                 >
                                 ―
                                 </button>
                             </div>
                         </div>
-                        <div
-                        class="botones"
-                        >
-                            <button 
-                            @click="SumarCarrito"
+                        <div class="botones">
+                            <button @click="SumarCarrito"
                             class="botoncon"
                             >
                             Agregar al Carrito
                             </button>
-                            <button 
-                            @click="CerrarPopUp04"
+                            <button @click="CerrarPopUp04"
                             class="botonc"
                             >
                             Cancelar
@@ -182,8 +160,13 @@
         <!-- Comprar Notificacion -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="MostrarConfir" class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg z-[100] font-bold">
-                    ✅ ¡Agregado al carrito!
+                <div v-if="MostrarConfir" 
+                class="fixed top-4 right-4 
+                bg-green-600 text-white 
+                px-6 py-3 rounded-xl shadow-lg 
+                z-[100] font-bold"
+                >
+                ✅ ¡Agregado al carrito!
                 </div>
             </transition>
         </Teleport>
@@ -192,8 +175,8 @@
             <transition name="fade">
                 <div v-if="ActualizarCajaP"
                 @click.self="CerrarPopUp01" 
-                class="fondo 
-                ">
+                class="fondo "
+                >
                     <div class="popup">
                         <form @submit.prevent="ActualizarProducto">
                             <h1>
@@ -204,10 +187,9 @@
                                 <h2>
                                 Nombre
                                 </h2>
-                                <input 
+                                <input placeholder="Nombre"
                                 type="text" 
                                 v-model="ProductoAct.nombre" 
-                                placeholder="Nombre"
                                 maxlength="50"
                                 >
                             </div>
@@ -216,10 +198,9 @@
                                 <h2>
                                 Precio
                                 </h2>
-                                <input 
+                                <input placeholder="Precio"
                                 type="number" 
                                 v-model="ProductoAct.precio" 
-                                placeholder="Precio"
                                 maxlength="8"
                                 >
                             </div>
@@ -228,10 +209,9 @@
                                 <h2>
                                 Stock
                                 </h2>
-                                <input 
+                                <input placeholder="Stock"
                                 type="number" 
-                                v-model="ProductoAct.stock" 
-                                placeholder="Stock"
+                                v-model="ProductoAct.stock"
                                 maxlength="8"
                                 >
                             </div>
@@ -240,11 +220,16 @@
                                 <h2>
                                 Categoria
                                 </h2>
-                                <select v-model="OpcionCategoriaA" class="seleccion">
+                                <select v-model="OpcionCategoriaA" 
+                                class="seleccion"
+                                >
                                     <option value="new">
                                     + Agrega una Categoria
                                     </option>
-                                    <option v-for="i in ListaCategoria" :key="i.categoria" :value="i.categoria">
+                                    <option v-for="i in ListaCategoria" 
+                                    :key="i.categoria" 
+                                    :value="i.categoria"
+                                    >
                                     {{ i.categoria }}
                                     </option>
                                 </select>
@@ -252,83 +237,70 @@
                                     <h3>
                                     Nueva Categoria
                                     </h3>
-                                    <input 
+                                    <input placeholder="Categoria"
                                     type="text" 
-                                    v-model="ProductoAct.categoria" 
-                                    placeholder="Categoria"
+                                    v-model="ProductoAct.categoria"
                                     maxlength="20"
                                     >
                                 </div>
                                 <h2>
                                 Codigo de Barras
                                 </h2>
-                                <input 
+                                <input placeholder="Codigo de Barras"
                                 type="text" 
                                 v-model="ProductoAct.codigo_barra" 
-                                placeholder="Codigo de Barras"
                                 maxlength="15"
                                 >
                             </div>
                             <!-- Actualizar Imagenes Actuales -->
                             <div v-if="Rol === 1 || Rol === 2">
-                                <h2>Imágenes actuales</h2>
-                                <div 
-                                v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
+                                <h2>
+                                Imágenes actuales
+                                </h2>
+                                <div v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
                                 class="
                                 flex flex-row
                                 md:gap-3 gap-1
                                 items-center justify-center
                                 w-full md:pb-2 pb-1
                                 ">
-                                    <button 
+                                    <button @click="BackImg(ProductoAct)"
                                     type="button" 
-                                    @click="BackImg(ProductoAct)"
                                     :disabled="GetImg(ProductoAct.id) === 0"
                                     class="botonflecha">
                                     ❮
                                     </button>
-                                    <div
-                                    class="
-                                    relative 
-                                    w-fit mx-auto mt-2
-                                    ">
-                                        <button
+                                    <div class="relative w-fit mx-auto mt-2">
+                                        <button @click="NoMoreImages(ProductoAct.imagenes[GetImg(ProductoAct.id)])"
                                         type="button"
-                                        @click="NoMoreImages(ProductoAct.imagenes[GetImg(ProductoAct.id)])"
                                         title="Quitar imagen"
                                         class="botonx"
                                         >
                                         🗙
                                         </button>
                                         <div>
-                                            <img
-                                            v-show="ImagenesCargando[ProductoAct.id] === false"
+                                            <img v-show="ImagenesCargando[ProductoAct.id] === false"
                                             :src=ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)
                                             @load="ImagenesCargando[ProductoAct.id] = false"
                                             :class="DelImg.includes(ProductoAct.imagenes[GetImg(ProductoAct.id)].id_imagen) ? 'imagendel' : 'imagen'"
                                             >
-                                            <div
-                                            v-if="ImagenesCargando[ProductoAct.id] !== false" 
+                                            <div v-if="ImagenesCargando[ProductoAct.id] !== false" 
                                             class="mt-2"
                                             >
-                                                <img 
-                                                src="../assets/loading.gif" 
+                                                <img src="../assets/loading.gif" 
                                                 alt="Cargando..." 
                                                 class="imagen !2xl:p-15">
                                             </div>
                                         </div>
                                     </div>
-                                    <button 
+                                    <button @click="NextImg(ProductoAct)"
                                     type="button" 
-                                    @click="NextImg(ProductoAct)"
                                     :disabled="GetImg(ProductoAct.id) === ProductoAct.imagenes.length - 1"
                                     class="botonflecha">
                                     ❯
                                     </button>
                                 </div>
-                                <div 
-                                v-else 
-                                class="imageno">
+                                <div v-else class="imageno">
                                 Sin imágenes
                                 </div>
                                 <!-- Imagenes Nuevas -->
@@ -336,47 +308,37 @@
                                     <h2>
                                     Imagenes Nuevas
                                     </h2>
-                                    <div
-                                    v-if="VistaPrevia.length > 0"
+                                    <div v-if="VistaPrevia.length > 0"
                                     class="
-                                    relative
-                                    w-fit mx-auto mt-2
+                                    relative w-fit 
+                                    mx-auto mt-2
                                     ">
-                                        <div
-                                        v-for="(img, index) in VistaPrevia"
+                                        <div v-for="(img, index) in VistaPrevia"
                                         :key="index"
-                                        class="
-                                        shrink-0 mt-2 
-                                        relative"
+                                        class="shrink-0 mt-2 relative"
                                         >
-                                            <button
+                                            <button @click="LimpiarImagenes"
                                             type="button"
-                                            @click="LimpiarImagenes"
                                             title="Quitar imagen"
                                             class="botonx"
                                             >
                                             🗙
                                             </button>
-                                            <img 
-                                            :src="VistaPrevia" 
+                                            <img :src="VistaPrevia" 
                                             alt="Vista Previa"
                                             class="imagen !m-0" 
                                             />
                                         </div>
                                     </div>
-                                    <div
-                                    v-else 
-                                    class="imageno"
-                                    >
+                                    <div v-else class="imageno">
                                     <span>
                                     Sin vista previa
                                     </span> 
                                     </div>
                                     <div class="md:mt-4 mt-2">
-                                        <input
+                                        <input @change="SeleccionarImagen"
                                         type="file"
                                         accept="image/*"
-                                        @change="SeleccionarImagen"
                                         multiple
                                         class="imagenu !w-full"
                                         ref="fileInput"
@@ -384,20 +346,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div 
-                            class="botones"
-                            >
-                                <button 
+                            <div class="botones">
+                                <button :disabled="confirboton" 
                                 type="submit" 
-                                :disabled="confirboton" 
-                                class="botoncon
-                                ">
+                                class="botoncon"
+                                >
                                 Actualizar
                                 </button>
-                                <button 
-                                type="button"
-                                @click="CerrarPopUp01" 
-                                class="botonc">
+                                <button @click="CerrarPopUp01"
+                                type="button" 
+                                class="botonc"
+                                >
                                 Cancelar
                                 </button>
                             </div>
@@ -411,8 +370,8 @@
             <transition name="fade">
                 <div v-if="VentanaBanner"
                 @click.self="CerrarPopUp03" 
-                class="fondo 
-                ">
+                class="fondo"
+                >
                     <div class="popup">
                         <h1 class="text-center">
                         Banners:
@@ -423,10 +382,9 @@
                             Nuevos Banners
                             </h1>
                             <div class="md:mt-4 mt-2">
-                                <input
+                                <input @change="SeleccionarBanner"
                                 type="file"
                                 accept="image/*"
-                                @change="SeleccionarBanner"
                                 multiple
                                 class="imagenu !w-full"
                                 ref="fileInput"
@@ -438,12 +396,10 @@
                             <h1>
                             Actualizar Banners
                             </h1>
-                            <div 
-                            v-if="bannersorden.length > 0"
+                            <div v-if="bannersorden.length > 0"
                             class="relative flex flex-row overflow-x-auto gap-4"
                             >
-                                <div
-                                v-for="(banner, index) in bannersorden"
+                                <div v-for="(banner, index) in bannersorden"
                                 :key="banner.id || banner.vista_previa"
                                 :class="bannerdesactivado(banner) ? 'cartabannerdel' : 'cartabanner'"
                                 draggable="true"
@@ -453,19 +409,16 @@
                                 >
                                     <template v-if="banner.id">
                                             <div class="botones">
-                                                <button
+                                                <button @click="bannerestatus(banner.id)"
                                                 v-if="!bannerdesactivado(banner)"
                                                 type="button"
-                                                @click="bannerestatus(banner.id)"
                                                 title="Desactivar"
                                                 class="botonc"
                                                 >
                                                 🗙
                                                 </button>
-                                                <button
-                                                v-else
+                                                <button v-else @click="bannerestatus(banner.id)"
                                                 type="button"
-                                                @click="bannerestatus(banner.id)"
                                                 title="Restaurar"
                                                 class="botoncon"
                                                 >
@@ -473,19 +426,16 @@
                                                 </button>
                                             </div>
                                             <div v-if="bannerdesactivado(banner)">
-                                                <button
+                                                <button @click="DelSupaBann.push(banner.id)"
                                                 v-if="!DelSupaBann.includes(banner.id)"
                                                 type="button"
-                                                @click="DelSupaBann.push(banner.id)"
                                                 title="Quitar imagen"
                                                 class="botonx"
                                                 >
                                                 🗑️
                                                 </button>
-                                                <button
-                                                v-else
+                                                <button v-else @click="DelSupaBann = DelSupaBann.filter(id => id !== banner.id)"
                                                 type="button"
-                                                @click="DelSupaBann = DelSupaBann.filter(id => id !== banner.id)"
                                                 title="Restaurar imagen"
                                                 class="botonx"
                                                 >
@@ -493,12 +443,10 @@
                                                 </button>
                                             </div>
                                             <div class="banner-wrapper">
-                                                <img 
-                                                :src="ObtenerImgUrl(banner.s3_key)"
+                                                <img :src="ObtenerImgUrl(banner.s3_key)"
                                                 :class="DelSupaBann.includes(banner.id) ? 'imagendel' : 'imagen'"
                                                 >
-                                                <div 
-                                                v-if="bannerdesactivado(banner)" 
+                                                <div v-if="bannerdesactivado(banner)" 
                                                 class="banner-overlay"
                                                 >
                                                 </div>
@@ -508,45 +456,36 @@
                                         <h1>
                                         Nuevo!
                                         </h1>
-                                        <button
+                                        <button @click="BannersNuevos.splice(BannersNuevos.indexOf(banner), 1)"
                                         type="button"
-                                        @click="BannersNuevos.splice(BannersNuevos.indexOf(banner), 1)"
                                         title="Quitar imagen nueva"
                                         class="botonx !top-20 !right-20"
                                         >
                                         🗑️
                                         </button>
-                                        <img 
-                                        :src="banner.vista_previa" 
+                                        <img :src="banner.vista_previa" 
                                         alt="Vista Previa"
                                         class="imagen !m-0" 
                                         />
                                     </template>
-                                    <input 
+                                    <input placeholder="Enlace..."
                                     v-model="banner.enlace"
                                     type="text"
-                                    placeholder="Enlace..."
                                     class="mt-3"
                                     >
                                 </div>
                             </div>
-                            <div 
-                            v-else 
-                            class="imageno">
+                            <div v-else class="imageno">
                             Sin imágenes
                             </div>
                         </div>
-                        <div
-                        class="botones"
-                        >
-                            <button 
-                            @click="SaveBanner"
-                            class="botoncon
-                            ">
+                        <div class="botones">
+                            <button @click="SaveBanner"
+                            class="botoncon"
+                            >
                             Guardar Cambios
                             </button>
-                            <button 
-                            @click="CerrarPopUp03"
+                            <button @click="CerrarPopUp03"
                             class="botonc"
                             >
                             Cancelar
@@ -566,15 +505,11 @@
                     items-center justify-center 
                     w-full h-[60vh]"
                     >
-                        <img 
-                        src="../assets/loading.gif" 
+                        <img src="../assets/loading.gif" 
                         alt="Cargando catálogo..." 
                         class="w-32 h-32 object-contain mb-4"
                         >
-                        <h2 
-                        class="text-green-800 
-                        font-bold text-xl animate-pulse"
-                        >
+                        <h2 class="text-green-800 font-bold text-xl animate-pulse">
                         Cargando catálogo, un momento...
                         </h2>
                     </div>
@@ -589,8 +524,7 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button 
-                        @click="CargarDatos()" 
+                        <button @click="CargarDatos()" 
                         class="botoncon mt-4"
                         >
                         🔄 Recargar Página
@@ -598,29 +532,25 @@
                     </div>
                     <div v-else>
                         <div class="px-5">
-                            <input
+                            <input placeholder="Busqueda..."
                             @input="BusquedaProducto"
                             type="text" 
                             v-model="Busqueda" 
-                            placeholder="Busqueda..."
                             class="busqueda"
                             maxlength="50"
                             >
                         </div>
-                        <div 
-                        v-if="Bananaer"
+                        <div v-if="Bananaer"
                         class="flex flex-col relative group" 
                         >   
-                            <div 
-                            v-if="Bananaer.imagenes && Bananaer.imagenes.length > 0"
+                            <div v-if="Bananaer.imagenes && Bananaer.imagenes.length > 0"
                             class="relative px-5"
                             @touchstart="ComienzoToque($event)"
                             @touchend="FinToque($event, Bananaer)"
                             >
-                                <button
-                                type="button"
-                                @click="IndiceBanner--"
+                                <button @click="IndiceBanner--"
                                 :disabled="IndiceBanner === 0"
+                                type="button"
                                 class="botonflechagrande
                                 flex-row absolute 
                                 left-4 top-1/2 -translate-y-1/2 z-20 
@@ -628,36 +558,31 @@
                                 >
                                 ❮
                                 </button>
-                                <button
+                                <button @click="AbrirPopUp03"
                                 v-if="Rol === 1"
                                 type="button"
-                                @click="AbrirPopUp03"
                                 class="botonx !bg-gray-700"
                                 >
                                 ✏️
                                 </button>
                                 <div>
-                                    <img
-                                    @click="router.push(`/${Bananaer.imagenes[IndiceBanner].enlace}`)"
+                                    <img @click="router.push(`/${Bananaer.imagenes[IndiceBanner].enlace}`)"
                                     @load="ImagenesCargando[Bananaer.id] = false"
                                     v-show="ImagenesCargando[Bananaer.id] === false"
                                     :src="ObtenerImgUrl(Bananaer.imagenes[IndiceBanner].s3_key)"
                                     class="banner"
                                     > 
-                                    <div
-                                    v-if="ImagenesCargando[Bananaer.id] !== false" 
+                                    <div v-if="ImagenesCargando[Bananaer.id] !== false" 
                                     class="mt-2"
                                     >
-                                        <img 
-                                        src="../assets/loading.gif" 
+                                        <img src="../assets/loading.gif" 
                                         alt="Cargando..." 
                                         class="banner">
                                     </div>
                                 </div>
-                                <button
-                                type="button"
-                                @click="IndiceBanner++"
+                                <button @click="IndiceBanner++"
                                 :disabled="IndiceBanner === Bananaer.imagenes.length - 1"
+                                type="button"
                                 class="botonflechagrande 
                                 flex-row absolute 
                                 right-4 top-1/2 -translate-y-1/2 z-20 
@@ -667,33 +592,25 @@
                                 </button>
                             </div>
                         </div>
-                        <div
-                        v-for="cat in ListaCategoria" 
+                        <div v-for="cat in ListaCategoria" 
                         :key="cat.categoria" 
                         >
-                            <div 
-                            v-if="ProductosPorCategoria[cat.categoria] && ProductosPorCategoria[cat.categoria].length > 0"
+                            <div v-if="ProductosPorCategoria[cat.categoria] && ProductosPorCategoria[cat.categoria].length > 0"
                             class="
                             flex flex-col
                             md:mb-8 mb-2
                             bg-gradient-to-tr from-green-600/50 to-green-300/50"
                             >
-                                <h1
-                                class="
-                                text-3xl font-extrabold text-green-900  
-                                md:mb-2 mb-0 drop-shadow-sm"
-                                >
+                                <h1 class="text-3xl font-extrabold text-green-900 md:mb-2 mb-0 drop-shadow-sm">
                                 {{ cat.categoria }}
                                 </h1>
-                                <div 
-                                :id="'carrusel-' + cat.categoria"
+                                <div :id="'carrusel-' + cat.categoria"
                                 class="
                                 flex flex-row 
                                 w-full overflow-x-auto md:overflow-hidden md:py-4 py-2
                                 scroll-smooth gap-5"
                                 >
-                                    <button
-                                    @click="CarruselIzquierda(cat.categoria)"
+                                    <button @click="CarruselIzquierda(cat.categoria)"
                                     :disabled="ObtenerIndiceCarrusel(cat.categoria) === 0"
                                     class="botonflechagrande 
                                     flex-row z-20
@@ -701,44 +618,36 @@
                                     >
                                     ❮
                                     </button>
-                                    <div
-                                    v-for="i in ProductosPorCategoria[cat.categoria]"
+                                    <div v-for="i in ProductosPorCategoria[cat.categoria]"
                                     :key="cat.categoria + '-' + i.id"
                                     :class="Estatuscolor(i.activo)"
                                     class="carta"
-                                        >
+                                    >
                                         <div>
-                                            <div 
-                                            v-if="i.imagenes.length > 0"
+                                            <div v-if="i.imagenes.length > 0"
                                             class="
                                             flex flex-row 
                                             2xl:gap-3 gap-1
                                             items-center justify-center 
                                             w-full md:pb-2 pb-1 snap-x
                                             ">
-                                                <img
-                                                v-show="ImagenesCargando[i.id] === false"
+                                                <img v-show="ImagenesCargando[i.id] === false"
                                                 :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
                                                 @load="ImagenesCargando[i.id] = false"
                                                 class="imagen"
                                                 >
-                                                <div
-                                                v-if="ImagenesCargando[i.id] !== false" 
+                                                <div v-if="ImagenesCargando[i.id] !== false" 
                                                 class="mt-2"
                                                 >
-                                                    <img 
-                                                    src="../assets/loading.gif" 
+                                                    <img src="../assets/loading.gif" 
                                                     alt="Cargando..." 
                                                     class="imagen !p-15">
                                                 </div>
                                             </div>
-                                            <img
-                                            v-else
-                                            src="../assets/images.png"
+                                            <img v-else src="../assets/images.png"
                                             class="imagen"
                                             >
-                                            <div
-                                            >
+                                            <div>
                                                 <h2 class="font-bold">
                                                 {{ i.nombre }}
                                                 </h2>
@@ -755,8 +664,7 @@
                                                 <div class="flex flex-row lg:flex-col justify-center">
                                                     <div class="botones">
                                                         <div v-if="Rol === 1 || Rol === 2">
-                                                            <button 
-                                                            @click="Eliminacion(i)" 
+                                                            <button @click="Eliminacion(i)" 
                                                             v-if="i.activo" 
                                                             class="botonc !py-2"
                                                             >
@@ -765,9 +673,7 @@
                                                             Eliminar
                                                             </span>
                                                             </button>
-                                                            <button 
-                                                            @click="Eliminacion(i)" 
-                                                            v-else 
+                                                            <button v-else @click="Eliminacion(i)" 
                                                             class="botoncon !py-2"
                                                             >
                                                             🕊️
@@ -777,8 +683,7 @@
                                                             </button>
                                                         </div>
                                                         <div v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5">
-                                                            <button 
-                                                            @click="Edicion(i)" 
+                                                            <button @click="Edicion(i)" 
                                                             v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5" 
                                                             class="botont !py-2">
                                                             ✏️ 
@@ -787,11 +692,10 @@
                                                             </span>
                                                             </button>
                                                         </div>
-                                                        <button 
-                                                        @click="Compracion(i)" 
-                                                        :disabled="CarritoStock(i) === 0" 
-                                                        class="botoncon !py-2 !text-2xl"
+                                                        <button @click="Compracion(i)"
+                                                        :disabled="CarritoStock(i) === 0"
                                                         v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                                                        class="botoncon !py-2 !text-2xl"
                                                         >
                                                         🛍️
                                                         </button>
@@ -800,9 +704,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button
-                                    @click="CarruselDerecha(cat.categoria, ProductosPorCategoria[cat.categoria].length)"
-                                    class="botonflechagrande absolute right-5 z:20 self-center hidden md:flex"
+                                    <button @click="CarruselDerecha(cat.categoria, ProductosPorCategoria[cat.categoria].length)"
+                                    class="botonflechagrande 
+                                    absolute right-5 
+                                    z:20 self-center 
+                                    hidden md:flex"
                                     >
                                     ❯
                                     </button>
@@ -818,10 +724,34 @@
 
 <script setup>
     // ----- Imports ----- //
-    import { CarritoLocal, CerrarSesion, Rol, ActualizarCajaP, ProductoActual, ProductoCantidad, PedidoActual, leerCookie, urlover8000, CargarCarrito, Iniciado, SesionExpirada } from './Estatus.js'
-    import { onMounted, onUnmounted, toRefs, ref, watch, computed } from 'vue'
-    import { supabase } from '../config/supebase.js'
-    import { useRouter } from 'vue-router'
+    import { 
+        CarritoLocal, 
+        CerrarSesion, 
+        Rol, 
+        ActualizarCajaP, 
+        ProductoActual, 
+        ProductoCantidad, 
+        PedidoActual, 
+        leerCookie, 
+        urlover8000, 
+        CargarCarrito, 
+        Iniciado, 
+        SesionExpirada 
+    } from './Estatus.js'
+    import { 
+        onMounted, 
+        onUnmounted, 
+        toRefs, 
+        ref, 
+        watch, 
+        computed 
+    } from 'vue'
+    import { 
+        supabase 
+    } from '../config/supebase.js'
+    import { 
+        useRouter 
+    } from 'vue-router'
     // ----- Variables Vue ----- //
     const bannersorden = computed ({
         get() {
