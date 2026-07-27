@@ -748,7 +748,7 @@
     } from 'vue'
     import { 
         supabase 
-    } from '../config/supebase.js'
+    } from '../config/supabase.js'
     import { 
         useRouter 
     } from 'vue-router'
