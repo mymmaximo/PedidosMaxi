@@ -110,13 +110,11 @@ router.beforeEach(async (to, from, next) => {
         PrimeraCarga = false
     }
     if (to.meta.requireAuth) {
-        await ValidadSesionBack()
         if (!Iniciado.value) {
             MostrarError.value = true
             setTimeout(() => { MostrarError.value = false }, 3000)
-            if (to.path !== '/') {
-                return next('/') 
-            }
+            return next('/') 
+            
         }
         if (to.meta.rolesPer && !to.meta.rolesPer.includes(Rol.value)) {
             MostrarError.value = true
