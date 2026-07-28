@@ -262,7 +262,6 @@
             }
         }, 15000)
         try {
-            await ValidadSesionBack()
             clearTimeout(temporizador)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
@@ -319,7 +318,6 @@
         if (respuesta.ok) {
             const data = await respuesta.json()
             localStorage.setItem('token_seguro', data.access_token)
-            await ValidadSesionBack()
             emit('LoginExitoso')
             LoginBox.value = {
                 email: "",

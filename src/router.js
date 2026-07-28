@@ -105,10 +105,6 @@ const router = createRouter({
 let PrimeraCarga = true
 
 router.beforeEach(async (to, from, next) => {
-    if (PrimeraCarga) {
-        await ValidadSesionBack()
-        PrimeraCarga = false
-    }
     if (to.meta.requireAuth) {
         if (!Iniciado.value) {
             MostrarError.value = true
