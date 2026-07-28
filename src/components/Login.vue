@@ -288,8 +288,6 @@
             credentials: 'include'
         })
         if (respuesta.ok) {
-            const data = await respuesta.json()
-            localStorage.setItem('token_seguro', data.access_token)
             await ValidadSesionBack()
             emit('LoginExitoso')
             LoginBox.value = {
@@ -316,8 +314,6 @@
             return
         }
         if (respuesta.ok) {
-            const data = await respuesta.json()
-            localStorage.setItem('token_seguro', data.access_token)
             emit('LoginExitoso')
             LoginBox.value = {
                 email: "",

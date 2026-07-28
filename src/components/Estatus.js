@@ -69,7 +69,6 @@ export const CerrarSesion = async () =>{
             error
         )
     }
-    localStorage.removeItem('token_seguro')
     LimpiarCompra()
     Rol.value = null
     ClienteID.value = null
@@ -101,14 +100,6 @@ export const LimpiarCompra = () =>{
 }
 
 export const ValidadSesionBack = async () => {
-    const token = localStorage.getItem('token_seguro')
-    if (!token) {
-        Iniciado.value = false
-        Rol.value = null
-        ClienteID.value = null
-        LimpiarCompra()
-        return
-    }
     try {
         const respuesta = await fetch(`${urlover8000}/reload/`, {
             method: 'GET',
