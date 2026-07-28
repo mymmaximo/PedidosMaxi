@@ -105,7 +105,7 @@ const router = createRouter({
 let PrimeraCarga = true
 
 router.beforeEach(async (to, from, next) => {
-    if (PrimeraCarga || to.path === '/') {
+    if (PrimeraCarga) {
         await ValidadSesionBack()
         PrimeraCarga = false
     }
@@ -113,8 +113,7 @@ router.beforeEach(async (to, from, next) => {
         if (!Iniciado.value) {
             MostrarError.value = true
             setTimeout(() => { MostrarError.value = false }, 3000)
-            return next('/') 
-            
+            return next('/')
         }
         if (to.meta.rolesPer && !to.meta.rolesPer.includes(Rol.value)) {
             MostrarError.value = true
