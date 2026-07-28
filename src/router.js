@@ -24,7 +24,7 @@ const routes = [
         name: 'inicio', 
         component: Inicio,
         meta: {
-            requireAuth: true,
+            requireAuth: false,
         }
     },
     { 
@@ -102,13 +102,21 @@ const router = createRouter({
   routes,
 })
 
+let PrimeraCarga = true
+
 router.beforeEach(async (to, from, next) => {
+    if (PrimeraCarga || to.path === '/') {
+        await ValidadSesionBack()
+        PrimeraCarga = false
+    }
     if (to.meta.requireAuth) {
         await ValidadSesionBack()
         if (!Iniciado.value) {
             MostrarError.value = true
             setTimeout(() => { MostrarError.value = false }, 3000)
-            return next('/')
+            if (to.path !== '/') {
+                return next('/') 
+            }
         }
         if (to.meta.rolesPer && !to.meta.rolesPer.includes(Rol.value)) {
             MostrarError.value = true

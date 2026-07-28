@@ -547,10 +547,10 @@
         }, 15000)
         try {
             await BusquedaCliente()
-            const respuestac = await fetch("http://localhost:8000/direccion/ciudad")
+            const respuestac = await fetch(`${urlover8000}/direccion/ciudad`)
             const ciudad = await respuestac.json()
             ListaCiudad.value = ciudad
-            const respuestap = await fetch("http://localhost:8000/direccion/provincia")
+            const respuestap = await fetch(`${urlover8000}/direccion/provincia`)
             const provincia = await respuestap.json()
             ListaProvincia.value = provincia
             clearTimeout(temporizador)
