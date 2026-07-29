@@ -118,9 +118,9 @@
                             <input v-model="ProductoCantidad"
                             type="number" 
                             maxlength="8"
-                            class="md:w-30 md:mb-5 w-30 mb-5"
+                            class="!w-30 mb-5"
                             >
-                            <div class="flex justify-center">
+                            <div class="botones !flex-row">
                                 <button @click="SumarProducto(ProductoActual)"
                                 class="botoncon !px-4"
                                 >
