@@ -640,7 +640,7 @@
                                                 class="mt-2"
                                                 >
                                                     <img src="../assets/loading.gif" 
-                                                    alt="Cargando..." 
+                                                    alt="Cargando...." 
                                                     class="imagen !p-15">
                                                 </div>
                                             </div>
