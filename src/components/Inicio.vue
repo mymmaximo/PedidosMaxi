@@ -736,7 +736,8 @@
         urlover8000, 
         CargarCarrito, 
         Iniciado, 
-        SesionExpirada 
+        SesionExpirada,
+        ValidadSesionBack
     } from './Estatus.js'
     import { 
         onMounted, 

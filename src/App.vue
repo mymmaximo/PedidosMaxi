@@ -361,7 +361,7 @@
         Rol, 
         MostrarError, 
         VolverCarro, 
-        SesionExpirada 
+        SesionExpirada
     } from './components/Estatus.js'
     // ----- Variables Complejas ----- //
     const route = useRoute()
