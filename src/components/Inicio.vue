@@ -122,20 +122,12 @@
                             >
                             <div class="flex justify-center">
                                 <button @click="SumarProducto(ProductoActual)"
-                                class="w-10 h-10 
-                                flex items-center justify-center
-                                text-green-600 hover:bg-white hover:shadow-sm 
-                                rounded-full transition-all 
-                                font-bold text-xl cursor-pointer"
+                                class="botoncon !px-4"
                                 >
                                 ✚
                                 </button>
                                 <button @click="RestarProducto(ProductoActual)"
-                                class="w-10 h-10 
-                                flex items-center justify-center 
-                                text-red-500 font-bold hover:bg-white hover:shadow-sm 
-                                rounded-full transition-all 
-                                text-xl cursor-pointer"
+                                class="botonc !px-4 !font-bold"
                                 >
                                 ―
                                 </button>
