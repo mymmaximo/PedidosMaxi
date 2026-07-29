@@ -294,7 +294,6 @@
                 email: "",
                 contrasena: ""
             }
-            window.location.href = '/'
         } else {
             Herror.value = "Usuario o contraseña incorrectos"
             Heror.value = true
@@ -319,7 +318,6 @@
                 email: "",
                 contrasena: ""
             }
-            window.location.href = '/'
         } else {
             await IniciarSesionCliente()
         } 

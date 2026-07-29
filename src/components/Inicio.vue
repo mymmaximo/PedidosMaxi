@@ -893,6 +893,7 @@
             }
         }, 15000)
         try {
+            await ValidadSesionBack()
             await Banner()
             await BusquedaProducto()
             if (Rol.value === '1') {
