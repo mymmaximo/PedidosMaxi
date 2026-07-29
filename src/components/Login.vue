@@ -313,6 +313,7 @@
             return
         }
         if (respuesta.ok) {
+            await ValidadSesionBack()
             emit('LoginExitoso')
             LoginBox.value = {
                 email: "",
