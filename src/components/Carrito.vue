@@ -548,7 +548,10 @@
             },
             body: JSON.stringify({
                 id_cliente: parseInt(ClienteID.value),
-                id_direccion: DireccionPedido
+                id_direccion: DireccionPedido,
+                metodo_pago: " ",
+                tiempo_estimado_entrega: 0,
+                tiempo_entrega: 0
             }),
             credentials: 'include'
         })
