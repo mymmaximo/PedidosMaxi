@@ -159,7 +159,7 @@
                             class="w-full"
                             >
                                 <div v-for= "i in Pedidos" 
-                                :key="i.id_pedido && i.estatus === 3"
+                                :key="i.id_pedido"
                                 class="mb-2 lg:mb-5"
                                 >
                                     <div v-if="i.estatus === 3">
@@ -294,7 +294,7 @@
                                 class="w-full"
                                 >
                                     <div v-for= "i in Pedidos" 
-                                    :key="i.id_pedido && i.estatus === 2"
+                                    :key="i.id_pedido"
                                     class="mb-2 lg:mb-5"
                                     >
                                         <div v-if="i.estatus === 2">
@@ -440,7 +440,7 @@
                                 class="w-full"
                                 >
                                     <div v-for= "i in Pedidos" 
-                                    :key="i.id_pedido && i.estatus === 1"
+                                    :key="i.id_pedido"
                                     class="mb-2 lg:mb-5"
                                     >
                                         <div v-if="i.estatus === 1">
@@ -690,7 +690,7 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaPedido = async() => {
-        let url = new URL (`${urlover8000}/pedidos/cliente/${ClienteID.value}/`)
+        let url = new URL (`${urlover8000}/pedidos/cliente/${ClienteID.value}`)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_pedido', Busqueda.value)
         }
