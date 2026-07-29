@@ -162,7 +162,7 @@
                                 :key="i.id_pedido"
                                 class="mb-2 lg:mb-5"
                                 >
-                                    <div v-if="i.estatus === 3">
+                                    <div v-if="i.estatus === 3|| i.estatus === 4">
                                         <div class="tab !bg-green-200">
                                             <div class="flex flex-col">
                                                 <div class="flex flex-row">
