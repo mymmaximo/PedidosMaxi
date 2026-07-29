@@ -159,7 +159,7 @@
                             class="w-full"
                             >
                                 <div v-for= "i in Pedidos" 
-                                :key="i.id && i.estatus === 3"
+                                :key="i.id_pedido && i.estatus === 3"
                                 class="mb-2 lg:mb-5"
                                 >
                                     <div v-if="i.estatus === 3">
@@ -294,7 +294,7 @@
                                 class="w-full"
                                 >
                                     <div v-for= "i in Pedidos" 
-                                    :key="i.id && i.estatus === 2"
+                                    :key="i.id_pedido && i.estatus === 2"
                                     class="mb-2 lg:mb-5"
                                     >
                                         <div v-if="i.estatus === 2">
@@ -440,10 +440,10 @@
                                 class="w-full"
                                 >
                                     <div v-for= "i in Pedidos" 
-                                    :key="i.id && i.estatus === 3"
+                                    :key="i.id_pedido && i.estatus === 1"
                                     class="mb-2 lg:mb-5"
                                     >
-                                        <div v-if="i.estatus === 3">
+                                        <div v-if="i.estatus === 1">
                                             <div class="tab !bg-red-200">
                                                 <div class="flex flex-col">
                                                     <div class="flex flex-row">
