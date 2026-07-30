@@ -397,7 +397,7 @@
     // ----- Funciones Vue ----- //
     onMounted (async () => {
         let PagoExito = false
-        CargarDatos()
+        await CargarDatos()
         CargarCarrito()
         InstanciaPaddle.value = await initializePaddle({
             environment: 'sandbox', 
