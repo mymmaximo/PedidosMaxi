@@ -118,7 +118,11 @@ router.beforeEach(async (to, from, next) => {
         if (to.meta.rolesPer && !to.meta.rolesPer.includes(Rol.value)) {
             MostrarError.value = true
             setTimeout(() => { MostrarError.value = false }, 3000)
-            return next(from.path === to.path ? '/' : from.path)
+            if (from.matched.length > 0) {
+                return next(false)
+            } else {
+                return next('/')
+            }
         }
     }
     if (to.meta.requireCarrito) {
@@ -138,7 +142,11 @@ router.beforeEach(async (to, from, next) => {
         if (!carrito_valido) {
             VolverCarro.value = true
             setTimeout(() => { VolverCarro.value = false }, 3000)
-            return next('/')
+            if (from.matched.length > 0) {
+                return next(false)
+            } else {
+                return next('/')
+            }
         }
     }
     next()
