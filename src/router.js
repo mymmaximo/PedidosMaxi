@@ -118,7 +118,7 @@ router.beforeEach(async (to, from, next) => {
         if (to.meta.rolesPer && !to.meta.rolesPer.includes(Rol.value)) {
             MostrarError.value = true
             setTimeout(() => { MostrarError.value = false }, 3000)
-            return next('/')
+            return next(from.path === to.path ? '/' : from.path)
         }
     }
     if (to.meta.requireCarrito) {
