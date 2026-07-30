@@ -159,7 +159,7 @@
                 <div class="flex min-h-10">
                     <div @click="AbrirPopUp02()" 
                     v-if="CarritoLocal.length > 0 && Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
-                    class="botont !rounded-none !px-5"
+                    class="botonc !rounded-none !px-2"
                     >
                     🗑️
                     </div>
@@ -187,7 +187,7 @@
                     Mi Perfil
                         <div class="hidden group-hover:block 
                         absolute top-full 
-                        sm:right-0 md:right-0 lg:right-0 xl:left-4 2xl:left-4
+                        sm:right-0 md:right-0 lg:right-0
                         bg-green-800 text-white border-green-700 border-4 rounded-sm"
                         >
                             <h3 @click="router.push('/mis_pedidos')"

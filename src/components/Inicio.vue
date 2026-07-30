@@ -72,7 +72,7 @@
                 @click.self="CerrarPopUp04"
                 class="fondo"
                 >
-                    <div class="popup !p-0 !max-w-sm !w-full !overflow-hidden relative">
+                    <div class="popup">
                         <h1>
                         {{ ProductoActual.nombre }}
                         </h1>
@@ -129,7 +129,7 @@
                                 <button @click="RestarProducto(ProductoActual)"
                                 class="botonc !px-4 !font-bold"
                                 >
-                                ―
+                                ━
                                 </button>
                             </div>
                         </div>

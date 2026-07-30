@@ -407,9 +407,7 @@ input[type="radio"] {
 .item {
     @apply
     self-center
-    p-0
-    lg:p-2
-    2xl:p-5
+    p-5
 }
 label {
     @apply
@@ -451,10 +449,8 @@ select {
     text-lg
     lg:text-xl
     2xl:text-2xl
-    px-1
-    lg:px-4
-    2xl:px-5
-    py-0
+    px-5
+    py-2
     transition-all duration-200
     hover:text-gray-200
     hover:bg-gray-800
@@ -473,8 +469,11 @@ select {
     px-2
     lg:px-5
     2xl:px-10
-    py-5
-    lg:py-3
+    py-3
+    sm:py-1
+    md:py-1
+    lg:py-2
+    xl:py-2
     2xl:py-2
     text-xl
     sm:text-base
@@ -503,8 +502,11 @@ select {
     px-2
     lg:px-5
     2xl:px-6
-    py-5
-    lg:py-3
+    py-3
+    sm:py-1
+    md:py-1
+    lg:py-2
+    xl:py-2
     2xl:py-2
     text-xl
     sm:text-base
@@ -573,9 +575,15 @@ select {
     border-4 border-green-500
     cursor-pointer
     rounded-xl
+    px-3
+    sm:px-3
+    md:px-3
     lg:px-3
     2xl:px-3
-    lg:py-1
+    py-10
+    sm:py-8
+    md:py-10
+    lg:py-20
     2xl:py-25
     m-3
     transition-all duration-200
@@ -683,8 +691,11 @@ select {
     px-2
     lg:px-5
     2xl:px-10
-    py-5
-    lg:py-3
+    py-3
+    sm:py-1
+    md:py-1
+    lg:py-2
+    xl:py-2
     2xl:py-2
     text-xl
     sm:text-base
@@ -707,7 +718,7 @@ select {
 }
 .botonx {
     @apply
-    absolute top-2 right-2 
+    absolute top-2 right-6
     flex items-center justify-center
     cursor-pointer
     text-white text-center
@@ -869,6 +880,12 @@ img {
     sm:grid
     gap-4
     p-4
+    py-3
+    sm:py-1
+    md:py-1
+    lg:py-2
+    xl:py-2
+    2xl:py-2
 }
 .col-producto-titulo { 
     @apply 
@@ -886,8 +903,8 @@ img {
 .carrito-lista {
     @apply 
     flex flex-col 
-    gap-3 
-    mt-3
+    gap-3
+    mt-1
 }
 .carrito-fila {
     @apply

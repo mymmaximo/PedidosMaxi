@@ -373,7 +373,7 @@
 							>
 							❮
 							</button>
-							<h2 class="item">
+							<h2 class="self-center p-5">
 							Items 
 							{{ 0 + Pagina }} 
 							- 

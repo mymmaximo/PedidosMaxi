@@ -1,16 +1,16 @@
 import { ref } from 'vue'
 
-export const urlbase5173 = "https://pedidosmaxi-production.up.railway.app"
+export const urlbase5173a = "https://pedidosmaxi-production.up.railway.app"
 
-export const urlover8000 = "https://backend-pedidosmaxi-production.up.railway.app"
+export const urlover8000a = "https://backend-pedidosmaxi-production.up.railway.app"
 
-export const urlbase5173a = "http://localhost:5173"
+export const urlbase5173b = "http://localhost:5173"
 
-export const urlover8000a = "http://localhost:8000"
+export const urlover8000b = "http://localhost:8000"
 
-export const urlbase5173b = "http://10.250.4.38:5173"
+export const urlbase5173 = "http://10.250.4.18:5173"
 
-export const urlover8000b = "http://10.250.4.38:8000"
+export const urlover8000 = "http://10.250.4.18:8000"
 
 export const Rol = ref(null)
 
