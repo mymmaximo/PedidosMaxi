@@ -1,7 +1,5 @@
 import { ref } from 'vue'
 
-import router from '../router.js'
-
 export const urlbase5173 = "https://pedidosmaxi-production.up.railway.app"
 
 export const urlover8000 = "https://backend-pedidosmaxi-production.up.railway.app"
@@ -50,11 +48,11 @@ export const CargarCarrito = () => {
                 console.log("Carrito valido y recuperado")
             } else {
                 console.log("Carrito destruido")
-                LimpiarCompra
+                LimpiarCompra()
             }
         } catch(error) {
             console.log("Carrito destruido")
-            LimpiarCompra
+            LimpiarCompra()
         }
     }
 }
@@ -75,7 +73,7 @@ export const CerrarSesion = async () =>{
     Rol.value = null
     ClienteID.value = null
     Iniciado.value = false
-    router.push('/')
+    window.location.href = '/'
 }
 
 const Decodificar = (token) => {
