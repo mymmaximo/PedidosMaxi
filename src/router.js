@@ -41,7 +41,7 @@ const routes = [
         name: 'productos', 
         component: Productos,
         meta: {
-            requireAuth: true,
+            requireAuth: false,
         }
     },
     { 
