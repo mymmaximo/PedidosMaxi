@@ -59,6 +59,7 @@
                             <input placeholder="Contraseña"
                             :type="verContrasena ? 'text' : 'password'"
                             v-model="ClienteConfig.contrasena"
+                            autocomplete="new-password"
                             >
                             <button @click="verContrasena = !verContrasena"
                             type="button"
@@ -74,6 +75,7 @@
                             <input placeholder="Confirmar Contraseña"
                             :type="verConContrasena ? 'text' : 'password'"
                             v-model="ClienteConfig.concontrasena"
+                            autocomplete="new-password"
                             >
                             <button @click="verConContrasena = !verConContrasena"
                             type="button" 
