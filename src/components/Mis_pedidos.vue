@@ -159,10 +159,10 @@
                             class="w-full"
                             >
                                 <div v-for= "i in Pedidos" 
-                                :key="i.id_pedido"
+                                :key="i.id_pedido && i.estatus === 3"
                                 class="mb-2 lg:mb-5"
                                 >
-                                    <div v-if="i.estatus === 3 || i.estatus === 4">
+                                    <div v-if="i.estatus === 3">
                                         <div class="tab !bg-green-200">
                                             <div class="flex flex-col">
                                                 <div class="flex flex-row">
@@ -294,7 +294,7 @@
                                 class="w-full"
                                 >
                                     <div v-for= "i in Pedidos" 
-                                    :key="i.id_pedido"
+                                    :key="i.id_pedido && i.estatus === 2"
                                     class="mb-2 lg:mb-5"
                                     >
                                         <div v-if="i.estatus === 2">
@@ -440,7 +440,7 @@
                                 class="w-full"
                                 >
                                     <div v-for= "i in Pedidos" 
-                                    :key="i.id_pedido"
+                                    :key="i.id_pedido && i.estatus === 1"
                                     class="mb-2 lg:mb-5"
                                     >
                                         <div v-if="i.estatus === 1">
@@ -556,17 +556,17 @@
                                             Ver Detalles
                                             </div>
                                         </div>
-                                        <div 
-                                        v-else
-                                        >
-                                            <h2>
-                                            No se encontraron Pedidos 😔
-                                            </h2>
-                                            <h3>
-                                            Prueba buscando con otro termino
-                                            </h3>
-                                        </div>
                                     </div>
+                                </div>
+                                <div 
+                                v-else
+                                >
+                                    <h2>
+                                    No se encontraron Pedidos 😔
+                                    </h2>
+                                    <h3>
+                                    Prueba buscando con otro termino
+                                    </h3>
                                 </div>
                             </div>
                         </div>
