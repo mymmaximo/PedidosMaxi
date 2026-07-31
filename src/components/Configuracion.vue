@@ -140,6 +140,7 @@
             const respuestaid = await fetch(`${urlover8000}/reload/`, { credentials: 'include' })
             if (respuestaid.ok) {
                 const sesion = await respuestaid.json()
+                IdClienteAct.value = sesion.id_cliente
                 const respuesta = await fetch(`${urlover8000}/cliente/${sesion.id_cliente}/direcciones/`, { credentials: 'include' })
                 if (respuesta.ok) {
                     const datos = await respuesta.json()
@@ -180,7 +181,7 @@
             UsuarioUpd.contrasena = ClienteConfig.value.contrasena
         }
         if (!IdClienteAct.value) return
-        const ActUsuario = await fetch(`${urlover8000}/clientes/id/${IdClienteAct}`, {
+        const ActUsuario = await fetch(`${urlover8000}/clientes/id/${IdClienteAct.value}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
