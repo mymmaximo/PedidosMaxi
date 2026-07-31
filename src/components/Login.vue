@@ -266,9 +266,14 @@
             }
         }
     })
-    const emit = defineEmits([
-        'LoginExitoso'
-    ])
+    const ProcesarLogin = () => {
+        Iniciado.value = true
+        if (Rol.value === 3 || Rol.value === 6) {
+            router.push('/pedidos')
+        } else {
+            router.push('/')
+        }
+    }
     // ----- Para el Backend ----- //
     const IniciarSesionCliente = async() => {
         const respuesta = await fetch(`${urlover8000}/cliente/login/`, {
@@ -281,7 +286,7 @@
         })
         if (respuesta.ok) {
             await ValidadSesionBack()
-            emit('LoginExitoso')
+            ProcesarLogin()
             LoginBox.value = {
                 email: "",
                 contrasena: ""
@@ -306,7 +311,7 @@
         }
         if (respuesta.ok) {
             await ValidadSesionBack()
-            emit('LoginExitoso')
+            ProcesarLogin()
             LoginBox.value = {
                 email: "",
                 contrasena: ""

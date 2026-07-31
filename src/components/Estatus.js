@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 
+import router from '../router.js'
+
 export const urlbase5173 = "https://pedidosmaxi-production.up.railway.app"
 
 export const urlover8000 = "https://backend-pedidosmaxi-production.up.railway.app"
@@ -73,7 +75,7 @@ export const CerrarSesion = async () =>{
     Rol.value = null
     ClienteID.value = null
     Iniciado.value = false
-    window.location.href = '/'
+    router.push('/')
 }
 
 const Decodificar = (token) => {
