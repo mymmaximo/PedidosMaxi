@@ -107,7 +107,7 @@
                 </div>
             </transition>
         </Teleport>   
-        <div v-if="Iniciado">
+        <div>
             <div class="sticky top-0
             w-full m-0 p-0 justify-between z-30
             bg-green-600 hidden sm:flex"
