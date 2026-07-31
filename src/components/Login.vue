@@ -194,11 +194,17 @@
         onMounted, 
         ref 
     } from 'vue'
+    import {
+        useRouter
+    } from 'vue-router'
     import { 
         ValidadSesionBack, 
-        urlover8000
+        urlover8000,
+        Iniciado,
+        Rol
     } from './Estatus.js'
     // ----- Variables Vue ----- //
+    const router = useRouter()
     const confirbotonreg = computed(() =>{
         if (!MostrarLogin.value) {
             const faltandatos02 = 
