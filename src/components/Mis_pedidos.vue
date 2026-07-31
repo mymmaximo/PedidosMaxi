@@ -155,7 +155,7 @@
                             <h1 class="text-center">
                             Mis Pedidos en Preparacion
                             </h1>
-                            <div v-if="Pedidos.length > 0"
+                            <div v-if="PedidosEnPreparacion.length > 0"
                             class="w-full"
                             >
                                 <div v-for= "i in Pedidos" 
@@ -290,7 +290,7 @@
                                 <h1 class="text-center">
                                 Mis Pedidos En Camino
                                 </h1>
-                                <div v-if="Pedidos.length > 0"
+                                <div v-if="PedidosEnCamino.length > 0"
                                 class="w-full"
                                 >
                                     <div v-for= "i in Pedidos" 
@@ -436,7 +436,7 @@
                             </div>
                             <!-- Tabla Historial de Pedidos -->
                             <div v-if="mostrarhistorial">
-                                <div v-if="Pedidos.length > 0"
+                                <div v-if="PedidosEnHistorial.length > 0"
                                 class="w-full"
                                 >
                                     <div v-for= "i in Pedidos" 
@@ -580,7 +580,8 @@
 <script setup>
     // ----- Imports ----- //
     import { 
-        onMounted, 
+        onMounted,
+        computed, 
         ref 
     } from 'vue'
     import { 
@@ -635,6 +636,15 @@
                 CargandoTrue.value = false
             }
         }
+    })
+    const PedidosEnPreparacion = computed(() => {
+        return Pedidos.value.filter(pedido => pedido.estatus === 3)
+    })
+    const PedidosEnCamino = computed(() => {
+        return Pedidos.value.filter(pedido => pedido.estatus === 2)
+    })
+    const PedidosEnHistorial = computed(() => {
+        return Pedidos.value.filter(pedido => pedido.estatus === 1)
     })
     // ----- Para el Frontend ----- //
     const AplicarFiltro = () => {
