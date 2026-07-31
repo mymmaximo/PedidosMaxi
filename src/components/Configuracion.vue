@@ -103,8 +103,7 @@
         ref 
     } from 'vue'
     import { 
-        CerrarSesion, 
-        leerCookie, 
+        CerrarSesion,
         urlover8000, 
         SesionExpirada, 
         Iniciado 
@@ -121,6 +120,8 @@
     const CargandoTrue = ref(true)
     const verContrasena = ref(false)
     const verConContrasena = ref(false)
+    // ----- Variables Vacias ----- //
+    const IdClienteAct = ref(null)
     // ----- Funciones Vue ----- //
     onMounted (() => {
         CargarDatos()
@@ -136,16 +137,15 @@
             }
         }, 15000)
         try {
-            const idConfig = leerCookie("id_cliente")
-            if (idConfig) {
-                const respuesta = await fetch(`${urlover8000}/cliente/?id_cliente=${idConfig}`)
-                const datos = await respuesta.json()
-                if (datos.length > 0) {
-                    const miPerfil = datos.find(cliente => cliente.id === parseInt(idConfig))
-                    if (miPerfil) {
-                        ClienteConfig.value.nombre = miPerfil.nombre
-                        ClienteConfig.value.email = miPerfil.email
-                        ClienteConfig.value.usuario = miPerfil.usuario
+            const respuestaid = await fetch(`${urlover8000}/reload/`, { credentials: 'include' })
+            if (respuestaid.ok) {
+                const sesion = await respuestaid.json()
+                const respuesta = await fetch(`${urlover8000}/cliente/${sesion.id_cliente}/direcciones/`, { credentials: 'include' })
+                if (respuesta.ok) {
+                    const datos = await respuesta.json()
+                    if (datos && datos.length > 0) {
+                        ClienteConfig.value.nombre = datos[0].nombre
+                        ClienteConfig.value.email = datos[0].email
                     }
                 }
             }
@@ -179,8 +179,8 @@
         if (ClienteConfig.value.contrasena !== "") {
             UsuarioUpd.contrasena = ClienteConfig.value.contrasena
         }
-        const idUsuarioAct = leerCookie("id_cliente")
-        const ActUsuario = await fetch(`${urlover8000}/clientes/id/${idUsuarioAct}`, {
+        if (!IdClienteAct.value) return
+        const ActUsuario = await fetch(`${urlover8000}/clientes/id/${IdClienteAct}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -188,7 +188,7 @@
             body: JSON.stringify(UsuarioUpd),
             credentials: 'include'
         })
-        if (ActUsuario.status === 401) {
+        if (ActUsuario.status === 401 || ActUsuario.status === 403) {
             CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
             SesionExpirada.value = true
@@ -198,7 +198,9 @@
         ClienteConfig.value = {
             nombre: "",
             email: "",
-            contrasena: ""
+            contrasena: "",
+            concontrasena: ""
         }
+        await CargarDatos()
     }
 </script>
