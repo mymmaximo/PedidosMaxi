@@ -836,6 +836,9 @@
         Iniciado, 
         SesionExpirada 
     } from './Estatus.js'
+    import { 
+        useRouter 
+    } from 'vue-router'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
         if (VentanaNuevo.value) {
@@ -884,6 +887,7 @@
         imagenes: []
     })
     const prop = defineProps (['path','size'])
+    const router = useRouter()
     const { path } = toRefs (prop)
     // ----- Variables Booleanas ----- //
     const ActualizarCajaPDel = ref (false)
@@ -1471,6 +1475,11 @@
     const SumarCarrito = () => {
         if (!ProductoActual.value)
             return
+        if (!Iniciado.value) {
+            router.push('/login')
+            CerrarPopUp03()
+            return
+        }
         const nuevoProducto = {
             id_pedido: PedidoActual.value,
             nombre_producto: ProductoActual.value.nombre,
