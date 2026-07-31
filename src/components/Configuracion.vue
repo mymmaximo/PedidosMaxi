@@ -141,13 +141,12 @@
             if (respuestaid.ok) {
                 const sesion = await respuestaid.json()
                 IdClienteAct.value = sesion.id_cliente
-                const respuesta = await fetch(`${urlover8000}/cliente/?limit=1000`, { credentials: 'include' })
+                const respuesta = await fetch(`${urlover8000}/cliente/`, { credentials: 'include' })
                 if (respuesta.ok) {
                     const datos = await respuesta.json()
-                    const miPerfil = datos.find(cliente => cliente.id === sesion.id_cliente)
                     if (datos && datos.length > 0) {
-                        ClienteConfig.value.nombre = miPerfil.nombre
-                        ClienteConfig.value.email = miPerfil.email
+                        ClienteConfig.value.nombre = datos[0].nombre
+                        ClienteConfig.value.email = datos[0].email
                     }
                 }
             }
