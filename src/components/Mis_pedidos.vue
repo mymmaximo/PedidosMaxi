@@ -556,17 +556,17 @@
                                             Ver Detalles
                                             </div>
                                         </div>
+                                        <div 
+                                        v-else
+                                        >
+                                            <h2>
+                                            No se encontraron Pedidos 😔
+                                            </h2>
+                                            <h3>
+                                            Prueba buscando con otro termino
+                                            </h3>
+                                        </div>
                                     </div>
-                                </div>
-                                <div 
-                                v-else
-                                >
-                                    <h2>
-                                    No se encontraron Pedidos 😔
-                                    </h2>
-                                    <h3>
-                                    Prueba buscando con otro termino
-                                    </h3>
                                 </div>
                             </div>
                         </div>
