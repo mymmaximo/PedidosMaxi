@@ -158,12 +158,144 @@
                             <div v-if="PedidosEnPreparacion.length > 0"
                             class="w-full"
                             >
-                                <div v-for= "i in Pedidos" 
-                                :key="i.id_pedido && i.estatus === 3"
+                                <div v-for= "i in PedidosEnPreparacion" 
+                                :key="i.id_pedido"
                                 class="mb-2 lg:mb-5"
                                 >
-                                    <div v-if="i.estatus === 3">
-                                        <div class="tab !bg-green-200">
+                                    <div class="tab !bg-green-200">
+                                        <div class="flex flex-col">
+                                            <div class="flex flex-row">
+                                                <h1>
+                                                Pedido a
+                                                {{ i.direccion[0].calle }} 
+                                                {{ i.direccion[0].numero }}
+                                                </h1>
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <h2>
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Pagado con: 
+                                                </span>
+                                                {{ i.metodo_pago }}
+                                                </h2>
+                                                <h2 class="font-bold">
+                                                <span class="hidden lg:inline 2xl:inline">
+                                                Total:
+                                                </span>
+                                                ${{ i.total }}
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col ml-auto text-right items-end">
+                                            <h3>
+                                            Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
+                                            </h3>
+                                            <h3>
+                                            Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div v-if = "PedidoNowPreparando === i.id_pedido">
+                                        <div v-for = "e in i.detalle_pedido" 
+                                        :key="e.id_detalle_pedido"
+                                        class="tab !bg-green-100/50 !p-5"
+                                        >
+                                            <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
+                                                <div class="flex flex-row">
+                                                    <h3 class="font-bold overflow-hidden text-ellipsis">
+                                                    {{ e.producto.nombre }}
+                                                    </h3>
+                                                </div>
+                                                <div class="flex flex-col gap-1">
+                                                    <h3>
+                                                    Categoria: {{ e.producto.categoria }}
+                                                    </h3>
+                                                    <h3>
+                                                    Precio Unitario: ${{ e.precio_unitario }}
+                                                    </h3>
+                                                    <h3>
+                                                    Cantidad: {{ e.cantidad }}
+                                                    </h3>
+                                                    <div class="flex flex-row">
+                                                        <h2 class="font-bold mr-2">
+                                                        Subtotal:
+                                                        </h2>
+                                                        <h2>
+                                                        ${{ e.subtotal }}
+                                                        </h2>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-col gap-1">
+                                                    <div class="flex flex-row">
+                                                        <h2 class="mr-2">
+                                                        Pedido Creado el Dia: 
+                                                        </h2>
+                                                        <h3>
+                                                        {{ FormatoFecha(i.created_at) }}
+                                                        </h3>
+                                                    </div>
+                                                    <div class="flex flex-row">
+                                                        <h3 class="mr-2">
+                                                        Pedido Act. el Dia: 
+                                                        </h3>
+                                                        <h3>
+                                                        {{ FormatoFecha(i.updated_at) }}
+                                                        </h3>
+                                                    </div>
+                                                    <div class="flex flex-row">
+                                                        <h2 class="font-bold mr-2">
+                                                        Ciudad: 
+                                                        </h2>
+                                                        <h2>
+                                                        {{ i.direccion[0].ciudad }}
+                                                        </h2>
+                                                    </div>
+                                                    <div class="flex flex-row">
+                                                        <h2 class="font-bold mr-2">
+                                                        Provincia:
+                                                        </h2>
+                                                        <h2>
+                                                        {{ i.direccion[0].provincia }}
+                                                        </h2>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div @click="PedidoCambioPreparando(i.id_pedido)"
+                                    v-if = "PedidoNowPreparando === i.id_pedido"
+                                    class="botont text-center"
+                                    >
+                                    Ocultar Detalles
+                                    </div>
+                                    <div v-else @click="PedidoCambioPreparando(i.id_pedido)"
+                                    class="botoncon text-center"
+                                    >
+                                    Ver Detalles
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <h2>
+                                No se encontraron Pedidos 😔
+                                </h2>
+                                <h3>
+                                Prueba buscando con otro termino
+                                </h3>
+                            </div>
+                            <div>
+                            <!-- Tabla de Pedidos en Camino -->
+                                <h1 class="text-center">
+                                Mis Pedidos En Camino
+                                </h1>
+                                <div v-if="PedidosEnCamino.length > 0"
+                                class="w-full"
+                                >
+                                    <div v-for= "i in PedidosEnCamino" 
+                                    :key="i.id_pedido"
+                                    class="mb-2 lg:mb-5"
+                                    >
+                                        <div class="tab !bg-yellow-200">
                                             <div class="flex flex-col">
                                                 <div class="flex flex-row">
                                                     <h1>
@@ -196,10 +328,10 @@
                                                 </h3>
                                             </div>
                                         </div>
-                                        <div v-if = "PedidoNowPreparando === i.id_pedido">
+                                        <div v-if = "PedidoNowEnCamino === i.id_pedido">
                                             <div v-for = "e in i.detalle_pedido" 
                                             :key="e.id_detalle_pedido"
-                                            class="tab !bg-green-100/50 !p-5"
+                                            class="tab !bg-yellow-100/50"
                                             >
                                                 <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                     <div class="flex flex-row">
@@ -263,152 +395,16 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div @click="PedidoCambioPreparando(i.id_pedido)"
-                                        v-if = "PedidoNowPreparando === i.id_pedido"
+                                        <div @click="PedidoCambioEnCamino(i.id_pedido)"
+                                        v-if = "PedidoNowEnCamino === i.id_pedido"
                                         class="botont text-center"
                                         >
                                         Ocultar Detalles
                                         </div>
-                                        <div v-else @click="PedidoCambioPreparando(i.id_pedido)"
+                                        <div v-else @click="PedidoCambioEnCamino(i.id_pedido)"
                                         class="botoncon text-center"
                                         >
                                         Ver Detalles
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <h2>
-                                No se encontraron Pedidos 😔
-                                </h2>
-                                <h3>
-                                Prueba buscando con otro termino
-                                </h3>
-                            </div>
-                            <div>
-                            <!-- Tabla de Pedidos en Camino -->
-                                <h1 class="text-center">
-                                Mis Pedidos En Camino
-                                </h1>
-                                <div v-if="PedidosEnCamino.length > 0"
-                                class="w-full"
-                                >
-                                    <div v-for= "i in Pedidos" 
-                                    :key="i.id_pedido && i.estatus === 2"
-                                    class="mb-2 lg:mb-5"
-                                    >
-                                        <div v-if="i.estatus === 2">
-                                            <div class="tab !bg-yellow-200">
-                                                <div class="flex flex-col">
-                                                    <div class="flex flex-row">
-                                                        <h1>
-                                                        Pedido a
-                                                        {{ i.direccion[0].calle }} 
-                                                        {{ i.direccion[0].numero }}
-                                                        </h1>
-                                                    </div>
-                                                    <div class="flex flex-col">
-                                                        <h2>
-                                                        <span class="hidden lg:inline 2xl:inline">
-                                                        Pagado con: 
-                                                        </span>
-                                                        {{ i.metodo_pago }}
-                                                        </h2>
-                                                        <h2 class="font-bold">
-                                                        <span class="hidden lg:inline 2xl:inline">
-                                                        Total:
-                                                        </span>
-                                                        ${{ i.total }}
-                                                        </h2>
-                                                    </div>
-                                                </div>
-                                                <div class="flex flex-col ml-auto text-right items-end">
-                                                    <h3>
-                                                    Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
-                                                    </h3>
-                                                    <h3>
-                                                    Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                            <div v-if = "PedidoNowEnCamino === i.id_pedido">
-                                                <div v-for = "e in i.detalle_pedido" 
-                                                :key="e.id_detalle_pedido"
-                                                class="tab !bg-yellow-100/50"
-                                                >
-                                                    <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
-                                                        <div class="flex flex-row">
-                                                            <h3 class="font-bold overflow-hidden text-ellipsis">
-                                                            {{ e.producto.nombre }}
-                                                            </h3>
-                                                        </div>
-                                                        <div class="flex flex-col gap-1">
-                                                            <h3>
-                                                            Categoria: {{ e.producto.categoria }}
-                                                            </h3>
-                                                            <h3>
-                                                            Precio Unitario: ${{ e.precio_unitario }}
-                                                            </h3>
-                                                            <h3>
-                                                            Cantidad: {{ e.cantidad }}
-                                                            </h3>
-                                                            <div class="flex flex-row">
-                                                                <h2 class="font-bold mr-2">
-                                                                Subtotal:
-                                                                </h2>
-                                                                <h2>
-                                                                ${{ e.subtotal }}
-                                                                </h2>
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex flex-col gap-1">
-                                                            <div class="flex flex-row">
-                                                                <h2 class="mr-2">
-                                                                Pedido Creado el Dia: 
-                                                                </h2>
-                                                                <h3>
-                                                                {{ FormatoFecha(i.created_at) }}
-                                                                </h3>
-                                                            </div>
-                                                            <div class="flex flex-row">
-                                                                <h3 class="mr-2">
-                                                                Pedido Act. el Dia: 
-                                                                </h3>
-                                                                <h3>
-                                                                {{ FormatoFecha(i.updated_at) }}
-                                                                </h3>
-                                                            </div>
-                                                            <div class="flex flex-row">
-                                                                <h2 class="font-bold mr-2">
-                                                                Ciudad: 
-                                                                </h2>
-                                                                <h2>
-                                                                {{ i.direccion[0].ciudad }}
-                                                                </h2>
-                                                            </div>
-                                                            <div class="flex flex-row">
-                                                                <h2 class="font-bold mr-2">
-                                                                Provincia:
-                                                                </h2>
-                                                                <h2>
-                                                                {{ i.direccion[0].provincia }}
-                                                                </h2>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div @click="PedidoCambioEnCamino(i.id_pedido)"
-                                            v-if = "PedidoNowEnCamino === i.id_pedido"
-                                            class="botont text-center"
-                                            >
-                                            Ocultar Detalles
-                                            </div>
-                                            <div v-else @click="PedidoCambioEnCamino(i.id_pedido)"
-                                            class="botoncon text-center"
-                                            >
-                                            Ver Detalles
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -439,122 +435,120 @@
                                 <div v-if="PedidosEnHistorial.length > 0"
                                 class="w-full"
                                 >
-                                    <div v-for= "i in Pedidos" 
-                                    :key="i.id_pedido && i.estatus === 1"
+                                    <div v-for= "i in PedidosEnHistorial" 
+                                    :key="i.id_pedido"
                                     class="mb-2 lg:mb-5"
                                     >
-                                        <div v-if="i.estatus === 1">
-                                            <div class="tab !bg-red-200">
+                                        <div class="tab !bg-red-200">
+                                            <div class="flex flex-col">
+                                                <div class="flex flex-row">
+                                                    <h1>
+                                                    Pedido a
+                                                    {{ i.direccion[0].calle }} 
+                                                    {{ i.direccion[0].numero }}
+                                                    </h1>
+                                                </div>
                                                 <div class="flex flex-col">
+                                                    <h2>
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Pagado con: 
+                                                    </span>
+                                                    {{ i.metodo_pago }}
+                                                    </h2>
+                                                    <h2 class="font-bold">
+                                                    <span class="hidden lg:inline 2xl:inline">
+                                                    Total:
+                                                    </span>
+                                                    ${{ i.total }}
+                                                    </h2>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col ml-auto text-right items-end">
+                                                <h3>
+                                                Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
+                                                </h3>
+                                                <h3>
+                                                Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div v-if = "PedidoNowHistorial === i.id_pedido">
+                                            <div v-for = "e in i.detalle_pedido" 
+                                            :key="e.id_detalle_pedido"
+                                            class="tab !bg-red-100/50"
+                                            >
+                                                <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                     <div class="flex flex-row">
-                                                        <h1>
-                                                        Pedido a
-                                                        {{ i.direccion[0].calle }} 
-                                                        {{ i.direccion[0].numero }}
-                                                        </h1>
+                                                        <h3 class="font-bold overflow-hidden text-ellipsis">
+                                                        {{ e.producto.nombre }}
+                                                        </h3>
                                                     </div>
-                                                    <div class="flex flex-col">
-                                                        <h2>
-                                                        <span class="hidden lg:inline 2xl:inline">
-                                                        Pagado con: 
-                                                        </span>
-                                                        {{ i.metodo_pago }}
-                                                        </h2>
-                                                        <h2 class="font-bold">
-                                                        <span class="hidden lg:inline 2xl:inline">
-                                                        Total:
-                                                        </span>
-                                                        ${{ i.total }}
-                                                        </h2>
-                                                    </div>
-                                                </div>
-                                                <div class="flex flex-col ml-auto text-right items-end">
-                                                    <h3>
-                                                    Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
-                                                    </h3>
-                                                    <h3>
-                                                    Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                            <div v-if = "PedidoNowHistorial === i.id_pedido">
-                                                <div v-for = "e in i.detalle_pedido" 
-                                                :key="e.id_detalle_pedido"
-                                                class="tab !bg-red-100/50"
-                                                >
-                                                    <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
+                                                    <div class="flex flex-col gap-1">
+                                                        <h3>
+                                                        Categoria: {{ e.producto.categoria }}
+                                                        </h3>
+                                                        <h3>
+                                                        Precio Unitario: ${{ e.precio_unitario }}
+                                                        </h3>
+                                                        <h3>
+                                                        Cantidad: {{ e.cantidad }}
+                                                        </h3>
                                                         <div class="flex flex-row">
-                                                            <h3 class="font-bold overflow-hidden text-ellipsis">
-                                                            {{ e.producto.nombre }}
+                                                            <h2 class="font-bold mr-2">
+                                                            Subtotal:
+                                                            </h2>
+                                                            <h2>
+                                                            ${{ e.subtotal }}
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex flex-col gap-1">
+                                                        <div class="flex flex-row">
+                                                            <h2 class="mr-2">
+                                                            Pedido Creado el Dia: 
+                                                            </h2>
+                                                            <h3>
+                                                            {{ FormatoFecha(i.created_at) }}
                                                             </h3>
                                                         </div>
-                                                        <div class="flex flex-col gap-1">
-                                                            <h3>
-                                                            Categoria: {{ e.producto.categoria }}
+                                                        <div class="flex flex-row">
+                                                            <h3 class="mr-2">
+                                                            Pedido Act. el Dia: 
                                                             </h3>
                                                             <h3>
-                                                            Precio Unitario: ${{ e.precio_unitario }}
+                                                            {{ FormatoFecha(i.updated_at) }}
                                                             </h3>
-                                                            <h3>
-                                                            Cantidad: {{ e.cantidad }}
-                                                            </h3>
-                                                            <div class="flex flex-row">
-                                                                <h2 class="font-bold mr-2">
-                                                                Subtotal:
-                                                                </h2>
-                                                                <h2>
-                                                                ${{ e.subtotal }}
-                                                                </h2>
-                                                            </div>
                                                         </div>
-                                                        <div class="flex flex-col gap-1">
-                                                            <div class="flex flex-row">
-                                                                <h2 class="mr-2">
-                                                                Pedido Creado el Dia: 
-                                                                </h2>
-                                                                <h3>
-                                                                {{ FormatoFecha(i.created_at) }}
-                                                                </h3>
-                                                            </div>
-                                                            <div class="flex flex-row">
-                                                                <h3 class="mr-2">
-                                                                Pedido Act. el Dia: 
-                                                                </h3>
-                                                                <h3>
-                                                                {{ FormatoFecha(i.updated_at) }}
-                                                                </h3>
-                                                            </div>
-                                                            <div class="flex flex-row">
-                                                                <h2 class="font-bold mr-2">
-                                                                Ciudad: 
-                                                                </h2>
-                                                                <h2>
-                                                                {{ i.direccion[0].ciudad }}
-                                                                </h2>
-                                                            </div>
-                                                            <div class="flex flex-row">
-                                                                <h2 class="font-bold mr-2">
-                                                                Provincia:
-                                                                </h2>
-                                                                <h2>
-                                                                {{ i.direccion[0].provincia }}
-                                                                </h2>
-                                                            </div>
+                                                        <div class="flex flex-row">
+                                                            <h2 class="font-bold mr-2">
+                                                            Ciudad: 
+                                                            </h2>
+                                                            <h2>
+                                                            {{ i.direccion[0].ciudad }}
+                                                            </h2>
+                                                        </div>
+                                                        <div class="flex flex-row">
+                                                            <h2 class="font-bold mr-2">
+                                                            Provincia:
+                                                            </h2>
+                                                            <h2>
+                                                            {{ i.direccion[0].provincia }}
+                                                            </h2>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div @click="PedidoCambioHistorial(i.id_pedido)"
-                                            v-if = "PedidoNowHistorial === i.id_pedido"
-                                            class="botont text-center"
-                                            >
-                                            Ocultar Detalles
-                                            </div>
-                                            <div v-else @click="PedidoCambioHistorial(i.id_pedido)"
-                                            class="botoncon text-center"
-                                            >
-                                            Ver Detalles
-                                            </div>
+                                        </div>
+                                        <div @click="PedidoCambioHistorial(i.id_pedido)"
+                                        v-if = "PedidoNowHistorial === i.id_pedido"
+                                        class="botont text-center"
+                                        >
+                                        Ocultar Detalles
+                                        </div>
+                                        <div v-else @click="PedidoCambioHistorial(i.id_pedido)"
+                                        class="botoncon text-center"
+                                        >
+                                        Ver Detalles
                                         </div>
                                     </div>
                                 </div>
