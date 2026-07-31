@@ -1,8 +1,6 @@
 <template>
     <div class="cuerpo">
-        <div v-if="!Iniciado"
-        class="pagina !md:items-center"
-        >
+        <div class="pagina !md:items-center">
             <div v-if="CargandoTrue" 
             class="flex flex-col 
             items-center justify-center 
@@ -186,11 +184,6 @@
                 </div>
             </div>
         </div>
-        <div v-else>
-            <h2>
-            ¡Bienvenido a la tienda! 🛒
-            </h2>
-        </div>
     </div>
 </template>
 
@@ -203,7 +196,6 @@
     } from 'vue'
     import { 
         ValidadSesionBack, 
-        Iniciado, 
         urlover8000
     } from './Estatus.js'
     // ----- Variables Vue ----- //

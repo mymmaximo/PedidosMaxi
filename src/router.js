@@ -8,6 +8,7 @@ import Carrito from './components/Carrito.vue'
 import Configuracion from './components/Configuracion.vue'
 import Mis_pedidos from './components/Mis_pedidos.vue'
 import Historial_precios from './components/Historial_precios.vue'
+import Login from './components/Login.vue'
 import { 
     ValidadSesionBack, 
     Rol, 
@@ -19,6 +20,14 @@ import {
 } from './components/Estatus.js'
 
 const routes = [
+    {
+        path: '/login',
+        name: 'login',
+        component: Login,
+        meta: {
+            requireAuth: false,
+        }
+    },
     { 
         path: '/', 
         name: 'inicio', 

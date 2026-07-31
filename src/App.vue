@@ -190,19 +190,26 @@
                         sm:right-0 md:right-0 lg:right-0
                         bg-green-800 text-white border-green-700 border-4 rounded-sm"
                         >
+                            <h3 @click="router.push('/login')"
+                            v-if="!Iniciado"
+                            class="botonpestaña !p-2 !truncate"
+                            >
+                            Iniciar Sesion
+                            </h3>
                             <h3 @click="router.push('/mis_pedidos')"
-                            v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                            v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
                             class="botonpestaña !p-2 !truncate"
                             >
                             Mis Pedidos
                             </h3>
                             <h3 @click="router.push('/configuracion')" 
-                            v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                            v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
                             class="botonpestaña !p-2 !truncate"
                             >
                             Configuracion
                             </h3>
                             <h3 @click="AbrirPopUp01()"
+                            v-if="Iniciado"
                             class="botonc !rounded-none !p-2 !truncate"
                             >
                             Cerrar Sesion
@@ -306,21 +313,29 @@
                                 >
                                 🗑️ Vaciar Carrito
                                 </div>
+                                <div @click="router.push('/login') ; MostrarMenu = false"
+                                v-if="!Iniciado"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
+                                class="botonpestaña !py-4 !text-left"
+                                >
+                                👤 Iniciar Sesion
+                                </div>
                                 <div @click="router.push('/mis_pedidos') ; MostrarMenu = false"
-                                v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                                v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 👤 Mis Pedidos
                                 </div>
                                 <div @click="router.push('/configuracion') ; MostrarMenu = false" 
-                                v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                                v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/configuracion'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 ⚙️ Configuracion
                                 </div>
                                 <div @click="AbrirPopUp01()"
+                                v-if="Iniciado"
                                 class="botonpestaña 
                                 !from-red-600/80 !to-red-800/80 
                                 !py-4 !text-left"
@@ -336,9 +351,6 @@
                     </router-view>
                 </div>
             </div>
-        </div>
-        <div v-else>
-            <Login @LoginExitoso="ProcesarLogin"/>
         </div>
     </div>
 </template>
