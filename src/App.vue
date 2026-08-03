@@ -184,7 +184,16 @@
                         </h2>
                     </div>
                     <div class="botonpestaña group relative z-50">
-                    Mi Perfil
+                        <h3 @click="router.push('/login')"
+                        v-if="!Iniciado"
+                        >
+                        Iniciar Sesion
+                        </h3>
+                        <h3 @click="router.push('/mis_pedidos')"
+                        v-if="Iniciado"
+                        >
+                        Mi Perfil
+                        </h3>
                         <div class="hidden group-hover:block 
                         absolute top-full 
                         sm:right-0 md:right-0 lg:right-0

@@ -1475,11 +1475,6 @@
     const SumarCarrito = () => {
         if (!ProductoActual.value)
             return
-        if (!Iniciado.value) {
-            router.push('/login')
-            CerrarPopUp03()
-            return
-        }
         const nuevoProducto = {
             id_pedido: PedidoActual.value,
             nombre_producto: ProductoActual.value.nombre,

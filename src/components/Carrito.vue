@@ -459,6 +459,10 @@
 		document.body.style.overflow = "hidden"
 	}
 	const AbrirPopUp02 = () => {
+        if (!Iniciado.value) {
+            router.push('/login')
+            return
+        }
 		PantallaDirecto.value = true
 		document.body.style.overflow = "hidden"
         if (ListaDirecciones.value.length > 0)
