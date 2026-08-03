@@ -171,7 +171,7 @@
                     Tu Carrito
                     </div>
                     <div v-else
-                    class="botonpestaña group relative !hover:from-red-100 !hover:to-red-300"
+                    class="botonpestaña group relative hover:from-red-100 hover:to-red-300"
                     >
                         Tu Carrito
                         <h2 class="hidden group-hover:flex
