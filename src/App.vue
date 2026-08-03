@@ -178,7 +178,7 @@
                         <span class="block group-hover:hidden">
                         Tu Carrito
                         </span>
-                        <span class="hidden group-hover:block font-bold tracking-wide">
+                        <span class="hidden group-hover:block font-bold text-black tracking-wide">
                         ¡Está Vacío!
                         </span>
                     </div>
