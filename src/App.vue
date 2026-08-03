@@ -173,7 +173,7 @@
                     <div v-else
                     class="botonpestaña group cursor-default 
                     transition-all duration-300 
-                    hover:!from-red-600 hover:!to-red-800 hover:!text-white hover:shadow-inner"
+                    hover:!from-red-100 hover:!to-red-300 hover:!text-white hover:shadow-inner"
                     >
                         <span class="block group-hover:hidden">
                         Tu Carrito
