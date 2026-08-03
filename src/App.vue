@@ -186,6 +186,8 @@
                     <div class="botonpestaña group relative z-50">
                         <h3 @click="router.push('/login')"
                         v-if="!Iniciado"
+                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
+                        class="botonpestaña"
                         >
                         Iniciar Sesion
                         </h3>
