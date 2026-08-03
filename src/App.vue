@@ -197,7 +197,8 @@
                         >
                         Mi Perfil
                         </h3>
-                        <div class="hidden group-hover:block 
+                        <div v-if="!Iniciado"
+                        class="hidden group-hover:block 
                         absolute top-full 
                         sm:right-0 md:right-0 lg:right-0
                         bg-green-800 text-white border-green-700 border-4 rounded-sm"
@@ -321,7 +322,7 @@
                                 </div>
                                 <div @click="router.push('/login') ; MostrarMenu = false"
                                 v-if="!Iniciado"
-                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 👤 Iniciar Sesion
