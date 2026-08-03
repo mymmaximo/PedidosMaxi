@@ -171,17 +171,16 @@
                     Tu Carrito
                     </div>
                     <div v-else
-                    class="botonpestaña group relative hover:from-red-100 hover:to-red-300"
+                    class="botonpestaña group cursor-default 
+                    transition-all duration-300 
+                    hover:!from-red-600 hover:!to-red-800 hover:!text-white hover:shadow-inner"
                     >
+                        <span class="block group-hover:hidden">
                         Tu Carrito
-                        <h2 class="hidden group-hover:flex
-                        absolute top-full 
-                        sm:right-0 md:right-0 lg:right-0 xl:left-4 2xl:left-4
-                        p-4 whitespace-nowrap
-                        bg-red-200 border-red-700 border-4 rounded-sm"
-                        >
-                        ¡Está Vacio!
-                        </h2>
+                        </span>
+                        <span class="hidden group-hover:block font-bold tracking-wide">
+                        ¡Está Vacío!
+                        </span>
                     </div>
                     <div class="group relative z-50">
                         <h3 @click="router.push('/login')"
