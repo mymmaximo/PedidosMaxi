@@ -165,7 +165,7 @@
                     </div>
                     <div v-if="CarritoLocal.length > 0 && Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
                     @click="router.push('/carrito')"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
+                    :class="{'!from-red-100 !to-red-300 !text-black shadow-inner': route.path === '/carrito'}"
                     class="botonpestaña"
                     >
                     Tu Carrito
