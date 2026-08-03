@@ -197,7 +197,7 @@
                         >
                         Mi Perfil
                         </h3>
-                        <div v-if="!Iniciado"
+                        <div v-if="Iniciado"
                         class="hidden group-hover:block 
                         absolute top-full 
                         sm:right-0 md:right-0 lg:right-0
