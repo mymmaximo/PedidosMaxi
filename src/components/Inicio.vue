@@ -889,7 +889,7 @@
             await ValidadSesionBack()
             await Banner()
             await BusquedaProducto()
-            if (Rol.value === '1') {
+            if (Rol.value === 1) {
                 await Banneractu()
             }
             const respuesta = await fetch(`${urlover8000}/producto/categorias/`, {
