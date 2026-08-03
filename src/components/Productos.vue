@@ -714,7 +714,7 @@
                                         class="imagen"
                                         >
                                         <div>
-                                            <h2 class="font-bold truncate ">
+                                            <h2 class="font-bold">
                                             {{ i.nombre }}
                                             </h2>
                                             <h3>
