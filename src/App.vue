@@ -183,7 +183,7 @@
                         ¡Está Vacio!
                         </h2>
                     </div>
-                    <div class="botonpestaña group relative z-50">
+                    <div class="group relative z-50">
                         <h3 @click="router.push('/login')"
                         v-if="!Iniciado"
                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
@@ -193,6 +193,7 @@
                         </h3>
                         <h3 @click="router.push('/mis_pedidos')"
                         v-if="Iniciado"
+                        class="botonpestaña"
                         >
                         Mi Perfil
                         </h3>
@@ -201,12 +202,6 @@
                         sm:right-0 md:right-0 lg:right-0
                         bg-green-800 text-white border-green-700 border-4 rounded-sm"
                         >
-                            <h3 @click="router.push('/login')"
-                            v-if="!Iniciado"
-                            class="botonpestaña !p-2 !truncate"
-                            >
-                            Iniciar Sesion
-                            </h3>
                             <h3 @click="router.push('/mis_pedidos')"
                             v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
                             class="botonpestaña !p-2 !truncate"
