@@ -166,12 +166,12 @@
                     <div v-if="CarritoLocal.length > 0 && Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
                     @click="router.push('/carrito')"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
-                    class="botonpestaña !hover:from-red-100 !hover:to-red-300"
+                    class="botonpestaña"
                     >
                     Tu Carrito
                     </div>
                     <div v-else
-                    class="botonpestaña group relative"
+                    class="botonpestaña group relative !hover:from-red-100 !hover:to-red-300"
                     >
                         Tu Carrito
                         <h2 class="hidden group-hover:flex
