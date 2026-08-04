@@ -892,7 +892,7 @@
             if (Rol.value === 1) {
                 await Banneractu()
             }
-            const respuesta = await fetch(`${urlover8000}/producto/categorias`, {
+            const respuesta = await fetch(`${urlover8000}/producto/categorias/`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
                 },
@@ -1252,7 +1252,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch(`${urlover8000}/productos/archivos`, {
+                    await fetch(`${urlover8000}/productos/archivos/`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1296,7 +1296,7 @@
     }
     const Banneractu = async () => {
         try {
-            const respuesta = await fetch(`${urlover8000}/banners`, {
+            const respuesta = await fetch(`${urlover8000}/banners/`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
                 },
@@ -1358,7 +1358,7 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL (`${urlover8000}/producto`)
+        let url = new URL (`${urlover8000}/producto/`)
 		url.searchParams.append('limit', 1000)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value)
@@ -1427,7 +1427,7 @@
         const tokenGuardado = leerCookie("token")
         const ClienteGuardado = leerCookie("id_cliente")
         if (PedidoActual.value) {
-            const respuesta = await fetch(`${urlover8000}/pedidos/detalles_pedido`, {
+            const respuesta = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1448,7 +1448,7 @@
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch(`${urlover8000}/pedidos`, {
+            const respuesta = await fetch(`${urlover8000}/pedidos/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1572,7 +1572,7 @@
                 .upload(filePath, BannerNew.imagen)
         // ----- Subir Datos Banner Backend ----- //
             if (!uploadError) {
-                await fetch(`${urlover8000}/banners`, {
+                await fetch(`${urlover8000}/banners/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
