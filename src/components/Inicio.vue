@@ -892,7 +892,7 @@
             if (Rol.value === 1) {
                 await Banneractu()
             }
-            const respuesta = await fetch(`${urlover8000}/producto/categorias/`, {
+            const respuesta = await fetch(`${urlover8000}/producto/categorias`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
                 },
@@ -1183,7 +1183,7 @@
                 enlace: BannerAct.enlace,
                 orden: BannerAct.orden
             }
-            const ActBanner = await fetch(`${urlover8000}/banners/id/${BannerAct.id}/`, {
+            const ActBanner = await fetch(`${urlover8000}/banners/id/${BannerAct.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1213,7 +1213,7 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`${urlover8000}/productos/id/${ProductoAct.value.id}/`, {
+            const ActProducto = await fetch(`${urlover8000}/productos/id/${ProductoAct.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1237,7 +1237,7 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`${urlover8000}/productos/archivos/id/${id_img}/`, {
+                await fetch(`${urlover8000}/productos/archivos/id/${id_img}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 })
@@ -1252,7 +1252,7 @@
                     .upload(filePath, file)
             // ----- Subir Datos Imagen Backend ----- //
                 if (!uploadError) {
-                    await fetch(`${urlover8000}/productos/archivos/`, {
+                    await fetch(`${urlover8000}/productos/archivos`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -1296,7 +1296,7 @@
     }
     const Banneractu = async () => {
         try {
-            const respuesta = await fetch(`${urlover8000}/banners/`, {
+            const respuesta = await fetch(`${urlover8000}/banners`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
                 },
@@ -1326,7 +1326,7 @@
                 if (BannerDelete.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([BannerDelete.s3_key])
                 }
-                await fetch(`${urlover8000}/banners/id/${BannerDelete.id}/`, {
+                await fetch(`${urlover8000}/banners/id/${BannerDelete.id}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 })
@@ -1335,7 +1335,7 @@
         DelSupaBann.value = []
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}/`, {
+        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -1358,7 +1358,7 @@
         CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
-        let url = new URL (`${urlover8000}/producto/`)
+        let url = new URL (`${urlover8000}/producto`)
 		url.searchParams.append('limit', 1000)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value)
@@ -1427,7 +1427,7 @@
         const tokenGuardado = leerCookie("token")
         const ClienteGuardado = leerCookie("id_cliente")
         if (PedidoActual.value) {
-            const respuesta = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
+            const respuesta = await fetch(`${urlover8000}/pedidos/detalles_pedido`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1448,7 +1448,7 @@
                 console.error("Error al agregar detalle:", error)
             }
         } else {
-            const respuesta = await fetch(`${urlover8000}/pedidos/`, {
+            const respuesta = await fetch(`${urlover8000}/pedidos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1492,7 +1492,7 @@
                 (b) => b.id === id_banner
             )
             if (BannerDelete) {
-                await fetch(`${urlover8000}/banners/estado/id/${BannerDelete.id}/`, {
+                await fetch(`${urlover8000}/banners/estado/id/${BannerDelete.id}`, {
                     method: 'PUT',
                     credentials: 'include'
                 })
@@ -1572,7 +1572,7 @@
                 .upload(filePath, BannerNew.imagen)
         // ----- Subir Datos Banner Backend ----- //
             if (!uploadError) {
-                await fetch(`${urlover8000}/banners/`, {
+                await fetch(`${urlover8000}/banners`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

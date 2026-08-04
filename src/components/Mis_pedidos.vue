@@ -694,7 +694,7 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaPedido = async() => {
-        let url = new URL (`${urlover8000}/pedidos/cliente/${ClienteID.value}/`)
+        let url = new URL (`${urlover8000}/pedidos/cliente/${ClienteID.value}`)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_pedido', Busqueda.value)
         }
