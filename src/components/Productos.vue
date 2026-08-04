@@ -175,11 +175,11 @@
                                 </div>
                             </div>
                             <div class="botones">
-                                <button :disabled="confirboton" 
+                                <button :disabled="confirboton || actualizando" 
                                 type="submit" 
-                                class="botoncon"
+                                :class="Actualizando ? 'botoncon opacity-50 cursor-not-allowed' : 'botoncon'"
                                 >
-                                Actualizar
+                                {{ Actualizando ? 'Actualizando...' : 'Actualizar' }}
                                 </button>
                                 <button @click="CerrarPopUp01"
                                 type="button" 
@@ -902,6 +902,7 @@
     const MostrarFiltro = ref (true)
     const MostrarNuevo = ref (false)
     const VentanaNuevo = ref (false)
+    const Actualizando = ref(false)
     const CargandoTrue = ref(true)
     const ErrorCarga = ref(false)
     const uploading = ref (false)
@@ -1162,6 +1163,8 @@
     }
     // ----- Para el Backend ----- //
     const ActualizarProducto = async() => {
+        if (Actualizando.value) return
+        Actualizando.value = true
         try {
             // ----- Datos Texto Backend ----- //
             if (OpcionCategoriaA.value != "new") { 
@@ -1232,6 +1235,8 @@
         } catch (error) {
             console.error(error)
             alert("Hubo un error al guardar los cambios.")
+        } finally {
+            Actualizando.value = false
         }
     }
     const BorrarProducto = async() => {
