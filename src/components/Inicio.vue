@@ -337,9 +337,9 @@
                                 </div>
                             </div>
                             <div class="botones">
-                                <button :disabled="confirboton || actualizando" 
+                                <button :disabled="confirboton || Actualizando" 
                                 type="submit" 
-                                :class="Actualizando ? 'botoncon opacity-50 cursor-not-allowed' : 'botoncon'"
+                                class="botoncon"
                                 >
                                 {{ Actualizando ? 'Actualizando...' : 'Actualizar' }}
                                 </button>
