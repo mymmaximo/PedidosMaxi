@@ -1176,13 +1176,14 @@
     // ----- Para el Backend ----- //
     const ActualizarBanner = async() => {
         // ----- Actualizar Datos Banner Backend ----- //
+        if (!Bananaeract.value) return
         for (const BannerAct of Bananaeract.value.imagenes) {
             if (bannerdesactivado(BannerAct)) continue
             const BannerActData = {
                 enlace: BannerAct.enlace,
                 orden: BannerAct.orden
             }
-            const ActBanner = await fetch(`${urlover8000}/banners/id/${BannerAct.id}`, {
+            const ActBanner = await fetch(`${urlover8000}/banners/id/${BannerAct.id}/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1212,7 +1213,7 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`${urlover8000}/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`${urlover8000}/productos/id/${ProductoAct.value.id}/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1236,7 +1237,7 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`${urlover8000}/productos/archivos/id/${id_img}`, {
+                await fetch(`${urlover8000}/productos/archivos/id/${id_img}/`, {
                     method: 'DELETE',
                     credentials: 'include'
                 })
@@ -1316,6 +1317,7 @@
     }
     const BorrarBanner = async() => {
         // ----- Borrar Banner Imagen ----- //
+        if (!Bananaeract.value) return
         for (const id_banner of DelSupaBann.value) {
             const BannerDelete = Bananaeract.value.imagenes.find(
                 (b) => b.id === id_banner
@@ -1324,7 +1326,7 @@
                 if (BannerDelete.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([BannerDelete.s3_key])
                 }
-                await fetch(`${urlover8000}/banners/id/${BannerDelete.id}`, {
+                await fetch(`${urlover8000}/banners/id/${BannerDelete.id}/`, {
                     method: 'DELETE',
                     credentials: 'include'
                 })
@@ -1333,7 +1335,7 @@
         DelSupaBann.value = []
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}/`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -1483,13 +1485,14 @@
         }
     })
     const DesactivarBanner = async () => {
+        if (!Bananaeract.value) return
         for (const id_banner of DelBann.value) {
             if (DelSupaBann.value.includes(id_banner)) continue
             const BannerDelete = Bananaeract.value.imagenes.find(
                 (b) => b.id === id_banner
             )
             if (BannerDelete) {
-                await fetch(`${urlover8000}/banners/estado/id/${BannerDelete.id}`, {
+                await fetch(`${urlover8000}/banners/estado/id/${BannerDelete.id}/`, {
                     method: 'PUT',
                     credentials: 'include'
                 })
