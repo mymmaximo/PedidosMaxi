@@ -167,7 +167,7 @@
             <transition name="fade">
                 <div v-if="ActualizarCajaP"
                 @click.self="CerrarPopUp01" 
-                class="fondo "
+                class="fondo"
                 >
                     <div class="popup">
                         <form @submit.prevent="ActualizarProducto">
@@ -250,16 +250,16 @@
                                 Imágenes actuales
                                 </h2>
                                 <div v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0" 
-                                class="
-                                flex flex-row
+                                class="flex flex-row
                                 md:gap-3 gap-1
                                 items-center justify-center
-                                w-full md:pb-2 pb-1
-                                ">
+                                w-full md:pb-2 pb-1"
+                                >
                                     <button @click="BackImg(ProductoAct)"
-                                    type="button" 
+                                    type="button"
                                     :disabled="GetImg(ProductoAct.id) === 0"
-                                    class="botonflecha">
+                                    class="botonflecha"
+                                    >
                                     ❮
                                     </button>
                                     <div class="relative w-fit mx-auto mt-2">
@@ -301,10 +301,8 @@
                                     Imagenes Nuevas
                                     </h2>
                                     <div v-if="VistaPrevia.length > 0"
-                                    class="
-                                    relative w-fit 
-                                    mx-auto mt-2
-                                    ">
+                                    class="relative w-fit mx-auto mt-2"
+                                    >
                                         <div v-for="(img, index) in VistaPrevia"
                                         :key="index"
                                         class="shrink-0 mt-2 relative"

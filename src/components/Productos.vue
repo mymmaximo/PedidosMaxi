@@ -8,22 +8,22 @@
                 class="fondo"
                 >
                     <div class="popup">
-                        <form @submit.prevent="ActualizarProducto" 
-                        class="Texto_producto"
-                        >
+                        <form @submit.prevent="ActualizarProducto">
                             <h1>
                             {{ ProductoAct.nombre }}
                             </h1>
+                            <!-- Actualizar Nombre -->
                             <div v-if="Rol === 1 || Rol === 2">
                                 <h2>
                                 Nombre
                                 </h2>
                                 <input placeholder="Nombre"
-                                type="text" 
-                                v-model="ProductoAct.nombre" 
+                                type="text"
+                                v-model="ProductoAct.nombre"
                                 maxlength="50"
                                 >
                             </div>
+                            <!-- Actualizar Precio -->
                             <div v-if="Rol === 1 || Rol === 2 || Rol === 4">
                                 <h2>
                                 Precio
@@ -34,6 +34,7 @@
                                 maxlength="8"
                                 >
                             </div>
+                            <!-- Actualizar Stock -->
                             <div v-if="Rol === 1 || Rol === 2 || Rol === 5">
                                 <h2>
                                 Stock
@@ -44,11 +45,14 @@
                                 maxlength="8"
                                 >
                             </div>
+                            <!-- Actualizar Categoria y Codigo de Barra -->
                             <div v-if="Rol === 1 || Rol === 2">
                                 <h2>
                                 Categoria
                                 </h2>
-                                <select v-model="OpcionCategoriaA">
+                                <select v-model="OpcionCategoriaA"
+                                class="seleccion"
+                                >
                                     <option value="new">
                                     + Agrega una Categoria
                                     </option>
@@ -78,6 +82,7 @@
                                 maxlength="15"
                                 >
                             </div>
+                            <!-- Actualizar Imagenes Actuales -->
                             <div v-if="Rol === 1 || Rol === 2">
                                 <h2>
                                 Imágenes actuales
@@ -88,7 +93,7 @@
                                 w-full pb-2"
                                 >
                                     <button @click="BackImg(ProductoAct)"
-                                    type="button" 
+                                    type="button"
                                     :disabled="GetImg(ProductoAct.id) === 0"
                                     class="botonflecha"
                                     >
@@ -106,7 +111,7 @@
                                             <img v-show="ImagenesCargando[ProductoAct.id] === false"
                                             :src=ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)
                                             @load="ImagenesCargando[ProductoAct.id] = false"
-                                            class="imagen"
+                                            :class="DelImg.includes(ProductoAct.imagenes[GetImg(ProductoAct.id)].id_imagen) ? 'imagendel' : 'imagen'"
                                             >
                                             <div v-if="ImagenesCargando[ProductoAct.id] !== false" 
                                             class="mt-2"
@@ -587,7 +592,7 @@
                                         :key="index"
                                         class="shrink-0 mt-2 relative"
                                         >
-                                            <button @click="QuitarImagenNueva(index)"
+                                            <button @click="LimpiarImagenes"
                                             title="Quitar imagen"
                                             class="botonx"
                                             >
@@ -1105,17 +1110,6 @@
             fileInput.value.value = ''
         }
     }
-    const MoreImages = (evt) => {
-        const file = evt.target.files[0]
-        if (file) {
-            NewImg.value.push(file)
-            ProductoAct.value.imagenes.push({
-                id_imagen: null,
-                s3_key: URL.createObjectURL(file),
-                es_nueva: true
-            })
-        }
-    }
     const NextImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual < imagen.imagenes.length - 1) {
@@ -1139,12 +1133,6 @@
             .from('max_imagenes')
             .getPublicUrl(Imgenkey)
         return respuesta.data.publicUrl
-    }
-    const QuitarImagenNueva = (index) => {
-        ArchivoSave.value.splice(index, 1)
-        VistaPrevia.value.splice(index, 1)
-        if (fileInput.value) 
-            fileInput.value.value = ''
     }
     const RestarProducto = () => {
         if (ProductoCantidad.value > 1) {
