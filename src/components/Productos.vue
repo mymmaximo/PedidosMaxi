@@ -147,7 +147,7 @@
                                             >
                                             🗙
                                             </button>
-                                            <img :src="VistaPrevia" 
+                                            <img :src="img" 
                                             alt="Vista Previa"
                                             class="imagen !m-0" 
                                             />
@@ -587,7 +587,7 @@
                                         :key="index"
                                         class="shrink-0 mt-2 relative"
                                         >
-                                            <button @click="QuitarImagenNueva"
+                                            <button @click="QuitarImagenNueva(index)"
                                             title="Quitar imagen"
                                             class="botonx"
                                             >
@@ -1186,7 +1186,7 @@
                 categoria: ProductoAct.value.categoria,
                 codigo_barra: ProductoAct.value.codigo_barra
             }
-            const ActProducto = await fetch(`${urlover8000}/productos/id/${ProductoAct.value.id}`, {
+            const ActProducto = await fetch(`${urlover8000}/productos/id/${ProductoAct.value.id}/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -1210,7 +1210,7 @@
                 if (ImgDel && ImgDel.s3_key) {
                     await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
                 }
-                await fetch(`${urlover8000}/productos/archivos/id/${id_img}`, {
+                await fetch(`${urlover8000}/productos/archivos/id/${id_img}/`, {
                     method: 'DELETE',
                     credentials: 'include'
                 })
@@ -1247,7 +1247,7 @@
         }
     }
     const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
+        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}/`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

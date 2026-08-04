@@ -316,7 +316,7 @@
                                             >
                                             🗙
                                             </button>
-                                            <img :src="VistaPrevia" 
+                                            <img :src="img" 
                                             alt="Vista Previa"
                                             class="imagen !m-0" 
                                             />
