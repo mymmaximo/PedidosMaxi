@@ -49,7 +49,7 @@
             </transition>
         </Teleport>
         <!-- Notificacion de rol invalido -->
-        <template v-if="Iniciado">
+        <template>
             <Teleport to="body">
                 <transition name="fade">
                     <div v-if="MostrarError" 
@@ -64,7 +64,7 @@
             </Teleport>
         </template>
         <!-- Noticacion Carro Vacio -->
-        <template v-if="Iniciado">
+        <template>
             <Teleport to="body">
                 <transition name="fade">
                     <div v-if="VolverCarro" 
