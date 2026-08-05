@@ -8,6 +8,7 @@ import Carrito from './components/Carrito.vue'
 import Configuracion from './components/Configuracion.vue'
 import Mis_pedidos from './components/Mis_pedidos.vue'
 import Historial_precios from './components/Historial_precios.vue'
+import Centro_de_ayuda from './components/Centro_de_ayuda.vue'
 import Login from './components/Login.vue'
 import { 
     ValidadSesionBack, 
@@ -102,6 +103,14 @@ const routes = [
         meta: {
             requireAuth: true,
             rolesPer: [1, 2, 4]
+        }
+    },
+    { 
+        path: '/centro_de_ayuda', 
+        name: 'centro_de_ayuda', 
+        component: Centro_de_ayuda, 
+        meta: {
+            requireAuth: false
         }
     },
 ]

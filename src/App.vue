@@ -183,6 +183,12 @@
                         </span>
                     </div>
                     <div class="group relative z-50">
+                        <h3 @click="router.push('/centro_de_ayuda')"
+                        :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
+                        class="botonpestaña"
+                        >
+                        🗣️ Centro de Ayuda
+                        </h3>
                         <h3 @click="router.push('/login')"
                         v-if="!Iniciado"
                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
@@ -326,6 +332,12 @@
                                 >
                                 👤 Iniciar Sesion
                                 </div>
+                                <div @click="router.push('/centro_de_ayuda') ; MostrarMenu = false"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
+                                class="botonpestaña !py-4 !text-left"
+                                >
+                                🗣️ Centro de Ayuda
+                                </div>
                                 <div @click="router.push('/mis_pedidos') ; MostrarMenu = false"
                                 v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
@@ -366,7 +378,6 @@
     import { 
         ref 
     } from 'vue'
-    import Login from './components/Login.vue'
     import { 
         useRouter, 
         useRoute 

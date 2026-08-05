@@ -331,7 +331,7 @@
                             <span class="hidden lg:inline 2xl:inline">
                             Total:
                             </span>
-                            {{ ProductoActual.precio * ProductoCantidad }}  
+                            ${{ ProductoActual.precio * ProductoCantidad }}  
                             </h1>
                         </div>
                         <div class="botones">
