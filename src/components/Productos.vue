@@ -316,15 +316,15 @@
                             class="!w-30 mb-3"
                             >
                             <div class="botones !flex-row">
-                                <button @click="SumarProducto(ProductoActual)"
-                                class="botoncon !px-4"
-                                >
-                                ✚
-                                </button>
                                 <button @click="RestarProducto(ProductoActual)"
                                 class="botonc !px-4 !font-bold"
                                 >
                                 ━
+                                </button>
+                                <button @click="SumarProducto(ProductoActual)"
+                                class="botoncon !px-4"
+                                >
+                                ✚
                                 </button>
                             </div>
                             <h1 class="text-center">

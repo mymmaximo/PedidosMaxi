@@ -3,10 +3,10 @@
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="start !px-5">
+                    <h1 class="text-center">
+                    Centro de Ayuda
+                    </h1>
                     <div class="mb-2 lg:mb-5">
-                        <h1 class="text-center">
-                        Centro de Ayuda
-                        </h1>
                         <div class="tab">
                             <!-- Correo Electronico -->
                             <div class="flex flex-col">
