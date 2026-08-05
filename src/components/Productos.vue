@@ -313,7 +313,7 @@
                             <input v-model="ProductoCantidad"
                             type="number" 
                             maxlength="8"
-                            class="!w-30 mb-5"
+                            class="!w-30 mb-3"
                             >
                             <div class="botones !flex-row">
                                 <button @click="SumarProducto(ProductoActual)"
@@ -329,6 +329,9 @@
                             </div>
                         </div>
                         <div class="botones">
+                            <h1 class="text-center">
+                            {{ ProductoActual.precio * ProductoActual.cantidad }}  
+                            </h1>
                             <button @click="SumarCarrito"
                             class="botoncon"
                             >
@@ -801,7 +804,7 @@
                                 {{ Pagina + Productos.length }}
                                 </h2>
                                 <button @click="CambiarPagina('next')" 
-                                :disabled="Productos.length < 21 || CargandoTrue"
+                                :disabled="Productos.length < 20 || CargandoTrue"
                                 class="botona"
                                 >
                                 ❯
