@@ -92,7 +92,7 @@
                         <div
                         class="botones"
                         >
-                            <button @click="LimpiarCompra() ; CerrarPopUp02()"
+                            <button @click="LimpiarCompra() ; CerrarPopUp02() ; router.push('/')"
                             class="botonc"
                             >
                             Si Confirmo
