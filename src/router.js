@@ -133,13 +133,17 @@ router.beforeEach(async (to, from, next) => {
             setTimeout(() => { MostrarError.value = false }, 3000)
             return next('/')
         }
-        if (to.meta.rolesPer && !to.meta.rolesPer.includes(Rol.value)) {
-            MostrarError.value = true
-            setTimeout(() => { MostrarError.value = false }, 3000)
-            if (from.matched.length > 0) {
-                return next(false)
-            } else {
-                return next('/')
+        if (to.meta.rolesPer) {
+            const URoles = Rol.value ? Rol.value.split(",").map(r => parseInt(r.trim())) : []
+            const Acceso = URoles.some(rol => to.meta.rolesPer.includes(rol))
+            if (!Acceso) {
+                MostrarError.value = true
+                setTimeout(() => { MostrarError.value = false }, 3000)
+                if (from.matched.length > 0) {
+                    return next(false)
+                } else {
+                    return next('/')
+                }
             }
         }
     }

@@ -13,7 +13,7 @@
                             {{ ProductoAct.nombre }}
                             </h1>
                             <!-- Actualizar Nombre -->
-                            <div v-if="Rol === 1 || Rol === 2">
+                            <div v-if="VerificarRol([1, 2])">
                                 <h2>
                                 Nombre
                                 </h2>
@@ -24,7 +24,7 @@
                                 >
                             </div>
                             <!-- Actualizar Precio -->
-                            <div v-if="Rol === 1 || Rol === 2 || Rol === 4">
+                            <div v-if="VerificarRol([1, 2, 4])">
                                 <h2>
                                 Precio
                                 </h2>
@@ -35,7 +35,7 @@
                                 >
                             </div>
                             <!-- Actualizar Stock -->
-                            <div v-if="Rol === 1 || Rol === 2 || Rol === 5">
+                            <div v-if="VerificarRol([1, 2, 5])">
                                 <h2>
                                 Stock
                                 </h2>
@@ -46,7 +46,7 @@
                                 >
                             </div>
                             <!-- Actualizar Categoria y Codigo de Barra -->
-                            <div v-if="Rol === 1 || Rol === 2">
+                            <div v-if="VerificarRol([1, 2])">
                                 <h2>
                                 Categoria
                                 </h2>
@@ -83,7 +83,7 @@
                                 >
                             </div>
                             <!-- Actualizar Imagenes Actuales -->
-                            <div v-if="Rol === 1 || Rol === 2">
+                            <div v-if="VerificarRol([1, 2])">
                                 <h2>
                                 Imágenes actuales
                                 </h2>
@@ -486,7 +486,7 @@
                                 maxlength="10"
                                 >
                             </div>
-                            <div v-if="Rol === 1 || Rol === 2 || Rol === 4">
+                            <div v-if="VerificarRol([1, 2, 4])">
                                 <h2>
                                 ¿El Productos esta Activo?
                                 </h2>
@@ -529,7 +529,7 @@
                             </div>
                         </div>
                     </transition>
-                    <div v-if="Rol === 1 || Rol === 2">
+                    <div v-if="VerificarRol([1, 2])">
                         <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
                         >
@@ -735,7 +735,7 @@
                                             <h2>
                                             ${{ i.precio }}
                                             </h2>
-                                            <div v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5">
+                                            <div v-if="VerificarRol([1, 2, 4, 5])">
                                                 <h3>
                                                 {{ i.codigo_barra }} <br>
                                                 Stock: 
@@ -743,9 +743,9 @@
                                                 </h3>
                                             </div>
                                             <div class="botones">
-                                                <div v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5">
+                                                <div v-if="VerificarRol([1, 2, 4, 5])">
                                                     <button @click="Edicion(i)" 
-                                                    v-if="Rol === 1 || Rol === 2 || Rol === 4 || Rol === 5" 
+                                                    v-if="VerificarRol([1, 2, 4, 5])" 
                                                     class="botont !py-2"
                                                     >
                                                     ✏️
@@ -754,7 +754,7 @@
                                                     </span>
                                                     </button>
                                                 </div>
-                                                <div v-if="Rol === 1 || Rol === 2">
+                                                <div v-if="VerificarRol([1, 2])">
                                                     <button @click="Eliminacion(i)" 
                                                     v-if="i.activo" 
                                                     class="botonc !py-2"
@@ -775,7 +775,7 @@
                                                 </div>
                                                 <button @click="Compracion(i)"
                                                 :disabled="CarritoStock(i) === 0"
-                                                v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                                                v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
                                                 class="botoncon !py-2 !text-2xl"
                                                 >
                                                 🛍️ 
@@ -845,7 +845,9 @@
         urlover8000,
         CargarCarrito, 
         Iniciado, 
-        SesionExpirada 
+        SesionExpirada,
+        VerificarRol,
+        VerificarRolExcluido
     } from './Estatus.js'
     import { 
         useRouter 

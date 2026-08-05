@@ -114,42 +114,42 @@
             >
                 <div class="flex min-h-10 !bg-green-600">
                     <div @click="router.push('/')" 
-                    v-if="Rol !== 3 && Rol !== 6"
+                    v-if="VerificarRolExcluido([3, 6])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
                     class="botonpestaña"
                     >
                     Inicios
                     </div>
                     <div @click="router.push('/productos')" 
-                    v-if="Rol !== 3 && Rol !== 6"
+                    v-if="VerificarRolExcluido([3, 6])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
                     class="botonpestaña"
                     >
                     Productos
                     </div>
                     <div @click="router.push('/pedidos')" 
-                    v-if="Rol === 1|| Rol === 3 || Rol === 6"
+                    v-if="VerificarRol([1, 3, 6])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
                     class="botonpestaña"
                     >
                     Pedidos
                     </div>
                     <div @click="router.push('/clientes')" 
-                    v-if="Rol === 1 || Rol === 3"
+                    v-if="VerificarRol([1, 3])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
                     class="botonpestaña"
                     >
                     Clientes
                     </div>
                     <div @click="router.push('/usuarios')" 
-                    v-if="Rol === 1"
+                    v-if="VerificarRol([1])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
                     class="botonpestaña"
                     >
                     Usuarios
                     </div>
                     <div @click="router.push('/historial_precios')" 
-                    v-if="Rol === 1 || Rol === 4"
+                    v-if="VerificarRol([1, 4])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
                     class="botonpestaña"
                     >
@@ -209,13 +209,13 @@
                         bg-green-800 text-white border-green-700 border-4 rounded-sm"
                         >
                             <h3 @click="router.push('/mis_pedidos')"
-                            v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
+                            v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
                             class="botonpestaña !p-2 !truncate"
                             >
                             Mis Pedidos
                             </h3>
                             <h3 @click="router.push('/configuracion')" 
-                            v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
+                            v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
                             class="botonpestaña !p-2 !truncate"
                             >
                             Configuracion
@@ -271,42 +271,42 @@
                                 ⫶☰ Cerrar Menu
                                 </h1>
                                 <div @click="router.push('/') ; MostrarMenu = false" 
-                                v-if="Rol !== 3 && Rol !== 6"
+                                v-if="VerificarRolExcluido([3, 6])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 🏠︎ Inicio
                                 </div>
                                 <div @click="router.push('/productos') ; MostrarMenu = false" 
-                                v-if="Rol !== 3 && Rol !== 6"
+                                v-if="VerificarRolExcluido([3, 6])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 📦 Productos
                                 </div>
                                 <div @click="router.push('/pedidos') ; MostrarMenu = false" 
-                                v-if="Rol === 1|| Rol === 3 || Rol === 6"
+                                v-if="VerificarRol([1, 3, 6])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 🚛 Pedidos
                                 </div>
                                 <div @click="router.push('/clientes') ; MostrarMenu = false" 
-                                v-if="Rol === 1 || Rol === 3"
+                                v-if="VerificarRol([1, 3])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 👥 Clientes
                                 </div>
                                 <div @click="router.push('/usuarios') ; MostrarMenu = false" 
-                                v-if="Rol === 1"
+                                v-if="VerificarRol([1])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 👨🏻‍💼 Usuarios
                                 </div>
                                 <div @click="router.push('/historial_precios') ; MostrarMenu = false" 
-                                v-if="Rol === 1 || Rol === 4"
+                                v-if="VerificarRol([1, 4])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -339,14 +339,14 @@
                                 🗣️ Centro de Ayuda
                                 </div>
                                 <div @click="router.push('/mis_pedidos') ; MostrarMenu = false"
-                                v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
+                                v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 👤 Mis Pedidos
                                 </div>
                                 <div @click="router.push('/configuracion') ; MostrarMenu = false" 
-                                v-if="Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6 && Iniciado"
+                                v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/configuracion'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -390,7 +390,9 @@
         Rol, 
         MostrarError, 
         VolverCarro, 
-        SesionExpirada
+        SesionExpirada,
+        VerificarRol,
+        VerificarRolExcluido
     } from './components/Estatus.js'
     // ----- Variables Complejas ----- //
     const route = useRoute()
