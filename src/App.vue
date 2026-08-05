@@ -187,7 +187,7 @@
                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
                         class="botonpestaña"
                         >
-                        🗣️ Centro de Ayuda
+                        Centro de Ayuda
                         </h3>
                         <h3 @click="router.push('/login')"
                         v-if="!Iniciado"

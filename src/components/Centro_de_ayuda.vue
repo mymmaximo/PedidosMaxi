@@ -29,6 +29,8 @@
                                 Contactate con nuestros asesores vía E-Mail
                                 </h2>
                             </div>
+                        </div>
+                        <div class="tab">
                             <!-- Whatsapp -->
                             <div class="flex flex-col">
                                 <div class="flex flex-row">
@@ -50,6 +52,8 @@
                                 Contactate con nuestros asesores vía Whatsapp
                                 </h2>
                             </div>
+                        </div>
+                        <div class="tab">
                             <!-- Telefono -->
                             <div class="flex flex-col">
                                 <div class="flex flex-row">
