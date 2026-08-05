@@ -2,7 +2,7 @@
     <div class="cuerpo">
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-                <div>
+                <div class="start">
                     <div class="mb-2 lg:mb-5">
                         <h1 class="text-center">
                         Centro de Ayuda
