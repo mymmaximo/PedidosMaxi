@@ -330,7 +330,7 @@
                         </div>
                         <div class="botones">
                             <h1 class="text-center">
-                            {{ ProductoActual.precio * ProductoActual.cantidad }}  
+                            {{ ProductoActual.precio * ProductoCantidad }}  
                             </h1>
                             <button @click="SumarCarrito"
                             class="botoncon"
@@ -792,7 +792,7 @@
                             </div>
                             <div class="flex justify-center p-5">
                                 <button @click="CambiarPagina('back')" 
-                                :disabled="Pagina < 21 || CargandoTrue"
+                                :disabled="Pagina < 20 || CargandoTrue"
                                 class="botona"
                                 >
                                 ❮
