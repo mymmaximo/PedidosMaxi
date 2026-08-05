@@ -5,7 +5,7 @@
             <transition name="fade">
                 <div v-if="MostrarNotificacion" 
                 class="fixed top-4 right-4 
-                bg-green-600 text-white 
+                bg-blue-300 text-white 
                 px-6 py-3 rounded-xl shadow-lg 
                 z-[100] font-bold"
                 >
