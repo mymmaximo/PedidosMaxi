@@ -74,8 +74,8 @@
             </div>
         </transition>
     </Teleport>
+    <!-- Tabla de Usuarios -->
     <div class="cuerpo">
-        <!-- Tabla de Usuarios -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="bar">
@@ -208,32 +208,21 @@
                                 v-model="NuevoUsuario.contrasena"
                                 maxlength="30"
                                 >
-                                <h2>
-                                Rol
-                                </h2>
-                                <select v-model="NuevoUsuario.id_rol">
-                                    <option value="" disabled>
-                                    Selecciona un Rol...
-                                    </option>
-                                    <option value=1>
-                                    Administrador
-                                    </option>
-                                    <option value=2>
-                                    Editor de Productos General
-                                    </option>
-                                    <option value=3>
-                                    Gestor de Pedidos General y Editor de Clientes
-                                    </option>
-                                    <option value=4>
-                                    Gestor de Precios
-                                    </option>
-                                    <option value=5>
-                                    Gestor de Stock
-                                    </option>
-                                    <option value=6>
-                                    Rider
-                                    </option>
-                                </select>
+                                <h2>Roles</h2>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 px-4">
+                                    <button 
+                                    v-for="rol in ListaRoles" 
+                                    :key="'nuevo-' + rol.id"
+                                    @click.prevent="NuevoUsuario.id_rol.includes(rol.id) ? NuevoUsuario.id_rol.splice(NuevoUsuario.id_rol.indexOf(rol.id), 1) : NuevoUsuario.id_rol.push(rol.id)"
+                                    type="button"
+                                    class="py-2 px-1 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm border-2"
+                                    :class="NuevoUsuario.id_rol.includes(rol.id) 
+                                        ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
+                                        : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
+                                    >
+                                        {{ rol.nombre }}
+                                    </button>
+                                </div>
                             </form>
                             <div class="botones">
                                 <button :disabled="confirboton"
@@ -425,7 +414,7 @@
         email: "",
         dni: "",
         contrasena: "",
-        id_rol: ""
+        id_rol: []
     })
     const UsuarioAct = ref({
         id: "",
@@ -512,6 +501,7 @@
         UsuarioAct.value.id = usuario_fila.id
         UsuarioAct.value.nombre = usuario_fila.nombre
         UsuarioAct.value.email = usuario_fila.email
+        UsuarioAct.value.id_rol = usuario_fila.id_rol ? [...usuario_fila.id_rol] : []
         AbrirPopUp02()
     }
     const Eliminacion = (usuario_fila) => {
@@ -531,71 +521,44 @@
         BusquedaUsuario()
         filtroAct.value = false
     }
-    const Rolcolor = (id_rol,activo) => {
-        if (activo) {
-            if (id_rol === 1) {
-                return "admin"
-            }
-            else if (id_rol === 2) {
-                return "pgral"
-            }
-            else if (id_rol === 3) {
-                return "pedcli"
-            }
-            else if (id_rol === 4) {
-                return "preci"
-            }
-            else if (id_rol === 5) {
-                return "stoc"
-            }
-            else if (id_rol === 6) {
-                return "rider"
-            }
-        }
-        else {
-            return "no"
-        }
+    const Rolcolor = (array_roles,activo) => {
+        if (!activo) return "no"
+        if (!Array.isArray(array_roles) || array_roles.length === 0) return "no"
+        if (array_roles.includes(1)) return "admin"
+        if (array_roles.includes(2)) return "pgral"
+        if (array_roles.includes(3)) return "pedcli"
+        if (array_roles.includes(4)) return "preci"
+        if (array_roles.includes(5)) return "stoc"
+        if (array_roles.includes(6)) return "rider"
+        if (array_roles.includes(7)) return "pedcli"
     }
-    const Roltxt = (id_rol,activo) => {
-        if (activo) {
-            if (id_rol === 1) {
-                return "Administrador"
-            }
-            else if (id_rol === 2) {
-                return "Editor de Productos Gral."
-            }
-            else if (id_rol === 3) {
-                return "Gestor de Pedidos y Clientes"
-            }
-            else if (id_rol === 4) {
-                return "Gestor de Precios"
-            }
-            else if (id_rol === 5) {
-                return "Gestor de Stock"
-            }
-            else if (id_rol === 6) {
-                return "Rider"
-            }
-        } else {
-            if (id_rol === 1) {
-                return "Ex-Administrador"
-            }
-            else if (id_rol === 2) {
-                return "Ex-Editor de Productos Gral."
-            }
-            else if (id_rol === 3) {
-                return "Ex-Gestor de Pedidos y Clientes"
-            }
-            else if (id_rol === 4) {
-                return "Ex-Gestor de Precios"
-            }
-            else if (id_rol === 5) {
-                return "Ex-Gestor de Stock"
-            }
-            else if (id_rol === 6) {
-                return "Ex-Rider"
-            }
+    const Roltxt = (array_roles,activo) => {
+        if (!Array.isArray(array_roles) || array_roles.length === 0) {
+            return "Sin Rol Asignado"
         }
+        if (array_roles.length > 1) {
+            if (array_roles.includes(1)) return activo ? "Admin +" : "Ex-Admin +"
+            return activo ? "Multirrol" : "Ex-Multirrol"
+        }
+        const id_unico = array_roles[0]
+        if (activo) {
+            if (id_unico === 1) return "Administrador"
+            if (id_unico === 2) return "Editor de Productos Gral."
+            if (id_unico === 3) return "Gestor de Pedidos y Clientes"
+            if (id_unico === 4) return "Gestor de Precios"
+            if (id_unico === 5) return "Gestor de Stock"
+            if (id_unico === 6) return "Rider"
+            if (id_unico === 7) return "Editor de Clientes"
+        } else {
+            if (id_unico === 1) return "Ex-Administrador"
+            if (id_unico === 2) return "Ex-Editor de Productos Gral."
+            if (id_unico === 3) return "Ex-Gestor de Pedidos y Clientes"
+            if (id_unico === 4) return "Ex-Gestor de Precios"
+            if (id_unico === 5) return "Ex-Gestor de Stock"
+            if (id_unico === 6) return "Ex-Rider"
+            if (id_unico === 7) return "Ex-Editor de Clientes"
+        }
+        return "Desconocido"
     }
     const ToggleRol = (id_rol) => {
         if (!UsuarioAct.value.id_rol) {
