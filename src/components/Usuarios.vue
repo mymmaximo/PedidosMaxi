@@ -209,7 +209,7 @@
                                 maxlength="30"
                                 >
                                 <h2>Roles</h2>
-                                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 px-4">
+                                <div class="grid grid-cols-1 md:grid-cols-1 gap-2 mb-6 px-4">
                                     <button 
                                     v-for="rol in ListaRoles" 
                                     :key="'nuevo-' + rol.id"
