@@ -162,7 +162,9 @@
                                 :key="i.id_pedido"
                                 class="mb-2 lg:mb-5"
                                 >
-                                    <div class="tab !bg-green-200">
+                                    <div  @click="PedidoCambioPreparando(i.id_pedido)"
+                                    class="tab !bg-green-200"
+                                    >
                                         <div class="flex flex-col">
                                             <div class="flex flex-row">
                                                 <h1>
@@ -295,7 +297,9 @@
                                     :key="i.id_pedido"
                                     class="mb-2 lg:mb-5"
                                     >
-                                        <div class="tab !bg-yellow-200">
+                                        <div @click="PedidoCambioEnCamino(i.id_pedido)"
+                                        class="tab !bg-yellow-200"
+                                        >
                                             <div class="flex flex-col">
                                                 <div class="flex flex-row">
                                                     <h1>
@@ -475,6 +479,7 @@
                                         <div v-if = "PedidoNowHistorial === i.id_pedido">
                                             <div v-for = "e in i.detalle_pedido" 
                                             :key="e.id_detalle_pedido"
+                                            @click="PedidoCambioHistorial(i.id_pedido)"
                                             class="tab !bg-red-100/50"
                                             >
                                                 <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">

@@ -481,7 +481,7 @@
 	}
 	const Edicion = (pedido_fila) => {
 		if (pedido_fila.estatus === 1) {
-			return
+			PedidoCambio(EstatusAct.value.id_pedido)
 		}
 		EstatusAct.value.id_pedido = pedido_fila.id_pedido
 		EstatusAct.value.id_cliente = pedido_fila.id_cliente

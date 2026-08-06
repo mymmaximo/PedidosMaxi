@@ -312,7 +312,8 @@
                                 :key="i.id"
                                 class="mb-2 lg:mb-5"
                                 >
-                                    <div :class="Estatuscolor(i.activo)"
+                                    <div @click= "DireccionCambio(i.id)" 
+                                    :class="Estatuscolor(i.activo)"
                                     class="tab"
                                     >
                                         <div class="flex flex-col">

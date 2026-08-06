@@ -282,7 +282,8 @@
                             :key="i.id"
                             class="mb-2 lg:mb-5"
                             >
-                                <div :class="Rolcolor(i.id_rol,i.activo)"
+                                <div @click="Edicion(i)"
+                                :class="Rolcolor(i.id_rol,i.activo)"
                                 class="tab"
                                 >
                                     <div class="flex flex-col">
