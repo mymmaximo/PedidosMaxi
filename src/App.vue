@@ -196,7 +196,7 @@
                         >
                         Iniciar Sesion
                         </h3>
-                        <h3 @click="router.push('/mis_pedidos')"
+                        <h3 @click="!Rol || Rol.length === 0 ? router.push('/mis_pedidos') : null"
                         v-if="Iniciado"
                         class="botonpestaña"
                         >
