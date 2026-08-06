@@ -201,7 +201,9 @@
         ValidadSesionBack, 
         urlover8000,
         Iniciado,
-        Rol
+        Rol,
+        VerificarRol,
+        VerificarRolExcluido
     } from './Estatus.js'
     // ----- Variables Vue ----- //
     const router = useRouter()

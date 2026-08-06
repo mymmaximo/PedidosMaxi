@@ -183,7 +183,7 @@
                         </span>
                     </div>
                     <div @click="router.push('/centro_de_ayuda')"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
+                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/centro_de_ayuda'}"
                     class="botonpestaña"
                     >
                     Centro de Ayuda
