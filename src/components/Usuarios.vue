@@ -37,47 +37,24 @@
                     <h1>
                     Actualizar Usuario {{ UsuarioAct.nombre }}
                     </h1>
-                    <form @submit.prevent="ActualizarUsuarios">
-                        <h2 class="!self-center font-bold">
-                        Rol
-                        </h2>
-                        <select v-model="UsuarioAct.id_rol">
-                            <option value="" disabled>
-                            Selecciona un Rol...
-                            </option>
-                            <option value=1>
-                            Administrador
-                            </option>
-                            <option value=2>
-                            Editor de Productos General
-                            </option>
-                            <option value=3>
-                            Gestor de Pedidos General y Editor de Clientes
-                            </option>
-                            <option value=4>
-                            Gestor de Precios
-                            </option>
-                            <option value=5>
-                            Gestor de Stock
-                            </option>
-                            <option value=6>
-                            Rider
-                            </option>
-                        </select>
-                        <div class="botones">
-                            <button :disabled="confirboton"
-                            type="submit" 
-                            class="botoncon"
-                            >
-                            Actualizar
-                            </button>
-                            <button @click="CerrarPopUp02" 
-                            class="botonc"
-                            >
-                            Cancelar
-                            </button>
-                        </div>
-                    </form>
+                    <h2 class="mt-4 mb-2 font-bold text-center text-green-900">
+                        Roles Asignados
+                    </h2>
+                    <!-- Cuadrícula de botones (3 columnas en PC, 2 en móvil) -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 px-4">
+                        <button 
+                        v-for="rol in ListaRoles" 
+                        :key="rol.id"
+                        @click="ToggleRol(rol.id)"
+                        type="button"
+                        class="py-2 px-1 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm border-2"
+                        :class="UsuarioAct.id_rol && UsuarioAct.id_rol.includes(rol.id) 
+                            ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
+                            : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
+                        >
+                            {{ rol.nombre }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </transition>
@@ -442,6 +419,15 @@
         contrasena: "",
         id_rol: ""
     })
+    const ListaRoles = ref([
+        { id: 1, nombre: "Administrador"},
+        { id: 2, nombre: "Editor de Productor General"},
+        { id: 3, nombre: "Gestor de Pedidos General"},
+        { id: 4, nombre: "Gestor de Precios"},
+        { id: 5, nombre: "Gestor de Stock"},
+        { id: 6, nombre: "Rider"},
+        { id: 7, nombre: "Editor de Clientes"}
+    ])
     // ----- Variables Booleanas ----- //
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
@@ -594,6 +580,17 @@
             else if (id_rol === 6) {
                 return "Ex-Rider"
             }
+        }
+    }
+    const ToggleRol = (id_rol) => {
+        if (!UsuarioAct.value.id_rol) {
+            UsuarioAct.value.id_rol = []
+        }
+        const index = UsuarioAct.value.id_rol.indexOf(id_rol)
+        if (index > -1) {
+            UsuarioAct.value.id_rol.splice(index, 1)
+        } else {
+            UsuarioAct.value.id_rol.push(id_rol)
         }
     }
     // ----- Para el Backend ----- //
