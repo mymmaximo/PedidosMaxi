@@ -37,24 +37,39 @@
                     <h1>
                     Actualizar Usuario {{ UsuarioAct.nombre }}
                     </h1>
-                    <h2 class="mt-4 mb-2 font-bold text-center text-green-900">
-                        Roles Asignados
-                    </h2>
-                    <!-- Cuadrícula de botones (3 columnas en PC, 2 en móvil) -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 px-4">
-                        <button 
-                        v-for="rol in ListaRoles" 
-                        :key="rol.id"
-                        @click="ToggleRol(rol.id)"
-                        type="button"
-                        class="py-2 px-1 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm border-2"
-                        :class="UsuarioAct.id_rol && UsuarioAct.id_rol.includes(rol.id) 
-                            ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
-                            : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
-                        >
-                            {{ rol.nombre }}
-                        </button>
-                    </div>
+                    <form @submit.prevent="ActualizarUsuarios">
+                        <h2 class="mt-4 mb-2 font-bold text-center text-green-900">
+                            Roles Asignados
+                        </h2>
+                        <!-- Cuadrícula de botones (3 columnas en PC, 2 en móvil) -->
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 px-4">
+                            <button 
+                            v-for="rol in ListaRoles" 
+                            :key="rol.id"
+                            @click="ToggleRol(rol.id)"
+                            type="button"
+                            class="py-2 px-1 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm border-2"
+                            :class="UsuarioAct.id_rol && UsuarioAct.id_rol.includes(rol.id) 
+                                ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
+                                : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
+                            >
+                                {{ rol.nombre }}
+                            </button>
+                        </div>
+                        <div class="botones">
+                            <button :disabled="confirboton"
+                            type="submit" 
+                            class="botoncon"
+                            >
+                            Actualizar
+                            </button>
+                            <button @click="CerrarPopUp02" 
+                            class="botonc"
+                            >
+                            Cancelar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </transition>
