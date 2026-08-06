@@ -358,7 +358,7 @@
     // ----- Variables Vue ----- //
     const router = useRouter()
     const confirboton = computed(() =>{
-        if (Rol.value && Rol.value !== "") {
+        if (Rol.value && Rol.value.length > 0) {
             return true
         }
         if (DireccionExistente.value === "") {

@@ -274,7 +274,7 @@
     })
     const ProcesarLogin = () => {
         Iniciado.value = true
-        if (Rol.value === 3 || Rol.value === 6) {
+        if (VerificarRol([3, 6])) {
             router.push('/pedidos')
         } else {
             router.push('/')

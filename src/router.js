@@ -134,8 +134,7 @@ router.beforeEach(async (to, from, next) => {
             return next('/')
         }
         if (to.meta.rolesPer) {
-            const URoles = Rol.value ? Rol.value.split(",").map(r => parseInt(r.trim())) : []
-            const Acceso = URoles.some(rol => to.meta.rolesPer.includes(rol))
+            const Acceso = Rol.value && Rol.value.some(rol => to.meta.rolesPer.includes(rol))
             if (!Acceso) {
                 MostrarError.value = true
                 setTimeout(() => { MostrarError.value = false }, 3000)

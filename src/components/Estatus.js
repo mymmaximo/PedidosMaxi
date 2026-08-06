@@ -12,7 +12,7 @@ export const urlbase5173a = "http://10.250.4.18:5173"
 
 export const urlover8000a = "http://10.250.4.18:8000"
 
-export const Rol = ref("")
+export const Rol = ref([])
 
 export const ClienteID = ref(null)
 
@@ -108,7 +108,7 @@ export const ValidadSesionBack = async () => {
         if (respuesta.ok) {
             const datos = await respuesta.json()
             Iniciado.value = true
-            Rol.value = datos.id_rol ? String(datos.id_rol) : ""
+            Rol.value = datos.id_rol || []
             ClienteID.value = datos.id_cliente
         } else {
             if (Iniciado.value === true) {
@@ -180,15 +180,13 @@ export const ValidadCarrito = (carrito_check) => {
 }
 
 export const VerificarRol = (rolesPermitidos) => {
-    if (!Rol.value) return false
+    if (!Rol.value || Rol.value.length === 0) return false
     const permitidos = Array.isArray(rolesPermitidos) ? rolesPermitidos : [rolesPermitidos]
-    const misRoles = Rol.value.split(",").map(r => parseInt(r.trim()))
-    return misRoles.some(rol => permitidos.includes(rol))
+    return Rol.value.some(rol => permitidos.includes(rol))
 }
 
 export const VerificarRolExcluido = (rolesnoPermitidos) => {
-    if (!Rol.value) return true
+    if (!Rol.value || Rol.value.length === 0) return true
     const nopermitidos = Array.isArray(rolesnoPermitidos) ? rolesnoPermitidos : [rolesnoPermitidos]
-    const misRoles = Rol.value.split(",").map(r => parseInt(r.trim()))
-    return misRoles.some(rol => !nopermitidos.includes(rol))
+    return Rol.value.some(rol => !nopermitidos.includes(rol))
 }

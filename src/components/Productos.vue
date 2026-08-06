@@ -537,7 +537,7 @@
                         </h1>
                     </div>
                     <transition name="slide">
-                        <div v-if="MostrarNuevo && (Rol === 1 || Rol === 2)"
+                        <div v-if="MostrarNuevo && (VerificarRol([1, 2]))"
                         class="flex flex-col lg:self-center"
                         >
                             <form @submit.prevent="SubirNuevoProducto">

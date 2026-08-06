@@ -158,12 +158,12 @@
                 </div>
                 <div class="flex min-h-10">
                     <div @click="AbrirPopUp02()" 
-                    v-if="CarritoLocal.length > 0 && Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                    v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
                     class="botonc !rounded-none !px-2"
                     >
                     🗑️
                     </div>
-                    <div v-if="CarritoLocal.length > 0 && Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                    <div v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
                     @click="router.push('/carrito')"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
                     class="botonpestaña"
@@ -313,14 +313,14 @@
                                 💲 Historial de Precios
                                 </div>
                                 <div @click="router.push('/carrito') ; MostrarMenu = false"
-                                v-if="CarritoLocal.length > 0 && Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                                v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                 🛒 Tu Carrito
                                 </div>
                                 <div @click="AbrirPopUp02()" 
-                                v-if="CarritoLocal.length > 0 && Rol !== 2 && Rol !== 3 && Rol !== 4 && Rol !== 5 && Rol !== 6"
+                                v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
                                 class="botonpestaña !from-red-400/80 !to-red-500/80 !py-4 !text-left"
                                 >
                                 🗑️ Vaciar Carrito
@@ -404,7 +404,7 @@
     // ----- Funciones Vue ----- //
     const ProcesarLogin = () => {
         Iniciado.value = true
-        if (Rol.value === 3 || Rol.value === 6) {
+        if (VerificarRol([3, 6])) {
             router.push('/pedidos')
         } else {
             router.push('/')
