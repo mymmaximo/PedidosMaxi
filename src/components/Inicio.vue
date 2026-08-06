@@ -617,6 +617,7 @@
                                     <div v-for="i in ProductosPorCategoria[cat.categoria]"
                                     :key="cat.categoria + '-' + i.id"
                                     :class="Estatuscolor(i.activo)"
+                                    @click="Compracion(i)"
                                     class="carta"
                                     >
                                         <div>

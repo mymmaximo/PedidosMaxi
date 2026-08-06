@@ -686,6 +686,7 @@
                                 @touchstart="ComienzoToque($event)"
                                 @touchend="FinToque($event, i)" 
                                 class="carta"
+                                @click="Compracion(i)"
                                 >
                                     <div>
                                         <div v-if="i.imagenes.length > 0"
