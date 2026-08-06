@@ -1028,6 +1028,9 @@
         inicioY = evento.changedTouches[0].clientY
     }
     const Compracion = (producto_fila) => {
+        if (CarritoStock(producto_fila) <= 0) {
+            return 
+        }
         VentanaComprar(producto_fila)
         AbrirPopUp04()
     }
