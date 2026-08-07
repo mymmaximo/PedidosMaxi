@@ -314,7 +314,7 @@
                                         </div>
                                     </div>
                                     <div class="flex flex-col ml-auto text-right items-end">
-                                        <button @click="Eliminacion(i)" 
+                                        <button @click.stop="Eliminacion(i)" 
                                         v-if="i.activo"
                                         class="botonc !p-2"
                                         >
@@ -323,7 +323,7 @@
                                         Eliminar
                                         </span>
                                         </button>
-                                        <button v-else @click="Eliminacion(i)"
+                                        <button v-else @click.stop="Eliminacion(i)"
                                         class="botoncon !p-2"
                                         >
                                         🕊️
@@ -331,7 +331,7 @@
                                         Reactivar
                                         </span>
                                         </button>
-                                        <button @click="Edicion(i)"
+                                        <button @click.stop="Edicion(i)"
                                         class="botont !p-2"
                                         >
                                         ✏️
@@ -422,7 +422,7 @@
         nombre: "",
         email: "",
         contrasena: "",
-        id_rol: ""
+        id_rol: []
     })
     const ListaRoles = ref([
         { id: 1, nombre: "Administrador"},
@@ -607,7 +607,7 @@
             nombre: "",
             email: "",
             contrasena: "",
-            id_rol: ""
+            id_rol: []
         }
         BusquedaUsuario()
         CerrarPopUp02()
@@ -677,7 +677,7 @@
             email: "",
             dni: "",
             contrasena: "",
-            id_rol: ""
+            id_rol: []
         }
         BusquedaUsuario()
     }

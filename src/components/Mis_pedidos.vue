@@ -37,6 +37,20 @@
                                 </h2>
                                 <div class="flex flex-col gap-3">
                                     <label>
+                                    <input :value="5"
+                                    type="radio" 
+                                    v-model="filtroMP"
+                                    > 
+                                    Todos
+                                    </label>
+                                    <label>
+                                    <input :value="4"
+                                    type="radio" 
+                                    v-model="filtroMP"
+                                    > 
+                                    Paddle
+                                    </label>
+                                    <label>
                                     <input :value="3"
                                     type="radio" 
                                     v-model="filtroMP"
@@ -264,13 +278,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div @click="PedidoCambioPreparando(i.id_pedido)"
+                                    <div @click.stop="PedidoCambioPreparando(i.id_pedido)"
                                     v-if = "PedidoNowPreparando === i.id_pedido"
                                     class="botont text-center"
                                     >
                                     Ocultar Detalles
                                     </div>
-                                    <div v-else @click="PedidoCambioPreparando(i.id_pedido)"
+                                    <div v-else @click.stop="PedidoCambioPreparando(i.id_pedido)"
                                     class="botoncon text-center"
                                     >
                                     Ver Detalles
@@ -399,13 +413,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div @click="PedidoCambioEnCamino(i.id_pedido)"
+                                        <div @click.stop="PedidoCambioEnCamino(i.id_pedido)"
                                         v-if = "PedidoNowEnCamino === i.id_pedido"
                                         class="botont text-center"
                                         >
                                         Ocultar Detalles
                                         </div>
-                                        <div v-else @click="PedidoCambioEnCamino(i.id_pedido)"
+                                        <div v-else @click.stop="PedidoCambioEnCamino(i.id_pedido)"
                                         class="botoncon text-center"
                                         >
                                         Ver Detalles
@@ -443,7 +457,9 @@
                                     :key="i.id_pedido"
                                     class="mb-2 lg:mb-5"
                                     >
-                                        <div class="tab !bg-red-200">
+                                        <div @click="PedidoCambioHistorial(i.id_pedido)"
+                                        class="tab !bg-red-200"
+                                        >
                                             <div class="flex flex-col">
                                                 <div class="flex flex-row">
                                                     <h1>
@@ -479,7 +495,6 @@
                                         <div v-if = "PedidoNowHistorial === i.id_pedido">
                                             <div v-for = "e in i.detalle_pedido" 
                                             :key="e.id_detalle_pedido"
-                                            @click="PedidoCambioHistorial(i.id_pedido)"
                                             class="tab !bg-red-100/50"
                                             >
                                                 <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
@@ -544,13 +559,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div @click="PedidoCambioHistorial(i.id_pedido)"
+                                        <div @click.stop="PedidoCambioHistorial(i.id_pedido)"
                                         v-if = "PedidoNowHistorial === i.id_pedido"
                                         class="botont text-center"
                                         >
                                         Ocultar Detalles
                                         </div>
-                                        <div v-else @click="PedidoCambioHistorial(i.id_pedido)"
+                                        <div v-else @click.stop="PedidoCambioHistorial(i.id_pedido)"
                                         class="botoncon text-center"
                                         >
                                         Ver Detalles
@@ -601,7 +616,7 @@
     const PedidoNowHistorial = ref(null)
     const PedidoNowPreparando = ref(null)
     // ----- Variables Simples ----- //
-    const filtroMP = ref(4)
+    const filtroMP = ref(5)
     const filtroEst = ref(4)
     // ----- Funciones Vue ----- //
     onMounted (() => {
@@ -708,8 +723,11 @@
             filtroAct.value = true
         }
         let mpfiltro = ""
-        if (filtroMP.value === 4) {
+        if (filtroMP.value === 5) {
             mpfiltro = ""
+        }
+        else if (filtroMP.value === 4) {
+            mpfiltro = "Paddle"
         }
         else if (filtroMP.value === 3) {
             mpfiltro = "Tarjeta de Crédito"
@@ -723,7 +741,7 @@
         else if (filtroMP.value === 0) {
             mpfiltro = "Efectivo"
         }
-        if (filtroMP.value !== 4&& mpfiltro !== "") {
+        if (filtroMP.value !== 5 && mpfiltro !== "") {
             url.searchParams.append('filtromp', mpfiltro)
             filtroAct.value = true
         }

@@ -64,6 +64,13 @@
 								Filtro de Metodo de Pago
 								</h1>
 								<label>
+								<input :value="5"
+								type="radio" 
+								v-model="filtroMP"
+								> 
+								Todos
+								</label>
+								<label>
 								<input :value="4"
 								type="radio" 
 								v-model="filtroMP"
@@ -103,6 +110,13 @@
 								<h1>
 								Filtro de Estatus
 								</h1>
+								<label>
+								<input :value="4"
+								type="radio"
+								v-model="filtroEst"
+								> 
+								Todos
+								</label>
 								<label>
 								<input :value="3"
 								type="radio"
@@ -223,7 +237,7 @@
 						<!-- Tabla de Pedidos -->
 						<div v-if="Pedidos.length > 0">
 							<div v-for= "i in Pedidos" 
-							:key="i.id"
+							:key="i.id_pedido"
 							class="mb-2 lg:mb-5"
 							>
 								<div @click="Edicion(i)" 
@@ -431,7 +445,7 @@
     const filtroprovincia = ref ("")
     // ----- Variables Simples ----- //
 	const Pagina = ref(0)
-	const filtroMP = ref(4)
+	const filtroMP = ref(5)
 	const filtroEst = ref(4)
     // ----- Funciones Vue ----- //
 	onMounted (() => {
@@ -481,7 +495,7 @@
 	}
 	const Edicion = (pedido_fila) => {
 		if (pedido_fila.estatus === 1) {
-			PedidoCambio(EstatusAct.value.id_pedido)
+			PedidoCambio(pedido_fila.id_pedido)
 			return
 		}
 		EstatusAct.value.id_pedido = pedido_fila.id_pedido
@@ -532,7 +546,7 @@
 		}
 	}
 	const LimpiarFiltro = () => {
-		filtroMP.value = 4
+		filtroMP.value = 5
 		filtroEst.value = 4
         filtrociudad.value = ""
         filtroprovincia.value = ""
@@ -605,7 +619,7 @@
 		else if (filtroMP.value === 0) {
 			mpfiltro = "Efectivo"
 		}
-		if (filtroMP.value !== 4&& mpfiltro !== "") {
+		if (filtroMP.value !== 5 && mpfiltro !== "") {
 			url.searchParams.append('filtromp', mpfiltro)
 			filtroAct.value = true
 		}

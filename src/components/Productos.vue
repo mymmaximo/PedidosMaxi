@@ -695,7 +695,7 @@
                                         items-center justify-center 
                                         w-full pb-2 snap-x"
                                         >
-                                            <button @click="BackImg(i)"
+                                            <button @click.stop="BackImg(i)"
                                             :disabled="GetImg(i.id) === 0"
                                             class="botonflecha hidden md:flex"
                                             >
@@ -715,7 +715,7 @@
                                                     class="imagen !2xl:p-15">
                                                 </div>
                                             </div>
-                                            <button @click="NextImg(i)"
+                                            <button @click.stop="NextImg(i)"
                                             :disabled="GetImg(i.id) === i.imagenes.length - 1"
                                             class="botonflecha hidden md:flex"
                                             >
@@ -745,7 +745,7 @@
                                             </div>
                                             <div class="botones">
                                                 <div v-if="VerificarRol([1, 2, 4, 5])">
-                                                    <button @click="Edicion(i)" 
+                                                    <button @click.stop="Edicion(i)" 
                                                     v-if="VerificarRol([1, 2, 4, 5])" 
                                                     class="botont !py-2"
                                                     >
@@ -756,7 +756,7 @@
                                                     </button>
                                                 </div>
                                                 <div v-if="VerificarRol([1, 2])">
-                                                    <button @click="Eliminacion(i)" 
+                                                    <button @click.stop="Eliminacion(i)" 
                                                     v-if="i.activo" 
                                                     class="botonc !py-2"
                                                     >
@@ -765,7 +765,7 @@
                                                     Eliminar
                                                     </span>
                                                     </button>
-                                                    <button v-else @click="Eliminacion(i)" 
+                                                    <button v-else @click.stop="Eliminacion(i)" 
                                                     class="botoncon"
                                                     >
                                                     🕊️
@@ -774,7 +774,7 @@
                                                     </span>
                                                     </button>
                                                 </div>
-                                                <button @click="Compracion(i)"
+                                                <button @click.stop="Compracion(i)"
                                                 :disabled="CarritoStock(i) === 0"
                                                 v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
                                                 class="botoncon !py-2 !text-2xl"

@@ -661,7 +661,7 @@
                                                 <div class="flex flex-row lg:flex-col justify-center">
                                                     <div class="botones">
                                                         <div v-if="VerificarRol([1, 2])">
-                                                            <button @click="Eliminacion(i)" 
+                                                            <button @click.stop="Eliminacion(i)" 
                                                             v-if="i.activo" 
                                                             class="botonc !py-2"
                                                             >
@@ -670,7 +670,7 @@
                                                             Eliminar
                                                             </span>
                                                             </button>
-                                                            <button v-else @click="Eliminacion(i)" 
+                                                            <button v-else @click.stop="Eliminacion(i)" 
                                                             class="botoncon !py-2"
                                                             >
                                                             🕊️
@@ -680,7 +680,7 @@
                                                             </button>
                                                         </div>
                                                         <div v-if="VerificarRol([1, 2, 4, 5])">
-                                                            <button @click="Edicion(i)" 
+                                                            <button @click.stop="Edicion(i)" 
                                                             v-if="VerificarRol([1, 2, 4, 5])" 
                                                             class="botont !py-2">
                                                             ✏️ 
@@ -689,7 +689,7 @@
                                                             </span>
                                                             </button>
                                                         </div>
-                                                        <button @click="Compracion(i)"
+                                                        <button @click.stop="Compracion(i)"
                                                         :disabled="CarritoStock(i) === 0"
                                                         v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
                                                         class="botoncon !py-2 !text-2xl"
