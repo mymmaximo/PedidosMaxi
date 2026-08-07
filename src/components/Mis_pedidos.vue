@@ -477,9 +477,9 @@
                                             >
                                                 <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                     <div class="flex flex-row">
-                                                        <h3 class="font-bold overflow-hidden text-ellipsis">
+                                                        <h1 class="font-bold overflow-hidden text-ellipsis">
                                                         {{ e.producto.nombre }}
-                                                        </h3>
+                                                        </h1>
                                                     </div>
                                                     <div class="flex flex-col gap-1">
                                                         <h3>

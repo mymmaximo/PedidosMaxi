@@ -328,9 +328,9 @@
 									>
 										<div class="flex flex-col">
 											<div class="flex flex-row">
-												<h3 class="font-bold">
+												<h2 class="font-bold">
 												{{ e.producto.nombre }}
-												</h3>
+												</h2>
 											</div>
 											<div class="flex flex-col">
 												<h3>
