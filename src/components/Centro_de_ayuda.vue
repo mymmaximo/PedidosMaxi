@@ -21,7 +21,7 @@
                     </h1>
                     <div class="mb-2 lg:mb-5">
                         <div @click="CopiarAlPortapapeles('maxgiesenow@gmail.com', 'E-Mail')"
-                        class="tab cursor-pointer !mb-2 !lg:mb-5"
+                        class="tab cursor-pointer !mb-10"
                         >
                             <!-- Correo Electronico -->
                             <div class="flex flex-col">
@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <div @click="CopiarAlPortapapeles('+54 351 250-0570', 'WhatsApp')"
-                        class="tab cursor-pointer"
+                        class="tab cursor-pointer !mb-10"
                         >
                             <!-- Whatsapp -->
                             <div class="flex flex-col">
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <div @click="CopiarAlPortapapeles('+54 351 250-0570', 'Teléfono')"
-                        class="tab cursor-pointer"
+                        class="tab cursor-pointer !mb-10"
                         >
                             <!-- Telefono -->
                             <div class="flex flex-col">
