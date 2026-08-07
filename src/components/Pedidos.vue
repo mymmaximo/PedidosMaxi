@@ -359,17 +359,6 @@
 										</div>
 									</div>
 								</div>
-								<div @click= "PedidoCambio(i.id_pedido)"
-								v-if = "PedidoNow === i.id_pedido"  
-								class="botonc text-center"
-								>
-								Ocultar Detalles
-								</div>
-								<div v-else @click= "PedidoCambio(i.id_pedido)"
-								class="botoncon text-center"
-								>
-								Ver Detalles
-								</div>
 							</div>
 						</div>
 						<div v-else>

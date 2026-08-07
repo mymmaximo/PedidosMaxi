@@ -278,17 +278,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div @click.stop="PedidoCambioPreparando(i.id_pedido)"
-                                    v-if = "PedidoNowPreparando === i.id_pedido"
-                                    class="botont text-center"
-                                    >
-                                    Ocultar Detalles
-                                    </div>
-                                    <div v-else @click.stop="PedidoCambioPreparando(i.id_pedido)"
-                                    class="botoncon text-center"
-                                    >
-                                    Ver Detalles
-                                    </div>
                                 </div>
                             </div>
                             <div v-else>
@@ -412,17 +401,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div @click.stop="PedidoCambioEnCamino(i.id_pedido)"
-                                        v-if = "PedidoNowEnCamino === i.id_pedido"
-                                        class="botont text-center"
-                                        >
-                                        Ocultar Detalles
-                                        </div>
-                                        <div v-else @click.stop="PedidoCambioEnCamino(i.id_pedido)"
-                                        class="botoncon text-center"
-                                        >
-                                        Ver Detalles
                                         </div>
                                     </div>
                                 </div>
@@ -559,17 +537,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div @click.stop="PedidoCambioHistorial(i.id_pedido)"
-                                        v-if = "PedidoNowHistorial === i.id_pedido"
-                                        class="botont text-center"
-                                        >
-                                        Ocultar Detalles
-                                        </div>
-                                        <div v-else @click.stop="PedidoCambioHistorial(i.id_pedido)"
-                                        class="botoncon text-center"
-                                        >
-                                        Ver Detalles
-                                        </div>
                                     </div>
                                 </div>
                                 <div 
@@ -682,7 +649,7 @@
         }
     }
     const LimpiarFiltro = () => {
-        filtroMP.value = 4
+        filtroMP.value = 5
         filtroEst.value = 4
         BusquedaPedido()
         MostrarFiltro.value = false
