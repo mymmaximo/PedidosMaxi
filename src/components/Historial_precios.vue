@@ -1,5 +1,18 @@
 <template>
     <div class="cuerpo">
+        <!-- Notificación de Copiado Exitoso -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="MostrarNotificacion" 
+                class="fixed top-4 right-4 
+                bg-blue-300 text-white 
+                px-6 py-3 rounded-xl shadow-lg 
+                z-[100] font-bold"
+                >
+                ✅ {{ TextoNotificacion }}
+                </div>
+            </transition>
+        </Teleport>
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="bar">
@@ -74,12 +87,12 @@
                                 Filtros de Precio Viejo
                                 </h2>
                                 <input placeholder="Precio Viejo Max..."
-                                type="date"
+                                type="number"
                                 v-model="precio_viejo_max" 
                                 maxlength="10"
                                 >
                                 <input placeholder="Precio Viejo Min..."
-                                type="date"
+                                type="number"
                                 v-model="precio_viejo_min" 
                                 maxlength="10"
                                 >
@@ -210,7 +223,8 @@
                             :key="i.id"
                             class="mb-2 lg:mb-5"
                             >
-                                <div :class="Estatuscolor(i.activo)"
+                                <div  @click="CopiarAlPortapapeles(i.codigo_barra, i.nombre)"
+                                :class="Estatuscolor(i.activo)"
                                 class="tab"
                                 >
                                     <div class="flex flex-col">
@@ -307,6 +321,7 @@
     const CargandoTrue = ref(true)
 	const FiltroCaja = ref (false)
 	const MostrarFiltro = ref (false)
+    const MostrarNotificacion = ref(false)
     // ----- Variables Vacias ----- //
 	const orden = ref ("")
     const Historial = ref([])
@@ -318,6 +333,7 @@
 	const precio_nuevo_min = ref ("")
 	const precio_viejo_max = ref ("")
 	const precio_viejo_min = ref ("")
+    const TextoNotificacion = ref("")
 	const fecha_upgrade_max = ref ("")
 	const fecha_upgrade_min = ref ("")
     // ----- Variables Simples ----- //
@@ -359,9 +375,22 @@
         CerrarPopUp01()
     }
 	const CerrarPopUp01 = () => {
-		FiltroCaja.value = false
+		MostrarFiltro.value = false
 		document.body.style.overflow = "auto"
 	}
+    const CopiarAlPortapapeles = async (codigo, nombre_producto) => {
+        try {
+            await navigator.clipboard.writeText(codigo)
+            TextoNotificacion.value = `¡Codigo de Barra de ${nombre_producto} copiado al portapapeles!`
+            MostrarNotificacion.value = true
+            setTimeout(() => {
+                MostrarNotificacion.value = false
+            }, 2500)
+        } catch (error) {
+            console.error('Error al copiar al portapapeles:', error)
+            alert("Tu navegador no soporta la función de copiar automáticamente.")
+        }
+    }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
             return "si"
