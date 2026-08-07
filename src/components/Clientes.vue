@@ -170,7 +170,10 @@
                                         <option value="" disabled>
                                         Selecciona una Ciudad...
                                         </option>
-                                        <option v-for="i in ListaCiudad" :key="i.ciudad" :value="i.ciudad">
+                                        <option v-for="i in ListaCiudad" 
+                                        :key="i.ciudad" 
+                                        :value="i.ciudad"
+                                        >
                                         {{ i.ciudad }}
                                         </option>
                                     </select>
@@ -183,7 +186,10 @@
                                         <option value="" disabled>
                                         Selecciona una Provincia...
                                         </option>
-                                        <option v-for="i in ListaProvincia" :key="i.provincia" :value="i.provincia">
+                                        <option v-for="i in ListaProvincia" 
+                                        :key="i.provincia" 
+                                        :value="i.provincia"
+                                        >
                                         {{ i.provincia }}
                                         </option>
                                     </select>
@@ -344,7 +350,7 @@
                                             </div>
                                         </div>
                                         <div class="flex flex-col ml-auto text-right items-end">
-                                            <button @click="Eliminacion(i)" 
+                                            <button @click.stop="Eliminacion(i)" 
                                             v-if="i.activo"
                                             class="botonc !p-2"
                                             >
@@ -353,7 +359,7 @@
                                             Eliminar
                                             </span>
                                             </button>
-                                            <button v-else @click="Eliminacion(i)" 
+                                            <button v-else @clic.stopk="Eliminacion(i)" 
                                             class="botoncon !p-2"
                                             >
                                             🕊️
@@ -361,7 +367,7 @@
                                             Reactivar
                                             </span>
                                             </button>
-                                            <button @click="Edicion(i)"
+                                            <button @click.stop="Edicion(i)"
                                             class="botont !p-2"
                                             >
                                             ✏️
@@ -411,13 +417,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div @click= "DireccionCambio(i.id)"
+                                    <div @click.stop= "DireccionCambio(i.id)"
                                     v-if="i.direcciones.length > 0 && DireccionNow === i.id"
                                     class="botonc"
                                     >
                                     Ocultar Direcciones
                                     </div>
-                                    <div @click= "DireccionCambio(i.id)" 
+                                    <div @click.stop= "DireccionCambio(i.id)" 
                                     v-else-if="i.direcciones.length > 0 && DireccionNow !== i.id" 
                                     class="botoncon"
                                     >
@@ -604,7 +610,15 @@
     }
     const Eliminacion = (cliente_fila) => {
         ClienteEli.value = cliente_fila.id
+        ClienteAct.value.nombre = cliente_fila.nombre
         AbrirPopUp02()
+    }
+    const TocarTab = (cliente) => {
+        if (!cliente.direcciones || cliente.direcciones.length === 0) {
+            Eliminacion(cliente)
+        } else {
+            DireccionCambio(cliente.id)
+        }
     }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
