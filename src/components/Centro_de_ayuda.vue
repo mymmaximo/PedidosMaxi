@@ -21,7 +21,7 @@
                     </h1>
                     <div class="mb-2 lg:mb-5">
                         <div @click="CopiarAlPortapapeles('maxgiesenow@gmail.com', 'E-Mail')"
-                        class="tab cursor-pointer"
+                        class="tab cursor-pointer !mb-2 !lg:mb-5"
                         >
                             <!-- Correo Electronico -->
                             <div class="flex flex-col">
