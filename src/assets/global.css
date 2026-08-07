@@ -1115,8 +1115,7 @@ img {
 }
 .sent {
     @apply
-    from-green-50 to-green-200 
-    !cursor-not-allowed
+    from-green-50 to-green-200
 }
 .si {
     @apply
