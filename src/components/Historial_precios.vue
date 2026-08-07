@@ -418,7 +418,7 @@
 		bool_activo.value = 1
         BusquedaHistorial()
         CerrarPopUp01()
-        filtroAct.value = true
+        filtroAct.value = false
     }
     // ----- Para el Backend ----- //
     const BusquedaHistorial = async() => {
