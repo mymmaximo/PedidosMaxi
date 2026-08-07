@@ -27,6 +27,7 @@ const routes = [
         component: Login,
         meta: {
             requireAuth: false,
+            title: 'Iniciar Sesión'
         }
     },
     { 
@@ -35,6 +36,7 @@ const routes = [
         component: Inicio,
         meta: {
             requireAuth: false,
+            title: 'Inicio'
         }
     },
     { 
@@ -43,6 +45,7 @@ const routes = [
         component: Productos,
         meta: {
             requireAuth: false,
+            title: 'Productos'
         }
     },
     { 
@@ -51,7 +54,8 @@ const routes = [
         component: Pedidos, 
         meta: {
             requireAuth: true,
-            rolesPer: [1, 3, 6]
+            rolesPer: [1, 3, 6],
+            title: 'Pedidos'
         }
     },
     { 
@@ -60,7 +64,8 @@ const routes = [
         component: Clientes, 
         meta: {
             requireAuth: true,
-            rolesPer: [1, 7]
+            rolesPer: [1, 7],
+            title: 'Clientes'
         }
     },
     { 
@@ -69,7 +74,8 @@ const routes = [
         component: Usuarios, 
         meta: {
             requireAuth: true,
-            rolesPer: [1]
+            rolesPer: [1],
+            title: 'Usuarios'
         }
     },
     { 
@@ -77,7 +83,8 @@ const routes = [
         name: 'carrito', 
         component: Carrito,
         meta: {
-            requireCarrito: true
+            requireCarrito: true,
+            title: 'Carrito'
         }
     },
     { 
@@ -86,6 +93,7 @@ const routes = [
         component: Configuracion,
         meta: {
             requireAuth: true,
+            title: 'Configuracion'
         }
     },
     { 
@@ -94,6 +102,7 @@ const routes = [
         component: Mis_pedidos,
         meta: {
             requireAuth: true,
+            title: 'Mis Pedidos'
         }
     },
     { 
@@ -102,7 +111,8 @@ const routes = [
         component: Historial_precios, 
         meta: {
             requireAuth: true,
-            rolesPer: [1, 2, 4]
+            rolesPer: [1, 2, 4],
+            title: 'Historial de precios'
         }
     },
     { 
@@ -110,7 +120,8 @@ const routes = [
         name: 'centro_de_ayuda', 
         component: Centro_de_ayuda, 
         meta: {
-            requireAuth: false
+            requireAuth: false,
+            title: 'Centro de Ayuda'
         }
     },
 ]
@@ -123,6 +134,8 @@ const router = createRouter({
 let PrimeraCarga = true
 
 router.beforeEach(async (to, from, next) => {
+    const tituloBase = 'Maxi-Store'
+    document.title = to.meta.title ? `${to.meta.title} - ${tituloBase}` : tituloBase
     if (PrimeraCarga) {
         await ValidadSesionBack()
         PrimeraCarga = false
