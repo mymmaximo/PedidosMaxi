@@ -318,7 +318,7 @@
                                 :key="i.id"
                                 class="mb-2 lg:mb-5"
                                 >
-                                    <div @click= "DireccionCambio(i.id)" 
+                                    <div @click= "TocarTab(i)" 
                                     :class="Estatuscolor(i.activo)"
                                     class="tab"
                                     >
