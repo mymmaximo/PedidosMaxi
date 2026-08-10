@@ -136,7 +136,7 @@
                             <span class="hidden lg:inline 2xl:inline">
                             Total:
                             </span>
-                            $ {{ FormatearPrecio(i.precio) }} 
+                            $ {{ FormatearPrecio(ProductoActual.precio * ProductoCantidad) }}
                             </h1>
                         </div>
                         <div class="botones">
