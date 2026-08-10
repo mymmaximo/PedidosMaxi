@@ -331,7 +331,7 @@
                             <span class="hidden lg:inline 2xl:inline">
                             Total:
                             </span>
-                            ${{ ProductoActual.precio * ProductoCantidad }}  
+                            $ {{ FormatearPrecio(ProductoActual.precio * ProductoCantidad) }}  
                             </h1>
                         </div>
                         <div class="botones">
@@ -734,7 +734,7 @@
                                             {{ i.categoria }}
                                             </h3>
                                             <h2>
-                                            ${{ i.precio }}
+                                            $ {{ FormatearPrecio(i.precio) }}
                                             </h2>
                                             <div v-if="VerificarRol([1, 2, 4, 5])">
                                                 <h3>
@@ -1106,11 +1106,15 @@
         }
         inicioX = 0
     }
+    const FormatearPrecio = (precio) => {
+        if (precio === null || precio === undefined) return "0"
+        return new Intl.NumberFormat('es-AR').format(precio)
+    }
     const GetImg = (id) => {
         return IndiceImg.value[id] || 0
     }
     const LimpiarFiltro = () => {
-        filtroRadio.value = 4
+        filtroRadio.value = 0
         filtrocat.value = ""
         filtroEst.value =  1
         BusquedaProducto()
