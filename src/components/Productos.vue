@@ -903,12 +903,12 @@
     const prop = defineProps (['path','size'])
     const router = useRouter()
     const { path } = toRefs (prop)
+    const MostrarFiltro = ref(window.innerWidth >= 1024)
     // ----- Variables Booleanas ----- //
     const ActualizarCajaPDel = ref (false)
     const BloqueoPeticion = ref(false)
     const VentanaCompra = ref (false)
     const MostrarConfir = ref (false)
-    const MostrarFiltro = ref (true)
     const MostrarNuevo = ref (false)
     const VentanaNuevo = ref (false)
     const Actualizando = ref(false)
