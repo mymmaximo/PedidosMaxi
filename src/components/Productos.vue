@@ -927,7 +927,7 @@
     const fileInput = ref ('')
     const Busqueda = ref ("")
     const NewImg = ref ([])
-    const orden = ref ("")
+    const orden = ref ("3")
     const mayor = ref ("")
     const menor = ref ("")
     const DelImg= ref ([])
@@ -1286,7 +1286,9 @@
         }
         if (orden.value !== "") {
             url.searchParams.append('orden', orden.value)
-            filtroAct.value = true
+            if (orden.value !== "3") {
+                filtroAct.value = true
+            }
         }
         let minfiltro = ""
         let maxfiltro = ""
