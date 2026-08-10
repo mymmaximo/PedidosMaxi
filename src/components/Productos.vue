@@ -984,6 +984,14 @@
                 }
             })
             const categ = await respuesta.json()
+            const OrdenDeseado = ["Accesorios", "Hardware", "Periféricos", "Audio", "Hogar y Deco.", "Indumentaria", "SimRacing", "Varios..."]
+            categ.sort((a, b) => {
+                let indexA = OrdenDeseado.indexOf(a.categoria)
+                let indexB = OrdenDeseado.indexOf(b.categoria)
+                if (indexA === -1) indexA = 999 
+                if (indexB === -1) indexB = 999 
+                return indexA - indexB
+            })
             ListaCategoria.value = categ
             CargarCarrito()
             clearTimeout(temporizador)
