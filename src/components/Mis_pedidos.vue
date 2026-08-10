@@ -198,7 +198,7 @@
                                                 <span class="hidden lg:inline 2xl:inline">
                                                 Total:
                                                 </span>
-                                                ${{ i.total }}
+                                                $ {{ FormatearPrecio(i.total) }}
                                                 </h2>
                                             </div>
                                         </div>
@@ -224,10 +224,12 @@
                                                 </div>
                                                 <div class="flex flex-col gap-1">
                                                     <h3>
-                                                    Categoria: {{ e.producto.categoria }}
+                                                    Categoria: 
+                                                    {{ e.producto.categoria }}
                                                     </h3>
                                                     <h3>
-                                                    Precio Unitario: ${{ e.precio_unitario }}
+                                                    Precio Unitario: $ 
+                                                    {{ FormatearPrecio(e.precio_unitario) }}
                                                     </h3>
                                                     <h3>
                                                     Cantidad: {{ e.cantidad }}
@@ -237,7 +239,7 @@
                                                         Subtotal:
                                                         </h2>
                                                         <h2>
-                                                        ${{ e.subtotal }}
+                                                        $ {{ FormatearPrecio(e.subtotal) }}
                                                         </h2>
                                                     </div>
                                                 </div>
@@ -322,7 +324,7 @@
                                                     <span class="hidden lg:inline 2xl:inline">
                                                     Total:
                                                     </span>
-                                                    ${{ i.total }}
+                                                    $ {{ FormatearPrecio(i.total) }}
                                                     </h2>
                                                 </div>
                                             </div>
@@ -351,7 +353,7 @@
                                                         Categoria: {{ e.producto.categoria }}
                                                         </h3>
                                                         <h3>
-                                                        Precio Unitario: ${{ e.precio_unitario }}
+                                                        Precio Unitario: $ {{ FormatearPrecio(e.precio_unitario) }}
                                                         </h3>
                                                         <h3>
                                                         Cantidad: {{ e.cantidad }}
@@ -361,7 +363,7 @@
                                                             Subtotal:
                                                             </h2>
                                                             <h2>
-                                                            ${{ e.subtotal }}
+                                                            $ {{ FormatearPrecio(e.subtotal) }}
                                                             </h2>
                                                         </div>
                                                     </div>
@@ -457,7 +459,7 @@
                                                     <span class="hidden lg:inline 2xl:inline">
                                                     Total:
                                                     </span>
-                                                    ${{ i.total }}
+                                                    $ {{ FormatearPrecio(i.total) }}
                                                     </h2>
                                                 </div>
                                             </div>
@@ -483,20 +485,23 @@
                                                     </div>
                                                     <div class="flex flex-col gap-1">
                                                         <h3>
-                                                        Categoria: {{ e.producto.categoria }}
+                                                        Categoria: 
+                                                        {{ e.producto.categoria }}
                                                         </h3>
                                                         <h3>
-                                                        Precio Unitario: ${{ e.precio_unitario }}
+                                                        Precio Unitario: $ 
+                                                        {{ FormatearPrecio(e.precio_unitario) }}
                                                         </h3>
                                                         <h3>
-                                                        Cantidad: {{ e.cantidad }}
+                                                        Cantidad: 
+                                                        {{ e.cantidad }}
                                                         </h3>
                                                         <div class="flex flex-row">
                                                             <h2 class="font-bold mr-2">
                                                             Subtotal:
                                                             </h2>
                                                             <h2>
-                                                            ${{ e.subtotal }}
+                                                            $ {{ FormatearPrecio(e.subtotal) }}
                                                             </h2>
                                                         </div>
                                                     </div>
@@ -647,6 +652,10 @@
         else {
             return "Pendiente"
         }
+    }
+    const FormatearPrecio = (precio) => {
+        if (precio === null || precio === undefined) return "0"
+        return new Intl.NumberFormat('es-AR').format(precio)
     }
     const LimpiarFiltro = () => {
         filtroMP.value = 5

@@ -12,7 +12,7 @@
                         ¿Desear Cerrar Sesion?
                         </h1>
                         <div class="botones">
-                            <button @click="CerrarSesion()"
+                            <button @click="CerrarSesion() ; CerrarPopUp01"
                             class="botonc"
                             >
                             Si Confirmo
@@ -38,7 +38,7 @@
                         Tu sesión ha expirado
                         </h1>
                         <div class="botones">
-                            <button @click="SesionExpirada = false"
+                            <button @click="SesionExpirada = false; router.push('/login')"
                             class="botoncon"
                             >
                             Iniciar Sesion
@@ -49,20 +49,18 @@
             </transition>
         </Teleport>
         <!-- Notificacion de rol invalido -->
-        <template>
-            <Teleport to="body">
-                <transition name="fade">
-                    <div v-if="MostrarError" 
-                    class="fixed top-4 right-4 
-                    bg-yellow-600 text-black 
-                    px-6 py-3 rounded-xl shadow-lg 
-                    z-[100] font-bold"
-                    >
-                    ¡Acceso Denegado!, revisa tus privilegios
-                    </div>
-                </transition>
-            </Teleport>
-        </template>
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="MostrarError" 
+                class="fixed top-4 right-4 
+                bg-yellow-600 text-black 
+                px-6 py-3 rounded-xl shadow-lg 
+                z-[100] font-bold"
+                >
+                ¡Acceso Denegado!, revisa tus privilegios
+                </div>
+            </transition>
+        </Teleport>
         <!-- Noticacion Carro Vacio -->
         <template>
             <Teleport to="body">
@@ -401,15 +399,6 @@
     const MostrarMenu = ref (false)
     const BorrarCarrito = ref(false)
     const ActualizarCajaLogout = ref(false)
-    // ----- Funciones Vue ----- //
-    const ProcesarLogin = () => {
-        Iniciado.value = true
-        if (VerificarRol([3, 6])) {
-            router.push('/pedidos')
-        } else {
-            router.push('/')
-        }
-    }
     // ----- Para el Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaLogout.value = true

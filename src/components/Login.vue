@@ -154,7 +154,9 @@
                         </h3>
                         <input placeholder="DNI"
                         type="text" 
-                        v-model="NuevoCliente.dni" 
+                        v-model="NuevoCliente.dni"
+                        maxlength="8"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                         >
                         <div class="botones">
                             <button :disabled="confirbotonreg" 
@@ -241,16 +243,13 @@
     // ----- Variantes Booleanas ----- //
     const Heror = ref(false)
     const ErrorCarga = ref(false)
-    const CargandoTrue = ref(true)
+    const CargandoTrue = ref(false)
     const MostrarLogin = ref(true)
     const verContrasena = ref(false)
     const verConContrasena = ref(false)
     // ----- Variantes Vacias ----- //
     const Herror = ref("")
     // ----- Funciones Vue ----- //
-    onMounted (() => {
-        CargarDatos()
-    })
     const CargarDatos = ( async () => {
         CargandoTrue.value = true
         ErrorCarga.value = false

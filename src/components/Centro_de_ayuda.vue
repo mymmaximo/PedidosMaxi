@@ -122,5 +122,14 @@
             console.error('Error al copiar al portapapeles:', error)
             alert("Tu navegador no soporta la función de copiar automáticamente.")
         }
+        if (tipo === 'WhatsApp') {
+            window.open('https://wa.me/5493512500570', '_blank')
+        } 
+        else if (tipo === 'Teléfono') {
+            window.open('tel:+543512500570', '_self')
+        } 
+        else if (tipo === 'E-Mail') {
+            window.open('mailto:maxgiesenow@gmail.com', '_self')
+        }
     }
 </script>

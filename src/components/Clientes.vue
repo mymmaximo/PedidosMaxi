@@ -116,6 +116,13 @@
                                     </h1>
                                     <div class="flex flex-col">
                                         <label>
+                                        <input :value="2" 
+                                        type="radio"
+                                        v-model="filtroDirec"
+                                        >
+                                        Todos los Clientes
+                                        </label>
+                                        <label>
                                         <input :value="1"
                                         type="radio" 
                                         v-model="filtroDirec"
@@ -248,6 +255,7 @@
                                     type="text"
                                     v-model="NuevoCliente.dni"
                                     maxlength="8"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                     >
                                     <h2>
                                     Contraseña
@@ -638,9 +646,10 @@
 	}
     const LimpiarFiltro = () => {
         filtroDirec.value = 2
-        filtroEst.value = 1
+        filtroEst.value = 2
         filtrociudad.value = ""
         filtroprovincia.value = ""
+        orden.value = ""
         BusquedaCliente()
         filtroAct.value = false
     }

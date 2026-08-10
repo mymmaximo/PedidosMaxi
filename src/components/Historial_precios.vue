@@ -253,13 +253,13 @@
                                         <span class="hidden lg:inline 2xl:inline">
                                         Precio Viejo: 
                                         </span>
-                                        {{ i.precio_viejo }}
+                                        $ {{ FormatearPrecio(i.precio_viejo) }}
                                         </h2>
                                         <h2>
                                         <span class="hidden lg:inline 2xl:inline">
                                         Precio Nuevo: 
                                         </span>
-                                        {{ i.precio_nuevo }}
+                                        $ {{ FormatearPrecio(i.precio_nuevo) }}
                                         </h2>
                                         <h2>
                                         <span class="hidden lg:inline 2xl:inline">
@@ -319,7 +319,6 @@
 	const filtroAct = ref (false)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
-	const FiltroCaja = ref (false)
 	const MostrarFiltro = ref (false)
     const MostrarNotificacion = ref(false)
     // ----- Variables Vacias ----- //
@@ -327,7 +326,7 @@
     const Historial = ref([])
 	const Busqueda = ref ("")
 	const filtrocat = ref ("")
-	const bool_activo = ref ("")
+	const bool_activo = ref (2)
     const ListaCategoria = ref ("")
 	const precio_nuevo_max = ref ("")
 	const precio_nuevo_min = ref ("")
@@ -407,6 +406,10 @@
 			return "Pendiente"
 		}
 	}
+    const FormatearPrecio = (precio) => {
+        if (precio === null || precio === undefined) return "0"
+        return new Intl.NumberFormat('es-AR').format(precio)
+    }
     const LimpiarFiltro = () => {
 		fecha_upgrade_max.value = ""
 		fecha_upgrade_min.value = ""
@@ -415,7 +418,8 @@
 		precio_viejo_max.value = ""
 		precio_viejo_min.value = ""
         filtrocat.value = ""
-		bool_activo.value = 1
+		bool_activo.value = 2 
+        orden.value = ""
         BusquedaHistorial()
         CerrarPopUp01()
         filtroAct.value = false

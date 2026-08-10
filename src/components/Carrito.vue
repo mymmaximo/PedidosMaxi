@@ -61,8 +61,10 @@
                             v-model="NuevaDireccion.calle" 
                             >
                             <input placeholder="Numero"
-                            type="number" 
+                            type="text" 
                             v-model="NuevaDireccion.numero" 
+                            maxlength="6"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                             >
                             <input placeholder="Barrio"
                             type="text" 
@@ -272,7 +274,7 @@
                                     <span class="carrito-label-movil">
                                     Precio:
                                     </span>
-                                    ${{ item.precio_unitario }}
+                                    ${{ FormatearPrecio(item.precio_unitario) }}
                                 </div>
                                 <div class="carrito-col-cantidad">
                                     <input v-model="item.cantidad"
@@ -285,7 +287,7 @@
                                     <span class="carrito-label-movil">
                                     Subtotal:
                                     </span>
-                                    ${{ item.item_subtotal || item.cantidad * item.precio_unitario }}
+                                    ${{ FormatearPrecio(item.item_subtotal || item.cantidad * item.precio_unitario) }}
                                 </div>
 
                                 <div class="carrito-col-borrar">
@@ -309,7 +311,7 @@
                                         Total:
                                         </span>
                                         <span>
-                                        ${{ CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0) }}
+                                        ${{ FormatearPrecio(CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0)) }}
                                         </span>
                                     </div>
                                     <button 
@@ -487,6 +489,10 @@
         ProductoEli.value = producto_fila
         AbrirPopUp01()
     }
+    const FormatearPrecio = (precio) => {
+        if (precio === null || precio === undefined) return "0"
+        return new Intl.NumberFormat('es-AR').format(precio)
+    }
     const GetImg = (id) => {
         return IndiceImg.value[id] || 0
     }
@@ -523,88 +529,44 @@
             ProcesandoPago.value = false
             return
         }
-        let DireccionPedido = null
-        if (DireccionExistente.value !== "") {
-            DireccionPedido = DireccionExistente.value
-        } else {
-            const DatosNuevaDireccion = {
-                calle: NuevaDireccion.value.calle,
-                numero: parseInt(NuevaDireccion.value.numero),
-                barrio: NuevaDireccion.value.barrio,
-                ciudad: NuevaDireccion.value.ciudad,
-                provincia: NuevaDireccion.value.provincia
+        try {
+            let DireccionPedido = null
+            if (DireccionExistente.value !== "") {
+                DireccionPedido = DireccionExistente.value
+            } else {
+                const DatosNuevaDireccion = {
+                    calle: NuevaDireccion.value.calle,
+                    numero: parseInt(NuevaDireccion.value.numero),
+                    barrio: NuevaDireccion.value.barrio,
+                    ciudad: NuevaDireccion.value.ciudad,
+                    provincia: NuevaDireccion.value.provincia
+                }
+                const SubidaNuevaDireccion = await fetch(`${urlover8000}/direcciones/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(DatosNuevaDireccion),
+                    credentials: 'include'
+                })
+                const datos = await SubidaNuevaDireccion.json()
+                DireccionPedido = datos.id
             }
-            const SubidaNuevaDireccion = await fetch(`${urlover8000}/direcciones/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(DatosNuevaDireccion),
-                credentials: 'include'
-            })
-            const datos = await SubidaNuevaDireccion.json()
-            DireccionPedido = datos.id
-        }
-        const SubidaNuevoPedido = await fetch(`${urlover8000}/pedidos/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id_cliente: parseInt(ClienteID.value),
-                id_direccion: DireccionPedido,
-                metodo_pago: " ",
-                tiempo_estimado_entrega: 0,
-                tiempo_entrega: 0
-            }),
-            credentials: 'include'
-        })
-        if (SubidaNuevoPedido.status === 401) {
-            CerrarSesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
-            Iniciado.value = false
-            ProcesandoPago.value = false
-            return
-        }
-        const datosPedido = await SubidaNuevoPedido.json()
-        const Pedidoid = datosPedido.id
-        const DetallesLista = CarritoLocal.value.map(item => {
-            return {
-                id_pedido: Pedidoid,
-                id_producto: item.id_producto,
-                cantidad: item.cantidad,
-                precio_unitario: item.precio_unitario
-            }
-        })
-        const SubidaNuevoDetalle = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(DetallesLista),
-            credentials: 'include'
-            })  
-            if (SubidaNuevoDetalle.status === 401) {
-                CerrarSesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
-                Iniciado.value = false
-                ProcesandoPago.value = false
-                return
-            }
-            const subidaTransaccion = await fetch(`${urlover8000}/crear-transaccion-paddle/`, {
+            const SubidaNuevoPedido = await fetch(`${urlover8000}/pedidos/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id_pedido: Pedidoid
+                    id_cliente: parseInt(ClienteID.value),
+                    id_direccion: DireccionPedido,
+                    metodo_pago: " ",
+                    tiempo_estimado_entrega: 0,
+                    tiempo_entrega: 0
                 }),
                 credentials: 'include'
             })
-
-            if (subidaTransaccion.status === 401) {
+            if (SubidaNuevoPedido.status === 401) {
                 CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
                 SesionExpirada.value = true
@@ -612,16 +574,66 @@
                 ProcesandoPago.value = false
                 return
             }
+            const datosPedido = await SubidaNuevoPedido.json()
+            const Pedidoid = datosPedido.id
+            const DetallesLista = CarritoLocal.value.map(item => {
+                return {
+                    id_pedido: Pedidoid,
+                    id_producto: item.id_producto,
+                    cantidad: item.cantidad,
+                    precio_unitario: item.precio_unitario
+                }
+            })
+            const SubidaNuevoDetalle = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(DetallesLista),
+                credentials: 'include'
+                })  
+                if (SubidaNuevoDetalle.status === 401) {
+                    CerrarSesion()
+                    alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                    SesionExpirada.value = true
+                    Iniciado.value = false
+                    ProcesandoPago.value = false
+                    return
+                }
+                const subidaTransaccion = await fetch(`${urlover8000}/crear-transaccion-paddle/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_pedido: Pedidoid
+                    }),
+                    credentials: 'include'
+                })
 
-            const datosTransaccion = await subidaTransaccion.json()
-            InstanciaPaddle.value?.Checkout.open({
-            settings: {
-                displayMode: "overlay",
-                theme: "light",
-                locale: "es"
-            },
-            transactionId: datosTransaccion.transaction_id
-        })
+                if (subidaTransaccion.status === 401) {
+                    CerrarSesion()
+                    alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                    SesionExpirada.value = true
+                    Iniciado.value = false
+                    ProcesandoPago.value = false
+                    return
+                }
+
+                const datosTransaccion = await subidaTransaccion.json()
+                InstanciaPaddle.value?.Checkout.open({
+                settings: {
+                    displayMode: "overlay",
+                    theme: "light",
+                    locale: "es"
+                },
+                transactionId: datosTransaccion.transaction_id
+            })
+        } catch (error) {
+            console.error("Error crítico procesando la compra:", error)
+            alert("Ocurrió un problema al procesar tu pedido. Por favor, intenta de nuevo.")
+            ProcesandoPago.value = false
+        }
     })
     const VerificarStock = (item) => {
         if (item.cantidad < 1) {

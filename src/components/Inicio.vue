@@ -1388,6 +1388,7 @@
     const BusquedaProducto = async() => {
         let url = new URL (`${urlover8000}/producto/`)
 		url.searchParams.append('limit', 1000)
+        url.searchParams.append('bool_activo', 'true')
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value)
         }

@@ -1456,7 +1456,7 @@
                 if (uploadError) {
                     alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
                 } else {
-                    await fetch(`${urlover8000}/productos/archivos`, {
+                    await fetch(`${urlover8000}/productos/archivos/`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

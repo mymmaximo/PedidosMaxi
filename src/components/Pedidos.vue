@@ -260,7 +260,7 @@
 											{{ i.direccion[0].numero }}
 											</h2>
 											<h2 class="font-bold">
-											${{ i.total }}
+											$ {{ FormatearPrecio(i.total) }}
 											</h2>
 										</div>
 									</div>
@@ -337,14 +337,14 @@
 												Cantidad: {{ e.cantidad }}
 												</h3>
 												<h3>
-												Precio Unitario: ${{ e.precio_unitario }}
+												Precio Unitario: $ {{ FormatearPrecio(e.precio_unitario) }}
 												</h3>
 												<div class="flex flex-row">
 													<h2 class="font-bold mr-2">
 													Subtotal:
 													</h2>
-													<h2>
-													${{ e.subtotal }}
+													<h2 class="font-bold">
+													$ {{ FormatearPrecio(e.subtotal) }}
 													</h2>
 												</div>
 											</div>
@@ -547,11 +547,16 @@
 			return "Pendiente"
 		}
 	}
+	const FormatearPrecio = (precio) => {
+		if (precio === null || precio === undefined) return "0"
+		return new Intl.NumberFormat('es-AR').format(precio)
+	}
 	const LimpiarFiltro = () => {
 		filtroMP.value = 5
 		filtroEst.value = 4
         filtrociudad.value = ""
         filtroprovincia.value = ""
+		orden.value = ""
 		BusquedaPedido()
 		filtroAct.value = false
 	}

@@ -85,10 +85,11 @@
                             </button>
                         </div>
                         <div class="botones !p-0">
-                            <button type="submit" 
+                            <button type="submit"
+                            :disabled="Actualizando"
                             class="botoncon"
                             >
-                            Actualizar
+                            {{ Actualizando ? 'Actualizando...' : 'Actualizar' }}
                             </button>
                         </div>
                     </form>
@@ -108,7 +109,8 @@
         CerrarSesion,
         urlover8000, 
         SesionExpirada, 
-        Iniciado 
+        Iniciado,
+        ClienteID
     } from './Estatus.js'
     // ----- Variables Complejas ----- //
     const ClienteConfig = ref({
@@ -120,6 +122,7 @@
     // ----- Variantes Booleanas ----- //
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
+    const Actualizando = ref(false)
     const verContrasena = ref(false)
     const verConContrasena = ref(false)
     // ----- Variables Vacias ----- //
@@ -166,6 +169,8 @@
     })
     // ----- Para el Backend ----- //
     const ActualizarCliente = async() => {
+        if (Actualizando.value) return
+        Actualizando.value = true
         if (ClienteConfig.value.contrasena !== "" || ClienteConfig.value.concontrasena !== "") {
             if (ClienteConfig.value.contrasena !== ClienteConfig.value.concontrasena) {
                 alert("❌ Las contraseñas no coinciden. Por favor, verifícalas.")
@@ -196,6 +201,7 @@
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
             SesionExpirada.value = true
             Iniciado.value = false
+            Actualizando.value = false
             return
         }
         ClienteConfig.value = {
@@ -205,5 +211,6 @@
             concontrasena: ""
         }
         await CargarDatos()
+        Actualizando.value = false
     }
 </script>

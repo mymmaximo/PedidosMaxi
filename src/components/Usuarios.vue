@@ -196,9 +196,10 @@
                                 Documento
                                 </h2>
                                 <input placeholder="Documento"
-                                type="number" 
+                                type="text" 
                                 v-model="NuevoUsuario.dni"
                                 maxlength="8"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 >
                                 <h2>
                                 Contraseña
@@ -400,12 +401,12 @@
                 NuevoUsuario.value.email === ""||
                 NuevoUsuario.value.dni === ""||
                 NuevoUsuario.value.contrasena === ""||
-                NuevoUsuario.value.id_rol === ""
+                NuevoUsuario.value.id_rol.length === 0
             return faltandatos01
         }
         if (ActualizarCajaU.value) {
             const faltandatos02 = 
-                UsuarioAct.value.id_rol === ""
+                UsuarioAct.value.id_rol.length === 0
             return faltandatos02
         }
     })
@@ -518,7 +519,8 @@
 		}
 	}
     const LimpiarFiltro = () => {
-        filtroEst.value = 1
+        filtroEst.value = 2
+        orden.value = ""
         BusquedaUsuario()
         filtroAct.value = false
     }
@@ -584,7 +586,7 @@
         if (UsuarioAct.value.contrasena !== "") {
             UsuarioUpd.contrasena = UsuarioAct.value.contrasena
         }
-        if (UsuarioAct.value.id_rol !== "") {
+        if (UsuarioAct.value.id_rol.length > 0) {
             UsuarioUpd.id_rol = UsuarioAct.value.id_rol
         }
         const ActUsuario = await fetch(`${urlover8000}/usuarios/id/${UsuarioAct.value.id}`, {
