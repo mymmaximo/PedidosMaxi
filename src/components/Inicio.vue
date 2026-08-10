@@ -136,7 +136,7 @@
                             <span class="hidden lg:inline 2xl:inline">
                             Total:
                             </span>
-                            ${{ ProductoActual.precio * ProductoCantidad }}  
+                            $ {{ FormatearPrecio(i.precio) }} 
                             </h1>
                         </div>
                         <div class="botones">
@@ -649,11 +649,12 @@
                                                 {{ i.nombre }}
                                                 </h2>
                                                 <h2>
-                                                ${{ i.precio }}
+                                                $ {{ FormatearPrecio(i.precio) }}
                                                 </h2>
                                                 <div v-if="VerificarRol([1, 2, 4, 5])">
                                                     <h3>
-                                                    {{ i.codigo_barra }} <br>
+                                                    {{ i.codigo_barra }} 
+                                                    <br>
                                                     Stock: 
                                                     {{ i.stock }}
                                                     </h3>
@@ -1079,6 +1080,10 @@
         }
         inicioX = 0
         inicioY = 0
+    }
+    const FormatearPrecio = (precio) => {
+        if (precio === null || precio === undefined) return "0"
+        return new Intl.NumberFormat('es-AR').format(precio)
     }
     const GetImg = (id) => {
         return IndiceImg.value[id] || 0
