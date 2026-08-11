@@ -388,7 +388,7 @@
                                     <div v-if = "DireccionNow === i.id">
                                         <div v-for = "e in i.direcciones" 
                                         :key="e.id"
-                                        class="tab !bg-green-100/50"
+                                        class="tab !bg-green-100/50 !mx-5"
                                         >
                                             <div class="flex flex-col">
                                                 <div class="flex flex-row">

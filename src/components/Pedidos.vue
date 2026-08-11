@@ -324,7 +324,7 @@
 									</div>
 									<div v-for = "e in i.detalle_pedido" 
 									:key="e.id_detalle_pedido"
-									class="tab !bg-green-100/50"
+									class="tab !bg-green-100/50 !mx-5"
 									>
 										<div class="flex flex-col">
 											<div class="flex flex-row">
