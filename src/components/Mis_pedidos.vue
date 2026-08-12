@@ -4,11 +4,13 @@
             <div class="flex w-full flex-col sm:flex-row">
                 <!-- Filtros -->
                 <div class="bar">
-                    <h1 @click="MostrarFiltro = !MostrarFiltro"
-                    class="botonfil"
-                    >
-                    ᯤ
-                    </h1>
+                    <div>
+                        <h1 @click="MostrarFiltro = !MostrarFiltro"
+                        class="botonfil"
+                        >
+                        ᯤ
+                        </h1>
+                    </div>
                     <transition name="slide">
                         <div v-if="MostrarFiltro"
                         class="flex flex-col self-center"
