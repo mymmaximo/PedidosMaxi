@@ -438,7 +438,7 @@
                                     class="mb-2 lg:mb-5"
                                     >
                                         <div @click="PedidoCambioHistorial(i.id_pedido)"
-                                        class="tab !from-red-200"
+                                        class="tab !from-gray-200"
                                         >
                                             <div class="flex flex-col">
                                                 <div class="flex flex-row">
@@ -475,7 +475,7 @@
                                         <div v-if = "PedidoNowHistorial === i.id_pedido">
                                             <div v-for = "e in i.detalle_pedido" 
                                             :key="e.id_detalle_pedido"
-                                            class="tab !from-red-100 !mx-5 !w-auto"
+                                            class="tab !from-gray-100 !mx-5 !w-auto"
                                             >
                                                 <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                     <div class="flex flex-row">
