@@ -28,10 +28,20 @@
     lg:p-2
     xl:p-2
     2xl:p-5
-    sm:h-[calc(100vh-64px)]
+    pb-12 
+    sm:pb-12 
+    md:pb-12 
+    lg:pb-12 
+    xl:pb-12 
+    2xl:pb-12
     h-auto
+    sm:h-[calc(100vh-40px)] 
+    md:h-[calc(100vh-48px)] 
+    2xl:h-[calc(100vh-40px)]
     top-0
-    sm:top-16
+    sm:top-10 
+    md:top-12 
+    2xl:top-10
 }
 .carta {
     @apply
