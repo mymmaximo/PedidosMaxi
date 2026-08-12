@@ -214,7 +214,7 @@
                                     <div v-if = "PedidoNowPreparando === i.id_pedido">
                                         <div v-for = "e in i.detalle_pedido" 
                                         :key="e.id_detalle_pedido"
-                                        class="tab !bg-green-100/50 !p-5 !mx-5"
+                                        class="tab !bg-green-100/50 !p-5 !mx-5 !w-auto"
                                         >
                                             <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                 <div class="flex flex-row">
@@ -340,7 +340,7 @@
                                         <div v-if = "PedidoNowEnCamino === i.id_pedido">
                                             <div v-for = "e in i.detalle_pedido" 
                                             :key="e.id_detalle_pedido"
-                                            class="tab !bg-yellow-100/50 !mx-5"
+                                            class="tab !bg-yellow-100/50 !mx-5 !w-auto"
                                             >
                                                 <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                     <div class="flex flex-row">
@@ -475,7 +475,7 @@
                                         <div v-if = "PedidoNowHistorial === i.id_pedido">
                                             <div v-for = "e in i.detalle_pedido" 
                                             :key="e.id_detalle_pedido"
-                                            class="tab !bg-red-100/50 !mx-5"
+                                            class="tab !bg-red-100/50 !mx-5 !w-auto"
                                             >
                                                 <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                     <div class="flex flex-row">
