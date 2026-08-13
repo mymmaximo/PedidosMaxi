@@ -204,7 +204,7 @@
                         </button>
                     </div>
                     <div v-else class="carrito-contenedor">
-                        <div class="carrito-header">
+                        <div class="titulo-config">
                             <h1>
                             Tu Carrito
                             </h1>

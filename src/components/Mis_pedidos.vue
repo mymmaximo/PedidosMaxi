@@ -168,7 +168,7 @@
                         </div>
                         <div class="flex-col lg:flex-row">
                         <!-- Tabla de Pedidos en Preparacion -->
-                            <h1 class="text-center">
+                            <h1 class="titulo-config">
                             Mis Pedidos en Preparacion
                             </h1>
                             <div v-if="PedidosEnPreparacion.length > 0"
@@ -294,7 +294,7 @@
                             </div>
                             <div>
                             <!-- Tabla de Pedidos en Camino -->
-                                <h1 class="text-center">
+                                <h1 class="titulo-config !from-yellow-800 !to-yellow-500">
                                 Mis Pedidos En Camino
                                 </h1>
                                 <div v-if="PedidosEnCamino.length > 0"
