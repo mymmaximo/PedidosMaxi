@@ -91,11 +91,11 @@
                         ❌ {{ Herror }}
                         </div>
                         <div class="mt-2">
-                            <button :disabled="confirbotonlog" 
+                            <button :disabled="confirbotonlog || ProcesandoAuth" 
                             type="submit" 
                             class="boton-guardar"
                             >
-                            Ingresar
+                                {{ ProcesandoAuth ? 'Ingresando...' : 'Ingresar' }}
                             </button>
                         </div>
                         <div class="mt-6 border-t border-green-100 pt-6 text-center">
@@ -203,11 +203,11 @@
                         ❌ {{ Herror }}
                         </div>
                         <div class="mt-2">
-                            <button :disabled="confirbotonreg" 
+                            <button :disabled="confirbotonreg || ProcesandoAuth" 
                             type="submit" 
                             class="boton-guardar"
                             >
-                                Registrarte
+                            {{ ProcesandoAuth ? 'Registrando...' : 'Registrarte' }}
                             </button>
                         </div>
                         <div class="mt-6 border-t border-green-100 pt-6 text-center">
@@ -285,6 +285,7 @@
     const CargandoTrue = ref(false)
     const MostrarLogin = ref(true)
     const verContrasena = ref(false)
+    const ProcesandoAuth = ref(false)
     const verConContrasena = ref(false)
     // ----- Variantes Vacias ----- //
     const Herror = ref("")
@@ -343,28 +344,39 @@
         } 
     }
     const IniciarSesionUsuario = async() => {
-        const respuesta = await fetch(`${urlover8000}/usuario/login/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(LoginBox.value),
-            credentials: 'include'
-        })
-        if (respuesta.status === 401) {
-            await IniciarSesionCliente()
-            return
-        }
-        if (respuesta.ok) {
-            await ValidadSesionBack()
-            ProcesarLogin()
-            LoginBox.value = {
-                email: "",
-                contrasena: ""
+        if (ProcesandoAuth.value) return
+        ProcesandoAuth.value = true
+        Heror.value = false
+        try {
+            const respuesta = await fetch(`${urlover8000}/usuario/login/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(LoginBox.value),
+                credentials: 'include'
+            })
+            if (respuesta.status === 401) {
+                await IniciarSesionCliente()
+                return
             }
-        } else {
-            await IniciarSesionCliente()
-        } 
+            if (respuesta.ok) {
+                await ValidadSesionBack()
+                ProcesarLogin()
+                LoginBox.value = {
+                    email: "",
+                    contrasena: ""
+                }
+            } else {
+                await IniciarSesionCliente()
+            } 
+        } catch (error) {
+            console.error("Error de conexión:", error)
+            Herror.value = "Error al conectar con el servidor"
+            Heror.value = true
+        } finally {
+            ProcesandoAuth.value = false
+        }
     }
     const SubirNuevoCliente = async() => {
         if (NuevoCliente.value.contrasena !== "" || NuevoCliente.value.concontrasena !== "") {
@@ -373,26 +385,37 @@
                 return
             }
         }
-        const respuesta = await fetch(`${urlover8000}/clientes/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(NuevoCliente.value),
-            credentials: 'include'
-            })
-        if (respuesta.ok) {
-            NuevoCliente.value = {
-                nombre: "",
-                email: "",
-                dni: "",
-                contrasena: "",
-                concontrasena: ""
-            }
-            MostrarLogin.value = true
-        } else {
-            Herror.value = "Error al registrar, revisa tus datos"
+        if (ProcesandoAuth.value) return
+        ProcesandoAuth.value = true
+        Heror.value = false
+        try {
+            const respuesta = await fetch(`${urlover8000}/clientes/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(NuevoCliente.value),
+                credentials: 'include'
+                })
+            if (respuesta.ok) {
+                NuevoCliente.value = {
+                    nombre: "",
+                    email: "",
+                    dni: "",
+                    contrasena: "",
+                    concontrasena: ""
+                }
+                MostrarLogin.value = true
+            } else {
+                Herror.value = "Error al registrar, revisa tus datos"
+                Heror.value = true
+            } 
+        } catch (error) {
+            console.error("Error de conexión:", error)
+            Herror.value = "Error al conectar con el servidor"
             Heror.value = true
-        } 
+        } finally {
+            ProcesandoAuth.value = false
+        }
     }
 </script>
