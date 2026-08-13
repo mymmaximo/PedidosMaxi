@@ -1089,6 +1089,57 @@ img {
 .slide-left-enter-from, .slide-left-leave-to {
     @apply opacity-0 -translate-x-full
 }
+/* configuracion */
+.tarjeta-config {
+    @apply 
+    bg-white shadow-2xl shadow-green-900/10 
+    rounded-3xl p-8 sm:p-10 
+    w-full max-w-lg 
+    border border-green-100 
+    relative overflow-hidden;
+}
+.deco-config {
+    @apply 
+    absolute top-0 right-0 -mr-16 -mt-16 
+    w-48 h-48 rounded-full 
+    bg-gradient-to-br from-green-300 to-green-100 
+    opacity-40 blur-3xl pointer-events-none;
+}
+.titulo-config {
+    @apply 
+    text-3xl lg:text-4xl font-black 
+    text-transparent bg-clip-text bg-gradient-to-r from-green-800 to-green-500 
+    mb-2 text-center;
+}
+.label-config {
+    @apply 
+    font-bold text-green-800 
+    mb-1 ml-2 
+    text-sm sm:text-base;
+}
+.input-config {
+    @apply 
+    !text-left !px-4 !py-3 
+    !bg-green-50/50 !border-green-200 
+    focus:!border-green-500 focus:!bg-white 
+    !rounded-xl shadow-sm transition-all w-full;
+}
+.input-pass {
+    @apply !pr-12;
+}
+.boton-ojo {
+    @apply 
+    absolute inset-y-0 right-3 
+    flex items-center justify-center 
+    text-xl text-gray-400 
+    hover:text-green-600 hover:scale-110 
+    transition-all drop-shadow-none outline-none border-none bg-transparent cursor-pointer;
+}
+.boton-guardar {
+    @apply 
+    botoncon w-full !py-4 !text-lg !rounded-2xl 
+    shadow-lg hover:shadow-green-600/30;
+}
 /* estatus */
 .admin {
     @apply
