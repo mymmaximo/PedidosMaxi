@@ -39,147 +39,186 @@
             <div v-else>
                 <!-- Iniciar Sesion -->
                 <div v-if="MostrarLogin"
-                class="troncodentro"
+                class="tarjeta-config"
                 >
+                    <div class="deco-config">
+                    </div>
+                    <div class="text-center mb-8 relative z-10">
+                        <h1 class="titulo-config">
+                        Iniciar Sesión
+                        </h1>
+                        <p class="text-gray-500 font-medium text-sm sm:text-base">
+                        Bienvenido de nuevo a Maxi-Store
+                        </p>
+                    </div>
                     <form @submit.prevent="IniciarSesionUsuario" 
-                    class="popup"
+                    class="!gap-5 relative z-10"
                     >
-                        <h4 class="text-center">
-                        Iniciar Sesion
-                        </h4>
-                        <h2>
-                        Ingresa tu E-Mail
-                        </h2>
-                        <input placeholder="Email"
-                        type="text" 
-                        v-model="LoginBox.email" 
-                        :class="{'!border-red-500' : Heror === true}"
-                        >
-                        <h2>
-                        Ingresa tu Contraseña
-                        </h2>
-                        <div class="flex">
-                            <input placeholder="Contraseña"
-                            :type="verContrasena ? 'text' : 'password'"
-                            v-model="LoginBox.contrasena" 
-                            :class="{'!border-red-500' : Heror === true}"
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            E-mail
+                            </label>
+                            <input placeholder="tucorreo@email.com"
+                            type="text" 
+                            v-model="LoginBox.email" 
+                            class="input-config"
+                            :class="{'!border-red-500' : Heror}"
                             >
-                            <button @click="verContrasena = !verContrasena"
-                            type="button" 
-                            class="botont !p-1"
-                            >
-                            {{ verContrasena ? '🔒' : '👁️' }}
-                            </button>
                         </div>
-                        <div class="botones">
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            Contraseña
+                            </label>
+                            <div class="relative w-full">
+                                <input placeholder="Tu contraseña"
+                                :type="verContrasena ? 'text' : 'password'"
+                                v-model="LoginBox.contrasena" 
+                                class="input-config input-pass"
+                                :class="{'!border-red-500' : Heror}"
+                                >
+                                <button @click="verContrasena = !verContrasena"
+                                type="button" 
+                                class="boton-ojo"
+                                >
+                                {{ verContrasena ? '🔒' : '👁️' }}
+                                </button>
+                            </div>
+                        </div>
+                        <div v-if="Heror" 
+                        class="text-red-500 text-center font-bold text-sm 
+                        bg-red-50 py-2 rounded-lg border border-red-200"
+                        >
+                        ❌ {{ Herror }}
+                        </div>
+                        <div class="mt-2">
                             <button :disabled="confirbotonlog" 
                             type="submit" 
-                            class="botoncon"
+                            class="boton-guardar"
                             >
-                            Iniciar Sesion
+                            Ingresar
                             </button>
                         </div>
-                        <h4 v-if="Heror"
-                        class="botonc"
-                        >
-                        {{ Herror }}
-                        </h4>
-                        <h2 class="text-center">
-                        ¿No Tienes Cuenta?
-                        </h2>
-                        <div class="botones">
+                        <div class="mt-6 border-t border-green-100 pt-6 text-center">
+                            <p class="text-gray-600 font-medium mb-3">
+                            ¿No tienes cuenta?
+                            </p>
                             <button @click="MostrarLogin = false; Heror = false"
                             type="button" 
-                            class="botont"
+                            class="botont w-full !py-3 !rounded-2xl shadow-sm"
                             >
-                            Registrate
+                                Crear una cuenta nueva
                             </button>
                         </div>
                     </form>
                 </div>
                 <!-- Registrarse -->
-                <div v-else>
+                <div v-else class="tarjeta-config">
+                    <div class="deco-config">
+                    </div>
+                    <div class="text-center mb-8 relative z-10">
+                        <h1 class="titulo-config">
+                        Crear Cuenta
+                        </h1>
+                        <p class="text-gray-500 font-medium text-sm sm:text-base">
+                        Únete para gestionar tus pedidos
+                        </p>
+                    </div>
                     <form @submit.prevent="SubirNuevoCliente" 
-                    class="troncodentro"
+                    class="!gap-5 relative z-10"
                     >
-                        <h4 class="text-center">
-                        Registrarse
-                        </h4>
-                        <h3>
-                        Ingresa tu E-Mail
-                        </h3>
-                        <input placeholder="E-Mail"
-                        type="text" 
-                        v-model="NuevoCliente.email" 
-                        >
-                        <h3>
-                        Ingresa tu Contraseña
-                        </h3>
-                        <div class="flex">
-                            <input placeholder="Contraseña"
-                            :type="verContrasena ? 'text' : 'password'"
-                            v-model="NuevoCliente.contrasena" 
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            Nombre Completo
+                            </label>
+                            <input placeholder="Tu nombre"
+                            type="text" 
+                            v-model="NuevoCliente.nombre" 
+                            class="input-config"
                             >
-                            <button @click="verContrasena = !verContrasena"
-                            type="button" 
-                            class="botont !p-1"
-                            >
-                            {{ verContrasena ? '🔒' : '👁️' }}
-                            </button>
                         </div>
-                        <h3>
-                        Confirmar Contraseña
-                        </h3>
-                        <div class="flex">
-                            <input placeholder="Confirmar Contraseña"
-                            :type="verConContrasena ? 'text' : 'password'"
-                            v-model="NuevoCliente.concontrasena" 
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            DNI
+                            </label>
+                            <input placeholder="Tu documento"
+                            type="text" 
+                            v-model="NuevoCliente.dni"
+                            maxlength="8"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            class="input-config"
                             >
-                            <button @click="verConContrasena = !verConContrasena"
-                            type="button" 
-                            class="botont !p-1"
-                            >
-                            {{ verConContrasena ? '🔒' : '👁️' }}
-                            </button>
                         </div>
-                        <h3>
-                        Ingresa tu Nombre
-                        </h3>
-                        <input placeholder="Nombre"
-                        type="text" 
-                        v-model="NuevoCliente.nombre" 
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            E-mail
+                            </label>
+                            <input placeholder="tucorreo@email.com"
+                            type="text" 
+                            v-model="NuevoCliente.email" 
+                            class="input-config"
+                            >
+                        </div>
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            Contraseña
+                            </label>
+                            <div class="relative w-full">
+                                <input placeholder="Crea una contraseña"
+                                :type="verContrasena ? 'text' : 'password'"
+                                v-model="NuevoCliente.contrasena" 
+                                autocomplete="new-password"
+                                class="input-config input-pass"
+                                >
+                                <button @click="verContrasena = !verContrasena"
+                                type="button" 
+                                class="boton-ojo"
+                                >
+                                {{ verContrasena ? '🔒' : '👁️' }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            Confirmar Contraseña
+                            </label>
+                            <div class="relative w-full">
+                                <input placeholder="Repite la contraseña"
+                                :type="verConContrasena ? 'text' : 'password'"
+                                v-model="NuevoCliente.concontrasena" 
+                                autocomplete="new-password"
+                                class="input-config input-pass"
+                                >
+                                <button @click="verConContrasena = !verConContrasena"
+                                type="button" 
+                                class="boton-ojo"
+                                >
+                                {{ verConContrasena ? '🔒' : '👁️' }}
+                                </button>
+                            </div>
+                        </div>
+                        <div v-if="Heror" 
+                        class="text-red-500 text-center font-bold text-sm 
+                        bg-red-50 py-2 rounded-lg border border-red-200"
                         >
-                        <h3>
-                        Ingresa tu DNI
-                        </h3>
-                        <input placeholder="DNI"
-                        type="text" 
-                        v-model="NuevoCliente.dni"
-                        maxlength="8"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                        >
-                        <div class="botones">
+                        ❌ {{ Herror }}
+                        </div>
+                        <div class="mt-2">
                             <button :disabled="confirbotonreg" 
                             type="submit" 
-                            class="botoncon"
+                            class="boton-guardar"
                             >
-                            Registrarte
+                                Registrarte
                             </button>
                         </div>
-                        <h2 v-if="Heror"
-                        class="text-red-500"
-                        >
-                        {{ Herror }}
-                        </h2>
-                        <div class="botones">
-                            <h3>
-                            ¿Ya Tienes Cuenta?
-                            </h3>
+                        <div class="mt-6 border-t border-green-100 pt-6 text-center">
+                            <p class="text-gray-600 font-medium mb-3">
+                            ¿Ya tienes cuenta?
+                            </p>
                             <button @click="MostrarLogin = true; Heror = false"
                             type="button" 
-                            class="botont !p-1"
+                            class="botont w-full !py-3 !rounded-2xl shadow-sm"
                             >
-                            Iniciar Sesion
+                                Iniciar Sesión
                             </button>
                         </div>
                     </form>

@@ -1147,7 +1147,7 @@ img {
     hover:-translate-y-1 hover:shadow-lg hover:shadow-green-600/40 hover:border-green-400
     active:scale-95 active:from-green-700 active:to-green-900
     disabled:from-gray-400 disabled:to-gray-500 disabled:border-gray-400 
-    disabled:text-gray-200 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none;
+    disabled:text-gray-200 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none
 }
 /* estatus */
 .admin {
