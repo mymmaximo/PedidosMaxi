@@ -686,7 +686,7 @@
                                 @touchstart="ComienzoToque($event)"
                                 @touchend="FinToque($event, i)" 
                                 class="carta"
-                                @click="Compracion(i)"
+                                @click="AccionCarta(i)"
                                 >
                                     <div>
                                         <div v-if="i.imagenes.length > 0"
@@ -1038,6 +1038,13 @@
 		VentanaCompra.value = true
 		document.body.style.overflow = "hidden"
 	}
+    const AccionCarta = (producto_fila) => {
+        if (VerificarRol([1, 2, 3, 4, 5, 6])) {
+            Edicion(producto_fila)
+        } else {
+            Compracion(producto_fila)
+        }
+    }
     const AplicarFiltro = () => {
         BusquedaProducto()
         menor.value = ""
@@ -1070,9 +1077,6 @@
         inicioX = evento.changedTouches[0].clientX
     }
     const Compracion = (producto_fila) => {
-        if (VerificarRol ([1, 2, 3, 4, 5, 6]))
-            Edicion(producto_fila)
-            return
         if (CarritoStock(producto_fila) <= 0) {
             return 
         }

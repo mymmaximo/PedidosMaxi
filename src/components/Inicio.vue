@@ -617,7 +617,7 @@
                                     <div v-for="i in ProductosPorCategoria[cat.categoria]"
                                     :key="cat.categoria + '-' + i.id"
                                     :class="Estatuscolor(i.activo)"
-                                    @click="Compracion(i)"
+                                    @click="AccionCarta(i)"
                                     class="carta"
                                     >
                                         <div>
@@ -964,6 +964,13 @@
 		VentanaCompra.value = true
 		document.body.style.overflow = "hidden"
 	}
+    const AccionCarta = (producto_fila) => {
+        if (VerificarRol([1, 2, 3, 4, 5, 6])) {
+            Edicion(producto_fila)
+        } else {
+            Compracion(producto_fila)
+        }
+    }
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual > 0) {
@@ -1037,9 +1044,6 @@
         inicioY = evento.changedTouches[0].clientY
     }
     const Compracion = (producto_fila) => {
-        if (VerificarRol ([1, 2, 3, 4, 5, 6]))
-            Edicion(producto_fila)
-            return
         if (CarritoStock(producto_fila) <= 0) {
             return 
         }
