@@ -50,7 +50,7 @@
                         </div>
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            E-mail
+                            E-maila
                             </label>
                             <input placeholder="tucorreo@email.com" 
                             type="text" 
