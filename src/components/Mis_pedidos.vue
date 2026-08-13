@@ -442,7 +442,10 @@
                                         <div @click="PedidoCambioHistorial(i.id_pedido)"
                                         class="tab !from-gray-200"
                                         >
-                                            <div class="flex flex-col">
+                                            <div class="flex flex-col">       
+                                                <h1 class="titulo-config !from-red-800 !to-red-500">
+                                                Mis Pedidos En Camino
+                                                </h1>
                                                 <div class="flex flex-row">
                                                     <h1>
                                                     Pedido a
