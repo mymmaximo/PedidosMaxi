@@ -436,7 +436,7 @@
                                 class="w-full"
                                 >
                                     <h1 class="titulo-config !from-red-800 !to-red-500">
-                                    Mis Pedidos En Camino
+                                    Historial de Pedidos
                                     </h1>
                                     <div v-for= "i in PedidosEnHistorial" 
                                     :key="i.id_pedido"
