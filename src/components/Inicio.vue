@@ -1037,6 +1037,9 @@
         inicioY = evento.changedTouches[0].clientY
     }
     const Compracion = (producto_fila) => {
+        if (VerificarRol ([1, 2, 3, 4, 5, 6]))
+            Edicion(producto_fila)
+            return
         if (CarritoStock(producto_fila) <= 0) {
             return 
         }
