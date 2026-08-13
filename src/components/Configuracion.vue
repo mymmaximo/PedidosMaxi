@@ -35,61 +35,71 @@
             <div v-else>
                 <div class="troncodentro !z-0">
                     <form @submit.prevent="ActualizarCliente">
-                        <h1 class="text-center">
+                        <h1 class="titulo-config">
                         DETALLES DE LA CUENTA
                         </h1>
-                        <h2>
-                        Nombre
-                        </h2>
-                        <input placeholder="Nombre"
-                        type="text"
-                        v-model="ClienteConfig.nombre"
-                        >
-                        <h2>
-                        E-mail
-                        </h2>
-                        <input placeholder="Email@email.com"
-                        type="text"
-                        v-model="ClienteConfig.email"
-                        >
-                        <h2>
-                        Contraseña
-                        </h2>
-                        <div class="flex">
-                            <input placeholder="Contraseña"
-                            :type="verContrasena ? 'text' : 'password'"
-                            v-model="ClienteConfig.contrasena"
-                            autocomplete="new-password"
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            Nombre Completo
+                            </label>
+                            <input placeholder="Nombre" 
+                            type="text" 
+                            v-model="ClienteConfig.nombre" 
+                            class="input-config"
                             >
-                            <button @click="verContrasena = !verContrasena"
-                            type="button"
-                            class="botont !p-1"
-                            >
-                            {{ verContrasena ? '🔒' : '👁️' }}
-                            </button>
                         </div>
-                        <h2>
-                        Confirmar Contraseña
-                        </h2>
-                        <div class="flex">
-                            <input placeholder="Confirmar Contraseña"
-                            :type="verConContrasena ? 'text' : 'password'"
-                            v-model="ClienteConfig.concontrasena"
-                            autocomplete="new-password"
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            E-mail
+                            </label>
+                            <input placeholder="tucorreo@email.com" 
+                            type="text" 
+                            v-model="ClienteConfig.email" 
+                            class="input-config"
                             >
-                            <button @click="verConContrasena = !verConContrasena"
-                            type="button" 
-                            class="botont !p-1"
-                            >
-                            {{ verConContrasena ? '🔒' : '👁️' }}
-                            </button>
                         </div>
-                        <div class="botones !p-0">
-                            <button type="submit"
-                            :disabled="Actualizando"
-                            class="botoncon"
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">
+                            Nueva Contraseña
+                            </label>
+                            <div class="relative w-full">
+                                <input placeholder="Escribe para cambiarla" 
+                                :type="verContrasena ? 'text' : 'password'" 
+                                v-model="ClienteConfig.contrasena" 
+                                autocomplete="new-password" 
+                                class="input-config input-pass"
+                                >
+                                <button @click="verContrasena = !verContrasena" 
+                                type="button" 
+                                class="boton-ojo"
+                                >
+                                    {{ verContrasena ? '🔒' : '👁️' }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex flex-col text-left">
+                            <label class="label-config">Confirmar Contraseña</label>
+                            <div class="relative w-full">
+                                <input placeholder="Repite la contraseña" 
+                                :type="verConContrasena ? 'text' : 'password'" 
+                                v-model="ClienteConfig.concontrasena" 
+                                autocomplete="new-password" 
+                                class="input-config input-pass"
+                                >
+                                <button @click="verConContrasena = !verConContrasena" 
+                                type="button" 
+                                class="boton-ojo"
+                                >
+                                    {{ verConContrasena ? '🔒' : '👁️' }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" 
+                            :disabled="Actualizando" 
+                            class="boton-guardar"
                             >
-                            {{ Actualizando ? 'Actualizando...' : 'Actualizar' }}
+                                {{ Actualizando ? 'Guardando datos...' : 'Guardar Cambios' }}
                             </button>
                         </div>
                     </form>
