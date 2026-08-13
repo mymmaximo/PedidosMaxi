@@ -214,7 +214,7 @@
                         class="busqueda"
                         maxlength="50"
                         >
-                        <h1 class="text-center">
+                        <h1 class="titulo-config">
                         Historial de Precios
                         </h1>
                         <!-- Tabla de Historial de Precios -->

@@ -275,7 +275,7 @@
                         class="busqueda"
                         maxlength="50"
                         >
-                        <h1 class="text-center">
+                        <h1 class="titulo-config">
                         Usuarios
                         </h1>
                         <div v-if="usuarios.length > 0">

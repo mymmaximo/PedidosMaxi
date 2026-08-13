@@ -16,7 +16,7 @@
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="start !px-5">
-                    <h1 class="text-center">
+                    <h1 class="titulo-config">
                     Centro de Ayuda
                     </h1>
                     <div class="mb-2 lg:mb-5">

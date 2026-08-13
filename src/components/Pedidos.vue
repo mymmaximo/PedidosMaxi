@@ -231,7 +231,7 @@
 						class="busqueda"
 						maxlength="50"
 						>
-						<h1>
+						<h1 class="titulo-config">
 						Pedidos
 						</h1>
 						<!-- Tabla de Pedidos -->
