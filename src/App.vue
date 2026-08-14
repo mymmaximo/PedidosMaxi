@@ -116,7 +116,7 @@
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
                     class="botonpestaña"
                     >
-                    Inicios
+                    Inicio
                     </div>
                     <div @click="router.push('/productos')" 
                     v-if="VerificarRolExcluido([3, 6])"
@@ -166,7 +166,10 @@
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
                     class="botonpestaña"
                     >
-                    Tu Carrito
+                    Tu Carrito 
+                    <span class="bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                    ({{ CarritoLocal.length }})
+                    </span>
                     </div>
                     <div v-else
                     class="botonpestaña group cursor-default 
