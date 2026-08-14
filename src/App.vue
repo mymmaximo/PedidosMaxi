@@ -167,7 +167,11 @@
                     class="botonpestaña"
                     >
                     Tu Carrito 
-                    <span class="bg-green-500 text-white text-sm font-bold px-2 py-0.5 rounded-full">
+                    <span class="flex items-center justify-center 
+                    w-6 h-6 
+                    bg-green-500 rounded-full shadow-md
+                    text-white text-xs font-bold"
+                    >
                     {{ CarritoLocal.length }}
                     </span>
                     </div>
