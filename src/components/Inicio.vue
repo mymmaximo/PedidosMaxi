@@ -537,7 +537,7 @@
                             >
                         </div>
                         <div v-if="Bananaer"
-                        class="flex flex-col relative group" 
+                        class="flex flex-col relative group w-full overflow-hidden rounded-xl" 
                         >   
                             <div v-if="Bananaer.imagenes && Bananaer.imagenes.length > 0"
                             class="relative px-5"
@@ -548,9 +548,9 @@
                                 :disabled="IndiceBanner === 0"
                                 type="button"
                                 class="botonflechagrande
-                                flex-row absolute 
-                                left-4 top-1/2 -translate-y-1/2 z-20 
-                                hidden md:flex"
+                                absolute left-0 top-0 z-20 opacity-0
+                                hidden md:flex
+                                group-hover:opacity-100"
                                 >
                                 ❮
                                 </button>
@@ -580,9 +580,9 @@
                                 :disabled="IndiceBanner === Bananaer.imagenes.length - 1"
                                 type="button"
                                 class="botonflechagrande 
-                                flex-row absolute 
-                                right-4 top-1/2 -translate-y-1/2 z-20 
-                                hidden md:flex"
+                                absolute right-0 top-0 z-20 opacity-0
+                                hidden md:flex
+                                group-hover:opacity-100"
                                 >
                                 ❯
                                 </button>
