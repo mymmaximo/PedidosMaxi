@@ -557,7 +557,7 @@
                                 <button @click="AbrirPopUp03"
                                 v-if="VerificarRol([1])"
                                 type="button"
-                                class="botonx !bg-gray-700"
+                                class="botonx !right-20 !bg-gray-700"
                                 >
                                 ✏️
                                 </button>
