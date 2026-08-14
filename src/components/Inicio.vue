@@ -528,7 +528,7 @@
                     </div>
                     <div v-else>
                         <div class="px-5">
-                            <input placeholder="Busqueda..."
+                            <input placeholder="🔍 Busqueda..."
                             @input="BusquedaProducto"
                             type="text" 
                             v-model="Busqueda" 

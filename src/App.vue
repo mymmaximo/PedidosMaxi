@@ -373,6 +373,69 @@
                     <router-view>
                     </router-view>
                 </div>
+                <footer class="relative 
+                bg-green-900 text-green-100 
+                py-10 mt-auto w-full z-40 "
+                >
+                    <div class="max-w-7xl mx-auto px-5 grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div class="flex flex-col gap-3">
+                            <h2>
+                            Maxi-Store
+                            </h2>
+                            <p class="text-sm text-green-200">
+                            Testing eslogan aca siu.
+                            </p>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-lg font-bold text-white mb-2">
+                            Soporte y Legal
+                            </h3>
+                            <span @click="router.push('/centro_de_ayuda')"
+                            class="cursor-pointer  transition-colors
+                            hover:text-white text-sm"
+                            >
+                            Centro de Ayuda
+                            </span>
+                            <span class="cursor-pointer transition-colors 
+                            hover:text-white text-sm"
+                            >
+                            Términos y Condiciones
+                            </span>
+                            <span class="cursor-pointer transition-colors 
+                            hover:text-white text-sm"
+                            >
+                            Política de Privacidad
+                            </span>
+                            <span class="cursor-pointer transition-colors 
+                            hover:text-white text-sm"
+                            >
+                            Botón de Arrepentimiento
+                            </span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-lg font-bold text-white mb-2">
+                            Medios de Pago
+                            </h3>
+                            <div class="flex flex-row gap-3 text-3xl select-none">
+                            💳 🏦 💵 
+                            </div>
+                            <p class="text-sm text-green-200 mt-1">
+                            Pagos seguros encriptados y procesados mediante Paddle.
+                            </p>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-lg font-bold text-white mb-2">
+                            Contacto
+                            </h3>
+                            <span class="text-sm hover:text-white transition-colors cursor-pointer">
+                            📧 soporte@maxi-store.com
+                            </span>
+                            <span class="text-sm">
+                            📍 Córdoba, Argentina
+                            </span>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
     </div>
