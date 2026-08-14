@@ -164,7 +164,7 @@
                     <div v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
                     @click="router.push('/carrito')"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
-                    class="botonpestaña"
+                    class="botonpestaña flex flex-row items-center justify-center gap-2"
                     >
                     Tu Carrito 
                     <span class="flex items-center justify-center 
