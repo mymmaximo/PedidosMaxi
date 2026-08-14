@@ -167,8 +167,8 @@
                     class="botonpestaña"
                     >
                     Tu Carrito 
-                    <span class="bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                    ({{ CarritoLocal.length }})
+                    <span class="bg-green-500 text-white text-sm font-bold px-2 py-0.5 rounded-full">
+                    {{ CarritoLocal.length }}
                     </span>
                     </div>
                     <div v-else
