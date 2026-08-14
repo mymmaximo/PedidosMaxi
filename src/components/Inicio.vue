@@ -592,10 +592,8 @@
                         :key="cat.categoria" 
                         >
                             <div v-if="ProductosPorCategoria[cat.categoria] && ProductosPorCategoria[cat.categoria].length > 0"
-                            class="
-                            flex flex-col
-                            md:mb-8 mb-2
-                            bg-gradient-to-tr from-green-600/50 to-green-300/50"
+                            class="relative group flex flex-col md:mb-8 mb-2 
+                            bg-gradient-to-tr from-green-600/50 to-green-300/50 rounded-2xl"
                             >
                                 <h1 class="text-3xl font-extrabold text-green-900 md:mb-2 mb-0 drop-shadow-sm">
                                 {{ cat.categoria }}
@@ -608,9 +606,10 @@
                                 >
                                     <button @click="CarruselIzquierda(cat.categoria)"
                                     :disabled="ObtenerIndiceCarrusel(cat.categoria) === 0"
-                                    class="botonflechagrande 
-                                    flex-row z-20
-                                    absolute self-center hidden md:flex"
+                                    class="botonflechacat 
+                                    absolute left-0 top-[55%] 
+                                    hidden md:flex
+                                    opacity-0 group-hover:opacity-100"
                                     >
                                     ❮
                                     </button>
@@ -703,10 +702,10 @@
                                         </div>
                                     </div>
                                     <button @click="CarruselDerecha(cat.categoria, ProductosPorCategoria[cat.categoria].length)"
-                                    class="botonflechagrande 
-                                    absolute right-5 
-                                    z:20 self-center 
-                                    hidden md:flex"
+                                    class="botonflechacat 
+                                    absolute right-0 top-[55%] 
+                                    hidden md:flex
+                                    opacity-0 group-hover:opacity-100"
                                     >
                                     ❯
                                     </button>

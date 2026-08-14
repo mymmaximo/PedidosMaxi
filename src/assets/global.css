@@ -587,38 +587,19 @@ select {
     active:bg-green-900/80 active:scale-100
     disabled:opacity-0 disabled:cursor-default
 }
-.botonflechagrandeaaa {
+.botonflechacat {
     @apply
-    bg-linear-to-r from-green-700 to-green-800
-    text-white text-center
-    border-4 border-green-500
-    cursor-pointer
-    rounded-xl
-    px-3
-    sm:px-3
-    md:px-3
-    lg:px-3
-    2xl:px-3
-    py-10
-    sm:py-8
-    md:py-10
-    lg:py-20
-    2xl:py-25
-    m-3
-    transition-all duration-200
-    hover:text-gray-200
-    hover:from-green-300/60
-    hover:to-green-400/60
-    hover:border-green-200/60
-    active:from-green-100 
-    active:to-green-300
-    active:border-green-50
-    active:scale-95
-    disabled:text-gray-400/0
-    disabled:from-green-100/0
-    disabled:to-green-300/0
-    disabled:cursor-default 
-    disabled:border-green-500/0
+    -translate-y-1/2 z-30 
+    items-center justify-center w-10 h-16 
+    bg-green-900/90 
+    text-white text-2xl 
+    rounded-l-xl 
+    backdrop-blur-sm 
+    shadow-lg 
+    transition-all 
+    duration-300 
+    hover:bg-green-700 
+    hover:w-12
 }
 .botonfil {
     @apply
