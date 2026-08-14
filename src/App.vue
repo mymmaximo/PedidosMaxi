@@ -235,7 +235,7 @@
                     </div>
                 </div>
             </div>
-            <div class="pagina">
+            <div class="pagina !gap-0">
                 <div class="flex flex-col sticky 
                 w-full top-0 z-30 
                 bg-green-600 sm:hidden shadow-md"
@@ -379,7 +379,7 @@
                 >
                     <div class="max-w-7xl mx-auto px-5 grid grid-cols-1 md:grid-cols-4 gap-8">
                         <div class="flex flex-col gap-3">
-                            <h2>
+                            <h2 class="text-white">
                             Maxi-Store
                             </h2>
                             <p class="text-sm text-green-200">
