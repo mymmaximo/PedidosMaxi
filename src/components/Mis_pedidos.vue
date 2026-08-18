@@ -521,146 +521,199 @@
                                 </div>
                             </div>
                             <!-- Boton Historial -->
-                            <div class="botones">
+                            <div class="w-full flex justify-center my-6">
                                 <button @click="mostrarhistorial = !mostrarhistorial" 
-                                :class="Estatuscolor(mostrarhistorial)"
+                                class="boton-guardar 
+                                !w-auto !px-8 !py-3 !rounded-full 
+                                shadow-md flex items-center gap-2"
+                                :class="mostrarhistorial ? '!from-gray-500 !to-gray-700' : ''"
                                 >
-                                    <h2 v-if="!mostrarhistorial">
-                                    Ver Historial de Pedidos
-                                    </h2>
-                                    <h2 v-if="mostrarhistorial">
-                                    Ocultar Historial de Pedidos
-                                    </h2>
+                                    <span v-if="!mostrarhistorial">
+                                    📜 Ver Historial de Pedidos Anteriores
+                                    </span>
+                                    <span v-if="mostrarhistorial">
+                                    ⬆️ Ocultar Historial
+                                    </span>
                                 </button>
                             </div>
                             <!-- Tabla Historial de Pedidos -->
                             <div v-if="mostrarhistorial">
+                                <h1 class="text-2xl font-black text-gray-700 
+                                mb-4 border-b-2 border-gray-200 pb-2"
+                                >
+                                Historial de Pedidos
+                                </h1>
                                 <div v-if="PedidosEnHistorial.length > 0"
                                 class="w-full"
                                 >
-                                    <h1 class="titulo-config !from-gray-400 !to-gray-200">
-                                    Historial de Pedidos
-                                    </h1>
                                     <div v-for= "i in PedidosEnHistorial" 
                                     :key="i.id_pedido"
-                                    class="mb-2 lg:mb-5"
+                                    class="mb-4 opacity-90 hover:opacity-100 transition-opacity"
                                     >
                                         <div @click="PedidoCambioHistorial(i.id_pedido)"
-                                        class="tab !from-gray-200"
+                                        class="carrito-fila cursor-pointer 
+                                        hover:-translate-y-1 transition-all !p-5 
+                                        flex flex-col sm:flex-row justify-between 
+                                        items-start sm:items-center 
+                                        gap-4 bg-gray-50 
+                                        !border-gray-200 hover:!border-gray-300"
                                         >
-                                            <div class="flex flex-col">       
-                                                <div class="flex flex-row">
-                                                    <h1>
-                                                    Pedido a
-                                                    {{ i.direccion[0].calle }} 
-                                                    {{ i.direccion[0].numero }}
-                                                    </h1>
-                                                </div>
-                                                <div class="flex flex-col">
-                                                    <h2>
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    Pagado con: 
-                                                    </span>
-                                                    {{ i.metodo_pago }}
+                                            <div class="flex flex-col text-left">       
+                                                <div class="flex flex-wrap items-center gap-3 mb-2">
+                                                    <h2 class="text-xl font-bold text-gray-700">
+                                                    📍 {{ i.direccion[0].calle }} {{ i.direccion[0].numero }}
                                                     </h2>
-                                                    <h2 class="font-bold">
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    Total:
+                                                    <span class="bg-gray-200 
+                                                    text-gray-800 text-xs font-bold 
+                                                    px-3 py-1 rounded-full 
+                                                    border border-gray-300 shadow-sm"
+                                                    >
+                                                    ✅ Entregado
                                                     </span>
-                                                    $ {{ FormatearPrecio(i.total) }}
-                                                    </h2>
                                                 </div>
+                                                <p class="text-gray-500 font-medium text-sm">
+                                                💳 Método de Pago: 
+                                                <span class="text-gray-700">
+                                                {{ i.metodo_pago }}
+                                                </span>
+                                                </p>
+                                                <p class="text-gray-500 font-medium text-sm mt-1">
+                                                💰 Total: 
+                                                <span class="text-gray-700 font-bold text-lg">
+                                                ${{ FormatearPrecio(i.total) }}
+                                                </span>
+                                                </p>
                                             </div>
-                                            <div class="flex flex-col ml-auto text-right items-end">
-                                                <h3>
-                                                Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
-                                                </h3>
-                                                <h3>
-                                                Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
-                                                </h3>
-                                            </div>
-                                        </div>
-                                        <div v-if = "PedidoNowHistorial === i.id_pedido">
-                                            <div v-for = "e in i.detalle_pedido" 
-                                            :key="e.id_detalle_pedido"
-                                            class="tab !from-gray-100 !mx-5 !w-auto"
+                                            <div class="flex flex-col
+                                            w-full sm:w-auto 
+                                            bg-white p-3 
+                                            rounded-xl border border-gray-100 
+                                            text-right"
                                             >
-                                                <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
-                                                    <div class="flex flex-row">
-                                                        <h1 class="font-bold overflow-hidden text-ellipsis">
-                                                        {{ e.producto.nombre }}
-                                                        </h1>
-                                                    </div>
-                                                    <div class="flex flex-col gap-1">
-                                                        <h3>
-                                                        Categoria: 
-                                                        {{ e.producto.categoria }}
-                                                        </h3>
-                                                        <h3>
-                                                        Precio Unitario: $ 
-                                                        {{ FormatearPrecio(e.precio_unitario) }}
-                                                        </h3>
-                                                        <h3>
-                                                        Cantidad: 
-                                                        {{ e.cantidad }}
-                                                        </h3>
-                                                        <div class="flex flex-row">
-                                                            <h2 class="font-bold mr-2">
-                                                            Subtotal:
-                                                            </h2>
-                                                            <h2>
-                                                            $ {{ FormatearPrecio(e.subtotal) }}
-                                                            </h2>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex flex-col gap-1">
-                                                        <div class="flex flex-row">
-                                                            <h2 class="mr-2">
-                                                            Pedido Creado el Dia: 
-                                                            </h2>
-                                                            <h3>
-                                                            {{ FormatoFecha(i.created_at) }}
-                                                            </h3>
-                                                        </div>
-                                                        <div class="flex flex-row">
-                                                            <h3 class="mr-2">
-                                                            Pedido Act. el Dia: 
-                                                            </h3>
-                                                            <h3>
-                                                            {{ FormatoFecha(i.updated_at) }}
-                                                            </h3>
-                                                        </div>
-                                                        <div class="flex flex-row">
-                                                            <h2 class="font-bold mr-2">
-                                                            Ciudad: 
-                                                            </h2>
-                                                            <h2>
-                                                            {{ i.direccion[0].ciudad }}
-                                                            </h2>
-                                                        </div>
-                                                        <div class="flex flex-row">
-                                                            <h2 class="font-bold mr-2">
-                                                            Provincia:
-                                                            </h2>
-                                                            <h2>
-                                                            {{ i.direccion[0].provincia }}
-                                                            </h2>
-                                                        </div>
-                                                    </div>
+                                                <p class="text-xs text-gray-400 font-bold mb-1">
+                                                Tiempo Est. de Entrega: <span class="text-gray-600">
+                                                {{ i.tiempo_estimado_entrega }} Días
+                                                </span>
+                                                </p>
+                                                <p class="text-xs text-gray-400 font-bold">
+                                                Tiempo Real: 
+                                                <span class="text-gray-600">
+                                                {{ i.tiempo_entrega }} Días
+                                                </span>
+                                                </p>
+                                                <div class="text-gray-500 text-sm font-bold 
+                                                flex items-center justify-end 
+                                                mt-3 gap-1"
+                                                >
+                                                    {{ PedidoNowHistorial === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
                                                 </div>
                                             </div>
                                         </div>
+                                        <transition name="slide">
+                                            <div v-if = "PedidoNowHistorial === i.id_pedido"
+                                            class="bg-white 
+                                            border-2 border-gray-100 rounded-2xl 
+                                            p-5 sm:p-6 mt-2 shadow-inner mx-1 sm:mx-2"
+                                            >
+                                                <h3 class="text-lg font-bold text-gray-700 
+                                                mb-3 border-b border-gray-100 pb-2"
+                                                >
+                                                🛒 Productos del Pedido
+                                                </h3>
+                                                <div class="flex flex-col gap-2 mb-6">
+                                                    <div v-for = "e in i.detalle_pedido" 
+                                                    :key="e.id_detalle_pedido"
+                                                    class="flex flex-col sm:flex-row 
+                                                    justify-between sm:items-center 
+                                                    bg-gray-50 rounded-xl p-3 sm:p-4 
+                                                    border border-gray-100"
+                                                    >
+                                                        <div class="flex flex-col 
+                                                        w-full sm:w-1/2 mb-2 sm:mb-0"
+                                                        >
+                                                            <span class="font-bold text-gray-700 text-base">
+                                                            {{ e.producto.nombre }}
+                                                            </span>
+                                                            <span class="text-xs text-gray-400 font-bold 
+                                                            uppercase tracking-wider"
+                                                            >
+                                                            {{ e.producto.categoria }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="flex flex-row flex-wrap 
+                                                        gap-x-6 gap-y-2 w-full sm:w-auto 
+                                                        justify-between sm:justify-end text-sm"
+                                                        >
+                                                            <span class="text-gray-500">
+                                                            Cant: <b class="text-gray-700">
+                                                            {{ e.cantidad }}
+                                                            </b>
+                                                            </span>
+                                                            <span class="text-gray-500">
+                                                            Unidad: 
+                                                            <b class="text-gray-700">
+                                                            ${{ FormatearPrecio(e.precio_unitario) }}
+                                                            </b>
+                                                            </span>
+                                                            <span class="text-gray-700 font-black text-base">
+                                                            Sub: ${{ FormatearPrecio(e.subtotal) }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h3 class="text-lg font-bold text-gray-700 mb-3 
+                                                border-b border-gray-100 pb-2"
+                                                >
+                                                📋 Información de Envío
+                                                </h3>
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 
+                                                gap-4 text-sm 
+                                                bg-gray-50 p-4 rounded-xl 
+                                                border border-gray-100"
+                                                >
+                                                    <p class="text-gray-500">
+                                                    📅 
+                                                    <span class="font-semibold text-gray-700">
+                                                    Creado:
+                                                    </span> 
+                                                    {{ FormatoFecha(i.created_at) }}
+                                                    </p>
+                                                    <p class="text-gray-500">
+                                                    🔄 
+                                                    <span class="font-semibold text-gray-700">
+                                                    Entregado:
+                                                    </span> 
+                                                    {{ FormatoFecha(i.updated_at) }}
+                                                    </p>
+                                                    <p class="text-gray-500">
+                                                    🏙️ 
+                                                    <span class="font-semibold text-gray-700">
+                                                    Ciudad:
+                                                    </span> 
+                                                    {{ i.direccion[0].ciudad }}
+                                                    </p>
+                                                    <p class="text-gray-500">
+                                                    🗺️ 
+                                                    <span class="font-semibold text-gray-700">
+                                                    Provincia:
+                                                    </span> 
+                                                    {{ i.direccion[0].provincia }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </transition>
                                     </div>
                                 </div>
-                                <div 
-                                v-else
+                                <div v-else class="bg-white 
+                                border-2 border-dashed border-gray-300 rounded-2xl 
+                                p-8 text-center text-gray-500"
                                 >
-                                    <h2>
-                                    No se encontraron Pedidos 😔
+                                    <span class="text-4xl mb-3 block">
+                                    📂
+                                    </span>
+                                    <h2 class="text-xl font-bold text-gray-600">
+                                    No hay historial de pedidos
                                     </h2>
-                                    <h3>
-                                    Prueba buscando con otro termino
-                                    </h3>
                                 </div>
                             </div>
                         </div>
