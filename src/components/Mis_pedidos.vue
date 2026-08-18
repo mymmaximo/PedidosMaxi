@@ -294,7 +294,7 @@
                             </div>
                             <div>
                             <!-- Tabla de Pedidos en Camino -->
-                                <h1 class="titulo-config !from-yellow-800 !to-yellow-500">
+                                <h1 class="titulo-config !from-gray-400">
                                 Mis Pedidos En Camino
                                 </h1>
                                 <div v-if="PedidosEnCamino.length > 0"
@@ -342,7 +342,7 @@
                                         <div v-if = "PedidoNowEnCamino === i.id_pedido">
                                             <div v-for = "e in i.detalle_pedido" 
                                             :key="e.id_detalle_pedido"
-                                            class="tab !from-yellow-100 !mx-5 !w-auto"
+                                            class="tab !from-gray-100 !mx-5 !w-auto"
                                             >
                                                 <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
                                                     <div class="flex flex-row">
@@ -435,7 +435,7 @@
                                 <div v-if="PedidosEnHistorial.length > 0"
                                 class="w-full"
                                 >
-                                    <h1 class="titulo-config !from-red-800 !to-red-500">
+                                    <h1 class="titulo-config !from-gray-400 !to-gray-200">
                                     Historial de Pedidos
                                     </h1>
                                     <div v-for= "i in PedidosEnHistorial" 
