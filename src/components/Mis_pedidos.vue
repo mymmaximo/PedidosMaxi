@@ -181,11 +181,14 @@
                                 class="mb-4"
                                 >
                                     <div  @click="PedidoCambioPreparando(i.id_pedido)"
-                                    class="carrito-fila flex flex-col sm:flex-row 
+                                    class="flex flex-col sm:flex-row 
                                     hover:-translate-y-1 transition-all 
                                     justify-between cursor-pointer 
                                     items-start sm:items-center 
-                                    !p-5 gap-4 bg-white"
+                                    p-5 gap-4 
+                                    bg-white 
+                                    border-2 border-green-100 rounded-2xl 
+                                    shadow-sm w-full"
                                     >
                                         <div class="flex flex-col text-left">
                                             <div class="flex flex-wrap items-center gap-3 mb-2">
