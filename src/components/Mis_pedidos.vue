@@ -288,9 +288,6 @@
                                                             ${{ FormatearPrecio(e.precio_unitario) }}
                                                             </b>
                                                             </span>
-                                                            <span class="text-green-700 font-black text-base">
-                                                            Sub: ${{ FormatearPrecio(e.subtotal) }}
-                                                            </span>
                                                             <h2 class="font-bold mr-2">
                                                             Subtotal:
                                                             </h2>
@@ -379,6 +376,7 @@
                                         border-2 border-blue-300/40 hover:border-blue-400/80 
                                         hover:shadow-lg hover:shadow-blue-900/10 rounded-2xl w-full"
                                         >
+                                            <!-- IZQUIERDA -->
                                             <div class="flex flex-col text-left">
                                                 <div class="flex flex-wrap items-center gap-3 mb-2">
                                                     <h2 class="text-xl font-black text-gray-800">
@@ -403,24 +401,24 @@
                                                 ${{ FormatearPrecio(i.total) }}
                                                 </span>
                                                 </p>
-                                                <div class="flex flex-col w-full sm:w-auto bg-blue-50/50 p-3 rounded-xl border border-blue-100 text-right">
-                                                    <p class="text-xs text-gray-500 font-bold mb-1">
-                                                    Tiempo Est. de Entrega: 
-                                                    <span class="text-gray-800">
-                                                    {{ i.tiempo_estimado_entrega }} Días
-                                                    </span>
-                                                    </p>
-                                                    <p class="text-xs text-gray-500 font-bold">
-                                                    Tiempo de Entrega: 
-                                                    <span class="text-gray-800">
-                                                    {{ i.tiempo_entrega }} Días
-                                                    </span>
-                                                    </p>
-                                                    <div class="text-blue-600 text-sm font-bold 
-                                                    flex items-center justify-end mt-3 gap-1"
-                                                    >
-                                                    {{ PedidoNowEnCamino === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
-                                                    </div>
+                                            </div>
+                                            <div class="flex flex-col w-full sm:w-auto bg-blue-50/50 p-3 rounded-xl border border-blue-100 text-right">
+                                                <p class="text-xs text-gray-500 font-bold mb-1">
+                                                Tiempo Est. de Entrega: 
+                                                <span class="text-gray-800">
+                                                {{ i.tiempo_estimado_entrega }} Días
+                                                </span>
+                                                </p>
+                                                <p class="text-xs text-gray-500 font-bold">
+                                                Tiempo de Entrega: 
+                                                <span class="text-gray-800">
+                                                {{ i.tiempo_entrega }} Días
+                                                </span>
+                                                </p>
+                                                <div class="text-blue-600 text-sm font-bold 
+                                                flex items-center justify-end mt-3 gap-1"
+                                                >
+                                                {{ PedidoNowEnCamino === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
                                                 </div>
                                             </div>
                                         </div>
