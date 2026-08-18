@@ -272,29 +272,29 @@
                                                         </span>
                                                     </div>
                                                     <div class="flex flex-row flex-wrap 
-                                                    gap-x-6 gap-y-2 w-full sm:w-auto 
-                                                    justify-between sm:justify-end text-sm"
+                                                    gap-x-6 gap-y-2 
+                                                    w-full sm:w-auto 
+                                                    justify-between sm:justify-end 
+                                                    text-sm"
                                                     >
-                                                        <div class="flex flex-row">
-                                                            <span class="text-gray-500">
-                                                            Cant: 
-                                                            <b class="text-gray-800">
-                                                            {{ e.cantidad }}
-                                                            </b>
-                                                            </span>
-                                                            <span class="text-gray-500">
-                                                            Unidad: 
-                                                            <b class="text-gray-800">
-                                                            ${{ FormatearPrecio(e.precio_unitario) }}
-                                                            </b>
-                                                            </span>
-                                                            <h2 class="font-bold mr-2">
-                                                            Subtotal:
-                                                            </h2>
-                                                            <h2>
-                                                            $ {{ FormatearPrecio(e.subtotal) }}
-                                                            </h2>
-                                                        </div>
+                                                        <span class="text-gray-500">
+                                                        Cant: 
+                                                        <b class="text-gray-800">
+                                                        {{ e.cantidad }}
+                                                        </b>
+                                                        </span>
+                                                        <span class="text-gray-500">
+                                                        Unidad: 
+                                                        <b class="text-gray-800">
+                                                        ${{ FormatearPrecio(e.precio_unitario) }}
+                                                        </b>
+                                                        </span>
+                                                        <h2 class="font-bold mr-2">
+                                                        Subtotal:
+                                                        </h2>
+                                                        <h2>
+                                                        $ {{ FormatearPrecio(e.subtotal) }}
+                                                        </h2>
                                                     </div>
                                                 </div>
                                                 <h3 class="text-lg font-bold text-gray-800 
@@ -453,7 +453,12 @@
                                                             {{ e.producto.categoria }}
                                                             </span>
                                                         </div>
-                                                        <div class="flex flex-row flex-wrap gap-x-6 gap-y-2 w-full sm:w-auto justify-between sm:justify-end text-sm">
+                                                        <div class="flex flex-row flex-wrap 
+                                                        gap-x-6 gap-y-2 
+                                                        w-full sm:w-auto 
+                                                        justify-between sm:justify-end 
+                                                        text-sm"
+                                                        >
                                                             <span class="text-gray-500">
                                                             Cant: 
                                                             <b class="text-gray-800">
