@@ -193,7 +193,7 @@
                                         <div class="flex flex-col text-left">
                                             <div class="flex flex-wrap items-center gap-3 mb-2">
                                                 <h2 class="text-xl font-black text-gray-800">
-                                                Pedido a
+                                                📍Pedido a
                                                 {{ i.direccion[0].calle }} 
                                                 {{ i.direccion[0].numero }}
                                                 </h2>
@@ -201,21 +201,21 @@
                                                 text-yellow-800 text-xs font-bold 
                                                 rounded-full border border-yellow-300 shadow-sm"
                                                 >
-                                                    ⏳ Preparando
+                                                ⏳ Preparando
                                                 </span>
-                                                <p class="text-gray-500 font-medium text-sm">
-                                                💳 Método de Pago: 
-                                                <span class="text-gray-800">
-                                                {{ i.metodo_pago }}
-                                                </span>
-                                                </p>
-                                                <p class="text-gray-500 font-medium text-sm mt-1">
-                                                💰 Total: 
-                                                <span class="text-green-700 font-bold text-lg">
-                                                ${{ FormatearPrecio(i.total) }}
-                                                </span>
-                                                </p>
                                             </div>
+                                            <p class="text-gray-500 font-medium text-sm">
+                                            💳 Método de Pago: 
+                                            <span class="text-gray-800">
+                                            {{ i.metodo_pago }}
+                                            </span>
+                                            </p>
+                                            <p class="text-gray-500 font-medium text-sm mt-1">
+                                            💰 Total: 
+                                            <span class="text-green-700 font-bold text-lg">
+                                            ${{ FormatearPrecio(i.total) }}
+                                            </span>
+                                            </p>
                                         </div>
                                         <div class="flex flex-col w-full sm:w-auto 
                                         bg-green-50/50 p-3 rounded-xl border 
@@ -390,19 +390,19 @@
                                                     >
                                                     💨 En Camino
                                                     </span>
-                                                    <p class="text-gray-500 font-medium text-sm">
-                                                    💳 Método de Pago: 
-                                                    <span class="text-gray-800">
-                                                    {{ i.metodo_pago }}
-                                                    </span>
-                                                    </p>
-                                                    <p class="text-gray-500 font-medium text-sm mt-1">
-                                                    💰 Total: 
-                                                    <span class="text-blue-700 font-bold text-lg">
-                                                    ${{ FormatearPrecio(i.total) }}
-                                                    </span>
-                                                    </p>
                                                 </div>
+                                                <p class="text-gray-500 font-medium text-sm">
+                                                💳 Método de Pago: 
+                                                <span class="text-gray-800">
+                                                {{ i.metodo_pago }}
+                                                </span>
+                                                </p>
+                                                <p class="text-gray-500 font-medium text-sm mt-1">
+                                                💰 Total: 
+                                                <span class="text-blue-700 font-bold text-lg">
+                                                ${{ FormatearPrecio(i.total) }}
+                                                </span>
+                                                </p>
                                                 <div class="flex flex-col w-full sm:w-auto bg-blue-50/50 p-3 rounded-xl border border-blue-100 text-right">
                                                     <p class="text-xs text-gray-500 font-bold mb-1">
                                                     Tiempo Est. de Entrega: 
