@@ -181,7 +181,7 @@
                                 class="mb-4"
                                 >
                                     <div  @click="PedidoCambioPreparando(i.id_pedido)"
-                                    class="tab2"
+                                    class="tab"
                                     >
                                         <div class="flex flex-col text-left">
                                             <div class="flex flex-wrap items-center gap-3 mb-2">
