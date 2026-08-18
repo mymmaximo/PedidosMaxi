@@ -328,7 +328,7 @@
                                 >
                                     <div @click= "TocarTab(i)" 
                                     :class="Estatuscolor(i.activo)"
-                                    class="tab"
+                                    class="tab2"
                                     >
                                         <div class="flex flex-col">
                                             <div class="flex flex-row">
