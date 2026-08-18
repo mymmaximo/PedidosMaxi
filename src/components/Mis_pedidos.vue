@@ -305,7 +305,7 @@
                                     class="mb-2 lg:mb-5"
                                     >
                                         <div @click="PedidoCambioEnCamino(i.id_pedido)"
-                                        class="tab !from-yellow-200/50"
+                                        class="tab !from-gray-200/50"
                                         >
                                             <div class="flex flex-col">
                                                 <div class="flex flex-row">
