@@ -251,11 +251,8 @@
 											📍Pedido para
 											{{ i.cliente[0].nombre }}
 											</h2>
-											<span 
-											:class="Estatuscolor(i.estatus)"
-											class="globlanco"
-											>
-											({{ Estatustxt(i.estatus) }})
+											<span :class="Estatuscolor(i.estatus)">
+											{{ Estatustxt(i.estatus) }}
 											</span>
 										</div>
 										<p class="text-gray-500 font-medium text-sm">
