@@ -208,10 +208,7 @@
                                             </span>
                                             </p>
                                         </div>
-                                        <div class="flex flex-col w-full sm:w-auto 
-                                        bg-green-50/50 p-3 rounded-xl border 
-                                        border-green-100 text-right"
-                                        >
+                                        <div class="lilbox !bg-green-50/50 !border-green-100">
                                             <p class="text-xs text-gray-500 font-bold mb-1">
                                             Tiempo Est. de Entrega: 
                                             <span class="text-gray-800">
@@ -233,9 +230,7 @@
                                     </div>
                                     <transition name="slide">
                                         <div v-if = "PedidoNowPreparando === i.id_pedido"
-                                        class="bg-white border-2 border-green-100/50 rounded-2xl 
-                                        p-5 sm:p-6 shadow-inner 
-                                        mt-2 mx-1 sm:mx-2"
+                                        class="liltab !border-green-100/50"
                                         >
                                             <h3 class="text-lg font-bold text-gray-800 
                                             border-b border-gray-100 
@@ -245,10 +240,7 @@
                                             <div class="flex flex-col gap-2 mb-6">
                                                 <div v-for = "e in i.detalle_pedido" 
                                                 :key="e.id_detalle_pedido"
-                                                class="flex flex-col sm:flex-row 
-                                                justify-between sm:items-center 
-                                                bg-gray-50 rounded-xl p-3 sm:p-4 
-                                                border border-gray-100"
+                                                class="lilproduct"
                                                 >
                                                     <div class="flex flex-col w-full 
                                                     sm:w-1/2 mb-2 sm:mb-0"
@@ -293,9 +285,7 @@
                                                 >
                                                 📋 Información de Envío
                                                 </h3>
-                                                <div class="grid grid-cols-1 sm:grid-cols-2 
-                                                gap-4 text-sm bg-green-50 p-4 
-                                                rounded-xl border border-green-100"
+                                                <div class="lildata"
                                                 >
                                                     <p class="text-gray-500">
                                                     📅 
@@ -331,10 +321,7 @@
                                     </transition>
                                 </div>
                             </div>
-                            <div v-else class="bg-white border-2 border-dashed border-green-300 
-                            rounded-2xl p-8 mb-8
-                            text-center text-gray-500"
-                            >
+                            <div v-else class="lilelse">
                                 <span class="text-4xl mb-3 block">
                                 😔
                                 </span>
@@ -368,9 +355,7 @@
                                                     <h2 class="text-xl font-black text-gray-800">
                                                     📍 {{ i.direccion[0].calle }} {{ i.direccion[0].numero }}
                                                     </h2>
-                                                    <span class="bg-blue-100 text-blue-800 
-                                                    text-xs font-bold px-3 py-1 
-                                                    rounded-full border border-blue-300 shadow-sm"
+                                                    <span class="globoazul"
                                                     >
                                                     💨 En Camino
                                                     </span>
@@ -388,7 +373,7 @@
                                                 </span>
                                                 </p>
                                             </div>
-                                            <div class="flex flex-col w-full sm:w-auto bg-blue-50/50 p-3 rounded-xl border border-blue-100 text-right">
+                                        <div class="lilbox !bg-blue-50/50 !border-blue-100">
                                                 <p class="text-xs text-gray-500 font-bold mb-1">
                                                 Tiempo Est. de Entrega: 
                                                 <span class="text-gray-800">
@@ -410,9 +395,7 @@
                                         </div>
                                         <transition name="slide">
                                             <div v-if = "PedidoNowEnCamino === i.id_pedido"
-                                            class="bg-white 
-                                            border-2 border-blue-100/50 rounded-2xl 
-                                            p-5 sm:p-6 mt-2 shadow-inner mx-1 sm:mx-2"
+                                            class="lilelse !border-blue-100/50 "
                                             >
                                                 <h3 class="text-lg font-bold text-gray-800 
                                                 mb-3 border-b border-gray-100 pb-2"
@@ -422,10 +405,7 @@
                                                 <div class="flex flex-col gap-2 mb-6">
                                                     <div v-for = "e in i.detalle_pedido" 
                                                     :key="e.id_detalle_pedido"
-                                                    class="flex flex-col sm:flex-row 
-                                                    justify-between sm:items-center 
-                                                    bg-gray-50 rounded-xl p-3 sm:p-4 
-                                                    border border-gray-100"
+                                                    class="lilproduct"
                                                     >
                                                         <div class="flex flex-col w-full
                                                         sm:w-1/2 mb-2 sm:mb-0"
@@ -464,9 +444,7 @@
                                                     </div>
                                                 </div>
                                                 <h3 class="text-lg font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2">📋 Información de Envío</h3>
-                                                <div class="grid grid-cols-1 sm:grid-cols-2 
-                                                gap-4 text-sm 
-                                                bg-blue-50 p-4 rounded-xl border border-blue-100"
+                                                <div class="lildata !bg-blue-50 !border-blue-100"
                                                 >
                                                     <p class="text-gray-500">
                                                     📅 <span class="font-semibold text-gray-800">
@@ -500,9 +478,7 @@
                                         </transition>
                                     </div>
                                 </div>
-                                <div v-else class="bg-white 
-                                border-2 border-dashed border-blue-300 rounded-2xl 
-                                p-8 mb-8 text-center text-gray-500"
+                                <div v-else class="lilelse"
                                 >
                                 <span class="text-4xl mb-3 block">
                                 💨
@@ -533,7 +509,7 @@
                                 <h1 class="text-2xl font-black text-gray-700 
                                 mb-4 border-b-2 border-gray-200 pb-2"
                                 >
-                                Historial de Pedidos
+                                🧾Historial de Pedidos
                                 </h1>
                                 <div v-if="PedidosEnHistorial.length > 0"
                                 class="w-full"
@@ -550,10 +526,7 @@
                                                     <h2 class="text-xl font-bold text-gray-700">
                                                     📍 {{ i.direccion[0].calle }} {{ i.direccion[0].numero }}
                                                     </h2>
-                                                    <span class="bg-gray-200 
-                                                    text-gray-800 text-xs font-bold 
-                                                    px-3 py-1 rounded-full 
-                                                    border border-gray-300 shadow-sm"
+                                                    <span class="globlanco"
                                                     >
                                                     ✅ Entregado
                                                     </span>
@@ -571,11 +544,7 @@
                                                 </span>
                                                 </p>
                                             </div>
-                                            <div class="flex flex-col
-                                            w-full sm:w-auto 
-                                            bg-white p-3 
-                                            rounded-xl border border-gray-100 
-                                            text-right"
+                                            <div class="lilbox"
                                             >
                                                 <p class="text-xs text-gray-400 font-bold mb-1">
                                                 Tiempo Est. de Entrega: <span class="text-gray-600">
@@ -598,9 +567,7 @@
                                         </div>
                                         <transition name="slide">
                                             <div v-if = "PedidoNowHistorial === i.id_pedido"
-                                            class="bg-white 
-                                            border-2 border-gray-100 rounded-2xl 
-                                            p-5 sm:p-6 mt-2 shadow-inner mx-1 sm:mx-2"
+                                            class="liltab"
                                             >
                                                 <h3 class="text-lg font-bold text-gray-700 
                                                 mb-3 border-b border-gray-100 pb-2"
@@ -610,10 +577,7 @@
                                                 <div class="flex flex-col gap-2 mb-6">
                                                     <div v-for = "e in i.detalle_pedido" 
                                                     :key="e.id_detalle_pedido"
-                                                    class="flex flex-col sm:flex-row 
-                                                    justify-between sm:items-center 
-                                                    bg-gray-50 rounded-xl p-3 sm:p-4 
-                                                    border border-gray-100"
+                                                    class="lilproduct"
                                                     >
                                                         <div class="flex flex-col 
                                                         w-full sm:w-1/2 mb-2 sm:mb-0"
@@ -653,10 +617,7 @@
                                                 >
                                                 📋 Información de Envío
                                                 </h3>
-                                                <div class="grid grid-cols-1 sm:grid-cols-2 
-                                                gap-4 text-sm 
-                                                bg-gray-50 p-4 rounded-xl 
-                                                border border-gray-100"
+                                                <div class="lildata"
                                                 >
                                                     <p class="text-gray-500">
                                                     📅 
@@ -691,9 +652,7 @@
                                         </transition>
                                     </div>
                                 </div>
-                                <div v-else class="bg-white 
-                                border-2 border-dashed border-gray-300 rounded-2xl 
-                                p-8 text-center text-gray-500"
+                                <div v-else class="lilelse"
                                 >
                                     <span class="text-4xl mb-3 block">
                                     📂

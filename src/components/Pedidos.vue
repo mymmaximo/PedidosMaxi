@@ -235,130 +235,159 @@
 						Pedidos
 						</h1>
 						<!-- Tabla de Pedidos -->
-						<div v-if="Pedidos.length > 0">
+						<div v-if="Pedidos.length > 0"
+						class="w-full mb-8"
+						>
 							<div v-for= "i in Pedidos" 
 							:key="i.id_pedido"
-							class="mb-2 lg:mb-5"
+							class="mb-4"
 							>
-								<div @click="Edicion(i)" 
-								:class="Estatuscolor(i.estatus)"
+								<div @click="Edicion(i)"
 								class="tab"
 								>
-									<div class="flex flex-col">
-										<div class="flex flex-row">
-											<h1>
+									<div class="flex flex-col text-left">
+										<div class="flex flex-wrap items-center gap-3 mb-2">
+											<h2 class="text-xl font-black text-gray-800">
+											📍Pedido para
 											{{ i.cliente[0].nombre }}
-											</h1>
-											<h1>
+											</h2>
+											<span 
+											:class="Estatuscolor(i.estatus)"
+											class="globlanco"
+											>
 											({{ Estatustxt(i.estatus) }})
-											</h1>
+											</span>
 										</div>
-										<div class="flex flex-col">
-											<h2>
-											Direccion: 
-											{{ i.direccion[0].calle }} 
-											{{ i.direccion[0].numero }}
-											</h2>
-											<h2 class="font-bold">
-											$ {{ FormatearPrecio(i.total) }}
-											</h2>
-										</div>
+										<p class="text-gray-500 font-medium text-sm">
+										💳 Método de Pago: 
+										<span class="text-gray-800">
+										{{ i.metodo_pago }}
+										</span>
+										</p>
+										<p class="text-gray-500 font-medium text-sm">
+										📍 Direccion: 
+										<span class="text-gray-800">
+										{{ i.direccion[0].calle }} 
+										{{ i.direccion[0].numero }}
+										</span>
+										</p>
+										<p class="text-gray-500 font-medium text-sm mt-1">
+										💰 Total: 
+										<span class="text-green-700 font-bold text-lg">
+										${{ FormatearPrecio(i.total) }}
+										</span>
+										</p>
 									</div>
-									<div class="flex flex-col ml-auto text-right items-end">
-										<h3>
-										Tiempo Est. de Entrega: {{ i.tiempo_estimado_entrega }} Dias
-										</h3>
-										<h3>
-										Tiempo de Entrega: {{ i.tiempo_entrega }} Dias
-										</h3>
+									<div class="lilbox !bg-green-50/50 !border-green-100">
+										<p class="text-xs text-gray-500 font-bold mb-1">
+										Tiempo Est. de Entrega: 
+										<span class="text-gray-800">
+										{{ i.tiempo_estimado_entrega }} Días
+										</span>
+										</p>
+										<p class="text-xs text-gray-500 font-bold">
+										Tiempo de Entrega: 
+										<span class="text-gray-800">
+										{{ i.tiempo_entrega }} Días
+										</span>
+										</p>
+										<div class="text-green-600 text-sm font-bold 
+										mt-3 flex items-center justify-end gap-1"
+										>
+											{{ PedidoNow === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
+										</div>
 									</div>
 								</div>
-								<div v-if = "PedidoNow === i.id_pedido">
-									<div class="tab !from-gray-50 !to-gray-200">
-										<div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
-											<div class="flex flex-col gap-1">
-												<div class="flex flex-row">
-													<h2 class="font-bold mr-2">
-													Pagado con: 
-													</h2>
-													<h2>
-													{{ i.metodo_pago }}
-													</h2>
-												</div>
-												<div class="flex flex-row">
-													<h2 class="font-bold mr-2">
-													Ciudad: 
-													</h2>
-													<h2>
-													{{ i.direccion[0].ciudad }}
-													</h2>
-												</div>
-												<div class="flex flex-row">
-													<h2 class="font-bold mr-2">
-													Provincia:
-													</h2>
-													<h2>
-													{{ i.direccion[0].provincia }}
-													</h2>
-												</div>
-											</div>
-											<div class="flex flex-col gap-1">
-												<div class="flex flex-row">
-													<h2 class="mr-2">
-													Pedido Creado el Dia: 
-													</h2>
-													<h3>
-													{{ FormatoFecha(i.created_at) }}
-													</h3>
-												</div>
-												<div class="flex flex-row">
-													<h3 class="mr-2">
-													Pedido Act. el Dia: 
-													</h3>
-													<h3>
-													{{ FormatoFecha(i.updated_at) }}
-													</h3>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div v-for = "e in i.detalle_pedido" 
-									:key="e.id_detalle_pedido"
-									class="tab !bg-green-100/50 !mx-5 !w-auto"
+                                <transition name="slide">
+									<div v-if = "PedidoNow === i.id_pedido"
+									class="liltab !border-green-100/50"
 									>
-										<div class="flex flex-col">
-											<div class="flex flex-row">
-												<h2 class="font-bold">
-												{{ e.producto.nombre }}
-												</h2>
-											</div>
-											<div class="flex flex-col">
-												<h3>
-												Cantidad: {{ e.cantidad }}
-												</h3>
-												<h3>
-												Precio Unitario: $ {{ FormatearPrecio(e.precio_unitario) }}
-												</h3>
-												<div class="flex flex-row">
+										<h3 class="text-lg font-bold text-gray-800 
+										border-b border-gray-100 
+										mb-3 pb-2">
+										🛒 Productos del Pedido
+										</h3>
+										<div class="flex flex-col gap-2 mb-6">
+											<div v-for = "e in i.detalle_pedido" 
+											:key="e.id_detalle_pedido"
+											class="lilproduct"
+											>
+												<div class="flex flex-col w-full 
+												sm:w-1/2 mb-2 sm:mb-0"
+												>
+													<span class="font-bold text-gray-800 text-base">
+													{{ e.producto.nombre }}
+													</span>
+													<span class="text-xs text-gray-400 font-bold 
+													uppercase tracking-wider"
+													>
+													{{ e.producto.categoria }}
+													</span>
+												</div>
+												<div class="flex flex-row flex-wrap 
+												gap-x-6 gap-y-2 
+												w-full sm:w-auto 
+												justify-between sm:justify-end 
+												text-sm"
+												>
+													<span class="text-gray-500">
+													Cant: 
+													<b class="text-gray-800">
+													{{ e.cantidad }}
+													</b>
+													</span>
+													<span class="text-gray-500">
+													Unidad: 
+													<b class="text-gray-800">
+													${{ FormatearPrecio(e.precio_unitario) }}
+													</b>
+													</span>
 													<h2 class="font-bold mr-2">
 													Subtotal:
 													</h2>
-													<h2 class="font-bold">
+													<h2>
 													$ {{ FormatearPrecio(e.subtotal) }}
 													</h2>
 												</div>
 											</div>
-										</div>
-										<div class="flex flex-col ml-auto text-right items-end">
-											<h3>
-											Categoria: {{ e.producto.categoria }}
+											<h3 class="text-lg font-bold text-gray-800 
+											mb-3 border-b border-gray-100 pb-2"
+											>
+											📋 Información de Envío
 											</h3>
-											<h3>
-											Codigo de Barras: {{ e.producto.codigo_barra }}
-											</h3>
+											<div class="lildata">
+												<p class="text-gray-500">
+												📅 
+												<span class="font-semibold text-gray-800">
+												Creado:
+												</span> 
+												{{ FormatoFecha(i.created_at) }}
+												</p>
+												<p class="text-gray-500">
+												🔄 
+												<span class="font-semibold text-gray-800">
+												Actualizado:
+												</span> 
+												{{ FormatoFecha(i.updated_at) }}
+												</p>
+												<p class="text-gray-500">
+												🏙️ 
+												<span class="font-semibold text-gray-800">
+												Ciudad:
+												</span> 
+												{{ i.direccion[0].ciudad }}
+												</p>
+												<p class="text-gray-500">
+												🗺️ 
+												<span class="font-semibold text-gray-800">
+												Provincia:
+												</span> 
+												{{ i.direccion[0].provincia }}
+												</p>
+											</div>
 										</div>
 									</div>
-								</div>
+                                </transition>
 								<template v-if="i.estatus !== 1">
 									<div @click= "PedidoCambio(i.id_pedido)"
 									v-if = "PedidoNow === i.id_pedido"  
@@ -374,13 +403,16 @@
 								</template>
 							</div>
 						</div>
-						<div v-else>
-							<h2>
-							No se encontraron Pedidos 😔
+						<div v-else class="lilelse">
+							<span class="text-4xl mb-3 block">
+							😔
+							</span>
+							<h2 class="text-xl font-bold text-gray-700">
+							No se encontraron Pedidos en Preparación
 							</h2>
-							<h3>
-							Prueba buscando con otro termino
-							</h3>
+							<p class="mt-1">
+							Intenta ajustando los filtros de búsqueda.
+							</p>
 						</div>
 						<div class="flex justify-center p-3">
 							<button @click="Pagina = Pagina - 20 ; CargarDatos()" 
@@ -511,31 +543,31 @@
 	}
 	const Estatuscolor = (id_estatus) => {
 		if (id_estatus === 1) {
-			return "sent"
+			return "globoamarillo"
 		}
 		else if (id_estatus === 2) {
-			return "way"
+			return "globoazul"
 		}
 		else if (id_estatus === 3) {
-			return "box"
+			return "globlanco"
 		}
 		else if (id_estatus === 4) {
-			return "box"
+			return "globlanco"
 		}
-			return "what"
+			return "globlanco"
 	}
 	const Estatustxt = (id_estatus) => {
 		if (id_estatus === 1) {
-			return "Entregado"
+			return "✅ Entregado"
 		}
 		else if (id_estatus === 2) {
-			return "En Camino"
+			return "💨 En Camino"
 		}
 		else if (id_estatus === 3) {
-			return "Preparando"
+			return "⏳ Preparando"
 		}
 		else if (id_estatus === 4) {
-			return "Pendiente"
+			return "⏳⏳ Pendiente"
 		}
 			return "indefinido"
 	}
