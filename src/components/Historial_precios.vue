@@ -397,12 +397,20 @@
     }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
-            return "si"
+            return "globoazul"
         }
         else if (id_estatus === false) {
-            return "no"
+            return ""
         }
     }
+	const Estatustxt = (id_estatus) => {
+		if (id_estatus === 1) {
+			return "✅ Activo"
+		}
+		else if (id_estatus === 2) {
+			return "❌ Inactivo"
+		}
+	}
 	const FormatoFecha = (fechai) => {
 		if (fechai) {
 			return new Date(fechai).toLocaleDateString('es-ES')
