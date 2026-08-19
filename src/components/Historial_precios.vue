@@ -234,8 +234,8 @@
                                             <span class="text-xs font-bold 
                                             px-3 py-1 
                                             rounded-full border shadow-sm"
-                                            :class="(i.estatus === 1 || i.estatus === true) ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'">
-											{{ Estatustxt(i.estatus) }}
+                                            :class="(i.activo === 1 || i.activo === true) ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'">
+											{{ Estatustxt(i.activo) }}
 											</span>
                                         </div>
                                         <div class="flex flex-col">
