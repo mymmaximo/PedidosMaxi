@@ -385,19 +385,18 @@
 										</div>
 									</div>
                                 </transition>
-								<template v-if="i.estatus !== 1">
-									<div @click= "PedidoCambio(i.id_pedido)"
-									v-if = "PedidoNow === i.id_pedido"  
-									class="botonc text-center"
+								<div class="flex flex-row justify-end gap-2 mt-3">
+									<button @click= "Edicion(i)"
+									class="bg-gray-800 text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-gray-700 shadow-sm"
 									>
-									Ocultar Detalles
-									</div>
-									<div v-else @click= "PedidoCambio(i.id_pedido)"
-									class="botoncon text-center"
+									✏️ Editar Estado
+									</button>
+									<button @click= "PedidoCambio(i.id_pedido)"
+									class="bg-green-50 text-green-700 border border-green-200 text-xs font-bold px-3 py-2 rounded-lg hover:bg-green-100 shadow-sm"
 									>
-									Ver Detalles
-									</div>
-								</template>
+									{{ PedidoNow === i.id_pedido ? 'Ocultar ⬆️' : 'Detalles ⬇️' }}
+									</button>
+								</div>
 							</div>
 						</div>
 						<div v-else class="lilelse">
