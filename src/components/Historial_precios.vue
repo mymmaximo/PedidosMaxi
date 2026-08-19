@@ -231,7 +231,10 @@
 											<h2 class="text-xl font-black text-gray-800">
                                             {{ i.nombre }}
                                             </h2>
-											<span :class="Estatuscolor(i.estatus)">
+                                            <span class="text-xs font-bold 
+                                            px-3 py-1 
+                                            rounded-full border shadow-sm"
+                                            :class="(i.estatus === 1 || i.estatus === true) ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'">
 											{{ Estatustxt(i.estatus) }}
 											</span>
                                         </div>
