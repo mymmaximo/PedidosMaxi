@@ -190,9 +190,7 @@
                                                 {{ i.direccion[0].calle }} 
                                                 {{ i.direccion[0].numero }}
                                                 </h2>
-                                                <span class="bg-yellow-100 px-3 py-1
-                                                text-yellow-800 text-xs font-bold 
-                                                rounded-full border border-yellow-300 shadow-sm"
+                                                <span class="globoamarillo"
                                                 >
                                                 ⏳ Preparando
                                                 </span>
@@ -362,12 +360,7 @@
                                     class="mb-4"
                                     >
                                         <div @click="PedidoCambioEnCamino(i.id_pedido)"
-                                        class="flex flex-col sm:flex-row cursor-pointer 
-                                        hover:-translate-y-1 transition-all justify-between 
-                                        items-start sm:items-center 
-                                        gap-4 bg-white p-5 
-                                        border-2 border-blue-300/40 hover:border-blue-400/80 
-                                        hover:shadow-lg hover:shadow-blue-900/10 rounded-2xl w-full"
+                                        class="tablue"
                                         >
                                             <!-- IZQUIERDA -->
                                             <div class="flex flex-col text-left">
@@ -550,12 +543,7 @@
                                     class="mb-4 opacity-90 hover:opacity-100 transition-opacity"
                                     >
                                         <div @click="PedidoCambioHistorial(i.id_pedido)"
-                                        class="flex flex-col sm:flex-row 
-                                        cursor-pointer hover:-translate-y-1 transition-all 
-                                        justify-between items-start sm:items-center 
-                                        gap-4 bg-gray-50 p-5 
-                                        border-2 border-gray-200 hover:border-gray-300 
-                                        shadow-sm rounded-2xl w-full"
+                                        class="tabgray"
                                         >
                                             <div class="flex flex-col text-left">       
                                                 <div class="flex flex-wrap items-center gap-3 mb-2">
