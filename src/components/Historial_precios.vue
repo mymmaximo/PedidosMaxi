@@ -228,9 +228,9 @@
                                 >
                                     <div class="flex flex-col text-left">
                                         <div class="flex flex-wrap items-center gap-3 mb-2">
-                                            <h1>
+											<h2 class="text-xl font-black text-gray-800">
                                             {{ i.nombre }}
-                                            </h1>
+                                            </h2>
 											<span :class="Estatuscolor(i.estatus)">
 											{{ Estatustxt(i.estatus) }}
 											</span>
@@ -258,13 +258,13 @@
                                         $ {{ FormatearPrecio(i.precio_viejo) }}
                                         </h2>
                                         <h2>
-                                        <span class="hidden lg:inline 2xl:inline">
+                                        <span class="text-gray-500 font-medium text-sm">
                                         Precio Nuevo: 
                                         </span>
                                         $ {{ FormatearPrecio(i.precio_nuevo) }}
                                         </h2>
                                         <h2>
-                                        <span class="hidden lg:inline 2xl:inline">
+                                        <span class="text-gray-500 font-medium text-sm">
                                         Fecha de Act: 
                                         </span>
                                         {{ FormatoFecha(i.updated_at) }}
