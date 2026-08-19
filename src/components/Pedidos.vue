@@ -248,7 +248,7 @@
 									<div class="flex flex-col text-left">
 										<div class="flex flex-wrap items-center gap-3 mb-2">
 											<h2 class="text-xl font-black text-gray-800">
-											📍Pedido para
+											📦Pedido para
 											{{ i.cliente[0].nombre }}
 											</h2>
 											<span :class="Estatuscolor(i.estatus)">
@@ -539,10 +539,10 @@
 	}
 	const Estatuscolor = (id_estatus) => {
 		if (id_estatus === 1) {
-			return "globoamarillo"
+			return "globoazul"
 		}
 		else if (id_estatus === 2) {
-			return "globoazul"
+			return "globoamarillo"
 		}
 		else if (id_estatus === 3) {
 			return "globlanco"

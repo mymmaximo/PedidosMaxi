@@ -224,14 +224,16 @@
                             class="mb-2 lg:mb-5"
                             >
                                 <div  @click="CopiarAlPortapapeles(i.codigo_barra, i.nombre)"
-                                :class="Estatuscolor(i.activo)"
                                 class="tab"
                                 >
-                                    <div class="flex flex-col">
-                                        <div class="flex flex-row">
+                                    <div class="flex flex-col text-left">
+                                        <div class="flex flex-wrap items-center gap-3 mb-2">
                                             <h1>
                                             {{ i.nombre }}
                                             </h1>
+											<span :class="Estatuscolor(i.estatus)">
+											{{ Estatustxt(i.estatus) }}
+											</span>
                                         </div>
                                         <div class="flex flex-col">
                                             <h2>
@@ -248,9 +250,9 @@
                                             </h2>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col ml-auto text-right items-end">
+                                    <div class="lilbox">
                                         <h2>
-                                        <span class="hidden lg:inline 2xl:inline">
+                                        <span class="text-xs text-gray-500 font-bold mb-1">
                                         Precio Viejo: 
                                         </span>
                                         $ {{ FormatearPrecio(i.precio_viejo) }}
@@ -271,8 +273,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-else>
-                            <h2>
+						<div v-else class="lilelse">
+							<span class="text-4xl mb-3 block">
+							😔
+							</span>
+							<h2 class="text-xl font-bold text-gray-700">
                             No se encontraron Cambios en Precios
                             </h2>
                             <h3>

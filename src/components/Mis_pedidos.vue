@@ -221,11 +221,6 @@
                                             {{ i.tiempo_entrega }} Días
                                             </span>
                                             </p>
-                                            <div class="text-green-600 text-sm font-bold 
-                                            mt-3 flex items-center justify-end gap-1"
-                                            >
-                                                {{ PedidoNowPreparando === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
-                                            </div>
                                         </div>
                                     </div>
                                     <transition name="slide">
