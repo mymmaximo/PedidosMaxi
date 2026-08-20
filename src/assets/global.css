@@ -492,37 +492,36 @@ select {
 }
 .botoncon {
     @apply
-    text-green-100 text-center font-bold
-    bg-gradient-to-br from-green-400 to-green-800
-    rounded-3xl
+    flex 
+    justify-center 
+    items-center 
+    w-full 
+    sm:w-auto 
+    flex-1
+    text-white font-bold text-center 
+    tracking-wide
+    bg-green-600 
+    border border-transparent
     cursor-pointer
-    px-2
-    lg:px-5
-    2xl:px-6
-    py-3
-    sm:py-1
-    md:py-1
-    lg:py-2
-    xl:py-2
-    2xl:py-2
-    text-xl
-    sm:text-base
-    md:text-base
-    lg:text-base
-    xl:text-base
-    2xl:text-base
-    transition-all duration-200
-    hover:text-white
-    hover:from-green-800 
-    hover:to-green-500
-    active:text-black
-    active:from-green-400 
-    active:to-green-200
-    active:scale-95
-    disabled:text-gray-400 
-    disabled:from-gray-300 
-    disabled:to-gray-400
-    disabled:cursor-not-allowed
+    rounded-xl 
+    shadow-sm
+    px-6 
+    py-3 
+    sm:py-2.5
+    text-base
+    transition-all 
+    duration-200 
+    ease-out
+    hover:bg-green-700 
+    hover:shadow-md 
+    hover:-translate-y-0.5
+    active:scale-95 
+    active:bg-green-800
+    disabled:bg-gray-300 
+    disabled:text-gray-500 
+    disabled:cursor-not-allowed 
+    disabled:transform-none 
+    disabled:shadow-none
 }
 .botones {
     @apply
