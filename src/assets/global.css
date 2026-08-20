@@ -165,29 +165,17 @@ form {
 .popup {
     @apply
     flex flex-col
-    translate-z-15 z-50
-    bg-gradient-to-tr from-green-200 to-green-300
-    rounded-lg
+    z-50
+    bg-white
+    border border-gray-100
+    rounded-3xl
+    shadow-2xl shadow-green-900/20
     overflow-y-auto
-    sm:overflow-y-auto
-    md:overflow-y-auto
-    lg:overflow-y-auto
-    xl:overflow-y-auto
-    2xl:overflow-y-auto
-    p-5
-    sm:p-10
-    md:p-8
-    lg:p-8
-    xl:p-10
-    2xl:p-15
-    gap-3
-    sm:gap-3
-    md:gap-3
-    lg:gap-3
-    xl:gap-4
-    2xl:gap-4
-    max-h-full
-    max-w-[90vh]
+    p-6 sm:p-8 md:p-10
+    gap-4 sm:gap-6
+    max-h-[90vh]
+    w-[92%] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl
+    mx-auto;
 }
 .start {
     @apply
@@ -433,6 +421,17 @@ select {
 }
 ::-moz-selection {
     @apply bg-green-500 text-white
+}
+.popup h1 {
+    @apply 
+    text-2xl sm:text-3xl font-black text-gray-800 
+    border-b-2 border-gray-100 
+    pb-4 mb-2 p-0 text-center leading-tight;
+}
+.popup h2 {
+    @apply 
+    text-sm sm:text-base font-bold text-gray-500 
+    mt-2 mb-1 p-0 text-left;
 }
 /* botones */
 .botona {
