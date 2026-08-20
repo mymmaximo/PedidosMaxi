@@ -15,7 +15,7 @@
         </Teleport>
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-                <div class="bar">
+                <div :class="['bar', MostrarFiltro ? 'w-full sm:w-72 lg:w-80' : 'w-full sm:w-fit']">
                     <div>
                         <h1 @click="MostrarFiltro = !MostrarFiltro"
                         class="botonfil"

@@ -29,7 +29,7 @@
 	<div class="cuerpo">
 		<div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-				<div class="bar">
+				<div :class="['bar', MostrarFiltro ? 'w-full sm:w-72 lg:w-80' : 'w-full sm:w-fit']">
 					<div>
 						<h1 @click="MostrarFiltro = !MostrarFiltro"
 						class="botonfil"
@@ -247,10 +247,7 @@
 								>
 									<div class="flex flex-col text-left">
 										<div class="flex flex-wrap items-center gap-3 mb-2">
-											<h2 class="text-xl font-black text-gray-800">
-											📦Pedido para
-											{{ i.cliente[0].nombre }}
-											</h2>
+											<h2 class="text-xl font-black text-gray-8aaaaaaaaaaaaa											</h2>
 											<span :class="Estatuscolor(i.estatus)">
 											{{ Estatustxt(i.estatus) }}
 											</span>
