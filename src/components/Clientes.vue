@@ -324,10 +324,10 @@
                             <div v-if="clientes.length > 0">
                                 <div v-for= "i in clientes"
                                 :key="i.id"
-                                class="mb-6"
+                                class="mb-6 relative"
                                 >
                                     <div @click= "TocarTab(i)"
-                                    class="tarjeta-premium"
+                                    class="tarjeta-premium z-10 relative bg-white"
                                     >
                                         <div class="tarjeta-info">
                                             <div class="tarjeta-titulo">
@@ -347,7 +347,7 @@
                                             {{ i.dni }}
                                             </span>
                                             </p>
-                                            <p class="tarjeta-dato">
+                                            <p class="tarjeta-dato mb-1">
                                             📅 Creado el: 
                                             <span class="tarjeta-valor">
                                             {{ FormatoFecha(i.created_at) }}
@@ -401,7 +401,7 @@
                                     </div>
                                     <transition name="slide">
                                         <div v-if="DireccionNow === i.id && i.direcciones.length > 0" 
-                                        class="panel-desplegable"
+                                        class="panel-desplegable relative z-0"
                                         >
                                             <h3 class="text-lg font-bold 
                                             text-gray-800 
