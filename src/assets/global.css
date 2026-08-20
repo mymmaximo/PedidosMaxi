@@ -673,37 +673,41 @@ select {
 }
 .botont {
     @apply
-    text-white text-center
-    bg-gray-600  bg-gradient-to-br from-gray-400 to-gray-800
+    flex 
+    justify-center 
+    items-center 
+    w-full 
+    sm:w-auto 
+    flex-1
+    text-gray-700 
+    font-bold 
+    text-center 
+    tracking-wide
+    bg-gray-100 
+    border border-gray-200
     cursor-pointer
-    rounded-3xl
-    px-2
-    lg:px-5
-    2xl:px-10
-    py-3
-    sm:py-1
-    md:py-1
-    lg:py-2
-    xl:py-2
-    2xl:py-2
-    text-xl
-    sm:text-base
-    md:text-base
-    lg:text-base
-    xl:text-base
-    2xl:text-base
-    transition-all duration-200
-    hover:text-gray-200
-    hover:from-gray-800 
-    hover:to-gray-500
-    active:text-black
-    active:from-gray-400 
-    active:to-gray-200
-    active:scale-95
-    disabled:text-gray-500 
-    disabled:from-gray-300 
-    disabled:to-gray-400
-    disabled:cursor-not-allowed
+    rounded-xl 
+    shadow-sm
+    px-6 
+    py-3 
+    sm:py-2.5
+    text-base
+    transition-all 
+    duration-200 
+    ease-out
+    hover:bg-gray-200 
+    hover:text-gray-900 
+    hover:border-gray-300 
+    hover:shadow-md 
+    hover:-translate-y-0.5
+    active:scale-95 
+    active:bg-gray-300
+    disabled:bg-gray-50 
+    disabled:text-gray-300 
+    disabled:border-gray-100 
+    disabled:cursor-not-allowed 
+    disabled:transform-none 
+    disabled:shadow-none
 }
 .botonx {
     @apply
