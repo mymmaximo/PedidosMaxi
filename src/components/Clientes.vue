@@ -644,6 +644,15 @@
             return "badge-inactivo"
         }
     }
+	const Estatustxt = (id_estatus) => {
+		if (id_estatus === 1 || id_estatus === true) {
+            return "✅ Activo"
+        }
+		else if (id_estatus === 2 || id_estatus === 0 || id_estatus === false) {
+            return "❌ Inactivo"
+        }
+        return "Indefinido"
+	}
 	const FormatoFecha = (fechai) => {
 		if (fechai) {
 			return new Date(fechai).toLocaleDateString('es-ES')
