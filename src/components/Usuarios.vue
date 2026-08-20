@@ -288,7 +288,7 @@
                                 >
                                     <div class="tarjeta-info">
                                         <div class="tarjeta-titulo">
-                                            👤{{ i.nombre }} ()
+                                            👤{{ i.nombre }}
                                                 <span :class="Estatuscolor(i.activo)">
                                                 {{ Roltxt(i.id_rol) }}
                                                 </span>
@@ -519,32 +519,22 @@
             return "badge-inactivo"
         }
     }
-    const Roltxt = (array_roles,activo) => {
+    const Roltxt = (array_roles) => {
         if (!Array.isArray(array_roles) || array_roles.length === 0) {
             return "Sin Rol Asignado"
         }
         if (array_roles.length > 1) {
-            if (array_roles.includes(1)) return activo ? "Admin +" : "Ex-Admin +"
-            return activo ? "Multirrol" : "Ex-Multirrol"
+            if (array_roles.includes(1)) return "Admin +"
+            return "Multirrol"
         }
         const id_unico = array_roles[0]
-        if (activo) {
-            if (id_unico === 1) return "Administrador"
-            if (id_unico === 2) return "Editor de Productos Gral."
-            if (id_unico === 3) return "Gestor de Pedidos y Clientes"
-            if (id_unico === 4) return "Gestor de Precios"
-            if (id_unico === 5) return "Gestor de Stock"
-            if (id_unico === 6) return "Rider"
-            if (id_unico === 7) return "Editor de Clientes"
-        } else {
-            if (id_unico === 1) return "Ex-Administrador"
-            if (id_unico === 2) return "Ex-Editor de Productos Gral."
-            if (id_unico === 3) return "Ex-Gestor de Pedidos y Clientes"
-            if (id_unico === 4) return "Ex-Gestor de Precios"
-            if (id_unico === 5) return "Ex-Gestor de Stock"
-            if (id_unico === 6) return "Ex-Rider"
-            if (id_unico === 7) return "Ex-Editor de Clientes"
-        }
+        if (id_unico === 1) return "Administrador"
+        if (id_unico === 2) return "Editor de Productos Gral."
+        if (id_unico === 3) return "Gestor de Pedidos y Clientes"
+        if (id_unico === 4) return "Gestor de Precios"
+        if (id_unico === 5) return "Gestor de Stock"
+        if (id_unico === 6) return "Rider"
+        if (id_unico === 7) return "Editor de Clientes"
         return "Desconocido"
     }
     const ToggleRol = (id_rol) => {
