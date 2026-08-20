@@ -281,64 +281,51 @@
                         <div v-if="usuarios.length > 0">
                             <div v-for= "i in usuarios" 
                             :key="i.id"
-                            class="mb-2 lg:mb-5"
+                            class="mb-6 relative"
                             >
                                 <div @click="Edicion(i)"
-                                :class="Rolcolor(i.id_rol,i.activo)"
-                                class="tab"
+                                class="tarjeta-premium z-10 relative bg-white"
                                 >
-                                    <div class="flex flex-col">
-                                        <div class="flex flex-row">
-                                            <h1>
-                                            {{ i.nombre }} ({{ Roltxt(i.id_rol,i.activo) }})
-                                            </h1>
+                                    <div class="tarjeta-info">
+                                        <div class="tarjeta-titulo">
+                                            👤{{ i.nombre }} ()
+                                                <span :class="Estatuscolor(i.activo)">
+                                                {{ Roltxt(i.id_rol) }}
+                                                </span>
                                         </div>
-                                        <div class="flex flex-col">
-                                            <h2>
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            E-Mail: 
-                                            </span>
-                                            {{ i.email }}
-                                            </h2>
-                                            <h2>
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            DNI: 
-                                            </span>
-                                            {{ i.dni }}
-                                            </h2>
-                                            <h2>
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Usuario creado el: 
-                                            </span>
-                                            {{ FormatoFecha(i.created_at) }}
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-col ml-auto text-right items-end">
-                                        <button @click.stop="Eliminacion(i)" 
-                                        v-if="i.activo"
-                                        class="botonc !p-2"
-                                        >
-                                        ❌
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Eliminar
+                                        <p class="tarjeta-dato">
+                                        📧 E-Mail: <span class="tarjeta-valor">
+                                        {{ i.email }}
                                         </span>
+                                        </p>
+                                        <p class="tarjeta-dato">
+                                        🪪 DNI: 
+                                        <span class="tarjeta-valor">
+                                        {{ i.dni }}
+                                        </span>
+                                        </p>
+                                        <p class="tarjeta-dato mb-1">
+                                        📅 Creado el: 
+                                        <span class="tarjeta-valor">
+                                        {{ FormatoFecha(i.created_at) }}
+                                        </span>
+                                        </p>
+                                    </div>
+                                    <div class="tarjeta-acciones">
+                                        <button @click.stop="Eliminacion(i)" 
+                                        v-if="i.activo" 
+                                        class="btn-chico-rojo"
+                                        >
+                                        ❌ Eliminar
                                         </button>
                                         <button v-else @click.stop="Eliminacion(i)"
-                                        class="botoncon !p-2"
+                                        class="btn-chico-verde"
                                         >
-                                        🕊️
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Reactivar
-                                        </span>
+                                        🕊️ Reactivar
                                         </button>
-                                        <button @click.stop="Edicion(i)"
-                                        class="botont !p-2"
-                                        >
-                                        ✏️
-                                        <span class="hidden lg:inline 2xl:inline">
-                                        Editar
-                                        </span>
+                                        <button @click.stop="Edicion(i)" 
+                                        class="btn-chico-gris">
+                                        ✏️ Editar
                                         </button>
                                     </div>
                                 </div>
@@ -524,17 +511,14 @@
         BusquedaUsuario()
         filtroAct.value = false
     }
-    const Rolcolor = (array_roles,activo) => {
-        if (!activo) return "no"
-        if (!Array.isArray(array_roles) || array_roles.length === 0) return "no"
-        if (array_roles.includes(1)) return "admin"
-        if (array_roles.includes(2)) return "pgral"
-        if (array_roles.includes(3)) return "pedcli"
-        if (array_roles.includes(4)) return "preci"
-        if (array_roles.includes(5)) return "stoc"
-        if (array_roles.includes(6)) return "rider"
-        if (array_roles.includes(7)) return "pedcli"
-    }
+    const Estatuscolor = (id_estatus) => {
+        if (id_estatus === true || id_estatus === 1) {
+            return "badge-activo"
+        }
+        else {
+            return "badge-inactivo"
+        }
+    
     const Roltxt = (array_roles,activo) => {
         if (!Array.isArray(array_roles) || array_roles.length === 0) {
             return "Sin Rol Asignado"
