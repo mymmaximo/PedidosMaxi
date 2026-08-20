@@ -16,32 +16,72 @@
 }
 .bar {
     @apply 
-    sticky shrink-0 flex flex-col
-    overflow-y-auto z-20
-    text-white
-    bg-green-600/85 border-green-400/30 border-b sm:border-r
-    backdrop-blur-md shadow-lg
-    gap-5
-    p-2
-    sm:p-4
-    md:p-4
-    lg:p-2
-    xl:p-2
-    2xl:p-5
-    pb-2 
-    sm:pb-12 
-    md:pb-12 
-    lg:pb-12 
-    xl:pb-12 
-    2xl:pb-12
-    h-auto
-    sm:h-[calc(100vh-40px)] 
-    md:h-[calc(100vh-48px)] 
-    2xl:h-[calc(100vh-40px)]
-    top-0
-    sm:top-10 
-    md:top-12 
-    2xl:top-10
+    sticky 
+    shrink-0 
+    flex flex-col
+    overflow-y-auto 
+    z-20
+    bg-white 
+    border-b 
+    sm:border-b-0 
+    sm:border-r 
+    border-gray-100
+    shadow-[4px_0_24px_rgba(0,0,0,0.03)]
+    gap-2 
+    sm:gap-4
+    p-4 
+    sm:p-6
+    w-full 
+    sm:w-72 
+    lg:w-80
+    pb-12 
+    sm:pb-24
+    h-auto 
+    sm:h-[calc(100vh-48px)]
+    top-0 
+    sm:top-12
+}
+.bar h1, .bar h2 {
+    @apply 
+    text-xs 
+    font-black 
+    text-green-800 
+    uppercase 
+    tracking-wider 
+    mb-3 
+    mt-2 
+    p-0 
+    text-left 
+    border-none 
+    w-full
+}
+.bar label {
+    @apply 
+    flex 
+    items-center 
+    gap-3 
+    text-sm text-gray-600 font-medium 
+    cursor-pointer 
+    hover:text-green-600 
+    transition-colors 
+    py-1
+}
+input, select, input[type="number"], input[type="date"] {
+    @apply
+    w-full place-self-center
+    text-gray-700 font-medium text-left
+    bg-gray-50 border border-gray-200 rounded-xl
+    outline-none transition-all duration-200
+    px-4 py-2.5 mb-2
+    text-sm sm:text-base
+    shadow-sm
+    focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 focus:-translate-y-0.5 focus:shadow-md;
+}
+input[type="radio"] {
+    @apply 
+    w-4 h-4 mb-0
+    accent-green-600 cursor-pointer
+    focus:ring-0 focus:translate-y-0 shadow-none;
 }
 .carta {
     @apply
