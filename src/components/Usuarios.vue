@@ -518,7 +518,7 @@
         else {
             return "badge-inactivo"
         }
-    
+    }
     const Roltxt = (array_roles,activo) => {
         if (!Array.isArray(array_roles) || array_roles.length === 0) {
             return "Sin Rol Asignado"
