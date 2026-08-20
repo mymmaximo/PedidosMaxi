@@ -456,36 +456,39 @@ select {
 }
 .botonc {
     @apply
-    text-white text-center
-    bg-red-600 bg-gradient-to-br from-red-400 to-red-800
+    flex 
+    justify-center 
+    items-center 
+    w-full 
+    sm:w-auto 
+    flex-1
+    text-red-600 font-bold text-center 
+    tracking-wide
+    bg-red-50 
+    border border-red-200
     cursor-pointer
-    rounded-3xl
-    px-2
-    lg:px-5
-    2xl:px-10
-    py-3
-    sm:py-1
-    md:py-1
-    lg:py-2
-    xl:py-2
-    2xl:py-2
-    text-xl
-    sm:text-base
-    md:text-base
-    lg:text-base
-    xl:text-base
-    2xl:text-base
-    transition-all duration-200
-    hover:text-gray-200
-    hover:from-red-800 
-    hover:to-red-500
-    active:text-black
-    active:from-red-400 
-    active:to-red-200
-    active:scale-95
-    disabled:text-gray-500 
-    disabled:from-gray-300 
-    disabled:to-gray-400
+    rounded-xl 
+    shadow-sm
+    px-6 
+    py-3 
+    sm:py-2.5
+    text-base
+    transition-all 
+    duration-200 
+    ease-out
+    hover:bg-red-100 
+    hover:text-red-700 
+    hover:border-red-300 
+    hover:shadow-md 
+    hover:-translate-y-0.5
+    active:scale-95 
+    active:bg-red-200
+    disabled:bg-gray-100 
+    disabled:text-gray-400 
+    disabled:border-gray-200 
+    disabled:cursor-not-allowed 
+    disabled:transform-none 
+    disabled:shadow-none
 }
 .botoncon {
     @apply
