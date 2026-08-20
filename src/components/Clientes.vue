@@ -628,6 +628,7 @@
         ClienteAct.value.nombre = cliente_fila.nombre
         AbrirPopUp02()
     }
+    
     const TocarTab = (cliente) => {
         if (!cliente.direcciones || cliente.direcciones.length === 0) {
             Eliminacion(cliente)
@@ -636,11 +637,11 @@
         }
     }
     const Estatuscolor = (id_estatus) => {
-        if (id_estatus === true) {
-            return "si"
+        if (id_estatus === true || id_estatus === 1) {
+            return "badge-activo"
         }
-        else if (id_estatus === false) {
-            return "no"
+        else {
+            return "badge-inactivo"
         }
     }
 	const FormatoFecha = (fechai) => {
