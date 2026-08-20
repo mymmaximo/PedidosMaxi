@@ -39,7 +39,7 @@
     h-auto 
     sm:h-[calc(100vh-48px)]
     top-0 
-    sm:top-12
+    sm:top-10
 }
 .bar h1:not(.botonfil):not(.botonnew), .bar h2:not(.botonfil):not(.botonnew) {
     @apply text-xs font-black text-green-800 uppercase tracking-wider mb-3 mt-5 p-0 text-left border-none w-full;
