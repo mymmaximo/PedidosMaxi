@@ -398,14 +398,6 @@
             alert("Tu navegador no soporta la función de copiar automáticamente.")
         }
     }
-    const Estatuscolor = (id_estatus) => {
-        if (id_estatus === true) {
-            return "globoazul"
-        }
-        else if (id_estatus === false) {
-            return ""
-        }
-    }
 	const Estatustxt = (id_estatus) => {
 		if (id_estatus === 1 || id_estatus === true) {
             return "✅ Activo"

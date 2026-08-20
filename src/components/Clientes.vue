@@ -324,124 +324,131 @@
                             <div v-if="clientes.length > 0">
                                 <div v-for= "i in clientes"
                                 :key="i.id"
-                                class="mb-2 lg:mb-5"
+                                class="mb-6"
                                 >
-                                    <div @click= "TocarTab(i)" 
-                                    :class="Estatuscolor(i.activo)"
-                                    class="tab"
+                                    <div @click= "TocarTab(i)"
+                                    class="tarjeta-premium"
                                     >
-                                        <div class="flex flex-col">
-                                            <div class="flex flex-row">
-                                                <h1>
-                                                {{ i.nombre }}
-                                                </h1>
+                                        <div class="tarjeta-info">
+                                            <div class="tarjeta-titulo">
+                                                👤 {{ i.nombre }}
+                                                <span :class="Estatuscolor(i.activo)">
+                                                {{ Estatustxt(i.activo) }}
+                                                </span>
                                             </div>
-                                            <div class="flex flex-col">
-                                                <h2>
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                E-Mail: 
-                                                </span>
-                                                {{ i.email }}
-                                                </h2>
-                                                <h2>
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                DNI: 
-                                                </span>
-                                                {{ i.dni }}
-                                                </h2>
-                                                <h2>
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Cliente creado el: 
-                                                </span>
-                                                {{ FormatoFecha(i.created_at) }}
-                                                </h2>
-                                            </div>
+                                            <p class="tarjeta-dato">
+                                            📧 E-Mail: <span class="tarjeta-valor">
+                                            {{ i.email }}
+                                            </span>
+                                            </p>
+                                            <p class="tarjeta-dato">
+                                            🪪 DNI: 
+                                            <span class="tarjeta-valor">
+                                            {{ i.dni }}
+                                            </span>
+                                            </p>
+                                            <p class="tarjeta-dato">
+                                            📅 Creado el: 
+                                            <span class="tarjeta-valor">
+                                            {{ FormatoFecha(i.created_at) }}
+                                            </span>
+                                            </p>
                                         </div>
-                                        <div class="flex flex-col ml-auto text-right items-end">
+                                        <div class="tarjeta-acciones">
                                             <button @click.stop="Eliminacion(i)" 
-                                            v-if="i.activo"
-                                            class="botonc !p-2"
+                                            v-if="i.activo" 
+                                            class="btn-chico-rojo"
                                             >
-                                            ❌
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Eliminar
-                                            </span>
+                                            ❌ Eliminar
                                             </button>
-                                            <button v-else @clic.stopk="Eliminacion(i)" 
-                                            class="botoncon !p-2"
+                                            <button v-else @click.stop="Eliminacion(i)"
+                                            class="btn-chico-verde"
                                             >
-                                            🕊️
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Reactivar
-                                            </span>
+                                            🕊️ Reactivar
                                             </button>
-                                            <button @click.stop="Edicion(i)"
-                                            class="botont !p-2"
-                                            >
-                                            ✏️
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Editar
-                                            </span>
+                                            <button @click.stop="Edicion(i)" 
+                                            class="btn-chico-gris">
+                                            ✏️ Editar
                                             </button>
                                         </div>
                                     </div>
-                                    <div v-if = "DireccionNow === i.id">
-                                        <div v-for = "e in i.direcciones" 
-                                        :key="e.id"
-                                        class="tab !bg-green-100/50 !mx-5 !w-auto"
+                                    <div v-if="i.direcciones.length === 0" 
+                                    class="text-center text-xs 
+                                    text-gray-400 font-medium
+                                    mt-2 mb-4 
+                                    italic">
+                                    Sin direcciones adjuntas
+                                    </div>
+                                    <div v-else-if="DireccionNow !== i.id" 
+                                    @click.stop="DireccionCambio(i.id)"
+                                    class="text-center text-xs 
+                                    text-green-600 font-bold 
+                                    mt-2 mb-4 
+                                    cursor-pointer 
+                                    hover:text-green-800 
+                                    transition-colors" >
+                                    Ver {{ i.direcciones.length }} Dirección(es) ⬇️
+                                    </div>
+                                    <div v-else @click.stop="DireccionCambio(i.id)"
+                                    class="text-center text-xs 
+                                    text-green-600 font-bold 
+                                    mt-2 mb-4 
+                                    cursor-pointer 
+                                    hover:text-green-800 
+                                    transition-colors" 
+                                    >
+                                    Ocultar Direcciones ⬆️
+                                    </div>
+                                    <transition name="slide">
+                                        <div v-if="DireccionNow === i.id && i.direcciones.length > 0" 
+                                        class="panel-desplegable"
                                         >
-                                            <div class="flex flex-col">
-                                                <div class="flex flex-row">
-                                                    <h2>
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    Calle: 
-                                                    </span>
+                                            <h3 class="text-lg font-bold 
+                                            text-gray-800 
+                                            mb-3 pb-2 
+                                            border-b border-gray-200"
+                                            >
+                                            📍 Direcciones Registradas
+                                            </h3>
+                                            <div class="flex flex-col gap-3">
+                                                <div v-for="e in i.direcciones" 
+                                                :key="e.id" 
+                                                class="flex flex-col 
+                                                sm:flex-row
+                                                justify-between 
+                                                sm:items-center 
+                                                bg-white p-4 shadow-sm gap-2
+                                                rounded-xl border border-gray-200"
+                                                >
+                                                    <p class="tarjeta-dato">
+                                                    🗺️ Calle: 
+                                                    <span class="tarjeta-valor font-bold">
                                                     {{ e.calle }} 
                                                     {{ e.numero }}
-                                                    </h2>
-                                                </div>
-                                                <div class="flex flex-col">
-                                                    <h3>
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    Barrio: 
                                                     </span>
+                                                    </p>
+                                                    <p class="tarjeta-dato">
+                                                    🏘️ Barrio: 
+                                                    <span class="tarjeta-valor">
                                                     {{ e.barrio }}
-                                                    </h3>
+                                                    </span>
+                                                    </p>
+                                                    <p class="tarjeta-dato">
+                                                    🏙️ Ciudad: 
+                                                    <span class="tarjeta-valor">
+                                                    {{ e.ciudad }}
+                                                    </span>
+                                                    </p>
+                                                    <p class="tarjeta-dato">
+                                                    📍 Prov: 
+                                                    <span class="tarjeta-valor">
+                                                    {{ e.provincia }}
+                                                    </span>
+                                                    </p>
                                                 </div>
-                                            </div>
-                                            <div class="flex flex-col ml-auto text-right items-end">
-                                                <h2>
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Ciudad: 
-                                                </span>
-                                                {{ e.ciudad }}
-                                                </h2>
-                                                <h2>
-                                                <span class="hidden lg:inline 2xl:inline">
-                                                Provincia:  
-                                                </span>
-                                                {{ e.provincia }}
-                                                </h2>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div @click.stop= "DireccionCambio(i.id)"
-                                    v-if="i.direcciones.length > 0 && DireccionNow === i.id"
-                                    class="botonc"
-                                    >
-                                    Ocultar Direcciones
-                                    </div>
-                                    <div @click.stop= "DireccionCambio(i.id)" 
-                                    v-else-if="i.direcciones.length > 0 && DireccionNow !== i.id" 
-                                    class="botoncon"
-                                    >
-                                    Ver Direcciones
-                                    </div>
-                                    <button v-else disabled
-                                    class="botont w-full"
-                                    >
-                                    No hay Direcciones Adjuntas
-                                    </button>
+                                    </transition>
                                 </div>
                             </div>  
                             <div v-else>
