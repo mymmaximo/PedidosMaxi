@@ -41,19 +41,8 @@
     top-0 
     sm:top-12
 }
-.bar h1, .bar h2 {
-    @apply 
-    text-xs 
-    font-black 
-    text-green-800 
-    uppercase 
-    tracking-wider 
-    mb-3 
-    mt-2 
-    p-0 
-    text-left 
-    border-none 
-    w-full
+.bar h1:not(.botonfil):not(.botonnew), .bar h2:not(.botonfil):not(.botonnew) {
+    @apply text-xs font-black text-green-800 uppercase tracking-wider mb-3 mt-5 p-0 text-left border-none w-full;
 }
 .bar label {
     @apply 
@@ -630,54 +619,17 @@ select {
     hover:bg-green-700 
     hover:w-12
 }
-.botonfil {
+.botonfil, .botonnew {
     @apply
-    text-white text-center
-    bg-green-700 
-    rounded-xl
+    flex items-center justify-center w-full
+    bg-white text-green-700 font-black text-2xl sm:text-3xl
+    border-2 border-green-200 rounded-xl
     cursor-pointer
-    px-0
-    sm:px-3
-    md:px-3
-    lg:px-3
-    xl:px-4
-    2xl:px-4
-    py-2
-    sm:py-2
-    md:py-2
-    lg:py-2
-    xl:py-3
-    2xl:py-3
-    transition-all duration-200
-    hover:text-white
-    hover:bg-green-600
-    active:bg-green-300
-    active:scale-95
-    disabled:text-gray-500 
-    disabled:from-gray-300 
-    disabled:to-gray-400
-    disabled:cursor-not-allowed
-}
-.botonnew {
-    @apply
-    text-white text-center
-    bg-gray-600 
-    rounded-xl
-    cursor-pointer
-    px-0
-    lg:px-4
-    2xl:px-4
-    py-2
-    lg:py-3
-    2xl:py-2
-    hover:text-white
-    hover:bg-gray-500
-    active:text-black
-    active:bg-gray-300
-    disabled:text-gray-500 
-    disabled:from-gray-300 
-    disabled:to-gray-400
-    disabled:cursor-not-allowed
+    py-2 sm:py-3 px-4 mb-4
+    transition-all duration-300 ease-out shadow-sm
+    hover:bg-green-50 hover:text-green-800 hover:border-green-400 hover:shadow-md hover:-translate-y-0.5
+    active:bg-green-100 active:scale-95
+    disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none;
 }
 .botonpestaña {
     @apply
