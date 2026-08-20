@@ -240,7 +240,7 @@
                 w-full top-0 z-30 
                 bg-green-600 sm:hidden shadow-md"
                 >
-                    <div :class="['bar', MostrarFiltro ? 'w-full sm:w-72 lg:w-80' : 'w-full sm:w-fit']">
+                    <div :class="['bar', MostrarMenu ? 'w-full sm:w-72 lg:w-80' : 'w-full sm:w-fit']">
                         <h1 @click="MostrarMenu = !MostrarMenu"
                         class="botonfil"
                         >

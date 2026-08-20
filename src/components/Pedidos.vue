@@ -247,7 +247,6 @@
 								>
 									<div class="flex flex-col text-left">
 										<div class="flex flex-wrap items-center gap-3 mb-2">
-											<h2 class="text-xl font-black text-gray-8aaaaaaaaaaaaa											</h2>
 											<span :class="Estatuscolor(i.estatus)">
 											{{ Estatustxt(i.estatus) }}
 											</span>
