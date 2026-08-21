@@ -357,7 +357,12 @@
                 <div v-if="MostrarConfir" 
                 class="notificacion"
                 >
-                ✅ ¡Agregado al carrito!
+                    <span class="text-xl drop-shadow-sm">
+                    🛒
+                    </span>
+                    <span>
+                    ¡Agregado al carrito con éxito!
+                    </span>
                 </div>
             </transition>
         </Teleport>

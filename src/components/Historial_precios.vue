@@ -6,7 +6,12 @@
                 <div v-if="MostrarNotificacion" 
                 class="notificacion !bg-blue-300 !text-white"
                 >
-                ✅ {{ TextoNotificacion }}
+                    <span class="text-xl drop-shadow-sm">
+                    ✅ 
+                    </span>
+                    <span>
+                    {{ TextoNotificacion }}
+                    </span>
                 </div>
             </transition>
         </Teleport>

@@ -2,11 +2,16 @@
     <div class="cuerpo">
         <!-- Notificación de Copiado Exitoso -->
         <Teleport to="body">
-            <transition name="fade">
+            <transition name="slide">
                 <div v-if="MostrarNotificacion" 
                 class="notificacion !bg-blue-300 !text-white"
                 >
-                ✅ {{ TextoNotificacion }}
+                    <span class="text-xl drop-shadow-sm">
+                    ✅ 
+                    </span>
+                    <span>
+                    {{ TextoNotificacion }}
+                    </span>
                 </div>
             </transition>
         </Teleport>

@@ -50,11 +50,16 @@
         </Teleport>
         <!-- Notificacion de rol invalido -->
         <Teleport to="body">
-            <transition name="fade">
+            <transition name="slide">
                 <div v-if="MostrarError" 
                 class="notificacion !bg-yellow-600"
                 >
-                ¡Acceso Denegado!, revisa tus privilegios
+                    <span class="text-xl drop-shadow-sm">
+                    ⛔
+                    </span>
+                    <span>
+                    ¡Acceso Denegado!
+                    </span>
                 </div>
             </transition>
         </Teleport>
