@@ -732,10 +732,15 @@ select {
 .notificacion {
     @apply 
     fixed top-6 right-6 sm:top-10 sm:right-10 z-[100] 
-    flex items-center gap-3 px-6 py-4 
-    bg-white border border-gray-100 border-l-4 border-l-green-500 
+    flex items-center gap-3 px-6 py-4 pl-8
+    bg-white border border-gray-100 
     rounded-xl shadow-2xl shadow-green-900/20 
-    text-gray-800 font-bold text-sm sm:text-base;
+    text-gray-800 font-bold text-sm sm:text-base
+    overflow-hidden relative
+}
+.notificacion::before {
+    content: '';
+    @apply absolute left-0 top-0 bottom-0 w-2 bg-green-500
 }
 /* imagen */
 .banner {
