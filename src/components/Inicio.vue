@@ -608,7 +608,7 @@
                                 >
                                     <button @click="CarruselIzquierda(cat.categoria)"
                                     :disabled="ObtenerIndiceCarrusel(cat.categoria) === 0"
-                                    class="botonflechacat 
+                                    class="botonflechacatr 
                                     absolute left-0 top-[55%] 
                                     hidden md:flex
                                     opacity-0 group-hover:opacity-100"
@@ -704,7 +704,7 @@
                                         </div>
                                     </div>
                                     <button @click="CarruselDerecha(cat.categoria, ProductosPorCategoria[cat.categoria].length)"
-                                    class="botonflechacat 
+                                    class="botonflechacatl 
                                     absolute right-0 top-[55%] 
                                     hidden md:flex
                                     opacity-0 group-hover:opacity-100"
