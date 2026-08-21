@@ -32,10 +32,14 @@
                 🔄 Recargar Página
                 </button>
             </div>
-            <div v-else>
-                <div class="troncodentro !z-0">
-                    <form @submit.prevent="ActualizarCliente">
-                        <h1 class="titulo-config">
+            <div v-else class="flex justify-center items-center w-full px-4 py-12">
+                <div class="tarjeta-config">
+                    <div class="deco-config">
+                    </div>
+                    <form @submit.prevent="ActualizarCliente"
+                    class="relative z-10 flex flex-col gap-4"
+                    >
+                        <h1 class="titulo-config mb-4">
                         DETALLES DE LA CUENTA
                         </h1>
                         <div class="flex flex-col text-left">
@@ -58,7 +62,7 @@
                             class="input-config"
                             >
                         </div>
-                        <div class="flex flex-col text-left">
+                        <div class="flex flex-col text-left mt-2">
                             <label class="label-config">
                             Nueva Contraseña
                             </label>
