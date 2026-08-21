@@ -738,11 +738,6 @@ select {
     text-gray-800 font-bold text-sm sm:text-base
     overflow-hidden relative
 }
-.notificacion::before {
-    content: '';
-    @apply 
-    absolute left-0 top-0 bottom-0 w-2 bg-green-500
-}
 /* imagen */
 .banner {
     @apply
