@@ -76,7 +76,7 @@
                         <h1>
                         {{ ProductoActual.nombre }}
                         </h1>
-                        <div class="popup popup-compra">
+                        <div class="carrusel-contenedor">
                             <div v-if="ProductoActual.imagenes.length > 0"
                             class="carrusel-fila"
                             >
@@ -86,7 +86,7 @@
                                 >
                                 ❮
                                 </button>
-                                <div>
+                                <div class="carrusel-img-caja">
                                     <img v-show="ImagenesCargando[ProductoActual.id] === false"
                                     :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
                                     @load="ImagenesCargando[ProductoActual.id] = false"
@@ -115,7 +115,7 @@
                             </div>
                         </div>
                         <div class="panel-compra">
-                        <div class="control-cantidad">
+                            <div class="control-cantidad">
                                 <button @click="RestarProducto(ProductoActual)"
                                 class="control-btn-restar"
                                 >
