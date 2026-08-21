@@ -325,12 +325,6 @@
                                 >
                                 ✚
                                 </button>
-                                <h1 class="text-center">
-                                <span >
-                                Total:
-                                </span>
-                                $ {{ FormatearPrecio(ProductoActual.precio * ProductoCantidad) }}  
-                                </h1>
                             </div>
                             <div class="total-caja">
                                 <span class="total-subtitulo">
