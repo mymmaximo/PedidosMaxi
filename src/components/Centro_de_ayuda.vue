@@ -4,10 +4,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="MostrarNotificacion" 
-                class="fixed top-4 right-4 
-                bg-blue-300 text-white 
-                px-6 py-3 rounded-xl shadow-lg 
-                z-[100] font-bold"
+                class="notificacion !bg-blue-300 !text-white"
                 >
                 ✅ {{ TextoNotificacion }}
                 </div>

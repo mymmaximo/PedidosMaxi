@@ -355,10 +355,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="MostrarConfir" 
-                class="fixed top-4 right-4 
-                bg-green-600 text-white 
-                px-6 py-3 rounded-xl shadow-lg 
-                z-[100] font-bold"
+                class="notificacion"
                 >
                 ✅ ¡Agregado al carrito!
                 </div>

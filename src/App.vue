@@ -52,10 +52,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="MostrarError" 
-                class="fixed top-4 right-4 
-                bg-yellow-600 text-black 
-                px-6 py-3 rounded-xl shadow-lg 
-                z-[100] font-bold"
+                class="notificacion !bg-yellow-600"
                 >
                 ¡Acceso Denegado!, revisa tus privilegios
                 </div>
