@@ -72,20 +72,17 @@
                 @click.self="CerrarPopUp04"
                 class="fondo"
                 >
-                    <div class="popup">
+                    <div class="popup popup-compra">
                         <h1>
                         {{ ProductoActual.nombre }}
                         </h1>
-                        <div>
+                        <div class="popup popup-compra">
                             <div v-if="ProductoActual.imagenes.length > 0"
-                            class="flex flex-row 
-                            md:gap-3 gap-1 overflow-x-auto
-                            items-center justify-center 
-                            w-full md:pb-2 pb-1 snap-x
-                            ">
+                            class="carrusel-fila"
+                            >
                                 <button @click="BackImg(ProductoActual)"
                                 :disabled="GetImg(ProductoActual.id) === 0"
-                                class="botonflecha"
+                                class="carrusel-btn"
                                 >
                                 ❮
                                 </button>
@@ -93,57 +90,62 @@
                                     <img v-show="ImagenesCargando[ProductoActual.id] === false"
                                     :src=ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)
                                     @load="ImagenesCargando[ProductoActual.id] = false"
-                                    class="imagen"
+                                    class="carrusel-img"
                                     >
                                     <div v-if="ImagenesCargando[ProductoActual.id] !== false" 
-                                    class="mt-2"
+                                    class="absolute inset-0 flex items-center justify-center"
                                     >
                                         <img src="../assets/loading.gif" 
                                         alt="Cargando..." 
-                                        class="imagen !2xl:p-15">
+                                        class="w-12 h-12 opacity-50"
+                                        >
                                     </div>
                                 </div>
                                 <button @click="NextImg(ProductoActual)"
                                 :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
-                                class="botonflecha"
+                                class="carrusel-btn"
                                 >
                                 ❯
                                 </button>
                             </div>
-                            <img v-else src="../assets/images.png"
-                            class="imagen"
-                            >
+                            <div v-else class="carrusel-img-caja">
+                                <img src="../assets/images.png" 
+                                class="carrusel-img opacity-40 grayscale"
+                                >
+                            </div>
                         </div>
-                        <div class="flex flex-col">
-                            <input v-model="ProductoCantidad"
-                            type="number" 
-                            maxlength="8"
-                            class="!w-30 mb-5"
-                            >
-                            <div class="botones !flex-row">
+                        <div class="panel-compra">
+                        <div class="control-cantidad">
                                 <button @click="RestarProducto(ProductoActual)"
-                                class="botonc !px-4 !font-bold"
+                                class="control-btn-restar"
                                 >
                                 ━
                                 </button>
+                                <input v-model="ProductoCantidad"
+                                type="number" 
+                                maxlength="8"
+                                class="control-input"
+                                >
                                 <button @click="SumarProducto(ProductoActual)"
-                                class="botoncon !px-4"
+                                class="control-btn-sumar"
                                 >
                                 ✚
                                 </button>
                             </div>
-                            <h1 class="text-center">
-                            <span class="hidden lg:inline 2xl:inline">
-                            Total:
-                            </span>
-                            $ {{ FormatearPrecio(ProductoActual.precio * ProductoCantidad) }}
-                            </h1>
+                            <div class="total-caja">
+                                <span class="total-subtitulo">
+                                Precio Total
+                                </span>
+                                <span class="total-valor">
+                                    $ {{ FormatearPrecio(ProductoActual.precio * ProductoCantidad) }}
+                                </span>
+                            </div>
                         </div>
-                        <div class="botones">
+                        <div class="botones mt-2">
                             <button @click="SumarCarrito"
                             class="botoncon"
                             >
-                            Agregar al Carrito
+                            🛒 Agregar al Carrito
                             </button>
                             <button @click="CerrarPopUp04"
                             class="botonc"
