@@ -145,7 +145,7 @@
                             <button @click="SumarCarrito"
                             class="botoncon"
                             >
-                            🛒 Agregar al Carrito
+                            Agregar al Carrito
                             </button>
                             <button @click="CerrarPopUp04"
                             class="botonc"
