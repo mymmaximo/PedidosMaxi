@@ -665,11 +665,13 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button @click="CargarDatos()" 
-                        class="botoncon mt-4"
-                        >
-                        🔄 Recargar Página
-                        </button>
+                        <div class="mt-6 flex justify-center">
+                            <button @click="CargarDatos()" 
+                            class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
+                            >
+                            🔄 Recargar Página
+                            </button>
+                        </div>
                     </div>
                     <div v-else>
                         <div class="px-5">
@@ -746,43 +748,46 @@
                                                 {{ i.stock }}
                                                 </h3>
                                             </div>
-                                            <div class="botones">
-                                                <div v-if="VerificarRol([1, 2, 4, 5])">
-                                                    <button @click.stop="Edicion(i)" 
-                                                    v-if="VerificarRol([1, 2, 4, 5])" 
-                                                    class="botont !py-2"
-                                                    >
-                                                    ✏️
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    Editar
-                                                    </span>
-                                                    </button>
-                                                </div>
-                                                <div v-if="VerificarRol([1, 2])">
-                                                    <button @click.stop="Eliminacion(i)" 
-                                                    v-if="i.activo" 
-                                                    class="botonc !py-2"
-                                                    >
-                                                    ❌
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    Eliminar
-                                                    </span>
-                                                    </button>
-                                                    <button v-else @click.stop="Eliminacion(i)" 
-                                                    class="botoncon"
-                                                    >
-                                                    🕊️
-                                                    <span class="hidden lg:inline 2xl:inline">
-                                                    Reactivar
-                                                    </span>
-                                                    </button>
-                                                </div>
+                                            <div class="flex flex-wrap
+                                            w-full mt-auto justify-center items-center
+                                            pt-3  gap-1.5 sm:gap-2"
+                                            >
+                                                <button @click.stop="Edicion(i)" 
+                                                v-if="VerificarRol([1, 2, 4, 5])" 
+                                                class="botont !px-2 !py-2 !text-sm"
+                                                >
+                                                ✏️
+                                                <span class="hidden xl:inline ml-1 truncate">
+                                                Editar
+                                                </span>
+                                                </button>
+                                                <button @click.stop="Eliminacion(i)" 
+                                                v-if="VerificarRol([1, 2]) && i.activo" 
+                                                class="botonc !px-2 !py-2 !text-sm"
+                                                >
+                                                ❌
+                                                <span class="hidden xl:inline ml-1 truncate">
+                                                Eliminar
+                                                </span>
+                                                </button>
+                                                <button @click.stop="Eliminacion(i)" 
+                                                v-if="VerificarRol([1, 2]) && !i.activo" 
+                                                class="botoncon !px-2 !py-2 !text-sm"
+                                                >
+                                                🕊️
+                                                <span class="hidden xl:inline ml-1 truncate">
+                                                Reactivar
+                                                </span>
+                                                </button>
                                                 <button @click.stop="Compracion(i)"
                                                 :disabled="CarritoStock(i) === 0"
                                                 v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
-                                                class="botoncon !py-2 !text-2xl"
+                                                class="botoncon !px-2 !py-2 !text-sm"
                                                 >
-                                                🛍️ 
+                                                🛍️
+                                                <span class="hidden xl:inline ml-1 truncate">
+                                                Comprar
+                                                </span>
                                                 </button>
                                             </div>
                                         </div>
@@ -804,9 +809,9 @@
                                 >
                                 ❮
                                 </button>
-                                <h2 class="self-center p-5">
-                                Items 
-                                {{ 0 + Pagina }} 
+                                <h2 class="self-center font-bold px-6">
+                                Mostrando 
+                                {{ Pagina + 1 }}
                                 - 
                                 {{ Pagina + Productos.length }}
                                 </h2>
@@ -937,6 +942,7 @@
     // ----- Variables Simples ----- //
     const OpcionCategoriaA = ref ("new")
     const OpcionCategoria = ref ("new")
+    const ItemsPorPagina = ref(24)
     const filtroRadio = ref(0)
     const filtroEst = ref (1)
 	const Pagina = ref (0)
@@ -1009,9 +1015,9 @@
         CargandoTrue.value = true
         ErrorCarga.value = false
         if (direccion === 'next') {
-            Pagina.value += 21
+            Pagina.value += ItemsPorPagina.value
         } else if (direccion === 'back') {
-            Pagina.value -= 21
+            Pagina.value -= ItemsPorPagina.value
             if (Pagina.value < 0) Pagina.value = 0
         }
         try {
@@ -1291,6 +1297,7 @@
     const BusquedaProducto = async() => {
         let url = new URL (`${urlover8000}/producto/`)
 		url.searchParams.append('skip', Pagina.value)
+        url.searchParams.append('limit', ItemsPorPagina.value)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value)
         }

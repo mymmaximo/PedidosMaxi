@@ -217,11 +217,13 @@
                         <h2 class="text-xl text-gray-700 text-center px-4">
                         El servidor no responde o tu conexión es inestable.
                         </h2>
-                        <button @click="CargarDatos" 
-                        class="botoncon mt-4"
-                        >
-                        🔄 Recargar Página
-                        </button>
+                        <div class="mt-6 flex justify-center">
+                            <button @click="CargarDatos()" 
+                            class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
+                            >
+                            🔄 Recargar Página
+                            </button>
+                        </div>
                     </div>
 					<div v-else>
 						<!-- Barra de Busqueda -->

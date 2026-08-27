@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 export const urlbase5173 = "https://pedidosmaxi-production.up.railway.app"
 
-export const urlover8000 = "https://backend-pedidosmaxi-production.up.railway.app"
+export const urlover8000 = "https://backend-pedidos-maxi.vercel.app"
 
 export const urlbase5173b = "http://localhost:5173"
 
