@@ -683,7 +683,7 @@
                             maxlength="50"
                             >
                             <div v-if="Productos.length > 0"
-                            :class="['grid grid-cols-2 gap-6', (MostrarFiltro || MostrarNuevo) ? 'lg:grid-cols-3' : 'lg:grid-cols-4']"
+                            :class="['grid grid-cols-2 gap-6', (MostrarFiltro || MostrarNuevo) ? '!lg:grid-cols-3' : '!lg:grid-cols-4']"
                             >
                                 <div :class="Estatuscolor(i.activo)" 
                                 v-for= "i in Productos" 
