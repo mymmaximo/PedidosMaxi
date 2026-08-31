@@ -612,7 +612,7 @@ select {
     bg-white text-green-700 font-black text-2xl sm:text-3xl
     border-2 border-green-200 rounded-xl
     cursor-pointer
-    py-2 sm:py-3 px-4 mb-4
+    py-2 sm:py-3 px-4 mb-0
     transition-all duration-300 ease-out shadow-sm
     hover:bg-green-50 hover:text-green-800 hover:border-green-400 hover:shadow-md hover:-translate-y-0.5
     active:bg-green-100 active:scale-95
