@@ -371,7 +371,7 @@
             <div class="flex w-full flex-col sm:flex-row">
                 <!-- Barra de Filtros -->
                 <div :class="['bar', (MostrarFiltro || MostrarNuevo) ? 'w-full sm:w-72 lg:w-80' : 'w-full sm:w-fit']">
-                    <div class="sm:hidden">
+                    <div class="md:hidden">
                         <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
                         >
