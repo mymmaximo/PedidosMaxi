@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-export const urlbase5173 = "https://pedidosmaxi-production.up.railway.app"
+export const urlbase5173 = "https://pedidosmaxi-production.up.way.app"
 
 export const urlover8000 = "https://backend-pedidos-maxi.vercel.app"
 

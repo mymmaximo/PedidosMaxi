@@ -532,7 +532,7 @@
         const id_unico = array_roles[0]
         if (id_unico === 1) return "Administrador"
         if (id_unico === 2) return "Editor de Productos Gral."
-        if (id_unico === 3) return "Gestor de Pedidos y Clientes"
+        if (id_unico === 3) return "Gestor de Pedidos"
         if (id_unico === 4) return "Gestor de Precios"
         if (id_unico === 5) return "Gestor de Stock"
         if (id_unico === 6) return "Rider"
