@@ -90,8 +90,8 @@
                         <div v-if="MostrarFiltro"
                         class="flex flex-col lg:self-center"
                         >
-                            <div class="flex flex-col md:p-4 p-2">
-                                <h1>
+                            <div class="flex flex-col md:px-4 md:pb-4 p-2 !pt-0">
+                                <h1 class="!mt-0">
                                 Ordenar
                                 </h1>
                                 <select v-model="orden" 
