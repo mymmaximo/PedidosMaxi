@@ -229,6 +229,11 @@
                         </div>
                     </div>
 					<div v-else>
+                        <button @click="MostrarFiltro = true"
+                        class="sm:hidden w-full mb-4 py-3 bg-white text-green-800 font-black text-lg border-2 border-green-200 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 active:bg-green-50"
+                        >
+                        ᯤ Abrir Filtros
+                        </button>
 						<!-- Barra de Busqueda -->
 						<input @input="BusquedaPedido"
 						type="text" v-model="Busqueda" 
