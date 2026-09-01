@@ -29,20 +29,18 @@
 	<div class="cuerpo">
 		<div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-                <Teleport to="body">
-                    <transition name="fade">
-                        <div v-if="(MostrarFiltro || MostrarNuevo)" 
-                        @click="MostrarFiltro = false; MostrarNuevo = false"
-                        class="fondo !z-[35] sm:hidden cursor-pointer"
-                        >
-                        </div>
-                    </transition>
-                </Teleport>
+				<transition name="fade">
+					<div v-if="(MostrarFiltro || MostrarNuevo)" 
+					@click="MostrarFiltro = false; MostrarNuevo = false"
+                    class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[35] sm:hidden cursor-pointer"
+					>
+					</div>
+				</transition>
 				<div :class="[
 					'bar', 
 					(MostrarFiltro || MostrarNuevo) ? 'translate-x-0 sm:w-72 lg:w-80' : '-translate-x-full sm:w-fit sm:translate-x-0'
 				]">
-					<div>
+                    <div class="hidden sm:block">
 						<h1 @click="MostrarFiltro = !MostrarFiltro"
 						class="botonfil"
 						>
