@@ -29,7 +29,10 @@
 	<div class="cuerpo">
 		<div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-				<div :class="['bar', (MostrarFiltro || MostrarNuevo) ? 'w-full sm:w-72 lg:w-80' : 'w-full sm:w-fit']">
+				<div :class="[
+					'bar', 
+					(MostrarFiltro || MostrarNuevo) ? 'translate-x-0 sm:w-72 lg:w-80' : '-translate-x-full sm:w-fit sm:translate-x-0'
+				]">
 					<div>
 						<h1 @click="MostrarFiltro = !MostrarFiltro"
 						class="botonfil"
