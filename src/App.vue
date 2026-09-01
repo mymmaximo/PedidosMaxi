@@ -242,11 +242,11 @@
                 w-full top-0 z-30 
                 bg-green-600 sm:hidden shadow-md"
                 >
-                    <div :class="['bar', MostrarMenu ? 'w-full sm:w-72 lg:w-80' : 'w-full sm:w-fit']">
+                    <div class="p-3 w-full">
                         <h1 @click="MostrarMenu = !MostrarMenu"
-                        class="botonfil"
+                        class="botonfil !mb-0 !py-2"
                         >
-                        ⫶☰
+                        ⫶☰ Menú
                         </h1>
                     </div>
                     <transition name="fade">
