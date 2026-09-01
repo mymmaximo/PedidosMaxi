@@ -377,7 +377,7 @@
                 </div>
                 <footer class="relative 
                 bg-green-900 text-green-100 
-                py-10 w-full z-40"
+                py-10 w-full z-10"
                 >
                     <div class="max-w-7xl mx-auto px-5 grid grid-cols-1 md:grid-cols-4 gap-8">
                         <div class="flex flex-col gap-3">
