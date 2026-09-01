@@ -3,13 +3,15 @@
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
                 <!-- Filtros -->
-                <transition name="fade">
-                    <div v-if="(MostrarFiltro || MostrarNuevo)" 
-                    @click="MostrarFiltro = false; MostrarNuevo = false"
-                    class="fondo !z-30 sm:hidden cursor-pointer"
-                    >
-                    </div>
-                </transition>
+                <Teleport to="body">
+                    <transition name="fade">
+                        <div v-if="(MostrarFiltro || MostrarNuevo)" 
+                        @click="MostrarFiltro = false; MostrarNuevo = false"
+                        class="fondo !z-[35] sm:hidden cursor-pointer"
+                        >
+                        </div>
+                    </transition>
+                </Teleport>
                 <div :class="[
                     'bar', 
                     (MostrarFiltro || MostrarNuevo) ? 'translate-x-0 sm:w-72 lg:w-80' : '-translate-x-full sm:w-fit sm:translate-x-0'
