@@ -81,17 +81,20 @@
                 <transition name="fade">
                     <div v-if="(MostrarFiltro || MostrarNuevo)" 
                     @click="MostrarFiltro = false; MostrarNuevo = false"
-                    class="fixed inset-0 top-0 left-0 
-                    w-full h-full z-[35] 
-                    bg-black/40 sm:bg-transparent 
+                    class="fixed inset-0 
+                    top-0 left-0 
+                    w-full h-full !z-40 
+                    bg-black/40 
+                    sm:bg-transparent 
                     backdrop-blur-sm sm:backdrop-blur-none 
-                    m-0 p-0"
+                    m-0 p-0 
+                    cursor-pointer"
                     >
                     </div>
                 </transition>
                 <div @click.stop 
                 :class="[
-                'bar', 
+                'bar !z-50', 
                 (MostrarFiltro || MostrarNuevo) 
                     ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                     : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
