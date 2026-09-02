@@ -82,7 +82,11 @@
                     <transition name="fade">
                         <div v-if="(MostrarFiltro || MostrarNuevo)" 
                         @click="MostrarFiltro = false; MostrarNuevo = false"
-                        class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[35] sm:hidden cursor-pointer"
+                        class="fixed inset-0 top-0 left-0 
+                        w-full h-full z-[35] 
+                        bg-black/40 sm:bg-transparent 
+                        backdrop-blur-sm sm:backdrop-blur-none 
+                        m-0 p-0"
                         >
                         </div>
                     </transition>
@@ -240,11 +244,8 @@
                                 </div>
                             </form>
                             <div class="botones">
-                                <button :disabled="confirboton"
-                                type="submit" 
-                                class="botoncon"
-                                >
-                                Crear Cliente
+                                <button :disabled="confirboton || Actualizando" type="submit" class="botoncon">
+                                    {{ Actualizando ? 'Actualizando...' : 'Crear' }}
                                 </button>
                             </div>
                         </div>
