@@ -94,7 +94,7 @@
                 </transition>
                 <div @click.stop 
                 :class="[
-                'bar !z-50', 
+                'bar !z-40', 
                 (MostrarFiltro || MostrarNuevo) 
                     ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                     : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
