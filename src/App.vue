@@ -243,7 +243,7 @@
                 bg-green-600 sm:hidden shadow-md"
                 >
                     <div class="p-3 w-full">
-                        <h1 @click="MostrarMenu = !MostrarMenu"
+                        <h1 @click="MostrarMenu = !MostrarMenu ; document.body.style.overflow = 'hidden'"
                         class="botonfil !mb-0 !py-2"
                         >
                         ⫶☰ Menú
