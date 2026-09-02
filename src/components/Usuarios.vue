@@ -249,15 +249,15 @@
                                         {{ rol.nombre }}
                                     </button>
                                 </div>
+                                <div class="botones">
+                                    <button :disabled="confirboton" type="submit" class="botoncon">
+                                    Crear
+                                    </button>
+                                    <button @click="MostrarNuevo = false" type="button" class="botonc sm:hidden">
+                                    Cancelar
+                                    </button>
+                                </div>
                             </form>
-                            <div class="botones">
-                                <button :disabled="confirboton" type="submit" class="botoncon">
-                                Crear
-                                </button>
-                                <button @click="MostrarNuevo = false" type="button" class="botonc sm:hidden">
-                                Cancelar
-                                </button>
-                            </div>
                         </div>
                     </transition>
                 </div>
