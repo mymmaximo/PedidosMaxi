@@ -12,7 +12,7 @@
                         ¿Desear Cerrar Sesion?
                         </h1>
                         <div class="botones">
-                            <button @click="CerrarSesion() ; CerrarPopUp01"
+                            <button @click="CerrarSesion() ; CerrarPopUp01()"
                             class="botonc"
                             >
                             Si Confirmo
@@ -38,7 +38,7 @@
                         Tu sesión ha expirado
                         </h1>
                         <div class="botones">
-                            <button @click="SesionExpirada = false; router.push('/login')"
+                            <button @click="SesionExpirada = false; document.body.style.overflow = 'auto'; router.push('/login')"
                             class="botoncon"
                             >
                             Iniciar Sesion
