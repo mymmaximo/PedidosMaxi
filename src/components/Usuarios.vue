@@ -78,19 +78,17 @@
     <div class="cuerpo">
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-                <Teleport to="body">
-                    <transition name="fade">
-                        <div v-if="(MostrarFiltro || MostrarNuevo)" 
-                        @click="MostrarFiltro = false; MostrarNuevo = false"
-                        class="fixed inset-0 top-0 left-0 
-                        w-full h-full z-[35] 
-                        bg-black/40 sm:bg-transparent 
-                        backdrop-blur-sm sm:backdrop-blur-none 
-                        m-0 p-0"
-                        >
-                        </div>
-                    </transition>
-                </Teleport>
+                <transition name="fade">
+                    <div v-if="(MostrarFiltro || MostrarNuevo)" 
+                    @click="MostrarFiltro = false; MostrarNuevo = false"
+                    class="fixed inset-0 top-0 left-0 
+                    w-full h-full z-[35] 
+                    bg-black/40 sm:bg-transparent 
+                    backdrop-blur-sm sm:backdrop-blur-none 
+                    m-0 p-0"
+                    >
+                    </div>
+                </transition>
                 <div :class="[
                     'bar', 
                     (MostrarFiltro || MostrarNuevo) 
@@ -175,6 +173,11 @@
                                 class="botont" 
                                 >
                                 🗑️ Limpiar Filtro
+                                </button>
+                                <button @click="MostrarFiltro = false" 
+                                class="botonc sm:hidden"
+                                >
+                                Cerrar
                                 </button>
                             </div>
                         </div>
