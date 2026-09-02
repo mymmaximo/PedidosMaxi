@@ -244,8 +244,11 @@
                                 </div>
                             </form>
                             <div class="botones">
-                                <button :disabled="confirboton || Actualizando" type="submit" class="botoncon">
-                                    {{ Actualizando ? 'Actualizando...' : 'Crear' }}
+                                <button :disabled="confirboton" type="submit" class="botoncon">
+                                Crear
+                                </button>
+                                <button @click="MostrarNuevo = false" type="button" class="botonc sm:hidden">
+                                Cancelar
                                 </button>
                             </div>
                         </div>
@@ -404,7 +407,7 @@
     } from './Estatus'
     // ----- Variables Vue ----- //
     const confirboton = computed(() =>{
-        if (ActualizarUNew.value) {
+        if (MostrarNuevo.value) {
             const faltandatos01 = 
                 NuevoUsuario.value.nombre === ""||
                 NuevoUsuario.value.email === ""||
@@ -418,6 +421,7 @@
                 UsuarioAct.value.id_rol.length === 0
             return faltandatos02
         }
+        return false
     })
     // ----- Variables Complejas ----- //
     const NuevoUsuario = ref({
@@ -655,28 +659,38 @@
         usuarios.value = datos
     }
     const SubirNuevoUsuario = async() => {
-        const SubidaNuevoUsuario = await fetch(`${urlover8000}/usuarios/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(NuevoUsuario.value),
-            credentials: 'include'
-        })
-        if (SubidaNuevoUsuario.status === 401) {
-            await CerrarSesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
-            Iniciado.value = false
-            return
+        try {
+            const SubidaNuevoUsuario = await fetch(`${urlover8000}/usuarios/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(NuevoUsuario.value),
+                credentials: 'include'
+            })
+            if (SubidaNuevoUsuario.status === 401) {
+                await CerrarSesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
+                return
+            }
+            if (SubidaNuevoUsuario.ok) {
+                NuevoUsuario.value = {
+                    nombre: "",
+                    email: "",
+                    dni: "",
+                    contrasena: "",
+                    id_rol: []
+                }
+                MostrarNuevo.value = false
+                BusquedaUsuario()
+            } else {
+                const errorData = await SubidaNuevoUsuario.json()
+                alert(errorData.detail || "Error al crear el usuario. Revisa los datos.")
+            }
+        } catch (error) {
+            console.error("Fallo en la comunicación con el servidor:", error)
         }
-        NuevoUsuario.value = {
-            nombre: "",
-            email: "",
-            dni: "",
-            contrasena: "",
-            id_rol: []
-        }
-        BusquedaUsuario()
     }
 </script>
