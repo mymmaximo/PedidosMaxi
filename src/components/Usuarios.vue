@@ -88,7 +88,7 @@
                     sm:bg-transparent 
                     backdrop-blur-sm sm:backdrop-blur-none 
                     m-0 p-0 
-                    cursor-pointer"
+                    cursor-pointer sm:hidden"
                     >
                     </div>
                 </transition>
