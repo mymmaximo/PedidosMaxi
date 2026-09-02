@@ -89,12 +89,13 @@
                     >
                     </div>
                 </transition>
-                <div :class="[
-                    'bar', 
-                    (MostrarFiltro || MostrarNuevo) 
-                        ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
-                        : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
-                    ]">
+                <div @click.stop 
+                :class="[
+                'bar', 
+                (MostrarFiltro || MostrarNuevo) 
+                    ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
+                    : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
+                ]">
                     <div class="hidden sm:block">
                         <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
