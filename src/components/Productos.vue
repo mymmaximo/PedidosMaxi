@@ -835,7 +835,7 @@
                                 {{ Pagina + Productos.length }}
                                 </h2>
                                 <button @click="CambiarPagina('next')" 
-                                :disabled="Productos.length < 20 || CargandoTrue"
+                                :disabled="Productos.length < 24 || CargandoTrue"
                                 class="botona"
                                 >
                                 ❯
