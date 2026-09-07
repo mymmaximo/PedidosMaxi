@@ -544,29 +544,24 @@
         BusquedaUsuario()
         filtroAct.value = false
     }
-    const Estatuscolor = (id_estatus, id_rol) => {
+    const Estatuscolor = (id_estatus, array_roles) => {
         if (id_estatus === true || id_estatus === 1) {
-            if (id_rol === 1) {
-                return "badge-activo"
+            if (!Array.isArray(array_roles) || array_roles.length === 0) {
+                return "badge-activo !bg-gray-200 !text-gray-800"
             }
-            if (id_rol === 2) {
-                return "badge-activo !bg-blue-100 !text-blue-800"
+            if (array_roles.length > 1) {
+                if (array_roles.includes(1)) return "badge-activo"
+                return "badge-activo !bg-indigo-100 !text-indigo-800"
             }
-            if (id_rol === 3) {
-                return "badge-activo !bg-yellow-100 !text-yellow-800"
-            }
-            if (id_rol === 4) {
-                return "badge-activo !bg-orange-100 !text-orange-800"
-            }
-            if (id_rol === 5) {
-                return "badge-activo !bg-brown-100 !text-brown-800"
-            }
-            if (id_rol === 6) {
-                return "badge-activo !bg-pink-100 !text-pink-800"
-            }
-            if (id_rol === 7) {
-                return "badge-activo !bg-purple-100 !text-purple-800"
-            }
+            const id_unico = array_roles[0]
+            if (id_unico === 1) return "badge-activo"
+            if (id_unico === 2) return "badge-activo !bg-blue-100 !text-blue-800"
+            if (id_unico === 3) return "badge-activo !bg-yellow-100 !text-yellow-800"
+            if (id_unico === 4) return "badge-activo !bg-orange-100 !text-orange-800"
+            if (id_unico === 5) return "badge-activo !bg-stone-100 !text-stone-800"
+            if (id_unico === 6) return "badge-activo !bg-pink-100 !text-pink-800"
+            if (id_unico === 7) return "badge-activo !bg-purple-100 !text-purple-800"
+            return "badge-activo"
         }
         else {
             return "badge-inactivo"
