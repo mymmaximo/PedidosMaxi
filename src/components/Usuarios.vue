@@ -321,7 +321,7 @@
                                     <div class="tarjeta-info">
                                         <div class="tarjeta-titulo">
                                             👤{{ i.nombre }}
-                                                <span :class="Estatuscolor(i.activo)">
+                                                <span :class="Estatuscolor(i.activo, i.id_rol)">
                                                 {{ Roltxt(i.id_rol) }}
                                                 </span>
                                         </div>
