@@ -402,7 +402,7 @@
                                     <div v-else-if="DireccionNow !== i.id" 
                                     @click.stop="DireccionCambio(i.id)"
                                     class="
-                                    w-full mt-3 py-2 px-4 
+                                    w-full z-10 mt-3 py-2 px-4 
                                     bg-green-50 hover:bg-green-100 
                                     text-green-700 border 
                                     border-green-200 rounded-xl 
@@ -415,7 +415,14 @@
                                     Ver {{ i.direcciones.length }} Dirección(es) ⬇️
                                     </div>
                                     <div v-else @click.stop="DireccionCambio(i.id)"
-                                    class="w-full mt-3 py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all shadow-inner active:scale-95" 
+                                    class="w-full z-10 mt-3 py-2 px-4 
+                                    bg-gray-100 hover:bg-gray-200 
+                                    text-gray-700 border border-gray-300 
+                                    rounded-xl text-xs font-bold 
+                                    flex items-center justify-center 
+                                    gap-2 cursor-pointer 
+                                    transition-all shadow-inner 
+                                    active:scale-95" 
                                     >
                                     Ocultar Direcciones ⬆️
                                     </div>
