@@ -544,9 +544,29 @@
         BusquedaUsuario()
         filtroAct.value = false
     }
-    const Estatuscolor = (id_estatus) => {
+    const Estatuscolor = (id_estatus, id_rol) => {
         if (id_estatus === true || id_estatus === 1) {
-            return "badge-activo"
+            if (id_rol === 1) {
+                return "badge-activo"
+            }
+            if (id_rol === 2) {
+                return "badge-activo !bg-blue-100 !text-blue-800"
+            }
+            if (id_rol === 3) {
+                return "badge-activo !bg-yellow-100 !text-yellow-800"
+            }
+            if (id_rol === 4) {
+                return "badge-activo !bg-orange-100 !text-orange-800"
+            }
+            if (id_rol === 5) {
+                return "badge-activo !bg-brown-100 !text-brown-800"
+            }
+            if (id_rol === 6) {
+                return "badge-activo !bg-pink-100 !text-pink-800"
+            }
+            if (id_rol === 7) {
+                return "badge-activo !bg-purple-100 !text-purple-800"
+            }
         }
         else {
             return "badge-inactivo"
