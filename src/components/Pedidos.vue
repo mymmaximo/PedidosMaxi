@@ -308,7 +308,10 @@
 											{{ PedidoNow === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
 										</div>
 										<button v-if="i.estatus !== 1"
-										class="bg-gray-800 text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-gray-700 shadow-sm"
+										class="bg-gray-800 text-white text-xs 
+										my-10
+										font-bold px-3 py-2 rounded-lg 
+										hover:bg-gray-700 shadow-sm"
 										>
 										✏️ Editar Estado
 										</button>
