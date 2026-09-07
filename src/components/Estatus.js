@@ -105,6 +105,11 @@ export const ValidadSesionBack = async () => {
             method: 'GET',
             credentials: 'include'
         })
+        if (respuesta.status === 401) {
+            SesionExpirada.value = true
+            Iniciado.value = false
+            return false
+        }
         if (respuesta.ok) {
             const datos = await respuesta.json()
             Iniciado.value = true

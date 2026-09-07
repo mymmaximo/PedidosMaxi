@@ -301,7 +301,8 @@
 										{{ i.tiempo_entrega }} Días
 										</span>
 										</p>
-										<div class="text-green-600 text-sm font-bold 
+										<div v-if="i.estatus === 1"
+										class="text-green-600 text-sm font-bold 
 										mt-3 flex items-center justify-end gap-1"
 										>
 											{{ PedidoNow === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
@@ -400,11 +401,13 @@
                                 </transition>
 								<div class="flex flex-row justify-end gap-2 mt-3">
 									<button @click= "Edicion(i)"
+									v-if="i.estatus !== 1"
 									class="bg-gray-800 text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-gray-700 shadow-sm"
 									>
 									✏️ Editar Estado
 									</button>
 									<button @click= "PedidoCambio(i.id_pedido)"
+									v-if="i.estatus !== 1"
 									class="bg-green-50 text-green-700 border border-green-200 text-xs font-bold px-3 py-2 rounded-lg hover:bg-green-100 shadow-sm"
 									>
 									{{ PedidoNow === i.id_pedido ? 'Ocultar ⬆️' : 'Detalles ⬇️' }}
