@@ -309,7 +309,7 @@
 										</div>
 										<button v-if="i.estatus !== 1"
 										class="bg-gray-800 text-white text-xs 
-										my-3
+										my-3 cursor-pointer 
 										font-bold px-3 py-2 rounded-lg 
 										hover:bg-gray-700 shadow-sm"
 										>
