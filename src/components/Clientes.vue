@@ -415,21 +415,13 @@
                                     Ver {{ i.direcciones.length }} Dirección(es) ⬇️
                                     </div>
                                     <div v-else @click.stop="DireccionCambio(i.id)"
-                                    class="relative !z-[40]
-                                    w-full mt-3 py-2 px-4 
-                                    bg-gray-100 hover:bg-gray-200 
-                                    text-gray-700 border border-gray-300 
-                                    rounded-xl text-xs font-bold 
-                                    flex items-center justify-center 
-                                    gap-2 cursor-pointer 
-                                    transition-all shadow-inner 
-                                    active:scale-95" 
+                                    class="w-full mt-3 py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200 rounded-b-xl rounded-t-none text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all shadow-inner active:scale-95 z-10 relative border-t-0 -mt-1" 
                                     >
                                     Ocultar Direcciones ⬆️
                                     </div>
                                     <transition name="slide">
                                         <div v-if="DireccionNow === i.id && i.direcciones.length > 0" 
-                                        class="panel-desplegable relative !z-0"
+                                        class="panel-desplegable relative z-0 mt-2 bg-gray-50/50 rounded-xl border border-gray-100 p-2"
                                         >
                                             <h3 class="text-lg font-bold 
                                             text-gray-800 
