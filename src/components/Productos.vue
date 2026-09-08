@@ -31,7 +31,7 @@
                                 <input placeholder="Precio"
                                 type="number" 
                                 v-model="ProductoAct.precio" 
-                                maxlength="8"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
                             <!-- Actualizar Stock -->
@@ -42,7 +42,7 @@
                                 <input placeholder="Stock"
                                 type="number" 
                                 v-model="ProductoAct.stock" 
-                                maxlength="8"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
                             <!-- Actualizar Categoria y Codigo de Barra -->
@@ -317,7 +317,7 @@
                                 </button>
                                 <input v-model="ProductoCantidad"
                                 type="number" 
-                                maxlength="8"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 class="control-input"
                                 >
                                 <button @click="SumarProducto(ProductoActual)"
@@ -499,7 +499,7 @@
                                 <input placeholder="Precio Max..."
                                 type="number"
                                 v-model="mayor" 
-                                maxlength="10"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                                 <h3 class="flex flex-col md:p-4 p-2">
                                 Precio Minimo
@@ -507,7 +507,7 @@
                                 <input placeholder="Precio Min..."
                                 type="number"
                                 v-model="menor" 
-                                maxlength="10"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
                             <div v-if="VerificarRol([1, 2, 4])">
@@ -842,7 +842,7 @@
                                 {{ Pagina + Productos.length }}
                                 </h2>
                                 <button @click="CambiarPagina('next')" 
-                                :disabled="Productos.length < 25 || CargandoTrue"
+                                :disabled="Productos.length < ItemsPorPagina || CargandoTrue"
                                 class="botona"
                                 >
                                 ❯
