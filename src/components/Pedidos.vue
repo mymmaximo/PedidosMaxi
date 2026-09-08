@@ -541,6 +541,7 @@
 		document.body.style.overflow = "hidden"
 	}
 	const AplicarFiltro = () => {
+        Pagina.value = 0
 		BusquedaPedido()
 	}
     const CambiarPagina = async (direccion) => {
@@ -626,6 +627,7 @@
 		return new Intl.NumberFormat('es-AR').format(precio)
 	}
 	const LimpiarFiltro = () => {
+        Pagina.value = 0
 		filtroMP.value = 5
 		filtroEst.value = 4
         filtrociudad.value = ""

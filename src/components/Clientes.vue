@@ -471,29 +471,31 @@
                                     </transition>
                                 </div>
                             </div>  
-                            <div v-else>
-                                <h2>
-                                No se encontraran clientes 😔
+                            <div v-else class="flex flex-col items-center justify-center p-8">
+                                <h2 class="text-xl font-bold text-gray-700 text-center">
+                                {{ Pagina === 0 ? 'No se encontraron clientes 😔' : 'Ya no hay más clientes para mostrar 🏁' }}
                                 </h2>
-                                <h3>
-                                Prueba buscando con otro termino
+                                <h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
+                                Prueba buscando con otro término
                                 </h3>
                             </div>
                             <div class="flex justify-center p-3">
-                                <button @click="Pagina = Pagina - 20 ; CargarDatos()" 
-                                :disabled="Pagina < 20"
+                                <button @click="CambiarPagina('back')" 
+                                :disabled="Pagina === 0 || CargandoTrue"
                                 class="botona"
                                 >
                                 ❮
                                 </button>
-                                <h2 class="item">
-                                Items 
-                                {{ 0 + Pagina }} 
-                                - 
-                                {{ Pagina + clientes.length }}
+                                <h2 class="self-center font-bold px-6 text-green-800 text-center">
+                                <span v-if="clientes.length > 0">
+                                Mostrando {{ Pagina + 1 }} - {{ Pagina + clientes.length }}
+                                </span>
+                                <span v-else>
+                                Fin de la lista
+                                </span>
                                 </h2>
-                                <button @click="Pagina = Pagina + 20 ; CargarDatos()" 
-                                :disabled="clientes.length < 20"
+                                <button @click="CambiarPagina('next')" 
+                                :disabled="!HayMasPaginas || CargandoTrue"
                                 class="botona"
                                 >
                                 ❯
@@ -624,6 +626,7 @@
 		document.body.style.overflow = "hidden"
 	}
     const AplicarFiltro = () => {
+        Pagina.value = 0
         BusquedaCliente()
         filtrociudad.value = ""
         filtroprovincia.value = ""
@@ -710,6 +713,7 @@
 		}
 	}
     const LimpiarFiltro = () => {
+        Pagina.value = 0
         filtroDirec.value = 2
         filtroEst.value = 2
         filtrociudad.value = ""
