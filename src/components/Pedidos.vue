@@ -479,6 +479,7 @@
 	const filtroAct = ref(false)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
+    const HayMasPaginas = ref(false)
 	const MostrarFiltro = ref(false)
     const BloqueoPeticion = ref(false)
 	const ActualizarCajaP = ref (false)
@@ -495,6 +496,7 @@
 	const Pagina = ref(0)
 	const filtroMP = ref(5)
 	const filtroEst = ref(4)
+    const ItemsPorPagina = ref(24)
     // ----- Funciones Vue ----- //
 	onMounted (() => {
         CargarDatos()
@@ -672,6 +674,7 @@
 	const BusquedaPedido = async() => {
 		let url = new URL (`${urlover8000}/pedidos/all/`)
 		url.searchParams.append('skip', Pagina.value)
+        url.searchParams.append('limit', ItemsPorPagina.value + 1)
 		if (Busqueda.value !== "") {
 			url.searchParams.append('busqueda_pedido', Busqueda.value)
 		}
@@ -720,5 +723,17 @@
 		})
 		const datos = await BusqPedido.json()
 		Pedidos.value = datos
+        if (Array.isArray(datos)) {
+            if (datos.length > ItemsPorPagina.value) {
+                HayMasPaginas.value = true
+                Pedidos.value = datos.slice(0, ItemsPorPagina.value)
+            } else {
+                HayMasPaginas.value = false
+                Pedidos.value = datos
+            }
+        } else {
+            Pedidos.value = []
+            HayMasPaginas.value = false
+        }
 	}
 </script>
