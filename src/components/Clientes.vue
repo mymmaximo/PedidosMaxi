@@ -557,7 +557,9 @@
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
     const MostrarNuevo = ref(false)
+    const HayMasPaginas = ref(false)
     const MostrarFiltro = ref(false)
+    const BloqueoPeticion = ref(false)
     const ActualizarCajaCDel = ref(false)
     // ----- Variables Vacias ----- //
     const orden = ref("")
@@ -572,12 +574,16 @@
 	const Pagina = ref(0)
     const filtroEst = ref(2)
     const filtroDirec = ref(2)
+    const ItemsPorPagina = ref(24)
     const DireccionNow = ref(null)
     // ----- Funciones Vue ----- //
     onMounted (() => {
         CargarDatos()
     })
     const CargarDatos = (async() => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         CargandoTrue.value = true
         ErrorCarga.value = false
         const temporizador = setTimeout(() => {
@@ -605,6 +611,7 @@
             if (!ErrorCarga.value) {
                 CargandoTrue.value = false
             }
+            BloqueoPeticion.value = false
         }
     })
     // ----- Para el Frontend ----- //
@@ -620,6 +627,28 @@
         BusquedaCliente()
         filtrociudad.value = ""
         filtroprovincia.value = ""
+    }
+    const CambiarPagina = async (direccion) => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        if (direccion === 'next') {
+            Pagina.value += ItemsPorPagina.value
+        } else if (direccion === 'back') {
+            Pagina.value -= ItemsPorPagina.value
+            if (Pagina.value < 0) Pagina.value = 0
+        }
+        try {
+            await BusquedaCliente()
+        } catch (error) {
+            console.error(error)
+            ErrorCarga.value = true
+        } finally {
+            CargandoTrue.value = false
+            BloqueoPeticion.value = false
+        }
     }
 	const CerrarPopUp01 = () => {
 		ActualizarCajaC.value = false
@@ -648,7 +677,6 @@
         ClienteAct.value.nombre = cliente_fila.nombre
         AbrirPopUp02()
     }
-    
     const TocarTab = (cliente) => {
         if (!cliente.direcciones || cliente.direcciones.length === 0) {
             Eliminacion(cliente)
@@ -748,6 +776,7 @@
     const BusquedaCliente = async() => {
         let url = new URL (`${urlover8000}/cliente/`)
 		url.searchParams.append('skip', Pagina.value)
+        url.searchParams.append('limit', ItemsPorPagina.value + 1)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_cliente', Busqueda.value)
         }
@@ -784,7 +813,18 @@
             credentials: 'include'
         })
         const datos = await BusqCliente.json()
-        clientes.value = datos
+        if (Array.isArray(datos)) {
+            if (datos.length > ItemsPorPagina.value) {
+                HayMasPaginas.value = true
+                clientes.value = datos.slice(0, ItemsPorPagina.value)
+            } else {
+                HayMasPaginas.value = false
+                clientes.value = datos
+            }
+        } else {
+            clientes.value = []
+            HayMasPaginas.value = false
+        }
     }
     const SubirNuevoCliente = async() => {
         const SubidaNuevoCliente = await fetch(`${urlover8000}/clientes/`, {
