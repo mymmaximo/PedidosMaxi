@@ -363,29 +363,31 @@
                                 </div>
                             </div>
                         </div>  
-                        <div v-else>
-                            <h2>
-                            No se encontraran usuarios 😔
+                        <div v-else class="flex flex-col items-center justify-center p-8">
+                            <h2 class="text-xl font-bold text-gray-700 text-center">
+                            {{ Pagina === 0 ? 'No se encontraron usuarios 😔' : 'Ya no hay más usuarios para mostrar 🏁' }}
                             </h2>
-                            <h3>
-                            Prueba buscando con otro termino
+                            <h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
+                            Prueba buscando con otro término
                             </h3>
                         </div>
                         <div class="flex justify-center p-3">
-                            <button @click="Pagina = Pagina - 20 ; CargarDatos()" 
-                            :disabled="Pagina < 20"
+                            <button @click="CambiarPagina('back')" 
+                            :disabled="Pagina === 0 || CargandoTrue"
                             class="botona"
                             >
                             ❮
                             </button>
-                            <h2 class="item">
-                            Items 
-                            {{ 0 + Pagina }} 
-                            - 
-                            {{ Pagina + usuarios.length }}
+                            <h2 class="self-center font-bold px-6 text-green-800 text-center">
+                            <span v-if="usuarios.length > 0">
+                            Mostrando {{ Pagina + 1 }} - {{ Pagina + usuarios.length }}
+                            </span>
+                            <span v-else>
+                            Fin de la lista
+                            </span>
                             </h2>
-                            <button @click="Pagina = Pagina + 20 ; CargarDatos()" 
-                            :disabled="usuarios.length < 20"
+                            <button @click="CambiarPagina('next')" 
+                            :disabled="!HayMasPaginas || CargandoTrue"
                             class="botona"
                             >
                             ❯
@@ -455,12 +457,13 @@
         { id: 7, nombre: "Editor de Clientes"}
     ])
     // ----- Variables Booleanas ----- //
+    const filtroAct = ref(false)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
     const MostrarNuevo = ref(false)
-    const VentanaFiltro = ref(false)
     const MostrarFiltro = ref(false)
-    const ActualizarUNew = ref(false)
+    const HayMasPaginas = ref(false)
+    const BloqueoPeticion = ref(false)
     const ActualizarCajaUDel = ref(false)
     // ----- Variables Vacias ----- //
     const orden = ref("")
@@ -470,12 +473,15 @@
     // ----- Variables Simples ----- //
 	const Pagina = ref(0)
     const filtroEst = ref(2)
-    const filtroAct = ref(false)
+    const ItemsPorPagina = ref(24)
     // ----- Funciones Vue ----- //
     onMounted (() => {
         CargarDatos()
     })
     const CargarDatos = (async() => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         CargandoTrue.value = true
         ErrorCarga.value = false
         const temporizador = setTimeout(() => {
@@ -497,6 +503,7 @@
             if (!ErrorCarga.value) {
                 CargandoTrue.value = false
             }
+            BloqueoPeticion.value = false
         }
     })
     // ----- Para el Frontend ----- //
@@ -509,7 +516,30 @@
 		document.body.style.overflow = "hidden"
 	}
     const AplicarFiltro = () => {
+        Pagina.value = 0
         BusquedaUsuario()
+    }
+    const CambiarPagina = async (direccion) => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        if (direccion === 'next') {
+            Pagina.value += ItemsPorPagina.value
+        } else if (direccion === 'back') {
+            Pagina.value -= ItemsPorPagina.value
+            if (Pagina.value < 0) Pagina.value = 0
+        }
+        try {
+            await BusquedaProducto()
+        } catch (error) {
+            console.error(error)
+            ErrorCarga.value = true
+        } finally {
+            CargandoTrue.value = false
+            BloqueoPeticion.value = false
+        }
     }
 	const CerrarPopUp01 = () => {
 		ActualizarCajaUDel.value = false
@@ -539,6 +569,7 @@
 		}
 	}
     const LimpiarFiltro = () => {
+        Pagina.value = 0
         filtroEst.value = 2
         orden.value = ""
         BusquedaUsuario()
@@ -658,6 +689,7 @@
     const BusquedaUsuario = async() => {
         let url = new URL (`${urlover8000}/usuarios/`)
 		url.searchParams.append('skip', Pagina.value)
+        url.searchParams.append('limit', ItemsPorPagina.value + 1)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_usuario', Busqueda.value)
         }
@@ -678,7 +710,18 @@
             credentials: 'include'
         })
         const datos = await BusqUsuario.json()
-        usuarios.value = datos
+        if (Array.isArray(datos)) {
+            if (datos.length > ItemsPorPagina.value) {
+                HayMasPaginas.value = true
+                usuarios.value = datos.slice(0, ItemsPorPagina.value)
+            } else {
+                HayMasPaginas.value = false
+                usuarios.value = datos
+            }
+        } else {
+            usuarios.value = []
+            HayMasPaginas.value = false
+        }
     }
     const SubirNuevoUsuario = async() => {
         try {
