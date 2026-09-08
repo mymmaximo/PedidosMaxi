@@ -701,122 +701,195 @@
                         >
                         ᯤ Abrir Filtros
                         </button>
-                            <input @input="BusquedaProducto"
-                            type="text" 
-                            v-model="Busqueda" 
-                            placeholder="Busqueda..."
-                            class="busqueda"
-                            maxlength="50"
-                            >
+                            <div>
+                                <input @input="BusquedaProducto"
+                                type="text" 
+                                v-model="Busqueda" 
+                                placeholder="Busqueda..."
+                                class="busqueda !mb-0"
+                                maxlength="50"
+                                >
+                                <button @click="VistaLista = !VistaLista"
+                                title="Alternar Vista"
+                                class="bg-white border-2 border-green-200 
+                                text-green-700 rounded-xl 
+                                px-4 flex items-center justify-center hover:bg-green-50 
+                                transition-all shadow-sm active:scale-95"
+                                >
+                                    <span v-if="!VistaLista" class="text-xl">
+                                    🪟
+                                    </span>
+                                    <span v-else class="text-xl">
+                                    📄
+                                    </span>
+                                </button>
+                            </div>
                             <div v-if="Productos.length > 0"
-                            :class="['grid grid-cols-2 gap-6', (MostrarFiltro || MostrarNuevo) ? 'lg:grid-cols-3' : 'lg:grid-cols-4']"
+                            :class="VistaLista 
+                            ? 'flex flex-col gap-4 w-full' 
+                            :['grid grid-cols-2 gap-6', (MostrarFiltro || MostrarNuevo) ? 'lg:grid-cols-3' 
+                            : 'lg:grid-cols-4']"
                             >
-                                <div :class="Estatuscolor(i.activo)" 
-                                v-for= "i in Productos" 
+                                <div v-for= "i in Productos" 
                                 :key="i.id"
                                 @touchstart="ComienzoToque($event)"
                                 @touchend="FinToque($event, i)" 
-                                class="carta"
                                 @click="AccionCarta(i)"
+                                :class="[Estatuscolor(i.activo), VistaLista 
+                                ? 'tarjeta-premium relative bg-white !w-full !m-0 hover:!shadow-lg' 
+                                : 'carta relative']"
                                 >
-                                    <div>
-                                        <div v-if="i.imagenes.length > 0"
-                                        class="flex flex-row 
-                                        gap-3 overflow-x-auto
-                                        items-center justify-center 
-                                        w-full pb-2 snap-x"
+                                    <div :class="VistaLista 
+                                    ? 'flex flex-col sm:flex-row items-center sm:items-start gap-4 w-full sm:w-auto text-left' 
+                                    : 'w-full'"
+                                    >
+                                        <div :class="VistaLista 
+                                        ? 'w-24 sm:w-32 shrink-0' 
+                                        : 'w-full'"
                                         >
-                                            <button @click.stop="BackImg(i)"
-                                            :disabled="GetImg(i.id) === 0"
-                                            class="botonflecha hidden md:flex"
+                                            <div v-if="i.imagenes.length > 0"
+                                            class="flex flex-row 
+                                            gap-3 overflow-x-auto
+                                            items-center justify-center 
+                                            w-full pb-2 snap-x"
                                             >
-                                            ❮
-                                            </button>
-                                            <div>
-                                                <img v-show="ImagenesCargando[i.id] === false"
-                                                :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
-                                                @load="ImagenesCargando[i.id] = false"
-                                                class="imagen"
+                                                <button @click.stop="BackImg(i)"
+                                                :disabled="GetImg(i.id) === 0"
+                                                class="botonflecha hidden md:flex" 
+                                                v-show="!VistaLista"
                                                 >
-                                                <div v-if="ImagenesCargando[i.id] !== false" 
-                                                class="mt-2"
-                                                >
-                                                    <img src="../assets/loading.gif" 
-                                                    alt="Cargando..." 
-                                                    class="imagen !2xl:p-15">
+                                                ❮
+                                                </button>
+                                                <div>
+                                                    <img v-show="ImagenesCargando[i.id] === false"
+                                                    :src=ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)
+                                                    @load="ImagenesCargando[i.id] = false"
+                                                    class="imagen"
+                                                    >
+                                                    <div v-if="ImagenesCargando[i.id] !== false" 
+                                                    :class="VistaLista 
+                                                    ? 'w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-xl drop-shadow-md' 
+                                                    : 'imagen'"
+                                                    >
+                                                        <img src="../assets/loading.gif" 
+                                                        alt="Cargando..." 
+                                                        class="imagen !2xl:p-15">
+                                                    </div>
                                                 </div>
+                                                <button @click.stop="NextImg(i)"
+                                                :disabled="GetImg(i.id) === i.imagenes.length - 1"
+                                                class="botonflecha hidden md:flex"
+                                                v-show="!VistaLista"
+                                                >
+                                                ❯
+                                                </button>
                                             </div>
-                                            <button @click.stop="NextImg(i)"
-                                            :disabled="GetImg(i.id) === i.imagenes.length - 1"
-                                            class="botonflecha hidden md:flex"
+                                            <img v-else src="../assets/images.png"
+                                            :class="VistaLista 
+                                            ? 'w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-xl drop-shadow-md' 
+                                            : 'imagen'"
                                             >
-                                            ❯
-                                            </button>
                                         </div>
-                                        <img v-else src="../assets/images.png"
-                                        class="imagen"
+                                        <div :class="VistaLista 
+                                        ? 'tarjeta-info pt-2 sm:pt-0' 
+                                        : 'mt-2'"
                                         >
-                                        <div>
-                                            <h2 class="font-bold">
+                                            <h2 :class="['font-bold', VistaLista 
+                                            ? 'text-2xl text-gray-800' 
+                                            : '']">
                                             {{ i.nombre }}
                                             </h2>
-                                            <h3>
+                                            <h3 :class="VistaLista 
+                                            ? 'text-gray-500 font-medium' 
+                                            : ''">
                                             Categoria: 
                                             {{ i.categoria }}
                                             </h3>
-                                            <h2>
+                                            <h2 :class="VistaLista 
+                                            ? 'text-green-600 text-xl font-black mt-1' 
+                                            : ''"
+                                            >
                                             $ {{ FormatearPrecio(i.precio) }}
                                             </h2>
-                                            <div v-if="VerificarRol([1, 2, 4, 5])">
-                                                <h3>
-                                                {{ i.codigo_barra }} <br>
-                                                Stock: 
-                                                {{ i.stock }}
+                                            <div v-if="VerificarRol([1, 2, 4, 5])"
+                                            :class="VistaLista 
+                                            ? 'mt-1' 
+                                            : ''"
+                                            >
+                                                <h3 :class="VistaLista 
+                                                ? 'text-sm text-gray-400' 
+                                                : ''"
+                                                >
+                                                <span v-if="VistaLista">
+                                                🪪 Código: 
+                                                </span>
+                                                {{ i.codigo_barra }} 
+                                                <br v-if="VistaLista">
+                                                <span v-if="VistaLista">
+                                                📦 
+                                                </span>
+                                                Stock: {{ i.stock }}
                                                 </h3>
                                             </div>
-                                            <div class="flex flex-wrap
-                                            w-full mt-auto justify-center items-center
-                                            pt-3  gap-1.5 sm:gap-2"
-                                            >
-                                                <button @click.stop="Edicion(i)" 
-                                                v-if="VerificarRol([1, 2, 4, 5])" 
-                                                class="botont !px-2 !py-2 !text-sm"
-                                                >
-                                                ✏️
-                                                <span class="hidden xl:inline ml-1 truncate">
-                                                Editar
-                                                </span>
-                                                </button>
-                                                <button @click.stop="Eliminacion(i)" 
-                                                v-if="VerificarRol([1, 2]) && i.activo" 
-                                                class="botonc !px-2 !py-2 !text-sm"
-                                                >
-                                                ❌
-                                                <span class="hidden xl:inline ml-1 truncate">
-                                                Eliminar
-                                                </span>
-                                                </button>
-                                                <button @click.stop="Eliminacion(i)" 
-                                                v-if="VerificarRol([1, 2]) && !i.activo" 
-                                                class="botoncon !px-2 !py-2 !text-sm"
-                                                >
-                                                🕊️
-                                                <span class="hidden xl:inline ml-1 truncate">
-                                                Reactivar
-                                                </span>
-                                                </button>
-                                                <button @click.stop="Compracion(i)"
-                                                :disabled="CarritoStock(i) === 0"
-                                                v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
-                                                class="botoncon !px-2 !py-2 !text-sm"
-                                                >
-                                                🛍️
-                                                <span class="hidden xl:inline ml-1 truncate">
-                                                Comprar
-                                                </span>
-                                                </button>
-                                            </div>
                                         </div>
+                                    </div>
+                                    <div :class="VistaLista 
+                                    ? 'tarjeta-acciones !mt-4 sm:!mt-0' 
+                                    : 'flex flex-wrap w-full mt-auto justify-center items-center pt-3 gap-1.5 sm:gap-2'"
+                                    >
+                                        <button @click.stop="Edicion(i)" 
+                                        v-if="VerificarRol([1, 2, 4, 5])" 
+                                        :class="VistaLista 
+                                        ? 'btn-chico-gris' 
+                                        : 'botont !px-2 !py-2 !text-sm'"
+                                        >
+                                        ✏️
+                                        <span :class="VistaLista 
+                                        ? 'inline' 
+                                        : 'hidden xl:inline ml-1 truncate'"
+                                        >
+                                        Editar
+                                        </span>
+                                        </button>
+                                        <button @click.stop="Eliminacion(i)" 
+                                        v-if="VerificarRol([1, 2]) && i.activo" 
+                                        :class="VistaLista 
+                                        ? 'btn-chico-rojo' 
+                                        : 'botonc !px-2 !py-2 !text-sm'"
+                                        >
+                                        ❌
+                                        <span :class="VistaLista 
+                                        ? 'inline' 
+                                        : 'hidden xl:inline ml-1 truncate'"
+                                        >
+                                        Eliminar
+                                        </span>
+                                        </button>
+                                        <button @click.stop="Eliminacion(i)" 
+                                        v-if="VerificarRol([1, 2]) && !i.activo" 
+                                        :class="VistaLista 
+                                        ? 'btn-chico-verde' 
+                                        : 'botoncon !px-2 !py-2 !text-sm'"
+                                        >
+                                        🕊️
+                                        <span :class="VistaLista 
+                                        ? 'inline' 
+                                        : 'hidden xl:inline ml-1 truncate'"
+                                        >
+                                        Reactivar
+                                        </span>
+                                        </button>
+                                        <button @click.stop="Compracion(i)"
+                                        :disabled="CarritoStock(i) === 0"
+                                        v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
+                                        :class="VistaLista 
+                                        ? 'btn-chico-verde !bg-green-600 !text-white hover:!bg-green-700' 
+                                        : 'botoncon !px-2 !py-2 !text-sm'">
+                                        🛍️
+                                        <span class="hidden xl:inline ml-1 truncate">
+                                        Comprar
+                                        </span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -951,6 +1024,7 @@
     const Actualizando = ref(false)
     const CargandoTrue = ref(true)
     const ErrorCarga = ref(false)
+    const VistaLista = ref(false)
     const uploading = ref (false)
     const filtroAct = ref (false)
     // ----- Variables Vacias ----- //
