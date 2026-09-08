@@ -701,7 +701,7 @@
                         >
                         ᯤ Abrir Filtros
                         </button>
-                            <div>
+                            <div class="flex flex-row items-stretch w-full gap-3 mb-5">
                                 <input @input="BusquedaProducto"
                                 type="text" 
                                 v-model="Busqueda" 
