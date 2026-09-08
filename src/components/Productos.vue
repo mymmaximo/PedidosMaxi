@@ -844,7 +844,7 @@
                                 </span>
                                 </h2>
                                 <button @click="CambiarPagina('next')" 
-                                :disabled="Productos.length < ItemsPorPagina || CargandoTrue"
+                                :disabled="!HayMasPaginas || CargandoTrue"
                                 class="botona"
                                 >
                                 ❯
@@ -947,6 +947,7 @@
     const MostrarConfir = ref (false)
     const MostrarNuevo = ref (false)
     const VentanaNuevo = ref (false)
+    const HayMasPaginas = ref(false)
     const Actualizando = ref(false)
     const CargandoTrue = ref(true)
     const ErrorCarga = ref(false)
@@ -1327,7 +1328,7 @@
     const BusquedaProducto = async() => {
         let url = new URL (`${urlover8000}/producto/`)
 		url.searchParams.append('skip', Pagina.value)
-        url.searchParams.append('limit', ItemsPorPagina.value)
+        url.searchParams.append('limit', ItemsPorPagina.value + 1)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value)
         }
@@ -1386,7 +1387,18 @@
             credentials: 'include'
         })
         const datos = await BusqProducto.json()
-        Productos.value = datos
+        if (Array.isArray(datos)) {
+            if (datos.length > ItemsPorPagina.value) {
+                HayMasPaginas.value = true
+                Productos.value = datos.slice(0, ItemsPorPagina.value)
+            } else {
+                HayMasPaginas.value = false
+                Productos.value = datos
+            }
+        } else {
+            Productos.value = []
+            HayMasPaginas.value = false
+        }
     }
     const CarritoStock = (Producto) => {
         let stockCarrito = 0
