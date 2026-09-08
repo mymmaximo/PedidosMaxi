@@ -1083,6 +1083,7 @@
         }
     }
     const AplicarFiltro = () => {
+        Pagina.value = 0
         BusquedaProducto()
         menor.value = ""
         mayor.value = ""
@@ -1158,6 +1159,7 @@
         return IndiceImg.value[id] || 0
     }
     const LimpiarFiltro = () => {
+        Pagina.value = 0
         filtroRadio.value = 4
         filtrocat.value = ""
         filtroEst.value =  1
