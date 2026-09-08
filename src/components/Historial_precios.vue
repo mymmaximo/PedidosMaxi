@@ -299,32 +299,31 @@
                                 </div>
                             </div>
                         </div>
-						<div v-else class="lilelse">
-							<span class="text-4xl mb-3 block">
-							😔
-							</span>
-							<h2 class="text-xl font-bold text-gray-700">
-                            No se encontraron Cambios en Precios
-                            </h2>
-                            <h3>
-                            Prueba buscando con otro termino
-                            </h3>
-                        </div>
+                            <div v-else class="flex flex-col items-center justify-center p-8">
+                                <h2 class="text-xl font-bold text-gray-700 text-center">
+                                {{ Pagina === 0 ? 'No se encontraron Historial 😔' : 'Ya no hay más Historial para mostrar 🏁' }}
+                                </h2>
+                                <h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
+                                Prueba buscando con otro término
+                                </h3>
+                            </div>
                         <div class="flex justify-center p-3">
-                            <button @click="Pagina = Pagina - 20 ; CargarDatos()" 
-                            :disabled="Pagina < 20"
+                            <button @click="CambiarPagina('back')" 
+                            :disabled="Pagina === 0 || CargandoTrue"
                             class="botona"
                             >
                             ❮
                             </button>
-                            <h2 class="item">
-                            Items 
-                            {{ 0 + Pagina }}
-                            - 
-                            {{ Pagina + Historial.length }}
+                            <h2 class="self-center font-bold px-6 text-green-800 text-center">
+                            <span v-if="Historial.length > 0">
+                            Mostrando {{ Pagina + 1 }} - {{ Pagina + Historial.length }}
+                            </span>
+                            <span v-else>
+                            Fin de la lista
+                            </span>
                             </h2>
-                            <button @click="Pagina = Pagina + 20 ; CargarDatos()" 
-                            :disabled="Historial.length < 20"
+                            <button @click="CambiarPagina('next')" 
+                            :disabled="!HayMasPaginas || CargandoTrue"
                             class="botona"
                             >
                             ❯
@@ -350,7 +349,9 @@
 	const filtroAct = ref (false)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
+    const HayMasPaginas = ref(false)
 	const MostrarFiltro = ref (false)
+    const BloqueoPeticion = ref(false)
     const MostrarNotificacion = ref(false)
     // ----- Variables Vacias ----- //
 	const orden = ref ("")
@@ -368,11 +369,15 @@
 	const fecha_upgrade_min = ref ("")
     // ----- Variables Simples ----- //
 	const Pagina = ref (0)
+    const ItemsPorPagina = ref(24)
     // ----- Funciones Vue ----- //
     onMounted (() => {
         CargarDatos()
     })
     const CargarDatos = (async() => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         CargandoTrue.value = true
         ErrorCarga.value = false
         const temporizador = setTimeout(() => {
@@ -397,12 +402,36 @@
             if (!ErrorCarga.value) {
                 CargandoTrue.value = false
             }
+            BloqueoPeticion.value = false
         }
 	})
     // ----- Para el Frontend ----- //
     const AplicarFiltro = () => {
+        Pagina.value = 0
         BusquedaHistorial()
         CerrarPopUp01()
+    }
+    const CambiarPagina = async (direccion) => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        if (direccion === 'next') {
+            Pagina.value += ItemsPorPagina.value
+        } else if (direccion === 'back') {
+            Pagina.value -= ItemsPorPagina.value
+            if (Pagina.value < 0) Pagina.value = 0
+        }
+        try {
+            await BusquedaHistorial()
+        } catch (error) {
+            console.error(error)
+            ErrorCarga.value = true
+        } finally {
+            CargandoTrue.value = false
+            BloqueoPeticion.value = false
+        }
     }
 	const CerrarPopUp01 = () => {
 		MostrarFiltro.value = false
@@ -443,6 +472,7 @@
         return new Intl.NumberFormat('es-AR').format(precio)
     }
     const LimpiarFiltro = () => {
+        Pagina.value = 0
 		fecha_upgrade_max.value = ""
 		fecha_upgrade_min.value = ""
 		precio_nuevo_max.value = ""
@@ -460,6 +490,7 @@
     const BusquedaHistorial = async() => {
         let url = new URL (`${urlover8000}/historial/`)
 		url.searchParams.append('skip', Pagina.value)
+        url.searchParams.append('limit', ItemsPorPagina.value + 1)
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_historial', Busqueda.value)
         }
@@ -508,7 +539,17 @@
             credentials: 'include'
         })
         const datos = await BusqProducto.json()
-        Historial.value = datos
-		CerrarPopUp01()
+        if (Array.isArray(datos)) {
+            if (datos.length > ItemsPorPagina.value) {
+                HayMasPaginas.value = true
+                Historial.value = datos.slice(0, ItemsPorPagina.value)
+            } else {
+                HayMasPaginas.value = false
+                Historial.value = datos
+            }
+        } else {
+            Historial.value = []
+            HayMasPaginas.value = false
+        }
     }
 </script>
