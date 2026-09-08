@@ -417,32 +417,31 @@
 								</div>
 							</div>
 						</div>
-						<div v-else class="lilelse">
-							<span class="text-4xl mb-3 block">
-							😔
-							</span>
-							<h2 class="text-xl font-bold text-gray-700">
-							No se encontraron Pedidos en Preparación
+						<div v-else class="flex flex-col items-center justify-center p-8">
+							<h2 class="text-xl font-bold text-gray-700 text-center">
+							{{ Pagina === 0 ? 'No se encontraron Pedidos 😔' : 'Ya no hay más Pedidos para mostrar 🏁' }}
 							</h2>
-							<p class="mt-1">
-							Intenta ajustando los filtros de búsqueda.
-							</p>
+							<h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
+							Prueba buscando con otro término
+							</h3>
 						</div>
 						<div class="flex justify-center p-3">
-							<button @click="Pagina = Pagina - 20 ; CargarDatos()" 
-							:disabled="Pagina < 20"
+                            <button @click="CambiarPagina('back')" 
+                            :disabled="Pagina === 0 || CargandoTrue"
 							class="botona"
 							>
 							❮
 							</button>
-							<h2 class="self-center p-5">
-							Items 
-							{{ 0 + Pagina }} 
-							- 
-							{{ Pagina + Pedidos.length }}
+							<h2 class="self-center font-bold px-6 text-green-800 text-center">
+							<span v-if="Pedidos.length > 0">
+							Mostrando {{ Pagina + 1 }} - {{ Pagina + Pedidos.length }}
+							</span>
+							<span v-else>
+							Fin de la lista
+							</span>
 							</h2>
-							<button @click="Pagina = Pagina + 20 ; CargarDatos()" 
-							:disabled="Pedidos.length < 20"
+                            <button @click="CambiarPagina('next')" 
+                            :disabled="!HayMasPaginas || CargandoTrue"
 							class="botona"
 							>
 							❯
@@ -481,6 +480,7 @@
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
 	const MostrarFiltro = ref(false)
+    const BloqueoPeticion = ref(false)
 	const ActualizarCajaP = ref (false)
     // ----- Variables Vacias ----- //
 	const orden = ref("")
@@ -500,6 +500,9 @@
         CargarDatos()
     })
     const CargarDatos = (async() => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         CargandoTrue.value = true
         ErrorCarga.value = false
         const temporizador = setTimeout(() => {
@@ -527,6 +530,7 @@
             if (!ErrorCarga.value) {
                 CargandoTrue.value = false
             }
+            BloqueoPeticion.value = false
         }
 	})
     // ----- Para el Frontend ----- //
@@ -536,6 +540,28 @@
 	}
 	const AplicarFiltro = () => {
 		BusquedaPedido()
+	}
+    const CambiarPagina = async (direccion) => {
+        if (BloqueoPeticion.value) return
+        BloqueoPeticion.value = true
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        CargandoTrue.value = true
+        ErrorCarga.value = false
+        if (direccion === 'next') {
+            Pagina.value += ItemsPorPagina.value
+        } else if (direccion === 'back') {
+            Pagina.value -= ItemsPorPagina.value
+            if (Pagina.value < 0) Pagina.value = 0
+        }
+        try {
+            await BusquedaPedido()
+        } catch (error) {
+            console.error(error)
+            ErrorCarga.value = true
+        } finally {
+            CargandoTrue.value = false
+            BloqueoPeticion.value = false
+        }
 	}
 	const CerrarPopUp01 = () => {
 		ActualizarCajaP.value = false
