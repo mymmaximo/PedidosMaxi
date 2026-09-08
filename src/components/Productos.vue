@@ -717,10 +717,10 @@
                                 transition-all shadow-sm active:scale-95"
                                 >
                                     <span v-if="!VistaLista" class="text-xl">
-                                    🪟
+                                    ⊞
                                     </span>
                                     <span v-else class="text-xl">
-                                    📄
+                                    ☰
                                     </span>
                                 </button>
                             </div>
