@@ -820,26 +820,28 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-else>
-                                <h2>
-                                No se encontraron productos 😔
+                            <div v-else class="flex flex-col items-center justify-center p-8">
+                                <h2 class="text-xl font-bold text-gray-700 text-center">
+                                {{ Pagina === 0 ? 'No se encontraron productos 😔' : 'Ya no hay más productos para mostrar 🏁' }}
                                 </h2>
-                                <h3>
-                                Prueba buscando con otro termino
+                                <h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
+                                Prueba buscando con otro término
                                 </h3>
                             </div>
                             <div class="flex justify-center p-5">
                                 <button @click="CambiarPagina('back')" 
-                                :disabled="Pagina < 20 || CargandoTrue"
+                                :disabled="Pagina === 0 || CargandoTrue"
                                 class="botona"
                                 >
                                 ❮
                                 </button>
-                                <h2 class="self-center font-bold px-6">
-                                Mostrando 
-                                {{ Pagina + 1 }}
-                                - 
-                                {{ Pagina + Productos.length }}
+                                <h2 class="self-center font-bold px-6 text-green-800 text-center">
+                                <span v-if="Productos.length > 0">
+                                Mostrando {{ Pagina + 1 }} - {{ Pagina + Productos.length }}
+                                </span>
+                                <span v-else>
+                                Fin de la lista
+                                </span>
                                 </h2>
                                 <button @click="CambiarPagina('next')" 
                                 :disabled="Productos.length < ItemsPorPagina || CargandoTrue"
