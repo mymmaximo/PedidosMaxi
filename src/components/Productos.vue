@@ -455,6 +455,13 @@
                                 Filtros de Precio
                                 </h2>
                                 <label>
+                                <input :value="4"
+                                type="radio" 
+                                v-model="filtroRadio"
+                                >
+                                Cualquier Precio
+                                </label>
+                                <label>
                                 <input :value="3"
                                 type="radio" 
                                 v-model="filtroRadio"
@@ -572,7 +579,7 @@
                                 <input placeholder="Precio"
                                 type="number" 
                                 v-model="NuevoProducto.precio" 
-                                maxlength="8"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                                 <h2>
                                 Stock
@@ -835,7 +842,7 @@
                                 {{ Pagina + Productos.length }}
                                 </h2>
                                 <button @click="CambiarPagina('next')" 
-                                :disabled="Productos.length < 23 || CargandoTrue"
+                                :disabled="Productos.length < 25 || CargandoTrue"
                                 class="botona"
                                 >
                                 ❯
@@ -962,7 +969,7 @@
     const OpcionCategoriaA = ref ("new")
     const OpcionCategoria = ref ("new")
     const ItemsPorPagina = ref(24)
-    const filtroRadio = ref(0)
+    const filtroRadio = ref(4)
     const filtroEst = ref (1)
 	const Pagina = ref (0)
     // ----- Variables Temporales ----- //
@@ -1149,7 +1156,7 @@
         return IndiceImg.value[id] || 0
     }
     const LimpiarFiltro = () => {
-        filtroRadio.value = 0
+        filtroRadio.value = 4
         filtrocat.value = ""
         filtroEst.value =  1
         BusquedaProducto()
