@@ -330,54 +330,51 @@
                         :'grid grid-cols-2 gap-6'"
                         >
                             <div v-for= "i in usuarios" 
-                            :key="i.id"
-                            class="mb-6 relative"
+                            :key="i.id" 
+                            @click="Edicion(i)"
+                            class="tarjeta-premium z-10 relative bg-white mb-6"
                             >
-                                <div @click="Edicion(i)"
-                                class="tarjeta-premium z-10 relative bg-white"
-                                >
-                                    <div class="tarjeta-info">
-                                        <div class="tarjeta-titulo">
-                                            👤{{ i.nombre }}
-                                                <span :class="Estatuscolor(i.activo, i.id_rol)">
-                                                {{ Roltxt(i.id_rol) }}
-                                                </span>
-                                        </div>
-                                        <p class="tarjeta-dato">
-                                        📧 E-Mail: <span class="tarjeta-valor">
-                                        {{ i.email }}
-                                        </span>
-                                        </p>
-                                        <p class="tarjeta-dato">
-                                        🪪 DNI: 
-                                        <span class="tarjeta-valor">
-                                        {{ i.dni }}
-                                        </span>
-                                        </p>
-                                        <p class="tarjeta-dato mb-1">
-                                        📅 Creado el: 
-                                        <span class="tarjeta-valor">
-                                        {{ FormatoFecha(i.created_at) }}
-                                        </span>
-                                        </p>
+                                <div class="tarjeta-info">
+                                    <div class="tarjeta-titulo">
+                                        👤{{ i.nombre }}
+                                            <span :class="Estatuscolor(i.activo, i.id_rol)">
+                                            {{ Roltxt(i.id_rol) }}
+                                            </span>
                                     </div>
-                                    <div class="tarjeta-acciones">
-                                        <button @click.stop="Eliminacion(i)" 
-                                        v-if="i.activo" 
-                                        class="btn-chico-rojo"
-                                        >
-                                        ❌ Eliminar
-                                        </button>
-                                        <button v-else @click.stop="Eliminacion(i)"
-                                        class="btn-chico-verde"
-                                        >
-                                        🕊️ Reactivar
-                                        </button>
-                                        <button @click.stop="Edicion(i)" 
-                                        class="btn-chico-gris">
-                                        ✏️ Editar
-                                        </button>
-                                    </div>
+                                    <p class="tarjeta-dato">
+                                    📧 E-Mail: <span class="tarjeta-valor">
+                                    {{ i.email }}
+                                    </span>
+                                    </p>
+                                    <p class="tarjeta-dato">
+                                    🪪 DNI: 
+                                    <span class="tarjeta-valor">
+                                    {{ i.dni }}
+                                    </span>
+                                    </p>
+                                    <p class="tarjeta-dato mb-1">
+                                    📅 Creado el: 
+                                    <span class="tarjeta-valor">
+                                    {{ FormatoFecha(i.created_at) }}
+                                    </span>
+                                    </p>
+                                </div>
+                                <div class="tarjeta-acciones">
+                                    <button @click.stop="Eliminacion(i)" 
+                                    v-if="i.activo" 
+                                    class="btn-chico-rojo"
+                                    >
+                                    ❌ Eliminar
+                                    </button>
+                                    <button v-else @click.stop="Eliminacion(i)"
+                                    class="btn-chico-verde"
+                                    >
+                                    🕊️ Reactivar
+                                    </button>
+                                    <button @click.stop="Edicion(i)" 
+                                    class="btn-chico-gris">
+                                    ✏️ Editar
+                                    </button>
                                 </div>
                             </div>
                         </div>  
