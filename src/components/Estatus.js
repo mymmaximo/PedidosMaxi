@@ -70,7 +70,8 @@ export const CerrarSesion = async () =>{
         )
     }
     LimpiarCompra()
-    Rol.value = ""
+    document.cookie = "sesion_activa=; path=/; max-age=0;"
+    Rol.value = []
     ClienteID.value = null
     Iniciado.value = false
     window.location.href = '/'
@@ -106,8 +107,13 @@ export const ValidadSesionBack = async () => {
             credentials: 'include'
         })
         if (respuesta.status === 401) {
-            SesionExpirada.value = true
+            if (leerCookie('sesion_activa') === 'true') {
+                SesionExpirada.value = true
+                document.cookie = "sesion_activa=; path=/; max-age=0"
+            }
             Iniciado.value = false
+            Rol.value = []
+            ClienteID.value = null
             return false
         }
         if (respuesta.ok) {
@@ -116,11 +122,12 @@ export const ValidadSesionBack = async () => {
             Rol.value = datos.id_rol || []
             ClienteID.value = datos.id_cliente
         } else {
-            if (Iniciado.value === true) {
+            if (leerCookie('sesion_activa') === 'true') {
                 SesionExpirada.value = true
+                document.cookie = "sesion_activa=; path=/; max-age=0;"
             }
             Iniciado.value = false
-            Rol.value = ""
+            Rol.value = []
             ClienteID.value = null
             LimpiarCompra()
         }
