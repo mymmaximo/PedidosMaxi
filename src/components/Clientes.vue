@@ -332,12 +332,26 @@
                         >
                         ᯤ Abrir Filtros
                         </button>
-                        <input @input="BusquedaCliente"
-                        type="text" v-model="Busqueda" 
-                        placeholder="Busqueda..."
-                        class="busqueda"
-                        maxlength="50"
-                        >
+						<div class="flex flex-row items-stretch w-full gap-3 mb-5">-
+							<input @input="BusquedaCliente"
+							type="text" 
+							v-model="Busqueda" 
+							placeholder="Busqueda..."
+							class="busqueda !mb-0"
+							maxlength="50"
+							>
+							<button @click="VistaLista = !VistaLista"
+							title="Alternar Vista"
+							class="botonvista"
+							>
+								<span v-if="!VistaLista" class="text-xl">
+								「 」
+								</span>
+								<span v-else class="text-xl">
+								☰
+								</span>
+							</button>
+						</div>
                         <h1 class="titulo-config">
                         Clientes
                         </h1>
@@ -557,6 +571,7 @@
     // ----- Variables Booleanas ----- //
     const filtroAct = ref(false)
     const ErrorCarga = ref(false)
+    const VistaLista = ref(false)
     const CargandoTrue = ref(true)
     const MostrarNuevo = ref(false)
     const HayMasPaginas = ref(false)

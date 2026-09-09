@@ -206,6 +206,19 @@
                         </div>
                     </div>
                     <div v-else class="carrito-contenedor">
+						<div class="flex flex-row items-stretch w-full gap-3 mb-5">
+							<button @click="VistaLista = !VistaLista"
+							title="Alternar Vista"
+							class="botonvista"
+							>
+								<span v-if="!VistaLista" class="text-xl">
+								「 」
+								</span>
+								<span v-else class="text-xl">
+								☰
+								</span>
+							</button>
+						</div>
                         <div class="titulo-config">
                             <h1>
                             Tu Carrito
@@ -387,6 +400,7 @@
     })
     // ----- Variables Booleanas ----- //
     const ErrorCarga = ref(false)
+    const VistaLista = ref(false)
     const CargandoTrue = ref(true)
     const ProcesandoPago = ref(false)
     const PantallaDirecto = ref (false)

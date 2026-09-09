@@ -230,13 +230,26 @@
                         ᯤ Abrir Filtros
                         </button>
                         <!-- Barra de Busqueda -->
-                        <input @input="BusquedaHistorial"
-                        placeholder="Busqueda de Historial..."
-                        type="text" 
-                        v-model="Busqueda" 
-                        class="busqueda"
-                        maxlength="50"
-                        >
+						<div class="flex flex-row items-stretch w-full gap-3 mb-5">-
+							<input @input="BusquedaHistorial"
+							type="text" 
+							v-model="Busqueda" 
+							placeholder="Busqueda..."
+							class="busqueda !mb-0"
+							maxlength="50"
+							>
+							<button @click="VistaLista = !VistaLista"
+							title="Alternar Vista"
+							class="botonvista"
+							>
+								<span v-if="!VistaLista" class="text-xl">
+								「 」
+								</span>
+								<span v-else class="text-xl">
+								☰
+								</span>
+							</button>
+						</div>
                         <h1 class="titulo-config">
                         Historial de Precios
                         </h1>
@@ -347,6 +360,7 @@
     } from './Estatus.js'
     // ----- Variables Booleanas ----- //
 	const filtroAct = ref (false)
+    const VistaLista = ref(false)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
     const HayMasPaginas = ref(false)
