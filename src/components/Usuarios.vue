@@ -327,7 +327,7 @@
                         <div v-if="usuarios.length > 0"
                         :class="VistaLista 
                         ? 'flex flex-col gap-4 w-full' 
-                        :'grid grid-cols-2 gap-6'"
+                        :'grid grid-cols-4 gap-6'"
                         >
                             <div v-for= "i in usuarios" 
                             :key="i.id" 
@@ -476,7 +476,7 @@
     // ----- Variables Booleanas ----- //
     const filtroAct = ref(false)
     const ErrorCarga = ref(false)
-    const VistaLista = ref(false)
+    const VistaLista = ref(true)
     const CargandoTrue = ref(true)
     const MostrarNuevo = ref(false)
     const MostrarFiltro = ref(false)
