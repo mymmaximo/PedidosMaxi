@@ -254,61 +254,64 @@
                         Historial de Precios
                         </h1>
                         <!-- Tabla de Historial de Precios -->
-                        <div v-if="Historial.length > 0">
+                        <div v-if="Historial.length > 0"
+                        :class="VistaLista 
+                        ? 'flex flex-col gap-4 w-full' 
+                        :'grid grid-cols-4 gap-6'"
+                        >
                             <div v-for= "i in Historial" 
                             :key="i.id"
-                            class="mb-2 lg:mb-5"
+                            @click="CopiarAlPortapapeles(i.codigo_barra, i.nombre)"
+                            :class="VistaLista 
+                            ? 'tarjeta-premium z-10 relative bg-white !mb-6 !w-full !m-0 hover:!shadow-lg' 
+                            : 'carta relative'"
                             >
-                                <div  @click="CopiarAlPortapapeles(i.codigo_barra, i.nombre)"
-                                class="tab"
-                                >
-                                    <div class="flex flex-col text-left">
-                                        <div class="flex flex-wrap items-center gap-3 mb-2">
-											<h2 class="text-xl font-black text-gray-800">
-                                            {{ i.nombre }}
-                                            </h2>
-                                            <span class="text-xs font-bold 
-                                            px-3 py-1 
-                                            rounded-full border shadow-sm"
-                                            :class="(i.activo === 1 || i.activo === true) ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'">
-											{{ Estatustxt(i.activo) }}
-											</span>
-                                        </div>
-                                        <div class="flex flex-col">
-                                            <h2>
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Categoria: 
-                                            </span>
-                                            {{ i.categoria }}
-                                            </h2>
-                                            <h2>
-                                            <span class="hidden lg:inline 2xl:inline">
-                                            Codigo de Barras: 
-                                            </span>
-                                            {{ i.codigo_barra }}
-                                            </h2>
-                                        </div>
+                                <div class="flex flex-col text-left">
+                                    <div class="flex flex-wrap items-center gap-3 mb-2">
+                                        <h2 class="text-xl font-black text-gray-800">
+                                        {{ i.nombre }}
+                                        </h2>
+                                        <span class="text-xs font-bold 
+                                        px-3 py-1 
+                                        rounded-full border shadow-sm"
+                                        :class="(i.activo === 1 || i.activo === true) ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'">
+                                        {{ Estatustxt(i.activo) }}
+                                        </span>
                                     </div>
-                                    <div class="lilbox">
+                                    <div class="flex flex-col">
                                         <h2>
-                                        <span class="text-xs text-gray-500 font-bold mb-1">
-                                        Precio Viejo: 
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Categoria: 
                                         </span>
-                                        $ {{ FormatearPrecio(i.precio_viejo) }}
+                                        {{ i.categoria }}
                                         </h2>
                                         <h2>
-                                        <span class="text-gray-500 font-medium text-sm">
-                                        Precio Nuevo: 
+                                        <span class="hidden lg:inline 2xl:inline">
+                                        Codigo de Barras: 
                                         </span>
-                                        $ {{ FormatearPrecio(i.precio_nuevo) }}
-                                        </h2>
-                                        <h2>
-                                        <span class="text-gray-500 font-medium text-sm">
-                                        Fecha de Act: 
-                                        </span>
-                                        {{ FormatoFecha(i.updated_at) }}
+                                        {{ i.codigo_barra }}
                                         </h2>
                                     </div>
+                                </div>
+                                <div class="lilbox">
+                                    <h2>
+                                    <span class="text-xs text-gray-500 font-bold mb-1">
+                                    Precio Viejo: 
+                                    </span>
+                                    $ {{ FormatearPrecio(i.precio_viejo) }}
+                                    </h2>
+                                    <h2>
+                                    <span class="text-gray-500 font-medium text-sm">
+                                    Precio Nuevo: 
+                                    </span>
+                                    $ {{ FormatearPrecio(i.precio_nuevo) }}
+                                    </h2>
+                                    <h2>
+                                    <span class="text-gray-500 font-medium text-sm">
+                                    Fecha de Act: 
+                                    </span>
+                                    {{ FormatoFecha(i.updated_at) }}
+                                    </h2>
                                 </div>
                             </div>
                         </div>
@@ -360,7 +363,7 @@
     } from './Estatus.js'
     // ----- Variables Booleanas ----- //
 	const filtroAct = ref (false)
-    const VistaLista = ref(false)
+    const VistaLista = ref(true)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
     const HayMasPaginas = ref(false)

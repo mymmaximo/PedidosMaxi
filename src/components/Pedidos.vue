@@ -267,72 +267,71 @@
 						</h1>
 						<!-- Tabla de Pedidos -->
 						<div v-if="Pedidos.length > 0"
-                        :class="VistaLista 
-                        ? 'flex flex-col gap-4 w-full' 
-                        :'grid grid-cols-4 gap-6'"
+						class="w-full mb-8"
 						>
 							<div v-for= "i in Pedidos" 
 							:key="i.id_pedido"
 							@click="Edicion(i)"
-                            :class="VistaLista 
-                            ? 'tarjeta-premium z-10 relative bg-white !mb-6 !w-full !m-0 hover:!shadow-lg' 
-                            : 'carta relative'"
+							class="mb-4"
 							>
-								<div class="flex flex-col text-left">
-									<div class="flex flex-wrap items-center gap-3 mb-2">
-										<span :class="Estatuscolor(i.estatus)">
-										{{ Estatustxt(i.estatus) }}
+								<div 
+								class="tab"
+								>
+									<div class="flex flex-col text-left">
+										<div class="flex flex-wrap items-center gap-3 mb-2">
+											<span :class="Estatuscolor(i.estatus)">
+											{{ Estatustxt(i.estatus) }}
+											</span>
+										</div>
+										<p class="text-gray-500 font-medium text-sm">
+										💳 Método de Pago: 
+										<span class="text-gray-800">
+										{{ i.metodo_pago }}
 										</span>
+										</p>
+										<p class="text-gray-500 font-medium text-sm">
+										📍 Direccion: 
+										<span class="text-gray-800">
+										{{ i.direccion[0].calle }} 
+										{{ i.direccion[0].numero }}
+										</span>
+										</p>
+										<p class="text-gray-500 font-medium text-sm mt-1">
+										💰 Total: 
+										<span class="text-green-700 font-bold text-lg">
+										${{ FormatearPrecio(i.total) }}
+										</span>
+										</p>
 									</div>
-									<p class="text-gray-500 font-medium text-sm">
-									💳 Método de Pago: 
-									<span class="text-gray-800">
-									{{ i.metodo_pago }}
-									</span>
-									</p>
-									<p class="text-gray-500 font-medium text-sm">
-									📍 Direccion: 
-									<span class="text-gray-800">
-									{{ i.direccion[0].calle }} 
-									{{ i.direccion[0].numero }}
-									</span>
-									</p>
-									<p class="text-gray-500 font-medium text-sm mt-1">
-									💰 Total: 
-									<span class="text-green-700 font-bold text-lg">
-									${{ FormatearPrecio(i.total) }}
-									</span>
-									</p>
-								</div>
-								<div class="lilbox !bg-green-50/50 !border-green-100">
-									<p class="text-xs text-gray-500 font-bold mb-1">
-									Tiempo Est. de Entrega: 
-									<span class="text-gray-800">
-									{{ i.tiempo_estimado_entrega }} Días
-									</span>
-									</p>
-									<p class="text-xs text-gray-500 font-bold">
-									Tiempo de Entrega: 
-									<span class="text-gray-800">
-									{{ i.tiempo_entrega }} Días
-									</span>
-									</p>
-									<div v-if="i.estatus === 1"
-									class="text-green-600 text-sm font-bold 
-									mt-3 flex items-center justify-end gap-1"
-									>
-										{{ PedidoNow === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
+									<div class="lilbox !bg-green-50/50 !border-green-100">
+										<p class="text-xs text-gray-500 font-bold mb-1">
+										Tiempo Est. de Entrega: 
+										<span class="text-gray-800">
+										{{ i.tiempo_estimado_entrega }} Días
+										</span>
+										</p>
+										<p class="text-xs text-gray-500 font-bold">
+										Tiempo de Entrega: 
+										<span class="text-gray-800">
+										{{ i.tiempo_entrega }} Días
+										</span>
+										</p>
+										<div v-if="i.estatus === 1"
+										class="text-green-600 text-sm font-bold 
+										mt-3 flex items-center justify-end gap-1"
+										>
+											{{ PedidoNow === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
+										</div>
+										<button v-if="i.estatus !== 1"
+										class="bg-gray-800 text-white text-xs 
+										my-3 cursor-pointer 
+										font-bold px-3 py-2 rounded-lg 
+										hover:bg-gray-700 shadow-sm"
+										>
+										✏️ Editar Estado
+										</button>
 									</div>
-									<button v-if="i.estatus !== 1"
-									class="bg-gray-800 text-white text-xs 
-									my-3 cursor-pointer 
-									font-bold px-3 py-2 rounded-lg 
-									hover:bg-gray-700 shadow-sm"
-									>
-									✏️ Editar Estado
-									</button>
 								</div>
-							
                                 <transition name="slide">
 									<div v-if = "PedidoNow === i.id_pedido"
 									class="liltab !border-green-100/50"
@@ -493,7 +492,7 @@
 	})
     // ----- Variables Booleanas ----- //
 	const filtroAct = ref(false)
-    const VistaLista = ref(true)
+    const VistaLista = ref(false)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
     const HayMasPaginas = ref(false)
