@@ -727,7 +727,9 @@
                             <div v-if="Productos.length > 0"
                             :class="VistaLista 
                             ? 'flex flex-col gap-4 w-full' 
-                            :['grid grid-cols-2 gap-6', (MostrarFiltro || MostrarNuevo) ? 'lg:grid-cols-3' 
+                            :['grid grid-cols-2 gap-6', 
+                            (MostrarFiltro || MostrarNuevo) 
+                            ? 'lg:grid-cols-3' 
                             : 'lg:grid-cols-4']"
                             >
                                 <div v-for= "i in Productos" 

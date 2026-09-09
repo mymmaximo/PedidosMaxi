@@ -332,7 +332,9 @@
                             <div v-for= "i in usuarios" 
                             :key="i.id" 
                             @click="Edicion(i)"
-                            class="tarjeta-premium z-10 relative bg-white mb-6"
+                            :class="VistaLista 
+                            ? 'tarjeta-premium z-10 relative bg-white !mb-6 !w-full !m-0 hover:!shadow-lg' 
+                            : 'carta relative'"
                             >
                                 <div class="tarjeta-info">
                                     <div class="tarjeta-titulo">
