@@ -362,8 +362,8 @@
         urlover8000 
     } from './Estatus.js'
     // ----- Variables Booleanas ----- //
-	const filtroAct = ref (false)
     const VistaLista = ref(true)
+	const filtroAct = ref (false)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
     const HayMasPaginas = ref(false)
