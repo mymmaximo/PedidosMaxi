@@ -324,7 +324,11 @@
                         <h1 class="titulo-config">
                         Usuarios
                         </h1>
-                        <div v-if="usuarios.length > 0">
+                        <div v-if="usuarios.length > 0"
+                        :class="VistaLista 
+                        ? 'flex flex-col gap-4 w-full' 
+                        :'grid grid-cols-2 gap-6'"
+                        >
                             <div v-for= "i in usuarios" 
                             :key="i.id"
                             class="mb-6 relative"
