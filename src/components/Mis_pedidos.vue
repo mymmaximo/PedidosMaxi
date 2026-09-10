@@ -100,6 +100,13 @@
                                 </h2>
                                 <div class="flex flex-col gap-3">
                                     <label>
+                                    <input :value="4"
+                                    type="radio" 
+                                    v-model="filtroEst"
+                                    > 
+                                    Todos
+                                    </label>
+                                    <label>
                                     <input :value="3"
                                     type="radio" 
                                     v-model="filtroEst"
@@ -770,6 +777,9 @@
         window.scrollTo({ top: 0, behavior: 'smooth' })
         BusquedaPedido()
         MostrarFiltro.value = false
+        if (filtroEst.value === 1) {
+            mostrarhistorial.value = true
+        }
     }
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
