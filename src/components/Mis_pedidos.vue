@@ -711,7 +711,10 @@
     } from 'vue'
     import { 
         ClienteID, 
-        urlover8000 
+        urlover8000,
+        CerrarSesion,
+        SesionExpirada,
+        Iniciado
     } from './Estatus.js'
     // ----- Variables Booleanas ----- //
     const filtroAct = ref(false)
