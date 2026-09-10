@@ -490,6 +490,7 @@
         return new Intl.NumberFormat('es-AR').format(precio)
     }
     const LimpiarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
 		fecha_upgrade_max.value = ""
 		fecha_upgrade_min.value = ""

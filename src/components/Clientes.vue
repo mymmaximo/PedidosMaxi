@@ -718,6 +718,7 @@
 		}
 	}
     const LimpiarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
         filtroDirec.value = 2
         filtroEst.value = 2

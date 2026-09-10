@@ -633,6 +633,7 @@
 		return new Intl.NumberFormat('es-AR').format(precio)
 	}
 	const LimpiarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
 		filtroMP.value = 5
 		filtroEst.value = 4

@@ -792,6 +792,7 @@
         return new Intl.NumberFormat('es-AR').format(precio)
     }
     const LimpiarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         filtroMP.value = 5
         filtroEst.value = 4
         BusquedaPedido()

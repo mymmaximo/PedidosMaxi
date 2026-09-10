@@ -1237,6 +1237,7 @@
         return IndiceImg.value[id] || 0
     }
     const LimpiarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
         filtroRadio.value = 4
         filtrocat.value = ""
