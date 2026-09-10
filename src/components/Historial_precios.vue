@@ -424,6 +424,7 @@
 	})
     // ----- Para el Frontend ----- //
     const AplicarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
         BusquedaHistorial()
         CerrarPopUp01()

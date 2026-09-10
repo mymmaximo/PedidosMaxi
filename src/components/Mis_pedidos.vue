@@ -767,6 +767,7 @@
     })
     // ----- Para el Frontend ----- //
     const AplicarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         BusquedaPedido()
         MostrarFiltro.value = false
     }
