@@ -749,8 +749,14 @@
             const respuesta = await fetch(`${urlover8000}/pedidos/cliente/${ClienteID.value}`, {
                 credentials: 'include'
             })
+            if (respuesta.status === 401) {
+                await CerrarSesion()
+                SesionExpirada.value = true
+                Iniciado.value = false
+                return
+            }
             const datos = await respuesta.json()
-            Pedidos.value = datos
+            Pedidos.value = Array.isArray(datos) ? datos : []
             clearTimeout(temporizador)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
@@ -874,7 +880,14 @@
             method: 'GET',
             credentials: 'include'
         })
+        if (BusqPedido.status === 401) {
+            await CerrarSesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
+            return
+        }
         const datos = await BusqPedido.json()
-        Pedidos.value = datos
+        Pedidos.value = Array.isArray(datos) ? datos : []
     }
 </script>
