@@ -546,7 +546,7 @@
                                 </button>
                                 <button @click="LimpiarFiltro" 
                                 v-if="filtroAct === true"
-                                class="botont" 
+                                class="botont"
                                 >
                                 🗑️ Limpiar Filtro
                                 </button>
@@ -1448,7 +1448,6 @@
         }
         if (filtroEst.value === 1) {
             url.searchParams.append('bool_activo', 'true')
-            filtroAct.value = true
         }
         if (filtroEst.value === 0) {
             url.searchParams.append('bool_activo', 'false')
