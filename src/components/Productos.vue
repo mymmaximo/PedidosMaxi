@@ -1446,6 +1446,9 @@
             url.searchParams.append('precio_producto_max', maxfiltro)
             filtroAct.value = true
         }
+        if (filtroEst.value === 2) {
+            filtroAct.value = true
+        }
         if (filtroEst.value === 1) {
             url.searchParams.append('bool_activo', 'true')
         }
