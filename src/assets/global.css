@@ -961,7 +961,6 @@ img {
 .fade-enter-from, .fade-leave-to {
     @apply 
     opacity-0 
-    scale-95
 }
 .slide-enter-active, .slide-leave-active {
     @apply 
