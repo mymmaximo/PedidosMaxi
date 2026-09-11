@@ -106,6 +106,72 @@
                 </div>
             </transition>
         </Teleport>
+        <!-- Confirmacion Quitar -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="QuitarCaja"
+                @click.self="CerrarPopUp01"
+                class="fondo"
+                >
+                    <div class="popup">
+                        <h1 class="text-center">
+                        ¿Desear Quitar {{ ProductoQ.nombre }} de Mis Favoritos?
+                        </h1>
+                        <div>
+                            <div v-if="ProductoQ.imagenes.length > 0"
+                            class="flex flex-row 
+                            gap-3 overflow-x-auto
+                            items-center justify-center 
+                            w-full pb-2 snap-x"
+                            >
+                                <button @click="BackImg(ProductoQ)"
+                                :disabled="GetImg(ProductoQ.id) === 0"
+                                class="botonflecha"
+                                >
+                                ❮
+                                </button>
+                                <div>
+                                    <img v-show="ImagenesCargando[ProductoQ.id] === false"
+                                    :src=ObtenerImgUrl(ProductoQ.imagenes[GetImg(ProductoQ.id)].s3_key)
+                                    @load="ImagenesCargando[ProductoQ.id] = false"
+                                    class="imagen"
+                                    >
+                                    <div v-if="ImagenesCargando[ProductoQ.id] !== false" 
+                                    class="mt-2"
+                                    >
+                                        <img src="../assets/loading.gif" 
+                                        alt="Cargando..." 
+                                        class="imagen !2xl:p-15"
+                                        >
+                                    </div>
+                                </div>
+                                <button @click="NextImg(ProductoQ)"
+                                :disabled="GetImg(ProductoQ.id) === ProductoQ.imagenes.length - 1"
+                                class="botonflecha"
+                                >
+                                ❯
+                                </button>
+                            </div>
+                            <img v-else src="../assets/images.png"
+                            class="imagen"
+                            >
+                        </div>
+                        <div class="botones">
+                            <button @click="Quitar()"
+                            class="botoncon"
+                            >
+                            Confirmo
+                            </button>
+                            <button @click="CerrarPopUp01"
+                            class="botonc"
+                            >
+                            Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </Teleport>
         <!-- Tabla de Favoritos y Barra de Filtros -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
@@ -377,11 +443,6 @@
                                             <h2 :class="VistaLista ? 'text-green-600 text-xl font-black mt-1' : ''">
                                             $ {{ FormatearPrecio(i.precio) }}
                                             </h2>
-                                            <div v-if="VistaLista" class="mt-1">
-                                                <h3 class="text-sm text-gray-400">
-                                                    📦 Stock: {{ i.stock }}
-                                                </h3>
-                                            </div>
                                         </div>
                                     </div>
                                     
@@ -477,12 +538,19 @@
         useRouter 
     } from 'vue-router'
 
+    // ----- Variables Complejas ----- //
+    const ProductoQ = ref({
+        id: "",
+        nombre: "",
+        imagenes: []
+    })
+    const MostrarFiltro = ref(window.innerWidth >= 1024)
     // ----- Variables Booleanas ----- //
     const BloqueoPeticion = ref(false)
     const VentanaCompra = ref(false)
     const MostrarConfir = ref(false)
-    const MostrarFiltro = ref(window.innerWidth >= 1024)
     const HayMasPaginas = ref(false)
+    const QuitarCaja = ref (false)
     const CargandoTrue = ref(true)
     const ErrorCarga = ref(false)
     const VistaLista = ref(false)
@@ -495,7 +563,7 @@
     const IndiceImg = ref({})
     const Productos = ref([])
     const Busqueda = ref("")
-    const orden = ref("8") // Default: Agregados Recientemente
+    const orden = ref("8")
     const mayor = ref("")
     const menor = ref("")
 
@@ -595,6 +663,10 @@
     }
 
     // ----- Para el Frontend ----- //
+	const AbrirPopUp01 = () => {
+		QuitarCaja.value = true
+		document.body.style.overflow = "hidden"
+	}
     const AplicarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
@@ -602,7 +674,6 @@
         menor.value = ""
         mayor.value = ""
     }
-
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual > 0) {
@@ -610,18 +681,20 @@
             ImagenesCargando.value[imagen.id] = true
         }
     }
-
+	const CerrarPopUp01 = () => {
+		QuitarCaja.value = false
+        ProductoQ.value = { id: "", nombre: "", imagenes: [] }
+		document.body.style.overflow = "auto"
+	}
     const CerrarPopUp03 = () => {
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
         document.body.style.overflow = "auto"
     }
-
     const ComienzoToque = (evento) => {
         inicioX = evento.changedTouches[0].clientX
     }
-
     const Compracion = (producto_fila) => {
         if (CarritoStock(producto_fila) <= 0) {
             return 
@@ -631,7 +704,6 @@
         ProductoActual.value = producto_fila
         ProductoCantidad.value = 1
     }
-
     const FinToque = (evento, producto) => {
         if (!producto) return
         const finX = evento.changedTouches[0].clientX
@@ -648,16 +720,13 @@
         }
         inicioX = 0
     }
-
     const FormatearPrecio = (precio) => {
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat('es-AR').format(precio)
     }
-
     const GetImg = (id) => {
         return IndiceImg.value[id] || 0
     }
-
     const LimpiarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
@@ -666,7 +735,6 @@
         BusquedaFavoritos()
         filtroAct.value = false
     }
-
     const NextImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual < imagen.imagenes.length - 1) {
@@ -674,35 +742,38 @@
             ImagenesCargando.value[imagen.id] = true
         }
     }
-
     const ObtenerImgUrl = (Imgenkey) => {
         const respuesta = supabase.storage
             .from('max_imagenes')
             .getPublicUrl(Imgenkey)
         return respuesta.data.publicUrl
     }
-
     const RestarProducto = () => {
         if (ProductoCantidad.value > 1) {
             ProductoCantidad.value--
         }
     }
-
     const SumarProducto = () => {
         if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
             ProductoCantidad.value++
         }
     }
-
+    const QuitarFavorito = (producto_fila) => {
+        ProductoQ.value.id = producto_fila.id
+        ProductoQ.value.nombre = producto_fila.nombre
+        ProductoQ.value.imagenes = producto_fila.imagenes
+        AbrirPopUp01()
+    }
     // ----- Para el Backend ----- //
-    const QuitarFavorito = async (producto) => {
+    const Quitar = async () => {
+        if (!ProductoQ.value.id) return
         try {
             const respuesta = await fetch(`${urlover8000}/favoritos/toggle?id_cliente=${ClienteID.value}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id_producto: producto.id }),
+                body: JSON.stringify({ id_producto: ProductoQ.value.id }),
                 credentials: 'include'
             })
             
@@ -714,7 +785,8 @@
             }
             
             if (respuesta.ok) {
-                Productos.value = Productos.value.filter(p => p.id !== producto.id);
+                Productos.value = Productos.value.filter(p => p.id !== ProductoQ.value.id)
+                CerrarPopUp01()
                 if (Productos.value.length === 0 && Pagina.value > 0) {
                     CambiarPagina('back')
                 } else if (Productos.value.length === 0 && Pagina.value === 0) {
@@ -725,7 +797,6 @@
             console.error("Error al quitar favorito:", error);
         }
     }
-
     const BusquedaFavoritos = async() => {
         if (!ClienteID.value) return;
 
@@ -808,7 +879,6 @@
             HayMasPaginas.value = false
         }
     }
-
     const CarritoStock = (Producto) => {
         let stockCarrito = 0
         CarritoLocal.value.forEach((itemCarrito) => {
@@ -818,7 +888,6 @@
         })
         return Producto.stock - stockCarrito
     }
-
     const SumarCarrito = () => {
         if (!ProductoActual.value)
             return
