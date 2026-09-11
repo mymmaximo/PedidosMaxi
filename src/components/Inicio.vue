@@ -550,12 +550,6 @@
                             @touchstart="ComienzoToque($event)"
                             @touchend="FinToque($event, Bananaer)"
                             >
-                                <button v-if="ClienteID"
-                                @click.stop="ToggleFavorito(i.id)"
-                                class="absolute top-3 right-3 z-30 text-2xl hover:scale-125 transition-transform drop-shadow-md active:scale-95"
-                                >
-                                    {{ MisFavoritos.includes(i.id) ? '❤️' : '🤍' }}
-                                </button>
                                 <button @click="IndiceBanner--"
                                 :disabled="IndiceBanner === 0"
                                 type="button"
@@ -632,6 +626,12 @@
                                     class="carta"
                                     >
                                         <div>
+                                            <button v-if="ClienteID"
+                                            @click.stop="ToggleFavorito(i.id)"
+                                            class="absolute top-3 right-3 z-30 text-2xl hover:scale-125 transition-transform drop-shadow-md active:scale-95"
+                                            >
+                                                {{ MisFavoritos.includes(i.id) ? '❤️' : '🤍' }}
+                                            </button>
                                             <div v-if="i.imagenes.length > 0"
                                             class="
                                             flex flex-row 
