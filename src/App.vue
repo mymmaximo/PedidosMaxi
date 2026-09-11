@@ -209,12 +209,6 @@
                         >
                         Mi Perfil
                         </h3>
-                        <h3 @click="!Rol || Rol.length === 0 ? router.push('/favoritos') : null"
-                        v-if="Iniciado"
-                        class="botonpestaña"
-                        >
-                        Mis Favoritos
-                        </h3>
                         <div v-if="Iniciado"
                         class="hidden group-hover:block 
                         absolute top-full 
@@ -226,6 +220,12 @@
                             class="botonpestaña !p-2 !truncate"
                             >
                             Mis Pedidos
+                            </h3>
+                            <h3 @click="router.push('/favoritos')"
+                            v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
+                            class="botonpestaña !p-2 !truncate"
+                            >
+                            Mis Favoritos
                             </h3>
                             <h3 @click="router.push('/configuracion')" 
                             v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
