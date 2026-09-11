@@ -697,30 +697,28 @@
     // ----- Para el Backend ----- //
     const QuitarFavorito = async (producto) => {
         try {
-            const respuesta = await fetch(`${urlover8000}/favoritos/toggle`, {
+            const respuesta = await fetch(`${urlover8000}/favoritos/toggle?id_cliente=${ClienteID.value}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ id_producto: producto.id }),
                 credentials: 'include'
-            });
+            })
             
             if (respuesta.status === 401) {
                 await CerrarSesion();
-                SesionExpirada.value = true;
-                Iniciado.value = false;
+                SesionExpirada.value = true
+                Iniciado.value = false
                 return;
             }
             
             if (respuesta.ok) {
-                // Removemos la tarjeta del frontend al instante
                 Productos.value = Productos.value.filter(p => p.id !== producto.id);
-                // Si la página se queda vacía, retrocedemos o actualizamos
                 if (Productos.value.length === 0 && Pagina.value > 0) {
-                    CambiarPagina('back');
+                    CambiarPagina('back')
                 } else if (Productos.value.length === 0 && Pagina.value === 0) {
-                    BusquedaFavoritos(); // Refresca para ver si hay más por paginación oculta
+                    BusquedaFavoritos()
                 }
             }
         } catch (error) {
