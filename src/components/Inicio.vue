@@ -550,6 +550,12 @@
                             @touchstart="ComienzoToque($event)"
                             @touchend="FinToque($event, Bananaer)"
                             >
+                                <button v-if="ClienteID"
+                                @click.stop="ToggleFavorito(i.id)"
+                                class="absolute top-3 right-3 z-30 text-2xl hover:scale-125 transition-transform drop-shadow-md active:scale-95"
+                                >
+                                    {{ MisFavoritos.includes(i.id) ? '❤️' : '🤍' }}
+                                </button>
                                 <button @click="IndiceBanner--"
                                 :disabled="IndiceBanner === 0"
                                 type="button"
@@ -841,6 +847,7 @@
     const ListaCategoria = ref ("")
     const BannersNuevos = ref ([])
     const IndiceCarrusel = ref({})
+    const MisFavoritos = ref([])
     const VistaPrevia = ref ([])
     const ArchivoSave = ref ([])
     const DelSupaBann = ref ([])
@@ -927,6 +934,14 @@
                 return indexA - indexB
             })
             ListaCategoria.value = categ
+            if (ClienteID.value) {
+                const resFav = await fetch(`${urlover8000}/favoritos/cliente/${ClienteID.value}`, {
+                    credentials: 'include'
+                })
+                if (resFav.ok) {
+                    MisFavoritos.value = await resFav.json()
+                }
+            }
             CargarCarrito()
             IniciarCarruselAutomatico()
             clearTimeout(temporizador)
@@ -1633,5 +1648,33 @@
             }
         }
         BannersNuevos.value = []
+    }
+    const ToggleFavorito = async (id_producto) => {
+        try {
+            const respuesta = await fetch(`${urlover8000}/favoritos/toggle?id_cliente=${ClienteID.value}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_producto: id_producto }),
+                credentials: 'include'
+            })
+            
+            if (respuesta.status === 401) {
+                await CerrarSesion()
+                SesionExpirada.value = true
+                Iniciado.value = false
+                return
+            }
+            
+            if (respuesta.ok) {
+                const data = await respuesta.json()
+                if (data.estado_favorito) {
+                    MisFavoritos.value.push(id_producto)
+                } else {
+                    MisFavoritos.value = MisFavoritos.value.filter(id => id !== id_producto)
+                }
+            }
+        } catch (error) {
+            console.error("Error al actualizar favorito:", error)
+        }
     }
 </script>
