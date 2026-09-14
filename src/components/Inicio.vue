@@ -623,7 +623,7 @@
                                     :key="cat.categoria + '-' + i.id"
                                     :class="Estatuscolor(i.activo)"
                                     @click="AccionCarta(i)"
-                                    class="carta"
+                                    class="carta relative"
                                     >
                                         <div>
                                             <button v-if="ClienteID"
