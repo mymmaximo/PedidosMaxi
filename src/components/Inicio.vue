@@ -980,6 +980,15 @@
 	const AbrirPopUp02 = () => {
 		ActualizarCajaPDel.value = true
 		document.body.style.overflow = "hidden"
+        setTimeout(() => {
+            ProductoEli.value = {
+                id: "",
+                nombre: "",
+                imagenes: []
+            }
+            IndiceImg.value = {}
+        }, 300)
+        
 	}
 	const AbrirPopUp03 = () => {
 		VentanaBanner.value = true
@@ -1408,11 +1417,6 @@
             SesionExpirada.value = true
             Iniciado.value = false
             return
-        }
-        ProductoEli.value = {
-        id: "",
-        nombre: "",
-        imagenes: []
         }
         BusquedaProducto()
         CerrarPopUp02()
