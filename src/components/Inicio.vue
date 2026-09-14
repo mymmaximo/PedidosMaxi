@@ -628,7 +628,7 @@
                                         <div>
                                             <button v-if="ClienteID"
                                             @click.stop="ToggleFavorito(i.id)"
-                                            class="absolute top-2 right-2 z-30 flex items-center justify-center w-10 h-10 bg-white/70 hover:bg-white backdrop-blur-sm rounded-full text-xl hover:scale-110 transition-all shadow-sm hover:shadow-md active:scale-95 cursor-pointer"
+                                            class="absolute top-3 right-3 z-30 text-2xl hover:scale-125 transition-transform drop-shadow-md active:scale-95"
                                             >
                                                 {{ MisFavoritos.includes(i.id) ? '❤️' : '🤍' }}
                                             </button>
