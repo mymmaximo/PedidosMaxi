@@ -366,6 +366,119 @@
                 </div>
             </transition>
         </Teleport>
+        <!-- Promocion Producto -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="VentanaPromocion"
+                @click.self="CerrarPopUp04" 
+                class="fondo"
+                >
+                    <div class="popup">
+                        <form @submit.prevent="GuardarPromocion">
+                            <h1>
+                            Promoción: {{ ProductoPromo.nombre }}
+                            </h1>
+                            <div>
+                                <div v-if="ProductoPromo.imagenes.length > 0"
+                                class="flex flex-row 
+                                gap-1 md:gap-3 
+                                overflow-x-auto items-center justify-center 
+                                w-full md:pb-2 snap-x pb-1"
+                                >
+                                    <button type="button" 
+                                    @click="BackImg(ProductoPromo)" 
+                                    :disabled="GetImg(ProductoPromo.id) === 0" 
+                                    class="botonflecha">
+                                    ❮
+                                    </button>
+                                    <div>
+                                        <img v-show="ImagenesCargando[ProductoPromo.id] === false"
+                                        :src=ObtenerImgUrl(ProductoPromo.imagenes[GetImg(ProductoPromo.id)].s3_key)
+                                        @load="ImagenesCargando[ProductoPromo.id] = false"
+                                        class="imagencar"
+                                        >
+                                        <div v-if="ImagenesCargando[ProductoPromo.id] !== false" 
+                                        class="mt-2"
+                                        >
+                                            <img src="../assets/loading.gif" alt="Cargando..." 
+                                            class="imagencar !p-4"
+                                            >
+                                        </div>
+                                    </div>
+                                    <button type="button" 
+                                    @click="NextImg(ProductoPromo)" 
+                                    :disabled="GetImg(ProductoPromo.id) === ProductoPromo.imagenes.length - 1" 
+                                    class="botonflecha"
+                                    >
+                                    ❯
+                                    </button>
+                                </div>
+                                <img v-else src="../assets/images.png" 
+                                class="imagencar"
+                                >
+                            </div>
+                            <div class="mt-2">
+                                <h2>
+                                Nombre de la Promoción (Opcional)
+                                </h2>
+                                <input placeholder="Ej: Cyber Monday, Navidad..."
+                                type="text" 
+                                v-model="FormPromo.nombre_promocion" 
+                                maxlength="100"
+                                >
+                                <h2>
+                                Precio de Oferta
+                                </h2>
+                                <input placeholder="Nuevo Precio"
+                                type="number" 
+                                v-model="FormPromo.precio_oferta" 
+                                maxlength="8"
+                                required
+                                >
+                                <h2>
+                                Fecha y Hora de Inicio
+                                </h2>
+                                <input 
+                                type="datetime-local" 
+                                v-model="FormPromo.fecha_inicio"
+                                required
+                                >
+                                <h2>
+                                Fecha y Hora de Fin
+                                </h2>
+                                <input 
+                                type="datetime-local" 
+                                v-model="FormPromo.fecha_fin"
+                                required
+                                >
+                            </div>
+                            <div class="botones mt-4">
+                                <button type="submit" 
+                                class="botoncon"
+                                :disabled="Actualizando"
+                                >
+                                {{ FormPromo.id_promocion ? 'Actualizar' : 'Guardar' }}
+                                </button>
+                                <button type="button" 
+                                v-if="FormPromo.id_promocion"
+                                @click="BorrarPromocion"
+                                class="botonx !static !bg-red-600 hover:!bg-red-700 !text-white !p-2 !rounded-xl !text-base"
+                                :disabled="Actualizando"
+                                >
+                                Borrar Oferta 🗑️
+                                </button>
+                                <button @click="CerrarPopUp04" 
+                                type="button" 
+                                class="botonc"
+                                >
+                                Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </transition>
+        </Teleport>
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
@@ -755,6 +868,11 @@
                                         ? 'w-24 sm:w-32 shrink-0' 
                                         : 'w-full'"
                                         >
+                                            <div v-if="i.en_promocion" 
+                                            class="absolute top-2 left-2 z-30 bg-red-500 text-white text-xs font-black px-2 py-1 rounded-md shadow-md"
+                                            >
+                                            🔥 {{ i.nombre_promocion || 'OFERTA' }}
+                                            </div>
                                             <div v-if="i.imagenes.length > 0"
                                             class="flex flex-row 
                                             gap-3 overflow-x-auto
@@ -813,12 +931,19 @@
                                             Categoria: 
                                             {{ i.categoria }}
                                             </h3>
-                                            <h2 :class="VistaLista 
-                                            ? 'text-green-600 text-xl font-black mt-1' 
-                                            : ''"
-                                            >
-                                            $ {{ FormatearPrecio(i.precio) }}
-                                            </h2>
+                                            <div class="flex flex-col">
+                                                <h2 v-if="i.en_promocion" 
+                                                class="text-gray-400 text-sm font-bold line-through -mb-1 mt-1"
+                                                >
+                                                $ {{ FormatearPrecio(i.precio) }}
+                                                </h2>
+                                                <h2 :class="[
+                                                VistaLista ? 'text-xl font-black mt-1' : 'font-bold', 
+                                                i.en_promocion ? 'text-red-600' : 'text-green-600'
+                                                ]">
+                                                $ {{ FormatearPrecio(i.en_promocion ? i.precio_oferta : i.precio) }}
+                                                </h2>
+                                            </div>
                                             <div v-if="VerificarRol([1, 2, 4, 5])"
                                             :class="VistaLista 
                                             ? 'mt-1' 
@@ -834,7 +959,7 @@
                                                 {{ i.codigo_barra }} 
                                                 <br v-if="VistaLista">
                                                 <span v-if="VistaLista">
-                                                📦 
+                                                📦
                                                 </span>
                                                 Stock: {{ i.stock }}
                                                 </h3>
@@ -857,6 +982,17 @@
                                         : 'hidden xl:inline ml-1 truncate'"
                                         >
                                         Editar
+                                        </span>
+                                        </button>
+                                        <button @click.stop="AbrirPopUp04(i)" 
+                                        v-if="VerificarRol([1, 2])" 
+                                        :class="VistaLista 
+                                        ? 'btn-chico-gris !bg-blue-600 hover:!bg-blue-700' 
+                                        : 'botont !bg-blue-50 !border-blue-200 !text-blue-700 hover:!bg-blue-100 !px-2 !py-2 !text-sm'"
+                                        >
+                                        🏷️
+                                        <span class="hidden xl:inline ml-1 truncate">
+                                        Promoción
                                         </span>
                                         </button>
                                         <button @click.stop="Eliminacion(i)" 
@@ -1017,12 +1153,24 @@
         nombre: "",
         imagenes: []
     })
+    const ProductoPromo = ref({
+        id: "",
+        nombre: "",
+        imagenes: []
+    })
+    const FormPromo = ref({
+        nombre_promocion: "",
+        precio_oferta: "",
+        fecha_inicio: "",
+        fecha_fin: ""
+    })
     const prop = defineProps (['path','size'])
     const router = useRouter()
     const { path } = toRefs (prop)
     const MostrarFiltro = ref(window.innerWidth >= 1024)
     // ----- Variables Booleanas ----- //
     const ActualizarCajaPDel = ref (false)
+    const VentanaPromocion = ref(false)
     const BloqueoPeticion = ref(false)
     const VentanaCompra = ref (false)
     const MostrarConfir = ref (false)
@@ -1167,6 +1315,43 @@
 		VentanaCompra.value = true
 		document.body.style.overflow = "hidden"
 	}
+	const AbrirPopUp04 = async (producto_fila) => {
+		ProductoPromo.value.id = producto_fila.id
+        ProductoPromo.value.nombre = producto_fila.nombre
+        ProductoPromo.value.imagenes = producto_fila.imagenes
+        FormPromo.value = { 
+            id_promocion: null,
+            nombre_promocion: "", 
+            precio_oferta: "", 
+            fecha_inicio: "", 
+            fecha_fin: "" 
+        }
+        try {
+            const respuesta = await fetch(`${urlover8000}/promociones/`, {
+                headers: { "X-Tunnel-Skip-AntiPhishing-Page": "true" },
+                credentials: 'include'
+            })
+            if (respuesta.ok) {
+                const todasLasPromos = await respuesta.json()
+                const promoExistente = todasLasPromos.find(
+                    p => p.id_producto === producto_fila.id
+                )
+                if (promoExistente) {
+                    FormPromo.value = {
+                        id_promocion: promoExistente.id,
+                        nombre_promocion: promoExistente.nombre_promocion || "",
+                        precio_oferta: promoExistente.precio_oferta,
+                        fecha_inicio: new Date(promoExistente.fecha_inicio).toISOString().slice(0, 16),
+                        fecha_fin: new Date(promoExistente.fecha_fin).toISOString().slice(0, 16)
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error buscando promo existente:", error)
+        }
+        VentanaPromocion.value = true
+        document.body.style.overflow = "hidden"
+	}
     const AccionCarta = (producto_fila) => {
         if (VerificarRol([1, 2, 3, 4, 5, 6])) {
             Edicion(producto_fila)
@@ -1202,6 +1387,10 @@
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
+		document.body.style.overflow = "auto"
+	}
+	const CerrarPopUp04 = () => {
+        VentanaPromocion.value = false
 		document.body.style.overflow = "auto"
 	}
     const ComienzoToque = (evento) => {
@@ -1395,6 +1584,33 @@
             Actualizando.value = false
         }
     }
+    const BorrarPromocion = async () => {
+        if (!FormPromo.value.id_promocion) return
+        if (Actualizando.value) return
+        Actualizando.value = true
+        try {
+            const respuesta = await fetch(`${urlover8000}/promociones/id/${FormPromo.value.id_promocion}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            })
+            if (respuesta.status === 401) {
+                await CerrarSesion()
+                SesionExpirada.value = true
+                Iniciado.value = false
+                return
+            }
+            if (!respuesta.ok) {
+                throw new Error("No se pudo eliminar la promoción")
+            }
+            BusquedaProducto()
+            CerrarPopUp04()
+        } catch (error) {
+            console.error(error)
+            alert("Hubo un error al eliminar la promoción.")
+        } finally {
+            Actualizando.value = false
+        }
+    }
     const BorrarProducto = async() => {
         const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
@@ -1574,6 +1790,46 @@
         NewImg.value = []
         VistaPrevia.value = []
         AbrirPopUp01()
+    }
+    const GuardarPromocion = async () => {
+        if (Actualizando.value) return
+        Actualizando.value = true
+        
+        try {
+            const payload = {
+                id_producto: ProductoPromo.value.id,
+                nombre_promocion: FormPromo.value.nombre_promocion || null,
+                precio_oferta: parseFloat(FormPromo.value.precio_oferta),
+                fecha_inicio: new Date(FormPromo.value.fecha_inicio).toISOString(),
+                fecha_fin: new Date(FormPromo.value.fecha_fin).toISOString()
+            }
+            const respuesta = await fetch(`${urlover8000}/promociones/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                credentials: 'include'
+            })
+            if (respuesta.status === 401) {
+                await CerrarSesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
+                return
+            }
+            if (!respuesta.ok) {
+                const err = await respuesta.text()
+                throw new Error(err)
+            }
+            BusquedaProducto()
+            CerrarPopUp04()
+        } catch (error) {
+            console.error("Error al guardar promoción:", error)
+            alert("Hubo un error al guardar la promoción.")
+        } finally {
+            Actualizando.value = false
+        }
     }
     const SubirNuevoProducto = async() => {
         if (OpcionCategoria.value != "new") {
