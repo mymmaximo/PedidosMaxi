@@ -1624,6 +1624,29 @@
             Actualizando.value = false
         }
     }
+    const BorrarProducto = async() => {
+        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        })
+        if (EraseProducto.status === 401) {
+            await CerrarSesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            SesionExpirada.value = true
+            Iniciado.value = false
+            return
+        }
+        ProductoEli.value = {
+        id: "",
+        nombre: "",
+        imagenes: []
+        }
+        BusquedaProducto()
+        CerrarPopUp02()
+    }
     const BorrarPromocion = async () => {
         if (!FormPromo.value.id_promocion) return
         if (Actualizando.value) return
@@ -1650,29 +1673,6 @@
         } finally {
             Actualizando.value = false
         }
-    }
-    const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        })
-        if (EraseProducto.status === 401) {
-            await CerrarSesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
-            Iniciado.value = false
-            return
-        }
-        ProductoEli.value = {
-        id: "",
-        nombre: "",
-        imagenes: []
-        }
-        BusquedaProducto()
-        CerrarPopUp02()
     }
     const BusquedaProducto = async() => {
         let url = new URL (`${urlover8000}/producto/`)

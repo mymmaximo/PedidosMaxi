@@ -495,6 +495,128 @@
                 </div>
             </transition>
         </Teleport>
+        <!-- Promocion Producto -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="VentanaPromocion"
+                @click.self="CerrarPopUp05" 
+                class="fondo"
+                >
+                    <div class="popup !max-w-md">
+                        <form @submit.prevent="GuardarPromocion" 
+                        class="flex flex-col gap-4"
+                        >
+                            <h1 class="text-center !text-xl !mb-2">
+                            🏷️ Oferta: {{ ProductoPromo.nombre }}
+                            </h1>
+                            <div class="bg-gray-50 rounded-xl p-2 shadow-inner mx-auto w-full max-w-[200px]">
+                                <div v-if="ProductoPromo.imagenes.length > 0"
+                                class="flex flex-row gap-2 overflow-x-auto items-center justify-between w-full snap-x"
+                                >
+                                    <button type="button" 
+                                    @click="BackImg(ProductoPromo)" 
+                                    :disabled="GetImg(ProductoPromo.id) === 0" 
+                                    class="botonflecha !p-1 !h-8 !w-8 shrink-0">
+                                    ❮
+                                    </button>
+                                    <div class="shrink-0 flex justify-center w-24 h-24 relative rounded-lg overflow-hidden border-2 border-white shadow-sm">
+                                        <img v-show="ImagenesCargando[ProductoPromo.id] === false"
+                                        :src=ObtenerImgUrl(ProductoPromo.imagenes[GetImg(ProductoPromo.id)].s3_key)
+                                        @load="ImagenesCargando[ProductoPromo.id] = false"
+                                        class="w-full h-full object-cover"
+                                        >
+                                        <div v-if="ImagenesCargando[ProductoPromo.id] !== false" 
+                                        class="absolute inset-0 flex items-center justify-center bg-gray-100"
+                                        >
+                                            <img src="../assets/loading.gif" 
+                                            alt="Cargando..." 
+                                            class="w-8 h-8 opacity-50"
+                                            >
+                                        </div>
+                                    </div>
+                                    <button type="button" 
+                                    @click="NextImg(ProductoPromo)" 
+                                    :disabled="GetImg(ProductoPromo.id) === ProductoPromo.imagenes.length - 1" 
+                                    class="botonflecha !p-1 !h-8 !w-8 shrink-0">
+                                    ❯
+                                    </button>
+                                </div>
+                                <img v-else src="../assets/images.png" 
+                                class="w-24 h-24 object-cover mx-auto rounded-lg shadow-sm"
+                                >
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <div>
+                                    <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Nombre (Opcional)</h2>
+                                    <input placeholder="Ej: Cyber Monday..."
+                                    type="text" 
+                                    v-model="FormPromo.nombre_promocion" 
+                                    maxlength="100"
+                                    class="w-full px-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
+                                    >
+                                </div>
+                                <div>
+                                    <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Precio de Oferta</h2>
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                                        <input placeholder="Nuevo Precio"
+                                        type="number" 
+                                        v-model="FormPromo.precio_oferta" 
+                                        maxlength="8"
+                                        required
+                                        class="w-full pl-8 pr-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
+                                        >
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Inicio</h2>
+                                        <input 
+                                        type="datetime-local" 
+                                        v-model="FormPromo.fecha_inicio"
+                                        required
+                                        class="w-full px-3 py-2 border-2 border-green-200 rounded-xl text-sm focus:border-green-500 focus:outline-none transition-colors"
+                                        >
+                                    </div>
+                                    <div>
+                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Fin</h2>
+                                        <input 
+                                        type="datetime-local" 
+                                        v-model="FormPromo.fecha_fin"
+                                        required
+                                        class="w-full px-3 py-2 border-2 border-green-200 rounded-xl text-sm focus:border-green-500 focus:outline-none transition-colors"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-row justify-center gap-2 mt-2 pt-4 border-t-2 border-gray-100">
+                                <button type="submit" 
+                                class="botoncon flex-1 !m-0"
+                                :disabled="Actualizando"
+                                >
+                                {{ FormPromo.id_promocion ? 'Actualizar' : 'Guardar' }}
+                                </button>
+                                
+                                <button type="button" 
+                                v-if="FormPromo.id_promocion"
+                                @click="BorrarPromocion"
+                                class="botonx flex-1 !static !bg-red-500 hover:!bg-red-600 !text-white !p-2 !rounded-xl !text-sm !m-0 flex items-center justify-center gap-1 shadow-md hover:shadow-lg transition-all"
+                                :disabled="Actualizando"
+                                >
+                                🗑️ Borrar
+                                </button>
+                                <button @click="CerrarPopUp05" 
+                                type="button" 
+                                class="botonc flex-1 !m-0"
+                                >
+                                Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </transition>
+        </Teleport>
         <!-- Tabla de Productos y Barra de Filtros -->
         <div class="pagina">
             <div class="flex w-full flex-col lg:flex-row">
@@ -656,12 +778,28 @@
                                             class="imagen"
                                             >
                                             <div>
+                                                <div v-if="i.en_promocion" 
+                                                class="absolute top-2 left-2 z-30 bg-red-500 text-white text-xs font-black px-2 py-1 rounded-md shadow-md"
+                                                >
+                                                    🔥 {{ i.nombre_promocion || 'OFERTA' }}
+                                                </div>
+
                                                 <h2 class="font-bold">
                                                 {{ i.nombre }}
                                                 </h2>
-                                                <h2>
-                                                $ {{ FormatearPrecio(i.precio) }}
-                                                </h2>
+                                                <div class="flex flex-col">
+                                                    <h2 v-if="i.en_promocion" 
+                                                    class="text-gray-400 text-xs font-bold line-through -mb-1 mt-0.5"
+                                                    >
+                                                        $ {{ FormatearPrecio(i.precio) }}
+                                                    </h2>
+                                                    <h2 :class="[
+                                                        'font-bold', 
+                                                        i.en_promocion ? 'text-red-600' : 'text-green-600'
+                                                    ]">
+                                                        $ {{ FormatearPrecio(i.en_promocion ? i.precio_oferta : i.precio) }}
+                                                    </h2>
+                                                </div>
                                                 <div v-if="VerificarRol([1, 2, 4, 5])">
                                                     <h3>
                                                     {{ i.codigo_barra }} 
@@ -683,6 +821,15 @@
                                                         <span class="hidden xl:inline ml-1 truncate">
                                                         Editar
                                                         </span>
+                                                        <button @click.stop="AbrirPopUp05(i)" 
+                                                        v-if="VerificarRol([1, 2, 3])" 
+                                                        class="botont !bg-blue-50 !border-blue-200 !text-blue-700 hover:!bg-blue-100 !px-2 !py-2 !text-sm"
+                                                        >
+                                                        🏷️
+                                                        <span class="hidden xl:inline ml-1 truncate">
+                                                        Promoción
+                                                        </span>
+                                                        </button>
                                                         </button>
                                                         <button @click.stop="Eliminacion(i)" 
                                                         v-if="VerificarRol([1, 2]) && i.activo" 
@@ -831,11 +978,23 @@
         nombre: "",
         imagenes: []
     })
+    const ProductoPromo = ref({
+        id: "",
+        nombre: "",
+        imagenes: []
+    })
+    const FormPromo = ref({
+        nombre_promocion: "",
+        precio_oferta: "",
+        fecha_inicio: "",
+        fecha_fin: ""
+    })
     const prop = defineProps (['path','size'])
     const { path } = toRefs (prop)
     const router = useRouter()
     // ----- Variables Booleanas ----- //
     const ActualizarCajaPDel = ref (false)
+    const VentanaPromocion = ref(false)
     const VentanaCompra = ref (false)
     const VentanaBanner = ref (false)
     const MostrarConfir = ref(false)
@@ -998,6 +1157,43 @@
 		VentanaCompra.value = true
 		document.body.style.overflow = "hidden"
 	}
+	const AbrirPopUp05 = async (producto_fila) => {
+		ProductoPromo.value.id = producto_fila.id
+        ProductoPromo.value.nombre = producto_fila.nombre
+        ProductoPromo.value.imagenes = producto_fila.imagenes
+        FormPromo.value = { 
+            id_promocion: null,
+            nombre_promocion: "", 
+            precio_oferta: "", 
+            fecha_inicio: "", 
+            fecha_fin: "" 
+        }
+        try {
+            const respuesta = await fetch(`${urlover8000}/promociones/`, {
+                headers: { "X-Tunnel-Skip-AntiPhishing-Page": "true" },
+                credentials: 'include'
+            })
+            if (respuesta.ok) {
+                const todasLasPromos = await respuesta.json()
+                const promoExistente = todasLasPromos.find(
+                    p => p.id_producto === producto_fila.id
+                )
+                if (promoExistente) {
+                    FormPromo.value = {
+                        id_promocion: promoExistente.id,
+                        nombre_promocion: promoExistente.nombre_promocion || "",
+                        precio_oferta: promoExistente.precio_oferta,
+                        fecha_inicio: new Date(promoExistente.fecha_inicio).toISOString().slice(0, 16),
+                        fecha_fin: new Date(promoExistente.fecha_fin).toISOString().slice(0, 16)
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error buscando promo existente:", error)
+        }
+        VentanaPromocion.value = true
+        document.body.style.overflow = "hidden"
+	}
     const AccionCarta = (producto_fila) => {
         if (VerificarRol([1, 2, 3, 4, 5, 6])) {
             Edicion(producto_fila)
@@ -1073,6 +1269,10 @@
         ProductoCantidad.value = 1
 		document.body.style.overflow = "auto"
 	}
+    const CerrarPopUp05 = () => {
+        VentanaPromocion.value = false
+        document.body.style.overflow = "auto"
+    }
     const ComienzoToque = (evento) => {
         inicioX = evento.changedTouches[0].clientX
         inicioY = evento.changedTouches[0].clientY
@@ -1421,6 +1621,33 @@
         BusquedaProducto()
         CerrarPopUp02()
     }
+    const BorrarPromocion = async () => {
+        if (!FormPromo.value.id_promocion) return
+        if (Actualizando.value) return
+        Actualizando.value = true
+        try {
+            const respuesta = await fetch(`${urlover8000}/promociones/id/${FormPromo.value.id_promocion}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            })
+            if (respuesta.status === 401) {
+                await CerrarSesion()
+                SesionExpirada.value = true
+                Iniciado.value = false
+                return
+            }
+            if (!respuesta.ok) {
+                throw new Error("No se pudo eliminar la promoción")
+            }
+            BusquedaProducto()
+            CerrarPopUp05()
+        } catch (error) {
+            console.error(error)
+            alert("Hubo un error al eliminar la promoción.")
+        } finally {
+            Actualizando.value = false
+        }
+    }
     const BusquedaProducto = async() => {
         let url = new URL (`${urlover8000}/producto/`)
 		url.searchParams.append('limit', 1000)
@@ -1578,6 +1805,46 @@
         VistaPrevia.value = []
         AbrirPopUp01()
     }
+    const GuardarPromocion = async () => {
+        if (Actualizando.value) return
+        Actualizando.value = true
+        
+        try {
+            const payload = {
+                id_producto: ProductoPromo.value.id,
+                nombre_promocion: FormPromo.value.nombre_promocion || null,
+                precio_oferta: parseFloat(FormPromo.value.precio_oferta),
+                fecha_inicio: new Date(FormPromo.value.fecha_inicio).toISOString(),
+                fecha_fin: new Date(FormPromo.value.fecha_fin).toISOString()
+            }
+            const respuesta = await fetch(`${urlover8000}/promociones/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                credentials: 'include'
+            })
+            if (respuesta.status === 401) {
+                await CerrarSesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
+                return
+            }
+            if (!respuesta.ok) {
+                const err = await respuesta.text()
+                throw new Error(err)
+            }
+            BusquedaProducto()
+            CerrarPopUp05()
+        } catch (error) {
+            console.error("Error al guardar promoción:", error)
+            alert("Hubo un error al guardar la promoción.")
+        } finally {
+            Actualizando.value = false
+        }
+    }
     const SaveBanner = async () => {
         if (BannersNuevos.value.length > 0) {
             await SubirBanner()
@@ -1598,12 +1865,15 @@
     const SumarCarrito = () => {
         if (!ProductoActual.value)
             return
+        const precioEfectivo = ProductoActual.value.en_promocion 
+            ? ProductoActual.value.precio_oferta 
+            : ProductoActual.value.precio;
         const nuevoProducto = {
             id_pedido: PedidoActual.value,
             nombre_producto: ProductoActual.value.nombre,
             id_producto: ProductoActual.value.id,
             cantidad: ProductoCantidad.value,
-            precio_unitario: ProductoActual.value.precio,
+            precio_unitario: precioEfectivo,
             stock_producto: ProductoActual.value.stock,
             imagenes: ProductoActual.value.imagenes
         }
