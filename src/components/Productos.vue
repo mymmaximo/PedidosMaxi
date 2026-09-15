@@ -555,6 +555,30 @@
                                     </option>
                                 </select>
                             </div>
+                            <div class="flex flex-col 
+                            md:p-4 p-2 my-2
+                            border-t-2 border-b-2 border-green-50"
+                            >
+                                <h2>
+                                🏷️ Promociones
+                                </h2>
+                                <label class="flex items-center 
+                                gap-2 cursor-pointer mt-1 
+                                hover:text-green-700 transition-colors"
+                                >
+                                    <input 
+                                    type="checkbox" 
+                                    v-model="filtroPromo"
+                                    class="w-5 h-5 text-green-600 
+                                    rounded border-gray-300 focus:ring-green-500 
+                                    cursor-pointer"
+                                    >
+                                    <span class="font-bold 
+                                    text-gray-700">
+                                    Solo mostrar Ofertas
+                                    </span>
+                                </label>
+                            </div>
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2>
                                 Filtro Categoria
@@ -1196,6 +1220,7 @@
     const HayMasPaginas = ref(false)
     const Actualizando = ref(false)
     const CargandoTrue = ref(true)
+    const filtroPromo = ref(false)
     const ErrorCarga = ref(false)
     const VistaLista = ref(false)
     const uploading = ref (false)
@@ -1463,6 +1488,7 @@
         filtroRadio.value = 4
         filtrocat.value = ""
         filtroEst.value =  1
+        filtroPromo.value = false
         BusquedaProducto()
         filtroAct.value = false
     }
@@ -1706,6 +1732,10 @@
         }
         if (filtrocat.value !== "") {
             url.searchParams.append('filtrocat', filtrocat.value)
+            filtroAct.value = true
+        }
+        if (filtroPromo.value === true) {
+            url.searchParams.append('bool_promocion', 'true')
             filtroAct.value = true
         }
         const BusqProducto = await fetch(url.toString(), {
