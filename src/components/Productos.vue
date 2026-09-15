@@ -373,103 +373,113 @@
                 @click.self="CerrarPopUp04" 
                 class="fondo"
                 >
-                    <div class="popup">
-                        <form @submit.prevent="GuardarPromocion">
-                            <h1>
-                            Promoción: {{ ProductoPromo.nombre }}
+                    <div class="popup !max-w-md">
+                        <form @submit.prevent="GuardarPromocion" 
+                        class="flex flex-col gap-4"
+                        >
+                            <h1 class="text-center !text-xl !mb-2">
+                            🏷️ Oferta: {{ ProductoPromo.nombre }}
                             </h1>
-                            <div>
+                            <div class="bg-gray-50 rounded-xl p-2 shadow-inner mx-auto w-full max-w-[200px]">
                                 <div v-if="ProductoPromo.imagenes.length > 0"
-                                class="flex flex-row 
-                                gap-1 md:gap-3 
-                                overflow-x-auto items-center justify-center 
-                                w-full md:pb-2 snap-x pb-1"
+                                class="flex flex-row gap-2 overflow-x-auto items-center justify-between w-full snap-x"
                                 >
                                     <button type="button" 
                                     @click="BackImg(ProductoPromo)" 
                                     :disabled="GetImg(ProductoPromo.id) === 0" 
-                                    class="botonflecha">
+                                    class="botonflecha !p-1 !h-8 !w-8 shrink-0">
                                     ❮
                                     </button>
-                                    <div>
+                                    <div class="shrink-0 flex justify-center w-24 h-24 relative rounded-lg overflow-hidden border-2 border-white shadow-sm">
                                         <img v-show="ImagenesCargando[ProductoPromo.id] === false"
                                         :src=ObtenerImgUrl(ProductoPromo.imagenes[GetImg(ProductoPromo.id)].s3_key)
                                         @load="ImagenesCargando[ProductoPromo.id] = false"
-                                        class="imagencar"
+                                        class="w-full h-full object-cover"
                                         >
                                         <div v-if="ImagenesCargando[ProductoPromo.id] !== false" 
-                                        class="mt-2"
+                                        class="absolute inset-0 flex items-center justify-center bg-gray-100"
                                         >
-                                            <img src="../assets/loading.gif" alt="Cargando..." 
-                                            class="imagencar !p-4"
+                                            <img src="../assets/loading.gif" 
+                                            alt="Cargando..." 
+                                            class="w-8 h-8 opacity-50"
                                             >
                                         </div>
                                     </div>
                                     <button type="button" 
                                     @click="NextImg(ProductoPromo)" 
                                     :disabled="GetImg(ProductoPromo.id) === ProductoPromo.imagenes.length - 1" 
-                                    class="botonflecha"
-                                    >
+                                    class="botonflecha !p-1 !h-8 !w-8 shrink-0">
                                     ❯
                                     </button>
                                 </div>
                                 <img v-else src="../assets/images.png" 
-                                class="imagencar"
+                                class="w-24 h-24 object-cover mx-auto rounded-lg shadow-sm"
                                 >
                             </div>
-                            <div class="mt-2">
-                                <h2>
-                                Nombre de la Promoción (Opcional)
-                                </h2>
-                                <input placeholder="Ej: Cyber Monday, Navidad..."
-                                type="text" 
-                                v-model="FormPromo.nombre_promocion" 
-                                maxlength="100"
-                                >
-                                <h2>
-                                Precio de Oferta
-                                </h2>
-                                <input placeholder="Nuevo Precio"
-                                type="number" 
-                                v-model="FormPromo.precio_oferta" 
-                                maxlength="8"
-                                required
-                                >
-                                <h2>
-                                Fecha y Hora de Inicio
-                                </h2>
-                                <input 
-                                type="datetime-local" 
-                                v-model="FormPromo.fecha_inicio"
-                                required
-                                >
-                                <h2>
-                                Fecha y Hora de Fin
-                                </h2>
-                                <input 
-                                type="datetime-local" 
-                                v-model="FormPromo.fecha_fin"
-                                required
-                                >
+                            <div class="flex flex-col gap-3">
+                                <div>
+                                    <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Nombre (Opcional)</h2>
+                                    <input placeholder="Ej: Cyber Monday..."
+                                    type="text" 
+                                    v-model="FormPromo.nombre_promocion" 
+                                    maxlength="100"
+                                    class="w-full px-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
+                                    >
+                                </div>
+                                <div>
+                                    <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Precio de Oferta</h2>
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                                        <input placeholder="Nuevo Precio"
+                                        type="number" 
+                                        v-model="FormPromo.precio_oferta" 
+                                        maxlength="8"
+                                        required
+                                        class="w-full pl-8 pr-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
+                                        >
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Inicio</h2>
+                                        <input 
+                                        type="datetime-local" 
+                                        v-model="FormPromo.fecha_inicio"
+                                        required
+                                        class="w-full px-3 py-2 border-2 border-green-200 rounded-xl text-sm focus:border-green-500 focus:outline-none transition-colors"
+                                        >
+                                    </div>
+                                    <div>
+                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Fin</h2>
+                                        <input 
+                                        type="datetime-local" 
+                                        v-model="FormPromo.fecha_fin"
+                                        required
+                                        class="w-full px-3 py-2 border-2 border-green-200 rounded-xl text-sm focus:border-green-500 focus:outline-none transition-colors"
+                                        >
+                                    </div>
+                                </div>
                             </div>
-                            <div class="botones mt-4">
+                            <div class="flex flex-row justify-center gap-2 mt-2 pt-4 border-t-2 border-gray-100">
                                 <button type="submit" 
-                                class="botoncon"
+                                class="botoncon flex-1 !m-0"
                                 :disabled="Actualizando"
                                 >
                                 {{ FormPromo.id_promocion ? 'Actualizar' : 'Guardar' }}
                                 </button>
+                                
                                 <button type="button" 
                                 v-if="FormPromo.id_promocion"
                                 @click="BorrarPromocion"
-                                class="botonx !static !bg-red-600 hover:!bg-red-700 !text-white !p-2 !rounded-xl !text-base"
+                                class="botonx flex-1 !static !bg-red-500 hover:!bg-red-600 !text-white !p-2 !rounded-xl !text-sm !m-0 flex items-center justify-center gap-1 shadow-md hover:shadow-lg transition-all"
                                 :disabled="Actualizando"
                                 >
-                                Borrar Oferta 🗑️
+                                🗑️ Borrar
                                 </button>
+
                                 <button @click="CerrarPopUp04" 
                                 type="button" 
-                                class="botonc"
+                                class="botonc flex-1 !m-0"
                                 >
                                 Cancelar
                                 </button>
@@ -967,18 +977,18 @@
                                         </div>
                                     </div>
                                     <div :class="VistaLista 
-                                    ? 'tarjeta-acciones !mt-4 sm:!mt-0' 
+                                    ? 'tarjeta-acciones flex flex-col gap-2 !mt-4 sm:!mt-0 w-full sm:w-auto ml-auto shrink-0' 
                                     : 'flex flex-wrap w-full mt-auto justify-center items-center pt-3 gap-1.5 sm:gap-2'"
                                     >
                                         <button @click.stop="Edicion(i)" 
                                         v-if="VerificarRol([1, 2, 4, 5])" 
                                         :class="VistaLista 
-                                        ? 'btn-chico-gris' 
+                                        ? 'btn-chico-gris w-full justify-center' 
                                         : 'botont !px-2 !py-2 !text-sm'"
                                         >
                                         ✏️
                                         <span :class="VistaLista 
-                                        ? 'inline' 
+                                        ? 'inline ml-1' 
                                         : 'hidden xl:inline ml-1 truncate'"
                                         >
                                         Editar
@@ -987,23 +997,26 @@
                                         <button @click.stop="AbrirPopUp04(i)" 
                                         v-if="VerificarRol([1, 2])" 
                                         :class="VistaLista 
-                                        ? 'btn-chico-gris !bg-blue-600 hover:!bg-blue-700' 
+                                        ? 'btn-chico-gris !bg-blue-600 hover:!bg-blue-700 !text-white w-full justify-center' 
                                         : 'botont !bg-blue-50 !border-blue-200 !text-blue-700 hover:!bg-blue-100 !px-2 !py-2 !text-sm'"
                                         >
                                         🏷️
-                                        <span class="hidden xl:inline ml-1 truncate">
+                                        <span :class="VistaLista 
+                                        ? 'inline ml-1' 
+                                        : 'hidden xl:inline ml-1 truncate'"
+                                        >
                                         Promoción
                                         </span>
                                         </button>
                                         <button @click.stop="Eliminacion(i)" 
                                         v-if="VerificarRol([1, 2]) && i.activo" 
                                         :class="VistaLista 
-                                        ? 'btn-chico-rojo' 
+                                        ? 'btn-chico-rojo w-full justify-center' 
                                         : 'botonc !px-2 !py-2 !text-sm'"
                                         >
                                         ❌
                                         <span :class="VistaLista 
-                                        ? 'inline' 
+                                        ? 'inline ml-1' 
                                         : 'hidden xl:inline ml-1 truncate'"
                                         >
                                         Eliminar
@@ -1012,12 +1025,12 @@
                                         <button @click.stop="Eliminacion(i)" 
                                         v-if="VerificarRol([1, 2]) && !i.activo" 
                                         :class="VistaLista 
-                                        ? 'btn-chico-verde' 
+                                        ? 'btn-chico-verde w-full justify-center' 
                                         : 'botoncon !px-2 !py-2 !text-sm'"
                                         >
                                         🕊️
                                         <span :class="VistaLista 
-                                        ? 'inline' 
+                                        ? 'inline ml-1' 
                                         : 'hidden xl:inline ml-1 truncate'"
                                         >
                                         Reactivar
@@ -1027,10 +1040,14 @@
                                         :disabled="CarritoStock(i) === 0"
                                         v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
                                         :class="VistaLista 
-                                        ? 'btn-chico-verde !bg-green-600 !text-white hover:!bg-green-700' 
-                                        : 'botoncon !px-2 !py-2 !text-sm'">
+                                        ? 'btn-chico-verde !bg-green-600 !text-white hover:!bg-green-700 w-full justify-center' 
+                                        : 'botoncon !px-2 !py-2 !text-sm'"
+                                        >
                                         🛍️
-                                        <span class="hidden xl:inline ml-1 truncate">
+                                        <span :class="VistaLista 
+                                        ? 'inline ml-1' 
+                                        : 'hidden xl:inline ml-1 truncate'"
+                                        >
                                         Comprar
                                         </span>
                                         </button>
