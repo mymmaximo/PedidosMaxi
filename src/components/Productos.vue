@@ -331,7 +331,7 @@
                                 Precio Total
                                 </span>
                                 <span class="total-valor">
-                                    $ {{ FormatearPrecio(ProductoActual.precio * ProductoCantidad) }}
+                                    $ {{ FormatearPrecio((ProductoActual.en_promocion ? ProductoActual.precio_oferta : ProductoActual.precio) * ProductoCantidad) }}
                                 </span>
                             </div>
                         </div>
@@ -1913,12 +1913,15 @@
     const SumarCarrito = () => {
         if (!ProductoActual.value)
             return
+        const precioEfectivo = ProductoActual.value.en_promocion 
+            ? ProductoActual.value.precio_oferta 
+            : ProductoActual.value.precio;
         const nuevoProducto = {
             id_pedido: PedidoActual.value,
             nombre_producto: ProductoActual.value.nombre,
             id_producto: ProductoActual.value.id,
             cantidad: ProductoCantidad.value,
-            precio_unitario: ProductoActual.value.precio,
+            precio_unitario: precioEfectivo,
             stock_producto: ProductoActual.value.stock,
             imagenes: ProductoActual.value.imagenes
         }
