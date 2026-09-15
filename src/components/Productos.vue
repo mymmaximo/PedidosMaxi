@@ -555,27 +555,24 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="flex flex-col 
-                            md:p-4 p-2 my-2
-                            border-t-2 border-b-2 border-green-50"
-                            >
-                                <h2>
-                                🏷️ Promociones
+                            <div class="flex flex-col md:px-4 md:py-3 p-2 my-2 border-y-2 border-green-100 bg-green-50/50 rounded-xl">
+                                <h2 class="!mb-3 flex items-center gap-1 text-green-800">
+                                🔥 Promociones
                                 </h2>
-                                <label class="flex items-center 
-                                gap-2 cursor-pointer mt-1 
-                                hover:text-green-700 transition-colors"
-                                >
+                                <label class="relative inline-flex items-center cursor-pointer w-fit pl-1">
                                     <input 
                                     type="checkbox" 
                                     v-model="filtroPromo"
-                                    class="w-5 h-5 text-green-600 
-                                    rounded border-gray-300 focus:ring-green-500 
-                                    cursor-pointer"
+                                    class="sr-only peer"
                                     >
-                                    <span class="font-bold 
-                                    text-gray-700">
-                                    Solo mostrar Ofertas
+                                    <div class="w-11 h-6 bg-gray-300 rounded-full peer 
+                                    peer-checked:after:translate-x-full peer-checked:after:border-white 
+                                    after:content-[''] after:absolute after:top-0.5 after:left-[6px] 
+                                    after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                    after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500 shadow-inner">
+                                    </div>
+                                    <span class="ml-3 font-bold text-gray-700 select-none">
+                                    Ver solo ofertas
                                     </span>
                                 </label>
                             </div>
