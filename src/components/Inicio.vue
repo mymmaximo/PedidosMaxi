@@ -600,7 +600,7 @@
                                 <button type="button" 
                                 v-if="FormPromo.id_promocion"
                                 @click="BorrarPromocion"
-                                class="botonx flex-1 !static !bg-red-500 hover:!bg-red-600 !text-white !p-2 !rounded-xl !text-sm !m-0 flex items-center justify-center gap-1 shadow-md hover:shadow-lg transition-all"
+                                class="botonc flex-1 !m-0"
                                 :disabled="Actualizando"
                                 >
                                 🗑️ Borrar
