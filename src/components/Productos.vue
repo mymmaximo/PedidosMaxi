@@ -471,7 +471,7 @@
                                 <button type="button" 
                                 v-if="FormPromo.id_promocion"
                                 @click="BorrarPromocion"
-                                class="botonx flex-1 !static !bg-red-500 hover:!bg-red-600 !text-white !p-2 !rounded-xl !text-sm !m-0 flex items-center justify-center gap-1 shadow-md hover:shadow-lg transition-all"
+                                class="botonc flex-1 !m-0"
                                 :disabled="Actualizando"
                                 >
                                 🗑️ Borrar
@@ -555,26 +555,68 @@
                                     </option>
                                 </select>
                             </div>
+                            <!-- Switch de Promociones y Porcentaje -->
                             <div class="flex flex-col md:px-4 md:py-3 p-2 my-2 border-y-2 border-green-100 bg-green-50/50 rounded-xl">
-                                <h2 class="!mb-3 flex items-center gap-1 text-green-800">
+                                <h2 class="!mb-3 flex items-center gap-1 text-green-800 font-bold">
                                 🔥 Promociones
                                 </h2>
                                 <label class="relative inline-flex items-center cursor-pointer w-fit pl-1">
                                     <input 
                                     type="checkbox" 
                                     v-model="filtroPromo"
+                                    @change="filtroDescuentoMin = 0"
                                     class="sr-only peer"
                                     >
                                     <div class="w-11 h-6 bg-gray-300 rounded-full peer 
                                     peer-checked:after:translate-x-full peer-checked:after:border-white 
-                                    after:content-[''] after:absolute after:left-[6px] 
+                                    after:content-[''] after:absolute after:top-0.5 after:left-[6px] 
                                     after:bg-white after:border-gray-300 after:border after:rounded-full 
                                     after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500 shadow-inner">
                                     </div>
-                                    <span class="ml-3 font-bold text-gray-700 select-none">
-                                    Ver solo ofertas
-                                    </span>
+                                    <span class="ml-3 font-bold text-gray-700 select-none">Ver ofertas</span>
                                 </label>
+                                
+                                <!-- Opciones de Porcentaje (Solo aparecen si el switch está prendido) -->
+                                <div v-if="filtroPromo" class="flex flex-col gap-2 mt-3 pt-3 border-t border-green-200/50">
+                                    <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">
+                                    Descuento Mínimo:
+                                    </span>
+                                    <label class="text-sm text-gray-700 cursor-pointer">
+                                        <input 
+                                        :value="0" 
+                                        type="radio" 
+                                        v-model="filtroDescuentoMin" 
+                                        class="mr-1 accent-green-600"
+                                        > 
+                                        Cualquier descuento
+                                    </label>
+                                    <label class="text-sm text-gray-700 cursor-pointer">
+                                        <input 
+                                        :value="15" 
+                                        type="radio" 
+                                        v-model="filtroDescuentoMin"
+                                        class="mr-1 accent-green-600"
+                                        > 
+                                        15% OFF o más
+                                    </label>
+                                    <label class="text-sm text-gray-700 cursor-pointer">
+                                        <input 
+                                        :value="30" 
+                                        type="radio" 
+                                        v-model="filtroDescuentoMin" 
+                                        class="mr-1 accent-green-600"
+                                        > 
+                                        30% OFF o más
+                                    </label>
+                                    <label class="text-sm text-red-600 font-bold cursor-pointer">
+                                        <input :value="50" 
+                                        type="radio" 
+                                        v-model="filtroDescuentoMin" 
+                                        class="mr-1 accent-red-600"
+                                        > 
+                                        ¡50% OFF o más!
+                                    </label>
+                                </div>
                             </div>
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2>
@@ -1241,6 +1283,7 @@
     // ----- Variables Simples ----- //
     const OpcionCategoriaA = ref ("new")
     const OpcionCategoria = ref ("new")
+    const filtroDescuentoMin = ref(0)
     const ItemsPorPagina = ref(24)
     const filtroRadio = ref(4)
     const filtroEst = ref (1)
@@ -1485,6 +1528,7 @@
         filtroRadio.value = 4
         filtrocat.value = ""
         filtroEst.value =  1
+        filtroDescuentoMin.value = 0
         filtroPromo.value = false
         BusquedaProducto()
         filtroAct.value = false
@@ -1734,6 +1778,9 @@
         if (filtroPromo.value === true) {
             url.searchParams.append('bool_promocion', 'true')
             filtroAct.value = true
+            if (filtroDescuentoMin.value > 0) {
+                url.searchParams.append('porcentaje_descuento_min', filtroDescuentoMin.value)
+            }
         }
         const BusqProducto = await fetch(url.toString(), {
             headers: {
