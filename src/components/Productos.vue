@@ -451,7 +451,27 @@
                                             max="99" min="1"
                                             class="w-full pr-8 pl-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors disabled:bg-gray-100"
                                             >
-                                        </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Inicio</h2>
+                                        <input 
+                                        type="datetime-local" 
+                                        v-model="FormPromo.fecha_inicio"
+                                        required
+                                        class="w-full px-3 py-2 border-2 border-green-200 rounded-xl text-sm focus:border-green-500 focus:outline-none transition-colors"
+                                        >
+                                    </div>
+                                    <div>
+                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Fin</h2>
+                                        <input 
+                                        type="datetime-local" 
+                                        v-model="FormPromo.fecha_fin"
+                                        required
+                                        class="w-full px-3 py-2 border-2 border-green-200 rounded-xl text-sm focus:border-green-500 focus:outline-none transition-colors"
+                                        >
                                     </div>
                                 </div>
                             </div>
