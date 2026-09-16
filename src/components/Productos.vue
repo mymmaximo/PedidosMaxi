@@ -418,7 +418,9 @@
                             </div>
                             <div class="flex flex-col gap-3">
                                 <div>
-                                    <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Nombre (Opcional)</h2>
+                                    <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">
+                                    Nombre (Opcional)
+                                    </h2>
                                     <input placeholder="Ej: Cyber Monday..."
                                     type="text" 
                                     v-model="FormPromo.nombre_promocion" 
@@ -426,17 +428,40 @@
                                     class="w-full px-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
                                     >
                                 </div>
-                                <div>
-                                    <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Precio de Oferta</h2>
-                                    <div class="relative">
-                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
-                                        <input placeholder="Nuevo Precio"
-                                        type="number" 
-                                        v-model="FormPromo.precio_oferta" 
-                                        maxlength="8"
-                                        required
-                                        class="w-full pl-8 pr-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
-                                        >
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1 text-center">
+                                        Precio de Oferta
+                                        </h2>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">
+                                            $
+                                            </span>
+                                            <input placeholder="Monto"
+                                            type="number" 
+                                            v-model="FormPromo.precio_oferta" 
+                                            :disabled="FormPromo.porcentaje_descuento > 0"
+                                            maxlength="8"
+                                            class="w-full pl-8 pr-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors disabled:bg-gray-100"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1 text-center">
+                                        Descuento (%)
+                                        </h2>
+                                        <div class="relative">
+                                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">
+                                            %
+                                            </span>
+                                            <input placeholder="Ej: 20"
+                                            type="number" 
+                                            v-model="FormPromo.porcentaje_descuento" 
+                                            :disabled="FormPromo.precio_oferta > 0"
+                                            max="99" min="1"
+                                            class="w-full pr-8 pl-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors disabled:bg-gray-100"
+                                            >
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1005,11 +1030,16 @@
                                             {{ i.categoria }}
                                             </h3>
                                             <div class="flex flex-col">
-                                                <h2 v-if="i.en_promocion" 
-                                                class="text-gray-400 text-sm font-bold line-through -mb-1 mt-1"
-                                                >
-                                                $ {{ FormatearPrecio(i.precio) }}
-                                                </h2>
+                                                <div v-if="i.en_promocion" class="flex items-center gap-2 -mb-1 mt-1">
+                                                    <h2 class="text-gray-400 text-sm font-bold line-through">
+                                                    $ {{ FormatearPrecio(i.precio) }}
+                                                    </h2>
+                                                    <span v-if="i.porcentaje_descuento" 
+                                                    class="text-xs font-black text-white bg-green-500 px-1.5 py-0.5 rounded"
+                                                    >
+                                                    {{ i.porcentaje_descuento }}% OFF
+                                                    </span>
+                                                </div>
                                                 <h2 :class="[
                                                 VistaLista ? 'text-xl font-black mt-1' : 'font-bold', 
                                                 i.en_promocion ? 'text-red-600' : 'text-green-600'
@@ -1241,6 +1271,7 @@
     const FormPromo = ref({
         nombre_promocion: "",
         precio_oferta: "",
+        porcentaje_descuento: "",
         fecha_inicio: "",
         fecha_fin: ""
     })
@@ -1405,6 +1436,7 @@
             id_promocion: null,
             nombre_promocion: "", 
             precio_oferta: "", 
+            porcentaje_descuento: "",
             fecha_inicio: "", 
             fecha_fin: "" 
         }
@@ -1423,6 +1455,7 @@
                         id_promocion: promoExistente.id,
                         nombre_promocion: promoExistente.nombre_promocion || "",
                         precio_oferta: promoExistente.precio_oferta,
+                        porcentaje_descuento: promoExistente.porcentaje_descuento || "",
                         fecha_inicio: new Date(promoExistente.fecha_inicio).toISOString().slice(0, 16),
                         fecha_fin: new Date(promoExistente.fecha_fin).toISOString().slice(0, 16)
                     }
@@ -1890,7 +1923,8 @@
             const payload = {
                 id_producto: ProductoPromo.value.id,
                 nombre_promocion: FormPromo.value.nombre_promocion || null,
-                precio_oferta: parseFloat(FormPromo.value.precio_oferta),
+                precio_oferta: FormPromo.value.precio_oferta ? parseFloat(FormPromo.value.precio_oferta) : null,
+                porcentaje_descuento: FormPromo.value.porcentaje_descuento ? parseInt(FormPromo.value.porcentaje_descuento) : null,
                 fecha_inicio: new Date(FormPromo.value.fecha_inicio).toISOString(),
                 fecha_fin: new Date(FormPromo.value.fecha_fin).toISOString()
             }
