@@ -427,6 +427,7 @@
                                     >
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
+                                    <div class="grid grid-cols-2 gap-3">
                                     <div>
                                         <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1 text-center">Precio de Oferta</h2>
                                         <div class="relative">
@@ -440,6 +441,20 @@
                                             >
                                         </div>
                                     </div>
+                                    <div>
+                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1 text-center">Descuento (%)</h2>
+                                        <div class="relative">
+                                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">%</span>
+                                            <input placeholder="Ej: 20"
+                                            type="number" 
+                                            v-model="FormPromo.porcentaje_descuento" 
+                                            :disabled="FormPromo.precio_oferta > 0"
+                                            max="99" min="1"
+                                            class="w-full pr-8 pl-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors disabled:bg-gray-100"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
                                     <div>
                                         <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1 text-center">Descuento (%)</h2>
                                         <div class="relative">
@@ -1000,22 +1015,22 @@
                                             {{ i.categoria }}
                                             </h3>
                                             <div class="flex flex-col">
-                                                <div v-if="i.en_promocion" class="flex items-center gap-2 -mb-1 mt-1">
-                                                    <h2 class="text-gray-400 text-sm font-bold line-through">
-                                                        $ {{ FormatearPrecio(i.precio) }}
+                                                    <div v-if="i.en_promocion" class="flex items-center gap-2 -mb-1 mt-1">
+                                                        <h2 class="text-gray-400 text-sm font-bold line-through">
+                                                            $ {{ FormatearPrecio(i.precio) }}
+                                                        </h2>
+                                                        <span v-if="i.porcentaje_descuento" class="text-xs font-black text-white bg-green-500 px-1.5 py-0.5 rounded">
+                                                            {{ i.porcentaje_descuento }}% OFF
+                                                        </span>
+                                                    </div>
+                                                    <h2 :class="[
+                                                    VistaLista ? 'text-xl font-black mt-1' : 'font-bold', 
+                                                    i.en_promocion ? 'text-red-600' : 'text-green-600',
+                                                    !i.en_promocion ? 'mt-1' : ''
+                                                    ]">
+                                                    $ {{ FormatearPrecio(i.en_promocion ? i.precio_oferta : i.precio) }}
                                                     </h2>
-                                                    <span v-if="i.porcentaje_descuento" class="text-xs font-black text-white bg-green-500 px-1.5 py-0.5 rounded">
-                                                        {{ i.porcentaje_descuento }}% OFF
-                                                    </span>
                                                 </div>
-                                                <h2 :class="[
-                                                VistaLista ? 'text-xl font-black mt-1' : 'font-bold', 
-                                                i.en_promocion ? 'text-red-600' : 'text-green-600',
-                                                !i.en_promocion ? 'mt-1' : ''
-                                                ]">
-                                                $ {{ FormatearPrecio(i.en_promocion ? i.precio_oferta : i.precio) }}
-                                                </h2>
-                                            </div>
                                             <div v-if="VerificarRol([1, 2, 4, 5])"
                                             :class="VistaLista 
                                             ? 'mt-1' 
