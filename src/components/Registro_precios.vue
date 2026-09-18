@@ -91,25 +91,25 @@
                                 </h2>
                                 <input placeholder="Fecha de Actualizacion Max..."
                                 type="date"
-                                v-model="fecha_upgrade_max" 
+                                v-model="fecha_inicio_max" 
                                 >
                                 <input placeholder="Fecha de Actualizacion Min..."
                                 type="date"
-                                v-model="fecha_upgrade_min" 
+                                v-model="fecha_inicio_min" 
                                 >
                             </div>
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2 class="p-2">
                                 Filtros de Precio Viejo
                                 </h2>
-                                <input placeholder="Precio Viejo Max..."
+                                <input placeholder="Precio Anterior Max..."
                                 type="number"
-                                v-model="precio_viejo_max" 
+                                v-model="precio_anterior_max" 
                                 maxlength="10"
                                 >
-                                <input placeholder="Precio Viejo Min..."
+                                <input placeholder="Precio Anterior Min..."
                                 type="number"
-                                v-model="precio_viejo_min" 
+                                v-model="precio_anterior_min" 
                                 maxlength="10"
                                 >
                             </div>
@@ -294,23 +294,47 @@
                                     </div>
                                 </div>
                                 <div class="lilbox">
+                                    <h2 class="mb-2">
+                                    <span class="px-2 py-1 rounded-full 
+                                    text-xs font-bold text-white 
+                                    shadow-sm" 
+                                    :class="i.es_promocion ? 'bg-red-500' : 'bg-blue-500'"
+                                    >
+                                        {{ i.es_promocion ? '🔥 Oferta' : '🔄 Cambio' }}
+                                    </span>
+                                    <span v-if="i.motivo" 
+                                    class="ml-2 font-semibold 
+                                    text-gray-700"
+                                    >
+                                    {{ i.motivo }}
+                                    </span>
+                                    </h2>
                                     <h2>
                                     <span class="text-xs text-gray-500 font-bold mb-1">
-                                    Precio Viejo: 
+                                    Precio Anterior: 
                                     </span>
-                                    $ {{ FormatearPrecio(i.precio_viejo) }}
+                                    $ {{ FormatearPrecio(i.precio_anterior) }}
                                     </h2>
                                     <h2>
                                     <span class="text-gray-500 font-medium text-sm">
                                     Precio Nuevo: 
-                                    </span>
+                                    </span
+                                    class="font-bold" 
+                                    :class="i.precio_nuevo < i.precio_anterior ? 'text-green-600' : 'text-red-600'"
+                                    >
                                     $ {{ FormatearPrecio(i.precio_nuevo) }}
+                                    </h2>
+                                    <h2 v-if="i.es_promocion && i.porcentaje_descuento">
+                                    <span class="text-gray-500 font-medium text-sm">
+                                    Descuento:
+                                    </span>
+                                    {{ i.porcentaje_descuento }}%
                                     </h2>
                                     <h2>
                                     <span class="text-gray-500 font-medium text-sm">
-                                    Fecha de Act: 
+                                    Fecha Inicio: 
                                     </span>
-                                    {{ FormatoFecha(i.updated_at) }}
+                                    {{ FormatoFecha(i.fecha_inicio) }}
                                     </h2>
                                 </div>
                             </div>
@@ -379,14 +403,15 @@
     const ListaCategoria = ref ("")
 	const precio_nuevo_max = ref ("")
 	const precio_nuevo_min = ref ("")
-	const precio_viejo_max = ref ("")
-	const precio_viejo_min = ref ("")
+	const precio_anterior_max = ref ("")
+	const precio_anterior_min = ref ("")
     const TextoNotificacion = ref("")
-	const fecha_upgrade_max = ref ("")
-	const fecha_upgrade_min = ref ("")
+	const fecha_inicio_max = ref ("")
+	const fecha_inicio_min = ref ("")
     // ----- Variables Simples ----- //
 	const Pagina = ref (0)
     const ItemsPorPagina = ref(24)
+    const es_promocion_filtro = ref(2)
     // ----- Funciones Vue ----- //
     onMounted (() => {
         CargarDatos()
@@ -492,14 +517,15 @@
     const LimpiarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
-		fecha_upgrade_max.value = ""
-		fecha_upgrade_min.value = ""
+		fecha_inicio_max.value = ""
+		fecha_inicio_min.value = ""
 		precio_nuevo_max.value = ""
 		precio_nuevo_min.value = ""
-		precio_viejo_max.value = ""
-		precio_viejo_min.value = ""
+		precio_anterior_max.value = ""
+		precio_anterior_min.value = ""
         filtrocat.value = ""
 		bool_activo.value = 2 
+        es_promocion_filtro.value = 2
         orden.value = ""
         BusquedaHistorial()
         CerrarPopUp01()
@@ -507,7 +533,7 @@
     }
     // ----- Para el Backend ----- //
     const BusquedaHistorial = async() => {
-        let url = new URL (`${urlover8000}/historial/`)
+        let url = new URL (`${urlover8000}/registro_precios/historial/`)
 		url.searchParams.append('skip', Pagina.value)
         url.searchParams.append('limit', ItemsPorPagina.value + 1)
         if (Busqueda.value !== "") {
@@ -517,12 +543,12 @@
             url.searchParams.append('orden', orden.value)
             filtroAct.value = true
         }
-        if (fecha_upgrade_max.value !== "") {
-            url.searchParams.append('fecha_upgrade_max', fecha_upgrade_max.value)
+        if (fecha_inicio_max.value !== "") {
+            url.searchParams.append('fecha_inicio_max', fecha_inicio_max.value)
             filtroAct.value = true
         }
-        if (fecha_upgrade_min.value !== "") {
-            url.searchParams.append('fecha_upgrade_min', fecha_upgrade_min.value)
+        if (fecha_inicio_min.value !== "") {
+            url.searchParams.append('fecha_inicio_min', fecha_inicio_min.value)
             filtroAct.value = true
         }
         if (precio_nuevo_max.value !== "") {
@@ -533,12 +559,19 @@
             url.searchParams.append('precio_nuevo_min', precio_nuevo_min.value)
             filtroAct.value = true
         }
-        if (precio_viejo_max.value !== "") {
-            url.searchParams.append('precio_viejo_max', precio_viejo_max.value)
+        if (precio_anterior_max.value !== "") {
+            url.searchParams.append('precio_anterior_max', precio_anterior_max.value)
             filtroAct.value = true
         }
-        if (precio_viejo_min.value !== "") {
-            url.searchParams.append('precio_viejo_min', precio_viejo_min.value)
+        if (precio_anterior_min.value !== "") {
+            url.searchParams.append('precio_anterior_min', precio_anterior_min.value)
+            filtroAct.value = true
+        }
+        if (es_promocion_filtro.value === 1) {
+            url.searchParams.append('es_promocion', 'true')
+            filtroAct.value = true
+        } else if (es_promocion_filtro.value === 0) {
+            url.searchParams.append('es_promocion', 'false')
             filtroAct.value = true
         }
         if (bool_activo.value === 1) {
