@@ -331,7 +331,7 @@
                                 Precio Total
                                 </span>
                                 <span class="total-valor">
-                                    $ {{ FormatearPrecio((ProductoActual.en_promocion ? ProductoActual.precio_oferta : ProductoActual.precio) * ProductoCantidad) }}
+                                    $ {{ FormatearPrecio((ProductoActual.en_promocion ? ProductoActual.precio_nuevo : ProductoActual.precio) * ProductoCantidad) }}
                                 </span>
                             </div>
                         </div>
@@ -499,7 +499,7 @@
                                             <input placeholder="Ej: 20"
                                             type="number" 
                                             v-model="FormPromo.porcentaje_descuento" 
-                                            :disabled="FormPromo.precio_oferta > 0"
+                                            :disabled="FormPromo.precio_nuevo > 0"
                                             max="99" min="1"
                                             class="w-full 
                                             pr-8 pl-4 py-2 
@@ -1534,8 +1534,8 @@
                 if (promoExistente) {
                     FormPromo.value = {
                         id_promocion: promoExistente.id,
-                        nombre_promocion: promoExistente.motivo || "",
-                        precio_oferta: promoExistente.precio_nuevo,
+                        motivo: promoExistente.motivo || "",
+                        precio_nuevo: promoExistente.precio_nuevo,
                         porcentaje_descuento: promoExistente.porcentaje_descuento || "",
                         fecha_inicio: new Date(promoExistente.fecha_inicio).toISOString().slice(0, 16),
                         fecha_fin: new Date(promoExistente.fecha_fin).toISOString().slice(0, 16)
@@ -2003,8 +2003,8 @@
         try {
             const payload = {
                 id_producto: ProductoPromo.value.id,
-                nombre_promocion: FormPromo.value.motivo || null,
-                precio_oferta: FormPromo.value.precio_nuevo ? parseFloat(FormPromo.value.precio_nuevo) : null,
+                motivo: FormPromo.value.motivo || null,
+                precio_nuevo: FormPromo.value.precio_nuevo ? parseFloat(FormPromo.value.precio_nuevo) : null,
                 porcentaje_descuento: FormPromo.value.porcentaje_descuento ? parseInt(FormPromo.value.porcentaje_descuento) : null,
                 fecha_inicio: new Date(FormPromo.value.fecha_inicio).toISOString(),
                 fecha_fin: new Date(FormPromo.value.fecha_fin).toISOString()
