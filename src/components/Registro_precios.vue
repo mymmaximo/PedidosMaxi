@@ -147,6 +147,37 @@
                                 </div>
                             </div>
                             <div class="flex flex-col md:p-4 p-2">
+                                <h2 class="p-2 text-green-800 font-bold">
+                                Tipo de Registro
+                                </h2>
+                                <div class="flex flex-col p-2 gap-2">
+                                    <label class="cursor-pointer">
+                                        <input :value="2"
+                                        type="radio" 
+                                        v-model="es_promocion_filtro"
+                                        class="accent-green-600 mr-1"
+                                        > 
+                                        Todos (Historial Completo)
+                                    </label>
+                                    <label class="cursor-pointer text-red-600 font-semibold">
+                                        <input :value="1"
+                                        type="radio" 
+                                        v-model="es_promocion_filtro"
+                                        class="accent-red-500 mr-1"
+                                        > 
+                                        🔥 Solo Ofertas Temporales
+                                    </label>
+                                    <label class="cursor-pointer text-blue-600 font-semibold">
+                                        <input :value="0"
+                                        type="radio" 
+                                        v-model="es_promocion_filtro"
+                                        class="accent-blue-500 mr-1"
+                                        > 
+                                        🔄 Solo Cambios Fijos de Precio
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:p-4 p-2">
                                 <h2 class="p-2">
                                 ¿El Productos esta Activo?
                                 </h2>
@@ -171,6 +202,37 @@
                                     v-model="bool_activo"
                                     > 
                                     Productos Eliminados
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:p-4 p-2">
+                                <h2 class="p-2 text-indigo-800 font-bold">
+                                ¿El Registro / Promo está Vigente?
+                                </h2>
+                                <div class="flex flex-col p-2 gap-2">
+                                    <label class="cursor-pointer">
+                                        <input :value="2"
+                                        type="radio" 
+                                        v-model="promo_activa_filtro"
+                                        class="accent-indigo-600 mr-1"
+                                        > 
+                                        Todos (Vigentes y Borrados)
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input :value="1"
+                                        type="radio" 
+                                        v-model="promo_activa_filtro"
+                                        class="accent-indigo-600 mr-1"
+                                        > 
+                                        Solo Vigentes
+                                    </label>
+                                    <label class="cursor-pointer text-gray-500">
+                                        <input :value="0"
+                                        type="radio" 
+                                        v-model="promo_activa_filtro"
+                                        class="accent-gray-500 mr-1"
+                                        > 
+                                        Solo Eliminados / Vencidos
                                     </label>
                                 </div>
                             </div>
@@ -399,7 +461,6 @@
     const Historial = ref([])
 	const Busqueda = ref ("")
 	const filtrocat = ref ("")
-	const bool_activo = ref (2)
     const ListaCategoria = ref ("")
 	const precio_nuevo_max = ref ("")
 	const precio_nuevo_min = ref ("")
@@ -410,8 +471,10 @@
 	const fecha_inicio_min = ref ("")
     // ----- Variables Simples ----- //
 	const Pagina = ref (0)
+	const bool_activo = ref (2)
     const ItemsPorPagina = ref(24)
     const es_promocion_filtro = ref(2)
+    const promo_activa_filtro = ref (2)
     // ----- Funciones Vue ----- //
     onMounted (() => {
         CargarDatos()
@@ -525,6 +588,7 @@
 		precio_anterior_min.value = ""
         filtrocat.value = ""
 		bool_activo.value = 2 
+        promo_activa_filtro.value = 2
         es_promocion_filtro.value = 2
         orden.value = ""
         BusquedaHistorial()
@@ -572,6 +636,14 @@
             filtroAct.value = true
         } else if (es_promocion_filtro.value === 0) {
             url.searchParams.append('es_promocion', 'false')
+            filtroAct.value = true
+        }
+        if (promo_activa_filtro.value === 1) {
+            url.searchParams.append('promo_activa', 'true')
+            filtroAct.value = true
+        }
+        if (promo_activa_filtro.value === 0) {
+            url.searchParams.append('promo_activa', 'false')
             filtroAct.value = true
         }
         if (bool_activo.value === 1) {
