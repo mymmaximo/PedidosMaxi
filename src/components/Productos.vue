@@ -380,24 +380,39 @@
                             <h1 class="text-center !text-xl !mb-2">
                             🏷️ Oferta: {{ ProductoPromo.nombre }}
                             </h1>
-                            <div class="bg-gray-50 rounded-xl p-2 shadow-inner mx-auto w-full max-w-[200px]">
+                            <div class="bg-gray-50 rounded-xl 
+                            p-2 shadow-inner 
+                            mx-auto w-full max-w-[200px]"
+                            >
                                 <div v-if="ProductoPromo.imagenes.length > 0"
-                                class="flex flex-row gap-2 overflow-x-auto items-center justify-between w-full snap-x"
+                                class="flex flex-row 
+                                gap-2 overflow-x-auto 
+                                items-center justify-between 
+                                w-full snap-x"
                                 >
                                     <button type="button" 
                                     @click="BackImg(ProductoPromo)" 
                                     :disabled="GetImg(ProductoPromo.id) === 0" 
-                                    class="botonflecha !p-1 !h-8 !w-8 shrink-0">
+                                    class="botonflecha 
+                                    !p-1 !h-8 !w-8 shrink-0"
+                                    >
                                     ❮
                                     </button>
-                                    <div class="shrink-0 flex justify-center w-24 h-24 relative rounded-lg overflow-hidden border-2 border-white shadow-sm">
+                                    <div class="shrink-0 flex 
+                                    justify-center w-24 h-24 
+                                    relative rounded-lg 
+                                    overflow-hidden border-2 
+                                    border-white shadow-sm"
+                                    >
                                         <img v-show="ImagenesCargando[ProductoPromo.id] === false"
                                         :src=ObtenerImgUrl(ProductoPromo.imagenes[GetImg(ProductoPromo.id)].s3_key)
                                         @load="ImagenesCargando[ProductoPromo.id] = false"
                                         class="w-full h-full object-cover"
                                         >
                                         <div v-if="ImagenesCargando[ProductoPromo.id] !== false" 
-                                        class="absolute inset-0 flex items-center justify-center bg-gray-100"
+                                        class="absolute inset-0 
+                                        flex items-center 
+                                        justify-center bg-gray-100"
                                         >
                                             <img src="../assets/loading.gif" 
                                             alt="Cargando..." 
@@ -408,7 +423,9 @@
                                     <button type="button" 
                                     @click="NextImg(ProductoPromo)" 
                                     :disabled="GetImg(ProductoPromo.id) === ProductoPromo.imagenes.length - 1" 
-                                    class="botonflecha !p-1 !h-8 !w-8 shrink-0">
+                                    class="botonflecha 
+                                    !p-1 !h-8 !w-8 shrink-0"
+                                    >
                                     ❯
                                     </button>
                                 </div>
@@ -418,71 +435,139 @@
                             </div>
                             <div class="flex flex-col gap-3">
                                 <div>
-                                    <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Nombre (Opcional)</h2>
+                                    <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">
+                                    Nombre (Opcional)
+                                    </h2>
                                     <input placeholder="Ej: Cyber Monday..."
                                     type="text" 
                                     v-model="FormPromo.nombre_promocion" 
                                     maxlength="100"
-                                    class="w-full px-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
+                                    class="w-full px-4 py-2 
+                                    border-2 border-green-200 
+                                    rounded-xl 
+                                    focus:border-green-500 
+                                    focus:outline-none 
+                                    transition-colors"
                                     >
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1 text-center">Precio de Oferta</h2>
+                                        <h2 class="text-sm font-bold 
+                                        text-gray-600 
+                                        ml-1 mb-1 text-center"
+                                        >
+                                        Precio de Oferta
+                                        </h2>
                                         <div class="relative">
-                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                                            <span class="absolute 
+                                            left-3 top-1/2 
+                                            -translate-y-1/2 
+                                            text-gray-500 font-bold"
+                                            >
+                                            $
+                                            </span>
                                             <input placeholder="Monto"
                                             type="number" 
                                             v-model="FormPromo.precio_oferta" 
                                             :disabled="FormPromo.porcentaje_descuento > 0"
                                             maxlength="8"
-                                            class="w-full pl-8 pr-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors disabled:bg-gray-100"
+                                            class="w-full 
+                                            pl-8 pr-4 py-2 
+                                            border-2 border-green-200 
+                                            rounded-xl 
+                                            focus:border-green-500 
+                                            focus:outline-none 
+                                            transition-colors 
+                                            disabled:bg-gray-100"
                                             >
                                         </div>
                                     </div>
                                     <div>
-                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1 text-center">Descuento (%)</h2>
+                                        <h2 class="text-sm font-bold text-gray-600 
+                                        ml-1 mb-1 text-center"
+                                        >
+                                        Descuento (%)
+                                        </h2>
                                         <div class="relative">
-                                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">%</span>
+                                            <span class="absolute 
+                                            right-3 top-1/2 
+                                            -translate-y-1/2 
+                                            text-gray-500 font-bold"
+                                            >
+                                            %
+                                            </span>
                                             <input placeholder="Ej: 20"
                                             type="number" 
                                             v-model="FormPromo.porcentaje_descuento" 
                                             :disabled="FormPromo.precio_oferta > 0"
                                             max="99" min="1"
-                                            class="w-full pr-8 pl-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors disabled:bg-gray-100"
+                                            class="w-full 
+                                            pr-8 pl-4 py-2 
+                                            border-2 border-green-200 
+                                            rounded-xl 
+                                            focus:border-green-500 
+                                            focus:outline-none 
+                                            transition-colors 
+                                            disabled:bg-gray-100"
                                             >
                                         </div> 
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="grid grid-cols-1 
+                                sm:grid-cols-2 gap-3"
+                                >
                                     <div>
-                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Inicio</h2>
+                                        <h2 class="text-sm 
+                                        font-bold text-gray-600 
+                                        ml-1 mb-1"
+                                        >
+                                        Inicio
+                                        </h2>
                                         <input 
                                         type="datetime-local" 
                                         v-model="FormPromo.fecha_inicio"
                                         required
-                                        class="w-full px-3 py-2 border-2 border-green-200 rounded-xl text-sm focus:border-green-500 focus:outline-none transition-colors"
+                                        class="w-full 
+                                        px-3 py-2 
+                                        border-2 border-green-200 
+                                        rounded-xl text-sm 
+                                        focus:border-green-500 
+                                        focus:outline-none 
+                                        transition-colors"
                                         >
                                     </div>
                                     <div>
-                                        <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">Fin</h2>
+                                        <h2 class="text-sm font-bold 
+                                        text-gray-600 
+                                        ml-1 mb-1"
+                                        >
+                                        Fin
+                                        </h2>
                                         <input 
                                         type="datetime-local" 
                                         v-model="FormPromo.fecha_fin"
                                         required
-                                        class="w-full px-3 py-2 border-2 border-green-200 rounded-xl text-sm focus:border-green-500 focus:outline-none transition-colors"
+                                        class="w-full px-3 py-2 
+                                        border-2 border-green-200 
+                                        rounded-xl text-sm 
+                                        focus:border-green-500 
+                                        focus:outline-none 
+                                        transition-colors"
                                         >
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex flex-row justify-center gap-2 mt-2 pt-4 border-t-2 border-gray-100">
+                            <div class="flex flex-row 
+                            justify-center 
+                            gap-2 mt-2 pt-4 
+                            border-t-2 border-gray-100"
+                            >
                                 <button type="submit" 
                                 class="botoncon flex-1 !m-0"
                                 :disabled="Actualizando"
                                 >
                                 {{ FormPromo.id_promocion ? 'Actualizar' : 'Guardar' }}
-                                </button>
-                                
+                                </button>   
                                 <button type="button" 
                                 v-if="FormPromo.id_promocion"
                                 @click="BorrarPromocion"
@@ -491,7 +576,6 @@
                                 >
                                 🗑️ Borrar
                                 </button>
-
                                 <button @click="CerrarPopUp04" 
                                 type="button" 
                                 class="botonc flex-1 !m-0"
@@ -898,7 +982,15 @@
                     <div v-else>
                         <div class="px-5 w-full">
                         <button @click="MostrarFiltro = true"
-                        class="sm:hidden w-full mb-4 py-3 bg-white text-green-800 font-black text-lg border-2 border-green-200 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 active:bg-green-50"
+                        class="sm:hidden 
+                        w-full mb-4 py-3 
+                        bg-white text-green-800 
+                        font-black text-lg 
+                        border-2 border-green-200 
+                        rounded-xl flex items-center 
+                        justify-center gap-2 
+                        shadow-sm transition-all 
+                        active:scale-95 active:bg-green-50"
                         >
                         ᯤ Abrir Filtros
                         </button>
@@ -959,7 +1051,7 @@
                                             <div v-if="i.en_promocion" 
                                             class="absolute top-2 left-2 z-30 bg-red-500 text-white text-xs font-black px-2 py-1 rounded-md shadow-md"
                                             >
-                                            🔥 {{ i.nombre_promocion || 'OFERTA' }}
+                                            🔥 {{ i.motivo || 'OFERTA' }}
                                             </div>
                                             <div v-if="i.imagenes.length > 0"
                                             class="flex flex-row 
@@ -1033,7 +1125,7 @@
                                                     i.en_promocion ? 'text-red-600' : 'text-green-600',
                                                     !i.en_promocion ? 'mt-1' : ''
                                                     ]">
-                                                    $ {{ FormatearPrecio(i.en_promocion ? i.precio_oferta : i.precio) }}
+                                                    $ {{ FormatearPrecio(i.en_promocion ? i.precio_nuevo : i.precio) }}
                                                     </h2>
                                                 </div>
                                             <div v-if="VerificarRol([1, 2, 4, 5])"
@@ -1258,8 +1350,8 @@
         imagenes: []
     })
     const FormPromo = ref({
-        nombre_promocion: "",
-        precio_oferta: "",
+        motivo: "",
+        precio_nuevo: "",
         porcentaje_descuento: "",
         fecha_inicio: "",
         fecha_fin: ""
@@ -1423,8 +1515,8 @@
         ProductoPromo.value.imagenes = producto_fila.imagenes
         FormPromo.value = { 
             id_promocion: null,
-            nombre_promocion: "", 
-            precio_oferta: "", 
+            motivo: "", 
+            precio_nuevo: "", 
             porcentaje_descuento: "",
             fecha_inicio: "", 
             fecha_fin: "" 
@@ -1442,8 +1534,8 @@
                 if (promoExistente) {
                     FormPromo.value = {
                         id_promocion: promoExistente.id,
-                        nombre_promocion: promoExistente.nombre_promocion || "",
-                        precio_oferta: promoExistente.precio_oferta,
+                        nombre_promocion: promoExistente.motivo || "",
+                        precio_oferta: promoExistente.precio_nuevo,
                         porcentaje_descuento: promoExistente.porcentaje_descuento || "",
                         fecha_inicio: new Date(promoExistente.fecha_inicio).toISOString().slice(0, 16),
                         fecha_fin: new Date(promoExistente.fecha_fin).toISOString().slice(0, 16)
@@ -1718,7 +1810,7 @@
         if (Actualizando.value) return
         Actualizando.value = true
         try {
-            const respuesta = await fetch(`${urlover8000}/promociones/id/${FormPromo.value.id_promocion}`, {
+            const respuesta = await fetch(`${urlover8000}/registro_precios/id/${FormPromo.value.id_promocion}`, {
                 method: 'DELETE',
                 credentials: 'include'
             })
@@ -1911,13 +2003,13 @@
         try {
             const payload = {
                 id_producto: ProductoPromo.value.id,
-                nombre_promocion: FormPromo.value.nombre_promocion || null,
-                precio_oferta: FormPromo.value.precio_oferta ? parseFloat(FormPromo.value.precio_oferta) : null,
+                nombre_promocion: FormPromo.value.motivo || null,
+                precio_oferta: FormPromo.value.precio_nuevo ? parseFloat(FormPromo.value.precio_nuevo) : null,
                 porcentaje_descuento: FormPromo.value.porcentaje_descuento ? parseInt(FormPromo.value.porcentaje_descuento) : null,
                 fecha_inicio: new Date(FormPromo.value.fecha_inicio).toISOString(),
                 fecha_fin: new Date(FormPromo.value.fecha_fin).toISOString()
             }
-            const respuesta = await fetch(`${urlover8000}/promociones/`, {
+            const respuesta = await fetch(`${urlover8000}/registro_precios/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -2011,7 +2103,7 @@
         if (!ProductoActual.value)
             return
         const precioEfectivo = ProductoActual.value.en_promocion 
-            ? ProductoActual.value.precio_oferta 
+            ? ProductoActual.value.precio_nuevo 
             : ProductoActual.value.precio;
         const nuevoProducto = {
             id_pedido: PedidoActual.value,

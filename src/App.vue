@@ -148,9 +148,9 @@
                     >
                     Usuarios
                     </div>
-                    <div @click="router.push('/historial_precios')" 
+                    <div @click="router.push('/registro_precios')" 
                     v-if="VerificarRol([1, 4])"
-                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
+                    :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/registro_precios'}"
                     class="botonpestaña"
                     >
                     Historial de Precios
@@ -318,12 +318,12 @@
                                 >
                                 👨🏻‍💼 Usuarios
                                 </div>
-                                <div @click="router.push('/historial_precios') ; MostrarMenu = false" 
+                                <div @click="router.push('/registro_precios') ; MostrarMenu = false" 
                                 v-if="VerificarRol([1, 4])"
-                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/historial_precios'}"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/registro_precios'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
-                                💲 Historial de Precios
+                                💲 Registro de Precios
                                 </div>
                                 <div @click="router.push('/carrito') ; MostrarMenu = false"
                                 v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
