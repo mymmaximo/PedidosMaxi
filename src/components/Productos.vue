@@ -440,7 +440,7 @@
                                     </h2>
                                     <input placeholder="Ej: Cyber Monday..."
                                     type="text" 
-                                    v-model="FormPromo.nombre_promocion" 
+                                    v-model="FormPromo.motivo" 
                                     maxlength="100"
                                     class="w-full px-4 py-2 
                                     border-2 border-green-200 
@@ -468,7 +468,7 @@
                                             </span>
                                             <input placeholder="Monto"
                                             type="number" 
-                                            v-model="FormPromo.precio_oferta" 
+                                            v-model="FormPromo.precio_nuevo" 
                                             :disabled="FormPromo.porcentaje_descuento > 0"
                                             maxlength="8"
                                             class="w-full 
