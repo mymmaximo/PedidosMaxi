@@ -8,7 +8,7 @@ import Carrito from './components/Carrito.vue'
 import Configuracion from './components/Configuracion.vue'
 import Mis_pedidos from './components/Mis_pedidos.vue'
 import Favoritos from './components/Favoritos.vue'
-import Historial_precios from './components/Historial_precios.vue'
+import Registro_precios from './components/Registro_precios.vue'
 import Centro_de_ayuda from './components/Centro_de_ayuda.vue'
 import Login from './components/Login.vue'
 import { 
@@ -116,13 +116,13 @@ const routes = [
         }
     },
     { 
-        path: '/historial_precios', 
-        name: 'historial_precios', 
-        component: Historial_precios, 
+        path: '/registro_precios', 
+        name: 'registro_precios', 
+        component: Registro_precios, 
         meta: {
             requireAuth: true,
             rolesPer: [1, 2, 4],
-            title: 'Historial de precios'
+            title: 'Registro de precios'
         }
     },
     { 
