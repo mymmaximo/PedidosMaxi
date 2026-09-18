@@ -11,5 +11,8 @@ export default defineConfig({
     allowedHosts: [
       'hence-usage-airports-parks.trycloudflare.com'
     ]
+  },
+  build: {
+    chunkSizeWarningLimit: 1000,
   }
 })
