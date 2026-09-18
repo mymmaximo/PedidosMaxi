@@ -537,7 +537,7 @@
 		url.searchParams.append('skip', Pagina.value)
         url.searchParams.append('limit', ItemsPorPagina.value + 1)
         if (Busqueda.value !== "") {
-            url.searchParams.append('busqueda_historial', Busqueda.value)
+            url.searchParams.append('busqueda_promocion', Busqueda.value)
         }
         if (orden.value !== "") {
             url.searchParams.append('orden', orden.value)
