@@ -153,7 +153,7 @@
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/registro_precios'}"
                     class="botonpestaña"
                     >
-                    Historial de Precios
+                    Registro de Precios
                     </div>
                 </div>
                 <div class="flex min-h-10">

@@ -313,7 +313,7 @@
 							</button>
 						</div>
                         <h1 class="titulo-config">
-                        Historial de Precios
+                        Registro de Precios
                         </h1>
                         <!-- Tabla de Historial de Precios -->
                         <div v-if="Historial.length > 0"
