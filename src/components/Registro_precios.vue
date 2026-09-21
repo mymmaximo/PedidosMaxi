@@ -205,7 +205,9 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="flex flex-col md:p-4 p-2">
+                            <div v-if="es_promocion_filtro === 1"
+                            class="flex flex-col md:p-4 p-2"
+                            >
                                 <h2 class="p-2 text-indigo-800 font-bold">
                                 ¿El Registro / Promo está Vigente?
                                 </h2>
