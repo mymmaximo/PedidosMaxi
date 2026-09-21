@@ -363,6 +363,12 @@
                                         </span>
                                     </div>
                                     <div class="flex flex-col">
+                                        <span class="text-xs font-bold 
+                                        px-3 py-1 
+                                        rounded-full border shadow-sm"
+                                        :class="(i.activa === 1 || i.activa === true) ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'">
+                                        {{ EstatusPromotxt(i.activa) }}
+                                        </span>
                                         <h2 class="mb-2">
                                         <span class="px-2 py-1 rounded-full 
                                         text-xs font-bold text-white 
@@ -592,6 +598,15 @@
         }
 		else if (id_estatus === 2 || id_estatus === 0 || id_estatus === false) {
             return "❌ Inactivo"
+        }
+        return "Indefinido"
+	}
+	const EstatusPromotxt = (id_estatus) => {
+		if (id_estatus === 1 || id_estatus === true) {
+            return "✅ Promo Activa"
+        }
+		else if (id_estatus === 2 || id_estatus === 0 || id_estatus === false) {
+            return "❌ Promo Vencida"
         }
         return "Indefinido"
 	}
