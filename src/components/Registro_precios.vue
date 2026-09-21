@@ -193,7 +193,7 @@
                                         v-model="es_promocion_filtro"
                                         class="accent-blue-500 mr-1"
                                         > 
-                                        🔄 Solo Cambios Fijos de Precio
+                                        ⇄ Solo Cambios Fijos de Precio
                                     </label>
                                 </div>
                             </div>
@@ -377,7 +377,7 @@
                                         shadow-sm" 
                                         :class="i.es_promocion ? 'bg-red-500' : 'bg-blue-500'"
                                         >
-                                        {{ i.es_promocion ? '🔥 Oferta' : '🔄 Cambio' }}
+                                        {{ i.es_promocion ? '🔥 Oferta' : '⇄ Cambio' }}
                                         </span>
                                         <span v-if="i.motivo" 
                                         class="font-semibold 
