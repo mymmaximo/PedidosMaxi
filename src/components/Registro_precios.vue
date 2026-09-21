@@ -369,7 +369,7 @@
                                         :class="(i.activa === 1 || i.activa === true) ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'">
                                         {{ EstatusPromotxt(i.activa) }}
                                         </span>
-                                        <h2 class="mb-2">
+                                        <h2 class="mb-2 flex items-center gap-2">
                                         <span class="px-2 py-1 rounded-full 
                                         text-xs font-bold text-white 
                                         shadow-sm" 
@@ -378,7 +378,7 @@
                                         {{ i.es_promocion ? '🔥 Oferta' : '🔄 Cambio' }}
                                         </span>
                                         <span v-if="i.motivo" 
-                                        class="ml-2 font-semibold 
+                                        class="font-semibold 
                                         text-gray-700"
                                         >
                                         {{ i.motivo }}
@@ -625,6 +625,7 @@
     const LimpiarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
+        Busqueda.value = ""
 		fecha_inicio_max.value = ""
 		fecha_inicio_min.value = ""
 		fecha_fin_max.value = ""
