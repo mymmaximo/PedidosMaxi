@@ -97,6 +97,14 @@
                                 type="date"
                                 v-model="fecha_inicio_min" 
                                 >
+                                <input placeholder="Fecha de Actualizacion Max..."
+                                type="date"
+                                v-model="fecha_fin_max" 
+                                >
+                                <input placeholder="Fecha de Actualizacion Min..."
+                                type="date"
+                                v-model="fecha_fin_min" 
+                                >
                             </div>
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2 class="p-2">
@@ -400,6 +408,12 @@
                                     </span>
                                     {{ FormatoFecha(i.fecha_inicio) }}
                                     </h2>
+                                    <h2>
+                                    <span class="text-gray-500 font-medium text-sm">
+                                    Fecha Fin: 
+                                    </span>
+                                    {{ FormatoFecha(i.fecha_fin) }}
+                                    </h2>
                                 </div>
                             </div>
                         </div>
@@ -471,6 +485,8 @@
     const TextoNotificacion = ref("")
 	const fecha_inicio_max = ref ("")
 	const fecha_inicio_min = ref ("")
+	const fecha_fin_max = ref ("")
+	const fecha_fin_min = ref ("")
     // ----- Variables Simples ----- //
 	const Pagina = ref (0)
 	const bool_activo = ref (2)
@@ -584,6 +600,8 @@
         Pagina.value = 0
 		fecha_inicio_max.value = ""
 		fecha_inicio_min.value = ""
+		fecha_fin_max.value = ""
+		fecha_fin_min.value = ""
 		precio_nuevo_max.value = ""
 		precio_nuevo_min.value = ""
 		precio_anterior_max.value = ""
@@ -615,6 +633,14 @@
         }
         if (fecha_inicio_min.value !== "") {
             url.searchParams.append('fecha_inicio_min', fecha_inicio_min.value)
+            filtroAct.value = true
+        }
+        if (fecha_fin_max.value !== "") {
+            url.searchParams.append('fecha_fin_max', fecha_fin_max.value)
+            filtroAct.value = true
+        }
+        if (fecha_fin_min.value !== "") {
+            url.searchParams.append('fecha_fin_min', fecha_fin_min.value)
             filtroAct.value = true
         }
         if (precio_nuevo_max.value !== "") {
