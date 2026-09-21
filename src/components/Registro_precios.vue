@@ -364,6 +364,7 @@
                                     </div>
                                     <div class="flex flex-col">
                                         <span class="text-xs font-bold 
+                                        w-fit mb-2
                                         px-3 py-1 
                                         rounded-full border shadow-sm"
                                         :class="(i.activa === 1 || i.activa === true) ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'">
