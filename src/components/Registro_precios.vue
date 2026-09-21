@@ -363,6 +363,21 @@
                                         </span>
                                     </div>
                                     <div class="flex flex-col">
+                                        <h2 class="mb-2">
+                                        <span class="px-2 py-1 rounded-full 
+                                        text-xs font-bold text-white 
+                                        shadow-sm" 
+                                        :class="i.es_promocion ? 'bg-red-500' : 'bg-blue-500'"
+                                        >
+                                        {{ i.es_promocion ? '🔥 Oferta' : '🔄 Cambio' }}
+                                        </span>
+                                        <span v-if="i.motivo" 
+                                        class="ml-2 font-semibold 
+                                        text-gray-700"
+                                        >
+                                        {{ i.motivo }}
+                                        </span>
+                                        </h2>
                                         <h2>
                                         <span class="hidden lg:inline 2xl:inline">
                                         Categoria: 
@@ -378,21 +393,6 @@
                                     </div>
                                 </div>
                                 <div class="lilbox">
-                                    <h2 class="mb-2">
-                                    <span class="px-2 py-1 rounded-full 
-                                    text-xs font-bold text-white 
-                                    shadow-sm" 
-                                    :class="i.es_promocion ? 'bg-red-500' : 'bg-blue-500'"
-                                    >
-                                        {{ i.es_promocion ? '🔥 Oferta' : '🔄 Cambio' }}
-                                    </span>
-                                    <span v-if="i.motivo" 
-                                    class="ml-2 font-semibold 
-                                    text-gray-700"
-                                    >
-                                    {{ i.motivo }}
-                                    </span>
-                                    </h2>
                                     <h2>
                                     <span class="text-xs text-gray-500 font-bold mb-1">
                                     Precio Anterior: 
