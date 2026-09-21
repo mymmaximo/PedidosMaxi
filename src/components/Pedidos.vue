@@ -748,7 +748,7 @@
 		}
 		if (filtroProm.value !== 3) {
 			const esPromoBool = filtroProm.value === 2 ? 'true' : 'false'
-            url.searchParams.append('filtro_promocion', esPromoBool)
+            url.searchParams.append('filtroprom', esPromoBool)
             filtroAct.value = true
 		}
         if (filtrociudad.value !== "") {
