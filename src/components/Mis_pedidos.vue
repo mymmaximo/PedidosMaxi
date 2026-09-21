@@ -272,7 +272,11 @@
                                             <div class="flex flex-col gap-2 mb-6">
                                                 <div v-for = "e in i.detalle_pedido" 
                                                 :key="e.id_detalle_pedido"
-                                                class="lilproduct"
+                                                class="lilproduct 
+                                                flex flex-col sm:flex-row 
+                                                justify-between items-start 
+                                                sm:items-center py-3 
+                                                border-b border-gray-100"
                                                 >
                                                     <div class="flex flex-col w-full 
                                                     sm:w-1/2 mb-2 sm:mb-0"
@@ -280,6 +284,26 @@
                                                         <span class="font-bold text-gray-800 text-base">
                                                         {{ e.producto.nombre }}
                                                         </span>
+                                                        <div v-if="e.producto.es_promocion" 
+                                                        class="flex flex-wrap items-center 
+                                                        gap-2 mt-1"
+                                                        >
+                                                            <span v-if="e.producto.porcentaje_descuento" 
+                                                            class="text-xs font-black text-white 
+                                                            bg-green-500 px-1.5 py-0.5 
+                                                            rounded shadow-sm"
+                                                            >
+                                                            {{ e.producto.porcentaje_descuento }}
+                                                            % OFF
+                                                            </span>
+                                                            <span class="text-xs font-bold text-red-600 
+                                                            bg-red-50 px-2 py-0.5 
+                                                            rounded-md border border-red-200"
+                                                            >
+                                                            🔥 
+                                                            {{ e.producto.motivo || 'Oferta' }}
+                                                            </span>
+                                                        </div>
                                                         <span class="text-xs text-gray-400 font-bold 
                                                         uppercase tracking-wider"
                                                         >
@@ -298,18 +322,28 @@
                                                         {{ e.cantidad }}
                                                         </b>
                                                         </span>
-                                                        <span class="text-gray-500">
-                                                        Unidad: 
-                                                        <b class="text-gray-800">
-                                                        ${{ FormatearPrecio(e.precio_unitario) }}
-                                                        </b>
-                                                        </span>
-                                                        <h2 class="font-bold mr-2">
-                                                        Subtotal:
-                                                        </h2>
-                                                        <h2>
-                                                        $ {{ FormatearPrecio(e.subtotal) }}
-                                                        </h2>
+                                                        <div class="flex flex-col items-end">
+                                                            <span v-if="e.producto.es_promocion && e.producto.precio_anterior" 
+                                                            class="text-xs text-gray-400 font-bold line-through"
+                                                            >
+                                                            ${{ FormatearPrecio(e.producto.precio_anterior) }}
+                                                            </span>
+                                                            <span class="text-gray-500">
+                                                            Unidad: 
+                                                            <b :class="e.producto.es_promocion ? 'text-red-600 font-black' : 'text-gray-800'">
+                                                            ${{ FormatearPrecio(e.precio_unitario) }}
+                                                            </b>
+                                                            </span>
+                                                        </div>
+                                                        <div class="flex flex-col items-end">
+                                                            <h2 class="font-bold text-xs text-gray-400">
+                                                            Subtotal:
+                                                            </h2>
+                                                            <h2 class="font-black text-gray-800 text-base">
+                                                            $
+                                                            {{ FormatearPrecio(e.subtotal) }}
+                                                            </h2>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <h3 class="text-lg font-bold text-gray-800 
@@ -437,7 +471,11 @@
                                                 <div class="flex flex-col gap-2 mb-6">
                                                     <div v-for = "e in i.detalle_pedido" 
                                                     :key="e.id_detalle_pedido"
-                                                    class="lilproduct"
+                                                    class="lilproduct 
+                                                    flex flex-col sm:flex-row 
+                                                    justify-between items-start 
+                                                    sm:items-center py-3 
+                                                    border-b border-gray-100"
                                                     >
                                                         <div class="flex flex-col w-full
                                                         sm:w-1/2 mb-2 sm:mb-0"
@@ -445,6 +483,26 @@
                                                             <span class="font-bold text-gray-800 text-base">
                                                             {{ e.producto.nombre }}
                                                             </span>
+                                                            <div v-if="e.producto.es_promocion" 
+                                                            class="flex flex-wrap items-center 
+                                                            gap-2 mt-1"
+                                                            >
+                                                                <span v-if="e.producto.porcentaje_descuento" 
+                                                                class="text-xs font-black text-white 
+                                                                bg-green-500 px-1.5 py-0.5 
+                                                                rounded shadow-sm"
+                                                                >
+                                                                {{ e.producto.porcentaje_descuento }}
+                                                                % OFF
+                                                                </span>
+                                                                <span class="text-xs font-bold text-red-600 
+                                                                bg-red-50 px-2 py-0.5 
+                                                                rounded-md border border-red-200"
+                                                                >
+                                                                🔥 
+                                                                {{ e.producto.motivo || 'Oferta' }}
+                                                                </span>
+                                                            </div>
                                                             <span class="text-xs text-gray-400 font-bold 
                                                             uppercase tracking-wider"
                                                             >
@@ -463,15 +521,28 @@
                                                             {{ e.cantidad }}
                                                             </b>
                                                             </span>
-                                                            <span class="text-gray-500">
-                                                            Unidad: 
-                                                            <b class="text-gray-800">
-                                                            ${{ FormatearPrecio(e.precio_unitario) }}
-                                                            </b>
-                                                            </span>
-                                                            <span class="text-blue-700 font-black text-base">
-                                                            Sub: ${{ FormatearPrecio(e.subtotal) }}
-                                                            </span>
+                                                            <div class="flex flex-col items-end">
+                                                                <span v-if="e.producto.es_promocion && e.producto.precio_anterior" 
+                                                                class="text-xs text-gray-400 font-bold line-through"
+                                                                >
+                                                                ${{ FormatearPrecio(e.producto.precio_anterior) }}
+                                                                </span>
+                                                                <span class="text-gray-500">
+                                                                Unidad: 
+                                                                <b :class="e.producto.es_promocion ? 'text-red-600 font-black' : 'text-gray-800'">
+                                                                ${{ FormatearPrecio(e.precio_unitario) }}
+                                                                </b>
+                                                                </span>
+                                                            </div>
+                                                            <div class="flex flex-col items-end">
+                                                                <h2 class="font-bold text-xs text-gray-400">
+                                                                Subtotal:
+                                                                </h2>
+                                                                <h2 class="font-black text-gray-800 text-base">
+                                                                $
+                                                                {{ FormatearPrecio(e.subtotal) }}
+                                                                </h2>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -510,11 +581,10 @@
                                         </transition>
                                     </div>
                                 </div>
-                                <div v-else class="lilelse"
-                                >
-                                <span class="text-4xl mb-3 block">
-                                💨
-                                </span>
+                                <div v-else class="lilelse">
+                                    <span class="text-4xl mb-3 block">
+                                    💨
+                                    </span>
                                 <h2 class="text-xl font-bold text-gray-700">
                                 No hay Pedidos en Camino
                                 </h2>
@@ -609,7 +679,11 @@
                                                 <div class="flex flex-col gap-2 mb-6">
                                                     <div v-for = "e in i.detalle_pedido" 
                                                     :key="e.id_detalle_pedido"
-                                                    class="lilproduct"
+                                                    class="lilproduct 
+                                                    flex flex-col sm:flex-row 
+                                                    justify-between items-start 
+                                                    sm:items-center py-3 
+                                                    border-b border-gray-100"
                                                     >
                                                         <div class="flex flex-col 
                                                         w-full sm:w-1/2 mb-2 sm:mb-0"
@@ -617,6 +691,26 @@
                                                             <span class="font-bold text-gray-700 text-base">
                                                             {{ e.producto.nombre }}
                                                             </span>
+                                                            <div v-if="e.producto.es_promocion" 
+                                                            class="flex flex-wrap items-center 
+                                                            gap-2 mt-1"
+                                                            >
+                                                                <span v-if="e.producto.porcentaje_descuento" 
+                                                                class="text-xs font-black text-white 
+                                                                bg-green-500 px-1.5 py-0.5 
+                                                                rounded shadow-sm"
+                                                                >
+                                                                {{ e.producto.porcentaje_descuento }}
+                                                                % OFF
+                                                                </span>
+                                                                <span class="text-xs font-bold text-red-600 
+                                                                bg-red-50 px-2 py-0.5 
+                                                                rounded-md border border-red-200"
+                                                                >
+                                                                🔥 
+                                                                {{ e.producto.motivo || 'Oferta' }}
+                                                                </span>
+                                                            </div>
                                                             <span class="text-xs text-gray-400 font-bold 
                                                             uppercase tracking-wider"
                                                             >
@@ -628,19 +722,33 @@
                                                         justify-between sm:justify-end text-sm"
                                                         >
                                                             <span class="text-gray-500">
-                                                            Cant: <b class="text-gray-700">
+                                                            Cant: 
+                                                            <b class="text-gray-700">
                                                             {{ e.cantidad }}
                                                             </b>
                                                             </span>
-                                                            <span class="text-gray-500">
-                                                            Unidad: 
-                                                            <b class="text-gray-700">
-                                                            ${{ FormatearPrecio(e.precio_unitario) }}
-                                                            </b>
-                                                            </span>
-                                                            <span class="text-gray-700 font-black text-base">
-                                                            Sub: ${{ FormatearPrecio(e.subtotal) }}
-                                                            </span>
+                                                            <div class="flex flex-col items-end">
+                                                                <span v-if="e.producto.es_promocion && e.producto.precio_anterior" 
+                                                                class="text-xs text-gray-400 font-bold line-through"
+                                                                >
+                                                                ${{ FormatearPrecio(e.producto.precio_anterior) }}
+                                                                </span>
+                                                                <span class="text-gray-500">
+                                                                Unidad: 
+                                                                <b :class="e.producto.es_promocion ? 'text-red-600 font-black' : 'text-gray-800'">
+                                                                ${{ FormatearPrecio(e.precio_unitario) }}
+                                                                </b>
+                                                                </span>
+                                                            </div>
+                                                            <div class="flex flex-col items-end">
+                                                                <h2 class="font-bold text-xs text-gray-400">
+                                                                Subtotal:
+                                                                </h2>
+                                                                <h2 class="font-black text-gray-800 text-base">
+                                                                $
+                                                                {{ FormatearPrecio(e.subtotal) }}
+                                                                </h2>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -649,8 +757,7 @@
                                                 >
                                                 📋 Información de Envío
                                                 </h3>
-                                                <div class="lildata"
-                                                >
+                                                <div class="lildata">
                                                     <p class="text-gray-500">
                                                     📅 
                                                     <span class="font-semibold text-gray-700">
