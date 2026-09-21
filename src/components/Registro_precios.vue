@@ -359,7 +359,7 @@
                                         px-3 py-1 
                                         rounded-full border shadow-sm"
                                         :class="(i.activo === 1 || i.activo === true) ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'">
-                                        Producto {{ Estatustxt(i.activo) }}
+                                        {{ Estatustxt(i.activo) }}
                                         </span>
                                     </div>
                                     <div class="flex flex-col">
@@ -596,10 +596,10 @@
     }
 	const Estatustxt = (id_estatus) => {
 		if (id_estatus === 1 || id_estatus === true) {
-            return "✅ Activo"
+            return "✅Producto Activo"
         }
 		else if (id_estatus === 2 || id_estatus === 0 || id_estatus === false) {
-            return "❌ Inactivo"
+            return "❌Producto Inactivo"
         }
         return "Indefinido"
 	}
