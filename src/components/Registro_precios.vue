@@ -363,7 +363,8 @@
                                         </span>
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="text-xs font-bold 
+                                        <span v-if="i.es_promocion"
+                                        class="text-xs font-bold 
                                         w-fit mb-2
                                         px-3 py-1 
                                         rounded-full border shadow-sm"
