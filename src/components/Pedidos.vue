@@ -151,6 +151,32 @@
 							</div>
 							<div class="flex flex-col">
 								<h1>
+								Filtro de Promocion
+								</h1>
+								<label>
+								<input :value="3"
+								type="radio"
+								v-model="filtroProm"
+								> 
+								Todos
+								</label>
+								<label>
+								<input :value="2"
+								type="radio" 
+								v-model="filtroProm"
+								> 
+								Compras con Descuento
+								</label>
+								<label>
+								<input :value="1"
+								type="radio" 
+								v-model="filtroProm"
+								> 
+								Compras sin Descuento
+								</label>
+							</div>
+							<div class="flex flex-col">
+								<h1>
 								Ciudad del Cliente
 								</h1>
 								<div>
@@ -501,6 +527,7 @@
 	const Pagina = ref(0)
 	const filtroMP = ref(5)
 	const filtroEst = ref(4)
+	const filtroProm = ref(3)
     const ItemsPorPagina = ref(24)
     // ----- Funciones Vue ----- //
 	onMounted (() => {
@@ -637,6 +664,7 @@
         Pagina.value = 0
 		filtroMP.value = 5
 		filtroEst.value = 4
+		filtroProm.value = 3
         filtrociudad.value = ""
         filtroprovincia.value = ""
 		orden.value = ""
@@ -717,6 +745,11 @@
 		if (filtroEst.value !== 4) {
 			url.searchParams.append('filtroest', filtroEst.value)
 			filtroAct.value = true
+		}
+		if (filtroProm.value !== 3) {
+			const esPromoBool = filtroProm.value === 2 ? 'true' : 'false'
+            url.searchParams.append('filtro_promocion', esPromoBool)
+            filtroAct.value = true
 		}
         if (filtrociudad.value !== "") {
             url.searchParams.append('busqueda_pedido', filtrociudad.value)
