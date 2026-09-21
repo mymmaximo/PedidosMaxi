@@ -60,27 +60,39 @@
                                     Nombre producto Z-A
                                     </option>
                                     <option value="3">
-                                    Fecha ascendente
+                                    Fecha Inicio ascendente
                                     </option>
                                     <option value="4">
-                                    Fecha descendente
+                                    Fecha Inicio descendente
                                     </option>
                                     <option value="5">
-                                    Precio nuevo menor
+                                    Fecha Fin ascendente
                                     </option>
                                     <option value="6">
-                                    Precio nuevo mayor
+                                    Fecha Fin descendente
                                     </option>
                                     <option value="7">
-                                    Precio viejo menor
+                                    Precio nuevo menor
                                     </option>
                                     <option value="8">
-                                    Precio viejo mayor
+                                    Precio nuevo mayor
                                     </option>
                                     <option value="9">
-                                    Categoria A-Z
+                                    Precio viejo menor
                                     </option>
                                     <option value="10">
+                                    Precio viejo mayor
+                                    </option>
+                                    <option value="11">
+                                    Porcentaje de Descuento ascendente
+                                    </option>
+                                    <option value="12">
+                                    Porcentaje de Descuento descendente
+                                    </option>
+                                    <option value="13">
+                                    Categoria A-Z
+                                    </option>
+                                    <option value="14">
                                     Categoria Z-A
                                     </option>
                                 </select>
