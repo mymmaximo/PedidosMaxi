@@ -286,13 +286,12 @@
 						>
 							<div v-for= "i in Pedidos" 
 							:key="i.id_pedido"
-							@click="Edicion(i)"
 							class="mb-4"
 							>
-								<div 
-								class="tab"
-								>
-									<div class="flex flex-col text-left">
+								<div class="tab">
+									<div @click="Edicion(i)"
+									class="flex flex-col text-left"
+									>
 										<div class="flex flex-wrap items-center gap-3 mb-2">
 											<span :class="Estatuscolor(i.estatus)">
 											{{ Estatustxt(i.estatus) }}
