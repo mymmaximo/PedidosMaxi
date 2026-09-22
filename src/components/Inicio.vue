@@ -757,7 +757,7 @@
                       <img v-else src="../assets/images.png" class="imagen" />
                       <div>
                         <div
-                          v-if="i.en_promocion"
+                          v-if="i.es_promocion"
                           class="absolute top-2 left-2 z-30 bg-red-500 text-white text-xs font-black px-2 py-1 rounded-md shadow-md"
                         >
                           🔥 {{ i.motivo || "OFERTA" }}
@@ -768,7 +768,7 @@
                         </h2>
                         <div class="flex flex-col">
                           <h2
-                            v-if="i.en_promocion"
+                            v-if="i.es_promocion"
                             class="text-gray-400 text-xs font-bold line-through -mb-1 mt-0.5"
                           >
                             $ {{ FormatearPrecio(i.precio) }}
@@ -776,12 +776,12 @@
                           <h2
                             :class="[
                               'font-bold',
-                              i.en_promocion ? 'text-red-600' : 'text-green-600',
+                              i.es_promocion ? 'text-red-600' : 'text-green-600',
                             ]"
                           >
                             $
                             {{
-                              FormatearPrecio(i.en_promocion ? i.precio_nuevo : i.precio)
+                              FormatearPrecio(i.es_promocion ? i.precio_nuevo : i.precio)
                             }}
                           </h2>
                         </div>
@@ -1833,7 +1833,7 @@ const SaveBanner = async () => {
 };
 const SumarCarrito = () => {
   if (!ProductoActual.value) return;
-  const precioEfectivo = ProductoActual.value.en_promocion
+  const precioEfectivo = ProductoActual.value.es_promocion
     ? ProductoActual.value.precio_nuevo
     : ProductoActual.value.precio;
   const nuevoProducto = {
