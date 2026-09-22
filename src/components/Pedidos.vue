@@ -417,7 +417,7 @@
 														<span class="text-gray-500">
 														Unidad: 
 														<b :class="e.producto.es_promocion ? 'text-red-600 font-black' : 'text-gray-800'">
-														${{ FormatearPrecio(e.producto.es_promocion ? e.producto.precio_nuevo : e.precio_unitario) }}
+														${{ FormatearPrecio(e.precio_unitario) }}
 														</b>
 														</span>
 													</div>
@@ -427,7 +427,7 @@
 														</h2>
 														<h2 class="font-black text-gray-800 text-base">
 														$
-														$ {{ FormatearPrecio(e.producto.es_promocion ? (e.producto.precio_nuevo * e.cantidad) : e.subtotal) }}
+														{{ FormatearPrecio(e.subtotal) }}
 														</h2>
 													</div>
 												</div>
