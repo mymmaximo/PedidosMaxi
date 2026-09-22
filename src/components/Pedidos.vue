@@ -370,7 +370,7 @@
 													<span class="font-bold text-gray-800 text-base">
 													{{ e.producto.nombre }}
 													</span>
-													<div v-if="e.producto.es_promocion" 
+													<div v-if="e.producto.en_promocion" 
 													class="flex flex-wrap items-center 
 													gap-2 mt-1"
 													>
@@ -409,14 +409,14 @@
 													</b>
 													</span>
 													<div class="flex flex-col items-end">
-														<span v-if="e.producto.es_promocion && e.producto.precio_anterior" 
+														<span v-if="e.producto.en_promocion && e.producto.precio_anterior" 
 														class="text-xs text-gray-400 font-bold line-through"
 														>
 														${{ FormatearPrecio(e.producto.precio_anterior) }}
 														</span>
 														<span class="text-gray-500">
 														Unidad: 
-														<b :class="e.producto.es_promocion ? 'text-red-600 font-black' : 'text-gray-800'">
+														<b :class="e.producto.en_promocion ? 'text-red-600 font-black' : 'text-gray-800'">
 														${{ FormatearPrecio(e.precio_unitario) }}
 														</b>
 														</span>
