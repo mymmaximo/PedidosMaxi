@@ -1522,7 +1522,7 @@
             fecha_fin: "" 
         }
         try {
-            const respuesta = await fetch(`${urlover8000}/promociones/`, {
+            const respuesta = await fetch(`${urlover8000}/registro_precios/`, {
                 headers: { "X-Tunnel-Skip-AntiPhishing-Page": "true" },
                 credentials: 'include'
             })
