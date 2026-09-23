@@ -1145,8 +1145,8 @@
                                         </div>
                                     </div>
                                     <div :class="VistaLista 
-                                    ? 'tarjeta-acciones flex flex-col gap-2 !mt-4 sm:!mt-0 w-full sm:w-auto ml-auto shrink-0' 
-                                    : 'flex flex-wrap w-full mt-auto justify-center items-center pt-3 gap-1.5 sm:gap-2'"
+                                    ? 'tarjeta-acciones flex gap-2 !mt-4 sm:!mt-0 w-full sm:w-auto ml-auto shrink-0' 
+                                    : 'flex flex-wrap flex-col w-full mt-auto justify-center items-center pt-3 gap-1.5 sm:gap-2'"
                                     >
                                         <button @click.stop="Edicion(i)" 
                                         v-if="VerificarRol([1, 2, 4, 5])" 
