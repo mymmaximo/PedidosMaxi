@@ -1225,7 +1225,7 @@
                                         ? 'btn-chico-rojo w-full justify-center' 
                                         : 'botonc !px-2 !py-2 !text-sm'"
                                         >
-                                            {{ MisFavoritos.includes(i.id) ? '❤️ Agregar a Favoritos' : '🤍 Quitar de Favoritos' }}
+                                            {{ MisFavoritos.includes(i.id) ? '🤍 Quitar de Favoritos' : '❤️ Agregar a Favoritos' }}
                                         </button>
                                     </div>
                                 </div>
