@@ -1145,65 +1145,74 @@
                                         </div>
                                     </div>
                                     <div :class="VistaLista 
-                                    ? 'tarjeta-acciones flex gap-2 !mt-4 sm:!mt-0 w-full sm:w-auto ml-auto shrink-0' 
-                                    : 'flex flex-col w-full mt-auto justify-center items-center pt-3 gap-1.5 sm:gap-2'"
+                                    ? 'tarjeta-acciones flex flex-wrap justify-end gap-2 !mt-4 sm:!mt-0 w-full sm:w-auto ml-auto shrink-0' 
+                                    : [VerificarRol([1, 2]) ? 'grid grid-cols-2' : 'flex flex-col', 'w-full mt-auto pt-3 gap-1.5 sm:gap-2']"
                                     >
+                                        <!-- Boton Editar -->
                                         <button @click.stop="Edicion(i)" 
                                         v-if="VerificarRol([1, 2, 4, 5])" 
                                         :class="VistaLista 
                                         ? 'btn-chico-gris w-full justify-center' 
                                         : 'botont !px-2 !py-2 !text-sm'"
                                         >
-                                        ✏️
-                                        <span :class="VistaLista 
-                                        ? 'inline ml-1' 
-                                        : 'hidden xl:inline ml-1 truncate'"
-                                        >
-                                        Editar
-                                        </span>
+                                            ✏️
+                                            <span :class="VistaLista 
+                                            ? 'inline ml-1' 
+                                            : 'hidden xl:inline ml-1 truncate'"
+                                            >
+                                            Editar
+                                            </span>
                                         </button>
+
+                                        <!-- Boton Promocion -->
                                         <button @click.stop="AbrirPopUp04(i)" 
                                         v-if="VerificarRol([1, 2])" 
                                         :class="VistaLista 
                                         ? 'btn-chico-gris !bg-blue-600 hover:!bg-blue-700 !text-white w-full justify-center' 
                                         : 'botont !bg-blue-50 !border-blue-200 !text-blue-700 hover:!bg-blue-100 !px-2 !py-2 !text-sm'"
                                         >
-                                        🏷️
-                                        <span :class="VistaLista 
-                                        ? 'inline ml-1' 
-                                        : 'hidden xl:inline ml-1 truncate'"
-                                        >
-                                        Promoción
-                                        </span>
+                                            🏷️
+                                            <span :class="VistaLista 
+                                            ? 'inline ml-1' 
+                                            : 'hidden xl:inline ml-1 truncate'"
+                                            >
+                                            Promoción
+                                            </span>
                                         </button>
+
+                                        <!-- Boton Eliminar -->
                                         <button @click.stop="Eliminacion(i)" 
                                         v-if="VerificarRol([1, 2]) && i.activo" 
                                         :class="VistaLista 
                                         ? 'btn-chico-rojo w-full justify-center' 
-                                        : 'botonc !px-2 !py-2 !text-sm'"
+                                        : [VerificarRol([2]) ? 'col-span-2' : '', 'botonc !px-2 !py-2 !text-sm']"
                                         >
-                                        ❌
-                                        <span :class="VistaLista 
-                                        ? 'inline ml-1' 
-                                        : 'hidden xl:inline ml-1 truncate'"
-                                        >
-                                        Eliminar
-                                        </span>
+                                            ❌
+                                            <span :class="VistaLista 
+                                            ? 'inline ml-1' 
+                                            : 'hidden xl:inline ml-1 truncate'"
+                                            >
+                                            Eliminar
+                                            </span>
                                         </button>
+
+                                        <!-- Boton Reactivar -->
                                         <button @click.stop="Eliminacion(i)" 
                                         v-if="VerificarRol([1, 2]) && !i.activo" 
                                         :class="VistaLista 
                                         ? 'btn-chico-verde w-full justify-center' 
-                                        : 'botoncon !px-2 !py-2 !text-sm'"
+                                        : [VerificarRol([2]) ? 'col-span-2' : '', 'botoncon !px-2 !py-2 !text-sm']"
                                         >
-                                        🕊️
-                                        <span :class="VistaLista 
-                                        ? 'inline ml-1' 
-                                        : 'hidden xl:inline ml-1 truncate'"
-                                        >
-                                        Reactivar
-                                        </span>
+                                            🕊️
+                                            <span :class="VistaLista 
+                                            ? 'inline ml-1' 
+                                            : 'hidden xl:inline ml-1 truncate'"
+                                            >
+                                            Reactivar
+                                            </span>
                                         </button>
+
+                                        <!-- Boton Comprar -->
                                         <button @click.stop="Compracion(i)"
                                         :disabled="CarritoStock(i) === 0"
                                         v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
@@ -1211,19 +1220,21 @@
                                         ? 'btn-chico-verde !bg-green-600 !text-white hover:!bg-green-700 w-full justify-center' 
                                         : 'botoncon !px-2 !py-2 !text-sm'"
                                         >
-                                        🛍️
-                                        <span :class="VistaLista 
-                                        ? 'inline ml-1' 
-                                        : 'hidden xl:inline ml-1 truncate'"
-                                        >
-                                        Comprar
-                                        </span>
+                                            🛍️
+                                            <span :class="VistaLista 
+                                            ? 'inline ml-1' 
+                                            : 'hidden xl:inline ml-1 truncate'"
+                                            >
+                                            Comprar
+                                            </span>
                                         </button>
+
+                                        <!-- Boton Favoritos -->
                                         <button @click.stop="ToggleFavorito(i.id)"
                                         v-if="ClienteID"
                                         :class="VistaLista 
                                         ? 'btn-chico-rojo w-full justify-center' 
-                                        : 'botonc !px-2 !py-2 !text-sm'"
+                                        : [VerificarRol([1, 2]) ? 'col-span-2' : '', 'botonc !px-2 !py-2 !text-sm']"
                                         >
                                             {{ MisFavoritos.includes(i.id) ? '🤍 Quitar de Favoritos' : '❤️ Agregar a Favoritos' }}
                                         </button>
