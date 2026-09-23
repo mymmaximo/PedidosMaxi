@@ -1036,7 +1036,7 @@
                                 >
                                     <button v-if="ClienteID"
                                     @click.stop="ToggleFavorito(i.id)"
-                                    class="absolute top-3 right-3 z-30 text-2xl hover:scale-125 transition-transform drop-shadow-md active:scale-95"
+                                    class="absolute top-3 right-3 z-10 text-2xl hover:scale-125 transition-transform drop-shadow-md active:scale-95"
                                     >
                                         {{ MisFavoritos.includes(i.id) ? '❤️' : '🤍' }}
                                     </button>
@@ -1049,7 +1049,7 @@
                                         : 'w-full'"
                                         >
                                             <div v-if="i.es_promocion" 
-                                            class="absolute top-2 left-2 z-30 bg-red-500 text-white text-xs font-black px-2 py-1 rounded-md shadow-md"
+                                            class="absolute top-2 left-2 z-10 bg-red-500 text-white text-xs font-black px-2 py-1 rounded-md shadow-md"
                                             >
                                             🔥 {{ i.motivo || 'OFERTA' }}
                                             </div>
