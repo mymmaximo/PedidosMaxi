@@ -1529,7 +1529,7 @@
             if (respuesta.ok) {
                 const todasLasPromos = await respuesta.json()
                 const promoExistente = todasLasPromos.find(
-                    p => p.id_producto === producto_fila.id
+                    p => p.id_producto === producto_fila.id && p.activa === true
                 )
                 if (promoExistente) {
                     FormPromo.value = {
