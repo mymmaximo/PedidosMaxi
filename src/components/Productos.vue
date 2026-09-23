@@ -1034,12 +1034,6 @@
                                 ? 'tarjeta-premium relative bg-white !w-full !m-0 hover:!shadow-lg' 
                                 : 'carta relative']"
                                 >
-                                    <button v-if="ClienteID"
-                                    @click.stop="ToggleFavorito(i.id)"
-                                    class="absolute top-3 right-3 z-10 text-2xl hover:scale-125 transition-transform drop-shadow-md active:scale-95"
-                                    >
-                                        {{ MisFavoritos.includes(i.id) ? '❤️' : '🤍' }}
-                                    </button>
                                     <div :class="VistaLista 
                                     ? 'flex flex-col sm:flex-row items-center sm:items-start gap-4 w-full sm:w-auto text-left' 
                                     : 'w-full'"
@@ -1224,6 +1218,14 @@
                                         >
                                         Comprar
                                         </span>
+                                        </button>
+                                        <button @click.stop="ToggleFavorito(i.id)"
+                                        v-if="ClienteID"
+                                        :class="VistaLista 
+                                        ? 'btn-chico-rojo w-full justify-center' 
+                                        : 'botonc !px-2 !py-2 !text-sm'"
+                                        >
+                                            {{ MisFavoritos.includes(i.id) ? '❤️ Agregar a Favoritos' : '🤍 Quitar de Favoritos' }}
                                         </button>
                                     </div>
                                 </div>
