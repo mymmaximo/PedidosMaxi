@@ -217,7 +217,7 @@
                 return
             }
         }
-        // Establecer Datos del Cliente //
+        // Establecer Datos del Cliente
         const UsuarioUpd = {} 
         if (ClienteConfig.value.nombre !== "") {
             UsuarioUpd.nombre = ClienteConfig.value.nombre
@@ -229,7 +229,7 @@
             UsuarioUpd.contrasena = ClienteConfig.value.contrasena
         }
         if (!IdClienteAct.value) return
-        // Enviar Datos Actualizados al Backend //
+        // Enviar Datos Actualizados al Backend
         const ActUsuario = await fetch(`${urlover8000}/clientes/id/${IdClienteAct.value}`, {
             method: 'PUT',
             headers: {

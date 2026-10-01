@@ -119,6 +119,7 @@
     // ----- Variables Vacias ----- //
     const TextoNotificacion = ref("")
     // ----- Funciones Vue ----- //
+    
     // Copiar en Portapapeles //
     const CopiarAlPortapapeles = async (texto, tipo) => {
         // Mostrar Notificacion
