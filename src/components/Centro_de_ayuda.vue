@@ -1,106 +1,113 @@
 <template>
     <div class="cuerpo">
-        <!-- Notificación de Copiado Exitoso -->
+        <!-- Notificación -->
+        <!-- Copiado Exitoso -->
         <Teleport to="body">
             <transition name="slide">
                 <div v-if="MostrarNotificacion" 
                 class="notificacion !bg-blue-300 !text-white"
                 >
                     <span class="text-xl drop-shadow-sm">
-                    ✅ 
+                        ✅ 
                     </span>
                     <span>
-                    {{ TextoNotificacion }}
+                        {{ TextoNotificacion }}
                     </span>
                 </div>
             </transition>
         </Teleport>
+
+        <!-- Pagina -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="start !px-5">
+                    <!-- Titulo -->
                     <h1 class="titulo-config">
-                    Centro de Ayuda
+                        Centro de Ayuda
                     </h1>
+                    <!-- Contactos -->
                     <div class="mb-2 lg:mb-5">
+                        <!-- Correo Electronico -->
                         <div @click="CopiarAlPortapapeles('maxgiesenow@gmail.com', 'E-Mail')"
                         class="tab cursor-pointer !mb-10"
                         >
-                            <!-- Correo Electronico -->
                             <div class="flex flex-col">
                                 <div class="flex flex-row">
                                     <h1>
-                                    Correo Electronico
+                                        Correo Electronico
                                     </h1>
                                 </div>
                                 <div class="flex flex-col">
                                     <h2>
                                     <span class="hidden lg:inline 2xl:inline">
-                                    E-Mail: 
+                                        E-Mail: 
                                     </span>
-                                    maxgiesenow@gmail.com
+                                        maxgiesenow@gmail.com
                                     </h2>
                                 </div>
                             </div>
                             <div class="flex flex-col ml-auto text-right items-end">
                                 <h2>
-                                Contactate con nuestros asesores vía E-Mail
+                                    Contactate con nuestros asesores vía E-Mail
                                 </h2>
                             </div>
                         </div>
+                        <!-- Whatsapp -->
                         <div @click="CopiarAlPortapapeles('+54 351 250-0570', 'WhatsApp')"
                         class="tab cursor-pointer !mb-10"
                         >
-                            <!-- Whatsapp -->
                             <div class="flex flex-col">
                                 <div class="flex flex-row">
                                     <h1>
-                                    Whatsapp
+                                        Whatsapp
                                     </h1>
                                 </div>
                                 <div class="flex flex-col">
                                     <h2>
                                     <span class="hidden lg:inline 2xl:inline">
-                                    Nro: 
+                                        Nro: 
                                     </span>
-                                    +54 351 250-0570
+                                        +54 351 250-0570
                                     </h2>
                                 </div>
                             </div>
                             <div class="flex flex-col ml-auto text-right items-end">
                                 <h2>
-                                Contactate con nuestros asesores vía Whatsapp
+                                    Contactate con nuestros asesores vía Whatsapp
                                 </h2>
                             </div>
                         </div>
+                        <!-- Telefono -->
                         <div @click="CopiarAlPortapapeles('+54 351 250-0570', 'Teléfono')"
                         class="tab cursor-pointer !mb-10"
                         >
-                            <!-- Telefono -->
                             <div class="flex flex-col">
                                 <div class="flex flex-row">
                                     <h1>
-                                    Telefono
+                                        Telefono
                                     </h1>
                                 </div>
                                 <div class="flex flex-col">
                                     <h2>
                                     <span class="hidden lg:inline 2xl:inline">
-                                    Nro: 
+                                        Nro: 
                                     </span>
-                                    +54 351 250-0570
+                                        +54 351 250-0570
                                     </h2>
                                 </div>
                             </div>
                             <div class="flex flex-col ml-auto text-right items-end">
                                 <h2>
-                                Contactate con nuestros asesores vía Telefono Celular
+                                    Contactate con nuestros asesores vía Telefono Celular
                                 </h2>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -112,7 +119,9 @@
     // ----- Variables Vacias ----- //
     const TextoNotificacion = ref("")
     // ----- Funciones Vue ----- //
+    // Copiar en Portapapeles //
     const CopiarAlPortapapeles = async (texto, tipo) => {
+        // Mostrar Notificacion
         try {
             await navigator.clipboard.writeText(texto)
             TextoNotificacion.value = `¡${tipo} copiado al portapapeles!`
@@ -124,12 +133,15 @@
             console.error('Error al copiar al portapapeles:', error)
             alert("Tu navegador no soporta la función de copiar automáticamente.")
         }
+        // Copiar Numero de WhatsApp
         if (tipo === 'WhatsApp') {
             window.open('https://wa.me/5493512500570', '_blank')
         } 
+        // Copiar Numero de Telefono
         else if (tipo === 'Teléfono') {
             window.open('tel:+543512500570', '_self')
         } 
+        // Copiar Email de Contacto
         else if (tipo === 'E-Mail') {
             window.open('mailto:maxgiesenow@gmail.com', '_self')
         }

@@ -322,7 +322,7 @@
             router.push('/')
         }
     }
-    // ----- Para el Backend ----- //
+    // ----- Funciones Backend ----- //
     const IniciarSesionCliente = async() => {
         const respuesta = await fetch(`${urlover8000}/cliente/login/`, {
             method: 'POST',

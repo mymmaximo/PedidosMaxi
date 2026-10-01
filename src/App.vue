@@ -484,7 +484,7 @@
     const MostrarMenu = ref (false)
     const BorrarCarrito = ref(false)
     const ActualizarCajaLogout = ref(false)
-    // ----- Para el Frontend ----- //
+    // ----- Funciones Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaLogout.value = true
 		document.body.style.overflow = "hidden"

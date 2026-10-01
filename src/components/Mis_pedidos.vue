@@ -888,7 +888,7 @@
     const PedidosEnHistorial = computed(() => {
         return Pedidos.value.filter(pedido => pedido.estatus === 1)
     })
-    // ----- Para el Frontend ----- //
+    // ----- Funciones Frontend ----- //
     const AplicarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         BusquedaPedido()
@@ -949,7 +949,7 @@
             PedidoNowPreparando.value = id
         }
     }
-    // ----- Para el Backend ----- //
+    // ----- Funciones Backend ----- //
     const BusquedaPedido = async() => {
         let url = new URL (`${urlover8000}/pedidos/cliente/${ClienteID.value}`)
         if (Busqueda.value !== "") {

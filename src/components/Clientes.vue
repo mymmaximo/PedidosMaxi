@@ -1,5 +1,7 @@
 <template>
-    <!-- Confirmacion Eliminar -->
+
+    <!-- Confirmacion -->
+    <!-- Desactivar Cliente -->
     <Teleport to="body">
         <transition name="fade">
             <div v-if="ActualizarCajaCDel" 
@@ -8,24 +10,26 @@
             >
                 <div class="popup">
                     <h1>
-                    ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
+                        ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
                     </h1>
                     <div class="botones">
                         <button @click="BorrarCliente()"
                         class="botoncon"
                         >
-                        Si Confirmo
+                            Si Confirmo
                         </button>
                         <button @click="CerrarPopUp02"
                         class="botonc"
                         >
-                        Cancelar
+                            Cancelar
                         </button>
                     </div>
                 </div>
             </div>
         </transition>
     </Teleport>
+
+    <!-- Formulario -->
     <!-- Actualizar Cliente -->
     <Teleport to="body">
         <transition name="fade">
@@ -35,11 +39,11 @@
             >
                 <div class="popup">
                     <h1>
-                    Actualizar Cliente {{ ClienteAct.nombre }}
+                            Actualizar Cliente {{ ClienteAct.nombre }}
                     </h1>
                     <form @submit.prevent="ActualizarClientes">
                         <h2>
-                        Nombre
+                            Nombre
                         </h2>
                         <input placeholder="Nombre"
                         type="text" 
@@ -47,7 +51,7 @@
                         maxlength="20"
                         >
                         <h2>
-                        E-mail
+                            E-mail
                         </h2>
                         <input placeholder="Email@email.com"
                         type="text" 
@@ -59,12 +63,12 @@
                             type="submit" 
                             class="botoncon"
                             >
-                            Actualizar
+                                Actualizar
                             </button>
                             <button @click="CerrarPopUp01" 
                             class="botonc"
                             >
-                            Cancelar
+                                Cancelar
                             </button>
                         </div>
                     </form>
@@ -72,61 +76,74 @@
             </div>
         </transition>
     </Teleport>
+    
+    <!-- Pagina -->
     <div class="cuerpo">
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
+
+                <!-- Mostrar Fondo en Celular -->
                 <Teleport to="body">
                     <transition name="fade">
                         <div v-if="(MostrarFiltro || MostrarNuevo)" 
                         @click="MostrarFiltro = false; MostrarNuevo = false"
-                        class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[35] sm:hidden cursor-pointer"
+                        class="fixed inset-0 
+                        bg-black/40 backdrop-blur-sm 
+                        z-[35] sm:hidden cursor-pointer"
                         >
                         </div>
                     </transition>
                 </Teleport>
+
+                <!-- Barra de Filtros y Formulario de Nuevo Cliente -->
                 <div :class="[
-                    'bar', 
-                    (MostrarFiltro || MostrarNuevo) 
-                        ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
-                        : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
-                    ]">
+                'bar', 
+                (MostrarFiltro || MostrarNuevo) 
+                ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
+                : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
+                ]">
+                    <!-- Barra de Filtros -->
                     <div class="hidden sm:block">
+
+                        <!-- Boton de Filtros -->
                         <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
                         >
-                        ᯤ
+                            ᯤ
                         </h1>
                         <transition name="slide">
                             <div v-if="MostrarFiltro"
                             class="flex flex-col lg:self-center"
                             >
+                                <!-- Orden de Clientes -->
                                 <div class="flex flex-col md:p-4 p-2">
                                     <h1>
-                                    Ordenar
+                                        Ordenar
                                     </h1>
                                     <select placeholder=""
                                     v-model="orden" 
                                     >
                                         <option value="" disabled>
-                                        Orden...
+                                            Orden...
                                         </option> 
                                         <option value="1">
-                                        Nombre A-Z
+                                            Nombre A-Z
                                         </option>
                                         <option value="2">
-                                        Nombre Z-A
+                                            Nombre Z-A
                                         </option>
                                         <option value="3">
-                                        Clientes Antiguos
+                                            Clientes Antiguos
                                         </option>
                                         <option value="4">
-                                        Clientes Recientes
+                                            Clientes Recientes
                                         </option>
                                     </select>
                                 </div>
+                                <!-- Filtro Realizo el Pedido/Tiene Direcciones Cargadas -->
                                 <div class="flex flex-col md:p-4 p-2">
                                     <h1>
-                                    ¿Realizo un Pedido?
+                                        ¿Realizo un Pedido?
                                     </h1>
                                     <div class="flex flex-col">
                                         <label>
@@ -134,27 +151,28 @@
                                         type="radio"
                                         v-model="filtroDirec"
                                         >
-                                        Todos los Clientes
+                                            Todos los Clientes
                                         </label>
                                         <label>
                                         <input :value="1"
                                         type="radio" 
                                         v-model="filtroDirec"
                                         > 
-                                        Realizo uno o mas Pedidos
+                                            Realizo uno o mas Pedidos
                                         </label>
                                         <label>
                                         <input :value="0"
                                         type="radio"
                                         v-model="filtroDirec"
                                         > 
-                                        No Realizo Pedidos
+                                            No Realizo Pedidos
                                         </label>
                                     </div>
                                 </div>
+                                <!-- Filtro Activo/Desactivo -->
                                 <div class="flex flex-col p-2">
                                     <h1>
-                                    ¿El Cliente esta Activo?
+                                        ¿El Cliente esta Activo?
                                     </h1>
                                     <div class="flex flex-col">
                                         <label>
@@ -162,76 +180,81 @@
                                         type="radio" 
                                         v-model="filtroEst"
                                         > 
-                                        Todos los Clientes
+                                            Todos los Clientes
                                         </label>
                                         <label>
                                         <input :value="1"
                                         type="radio" 
                                         v-model="filtroEst"
                                         > 
-                                        Cliente Activo
+                                            Cliente Activo
                                         </label>
                                         <label>
                                         <input :value="0"
                                         type="radio"
                                         v-model="filtroEst"
                                         > 
-                                        Cliente Eliminado
+                                            Cliente Eliminado
                                         </label>
                                     </div>
                                 </div>
+                                <!-- Filtro Direcciones -->
                                 <div class="flex flex-col p-2">
                                 <div v-if="filtroDirec === 1">
+                                    <!-- Filtro Ciudad -->
                                     <h2>
-                                    Ciudad del Cliente
+                                        Ciudad del Cliente
                                     </h2>
                                     <select v-model="filtrociudad" 
                                     class="sel"
                                     >
                                         <option value="" disabled>
-                                        Selecciona una Ciudad...
+                                            Selecciona una Ciudad...
                                         </option>
                                         <option v-for="i in ListaCiudad" 
                                         :key="i.ciudad" 
                                         :value="i.ciudad"
                                         >
-                                        {{ i.ciudad }}
+                                            {{ i.ciudad }}
                                         </option>
                                     </select>
+                                    <!-- Filtro Provincia -->
                                     <h2>
-                                    Provincia del Cliente
+                                        Provincia del Cliente
                                     </h2>
                                     <select v-model="filtroprovincia" 
                                     class="sel"
                                     >
                                         <option value="" disabled>
-                                        Selecciona una Provincia...
+                                            Selecciona una Provincia...
                                         </option>
                                         <option v-for="i in ListaProvincia" 
                                         :key="i.provincia" 
                                         :value="i.provincia"
                                         >
-                                        {{ i.provincia }}
+                                            {{ i.provincia }}
                                         </option>
                                     </select>
                                 </div>
-                            </div>
+                                </div>
                                 <div class="botones">
                                     <button @click="AplicarFiltro" 
                                     class="botoncon"
                                     >
-                                    Filtrar
+                                        Filtrar
                                     </button>
                                     <button @click="LimpiarFiltro" 
                                     v-if="filtroAct === true"
                                     class="botont" 
                                     >
-                                    🗑️ Limpiar Filtro
+                                        🗑️ Limpiar Filtro
                                     </button>
                                 </div>
                             </div>
                         </transition>
                     </div>
+
+                    <!-- Barra de Registro -->
                     <div>
                         <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
@@ -243,11 +266,11 @@
                             class="flex flex-col lg:self-center"
                             >
                                 <h1>
-                                Nuevo Cliente
+                                    Nuevo Cliente
                                 </h1>
                                 <form @submit.prevent="SubirNuevoCliente">
                                     <h2>
-                                    Nombre
+                                        Nombre
                                     </h2>
                                     <input placeholder="Nombre"
                                     type="text" 
@@ -255,7 +278,7 @@
                                     maxlength="20"
                                     >
                                     <h2>
-                                    E-Mail
+                                        E-Mail
                                     </h2>
                                     <input placeholder="E-Mail"
                                     type="text" 
@@ -263,7 +286,7 @@
                                     maxlength="50"
                                     >
                                     <h2>
-                                    Documento
+                                        Documento
                                     </h2>
                                     <input placeholder="Documento"
                                     type="text"
@@ -272,7 +295,7 @@
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                     >
                                     <h2>
-                                    Contraseña
+                                        Contraseña
                                     </h2>
                                     <input placeholder="Contraseña"
                                     type="text"
@@ -284,16 +307,20 @@
                                         type="submit" 
                                         class="botoncon"
                                         >
-                                        Crear Cliente
+                                            Crear Cliente
                                         </button>
                                     </div>
                                 </form>
                             </div>
                         </transition>
                     </div>
+
                 </div>
+
                 <!-- Tabla de Clientes -->
                 <div class="start !px-5">
+
+                    <!-- Gif Cargando -->
                     <div v-if="CargandoTrue" 
                     class="flex flex-col 
                     items-center justify-center 
@@ -304,34 +331,42 @@
                         class="w-32 h-32 object-contain mb-4"
                         >
                         <h2 class="text-green-800 font-bold text-xl animate-pulse">
-                        Cargando clientes, un momento...
+                            Cargando clientes, un momento...
                         </h2>
                     </div>
+
+                    <!-- Error Cargando -->
                     <div v-else-if="ErrorCarga" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
                     >
                         <h1 class="text-3xl font-bold text-red-600 text-center">
-                        ¡Ups! La conexión tardó demasiado 🔌
+                            ¡Ups! La conexión tardó demasiado 🔌
                         </h1>
                         <h2 class="text-xl text-gray-700 text-center px-4">
-                        El servidor no responde o tu conexión es inestable.
+                            El servidor no responde o tu conexión es inestable.
                         </h2>
                         <div class="mt-6 flex justify-center">
                             <button @click="CargarDatos()" 
                             class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                             >
-                            🔄 Recargar Página
+                                🔄 Recargar Página
                             </button>
                         </div>
                     </div>
+
+                    <!-- Clientes -->
                     <div v-else>
+
+                        <!-- Mostrar Boton Filtro en Celular -->
                         <button @click="MostrarFiltro = true"
                         class="sm:hidden w-full mb-4 py-3 bg-white text-green-800 font-black text-lg border-2 border-green-200 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 active:bg-green-50"
                         >
-                        ᯤ Abrir Filtros
+                            ᯤ Abrir Filtros
                         </button>
+
+                        <!-- Barra de Busqueda -->
 						<div class="flex flex-row items-stretch w-full gap-3 mb-5">-
 							<input @input="BusquedaCliente"
 							type="text" 
@@ -341,9 +376,12 @@
 							maxlength="50"
 							>
 						</div>
+                        
+                        <!-- Encabezado -->
                         <h1 class="titulo-config">
-                        Clientes
+                            Clientes
                         </h1>
+                        <!-- Tabla de Clientes -->
                         <div>
                             <div v-if="clientes.length > 0">
                                 <div v-for= "i in clientes"
@@ -355,26 +393,27 @@
                                     >
                                         <div class="tarjeta-info">
                                             <div class="tarjeta-titulo">
-                                                👤 {{ i.nombre }}
+                                                    👤 {{ i.nombre }}
                                                 <span :class="Estatuscolor(i.activo)">
-                                                {{ Estatustxt(i.activo) }}
+                                                    {{ Estatustxt(i.activo) }}
                                                 </span>
                                             </div>
                                             <p class="tarjeta-dato">
-                                            📧 E-Mail: <span class="tarjeta-valor">
-                                            {{ i.email }}
+                                                📧 E-Mail: 
+                                            <span class="tarjeta-valor">
+                                                {{ i.email }}
                                             </span>
                                             </p>
                                             <p class="tarjeta-dato">
-                                            🪪 DNI: 
+                                                🪪 DNI: 
                                             <span class="tarjeta-valor">
-                                            {{ i.dni }}
+                                                {{ i.dni }}
                                             </span>
                                             </p>
                                             <p class="tarjeta-dato mb-1">
-                                            📅 Creado el: 
+                                                📅 Creado el: 
                                             <span class="tarjeta-valor">
-                                            {{ FormatoFecha(i.created_at) }}
+                                                {{ FormatoFecha(i.created_at) }}
                                             </span>
                                             </p>
                                         </div>
@@ -383,24 +422,25 @@
                                             v-if="i.activo" 
                                             class="btn-chico-rojo"
                                             >
-                                            ❌ Eliminar
+                                                ❌ Eliminar
                                             </button>
                                             <button v-else @click.stop="Eliminacion(i)"
                                             class="btn-chico-verde"
                                             >
-                                            🕊️ Reactivar
+                                                🕊️ Reactivar
                                             </button>
                                             <button @click.stop="Edicion(i)" 
                                             class="btn-chico-gris">
-                                            ✏️ Editar
+                                                ✏️ Editar
                                             </button>
                                         </div>
                                     </div>
+                                    <!-- Direcciones -->
                                     <div v-if="i.direcciones.length === 0" 
                                     class="text-center text-xs 
                                     text-gray-400 font-medium my-3 italic"
                                     >
-                                    Sin direcciones adjuntas
+                                        Sin direcciones adjuntas
                                     </div>
                                     <div v-else-if="DireccionNow !== i.id" 
                                     @click.stop="DireccionCambio(i.id)"
@@ -415,12 +455,12 @@
                                     transition-all shadow-sm 
                                     active:scale-95"
                                     >
-                                    Ver {{ i.direcciones.length }} Dirección(es) ⬇️
+                                        Ver {{ i.direcciones.length }} Dirección(es) ⬇️
                                     </div>
                                     <div v-else @click.stop="DireccionCambio(i.id)"
                                     class="w-full mt-3 py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200 rounded-b-xl rounded-t-none text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all shadow-inner active:scale-95 z-10 relative border-t-0 -mt-1" 
                                     >
-                                    Ocultar Direcciones ⬆️
+                                        Ocultar Direcciones ⬆️
                                     </div>
                                     <transition name="slide">
                                         <div v-if="DireccionNow === i.id && i.direcciones.length > 0" 
@@ -431,7 +471,7 @@
                                             mb-3 pb-2 
                                             border-b border-gray-200"
                                             >
-                                            📍 Direcciones Registradas
+                                                📍 Direcciones Registradas
                                             </h3>
                                             <div class="flex flex-col gap-3">
                                                 <div v-for="e in i.direcciones" 
@@ -444,28 +484,28 @@
                                                 rounded-xl border border-gray-200"
                                                 >
                                                     <p class="tarjeta-dato">
-                                                    🗺️ Calle: 
+                                                        🗺️ Calle: 
                                                     <span class="tarjeta-valor font-bold">
-                                                    {{ e.calle }} 
-                                                    {{ e.numero }}
+                                                        {{ e.calle }} 
+                                                        {{ e.numero }}
                                                     </span>
                                                     </p>
                                                     <p class="tarjeta-dato">
-                                                    🏘️ Barrio: 
+                                                        🏘️ Barrio: 
                                                     <span class="tarjeta-valor">
-                                                    {{ e.barrio }}
+                                                        {{ e.barrio }}
                                                     </span>
                                                     </p>
                                                     <p class="tarjeta-dato">
-                                                    🏙️ Ciudad: 
+                                                        🏙️ Ciudad: 
                                                     <span class="tarjeta-valor">
-                                                    {{ e.ciudad }}
+                                                        {{ e.ciudad }}
                                                     </span>
                                                     </p>
                                                     <p class="tarjeta-dato">
-                                                    📍 Prov: 
+                                                        📍 Prov: 
                                                     <span class="tarjeta-valor">
-                                                    {{ e.provincia }}
+                                                        {{ e.provincia }}
                                                     </span>
                                                     </p>
                                                 </div>
@@ -473,47 +513,58 @@
                                         </div>
                                     </transition>
                                 </div>
+
                             </div>  
+                            
+                            <!-- Tabla Vacia -->
                             <div v-else class="flex flex-col items-center justify-center p-8">
                                 <h2 class="text-xl font-bold text-gray-700 text-center">
-                                {{ Pagina === 0 ? 'No se encontraron clientes 😔' : 'Ya no hay más clientes para mostrar 🏁' }}
+                                    {{ Pagina === 0 ? 'No se encontraron clientes 😔' : 'Ya no hay más clientes para mostrar 🏁' }}
                                 </h2>
                                 <h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
-                                Prueba buscando con otro término
+                                    Prueba buscando con otro término
                                 </h3>
                             </div>
+                            
+                            <!-- Mostrando Paginas -->
                             <div class="flex justify-center p-3">
                                 <button @click="CambiarPagina('back')" 
                                 :disabled="Pagina === 0 || CargandoTrue"
                                 class="botona"
                                 >
-                                ❮
+                                    ❮
                                 </button>
                                 <h2 class="self-center font-bold px-6 text-green-800 text-center">
                                 <span v-if="clientes.length > 0">
-                                Mostrando {{ Pagina + 1 }} - {{ Pagina + clientes.length }}
+                                    Mostrando {{ Pagina + 1 }} - {{ Pagina + clientes.length }}
                                 </span>
                                 <span v-else>
-                                Fin de la lista
+                                    Fin de la lista
                                 </span>
                                 </h2>
                                 <button @click="CambiarPagina('next')" 
                                 :disabled="!HayMasPaginas || CargandoTrue"
                                 class="botona"
                                 >
-                                ❯
+                                    ❯
                                 </button>
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
+
     // ----- Imports ----- //
+
     import { 
         onMounted, 
         ref, 
@@ -526,7 +577,9 @@
         SesionExpirada, 
         Iniciado 
     } from './Estatus'
+    
     // ----- Variables Vue ----- //
+
     const confirboton = computed(() =>{
         if (MostrarNuevo.value) {
             const faltandatos01 = 
@@ -544,7 +597,9 @@
             return faltandatos02
         }
     })
+
     // ----- Variables Complejas ----- //
+
     const ClienteAct = ref({
         id: "",
         nombre: "",
@@ -557,17 +612,20 @@
         dni: "",
         contrasena: ""
     })
+
     // ----- Variables Booleanas ----- //
+
     const filtroAct = ref(false)
     const ErrorCarga = ref(false)
-    const VistaLista = ref(false)
     const CargandoTrue = ref(true)
     const MostrarNuevo = ref(false)
     const HayMasPaginas = ref(false)
     const MostrarFiltro = ref(false)
     const BloqueoPeticion = ref(false)
     const ActualizarCajaCDel = ref(false)
+
     // ----- Variables Vacias ----- //
+
     const orden = ref("")
     const Busqueda = ref("")
     const clientes =  ref([])
@@ -576,22 +634,29 @@
     const filtrociudad = ref ("")
     const ListaProvincia = ref ("")
     const filtroprovincia = ref ("")
+
     // ----- Variables Simples ----- //
+
 	const Pagina = ref(0)
     const filtroEst = ref(2)
     const filtroDirec = ref(2)
     const ItemsPorPagina = ref(24)
     const DireccionNow = ref(null)
+
     // ----- Funciones Vue ----- //
+    
+    // Primera Carga de Datos de la Pagina //
     onMounted (() => {
         CargarDatos()
     })
+    // Carga de Datos de la Pagina //
     const CargarDatos = (async() => {
         if (BloqueoPeticion.value) return
         BloqueoPeticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
         CargandoTrue.value = true
         ErrorCarga.value = false
+        // Tiempo de Espera para el Backend
         const temporizador = setTimeout(() => {
             if (CargandoTrue.value) {
                 CargandoTrue.value = false
@@ -599,6 +664,7 @@
                 console.warn("Se agotó el tiempo de espera de la petición.")
             }
         }, 15000)
+        // Leer Clientes y Direcciones
         try {
             await BusquedaCliente()
             const respuestac = await fetch(`${urlover8000}/direccion/ciudad/`)
@@ -620,28 +686,14 @@
             BloqueoPeticion.value = false
         }
     })
-    // ----- Para el Frontend ----- //
-	const AbrirPopUp01 = () => {
-		ActualizarCajaC.value = true
-		document.body.style.overflow = "hidden"
-	}
-	const AbrirPopUp02 = () => {
-		ActualizarCajaCDel.value = true
-		document.body.style.overflow = "hidden"
-	}
-    const AplicarFiltro = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Pagina.value = 0
-        BusquedaCliente()
-        filtrociudad.value = ""
-        filtroprovincia.value = ""
-    }
+    // Cambiar Pagina //
     const CambiarPagina = async (direccion) => {
         if (BloqueoPeticion.value) return
         BloqueoPeticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
         CargandoTrue.value = true
         ErrorCarga.value = false
+        // Establecer Valor de Items de Pagina
         if (direccion === 'next') {
             Pagina.value += ItemsPorPagina.value
         } else if (direccion === 'back') {
@@ -658,14 +710,38 @@
             BloqueoPeticion.value = false
         }
     }
+
+    // ----- Funciones Frontend ----- //
+
+    // Abrir Pop up para Actualizar Cliente //
+	const AbrirPopUp01 = () => {
+		ActualizarCajaC.value = true
+		document.body.style.overflow = "hidden"
+	}
+    // Abrir Pop up para Borrar Cliente //
+	const AbrirPopUp02 = () => {
+		ActualizarCajaCDel.value = true
+		document.body.style.overflow = "hidden"
+	}
+    // Aplicar Filtros //
+    const AplicarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Pagina.value = 0
+        BusquedaCliente()
+        filtrociudad.value = ""
+        filtroprovincia.value = ""
+    }
+    // Cerrar Pop up de Actualizar Cliente //
 	const CerrarPopUp01 = () => {
 		ActualizarCajaC.value = false
 		document.body.style.overflow = "auto"
 	}
+    // Cerrar Pop up de Borrar Cliente //
 	const CerrarPopUp02 = () => {
 		ActualizarCajaCDel.value = false
 		document.body.style.overflow = "auto"
 	}
+    // Mostrar Direcciones //
     const DireccionCambio = (id) => {
         if (DireccionNow.value === id) {
             DireccionNow.value = null
@@ -674,17 +750,20 @@
             DireccionNow.value = id
         }
     }
+    // Establecer Valores de Cliente para Actualizar y Abrir Pop Up //
     const Edicion = (cliente_fila) => {
         ClienteAct.value.id = cliente_fila.id
         ClienteAct.value.nombre = cliente_fila.nombre
         ClienteAct.value.email = cliente_fila.email
         AbrirPopUp01()
     }
+    // Establecer Valores de Cliente para Borrar y Abrir Pop Up //
     const Eliminacion = (cliente_fila) => {
         ClienteEli.value = cliente_fila.id
         ClienteAct.value.nombre = cliente_fila.nombre
         AbrirPopUp02()
     }
+    // Establecer Accion al Tocar el Tab //
     const TocarTab = (cliente) => {
         if (!cliente.direcciones || cliente.direcciones.length === 0) {
             Eliminacion(cliente)
@@ -692,6 +771,7 @@
             DireccionCambio(cliente.id)
         }
     }
+    // Establecer Color de Insignia de Estatus //
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true || id_estatus === 1) {
             return "badge-activo"
@@ -700,6 +780,7 @@
             return "badge-inactivo"
         }
     }
+    // Establecer Texto de Insignia de Estatus //
 	const Estatustxt = (id_estatus) => {
 		if (id_estatus === 1 || id_estatus === true) {
             return "✅ Activo"
@@ -709,6 +790,7 @@
         }
         return "Indefinido"
 	}
+    // Leer Fecha con Formato DD/MM/YYYY //
 	const FormatoFecha = (fechai) => {
 		if (fechai) {
 			return new Date(fechai).toLocaleDateString('es-ES')
@@ -717,6 +799,7 @@
 			return "Pendiente"
 		}
 	}
+    // Limpiar Filtros, Orden y Busqueda //
     const LimpiarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
@@ -728,9 +811,13 @@
         BusquedaCliente()
         filtroAct.value = false
     }
-    // ----- Para el Backend ----- //
+
+    // ----- Funciones Backend ----- //
+    
+    // Actualizar Datos del Cliente //
     const ActualizarClientes = async() => {
         const ClienteUpd = {} 
+        // Establecer Datos del Cliente
         if (ClienteAct.value.nombre !== "") {
             ClienteUpd.nombre = ClienteAct.value.nombre
         }
@@ -740,6 +827,7 @@
         if (ClienteAct.value.contrasena !== "") {
             ClienteUpd.contrasena = ClienteAct.value.contrasena
         }
+        // Enviar Datos Actualizados al Backend
         const ActCliente = await fetch(`${urlover8000}/clientes/id/${ClienteAct.value.id}`, {
             method: 'PUT',
             headers: {
@@ -764,6 +852,7 @@
         BusquedaCliente()
         CerrarPopUp01()
     }
+    // Desactivar Cliente //
     const BorrarCliente = async() => {
         const EraseCliente = await fetch(`${urlover8000}/clientes/id/${ClienteEli.value}`, {
         method: 'DELETE',
@@ -783,17 +872,21 @@
         BusquedaCliente()
         CerrarPopUp02()
     }
+    // Leer Datos de los Clientes //
     const BusquedaCliente = async() => {
         let url = new URL (`${urlover8000}/cliente/`)
 		url.searchParams.append('skip', Pagina.value)
         url.searchParams.append('limit', ItemsPorPagina.value + 1)
+        // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_cliente', Busqueda.value)
         }
+        // Establecer Orden
         if (orden.value !== "") {
             url.searchParams.append('orden', orden.value)
             filtroAct.value = true
         }
+        // Establecer Filtro Realizo el Pedido/Tiene Direcciones Cargadas
         if (filtroDirec.value === 1) {
             url.searchParams.append('bool_direccion', 'true')
             filtroAct.value = true
@@ -802,6 +895,7 @@
             url.searchParams.append('bool_direccion', 'false')
             filtroAct.value = true
         }
+        // Establecer Filtro Activo/Desactivo
         if (filtroEst.value === 1) {
             url.searchParams.append('bool_activo', 'true')
             filtroAct.value = true
@@ -810,6 +904,7 @@
             url.searchParams.append('bool_activo', 'false')
             filtroAct.value = true
         }
+        // Establecer Filtro Direcciones
         if (filtrociudad.value !== "") {
             url.searchParams.append('filtrociudad', filtrociudad.value)
             filtroAct.value = true            
@@ -836,6 +931,7 @@
             HayMasPaginas.value = false
         }
     }
+    // Registrando Cliente //
     const SubirNuevoCliente = async() => {
         const SubidaNuevoCliente = await fetch(`${urlover8000}/clientes/`, {
             method: 'POST',

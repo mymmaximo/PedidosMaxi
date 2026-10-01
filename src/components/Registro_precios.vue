@@ -548,7 +548,7 @@
             BloqueoPeticion.value = false
         }
 	})
-    // ----- Para el Frontend ----- //
+    // ----- Funciones Frontend ----- //
     const AplicarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
@@ -645,7 +645,7 @@
         CerrarPopUp01()
         filtroAct.value = false
     }
-    // ----- Para el Backend ----- //
+    // ----- Funciones Backend ----- //
     const BusquedaHistorial = async() => {
         let url = new URL (`${urlover8000}/registro_precios/historial/`)
 		url.searchParams.append('skip', Pagina.value)

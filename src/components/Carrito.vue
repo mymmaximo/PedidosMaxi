@@ -1,29 +1,33 @@
 <template>
     <div class="cuerpo">
-        <!-- Confirmacion Eliminar Detalle -->
+
+        <!-- Confirmacion -->
+        <!-- Borrar Detalle -->
         <Teleport to="body">
             <div v-if="ActualizarCarritoDel"
-            @click.self="CerrarPopUp01" 
+            @click.self="CerrarPopUp01"
             class="fondo"
             >
                 <div class="popup">
                     <h1>
-                    ¿Desear Eliminar el Detalle?
+                        ¿Desear Borrar el Detalle?
                     </h1>
                     <div class="botones">
                         <button @click="BorrarDetalle()"
                         class="botoncon">
-                        Si Confirmo
+                            Si Confirmo
                         </button>
                         <button @click="CerrarPopUp01"
                         class="botonc">
-                        Cancelar
+                            Cancelar
                         </button>
                     </div>
                 </div>
             </div>
         </Teleport>   
-        <!-- Pantalla de Pagar -->
+
+        <!-- Formulario -->
+        <!-- Comfirmar Pago -->
         <Teleport to="body">
             <div v-if="PantallaDirecto"
             @click.self="CerrarPopUp02"
@@ -31,29 +35,31 @@
             >
                 <div class="popup">
                     <h1>
-                    Dirección de Envío:
+                        Dirección de Envío:
                     </h1>
                     <h3>
-                    Tus Direcciones
+                        Tus Direcciones
                     </h3>
+                    <!-- Tiene Direcciones Guardadas -->
                     <select v-model="DireccionExistente">
                         <option value="">
-                        + Agrega una direccion
+                            + Agrega una direccion
                         </option>
                         <option v-for="i in ListaDirecciones" 
                         :key="i.id_direccion" 
                         :value="i.id_direccion"
                         >
-                        {{ i.calle }},
-                        {{ i.numero }},
-                        {{ i.barrio }},
-                        {{ i.ciudad }},
-                        {{ i.provincia }},
+                            {{ i.calle }},
+                            {{ i.numero }},
+                            {{ i.barrio }},
+                            {{ i.ciudad }},
+                            {{ i.provincia }},
                         </option>
                     </select>
+                    <!-- Crear Direccion -->
                     <div v-if="DireccionExistente === ''">
                             <h3>
-                            Nueva Direccion:
+                                Nueva Direccion:
                             </h3>
                         <div class="botones">
                             <input placeholder="Calle"
@@ -75,80 +81,81 @@
                             v-model="NuevaDireccion.ciudad" 
                             >
                             <select v-model="NuevaDireccion.provincia">
+                                <!-- Provincias -->
                                 <option value="" disabled>
-                                Selecciona tu Provincia...
+                                    Selecciona tu Provincia...
                                 </option>
                                 <option value="Buenos Aires">
-                                Buenos Aires
+                                    Buenos Aires
                                 </option>
                                 <option value="Catamarca">
-                                Catamarca
+                                    Catamarca
                                 </option>
                                 <option value="Chaco">
-                                Chaco
+                                    Chaco
                                 </option>
                                 <option value="Chubut">
-                                Chubut
+                                    Chubut
                                 </option>
                                 <option value="Córdoba">
-                                Córdoba
+                                    Córdoba
                                 </option>
                                 <option value="Corrientes">
-                                Corrientes
+                                    Corrientes
                                 </option>
                                 <option value="Entre Ríos">
-                                Entre Ríos
+                                    Entre Ríos
                                 </option>
                                 <option value="Formosa">
-                                Formosa
+                                    Formosa
                                 </option>
                                 <option value="Jujuy">
-                                Jujuy
+                                    Jujuy
                                 </option>
                                 <option value="La Pampa">
-                                La Pampa
+                                    La Pampa
                                 </option>
                                 <option value="La Pampa">
-                                La Pampa
+                                    La Pampa
                                 </option>
                                 <option value="La Rioja">
-                                La Rioja
+                                    La Rioja
                                 </option>
                                 <option value="Mendoza">
-                                Mendoza
+                                    Mendoza
                                 </option>
                                 <option value="Misiones">
-                                Misiones
+                                    Misiones
                                 </option>
                                 <option value="Neuquén">
-                                Neuquén
+                                    Neuquén
                                 </option>
                                 <option value="Río Negro">
-                                Río Negro
+                                    Río Negro
                                 </option>
                                 <option value="Salta">
-                                Salta
+                                    Salta
                                 </option>
                                 <option value="San Juan">
-                                San Juan
+                                    San Juan
                                 </option>
                                 <option value="San Luis">
-                                San Luis
+                                    San Luis
                                 </option>
                                 <option value="Santa Cruz">
-                                Santa Cruz
+                                    Santa Cruz
                                 </option>
                                 <option value="Santa Fe">
-                                Santa Fe
+                                    Santa Fe
                                 </option>
                                 <option value="Santiago del Estero">
-                                Santiago del Estero
+                                    Santiago del Estero
                                 </option>
                                 <option value="Tierra del Fuego">
-                                Tierra del Fuego
+                                    Tierra del Fuego
                                 </option>
                                 <option value="Tucumán">
-                                Tucumán
+                                    Tucumán
                                 </option>
                             </select>
                         </div>
@@ -157,22 +164,25 @@
                         <button @click="CerrarPopUp02"
                         class="botonc"
                         >
-                        Cancelar
+                            Cancelar
                         </button>
                         <button @click="ConfirmarCompra"
                         :disabled="confirboton || ProcesandoPago" 
                         class="botoncon"
                         >
-                        {{ ProcesandoPago ? 'Cargando...' : 'Realizar Pago' }}
+                            {{ ProcesandoPago ? 'Cargando...' : 'Realizar Pago' }}
                         </button>   
                     </div>
                 </div>
             </div>
         </Teleport>
-        <!-- Tabla de Detalles -->
+        
+        <!-- Pagina -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="start">
+
+                    <!-- Gif Cargando -->
                     <div v-if="CargandoTrue" 
                     class="flex flex-col 
                     items-center justify-center 
@@ -183,51 +193,59 @@
                         class="w-32 h-32 object-contain mb-4"
                         >
                         <h2 class="text-green-800 font-bold text-xl animate-pulse">
-                        Cargando carrito, un momento...
+                            Cargando carrito, un momento...
                         </h2>
                     </div>
+
+                    <!-- Error Cargando -->
                     <div v-else-if="ErrorCarga" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
                     >
                         <h1 class="text-3xl font-bold text-red-600 text-center">
-                        ¡Ups! La conexión tardó demasiado 🔌
+                            ¡Ups! La conexión tardó demasiado 🔌
                         </h1>
                         <h2 class="text-xl text-gray-700 text-center px-4">
-                        El servidor no responde o tu conexión es inestable.
+                            El servidor no responde o tu conexión es inestable.
                         </h2>
                         <div class="mt-6 flex justify-center">
                             <button @click="CargarDatos()" 
                             class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                             >
-                            🔄 Recargar Página
+                                🔄 Recargar Página
                             </button>
                         </div>
                     </div>
+                    
+                    <!-- Carrito -->
                     <div v-else class="carrito-contenedor">
                         <div class="titulo-config">
                             <h1>
-                            Tu Carrito
+                                Tu Carrito
                             </h1>
                         </div>
+
+                        <!-- Encabezado -->
                         <div class="carrito-tabla-cabecera">
                             <div class="col-producto-titulo">
-                            Producto
+                                Producto
                             </div>
                             <div class="col-titulo">
-                            Precio
+                                Precio
                             </div>
                             <div class="col-titulo">
-                            Cantidad
+                                Cantidad
                             </div>
                             <div class="col-titulo">
-                            Subtotal
+                                Subtotal
                             </div>
                             <div class="col_borrar_titulo">
-                            Borrar
+                                Borrar
                             </div>
                         </div>
+
+                        <!-- Productos -->
                         <div class="carrito-lista">
                             <div v-for="(item, index) in CarritoLocal" 
                             :key="index"
@@ -235,13 +253,14 @@
                             >
                                 <div class="carrito-col-producto">
                                     <div class="carrito-carrusel">
+                                        <!-- Imagenes de Producto -->
                                         <div v-if="item.imagenes && item.imagenes.length > 0"
                                         class="flex flex-row gap-1 items-center">
                                             <button @click="BackImg(item)"
                                             :disabled="GetImg(item.id_producto) === 0"
                                             class="carrito-btn-flecha"
                                             >
-                                            ❮
+                                                ❮
                                             </button>
                                             <div>
                                                 <img v-show="ImagenesCargando[item.id_producto] === false"
@@ -261,23 +280,29 @@
                                             :disabled="GetImg(item.id_producto) === item.imagenes.length - 1"
                                             class="carrito-btn-flecha"
                                             >
-                                            ❯
+                                                ❯
                                             </button>
                                         </div>
                                         <img v-else src="../assets/images.png"
                                         class="imagencar !w-16 !h-16 opacity-50"
                                         >
                                     </div>
+
+                                    <!-- Nombre del Producto -->
                                     <h2 class="carrito-nombre-producto">
-                                    {{ item.nombre_producto }}
+                                        {{ item.nombre_producto }}
                                     </h2>
                                 </div>
+
+                                <!-- Precio del Producto -->
                                 <div class="carrito-col-precio">
                                     <span class="carrito-label-movil">
-                                    Precio:
+                                        Precio:
                                     </span>
-                                    ${{ FormatearPrecio(item.precio_unitario) }}
+                                        ${{ FormatearPrecio(item.precio_unitario) }}
                                 </div>
+
+                                <!-- Stock del Producto (Incluye Verificacion) -->
                                 <div class="carrito-col-cantidad">
                                     <input v-model="item.cantidad"
                                     type="number"
@@ -285,54 +310,64 @@
                                     class="carrito-input-cantidad"
                                     >
                                 </div>
+
+                                <!-- Subtotal (Calculado) -->
                                 <div class="carrito-col-subtotal">
                                     <span class="carrito-label-movil">
-                                    Subtotal:
+                                        Subtotal:
                                     </span>
-                                    ${{ FormatearPrecio(item.item_subtotal || item.cantidad * item.precio_unitario) }}
+                                        ${{ FormatearPrecio(item.item_subtotal || item.cantidad * item.precio_unitario) }}
                                 </div>
 
+                                <!-- Boton Borrar Producto de Carrito -->
                                 <div class="carrito-col-borrar">
                                     <button @click="Eliminacion(index)" 
                                     title="Eliminar"
                                     class="carrito-btn-borrar"
                                     >
-                                    🗑️
+                                        🗑️
                                     </button>
                                 </div>
                             </div>
+
+                            <!-- Resumen de Compra -->
                             <div class="carrito-resumen-seccion">
                                 <div class="carrito-tarjeta-resumen">
                                     <div class="carrito-resumen-decoracion">
                                     </div>
                                     <h2 class="carrito-resumen-titulo">
-                                    Resumen de Compra
+                                        Resumen de Compra
                                     </h2>
                                     <div class="carrito-total-bloque">
                                         <span>
-                                        Total:
+                                            Total:
                                         </span>
                                         <span>
-                                        ${{ FormatearPrecio(CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0)) }}
+                                            ${{ FormatearPrecio(CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0)) }}
                                         </span>
                                     </div>
                                     <button 
                                     @click="AbrirPopUp02"
-                                    class="botoncon w-full !text-xl !py-4 z-10 hover:-translate-y-1">
-                                    Completar Pedido
+                                    class="botoncon w-full !text-xl !py-4 z-10 hover:-translate-y-1"
+                                    >
+                                        Completar Pedido
                                     </button>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
 <script setup>
+
     // ----- Imports ----- //
+
     import { 
         useRouter 
     } from 'vue-router'
@@ -359,8 +394,13 @@
         SesionExpirada, 
         Iniciado 
     } from './Estatus.js'
+
     // ----- Variables Vue ----- //
+
     const router = useRouter()
+    
+    // Verificacion del Boton //
+
     const confirboton = computed(() =>{
         if (Rol.value && Rol.value.length > 0) {
             return true
@@ -377,33 +417,14 @@
         }}
         return false
     })
-    // ----- Variables Complejas ----- //
-    const NuevaDireccion = ref ({
-        calle: "",
-        numero: null,
-        barrio: "",
-        ciudad: "",
-        provincia: ""
-    })
-    // ----- Variables Booleanas ----- //
-    const ErrorCarga = ref(false)
-    const VistaLista = ref(false)
-    const CargandoTrue = ref(true)
-    const ProcesandoPago = ref(false)
-    const PantallaDirecto = ref (false)
-    const ActualizarCarritoDel = ref(false)
-    // ----- Variables Vacias ----- //
-    const IndiceImg = ref ({})
-    const ProductoEli = ref("")
-    const ListaDirecciones = ref([])
-    const ImagenesCargando = ref({})
-    const InstanciaPaddle = ref(null)
-    const DireccionExistente = ref ("")
-    // ----- Funciones Vue ----- //
+
+    // Primera Carga de Datos de la Pagina //
+
     onMounted (async () => {
         let PagoExito = false
         await CargarDatos()
         CargarCarrito()
+        // Llamar Pasarela de Pago
         InstanciaPaddle.value = await initializePaddle({
             environment: 'sandbox', 
             token: 'test_04e1ed8d821a1fd086eaaa9ec0b',
@@ -423,6 +444,9 @@
             }
         })
     })
+
+    // Carga de Datos de la Pagina //
+
     const CargarDatos = (async() => {
         if (!ClienteID.value) { 
             CargandoTrue.value = false
@@ -430,6 +454,7 @@
         }
         CargandoTrue.value = true
         ErrorCarga.value = false
+        // Tiempo de Espera para el Backend
         const temporizador = setTimeout(() => {
             if (CargandoTrue.value) {
                 CargandoTrue.value = false
@@ -437,6 +462,7 @@
                 console.warn("Se agotó el tiempo de espera de la petición.")
             }
         }, 15000)
+        // Leer Direcciones de Cliente
         try {
             const respuesta = await fetch(`${urlover8000}/cliente/${ClienteID.value}/direcciones/`, {
                 credentials: 'include'
@@ -458,11 +484,42 @@
     const emit = defineEmits([
         'CarritoVacio'
     ])
-    // ----- Para el Frontend ----- //
+
+    // ----- Variables Complejas ----- //
+
+    const NuevaDireccion = ref ({
+        calle: "",
+        numero: null,
+        barrio: "",
+        ciudad: "",
+        provincia: ""
+    })
+
+    // ----- Variables Booleanas ----- //
+    
+    const ErrorCarga = ref(false)
+    const CargandoTrue = ref(true)
+    const ProcesandoPago = ref(false)
+    const PantallaDirecto = ref (false)
+    const ActualizarCarritoDel = ref(false)
+
+    // ----- Variables Vacias ----- //
+    
+    const IndiceImg = ref ({})
+    const ProductoEli = ref("")
+    const ListaDirecciones = ref([])
+    const ImagenesCargando = ref({})
+    const InstanciaPaddle = ref(null)
+    const DireccionExistente = ref ("")
+
+    // ----- Funciones Frontend ----- //
+    
+    // Abrir Pop up para Borrar Detalle //
 	const AbrirPopUp01 = () => {
 		ActualizarCarritoDel.value = true
 		document.body.style.overflow = "hidden"
 	}
+    // Abrir Pop up para Confirmar el Pago (Si no Inicio Sesion /login) //
 	const AbrirPopUp02 = () => {
         if (!Iniciado.value) {
             router.push('/login')
@@ -473,6 +530,7 @@
         if (ListaDirecciones.value.length > 0)
             DireccionExistente.value = ListaDirecciones.value[0].id_direccion
 	}
+    // Leer Imagen Anterior //
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id_producto)
         if (ImgActual > 0) {
@@ -480,25 +538,31 @@
             ImagenesCargando.value[imagen.id_producto] = true
         }
     }
+    // Cerrar Pop up de Borrar Detalle //
 	const CerrarPopUp01 = () => {
 		ActualizarCarritoDel.value = false
 		document.body.style.overflow = "auto"
 	}
+    // Cerrar Pop up de Borrar Detalle //
 	const CerrarPopUp02 = () => {
 		PantallaDirecto.value = false
 		document.body.style.overflow = "auto"
 	}
+    // Leer Producto para Borrar Detalle (Abre Pop up) //
     const Eliminacion = (producto_fila) => {
         ProductoEli.value = producto_fila
         AbrirPopUp01()
     }
+    // Leer Precio con Formato Pesos Argentinos //
     const FormatearPrecio = (precio) => {
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat('es-AR').format(precio)
     }
+    // Leer Imagen //
     const GetImg = (id) => {
         return IndiceImg.value[id] || 0
     }
+    // Leer Imagen Siguiente //
     const NextImg = (imagen) => {
         const ImgActual = GetImg(imagen.id_producto)
         if (ImgActual < imagen.imagenes.length - 1) {
@@ -506,25 +570,31 @@
             ImagenesCargando.value[imagen.id_producto] = true
         }
     }
+    // Obtener Url/Link de Imagen //
     const ObtenerImgUrl = (Imgenkey) => {
         const respuesta = supabase.storage
             .from('max_imagenes')
             .getPublicUrl(Imgenkey)
         return respuesta.data.publicUrl
     }
-    // ----- Para el Backend ----- //
+    // ----- Funciones Backend ----- //
+    
+    // Borrar Detalle de Pedido del Carrito //
     const BorrarDetalle = () => {
         CarritoLocal.value.splice(ProductoEli.value, 1)
         localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value))
         CerrarPopUp01()
+        // Carrito Vacio, vuelve al Inicio
         if (CarritoLocal.value.length === 0) {
             emit('CarritoVacio')
             router.push('/')
         }
     }
+    // Enviar Pedido Completo al Backend //
     const ConfirmarCompra = (async() => {
         if (ProcesandoPago.value) return
         ProcesandoPago.value = true
+        // Verificacion de Carrito
         if (!ValidadCarrito(CarritoLocal.value)) {
             alert("Manipulación detectada. Tu carrito ha sido vaciado por seguridad.")
             LimpiarCompra()
@@ -532,11 +602,13 @@
             ProcesandoPago.value = false
             return
         }
+        // Confirmar Compra
         try {
             let DireccionPedido = null
             if (DireccionExistente.value !== "") {
                 DireccionPedido = DireccionExistente.value
             } else {
+                // Establecer Datos de Nueva de Direccion
                 const DatosNuevaDireccion = {
                     calle: NuevaDireccion.value.calle,
                     numero: parseInt(NuevaDireccion.value.numero),
@@ -544,6 +616,7 @@
                     ciudad: NuevaDireccion.value.ciudad,
                     provincia: NuevaDireccion.value.provincia
                 }
+                // Subir Datos de Nueva de Direccion
                 const SubidaNuevaDireccion = await fetch(`${urlover8000}/direcciones/`, {
                     method: 'POST',
                     headers: {
@@ -555,6 +628,7 @@
                 const datos = await SubidaNuevaDireccion.json()
                 DireccionPedido = datos.id
             }
+            // Subir Nuevo Pedido
             const SubidaNuevoPedido = await fetch(`${urlover8000}/pedidos/`, {
                 method: 'POST',
                 headers: {
@@ -569,6 +643,7 @@
                 }),
                 credentials: 'include'
             })
+            // Sesion Vencida
             if (SubidaNuevoPedido.status === 401) {
                 CerrarSesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
@@ -579,6 +654,7 @@
             }
             const datosPedido = await SubidaNuevoPedido.json()
             const Pedidoid = datosPedido.id
+            // Establecer Lista de Detalles de Pedido
             const DetallesLista = CarritoLocal.value.map(item => {
                 return {
                     id_pedido: Pedidoid,
@@ -587,6 +663,7 @@
                     precio_unitario: item.precio_unitario
                 }
             })
+            // Subir Lista de Detalles de Pedido
             const SubidaNuevoDetalle = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
                 method: 'POST',
                 headers: {
@@ -595,36 +672,37 @@
                 body: JSON.stringify(DetallesLista),
                 credentials: 'include'
                 })  
-                if (SubidaNuevoDetalle.status === 401) {
-                    CerrarSesion()
-                    alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                    SesionExpirada.value = true
-                    Iniciado.value = false
-                    ProcesandoPago.value = false
-                    return
-                }
-                const subidaTransaccion = await fetch(`${urlover8000}/crear-transaccion-paddle/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id_pedido: Pedidoid
-                    }),
-                    credentials: 'include'
-                })
-
-                if (subidaTransaccion.status === 401) {
-                    CerrarSesion()
-                    alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                    SesionExpirada.value = true
-                    Iniciado.value = false
-                    ProcesandoPago.value = false
-                    return
-                }
-
-                const datosTransaccion = await subidaTransaccion.json()
-                InstanciaPaddle.value?.Checkout.open({
+            // Sesion Vencida
+            if (SubidaNuevoDetalle.status === 401) {
+                CerrarSesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
+                ProcesandoPago.value = false
+                return
+            }
+            // Subir Transaccion de Pasarela de Pago
+            const SubidaTransaccion = await fetch(`${urlover8000}/crear-transaccion-paddle/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_pedido: Pedidoid
+                }),
+                credentials: 'include'
+            })
+            // Sesion Vencida
+            if (SubidaTransaccion.status === 401) {
+                CerrarSesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                SesionExpirada.value = true
+                Iniciado.value = false
+                ProcesandoPago.value = false
+                return
+            }
+            const datosTransaccion = await SubidaTransaccion.json()
+            InstanciaPaddle.value?.Checkout.open({
                 settings: {
                     displayMode: "overlay",
                     theme: "light",
@@ -638,6 +716,7 @@
             ProcesandoPago.value = false
         }
     })
+    // Verificacion de Stock > 0 //
     const VerificarStock = (item) => {
         if (item.cantidad < 1) {
             item.cantidad = 1

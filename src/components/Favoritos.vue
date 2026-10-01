@@ -1,15 +1,19 @@
 <template>
     <div class="cuerpo">
+
+        <!-- Formulario -->
+        <!-- Añadir al Carrito -->
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="VentanaCompra"
-                @click.self="CerrarPopUp03"
+                @click.self="CerrarPopUp02"
                 class="fondo" 
                 >
                     <div class="popup popup-compra">
                         <h1>
                         {{ ProductoActual.nombre }}
                         </h1>
+                        <!-- Imagenes del Producto -->
                         <div class="carrusel-contenedor">
                             <div v-if="ProductoActual.imagenes.length > 0"
                             class="carrusel-fila"
@@ -48,6 +52,7 @@
                                 >
                             </div>
                         </div>
+                        <!-- Cantidad de Producto -->
                         <div class="panel-compra">
                             <div class="control-cantidad">
                                 <button @click="RestarProducto(ProductoActual)"
@@ -61,9 +66,9 @@
                                 class="control-input"
                                 >
                                 <button @click="SumarProducto(ProductoActual)"
-                                class="control-btn-sumar"
+                                class="control-btn-sumar"s
                                 >
-                                ✚
+                                    ✚
                                 </button>
                             </div>
                             <div class="total-caja">
@@ -81,7 +86,7 @@
                             >
                             Agregar al Carrito
                             </button>
-                            <button @click="CerrarPopUp03"
+                            <button @click="CerrarPopUp02"
                             class="botonc"
                             >
                             Cancelar
@@ -91,7 +96,9 @@
                 </div>
             </transition>
         </Teleport>
-        <!-- Comprar Notificacion -->
+
+        <!-- Notificación -->
+        <!-- Adicion al Carrito Exitoso -->
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="MostrarConfir" 
@@ -106,6 +113,8 @@
                 </div>
             </transition>
         </Teleport>
+
+        <!-- Confirmacion -->
         <!-- Confirmacion Quitar -->
         <Teleport to="body">
             <transition name="fade">
@@ -117,6 +126,7 @@
                         <h1 class="text-center">
                         ¿Desear Quitar {{ ProductoQ.nombre }} de Mis Favoritos?
                         </h1>
+                        <!-- Imagenes del Producto -->
                         <div>
                             <div v-if="ProductoQ.imagenes.length > 0"
                             class="flex flex-row 
@@ -172,10 +182,12 @@
                 </div>
             </transition>
         </Teleport>
-        <!-- Tabla de Favoritos y Barra de Filtros -->
+
+        <!-- Pagina -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-                <!-- Barra de Filtros -->
+
+                <!-- Mostrar Fondo en Celular -->
                 <Teleport to="body">
                     <transition name="fade">
                         <div v-if="MostrarFiltro" 
@@ -185,22 +197,29 @@
                         </div>
                     </transition>
                 </Teleport>
+
+                <!-- Barra de Filtros de Productos Favoritos -->
                 <div :class="[
                     'bar', 
                     MostrarFiltro 
                     ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                     : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
                     ]">
+                    <!-- Barra de Filtros -->
                     <div class="hidden sm:block">
+
+                        <!-- Boton de Filtros -->
                         <h1 @click="MostrarFiltro = !MostrarFiltro" 
                         class="botonfil"
                         >ᯤ
                         </h1>
+
                     </div>
                     <transition name="slide">
                         <div v-if="MostrarFiltro" 
                         class="flex flex-col lg:self-center"
                         >
+                            <!-- Orden de Productos Favoritos -->
                             <div class="flex flex-col md:px-4 md:pb-4 p-2 !pt-0">
                                 <h1 class="!mt-0">
                                 Ordenar
@@ -236,6 +255,8 @@
                                     </option>
                                 </select>
                             </div>
+
+                            <!-- Filtro de Categoria -->
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2>
                                 Filtro Categoria
@@ -254,6 +275,8 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <!-- Filtro de Precio (Rango Fijos) -->
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2>
                                 Filtros de Precio
@@ -294,6 +317,8 @@
                                 Personalizado
                                 </label>
                             </div>
+
+                            <!-- Filtro de Precio (Rango Personalizados) -->
                             <div v-if="filtroRadio === 0" 
                             class="flex flex-col md:p-4 p-2"
                             >
@@ -328,8 +353,11 @@
                         </div>
                     </transition>
                 </div>
-                <!-- Tabla de Favoritos -->
+
+                <!-- Tabla de Productos Favoritos -->
                 <div class="start">
+                    
+                    <!-- Gif Cargando -->
                     <div v-if="CargandoTrue" 
                     class="flex flex-col items-center justify-center w-full h-[60vh]"
                     >
@@ -341,6 +369,8 @@
                         Cargando tus favoritos...
                         </h2>
                     </div>
+
+                    <!-- Error Cargando -->
                     <div v-else-if="ErrorCarga" 
                     class="flex flex-col items-center justify-center w-full h-[60vh] gap-4"
                     >
@@ -358,16 +388,25 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- Favoritos -->
                     <div v-else>
                         <div class="px-5 w-full">
+
+                            <!-- Mostrar Boton Filtro en Celular -->
                             <button @click="MostrarFiltro = true" 
                             class="sm:hidden w-full mb-4 py-3 bg-white text-green-800 font-black text-lg border-2 border-green-200 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 active:bg-green-50">
                             ᯤ Abrir Filtros
                             </button>
+
+                            <!-- Encabezado -->
                             <h1 class="text-2xl font-black text-green-800 mb-4 ml-1">
                             🤍 Mi Lista de Deseos
                             </h1>
+
                             <div class="flex flex-row items-stretch w-full gap-3 mb-5">
+
+                                <!-- Barra de Busqueda -->
                                 <input @input="BusquedaFavoritos"
                                 type="text" 
                                 v-model="Busqueda" 
@@ -375,6 +414,8 @@
                                 class="busqueda !mb-0 !w-full"
                                 maxlength="50"
                                 >
+
+                                <!-- Vista en Lista/Carta -->
                                 <button @click="VistaLista = !VistaLista"
                                 title="Alternar Vista"
                                 class="shrink-0 flex items-center justify-center bg-white border-2 border-green-200 text-green-700 rounded-xl w-12 sm:w-14 hover:bg-green-50 transition-all shadow-sm active:scale-95 cursor-pointer"
@@ -386,7 +427,10 @@
                                     ☰
                                     </span>
                                 </button>
+
                             </div>
+                            
+                            <!-- Tabla de Favoritos -->
                             <div v-if="Productos.length > 0"
                             :class="VistaLista 
                             ? 'flex flex-col gap-4 w-full' 
@@ -397,12 +441,20 @@
                                 @touchstart="ComienzoToque($event)"
                                 @touchend="FinToque($event, i)" 
                                 @click="Compracion(i)"
-                                :class="['si', VistaLista ? 'tarjeta-premium relative bg-white !w-full !m-0 hover:!shadow-lg' : 'carta relative']"
+                                :class="[
+                                'si', VistaLista 
+                                ? 'tarjeta-premium relative bg-white !w-full !m-0 hover:!shadow-lg' 
+                                : 'carta relative']"
                                 >
-                                    <div :class="VistaLista ? 'flex flex-col sm:flex-row items-center sm:items-start gap-4 w-full sm:w-auto text-left' : 'w-full'">
+                                    <div :class="VistaLista 
+                                    ? 'flex flex-col sm:flex-row items-center sm:items-start gap-4 w-full sm:w-auto text-left' 
+                                    : 'w-full'">
+                                        
+                                        <!-- Imagenes del Producto -->
                                         <div :class="VistaLista ? 'w-24 sm:w-32 shrink-0' : 'w-full'">
                                             <div v-if="i.imagenes.length > 0"
-                                            class="flex flex-row gap-3 overflow-x-auto items-center justify-center w-full pb-2 snap-x"
+                                            class="flex flex-row gap-3 overflow-x-auto 
+                                            items-center justify-center w-full pb-2 snap-x"
                                             >
                                                 <button @click.stop="BackImg(i)"
                                                 :disabled="GetImg(i.id) === 0"
@@ -433,6 +485,7 @@
                                             :class="VistaLista ? 'w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-xl drop-shadow-md' : 'imagen'"
                                             >
                                         </div>
+                                        <!-- Datos del Producto -->
                                         <div :class="VistaLista ? 'tarjeta-info pt-2 sm:pt-0' : 'mt-2'">
                                             <h2 :class="['font-bold', VistaLista ? 'text-2xl text-gray-800' : '']">
                                             {{ i.nombre }}
@@ -445,7 +498,6 @@
                                             </h2>
                                         </div>
                                     </div>
-                                    
                                     <div :class="VistaLista 
                                     ? 'tarjeta-acciones !mt-4 sm:!mt-0' 
                                     : 'flex flex-wrap w-full mt-auto justify-center items-center pt-3 gap-1.5 sm:gap-2'"
@@ -471,6 +523,8 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <!-- Tabla Vacia -->
                             <div v-else class="flex flex-col items-center justify-center p-8">
                                 <span class="text-5xl mb-4">👻</span>
                                 <h2 class="text-xl font-bold text-gray-700 text-center">
@@ -480,6 +534,8 @@
                                 ¡Explora la tienda y dale al corazón a lo que te guste!
                                 </h3>
                             </div>
+                            
+                            <!-- Mostrando Paginas -->
                             <div class="flex justify-center p-5" v-if="Productos.length > 0 || Pagina > 0">
                                 <button @click="CambiarPagina('back')" 
                                 :disabled="Pagina === 0 || CargandoTrue"
@@ -507,11 +563,14 @@
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
 <script setup>
+
     // ----- Imports ----- //
+    
     import { 
         onMounted, 
         toRefs, 
@@ -534,18 +593,18 @@
         SesionExpirada,
         VerificarRolExcluido
     } from './Estatus.js'
-    import { 
-        useRouter 
-    } from 'vue-router'
 
     // ----- Variables Complejas ----- //
+
     const ProductoQ = ref({
         id: "",
         nombre: "",
         imagenes: []
     })
     const MostrarFiltro = ref(window.innerWidth >= 1024)
+
     // ----- Variables Booleanas ----- //
+
     const BloqueoPeticion = ref(false)
     const VentanaCompra = ref(false)
     const MostrarConfir = ref(false)
@@ -557,6 +616,7 @@
     const filtroAct = ref(false)
 
     // ----- Variables Complejas ----- //
+
     const ListaCategoria = ref("")
     const ImagenesCargando = ref({})
     const filtrocat = ref("")
@@ -568,16 +628,19 @@
     const menor = ref("")
 
     // ----- Variables Simples ----- //
+
     const ItemsPorPagina = ref(24)
     const filtroRadio = ref(4)
     const Pagina = ref(0)
     let inicioX = 0
 
     // ----- Funciones Vue ----- //
+
+    // Primera Carga de Datos de la Pagina //
     onMounted (() => {
         CargarDatos()
     })
-
+    // Verificacion de Stock > 0 //
     watch (ProductoCantidad, (NuevaCantidad) => {
         let CantidadnCarrito = 0
         if (ProductoActual.value) {
@@ -595,13 +658,15 @@
             }
         }
     })
-
+    // Definir Url/Link y Tamaño de Imagen //
     const prop = defineProps(['path','size'])
+    // Asignar Url/Link y Tamaño de Imagen //
     const { path } = toRefs(prop)
+    // Leer Url/Link y Tamaño de Imagen //
     watch(path, () => {
         if (path.value) ObtenerImgUrl()
     })
-
+    // Carga de Datos de la Pagina //
     const CargarDatos = (async() => {
         if (!ClienteID.value) return;
         if (BloqueoPeticion.value) return;
@@ -609,12 +674,14 @@
         window.scrollTo({ top: 0, behavior: 'smooth' })
         CargandoTrue.value = true
         ErrorCarga.value = false
+        // Tiempo de Espera para el Backend
         const temporizador = setTimeout(() => {
             if (CargandoTrue.value) {
                 CargandoTrue.value = false
                 ErrorCarga.value = true
             }
         }, 15000)
+        // Leer Productos Favoritos y Categorias
         try {
             await BusquedaFavoritos()
             const respuesta = await fetch(`${urlover8000}/producto/categorias/`, {
@@ -638,13 +705,14 @@
             BloqueoPeticion.value = false
         }
     })
-
+    // Cambiar Pagina //
     const CambiarPagina = async (direccion) => {
         if (BloqueoPeticion.value) return
         BloqueoPeticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
         CargandoTrue.value = true
         ErrorCarga.value = false
+        // Establecer Valor de Items de Pagina //
         if (direccion === 'next') {
             Pagina.value += ItemsPorPagina.value
         } else if (direccion === 'back') {
@@ -662,11 +730,14 @@
         }
     }
 
-    // ----- Para el Frontend ----- //
+    // ----- Funciones Frontend ----- //
+    
+    // Abrir Pop up para Quitar de Favoritos //
 	const AbrirPopUp01 = () => {
 		QuitarCaja.value = true
 		document.body.style.overflow = "hidden"
 	}
+    // Aplicar Filtros //
     const AplicarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
@@ -674,6 +745,7 @@
         menor.value = ""
         mayor.value = ""
     }
+    // Leer Imagen Anterior //
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual > 0) {
@@ -681,20 +753,24 @@
             ImagenesCargando.value[imagen.id] = true
         }
     }
+    // Cerrar Pop up para Quitar de Favoritos //
 	const CerrarPopUp01 = () => {
 		QuitarCaja.value = false
         ProductoQ.value = { id: "", nombre: "", imagenes: [] }
 		document.body.style.overflow = "auto"
 	}
-    const CerrarPopUp03 = () => {
+    // Cerrar Pop up para Añadir a Carrito //
+    const CerrarPopUp02 = () => {
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
         document.body.style.overflow = "auto"
     }
+    // Inicio del Toque de Imagen en Celular //
     const ComienzoToque = (evento) => {
         inicioX = evento.changedTouches[0].clientX
     }
+    // Establecer Valores del Producto para Añadir en el Carrito y Abrir Pop Up //
     const Compracion = (producto_fila) => {
         if (CarritoStock(producto_fila) <= 0) {
             return 
@@ -704,6 +780,7 @@
         ProductoActual.value = producto_fila
         ProductoCantidad.value = 1
     }
+    // Fin del Toque de Imagen en Celular //
     const FinToque = (evento, producto) => {
         if (!producto) return
         const finX = evento.changedTouches[0].clientX
@@ -720,13 +797,16 @@
         }
         inicioX = 0
     }
+    // Leer Precio con Formato Pesos Argentinos //
     const FormatearPrecio = (precio) => {
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat('es-AR').format(precio)
     }
+    // Leer Imagen //
     const GetImg = (id) => {
         return IndiceImg.value[id] || 0
     }
+    // Limpiar Filtros, Orden y Busqueda //
     const LimpiarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
@@ -735,6 +815,7 @@
         BusquedaFavoritos()
         filtroAct.value = false
     }
+    // Leer Imagen Siguiente //
     const NextImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual < imagen.imagenes.length - 1) {
@@ -742,32 +823,40 @@
             ImagenesCargando.value[imagen.id] = true
         }
     }
+    // Obtener Url/Link de Imagen //
     const ObtenerImgUrl = (Imgenkey) => {
         const respuesta = supabase.storage
             .from('max_imagenes')
             .getPublicUrl(Imgenkey)
         return respuesta.data.publicUrl
     }
+    // Restar Cantidad de Producto //
     const RestarProducto = () => {
         if (ProductoCantidad.value > 1) {
             ProductoCantidad.value--
         }
     }
+    // Sumar Cantidad de Producto //
     const SumarProducto = () => {
         if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
             ProductoCantidad.value++
         }
     }
+    // Establecer Valores del Producto para Quitar de Favoritos y Abrir Pop Up //
     const QuitarFavorito = (producto_fila) => {
         ProductoQ.value.id = producto_fila.id
         ProductoQ.value.nombre = producto_fila.nombre
         ProductoQ.value.imagenes = producto_fila.imagenes
         AbrirPopUp01()
     }
-    // ----- Para el Backend ----- //
+
+    // ----- Funciones Backend ----- //
+    
+    // Quitar Producto de Favoritos //
     const Quitar = async () => {
         if (!ProductoQ.value.id) return
         try {
+            // Quitar Producto en el Backend
             const respuesta = await fetch(`${urlover8000}/favoritos/toggle?id_cliente=${ClienteID.value}`, {
                 method: 'POST',
                 headers: {
@@ -778,7 +867,7 @@
             })
             
             if (respuesta.status === 401) {
-                await CerrarSesion();
+                await CerrarSesion()
                 SesionExpirada.value = true
                 Iniciado.value = false
                 return;
@@ -797,24 +886,26 @@
             console.error("Error al quitar favorito:", error);
         }
     }
+    // Leer los Productos Favoritos //
     const BusquedaFavoritos = async() => {
         if (!ClienteID.value) return;
-
         let url = new URL(`${urlover8000}/favoritos/lista/${ClienteID.value}`)
         url.searchParams.append('skip', Pagina.value)
         url.searchParams.append('limit', ItemsPorPagina.value + 1)
-        
+        // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value)
         }
+        // Establecer Orden
         if (orden.value !== "") {
             url.searchParams.append('orden', orden.value)
-            if (orden.value !== "8") { // 8 es el default de recientes
+            if (orden.value !== "8") {
                 filtroAct.value = true
             }
         }
         let minfiltro = ""
         let maxfiltro = ""
+        // Establecer Filtro Precios Fijos
         if (filtroRadio.value === 4) {
             minfiltro = ""
             maxfiltro = ""
@@ -831,6 +922,7 @@
         else if (filtroRadio.value === 1) {
             minfiltro = 50000
         }
+        // Establecer Filtro Precios Personalizados
         else if (filtroRadio.value === 0) {
             minfiltro = menor.value
             maxfiltro = mayor.value
@@ -843,28 +935,24 @@
             url.searchParams.append('precio_producto_max', maxfiltro)
             filtroAct.value = true
         }
+        // Establecer Filtro de Categoria
         if (filtrocat.value !== "") {
             url.searchParams.append('filtrocat', filtrocat.value)
             filtroAct.value = true
         }
-        
-        // Solo traemos los activos, el cliente no debería poder darle favorito a algo deshabilitado
         url.searchParams.append('bool_activo', 'true')
-
         const BusqProducto = await fetch(url.toString(), {
             headers: {
                 "X-Tunnel-Skip-AntiPhishing-Page": "true"
             },
             credentials: 'include'
         })
-        
         if (BusqProducto.status === 401) {
             await CerrarSesion()
             SesionExpirada.value = true
             Iniciado.value = false
             return
         }
-        
         const datos = await BusqProducto.json()
         if (Array.isArray(datos)) {
             if (datos.length > ItemsPorPagina.value) {
@@ -879,6 +967,7 @@
             HayMasPaginas.value = false
         }
     }
+    // Verificacion de Stock > 0 //
     const CarritoStock = (Producto) => {
         let stockCarrito = 0
         CarritoLocal.value.forEach((itemCarrito) => {
@@ -888,9 +977,11 @@
         })
         return Producto.stock - stockCarrito
     }
+    // Añadir al Carrito //
     const SumarCarrito = () => {
         if (!ProductoActual.value)
             return
+        // Establecer Datos del Producto 
         const nuevoProducto = {
             id_pedido: PedidoActual.value,
             nombre_producto: ProductoActual.value.nombre,
@@ -915,7 +1006,7 @@
                 CarritoLocal.value
             )
         )
-        CerrarPopUp03()
+        CerrarPopUp02()
         MostrarConfir.value = true
         setTimeout(() => { MostrarConfir.value = false }, 2000)
     }

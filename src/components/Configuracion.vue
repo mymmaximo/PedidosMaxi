@@ -1,7 +1,8 @@
 <template>
-    <!-- Actualizar Datos -->
     <div class="cuerpo">
         <div class="pagina">
+
+            <!-- Gif Cargando -->
             <div v-if="CargandoTrue" 
             class="flex flex-col 
             items-center justify-center 
@@ -12,28 +13,32 @@
                 class="w-32 h-32 object-contain mb-4"
                 >
                 <h2 class="text-green-800 font-bold text-xl animate-pulse">
-                Cargando configuracion, un momento...
+                    Cargando configuracion, un momento...
                 </h2>
             </div>
+
+            <!-- Error Cargando -->
             <div v-else-if="ErrorCarga" 
             class="flex flex-col 
             items-center justify-center 
             w-full h-[60vh] gap-4"
             >
                 <h1 class="text-3xl font-bold text-red-600 text-center">
-                ¡Ups! La conexión tardó demasiado 🔌
+                    ¡Ups! La conexión tardó demasiado 🔌
                 </h1>
                 <h2 class="text-xl text-gray-700 text-center px-4">
-                El servidor no responde o tu conexión es inestable.
+                    El servidor no responde o tu conexión es inestable.
                 </h2>
                 <div class="mt-6 flex justify-center">
                     <button @click="CargarDatos()" 
                     class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                     >
-                    🔄 Recargar Página
+                        🔄 Recargar Página
                     </button>
                 </div>
             </div>
+
+            <!-- Actualizar Datos de Usuario -->
             <div v-else class="flex justify-center items-center w-full px-4 py-12">
                 <div class="tarjeta-config">
                     <div class="deco-config">
@@ -41,12 +46,13 @@
                     <form @submit.prevent="ActualizarCliente"
                     class="relative z-10 flex flex-col gap-4"
                     >
+                        <!-- Encabezado -->
                         <h1 class="titulo-config mb-4">
-                        DETALLES DE LA CUENTA
+                            DETALLES DE LA CUENTA
                         </h1>
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            Nombre Completo
+                                Nombre Completo
                             </label>
                             <input placeholder="Nombre" 
                             type="text" 
@@ -56,7 +62,7 @@
                         </div>
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            E-mail
+                                E-mail
                             </label>
                             <input placeholder="tucorreo@email.com" 
                             type="text" 
@@ -66,7 +72,7 @@
                         </div>
                         <div class="flex flex-col text-left mt-2">
                             <label class="label-config">
-                            Nueva Contraseña
+                                Nueva Contraseña
                             </label>
                             <div class="relative w-full">
                                 <input placeholder="Escribe para cambiarla" 
@@ -116,7 +122,9 @@
 </template>
 
 <script setup>
+
     // ----- Imports ----- //
+
     import { 
         onMounted, 
         ref 
@@ -128,28 +136,40 @@
         Iniciado,
         ClienteID
     } from './Estatus.js'
+
     // ----- Variables Complejas ----- //
+
     const ClienteConfig = ref({
         nombre: "",
         email: "",
         contrasena: "",
         concontrasena: ""
     })
+
     // ----- Variantes Booleanas ----- //
+
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
     const Actualizando = ref(false)
     const verContrasena = ref(false)
     const verConContrasena = ref(false)
+
     // ----- Variables Vacias ----- //
+
     const IdClienteAct = ref(null)
+
     // ----- Funciones Vue ----- //
+    
+    // Primera Carga de Datos de la Pagina //
     onMounted (() => {
         CargarDatos()
     })
+
+    // Carga de Datos de la Pagina //
     const CargarDatos = (async() => {
         CargandoTrue.value = true
         ErrorCarga.value = false
+        // Tiempo de Espera para el Backend
         const temporizador = setTimeout(() => {
             if (CargandoTrue.value) {
                 CargandoTrue.value = false
@@ -157,6 +177,7 @@
                 console.warn("Se agotó el tiempo de espera de la petición.")
             }
         }, 15000)
+        // Leer Datos del Cliente con Sesion Iniciada
         try {
             const respuestaid = await fetch(`${urlover8000}/reload/`, { credentials: 'include' })
             if (respuestaid.ok) {
@@ -183,7 +204,10 @@
             }
         }
     })
-    // ----- Para el Backend ----- //
+
+    // ----- Funciones Backend ----- //
+    
+    // Actualizar Datos del Cliente //
     const ActualizarCliente = async() => {
         if (Actualizando.value) return
         Actualizando.value = true
@@ -193,6 +217,7 @@
                 return
             }
         }
+        // Establecer Datos del Cliente //
         const UsuarioUpd = {} 
         if (ClienteConfig.value.nombre !== "") {
             UsuarioUpd.nombre = ClienteConfig.value.nombre
@@ -204,6 +229,7 @@
             UsuarioUpd.contrasena = ClienteConfig.value.contrasena
         }
         if (!IdClienteAct.value) return
+        // Enviar Datos Actualizados al Backend //
         const ActUsuario = await fetch(`${urlover8000}/clientes/id/${IdClienteAct.value}`, {
             method: 'PUT',
             headers: {
@@ -229,4 +255,5 @@
         await CargarDatos()
         Actualizando.value = false
     }
+    
 </script>

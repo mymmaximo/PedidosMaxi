@@ -524,7 +524,7 @@
             BloqueoPeticion.value = false
         }
     })
-    // ----- Para el Frontend ----- //
+    // ----- Funciones Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaUDel.value = true
 		document.body.style.overflow = "hidden"
@@ -647,7 +647,7 @@
             UsuarioAct.value.id_rol.push(id_rol)
         }
     }
-    // ----- Para el Backend ----- //
+    // ----- Funciones Backend ----- //
     const ActualizarUsuarios = async() => {
         const UsuarioUpd = {} 
         if (UsuarioAct.value.nombre !== "") {

@@ -600,7 +600,7 @@
             BloqueoPeticion.value = false
         }
 	})
-    // ----- Para el Frontend ----- //
+    // ----- Funciones Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden"
@@ -712,7 +712,7 @@
 			PedidoNow.value = id
 		}
 	}
-    // ----- Para el Backend ----- //
+    // ----- Funciones Backend ----- //
 	const ActualizarEstatus = async() => {
 			const ActEst = await fetch(`${urlover8000}/pedidos/id/${EstatusAct.value.id_pedido}`, {
 				method: 'PUT',

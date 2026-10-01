@@ -1509,7 +1509,7 @@
         'upload',
         'update:path'
     ])
-    // ----- Para el Frontend ----- //
+    // ----- Funciones Frontend ----- //
 	const AbrirPopUp01 = () => {
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden"
@@ -1717,7 +1717,7 @@
         ProductoActual.value = ProductoSeleccionado
         ProductoCantidad.value = 1
     }
-    // ----- Para el Backend ----- //
+    // ----- Funciones Backend ----- //
     const ActualizarProducto = async() => {
         if (Actualizando.value) return
         Actualizando.value = true
