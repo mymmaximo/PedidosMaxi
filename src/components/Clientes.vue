@@ -580,7 +580,9 @@
     
     // ----- Variables Vue ----- //
 
+    // Habilitar Boton //
     const confirboton = computed(() =>{
+        // Nuevo Cliente
         if (MostrarNuevo.value) {
             const faltandatos01 = 
                 NuevoCliente.value.nombre === ""||
@@ -590,6 +592,7 @@
                 NuevoCliente.value.contrasena === ""
             return faltandatos01
         }
+        // Actualizar Cliente
         if (ActualizarCajaC.value) {
             const faltandatos02 = 
                 ClienteAct.value.nombre === ""||

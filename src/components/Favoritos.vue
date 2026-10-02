@@ -1,6 +1,92 @@
 <template>
     <div class="cuerpo">
 
+        <!-- Notificación -->
+        <!-- Adicion al Carrito Exitosa -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="MostrarConfir" 
+                class="notificacion"
+                >
+                    <span class="text-xl drop-shadow-sm">
+                    🛒
+                    </span>
+                    <span>
+                    ¡Agregado al carrito con éxito!
+                    </span>
+                </div>
+            </transition>
+        </Teleport>
+
+        <!-- Confirmacion -->
+        <!-- Confirmacion Quitar -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="QuitarCaja"
+                @click.self="CerrarPopUp01"
+                class="fondo"
+                >
+                    <div class="popup">
+                        <h1 class="text-center">
+                            ¿Desear Quitar {{ ProductoQ.nombre }} de Mis Favoritos?
+                        </h1>
+                        <!-- Imagenes del Producto -->
+                        <div>
+                            <div v-if="ProductoQ.imagenes.length > 0"
+                            class="flex flex-row 
+                            gap-3 overflow-x-auto
+                            items-center justify-center 
+                            w-full pb-2 snap-x"
+                            >
+                                <button @click="BackImg(ProductoQ)"
+                                :disabled="GetImg(ProductoQ.id) === 0"
+                                class="botonflecha"
+                                >
+                                    ❮
+                                </button>
+                                <div>
+                                    <img v-show="ImagenesCargando[ProductoQ.id] === false"
+                                    :src=ObtenerImgUrl(ProductoQ.imagenes[GetImg(ProductoQ.id)].s3_key)
+                                    @load="ImagenesCargando[ProductoQ.id] = false"
+                                    class="imagen"
+                                    >
+                                    <div v-if="ImagenesCargando[ProductoQ.id] !== false" 
+                                    class="mt-2"
+                                    >
+                                        <img src="../assets/loading.gif" 
+                                        alt="Cargando..." 
+                                        class="imagen !2xl:p-15"
+                                        >
+                                    </div>
+                                </div>
+                                <button @click="NextImg(ProductoQ)"
+                                :disabled="GetImg(ProductoQ.id) === ProductoQ.imagenes.length - 1"
+                                class="botonflecha"
+                                >
+                                ❯
+                                </button>
+                            </div>
+                            <img v-else src="../assets/images.png"
+                            class="imagen"
+                            >
+                        </div>
+                        <div class="botones">
+                            <button @click="Quitar()"
+                            class="botoncon"
+                            >
+                            Confirmo
+                            </button>
+                            <button @click="CerrarPopUp01"
+                            class="botonc"
+                            >
+                            Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </Teleport>
+
         <!-- Formulario -->
         <!-- Añadir al Carrito -->
         <Teleport to="body">
@@ -87,92 +173,6 @@
                             Agregar al Carrito
                             </button>
                             <button @click="CerrarPopUp02"
-                            class="botonc"
-                            >
-                            Cancelar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </transition>
-        </Teleport>
-
-        <!-- Notificación -->
-        <!-- Adicion al Carrito Exitoso -->
-        <Teleport to="body">
-            <transition name="fade">
-                <div v-if="MostrarConfir" 
-                class="notificacion"
-                >
-                    <span class="text-xl drop-shadow-sm">
-                    🛒
-                    </span>
-                    <span>
-                    ¡Agregado al carrito con éxito!
-                    </span>
-                </div>
-            </transition>
-        </Teleport>
-
-        <!-- Confirmacion -->
-        <!-- Confirmacion Quitar -->
-        <Teleport to="body">
-            <transition name="fade">
-                <div v-if="QuitarCaja"
-                @click.self="CerrarPopUp01"
-                class="fondo"
-                >
-                    <div class="popup">
-                        <h1 class="text-center">
-                        ¿Desear Quitar {{ ProductoQ.nombre }} de Mis Favoritos?
-                        </h1>
-                        <!-- Imagenes del Producto -->
-                        <div>
-                            <div v-if="ProductoQ.imagenes.length > 0"
-                            class="flex flex-row 
-                            gap-3 overflow-x-auto
-                            items-center justify-center 
-                            w-full pb-2 snap-x"
-                            >
-                                <button @click="BackImg(ProductoQ)"
-                                :disabled="GetImg(ProductoQ.id) === 0"
-                                class="botonflecha"
-                                >
-                                ❮
-                                </button>
-                                <div>
-                                    <img v-show="ImagenesCargando[ProductoQ.id] === false"
-                                    :src=ObtenerImgUrl(ProductoQ.imagenes[GetImg(ProductoQ.id)].s3_key)
-                                    @load="ImagenesCargando[ProductoQ.id] = false"
-                                    class="imagen"
-                                    >
-                                    <div v-if="ImagenesCargando[ProductoQ.id] !== false" 
-                                    class="mt-2"
-                                    >
-                                        <img src="../assets/loading.gif" 
-                                        alt="Cargando..." 
-                                        class="imagen !2xl:p-15"
-                                        >
-                                    </div>
-                                </div>
-                                <button @click="NextImg(ProductoQ)"
-                                :disabled="GetImg(ProductoQ.id) === ProductoQ.imagenes.length - 1"
-                                class="botonflecha"
-                                >
-                                ❯
-                                </button>
-                            </div>
-                            <img v-else src="../assets/images.png"
-                            class="imagen"
-                            >
-                        </div>
-                        <div class="botones">
-                            <button @click="Quitar()"
-                            class="botoncon"
-                            >
-                            Confirmo
-                            </button>
-                            <button @click="CerrarPopUp01"
                             class="botonc"
                             >
                             Cancelar
@@ -668,8 +668,8 @@
     })
     // Carga de Datos de la Pagina //
     const CargarDatos = (async() => {
-        if (!ClienteID.value) return;
-        if (BloqueoPeticion.value) return;
+        if (!ClienteID.value) return
+        if (BloqueoPeticion.value) return
         BloqueoPeticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
         CargandoTrue.value = true
@@ -870,7 +870,7 @@
                 await CerrarSesion()
                 SesionExpirada.value = true
                 Iniciado.value = false
-                return;
+                return
             }
             
             if (respuesta.ok) {
@@ -883,12 +883,12 @@
                 }
             }
         } catch (error) {
-            console.error("Error al quitar favorito:", error);
+            console.error("Error al quitar favorito:", error)
         }
     }
     // Leer los Productos Favoritos //
     const BusquedaFavoritos = async() => {
-        if (!ClienteID.value) return;
+        if (!ClienteID.value) return
         let url = new URL(`${urlover8000}/favoritos/lista/${ClienteID.value}`)
         url.searchParams.append('skip', Pagina.value)
         url.searchParams.append('limit', ItemsPorPagina.value + 1)
