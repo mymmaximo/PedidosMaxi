@@ -96,12 +96,10 @@
                 </Teleport>
 
                 <!-- Barra de Filtros y Formulario de Nuevo Cliente -->
-                <div :class="[
-                'bar', 
-                (MostrarFiltro || MostrarNuevo) 
+                <div :class="['bar', (MostrarFiltro || MostrarNuevo) 
                 ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
-                : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
-                ]">
+                : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
+                >
                     <!-- Barra de Filtros -->
                     <div class="hidden sm:block">
 
@@ -147,25 +145,25 @@
                                     </h1>
                                     <div class="flex flex-col">
                                         <label>
-                                        <input :value="2" 
-                                        type="radio"
-                                        v-model="filtroDirec"
-                                        >
-                                            Todos los Clientes
+                                            <input :value="2" 
+                                            type="radio"
+                                            v-model="filtroDirec"
+                                            >
+                                                Todos los Clientes
                                         </label>
                                         <label>
-                                        <input :value="1"
-                                        type="radio" 
-                                        v-model="filtroDirec"
-                                        > 
-                                            Realizo uno o mas Pedidos
+                                            <input :value="1"
+                                            type="radio" 
+                                            v-model="filtroDirec"
+                                            > 
+                                                Realizo uno o mas Pedidos
                                         </label>
                                         <label>
-                                        <input :value="0"
-                                        type="radio"
-                                        v-model="filtroDirec"
-                                        > 
-                                            No Realizo Pedidos
+                                            <input :value="0"
+                                            type="radio"
+                                            v-model="filtroDirec"
+                                            > 
+                                                No Realizo Pedidos
                                         </label>
                                     </div>
                                 </div>
@@ -176,66 +174,66 @@
                                     </h1>
                                     <div class="flex flex-col">
                                         <label>
-                                        <input :value="2"
-                                        type="radio" 
-                                        v-model="filtroEst"
-                                        > 
-                                            Todos los Clientes
+                                            <input :value="2"
+                                            type="radio" 
+                                            v-model="filtroEst"
+                                            > 
+                                                Todos los Clientes
                                         </label>
                                         <label>
-                                        <input :value="1"
-                                        type="radio" 
-                                        v-model="filtroEst"
-                                        > 
-                                            Cliente Activo
+                                            <input :value="1"
+                                            type="radio" 
+                                            v-model="filtroEst"
+                                            > 
+                                                Cliente Activo
                                         </label>
                                         <label>
-                                        <input :value="0"
-                                        type="radio"
-                                        v-model="filtroEst"
-                                        > 
-                                            Cliente Eliminado
+                                            <input :value="0"
+                                            type="radio"
+                                            v-model="filtroEst"
+                                            > 
+                                                Cliente Eliminado
                                         </label>
                                     </div>
                                 </div>
                                 <!-- Filtro Direcciones -->
                                 <div class="flex flex-col p-2">
-                                <div v-if="filtroDirec === 1">
-                                    <!-- Filtro Ciudad -->
-                                    <h2>
-                                        Ciudad del Cliente
-                                    </h2>
-                                    <select v-model="filtrociudad" 
-                                    class="sel"
-                                    >
-                                        <option value="" disabled>
-                                            Selecciona una Ciudad...
-                                        </option>
-                                        <option v-for="i in ListaCiudad" 
-                                        :key="i.ciudad" 
-                                        :value="i.ciudad"
+                                    <div v-if="filtroDirec === 1">
+                                        <!-- Filtro Ciudad -->
+                                        <h2>
+                                            Ciudad del Cliente
+                                        </h2>
+                                        <select v-model="filtrociudad" 
+                                        class="sel"
                                         >
-                                            {{ i.ciudad }}
-                                        </option>
-                                    </select>
-                                    <!-- Filtro Provincia -->
-                                    <h2>
-                                        Provincia del Cliente
-                                    </h2>
-                                    <select v-model="filtroprovincia" 
-                                    class="sel"
-                                    >
-                                        <option value="" disabled>
-                                            Selecciona una Provincia...
-                                        </option>
-                                        <option v-for="i in ListaProvincia" 
-                                        :key="i.provincia" 
-                                        :value="i.provincia"
+                                            <option value="" disabled>
+                                                Selecciona una Ciudad...
+                                            </option>
+                                            <option v-for="i in ListaCiudad" 
+                                            :key="i.ciudad" 
+                                            :value="i.ciudad"
+                                            >
+                                                {{ i.ciudad }}
+                                            </option>
+                                        </select>
+                                        <!-- Filtro Provincia -->
+                                        <h2>
+                                            Provincia del Cliente
+                                        </h2>
+                                        <select v-model="filtroprovincia" 
+                                        class="sel"
                                         >
-                                            {{ i.provincia }}
-                                        </option>
-                                    </select>
-                                </div>
+                                            <option value="" disabled>
+                                                Selecciona una Provincia...
+                                            </option>
+                                            <option v-for="i in ListaProvincia" 
+                                            :key="i.provincia" 
+                                            :value="i.provincia"
+                                            >
+                                                {{ i.provincia }}
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="botones">
                                     <button @click="AplicarFiltro" 
@@ -259,7 +257,7 @@
                         <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
                         >
-                        +
+                            +
                         </h1>
                         <transition name="slide">
                             <div v-if="MostrarNuevo"
@@ -349,7 +347,9 @@
                         </h2>
                         <div class="mt-6 flex justify-center">
                             <button @click="CargarDatos()" 
-                            class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
+                            class="botoncon 
+                            !flex-none !w-auto 
+                            px-8 shadow-lg shadow-green-900/20"
                             >
                                 🔄 Recargar Página
                             </button>
@@ -361,7 +361,12 @@
 
                         <!-- Mostrar Boton Filtro en Celular -->
                         <button @click="MostrarFiltro = true"
-                        class="sm:hidden w-full mb-4 py-3 bg-white text-green-800 font-black text-lg border-2 border-green-200 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 active:bg-green-50"
+                        class="sm:hidden w-full mb-4 py-3 
+                        bg-white text-green-800 font-black text-lg 
+                        border-2 border-green-200 rounded-xl 
+                        flex items-center justify-center gap-2 
+                        shadow-sm transition-all 
+                        active:scale-95 active:bg-green-50"
                         >
                             ᯤ Abrir Filtros
                         </button>
@@ -376,7 +381,7 @@
 							maxlength="50"
 							>
 						</div>
-                        
+
                         <!-- Encabezado -->
                         <h1 class="titulo-config">
                             Clientes
@@ -393,28 +398,28 @@
                                     >
                                         <div class="tarjeta-info">
                                             <div class="tarjeta-titulo">
-                                                    👤 {{ i.nombre }}
+                                                👤 {{ i.nombre }}
                                                 <span :class="Estatuscolor(i.activo)">
                                                     {{ Estatustxt(i.activo) }}
                                                 </span>
                                             </div>
                                             <p class="tarjeta-dato">
                                                 📧 E-Mail: 
-                                            <span class="tarjeta-valor">
-                                                {{ i.email }}
-                                            </span>
+                                                <span class="tarjeta-valor">
+                                                    {{ i.email }}
+                                                </span>
                                             </p>
                                             <p class="tarjeta-dato">
                                                 🪪 DNI: 
-                                            <span class="tarjeta-valor">
-                                                {{ i.dni }}
-                                            </span>
+                                                <span class="tarjeta-valor">
+                                                    {{ i.dni }}
+                                                </span>
                                             </p>
                                             <p class="tarjeta-dato mb-1">
                                                 📅 Creado el: 
-                                            <span class="tarjeta-valor">
-                                                {{ FormatoFecha(i.created_at) }}
-                                            </span>
+                                                <span class="tarjeta-valor">
+                                                    {{ FormatoFecha(i.created_at) }}
+                                                </span>
                                             </p>
                                         </div>
                                         <div class="tarjeta-acciones">
@@ -458,13 +463,23 @@
                                         Ver {{ i.direcciones.length }} Dirección(es) ⬇️
                                     </div>
                                     <div v-else @click.stop="DireccionCambio(i.id)"
-                                    class="w-full mt-3 py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200 rounded-b-xl rounded-t-none text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all shadow-inner active:scale-95 z-10 relative border-t-0 -mt-1" 
+                                    class="w-full mt-3 py-2 px-4 
+                                    bg-gray-100 hover:bg-gray-200 text-gray-700 
+                                    border border-gray-200 rounded-b-xl rounded-t-none 
+                                    text-xs font-bold flex items-center 
+                                    justify-center gap-2 
+                                    cursor-pointer transition-all 
+                                    shadow-inner active:scale-95 
+                                    z-10 relative border-t-0 -mt-1" 
                                     >
                                         Ocultar Direcciones ⬆️
                                     </div>
                                     <transition name="slide">
                                         <div v-if="DireccionNow === i.id && i.direcciones.length > 0" 
-                                        class="panel-desplegable relative z-0 mt-2 bg-gray-50/50 rounded-xl border border-gray-100 p-2"
+                                        class="panel-desplegable 
+                                        relative z-0 mt-2 
+                                        bg-gray-50/50 rounded-xl 
+                                        border border-gray-100 p-2"
                                         >
                                             <h3 class="text-lg font-bold 
                                             text-gray-800 
@@ -485,28 +500,28 @@
                                                 >
                                                     <p class="tarjeta-dato">
                                                         🗺️ Calle: 
-                                                    <span class="tarjeta-valor font-bold">
-                                                        {{ e.calle }} 
-                                                        {{ e.numero }}
-                                                    </span>
+                                                        <span class="tarjeta-valor font-bold">
+                                                            {{ e.calle }} 
+                                                            {{ e.numero }}
+                                                        </span>
                                                     </p>
                                                     <p class="tarjeta-dato">
                                                         🏘️ Barrio: 
-                                                    <span class="tarjeta-valor">
-                                                        {{ e.barrio }}
-                                                    </span>
+                                                        <span class="tarjeta-valor">
+                                                            {{ e.barrio }}
+                                                        </span>
                                                     </p>
                                                     <p class="tarjeta-dato">
                                                         🏙️ Ciudad: 
-                                                    <span class="tarjeta-valor">
-                                                        {{ e.ciudad }}
-                                                    </span>
+                                                        <span class="tarjeta-valor">
+                                                            {{ e.ciudad }}
+                                                        </span>
                                                     </p>
                                                     <p class="tarjeta-dato">
                                                         📍 Prov: 
-                                                    <span class="tarjeta-valor">
-                                                        {{ e.provincia }}
-                                                    </span>
+                                                        <span class="tarjeta-valor">
+                                                            {{ e.provincia }}
+                                                        </span>
                                                     </p>
                                                 </div>
                                             </div>
@@ -517,15 +532,20 @@
                             </div>  
                             
                             <!-- Tabla Vacia -->
-                            <div v-else class="flex flex-col items-center justify-center p-8">
+                            <div v-else 
+                            class="flex flex-col 
+                            items-center justify-center p-8"
+                            >
                                 <h2 class="text-xl font-bold text-gray-700 text-center">
                                     {{ Pagina === 0 ? 'No se encontraron clientes 😔' : 'Ya no hay más clientes para mostrar 🏁' }}
                                 </h2>
-                                <h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
+                                <h3 v-if="Pagina === 0" 
+                                class="text-gray-500 text-center mt-2"
+                                >
                                     Prueba buscando con otro término
                                 </h3>
                             </div>
-                            
+
                             <!-- Mostrando Paginas -->
                             <div class="flex justify-center p-3">
                                 <button @click="CambiarPagina('back')" 
@@ -535,12 +555,12 @@
                                     ❮
                                 </button>
                                 <h2 class="self-center font-bold px-6 text-green-800 text-center">
-                                <span v-if="clientes.length > 0">
-                                    Mostrando {{ Pagina + 1 }} - {{ Pagina + clientes.length }}
-                                </span>
-                                <span v-else>
-                                    Fin de la lista
-                                </span>
+                                    <span v-if="clientes.length > 0">
+                                        Mostrando {{ Pagina + 1 }} - {{ Pagina + clientes.length }}
+                                    </span>
+                                    <span v-else>
+                                        Fin de la lista
+                                    </span>
                                 </h2>
                                 <button @click="CambiarPagina('next')" 
                                 :disabled="!HayMasPaginas || CargandoTrue"
@@ -598,17 +618,18 @@
                 ClienteAct.value.nombre === ""||
                 ClienteAct.value.email === ""
             return faltandatos02
-        }
-    })
+    }})
 
     // ----- Variables Complejas ----- //
 
+    // Almacen para Actualizar Cliente //
     const ClienteAct = ref({
         id: "",
         nombre: "",
         email: "",
         contrasena: "",
     })
+    // Almacen para Nuevo Cliente //
     const NuevoCliente = ref({
         nombre: "",
         email: "",
@@ -687,8 +708,7 @@
                 CargandoTrue.value = false
             }
             BloqueoPeticion.value = false
-        }
-    })
+    }})
     // Cambiar Pagina //
     const CambiarPagina = async (direccion) => {
         if (BloqueoPeticion.value) return
@@ -711,8 +731,7 @@
         } finally {
             CargandoTrue.value = false
             BloqueoPeticion.value = false
-        }
-    }
+    }}
 
     // ----- Funciones Frontend ----- //
 
@@ -751,8 +770,7 @@
         }
         else {
             DireccionNow.value = id
-        }
-    }
+    }}
     // Establecer Valores de Cliente para Actualizar y Abrir Pop Up //
     const Edicion = (cliente_fila) => {
         ClienteAct.value.id = cliente_fila.id
@@ -766,14 +784,6 @@
         ClienteAct.value.nombre = cliente_fila.nombre
         AbrirPopUp02()
     }
-    // Establecer Accion al Tocar el Tab //
-    const TocarTab = (cliente) => {
-        if (!cliente.direcciones || cliente.direcciones.length === 0) {
-            Eliminacion(cliente)
-        } else {
-            DireccionCambio(cliente.id)
-        }
-    }
     // Establecer Color de Insignia de Estatus //
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true || id_estatus === 1) {
@@ -781,8 +791,7 @@
         }
         else {
             return "badge-inactivo"
-        }
-    }
+    }}
     // Establecer Texto de Insignia de Estatus //
 	const Estatustxt = (id_estatus) => {
 		if (id_estatus === 1 || id_estatus === true) {
@@ -800,8 +809,7 @@
 		}
 		else {
 			return "Pendiente"
-		}
-	}
+	}}
     // Limpiar Filtros, Orden y Busqueda //
     const LimpiarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -814,6 +822,13 @@
         BusquedaCliente()
         filtroAct.value = false
     }
+    // Establecer Accion al Tocar el Tab //
+    const TocarTab = (cliente) => {
+        if (!cliente.direcciones || cliente.direcciones.length === 0) {
+            Eliminacion(cliente)
+        } else {
+            DireccionCambio(cliente.id)
+    }}
 
     // ----- Funciones Backend ----- //
     
@@ -932,8 +947,7 @@
         } else {
             clientes.value = []
             HayMasPaginas.value = false
-        }
-    }
+    }}
     // Registrando Cliente //
     const SubirNuevoCliente = async() => {
         const SubidaNuevoCliente = await fetch(`${urlover8000}/clientes/`, {

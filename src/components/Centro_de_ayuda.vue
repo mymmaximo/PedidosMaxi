@@ -112,12 +112,19 @@
 </template>
 
 <script setup>
+
     // ----- Imports ----- //
+
     import { ref } from 'vue'
+
     // ----- Variables Booleanas ----- //
+
     const MostrarNotificacion = ref(false)
+
     // ----- Variables Vacias ----- //
+
     const TextoNotificacion = ref("")
+
     // ----- Funciones Vue ----- //
     
     // Copiar en Portapapeles //
@@ -145,6 +152,5 @@
         // Copiar Email de Contacto
         else if (tipo === 'E-Mail') {
             window.open('mailto:maxgiesenow@gmail.com', '_self')
-        }
-    }
+    }}
 </script>

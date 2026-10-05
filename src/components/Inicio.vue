@@ -957,6 +957,7 @@
                                                         >
                                                             {{ MisFavoritos.includes(i.id) ? '🤍 Quitar de Favoritos' : '❤️ Agregar a Favoritos' }}
                                                         </button>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -1037,7 +1038,6 @@
             bannersordenados.forEach((banner, index) => {
             banner.orden = index + 1
     })},})
-    
     // Habilitar Boton //
     const confirboton = computed(() => {
         // Actualizar Producto
@@ -1768,9 +1768,11 @@
         let url = new URL(`${urlover8000}/producto/`)
         url.searchParams.append("limit", 1000)
         url.searchParams.append("bool_activo", "true")
+        // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append("busqueda_producto", Busqueda.value)
         }
+        // Establecer Filtro de Precios
         let minfiltro = ""
         let maxfiltro = ""
         if (filtroRadio.value === 4) {
@@ -1797,6 +1799,7 @@
             url.searchParams.append("precio_producto_max", maxfiltro)
             filtroAct.value = true
         }
+        // Establecer Filtro de Estado de los Precios
         if (filtroEst.value === 1) {
             url.searchParams.append("bool_activo", "true")
             filtroAct.value = true
@@ -1805,6 +1808,7 @@
             url.searchParams.append("bool_activo", "false")
             filtroAct.value = true
         }
+        // Establecer Filtro de las Categorias
         if (filtrocat.value !== "") {
             url.searchParams.append("filtrocat", filtrocat.value)
             filtroAct.value = true

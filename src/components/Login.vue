@@ -1,6 +1,9 @@
 <template>
     <div class="cuerpo">
+        <!-- Pagina -->
         <div class="pagina !md:items-center">
+                    
+            <!-- Gif Cargando -->
             <div v-if="CargandoTrue" 
             class="flex flex-col 
             items-center justify-center 
@@ -15,49 +18,58 @@
                 class="text-green-800 
                 font-bold text-xl animate-pulse"
                 >
-                Cargando pagina, un momento...
+                    Cargando pagina, un momento...
                 </h2>
             </div>
+
+            <!-- Error Cargando -->
             <div v-else-if="ErrorCarga" 
             class="flex flex-col 
             items-center justify-center 
             w-full h-[60vh] gap-4"
             >
                 <h1 class="text-3xl font-bold text-red-600 text-center">
-                ¡Ups! La conexión tardó demasiado 🔌
+                    ¡Ups! La conexión tardó demasiado 🔌
                 </h1>
                 <h2 class="text-xl text-gray-700 text-center px-4">
-                El servidor no responde o tu conexión es inestable.
+                    El servidor no responde o tu conexión es inestable.
                 </h2>
                 <div class="mt-6 flex justify-center">
                     <button @click="CargarDatos()" 
                     class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                     >
-                    🔄 Recargar Página
+                        🔄 Recargar Página
                     </button>
                 </div>
             </div>
+            
+            <!-- Pagina de Inicio de Sesion / Registrar -->
             <div v-else>
-                <!-- Iniciar Sesion -->
+                <!-- Opcion Iniciar Sesion -->
                 <div v-if="MostrarLogin"
                 class="tarjeta-config"
                 >
+
+                    <!-- Encabezado -->
                     <div class="deco-config">
                     </div>
                     <div class="text-center mb-8 relative z-10">
                         <h1 class="titulo-config">
-                        Iniciar Sesión
+                            Iniciar Sesión
                         </h1>
                         <p class="text-gray-500 font-medium text-sm sm:text-base">
-                        Bienvenido de nuevo a Maxi-Store
+                            Bienvenido de nuevo a Maxi-Store
                         </p>
                     </div>
+
+                    <!-- Formulario -->
+                    <!-- Iniciar Sesion -->
                     <form @submit.prevent="IniciarSesionUsuario" 
                     class="!gap-5 relative z-10"
                     >
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            E-mail
+                                E-mail
                             </label>
                             <input placeholder="tucorreo@email.com"
                             type="text" 
@@ -68,7 +80,7 @@
                         </div>
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            Contraseña
+                                Contraseña
                             </label>
                             <div class="relative w-full">
                                 <input placeholder="Tu contraseña"
@@ -81,18 +93,20 @@
                                 type="button" 
                                 class="boton-ojo"
                                 >
-                                {{ verContrasena ? '🔒' : '👁️' }}
+                                    {{ verContrasena ? '🔒' : '👁️' }}
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Botones -->
                         <div v-if="Heror" 
                         class="text-red-500 text-center font-bold text-sm 
                         bg-red-50 py-2 rounded-lg border border-red-200"
                         >
-                        ❌ {{ Herror }}
+                            ❌ {{ Herror }}
                         </div>
                         <div class="mt-2">
-                            <button :disabled="confirbotonlog || ProcesandoAuth" 
+                            <button :disabled="confirboton || ProcesandoAuth" 
                             type="submit" 
                             class="boton-guardar"
                             >
@@ -101,7 +115,7 @@
                         </div>
                         <div class="mt-6 border-t border-green-100 pt-6 text-center">
                             <p class="text-gray-600 font-medium mb-3">
-                            ¿No tienes cuenta?
+                                ¿No tienes cuenta?
                             </p>
                             <button @click="MostrarLogin = false; Heror = false"
                             type="button" 
@@ -111,9 +125,13 @@
                             </button>
                         </div>
                     </form>
+
                 </div>
-                <!-- Registrarse -->
+                
+                <!-- Opcion Registrarse -->
                 <div v-else class="tarjeta-config">
+
+                    <!-- Encabezado -->
                     <div class="deco-config">
                     </div>
                     <div class="text-center mb-8 relative z-10">
@@ -124,12 +142,15 @@
                         Únete para gestionar tus pedidos
                         </p>
                     </div>
+
+                    <!-- Formulario -->
+                    <!-- Registrarse -->
                     <form @submit.prevent="SubirNuevoCliente" 
                     class="!gap-5 relative z-10"
                     >
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            Nombre Completo
+                                Nombre Completo
                             </label>
                             <input placeholder="Tu nombre"
                             type="text" 
@@ -139,7 +160,7 @@
                         </div>
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            DNI
+                                DNI
                             </label>
                             <input placeholder="Tu documento"
                             type="text" 
@@ -151,7 +172,7 @@
                         </div>
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            E-mail
+                                E-mail
                             </label>
                             <input placeholder="tucorreo@email.com"
                             type="text" 
@@ -161,7 +182,7 @@
                         </div>
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            Contraseña
+                                Contraseña
                             </label>
                             <div class="relative w-full">
                                 <input placeholder="Crea una contraseña"
@@ -174,13 +195,13 @@
                                 type="button" 
                                 class="boton-ojo"
                                 >
-                                {{ verContrasena ? '🔒' : '👁️' }}
+                                    {{ verContrasena ? '🔒' : '👁️' }}
                                 </button>
                             </div>
                         </div>
                         <div class="flex flex-col text-left">
                             <label class="label-config">
-                            Confirmar Contraseña
+                                Confirmar Contraseña
                             </label>
                             <div class="relative w-full">
                                 <input placeholder="Repite la contraseña"
@@ -193,27 +214,29 @@
                                 type="button" 
                                 class="boton-ojo"
                                 >
-                                {{ verConContrasena ? '🔒' : '👁️' }}
+                                    {{ verConContrasena ? '🔒' : '👁️' }}
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Botones -->
                         <div v-if="Heror" 
                         class="text-red-500 text-center font-bold text-sm 
                         bg-red-50 py-2 rounded-lg border border-red-200"
                         >
-                        ❌ {{ Herror }}
+                            ❌ {{ Herror }}
                         </div>
                         <div class="mt-2">
-                            <button :disabled="confirbotonreg || ProcesandoAuth" 
+                            <button :disabled="confirboton || ProcesandoAuth" 
                             type="submit" 
                             class="boton-guardar"
                             >
-                            {{ ProcesandoAuth ? 'Registrando...' : 'Registrarte' }}
+                                {{ ProcesandoAuth ? 'Registrando...' : 'Registrarte' }}
                             </button>
                         </div>
                         <div class="mt-6 border-t border-green-100 pt-6 text-center">
                             <p class="text-gray-600 font-medium mb-3">
-                            ¿Ya tienes cuenta?
+                                ¿Ya tienes cuenta?
                             </p>
                             <button @click="MostrarLogin = true; Heror = false"
                             type="button" 
@@ -223,17 +246,20 @@
                             </button>
                         </div>
                     </form>
+
                 </div>
+
             </div>
+
         </div>
     </div>
 </template>
 
 <script setup>
     // ----- Imports ----- //
+
     import { 
-        computed, 
-        onMounted, 
+        computed,
         ref 
     } from 'vue'
     import {
@@ -243,13 +269,21 @@
         ValidadSesionBack, 
         urlover8000,
         Iniciado,
-        Rol,
-        VerificarRol,
-        VerificarRolExcluido
+        VerificarRol
     } from './Estatus.js'
+    
     // ----- Variables Vue ----- //
-    const router = useRouter()
-    const confirbotonreg = computed(() =>{
+    
+    // Habilitar Boton //
+    const confirboton = computed(() =>{
+        // Iniciar Sesion
+        if (MostrarLogin.value) {
+            const faltandatos01 = 
+                LoginBox.value.email === "" ||
+                LoginBox.value.contrasena === ""
+            return faltandatos01
+        }
+        // Registrarse
         if (!MostrarLogin.value) {
             const faltandatos02 = 
                 NuevoCliente.value.nombre === "" ||
@@ -258,21 +292,17 @@
                 NuevoCliente.value.contrasena === "" ||
                 NuevoCliente.value.concontrasena === "" 
             return faltandatos02
-        }
-    })
-    const confirbotonlog = computed(() =>{
-        if (MostrarLogin.value) {
-            const faltandatos01 = 
-                LoginBox.value.email === "" ||
-                LoginBox.value.contrasena === ""
-            return faltandatos01
-        }
-    })
+    }})
+    const router = useRouter()
+
     // ----- Variables Complejas ----- //
+
+    // Almacen para Inicio de Sesion //
     const LoginBox = ref({
         email: "",
         contrasena: ""
     })
+    // Almacen para Resgistrar Cliente //
     const NuevoCliente = ref({
         nombre: "",
         email: "",
@@ -280,7 +310,9 @@
         contrasena: "",
         concontrasena: ""
     })
+
     // ----- Variantes Booleanas ----- //
+    
     const Heror = ref(false)
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(false)
@@ -288,9 +320,14 @@
     const verContrasena = ref(false)
     const ProcesandoAuth = ref(false)
     const verConContrasena = ref(false)
+    
     // ----- Variantes Vacias ----- //
+    
     const Herror = ref("")
+    
     // ----- Funciones Vue ----- //
+    
+    // Carga de Datos de la Pagina //
     const CargarDatos = ( async () => {
         CargandoTrue.value = true
         ErrorCarga.value = false
@@ -311,18 +348,20 @@
         } finally {
             if (!ErrorCarga.value) {
                 CargandoTrue.value = false
-            }
-        }
-    })
+    }}})
+
+    // Enviar Usuario/Cliente a Url/Link //
     const ProcesarLogin = () => {
         Iniciado.value = true
         if (VerificarRol([3, 6])) {
             router.push('/pedidos')
         } else {
             router.push('/')
-        }
-    }
+    }}
+
     // ----- Funciones Backend ----- //
+
+    // Verificar Inicio de Sesion como Cliente //
     const IniciarSesionCliente = async() => {
         const respuesta = await fetch(`${urlover8000}/cliente/login/`, {
             method: 'POST',
@@ -342,8 +381,8 @@
         } else {
             Herror.value = "Usuario o contraseña incorrectos"
             Heror.value = true
-        } 
-    }
+    }}
+    // Verificar Inicio de Sesion como Usuario //
     const IniciarSesionUsuario = async() => {
         if (ProcesandoAuth.value) return
         ProcesandoAuth.value = true
@@ -369,6 +408,7 @@
                     contrasena: ""
                 }
             } else {
+                // Verificar Inicio de Sesion como Cliente //
                 await IniciarSesionCliente()
             } 
         } catch (error) {
@@ -377,8 +417,8 @@
             Heror.value = true
         } finally {
             ProcesandoAuth.value = false
-        }
-    }
+    }}
+    // Registrar Cliente Nuevo //
     const SubirNuevoCliente = async() => {
         if (NuevoCliente.value.contrasena !== "" || NuevoCliente.value.concontrasena !== "") {
             if (NuevoCliente.value.contrasena !== NuevoCliente.value.concontrasena) {

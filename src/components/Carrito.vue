@@ -397,10 +397,7 @@
 
     // ----- Variables Vue ----- //
 
-    const router = useRouter()
-    
     // Verificacion del Boton //
-
     const confirboton = computed(() =>{
         if (Rol.value && Rol.value.length > 0) {
             return true
@@ -417,9 +414,7 @@
         }}
         return false
     })
-
     // Primera Carga de Datos de la Pagina //
-
     onMounted (async () => {
         let PagoExito = false
         await CargarDatos()
@@ -440,13 +435,8 @@
                         console.log("El usuario cerró la ventana sin pagar")
                     }
                     ProcesandoPago.value = false
-                }
-            }
-        })
-    })
-
+    }}})})
     // Carga de Datos de la Pagina //
-
     const CargarDatos = (async() => {
         if (!ClienteID.value) { 
             CargandoTrue.value = false
@@ -484,9 +474,11 @@
     const emit = defineEmits([
         'CarritoVacio'
     ])
+    const router = useRouter()
 
     // ----- Variables Complejas ----- //
 
+    // Almacen para Nuevas Direcciones //
     const NuevaDireccion = ref ({
         calle: "",
         numero: null,
@@ -536,8 +528,7 @@
         if (ImgActual > 0) {
             IndiceImg.value[imagen.id_producto] = ImgActual - 1
             ImagenesCargando.value[imagen.id_producto] = true
-        }
-    }
+    }}
     // Cerrar Pop up de Borrar Detalle //
 	const CerrarPopUp01 = () => {
 		ActualizarCarritoDel.value = false
@@ -568,8 +559,7 @@
         if (ImgActual < imagen.imagenes.length - 1) {
             IndiceImg.value[imagen.id_producto] = ImgActual + 1
             ImagenesCargando.value[imagen.id_producto] = true
-        }
-    }
+    }}
     // Obtener Url/Link de Imagen //
     const ObtenerImgUrl = (Imgenkey) => {
         const respuesta = supabase.storage
@@ -577,6 +567,7 @@
             .getPublicUrl(Imgenkey)
         return respuesta.data.publicUrl
     }
+
     // ----- Funciones Backend ----- //
     
     // Borrar Detalle de Pedido del Carrito //
@@ -588,8 +579,7 @@
         if (CarritoLocal.value.length === 0) {
             emit('CarritoVacio')
             router.push('/')
-        }
-    }
+    }}
     // Enviar Pedido Completo al Backend //
     const ConfirmarCompra = (async() => {
         if (ProcesandoPago.value) return
@@ -714,8 +704,7 @@
             console.error("Error crítico procesando la compra:", error)
             alert("Ocurrió un problema al procesar tu pedido. Por favor, intenta de nuevo.")
             ProcesandoPago.value = false
-        }
-    })
+    }})
     // Verificacion de Stock > 0 //
     const VerificarStock = (item) => {
         if (item.cantidad < 1) {

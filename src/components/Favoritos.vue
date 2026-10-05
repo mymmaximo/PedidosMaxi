@@ -9,10 +9,10 @@
                 class="notificacion"
                 >
                     <span class="text-xl drop-shadow-sm">
-                    🛒
+                        🛒
                     </span>
                     <span>
-                    ¡Agregado al carrito con éxito!
+                        ¡Agregado al carrito con éxito!
                     </span>
                 </div>
             </transition>
@@ -63,7 +63,7 @@
                                 :disabled="GetImg(ProductoQ.id) === ProductoQ.imagenes.length - 1"
                                 class="botonflecha"
                                 >
-                                ❯
+                                    ❯
                                 </button>
                             </div>
                             <img v-else src="../assets/images.png"
@@ -74,12 +74,12 @@
                             <button @click="Quitar()"
                             class="botoncon"
                             >
-                            Confirmo
+                                Confirmo
                             </button>
                             <button @click="CerrarPopUp01"
                             class="botonc"
                             >
-                            Cancelar
+                                Cancelar
                             </button>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                 >
                     <div class="popup popup-compra">
                         <h1>
-                        {{ ProductoActual.nombre }}
+                            {{ ProductoActual.nombre }}
                         </h1>
                         <!-- Imagenes del Producto -->
                         <div class="carrusel-contenedor">
@@ -108,7 +108,7 @@
                                 :disabled="GetImg(ProductoActual.id) === 0"
                                 class="carrusel-btn"
                                 >
-                                ❮
+                                    ❮
                                 </button>
                                 <div>
                                     <img v-show="ImagenesCargando[ProductoActual.id] === false"
@@ -129,7 +129,7 @@
                                 :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
                                 class="carrusel-btn"
                                 >
-                                ❯
+                                    ❯
                                 </button>
                             </div>
                             <div v-else class="carrusel-img-caja">
@@ -159,7 +159,7 @@
                             </div>
                             <div class="total-caja">
                                 <span class="total-subtitulo">
-                                Precio Total
+                                    Precio Total
                                 </span>
                                 <span class="total-valor">
                                     $ {{ FormatearPrecio(ProductoActual.precio * ProductoCantidad) }}
@@ -170,12 +170,12 @@
                             <button @click="SumarCarrito"
                             class="botoncon"
                             >
-                            Agregar al Carrito
+                                Agregar al Carrito
                             </button>
                             <button @click="CerrarPopUp02"
                             class="botonc"
                             >
-                            Cancelar
+                                Cancelar
                             </button>
                         </div>
                     </div>
@@ -199,19 +199,18 @@
                 </Teleport>
 
                 <!-- Barra de Filtros de Productos Favoritos -->
-                <div :class="[
-                    'bar', 
-                    MostrarFiltro 
-                    ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
-                    : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
-                    ]">
+                <div :class="['bar', MostrarFiltro 
+                ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
+                : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
+                >
                     <!-- Barra de Filtros -->
                     <div class="hidden sm:block">
 
                         <!-- Boton de Filtros -->
                         <h1 @click="MostrarFiltro = !MostrarFiltro" 
                         class="botonfil"
-                        >ᯤ
+                        >
+                            ᯤ
                         </h1>
 
                     </div>
@@ -222,36 +221,37 @@
                             <!-- Orden de Productos Favoritos -->
                             <div class="flex flex-col md:px-4 md:pb-4 p-2 !pt-0">
                                 <h1 class="!mt-0">
-                                Ordenar
+                                    Ordenar
                                 </h1>
                                 <select v-model="orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
-                                    Orden...
+                                        Orden...
                                     </option>
                                     <option value="8">
-                                    Agregados Recientemente
+                                        Agregados Recientemente
                                     </option>
                                     <option value="7">
-                                    Agregados más Antiguos
+                                        Agregados más Antiguos
                                     </option>
                                     <option value="1">
-                                    Nombre A-Z</option>
+                                        Nombre A-Z
+                                    </option>
                                     <option value="2">
-                                    Nombre Z-A
+                                        Nombre Z-A
                                     </option>
                                     <option value="3">
-                                    Mayor Precio
+                                        Mayor Precio
                                     </option>
                                     <option value="4">
-                                    Menor Precio
+                                        Menor Precio
                                     </option>
                                     <option value="5">
-                                    Mayor Stock
+                                        Mayor Stock
                                     </option>
                                     <option value="6">
-                                    Menor Stock
+                                        Menor Stock
                                     </option>
                                 </select>
                             </div>
@@ -259,18 +259,18 @@
                             <!-- Filtro de Categoria -->
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2>
-                                Filtro Categoria
+                                    Filtro Categoria
                                 </h2>
                                 <div>
                                     <select v-model="filtrocat">
                                         <option value="" disabled>
-                                        Categorias...
+                                            Categorias...
                                         </option>
                                         <option v-for="i in ListaCategoria" 
                                         :key="i.categoria" 
                                         :value="i.categoria"
                                         >
-                                        {{ i.categoria }}
+                                            {{ i.categoria }}
                                         </option>
                                     </select>
                                 </div>
@@ -279,42 +279,42 @@
                             <!-- Filtro de Precio (Rango Fijos) -->
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2>
-                                Filtros de Precio
+                                    Filtros de Precio
                                 </h2>
                                 <label>
-                                <input :value="4" 
-                                type="radio" 
-                                v-model="filtroRadio"
-                                > 
-                                Cualquier Precio
+                                    <input :value="4" 
+                                    type="radio" 
+                                    v-model="filtroRadio"
+                                    > 
+                                        Cualquier Precio
                                 </label>
                                 <label>
-                                <input :value="3" 
-                                type="radio" 
-                                v-model="filtroRadio"
-                                > 
-                                Hasta $10,000
+                                    <input :value="3" 
+                                    type="radio" 
+                                    v-model="filtroRadio"
+                                    > 
+                                        Hasta $10,000
                                 </label>
                                 <label>
-                                <input :value="2" 
-                                type="radio" 
-                                v-model="filtroRadio"
-                                > 
-                                $10,000 a $50,000
+                                    <input :value="2" 
+                                    type="radio" 
+                                    v-model="filtroRadio"
+                                    > 
+                                        $10,000 a $50,000
                                 </label>
                                 <label>
-                                <input :value="1" 
-                                type="radio" 
-                                v-model="filtroRadio"
-                                > 
-                                Más de $50,000
+                                    <input :value="1" 
+                                    type="radio" 
+                                    v-model="filtroRadio"
+                                    > 
+                                        Más de $50,000
                                 </label>
                                 <label>
-                                <input :value="0" 
-                                type="radio" 
-                                v-model="filtroRadio"
-                                > 
-                                Personalizado
+                                    <input :value="0" 
+                                    type="radio" 
+                                    v-model="filtroRadio"
+                                    > 
+                                        Personalizado
                                 </label>
                             </div>
 
@@ -323,7 +323,7 @@
                             class="flex flex-col md:p-4 p-2"
                             >
                                 <h3 class="flex flex-col md:p-4 p-2">
-                                Precio Mayor
+                                    Precio Mayor
                                 </h3>
                                 <input placeholder="Precio Max..." 
                                 type="number" 
@@ -331,7 +331,7 @@
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                                 <h3 class="flex flex-col md:p-4 p-2">
-                                Precio Minimo
+                                    Precio Minimo
                                 </h3>
                                 <input placeholder="Precio Min..." 
                                 type="number" 
@@ -342,12 +342,12 @@
                             <div class="botones">
                                 <button @click="AplicarFiltro" 
                                 class="botoncon">
-                                Aplicar Filtros
+                                    Aplicar Filtros
                                 </button>
                                 <button @click="LimpiarFiltro" 
                                 v-if="filtroAct === true" 
                                 class="botont">
-                                🗑️ Limpiar Filtro
+                                    🗑️ Limpiar Filtro
                                 </button>
                             </div>
                         </div>
@@ -366,7 +366,7 @@
                         class="w-32 h-32 object-contain mb-4"
                         >
                         <h2 class="text-green-800 font-bold text-xl animate-pulse">
-                        Cargando tus favoritos...
+                            Cargando tus favoritos...
                         </h2>
                     </div>
 
@@ -375,16 +375,16 @@
                     class="flex flex-col items-center justify-center w-full h-[60vh] gap-4"
                     >
                         <h1 class="text-3xl font-bold text-red-600 text-center">
-                        ¡Ups! Algo falló 🔌
+                            ¡Ups! Algo falló 🔌
                         </h1>
                         <h2 class="text-xl text-gray-700 text-center px-4">
-                        No pudimos cargar tus favoritos.
+                            No pudimos cargar tus favoritos.
                         </h2>
                         <div class="mt-6 flex justify-center">
                             <button @click="CargarDatos()" 
                             class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                             >
-                            🔄 Reintentar
+                                🔄 Reintentar
                             </button>
                         </div>
                     </div>
@@ -396,12 +396,12 @@
                             <!-- Mostrar Boton Filtro en Celular -->
                             <button @click="MostrarFiltro = true" 
                             class="sm:hidden w-full mb-4 py-3 bg-white text-green-800 font-black text-lg border-2 border-green-200 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 active:bg-green-50">
-                            ᯤ Abrir Filtros
+                                ᯤ Abrir Filtros
                             </button>
 
                             <!-- Encabezado -->
                             <h1 class="text-2xl font-black text-green-800 mb-4 ml-1">
-                            🤍 Mi Lista de Deseos
+                                🤍 Mi Lista de Deseos
                             </h1>
 
                             <div class="flex flex-row items-stretch w-full gap-3 mb-5">
@@ -421,10 +421,10 @@
                                 class="shrink-0 flex items-center justify-center bg-white border-2 border-green-200 text-green-700 rounded-xl w-12 sm:w-14 hover:bg-green-50 transition-all shadow-sm active:scale-95 cursor-pointer"
                                 >
                                     <span v-if="!VistaLista" class="text-xl">
-                                    「 」
+                                        「 」
                                     </span>
                                     <span v-else class="text-xl">
-                                    ☰
+                                        ☰
                                     </span>
                                 </button>
 
@@ -441,8 +441,7 @@
                                 @touchstart="ComienzoToque($event)"
                                 @touchend="FinToque($event, i)" 
                                 @click="Compracion(i)"
-                                :class="[
-                                'si', VistaLista 
+                                :class="['si', VistaLista 
                                 ? 'tarjeta-premium relative bg-white !w-full !m-0 hover:!shadow-lg' 
                                 : 'carta relative']"
                                 >
@@ -451,7 +450,10 @@
                                     : 'w-full'">
                                         
                                         <!-- Imagenes del Producto -->
-                                        <div :class="VistaLista ? 'w-24 sm:w-32 shrink-0' : 'w-full'">
+                                        <div :class="VistaLista 
+                                        ? 'w-24 sm:w-32 shrink-0' 
+                                        : 'w-full'"
+                                        >
                                             <div v-if="i.imagenes.length > 0"
                                             class="flex flex-row gap-3 overflow-x-auto 
                                             items-center justify-center w-full pb-2 snap-x"
@@ -461,7 +463,7 @@
                                                 class="botonflecha hidden md:flex" 
                                                 v-show="!VistaLista"
                                                 >
-                                                ❮
+                                                    ❮
                                                 </button>
                                                 <div>
                                                     <img v-show="ImagenesCargando[i.id] === false"
@@ -469,8 +471,13 @@
                                                     @load="ImagenesCargando[i.id] = false"
                                                     :class="VistaLista ? 'w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-xl drop-shadow-md' : 'imagen'"
                                                     >
-                                                    <div v-if="ImagenesCargando[i.id] !== false" class="mt-2">
-                                                        <img src="../assets/loading.gif" alt="Cargando..." class="imagen !2xl:p-15">
+                                                    <div v-if="ImagenesCargando[i.id] !== false" 
+                                                    class="mt-2"
+                                                    >
+                                                        <img src="../assets/loading.gif" 
+                                                        alt="Cargando..." 
+                                                        class="imagen !2xl:p-15"
+                                                        >
                                                     </div>
                                                 </div>
                                                 <button @click.stop="NextImg(i)"
@@ -478,23 +485,33 @@
                                                 class="botonflecha hidden md:flex"
                                                 v-show="!VistaLista"
                                                 >
-                                                ❯
+                                                    ❯
                                                 </button>
                                             </div>
                                             <img v-else src="../assets/images.png"
-                                            :class="VistaLista ? 'w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-xl drop-shadow-md' : 'imagen'"
+                                            :class="VistaLista 
+                                            ? 'w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-xl drop-shadow-md' 
+                                            : 'imagen'"
                                             >
                                         </div>
                                         <!-- Datos del Producto -->
                                         <div :class="VistaLista ? 'tarjeta-info pt-2 sm:pt-0' : 'mt-2'">
-                                            <h2 :class="['font-bold', VistaLista ? 'text-2xl text-gray-800' : '']">
-                                            {{ i.nombre }}
+                                            <h2 :class="['font-bold', VistaLista 
+                                            ? 'text-2xl text-gray-800' 
+                                            : '']"
+                                            >
+                                                {{ i.nombre }}
                                             </h2>
-                                            <h3 :class="VistaLista ? 'text-gray-500 font-medium' : ''">
-                                            Categoria: {{ i.categoria }}
+                                            <h3 :class="VistaLista 
+                                            ? 'text-gray-500 font-medium' 
+                                            : ''"
+                                            >
+                                                Categoria: {{ i.categoria }}
                                             </h3>
-                                            <h2 :class="VistaLista ? 'text-green-600 text-xl font-black mt-1' : ''">
-                                            $ {{ FormatearPrecio(i.precio) }}
+                                            <h2 :class="VistaLista 
+                                            ? 'text-green-600 text-xl font-black mt-1' 
+                                            : ''">
+                                                $ {{ FormatearPrecio(i.precio) }}
                                             </h2>
                                         </div>
                                     </div>
@@ -505,20 +522,19 @@
                                         <button @click.stop="QuitarFavorito(i)" 
                                         :class="VistaLista ? 'btn-chico-rojo' : 'botonc !px-2 !py-2 !text-sm'"
                                         >
-                                        💔
-                                        <span :class="VistaLista ? 'inline' : 'hidden xl:inline ml-1 truncate'">
-                                        Quitar
-                                        </span>
+                                            💔
+                                            <span :class="VistaLista ? 'inline' : 'hidden xl:inline ml-1 truncate'">
+                                                Quitar
+                                            </span>
                                         </button>
-
                                         <button @click.stop="Compracion(i)"
                                         :disabled="CarritoStock(i) === 0"
                                         v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
                                         :class="VistaLista ? 'btn-chico-verde !bg-green-600 !text-white hover:!bg-green-700' : 'botoncon !px-2 !py-2 !text-sm'">
-                                        🛍️
-                                        <span class="hidden xl:inline ml-1 truncate">
-                                        Comprar
-                                        </span>
+                                            🛍️
+                                            <span class="hidden xl:inline ml-1 truncate">
+                                                Comprar
+                                            </span>
                                         </button>
                                     </div>
                                 </div>
@@ -526,36 +542,42 @@
                             
                             <!-- Tabla Vacia -->
                             <div v-else class="flex flex-col items-center justify-center p-8">
-                                <span class="text-5xl mb-4">👻</span>
+                                <span class="text-5xl mb-4">
+                                    👻
+                                </span>
                                 <h2 class="text-xl font-bold text-gray-700 text-center">
-                                {{ Pagina === 0 ? 'Aún no tienes productos en favoritos' : 'Ya no hay más productos para mostrar 🏁' }}
+                                    {{ Pagina === 0 ? 'Aún no tienes productos en favoritos' : 'Ya no hay más productos para mostrar 🏁' }}
                                 </h2>
-                                <h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
-                                ¡Explora la tienda y dale al corazón a lo que te guste!
+                                <h3 v-if="Pagina === 0" 
+                                class="text-gray-500 text-center mt-2"
+                                >
+                                    ¡Explora la tienda y dale al corazón a lo que te guste!
                                 </h3>
                             </div>
                             
                             <!-- Mostrando Paginas -->
-                            <div class="flex justify-center p-5" v-if="Productos.length > 0 || Pagina > 0">
+                            <div class="flex justify-center p-5" 
+                            v-if="Productos.length > 0 || Pagina > 0"
+                            >
                                 <button @click="CambiarPagina('back')" 
                                 :disabled="Pagina === 0 || CargandoTrue"
                                 class="botona"
                                 >
-                                ❮
+                                    ❮
                                 </button>
                                 <h2 class="self-center font-bold px-6 text-green-800 text-center">
-                                <span v-if="Productos.length > 0">
-                                Mostrando {{ Pagina + 1 }} - {{ Pagina + Productos.length }}
-                                </span>
-                                <span v-else>
-                                Fin de la lista
-                                </span>
+                                    <span v-if="Productos.length > 0">
+                                        Mostrando {{ Pagina + 1 }} - {{ Pagina + Productos.length }}
+                                    </span>
+                                    <span v-else>
+                                        Fin de la lista
+                                    </span>
                                 </h2>
                                 <button @click="CambiarPagina('next')" 
                                 :disabled="!HayMasPaginas || CargandoTrue"
                                 class="botona"
                                 >
-                                ❯
+                                    ❯
                                 </button>
                             </div>
                         </div>
@@ -596,6 +618,7 @@
 
     // ----- Variables Complejas ----- //
 
+    // Almacen para Quitar de Favoritos //
     const ProductoQ = ref({
         id: "",
         nombre: "",
