@@ -1097,6 +1097,13 @@
     const Bananaer = ref(null)
     const filtroEst = ref(1)
 
+    // ----- Variables Temporales ----- //
+
+    let intervaloCarrusel = null
+    let cartagarrada = null
+    let inicioX = 0
+    let inicioY = 0
+
     // ----- Variables Vue ----- //
 
     // Leer Banners en Orden //
@@ -1144,13 +1151,6 @@
         )})}
         return agrupados
     })
-
-    // ----- Variables Temporales ----- //
-
-    let intervaloCarrusel = null
-    let cartagarrada = null
-    let inicioX = 0
-    let inicioY = 0
 
     // ----- Funciones Vue ----- //
 
