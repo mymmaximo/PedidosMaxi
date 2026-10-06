@@ -842,6 +842,14 @@
                                     class="carta relative"
                                     >
                                         <div>
+                                            <div v-if="i.es_promocion" 
+                                            class="absolute top-2 left-2 
+                                            z-10 bg-red-500 text-white 
+                                            text-xs font-black px-2 py-1 
+                                            rounded-md shadow-md"
+                                            >
+                                                🔥 {{ i.motivo || 'OFERTA' }}
+                                            </div>
                                             <!-- Imagenes del Producto -->
                                             <div v-if="i.imagenes.length > 0"
                                             class="flex flex-row 
@@ -869,29 +877,29 @@
                                             />
                                             <!-- Datos del Producto -->
                                             <div>
-                                                <div v-if="i.es_promocion"
-                                                class="absolute top-2 left-2 z-10 
-                                                bg-red-500 text-white text-xs font-black 
-                                                px-2 py-1 rounded-md shadow-md"
-                                                >
-                                                    🔥 {{ i.motivo || "OFERTA" }}
-                                                </div>
                                                 <h2 class="font-bold">
                                                     {{ i.nombre }}
                                                 </h2>
                                                 <div class="flex flex-col">
-                                                    <h2
-                                                    v-if="i.es_promocion"
-                                                    class="text-gray-400 text-xs font-bold
-                                                    line-through -mb-1 mt-0.5"
-                                                    >
-                                                        $ {{ FormatearPrecio(i.precio) }}
-                                                    </h2>
-                                                    <h2 :class="['font-bold', i.es_promocion 
+                                                    <div v-if="i.es_promocion" class="flex items-center gap-2 -mb-1 mt-1">
+                                                        <span v-if="i.porcentaje_descuento" class="text-xs font-black text-white bg-green-500 px-1.5 py-0.5 rounded">
+                                                            {{ i.porcentaje_descuento }}% OFF
+                                                        </span>
+                                                        <h2 class="text-gray-400 text-sm font-bold line-through">
+                                                            $ {{ FormatearPrecio(i.precio) }}
+                                                        </h2>
+                                                    </div>
+                                                    <h2 :class="[VistaLista 
+                                                    ? 'text-xl font-black mt-1' 
+                                                    : 'font-bold', 
+                                                    i.es_promocion 
                                                     ? 'text-red-600' 
-                                                    : 'text-green-600',]"
+                                                    : 'text-green-600',
+                                                    !i.es_promocion 
+                                                    ? 'mt-1' 
+                                                    : '']"
                                                     >
-                                                        $ {{FormatearPrecio(i.es_promocion ? i.precio_nuevo : i.precio)}}
+                                                        $ {{ FormatearPrecio(i.es_promocion ? i.precio_nuevo : i.precio) }}
                                                     </h2>
                                                 </div>
                                                 <div v-if="VerificarRol([1, 2, 4, 5])">
