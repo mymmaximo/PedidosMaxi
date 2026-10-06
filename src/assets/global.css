@@ -321,6 +321,7 @@ table td {
     hover:-translate-y-1
     from-red-500 
     to-green-200/20
+    relative
 }
 /* -------------------------------------------TEXTO------------------------------------------- */
 .busqueda {
