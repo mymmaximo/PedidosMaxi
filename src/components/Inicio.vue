@@ -1054,6 +1054,12 @@
         fecha_fin: "",
     })
     const router = useRouter()
+    // Leer Url/Link y Tamaño de Imagen //
+    const emit = defineEmits(["upload", "update:path"])
+    // Definir Url/Link y Tamaño de Imagen //
+    const prop = defineProps(["path", "size"])
+    // Asignar Url/Link y Tamaño de Imagen //
+    const { path } = toRefs(prop)
 
     // ----- Variables Booleanas ----- //
 
@@ -1256,12 +1262,6 @@
                 } else {
                     IndiceBanner.value = 0
     }}}, 4000)}
-    // Leer Url/Link y Tamaño de Imagen //
-    const emit = defineEmits(["upload", "update:path"])
-    // Definir Url/Link y Tamaño de Imagen //
-    const prop = defineProps(["path", "size"])
-    // Asignar Url/Link y Tamaño de Imagen //
-    const { path } = toRefs(prop)
 
 // ----- Para el Frontend ----- //
 
