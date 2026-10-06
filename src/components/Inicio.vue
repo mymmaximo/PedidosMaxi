@@ -71,6 +71,7 @@
                             class="imagen" 
                             />
                         </div>
+                        <!-- Botones Confirmacion -->
                         <div class="botones">
                             <button @click="BorrarProducto()" 
                             class="botoncon"
@@ -197,9 +198,12 @@
                 >
                     <div class="popup">
                         <form @submit.prevent="ActualizarProducto">
+
+                            <!-- Encabezado -->
                             <h1>
                                 {{ ProductoAct.nombre }}
                             </h1>
+
                             <!-- Actualizar Nombre -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
@@ -211,6 +215,7 @@
                                 maxlength="50"
                                 />
                             </div>
+
                             <!-- Actualizar Precio -->
                             <div v-if="VerificarRol([1, 2, 4])">
                                 <h2>
@@ -222,6 +227,7 @@
                                 maxlength="8"
                                 />
                             </div>
+
                             <!-- Actualizar Stock -->
                             <div v-if="VerificarRol([1, 2, 5])">
                                 <h2>
@@ -1016,54 +1022,6 @@
     import { supabase } from "../config/supabase.js"
     import { useRouter } from "vue-router"
 
-    // ----- Variables Vue ----- //
-
-    // Leer Banners en Orden //
-    const BannersOrden = computed({
-        get() {
-            const viejo = Bananaeract.value && Bananaeract.value.imagenes ? Bananaeract.value.imagenes : []
-            const nuevo = BannersNuevos.value
-            const todo = [...viejo, ...nuevo]
-            return todo.sort((a, b) => {
-                const desactA = BannerDesactivado(a)
-                const desactB = BannerDesactivado(b)
-                if (desactA && !desactB) return 1
-                if (desactB && !desactA) return -1
-                const ordenA = a.orden || 0
-                const ordenB = b.orden || 0
-                return ordenA - ordenB
-            })
-        },
-        set(bannersordenados) {
-            bannersordenados.forEach((banner, index) => {
-            banner.orden = index + 1
-    })},})
-    // Habilitar Boton //
-    const confirboton = computed(() => {
-        // Actualizar Producto
-        if (ActualizarCajaP.value) {
-            const faltandatos03 =
-            ProductoAct.value.nombre === "" ||
-            ProductoAct.value.precio === "" ||
-            ProductoAct.value.stock === "" ||
-            ProductoAct.value.codigo_barra === "" ||
-            ProductoAct.value.stock < 0 ||
-            ProductoAct.value.precio <= 0
-            const faltandatos04 =
-            OpcionCategoriaA.value === "new" && ProductoAct.value.categoria === ""
-            return faltandatos03 || faltandatos04
-    }})
-    // Establecer Categorias para la Pagina //
-    const ProductosPorCategoria = computed(() => {
-        const agrupados = {}
-        if (ListaCategoria.value && Productos.value) {
-                ListaCategoria.value.forEach((cat) => {
-                    agrupados[cat.categoria] = Productos.value.filter(
-                        (p) => p.categoria === cat.categoria
-        )})}
-        return agrupados
-    })
-
     // ----- Variables Complejas ----- //
 
     // Almacen para Actualizar Productos //
@@ -1138,6 +1096,54 @@
     const filtroRadio = ref(0)
     const Bananaer = ref(null)
     const filtroEst = ref(1)
+
+    // ----- Variables Vue ----- //
+
+    // Leer Banners en Orden //
+    const BannersOrden = computed({
+        get() {
+            const viejo = Bananaeract.value && Bananaeract.value.imagenes ? Bananaeract.value.imagenes : []
+            const nuevo = BannersNuevos.value
+            const todo = [...viejo, ...nuevo]
+            return todo.sort((a, b) => {
+                const desactA = BannerDesactivado(a)
+                const desactB = BannerDesactivado(b)
+                if (desactA && !desactB) return 1
+                if (desactB && !desactA) return -1
+                const ordenA = a.orden || 0
+                const ordenB = b.orden || 0
+                return ordenA - ordenB
+            })
+        },
+        set(bannersordenados) {
+            bannersordenados.forEach((banner, index) => {
+            banner.orden = index + 1
+    })},})
+    // Habilitar Boton //
+    const confirboton = computed(() => {
+        // Actualizar Producto
+        if (ActualizarCajaP.value) {
+            const faltandatos03 =
+            ProductoAct.value.nombre === "" ||
+            ProductoAct.value.precio === "" ||
+            ProductoAct.value.stock === "" ||
+            ProductoAct.value.codigo_barra === "" ||
+            ProductoAct.value.stock < 0 ||
+            ProductoAct.value.precio <= 0
+            const faltandatos04 =
+            OpcionCategoriaA.value === "new" && ProductoAct.value.categoria === ""
+            return faltandatos03 || faltandatos04
+    }})
+    // Establecer Categorias para la Pagina //
+    const ProductosPorCategoria = computed(() => {
+        const agrupados = {}
+        if (ListaCategoria.value && Productos.value) {
+                ListaCategoria.value.forEach((cat) => {
+                    agrupados[cat.categoria] = Productos.value.filter(
+                        (p) => p.categoria === cat.categoria
+        )})}
+        return agrupados
+    })
 
     // ----- Variables Temporales ----- //
 
@@ -2032,4 +2038,4 @@
         }}} catch (error) {
             console.error("Error al actualizar favorito:", error)
     }}
-    </script>
+</script>

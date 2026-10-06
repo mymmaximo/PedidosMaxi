@@ -100,6 +100,7 @@
                 ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                 : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
                 >
+
                     <!-- Barra de Filtros -->
                     <div class="hidden sm:block">
 
@@ -138,6 +139,7 @@
                                         </option>
                                     </select>
                                 </div>
+
                                 <!-- Filtro Realizo el Pedido/Tiene Direcciones Cargadas -->
                                 <div class="flex flex-col md:p-4 p-2">
                                     <h1>
@@ -167,7 +169,8 @@
                                         </label>
                                     </div>
                                 </div>
-                                <!-- Filtro Activo/Desactivo -->
+
+                                <!-- Filtro Cliente Activo/Desactivo -->
                                 <div class="flex flex-col p-2">
                                     <h1>
                                         ¿El Cliente esta Activo?
@@ -196,9 +199,11 @@
                                         </label>
                                     </div>
                                 </div>
+
                                 <!-- Filtro Direcciones -->
                                 <div class="flex flex-col p-2">
                                     <div v-if="filtroDirec === 1">
+
                                         <!-- Filtro Ciudad -->
                                         <h2>
                                             Ciudad del Cliente
@@ -216,6 +221,7 @@
                                                 {{ i.ciudad }}
                                             </option>
                                         </select>
+
                                         <!-- Filtro Provincia -->
                                         <h2>
                                             Provincia del Cliente

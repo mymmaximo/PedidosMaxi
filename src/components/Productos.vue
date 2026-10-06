@@ -27,9 +27,13 @@
                 class="fondo"
                 >
                     <div class="popup">
+
+                        <!-- Encabezado -->
                         <h1 class="text-center">
                             ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
                         </h1>
+
+                        <!-- Imagenes del Producto -->
                         <div>
                             <div v-if="ProductoEli.imagenes.length > 0"
                             class="flex flex-row 
@@ -69,6 +73,8 @@
                             class="imagen"
                             >
                         </div>
+
+                        <!-- Botones Confirmacion -->
                         <div class="botones">
                             <button @click="BorrarProducto()"
                             class="botoncon"
@@ -81,6 +87,7 @@
                                 Cancelar
                             </button>
                         </div>
+
                     </div>
                 </div>
             </transition>
@@ -96,9 +103,12 @@
                 >
                     <div class="popup">
                         <form @submit.prevent="ActualizarProducto">
+
+                            <!-- Encabezado -->
                             <h1>
                                 {{ ProductoAct.nombre }}
                             </h1>
+
                             <!-- Actualizar Nombre -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
@@ -110,6 +120,7 @@
                                 maxlength="50"
                                 >
                             </div>
+
                             <!-- Actualizar Precio -->
                             <div v-if="VerificarRol([1, 2, 4])">
                                 <h2>
@@ -121,6 +132,7 @@
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
+
                             <!-- Actualizar Stock -->
                             <div v-if="VerificarRol([1, 2, 5])">
                                 <h2>
@@ -132,6 +144,7 @@
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
+
                             <!-- Actualizar Categoria y Codigo de Barra -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
@@ -169,6 +182,7 @@
                                 maxlength="15"
                                 >
                             </div>
+
                             <!-- Actualizar Imagenes Actuales -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
@@ -263,6 +277,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Botones Confirmacion -->
                             <div class="botones">
                                 <button :disabled="confirboton || Actualizando" 
                                 type="submit" 
@@ -277,6 +293,7 @@
                                     Cancelar
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -292,9 +309,13 @@
                 class="fondo" 
                 >
                     <div class="popup popup-compra">
+
+                        <!-- Encabezado -->
                         <h1>
                             {{ ProductoActual.nombre }}
                         </h1>
+
+                        <!-- Imagenes del Producto -->
                         <div class="carrusel-contenedor">
                             <div v-if="ProductoActual.imagenes.length > 0"
                             class="carrusel-fila"
@@ -333,6 +354,8 @@
                                 >
                             </div>
                         </div>
+
+                        <!-- Cantidad de Producto -->
                         <div class="panel-compra">
                             <div class="control-cantidad">
                                 <button @click="RestarProducto(ProductoActual)"
@@ -360,6 +383,8 @@
                                 </span>
                             </div>
                         </div>
+
+                        <!-- Botones Confirmacion -->
                         <div class="botones mt-2">
                             <button @click="SumarCarrito"
                             class="botoncon"
@@ -372,6 +397,7 @@
                                 Cancelar
                             </button>
                         </div>
+
                     </div>
                 </div>
             </transition>
@@ -389,9 +415,13 @@
                         <form @submit.prevent="GuardarPromocion" 
                         class="flex flex-col gap-4"
                         >
+
+                            <!-- Encabezado -->
                             <h1 class="text-center !text-xl !mb-2">
                                 🏷️ Oferta: {{ ProductoPromo.nombre }}
                             </h1>
+
+                            <!-- Imagenes del Producto -->
                             <div class="bg-gray-50 rounded-xl 
                             p-2 shadow-inner 
                             mx-auto w-full max-w-[200px]"
@@ -445,7 +475,11 @@
                                 class="w-24 h-24 object-cover mx-auto rounded-lg shadow-sm"
                                 >
                             </div>
+
+                            <!-- Datos de la Promocion -->
                             <div class="flex flex-col gap-3">
+
+                                <!-- Motivo -->
                                 <div>
                                     <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">
                                         Nombre (Opcional)
@@ -462,7 +496,11 @@
                                     transition-colors"
                                     >
                                 </div>
+
+                                <!-- Precio Nuevo -->
                                 <div class="grid grid-cols-2 gap-3">
+
+                                    <!-- Precio Fijo -->
                                     <div>
                                         <h2 class="text-sm font-bold 
                                         text-gray-600 
@@ -494,6 +532,8 @@
                                             >
                                         </div>
                                     </div>
+
+                                    <!-- Precio por Porcentaje -->
                                     <div>
                                         <h2 class="text-sm font-bold text-gray-600 
                                         ml-1 mb-1 text-center"
@@ -525,6 +565,8 @@
                                         </div> 
                                     </div>
                                 </div>
+
+                                <!-- Fecha de Inicio/Vencimiento -->
                                 <div class="grid grid-cols-1 
                                 sm:grid-cols-2 gap-3"
                                 >
@@ -569,6 +611,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Botones Confirmacion -->
                             <div class="flex flex-row 
                             justify-center 
                             gap-2 mt-2 pt-4 
@@ -595,6 +639,7 @@
                                     Cancelar
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -604,7 +649,8 @@
         <!-- Pagina -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-                <!-- Barra de Filtros -->
+
+                <!-- Mostrar Fondo en Celular -->
                 <Teleport to="body">
                     <transition name="fade">
                         <div v-if="(MostrarFiltro || MostrarNuevo)" 
@@ -616,11 +662,17 @@
                         </div>
                     </transition>
                 </Teleport>
+
+                <!-- Barra de Filtros de Producto y Formulario de Nuevo Producto -->
                 <div :class="['bar', (MostrarFiltro || MostrarNuevo) 
-                    ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
-                    : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
-                    >
+                ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
+                : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
+                >
+
+                    <!-- Barra de Filtros -->
                     <div class="hidden sm:block">
+
+                        <!-- Boton de Filtros -->
                         <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
                         >
@@ -631,6 +683,8 @@
                         <div v-if="MostrarFiltro"
                         class="flex flex-col lg:self-center"
                         >
+
+                            <!-- Orden de Productos -->
                             <div class="flex flex-col md:px-4 md:pb-4 p-2 !pt-0">
                                 <h1 class="!mt-0">
                                     Ordenar
@@ -667,12 +721,24 @@
                                     </option>
                                 </select>
                             </div>
-                            <!-- Switch de Promociones y Porcentaje -->
-                            <div class="flex flex-col md:px-4 md:py-3 p-2 my-2 border-y-2 border-green-100 bg-green-50/50 rounded-xl">
-                                <h2 class="!mb-3 flex items-center gap-1 text-green-800 font-bold">
+
+                            <!-- Filtro de Promociones -->
+                            <div class="flex flex-col 
+                            md:px-4 md:py-3 p-2 my-2 
+                            border-y-2 border-green-100 bg-green-50/50 rounded-xl"
+                            >
+
+                                <!-- Toggle de Promociones -->
+                                <h2 class="!mb-3 flex 
+                                items-center gap-1 
+                                text-green-800 font-bold"
+                                >
                                     🔥 Promociones
                                 </h2>
-                                <label class="relative inline-flex items-center cursor-pointer w-fit pl-1">
+                                <label class="relative 
+                                inline-flex items-center 
+                                cursor-pointer w-fit pl-1"
+                                >
                                     <input 
                                     type="checkbox" 
                                     v-model="filtroPromo"
@@ -680,17 +746,22 @@
                                     class="sr-only peer"
                                     >
                                     <div class="w-11 h-6 bg-gray-300 rounded-full peer 
-                                    peer-checked:after:translate-x-full peer-checked:after:border-white 
-                                    after:content-[''] after:absolute after:top-0.5 after:left-[6px] 
-                                    after:bg-white after:border-gray-300 after:border after:rounded-full 
-                                    after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500 shadow-inner">
+                                    peer-checked:after:translate-x-full 
+                                    peer-checked:after:border-white 
+                                    after:content-[''] after:absolute 
+                                    after:top-0.5 after:left-[6px] 
+                                    after:bg-white after:border-gray-300 
+                                    after:border after:rounded-full 
+                                    after:h-5 after:w-5 after:transition-all 
+                                    peer-checked:bg-green-500 shadow-inner"
+                                    >
                                     </div>
                                     <span class="ml-3 font-bold text-gray-700 select-none">
                                         Ver ofertas
                                     </span>
                                 </label>
-                                
-                                <!-- Opciones de Porcentaje (Solo aparecen si el switch está prendido) -->
+
+                                <!-- Filtro Descuento Minimo -->
                                 <div v-if="filtroPromo" class="flex flex-col gap-2 mt-3 pt-3 border-t border-green-200/50">
                                     <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">
                                         Descuento Mínimo:
@@ -732,6 +803,8 @@
                                     </label>
                                 </div>
                             </div>
+
+                            <!-- Filtro de Categoria -->
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2>
                                     Filtro Categoria
@@ -750,6 +823,8 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <!-- Filtro de Precio Fijo -->
                             <div class="flex flex-col md:p-4 p-2">
                                 <h2>
                                     Filtros de Precio
@@ -790,6 +865,8 @@
                                     Personalizado
                                 </label>
                             </div>
+
+                            <!-- Filtro de Precio Personalizado -->
                             <div v-if="filtroRadio === 0" 
                             class="flex flex-col md:p-4 p-2"
                             >
@@ -810,6 +887,8 @@
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
+
+                            <!-- Filtro Producto Activo/Desactivo -->
                             <div v-if="VerificarRol([1, 2, 4])">
                                 <h2>
                                     ¿El Productos esta Activo?
@@ -838,6 +917,8 @@
                                     </label>
                                 </div>
                             </div>
+
+                            <!-- Botones Confirmacion -->
                             <div class="botones">
                                 <button @click="AplicarFiltro" 
                                 class="botoncon"
@@ -851,14 +932,20 @@
                                     🗑️ Limpiar Filtro
                                 </button>
                             </div>
+                            
                         </div>
                     </transition>
+
+                    <!-- Barra de Nuevo Producto -->
                     <div v-if="VerificarRol([1, 2])">
+
+                        <!-- Boton de Crear -->
                         <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
                         >
                             +
                         </h1>
+
                     </div>
                     <transition name="slide">
                         <div v-if="MostrarNuevo && (VerificarRol([1, 2]))"
