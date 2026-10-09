@@ -45,6 +45,7 @@
             
             <!-- Pagina de Inicio de Sesion / Registrar -->
             <div v-else>
+
                 <!-- Opcion Iniciar Sesion -->
                 <div v-if="MostrarLogin"
                 class="tarjeta-config"
@@ -124,6 +125,7 @@
                                 Crear una cuenta nueva
                             </button>
                         </div>
+
                     </form>
 
                 </div>
@@ -245,6 +247,7 @@
                                 Iniciar Sesión
                             </button>
                         </div>
+
                     </form>
 
                 </div>
@@ -331,6 +334,7 @@
     const CargarDatos = ( async () => {
         CargandoTrue.value = true
         ErrorCarga.value = false
+        // Tiempo de Espera para el Backend
         const temporizador = setTimeout(() => {
             if (CargandoTrue.value) {
                 CargandoTrue.value = false
@@ -353,6 +357,7 @@
     // Enviar Usuario/Cliente a Url/Link //
     const ProcesarLogin = () => {
         Iniciado.value = true
+        // Rider y Gestor de Pedidos General
         if (VerificarRol([3, 6])) {
             router.push('/pedidos')
         } else {
@@ -450,13 +455,12 @@
             } else {
                 Herror.value = "Error al registrar, revisa tus datos"
                 Heror.value = true
-            } 
-        } catch (error) {
+        }} catch (error) {
             console.error("Error de conexión:", error)
             Herror.value = "Error al conectar con el servidor"
             Heror.value = true
         } finally {
             ProcesandoAuth.value = false
-        }
-    }
+    }}
+    
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="cuerpo">
 
-        <!-- Notificación -->
+        <!-- Notificación --> 
         <!-- Adicion al Carrito Exitosa -->
         <Teleport to="body">
             <transition name="fade">
@@ -27,9 +27,12 @@
                 class="fondo"
                 >
                     <div class="popup">
+
+                        <!-- Encabezado -->
                         <h1 class="text-center">
                             ¿Desear Quitar {{ ProductoQ.nombre }} de Mis Favoritos?
                         </h1>
+
                         <!-- Imagenes del Producto -->
                         <div>
                             <div v-if="ProductoQ.imagenes.length > 0"
@@ -70,6 +73,8 @@
                             class="imagen"
                             >
                         </div>
+
+                        <!-- Botones -->
                         <div class="botones">
                             <button @click="Quitar()"
                             class="botoncon"
@@ -82,6 +87,7 @@
                                 Cancelar
                             </button>
                         </div>
+
                     </div>
                 </div>
             </transition>
@@ -96,9 +102,12 @@
                 class="fondo" 
                 >
                     <div class="popup popup-compra">
+
+                        <!-- Encabezado -->
                         <h1>
                             {{ ProductoActual.nombre }}
                         </h1>
+
                         <!-- Imagenes del Producto -->
                         <div class="carrusel-contenedor">
                             <div v-if="ProductoActual.imagenes.length > 0"
@@ -138,6 +147,7 @@
                                 >
                             </div>
                         </div>
+
                         <!-- Cantidad de Producto -->
                         <div class="panel-compra">
                             <div class="control-cantidad">
@@ -166,6 +176,8 @@
                                 </span>
                             </div>
                         </div>
+
+                        <!-- Botones -->
                         <div class="botones mt-2">
                             <button @click="SumarCarrito"
                             class="botoncon"
@@ -178,6 +190,7 @@
                                 Cancelar
                             </button>
                         </div>
+
                     </div>
                 </div>
             </transition>
@@ -192,7 +205,9 @@
                     <transition name="fade">
                         <div v-if="MostrarFiltro" 
                         @click="MostrarFiltro = false"
-                        class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[35] sm:hidden cursor-pointer"
+                        class="fixed inset-0 
+                        bg-black/40 backdrop-blur-sm 
+                        z-[35] sm:hidden cursor-pointer"
                         >
                         </div>
                     </transition>
@@ -203,21 +218,22 @@
                 ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                 : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
                 >
-                    <!-- Barra de Filtros -->
-                    <div class="hidden sm:block">
 
-                        <!-- Boton de Filtros -->
+                    <!-- Boton de Filtros -->
+                    <div class="hidden sm:block">
                         <h1 @click="MostrarFiltro = !MostrarFiltro" 
                         class="botonfil"
                         >
                             ᯤ
                         </h1>
-
                     </div>
+
+                    <!-- Barra de Filtros -->
                     <transition name="slide">
                         <div v-if="MostrarFiltro" 
                         class="flex flex-col lg:self-center"
                         >
+
                             <!-- Orden de Productos Favoritos -->
                             <div class="flex flex-col md:px-4 md:pb-4 p-2 !pt-0">
                                 <h1 class="!mt-0">
@@ -339,6 +355,8 @@
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
+
+                            <!-- Botones -->
                             <div class="botones">
                                 <button @click="AplicarFiltro" 
                                 class="botoncon">
@@ -350,8 +368,10 @@
                                     🗑️ Limpiar Filtro
                                 </button>
                             </div>
+
                         </div>
                     </transition>
+
                 </div>
 
                 <!-- Tabla de Productos Favoritos -->
@@ -395,7 +415,13 @@
 
                             <!-- Mostrar Boton Filtro en Celular -->
                             <button @click="MostrarFiltro = true" 
-                            class="sm:hidden w-full mb-4 py-3 bg-white text-green-800 font-black text-lg border-2 border-green-200 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 active:bg-green-50">
+                            class="sm:hidden w-full mb-4 py-3 
+                            bg-white text-green-800 font-black text-lg 
+                            border-2 border-green-200 rounded-xl 
+                            flex items-center justify-center gap-2 
+                            shadow-sm transition-all 
+                            active:scale-95 active:bg-green-50"
+                            >
                                 ᯤ Abrir Filtros
                             </button>
 
@@ -429,7 +455,7 @@
                                 </button>
 
                             </div>
-                            
+
                             <!-- Tabla de Favoritos -->
                             <div v-if="Productos.length > 0"
                             :class="VistaLista 
@@ -445,10 +471,13 @@
                                 ? 'tarjeta-premium relative bg-white !w-full !m-0 hover:!shadow-lg' 
                                 : 'carta relative']"
                                 >
+
+                                    <!-- Datos del Producto en Favorito -->
                                     <div :class="VistaLista 
                                     ? 'flex flex-col sm:flex-row items-center sm:items-start gap-4 w-full sm:w-auto text-left' 
                                     : 'w-full'">
-                                        
+
+                                        <!-- Motivo de Promocion -->
                                         <div v-if="i.es_promocion" 
                                         class="absolute top-2 left-2 
                                         z-10 bg-red-500 text-white 
@@ -457,6 +486,7 @@
                                         >
                                             🔥 {{ i.motivo || 'OFERTA' }}
                                         </div>
+
                                         <!-- Imagenes del Producto -->
                                         <div :class="VistaLista 
                                         ? 'w-24 sm:w-32 shrink-0' 
@@ -502,6 +532,7 @@
                                             : 'imagen'"
                                             >
                                         </div>
+
                                         <!-- Datos del Producto -->
                                         <div :class="VistaLista 
                                         ? 'tarjeta-info pt-2 sm:pt-0' 
@@ -542,7 +573,10 @@
                                                 </h2>
                                             </div>
                                         </div>
+
                                     </div>
+
+                                    <!-- Botones -->
                                     <div :class="VistaLista 
                                     ? 'tarjeta-acciones !mt-4 sm:!mt-0' 
                                     : 'flex flex-wrap w-full mt-auto justify-center items-center pt-3 gap-1.5 sm:gap-2'"
@@ -565,11 +599,15 @@
                                             </span>
                                         </button>
                                     </div>
+                                    
                                 </div>
                             </div>
-                            
+
                             <!-- Tabla Vacia -->
-                            <div v-else class="flex flex-col items-center justify-center p-8">
+                            <div v-else 
+                            class="flex flex-col 
+                            items-center justify-center p-8"
+                            >
                                 <span class="text-5xl mb-4">
                                     👻
                                 </span>
@@ -582,7 +620,7 @@
                                     ¡Explora la tienda y dale al corazón a lo que te guste!
                                 </h3>
                             </div>
-                            
+
                             <!-- Mostrando Paginas -->
                             <div class="flex justify-center p-5" 
                             v-if="Productos.length > 0 || Pagina > 0"
@@ -608,9 +646,12 @@
                                     ❯
                                 </button>
                             </div>
+
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
 
@@ -698,19 +739,19 @@
             CarritoLocal.value.forEach((prod) => {
                 if (prod.id_producto === ProductoActual.value.id) {
                     CantidadnCarrito = CantidadnCarrito + prod.cantidad
-                }
-            })
+            }})
             const StockLocal = ProductoActual.value.stock - CantidadnCarrito
             if (NuevaCantidad > StockLocal) {
                 ProductoCantidad.value = StockLocal
             }
             if (NuevaCantidad < 1 && StockLocal !== 0) {
                 ProductoCantidad.value = 1
-            }
-        }
-    })
+    }}})
     // Definir Url/Link y Tamaño de Imagen //
-    const prop = defineProps(['path','size'])
+    const prop = defineProps([
+        'path',
+        'size'
+    ])
     // Asignar Url/Link y Tamaño de Imagen //
     const { path } = toRefs(prop)
     // Leer Url/Link y Tamaño de Imagen //
@@ -730,16 +771,14 @@
             if (CargandoTrue.value) {
                 CargandoTrue.value = false
                 ErrorCarga.value = true
-            }
-        }, 15000)
+        }}, 15000)
         // Leer Productos Favoritos y Categorias
         try {
             await BusquedaFavoritos()
             const respuesta = await fetch(`${urlover8000}/producto/categorias/`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
-                }
-            })
+            }})
             const categ = await respuesta.json()
             ListaCategoria.value = categ
             CargarCarrito()
@@ -754,8 +793,7 @@
                 CargandoTrue.value = false
             }
             BloqueoPeticion.value = false
-        }
-    })
+    }})
     // Cambiar Pagina //
     const CambiarPagina = async (direccion) => {
         if (BloqueoPeticion.value) return
@@ -778,11 +816,10 @@
         } finally {
             CargandoTrue.value = false
             BloqueoPeticion.value = false
-        }
-    }
+    }}
 
     // ----- Funciones Frontend ----- //
-    
+
     // Abrir Pop up para Quitar de Favoritos //
 	const AbrirPopUp01 = () => {
 		QuitarCaja.value = true
@@ -802,8 +839,7 @@
         if (ImgActual > 0) {
             IndiceImg.value[imagen.id] = ImgActual - 1
             ImagenesCargando.value[imagen.id] = true
-        }
-    }
+    }}
     // Cerrar Pop up para Quitar de Favoritos //
 	const CerrarPopUp01 = () => {
 		QuitarCaja.value = false
@@ -872,8 +908,7 @@
         if (ImgActual < imagen.imagenes.length - 1) {
             IndiceImg.value[imagen.id] = ImgActual + 1
             ImagenesCargando.value[imagen.id] = true
-        }
-    }
+    }}
     // Obtener Url/Link de Imagen //
     const ObtenerImgUrl = (Imgenkey) => {
         const respuesta = supabase.storage
@@ -885,14 +920,12 @@
     const RestarProducto = () => {
         if (ProductoCantidad.value > 1) {
             ProductoCantidad.value--
-        }
-    }
+    }}
     // Sumar Cantidad de Producto //
     const SumarProducto = () => {
         if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
             ProductoCantidad.value++
-        }
-    }
+    }}
     // Establecer Valores del Producto para Quitar de Favoritos y Abrir Pop Up //
     const QuitarFavorito = (producto_fila) => {
         ProductoQ.value.id = producto_fila.id
@@ -915,15 +948,13 @@
                 },
                 body: JSON.stringify({ id_producto: ProductoQ.value.id }),
                 credentials: 'include'
-            })
-            
+            })            
             if (respuesta.status === 401) {
                 await CerrarSesion()
                 SesionExpirada.value = true
                 Iniciado.value = false
                 return
-            }
-            
+            }            
             if (respuesta.ok) {
                 Productos.value = Productos.value.filter(p => p.id !== ProductoQ.value.id)
                 CerrarPopUp01()
@@ -931,12 +962,10 @@
                     CambiarPagina('back')
                 } else if (Productos.value.length === 0 && Pagina.value === 0) {
                     BusquedaFavoritos()
-                }
-            }
+            }}
         } catch (error) {
             console.error("Error al quitar favorito:", error)
-        }
-    }
+    }}
     // Leer los Productos Favoritos //
     const BusquedaFavoritos = async() => {
         if (!ClienteID.value) return
@@ -952,8 +981,7 @@
             url.searchParams.append('orden', orden.value)
             if (orden.value !== "8") {
                 filtroAct.value = true
-            }
-        }
+        }}
         let minfiltro = ""
         let maxfiltro = ""
         // Establecer Filtro Precios Fijos
@@ -1016,16 +1044,14 @@
         } else {
             Productos.value = []
             HayMasPaginas.value = false
-        }
-    }
+    }}
     // Verificacion de Stock > 0 //
     const CarritoStock = (Producto) => {
         let stockCarrito = 0
         CarritoLocal.value.forEach((itemCarrito) => {
             if (itemCarrito.id_producto === Producto.id) {
                 stockCarrito = stockCarrito + itemCarrito.cantidad
-            }
-        })
+        }})
         return Producto.stock - stockCarrito
     }
     // Añadir al Carrito //
@@ -1055,10 +1081,10 @@
             'carrito_pendiente',
             JSON.stringify(
                 CarritoLocal.value
-            )
-        )
+        ))
         CerrarPopUp02()
         MostrarConfir.value = true
         setTimeout(() => { MostrarConfir.value = false }, 2000)
     }
+    
 </script>

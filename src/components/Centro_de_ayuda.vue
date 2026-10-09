@@ -1,11 +1,13 @@
 <template>
     <div class="cuerpo">
+
         <!-- Notificación -->
         <!-- Copiado Exitoso -->
         <Teleport to="body">
             <transition name="slide">
                 <div v-if="MostrarNotificacion" 
-                class="notificacion !bg-blue-300 !text-white"
+                class="notificacion 
+                !bg-blue-300 !text-white"
                 >
                     <span class="text-xl drop-shadow-sm">
                         ✅ 
@@ -21,12 +23,15 @@
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
                 <div class="start !px-5">
-                    <!-- Titulo -->
+
+                    <!-- Encabezado -->
                     <h1 class="titulo-config">
                         Centro de Ayuda
                     </h1>
+
                     <!-- Contactos -->
                     <div class="mb-2 lg:mb-5">
+
                         <!-- Correo Electronico -->
                         <div @click="CopiarAlPortapapeles('maxgiesenow@gmail.com', 'E-Mail')"
                         class="tab cursor-pointer !mb-10"
@@ -52,6 +57,7 @@
                                 </h2>
                             </div>
                         </div>
+
                         <!-- Whatsapp -->
                         <div @click="CopiarAlPortapapeles('+54 351 250-0570', 'WhatsApp')"
                         class="tab cursor-pointer !mb-10"
@@ -77,6 +83,7 @@
                                 </h2>
                             </div>
                         </div>
+
                         <!-- Telefono -->
                         <div @click="CopiarAlPortapapeles('+54 351 250-0570', 'Teléfono')"
                         class="tab cursor-pointer !mb-10"
@@ -102,6 +109,7 @@
                                 </h2>
                             </div>
                         </div>
+
                     </div>
 
                 </div>
@@ -126,7 +134,7 @@
     const TextoNotificacion = ref("")
 
     // ----- Funciones Vue ----- //
-    
+
     // Copiar en Portapapeles //
     const CopiarAlPortapapeles = async (texto, tipo) => {
         // Mostrar Notificacion
@@ -134,6 +142,7 @@
             await navigator.clipboard.writeText(texto)
             TextoNotificacion.value = `¡${tipo} copiado al portapapeles!`
             MostrarNotificacion.value = true
+            // Tiempo de Espera para la Notificacion
             setTimeout(() => {
                 MostrarNotificacion.value = false
             }, 2500)
@@ -153,4 +162,5 @@
         else if (tipo === 'E-Mail') {
             window.open('mailto:maxgiesenow@gmail.com', '_self')
     }}
+    
 </script>

@@ -1,84 +1,96 @@
 <template>
+    <div class="cuerpo">
 
-    <!-- Confirmacion -->
-    <!-- Desactivar Cliente -->
-    <Teleport to="body">
-        <transition name="fade">
-            <div v-if="ActualizarCajaCDel" 
-            @click.self="CerrarPopUp02"
-            class="fondo"
-            >
-                <div class="popup">
-                    <h1>
-                        ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
-                    </h1>
-                    <div class="botones">
-                        <button @click="BorrarCliente()"
-                        class="botoncon"
-                        >
-                            Si Confirmo
-                        </button>
-                        <button @click="CerrarPopUp02"
-                        class="botonc"
-                        >
-                            Cancelar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </transition>
-    </Teleport>
+        <!-- Confirmacion -->
+        <!-- Desactivar Cliente -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="ActualizarCajaCDel" 
+                @click.self="CerrarPopUp02"
+                class="fondo"
+                >
+                    <div class="popup">
 
-    <!-- Formulario -->
-    <!-- Actualizar Cliente -->
-    <Teleport to="body">
-        <transition name="fade">
-            <div v-if="ActualizarCajaC"
-            @click.self="CerrarPopUp01"
-            class="fondo"
-            >
-                <div class="popup">
-                    <h1>
-                            Actualizar Cliente {{ ClienteAct.nombre }}
-                    </h1>
-                    <form @submit.prevent="ActualizarClientes">
-                        <h2>
-                            Nombre
-                        </h2>
-                        <input placeholder="Nombre"
-                        type="text" 
-                        v-model="ClienteAct.nombre" 
-                        maxlength="20"
-                        >
-                        <h2>
-                            E-mail
-                        </h2>
-                        <input placeholder="Email@email.com"
-                        type="text" 
-                        v-model="ClienteAct.email" 
-                        maxlength="50"
-                        >
+                        <!-- Encabezado -->
+                        <h1>
+                            ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
+                        </h1>
+
+                        <!-- Botones -->
                         <div class="botones">
-                            <button :disabled="confirboton"
-                            type="submit" 
+                            <button @click="BorrarCliente()"
                             class="botoncon"
                             >
-                                Actualizar
+                                Si Confirmo
                             </button>
-                            <button @click="CerrarPopUp01" 
+                            <button @click="CerrarPopUp02"
                             class="botonc"
                             >
                                 Cancelar
                             </button>
                         </div>
-                    </form>
+
+                    </div>
                 </div>
-            </div>
-        </transition>
-    </Teleport>
-    
-    <!-- Pagina -->
-    <div class="cuerpo">
+            </transition>
+        </Teleport>
+
+        <!-- Formulario -->
+        <!-- Actualizar Cliente -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="ActualizarCajaC"
+                @click.self="CerrarPopUp01"
+                class="fondo"
+                >
+                    <div class="popup">
+                        <form @submit.prevent="ActualizarClientes">
+
+                            <!-- Encabezado -->
+                            <h1>
+                                    Actualizar Cliente {{ ClienteAct.nombre }}
+                            </h1>
+
+                            <!-- Datos de Cliente -->
+                            <h2>
+                                Nombre
+                            </h2>
+                            <input placeholder="Nombre"
+                            type="text" 
+                            v-model="ClienteAct.nombre" 
+                            maxlength="20"
+                            >
+                            <h2>
+                                E-mail
+                            </h2>
+                            <input placeholder="Email@email.com"
+                            type="text" 
+                            v-model="ClienteAct.email" 
+                            maxlength="50"
+                            >
+
+                            <!-- Botones -->
+                            <div class="botones">
+                                <button :disabled="confirboton"
+                                type="submit" 
+                                class="botoncon"
+                                >
+                                    Actualizar
+                                </button>
+                                <button @click="CerrarPopUp01" 
+                                class="botonc"
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </transition>
+        </Teleport>
+        
+        <!-- Pagina -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
 
@@ -110,10 +122,13 @@
                         >
                             ᯤ
                         </h1>
+
+                        <!-- Filtro -->
                         <transition name="slide">
                             <div v-if="MostrarFiltro"
                             class="flex flex-col lg:self-center"
                             >
+
                                 <!-- Orden de Clientes -->
                                 <div class="flex flex-col md:p-4 p-2">
                                     <h1>
@@ -241,6 +256,8 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <!-- Botones -->
                                 <div class="botones">
                                     <button @click="AplicarFiltro" 
                                     class="botoncon"
@@ -254,24 +271,34 @@
                                         🗑️ Limpiar Filtro
                                     </button>
                                 </div>
+
                             </div>
                         </transition>
+
                     </div>
 
                     <!-- Barra de Registro -->
                     <div>
+
+                        <!-- Boton de Registro -->
                         <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
                         >
                             +
                         </h1>
+
+                        <!-- Registro -->
                         <transition name="slide">
                             <div v-if="MostrarNuevo"
                             class="flex flex-col lg:self-center"
                             >
+
+                                <!-- Encabezado -->
                                 <h1>
                                     Nuevo Cliente
                                 </h1>
+
+                                <!-- Formulario de Cliente -->
                                 <form @submit.prevent="SubirNuevoCliente">
                                     <h2>
                                         Nombre
@@ -306,6 +333,8 @@
                                     v-model="NuevoCliente.contrasena"
                                     maxlength="20"
                                     >
+
+                                    <!-- Botones -->
                                     <div class="botones">
                                         <button :disabled="confirboton"
                                         type="submit" 
@@ -314,9 +343,12 @@
                                             Crear Cliente
                                         </button>
                                     </div>
+
                                 </form>
+
                             </div>
                         </transition>
+ 
                     </div>
 
                 </div>
@@ -392,6 +424,7 @@
                         <h1 class="titulo-config">
                             Clientes
                         </h1>
+
                         <!-- Tabla de Clientes -->
                         <div>
                             <div v-if="clientes.length > 0">
@@ -399,9 +432,14 @@
                                 :key="i.id"
                                 class="mb-6 relative"
                                 >
+
+                                    <!-- Boton al Tocar Tarjeta de Cliente -->
+                                    <!-- Si Tiene Direcciones las Muestra, Sino Desactiva Cliente -->
                                     <div @click= "TocarTab(i)"
                                     class="tarjeta-premium z-10 relative bg-white"
                                     >
+
+                                        <!-- Datos de Clientes -->
                                         <div class="tarjeta-info">
                                             <div class="tarjeta-titulo">
                                                 👤 {{ i.nombre }}
@@ -428,6 +466,8 @@
                                                 </span>
                                             </p>
                                         </div>
+
+                                        <!-- Botones -->
                                         <div class="tarjeta-acciones">
                                             <button @click.stop="Eliminacion(i)" 
                                             v-if="i.activo" 
@@ -445,7 +485,9 @@
                                                 ✏️ Editar
                                             </button>
                                         </div>
+
                                     </div>
+
                                     <!-- Direcciones -->
                                     <div v-if="i.direcciones.length === 0" 
                                     class="text-center text-xs 
@@ -533,10 +575,11 @@
                                             </div>
                                         </div>
                                     </transition>
+
                                 </div>
 
                             </div>  
-                            
+
                             <!-- Tabla Vacia -->
                             <div v-else 
                             class="flex flex-col 
@@ -692,8 +735,7 @@
                 CargandoTrue.value = false
                 ErrorCarga.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
-            }
-        }, 15000)
+        }}, 15000)
         // Leer Clientes y Direcciones
         try {
             await BusquedaCliente()
@@ -949,8 +991,7 @@
             } else {
                 HayMasPaginas.value = false
                 clientes.value = datos
-            }
-        } else {
+        }} else {
             clientes.value = []
             HayMasPaginas.value = false
     }}
@@ -979,4 +1020,5 @@
         }
         BusquedaCliente()
     }
+
 </script>

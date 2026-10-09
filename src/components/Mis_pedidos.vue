@@ -21,21 +21,22 @@
                 ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                 : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
                 >
-                    <!-- Barra de Filtros -->
-                    <div class="hidden sm:block">
 
-                        <!-- Boton de Filtros -->
+                    <!-- Boton de Filtros -->
+                    <div class="hidden sm:block">
                         <h1 @click="MostrarFiltro = !MostrarFiltro"
                         class="botonfil"
                         >
                             ᯤ
                         </h1>
-
                     </div>
+
+                    <!-- Barra de Filtros y Orden -->
                     <transition name="slide">
                         <div v-if="MostrarFiltro"
                         class="flex flex-col self-center"
                         >
+
                             <!-- Orden de Mis Pedidos -->
                             <div class="flex flex-col md:px-4 md:pb-4 p-2 !pt-0">
                                 <h1 class="!mt-0">
@@ -55,7 +56,10 @@
                                     </option>
                                 </select>
                             </div>
+
+                            <!-- Filtro de Mis Pedidos -->
                             <div class="flex flex-col w-full gap-2.5">
+
                                 <!-- Filtro de Metodo de Pago -->
                                 <h2>
                                     Filtro de Metodo de Pago
@@ -104,6 +108,7 @@
                                             Efectivo
                                     </label>
                                 </div>
+
                                 <!-- Filtro de Estatus del Pedido -->
                                 <h2>
                                     Filtro de Estatus
@@ -138,6 +143,8 @@
                                             Entregado
                                     </label>
                                 </div>
+
+                                <!-- Botones -->
                                 <div class="botones">
                                     <button @click="AplicarFiltro" 
                                     class="botoncon"
@@ -151,9 +158,12 @@
                                         🗑️ Limpiar Filtro
                                     </button>
                                 </div>
+
                             </div>
+
                         </div>
                     </transition>
+
                 </div>
 
                 <!-- Tabla de Mis Pedidos -->
@@ -242,6 +252,8 @@
                                 :key="i.id_pedido"
                                 class="mb-4"
                                 >
+
+                                    <!-- Datos de Pedido -->
                                     <div  @click="PedidoCambioPreparando(i.id_pedido)"
                                     class="tab"
                                     >
@@ -288,6 +300,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <!-- Detalles de Pedido -->
                                     <transition name="slide">
                                         <div v-if = "PedidoNowPreparando === i.id_pedido"
@@ -372,7 +385,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- Direccion -->
                                                 <h3 class="text-lg font-bold text-gray-800 
                                                 mb-3 border-b border-gray-100 pb-2"
                                                 >
@@ -412,8 +424,11 @@
                                             </div>
                                         </div>
                                     </transition>
+
                                 </div>
                             </div>
+
+                            <!-- Tabla Vacia -->
                             <div v-else class="lilelse">
                                 <span class="text-4xl mb-3 block">
                                     😔
@@ -444,6 +459,8 @@
                                     :key="i.id_pedido"
                                     class="mb-4"
                                     >
+
+                                        <!-- Datos de Pedido -->
                                         <div @click="PedidoCambioEnCamino(i.id_pedido)"
                                         class="tablue"
                                         >
@@ -489,6 +506,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <!-- Detalles de Pedido -->
                                         <transition name="slide">
                                             <div v-if = "PedidoNowEnCamino === i.id_pedido"
@@ -577,7 +595,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- Direcciones -->
                                                 <h3 class="text-lg font-bold text-gray-800 
                                                 mb-3 border-b border-gray-100 pb-2"
                                                 >
@@ -617,8 +634,11 @@
                                                 </div>
                                             </div>
                                         </transition>
+
                                     </div>
                                 </div>
+
+                                <!-- Tabla Vacia -->
                                 <div v-else class="lilelse">
                                     <span class="text-4xl mb-3 block">
                                         💨
@@ -627,6 +647,7 @@
                                         No hay Pedidos en Camino
                                     </h2>
                                 </div>
+
                             </div>
 
                             <!-- Boton Historial -->
@@ -635,7 +656,9 @@
                                 class="boton-guardar 
                                 !w-auto !px-8 !py-3 !rounded-full 
                                 shadow-md flex items-center gap-2"
-                                :class="mostrarhistorial ? '!from-gray-500 !to-gray-700' : ''"
+                                :class="mostrarhistorial 
+                                ? '!from-gray-500 !to-gray-700' 
+                                : ''"
                                 >
                                     <span v-if="!mostrarhistorial">
                                         📜 Ver Historial de Pedidos Anteriores
@@ -665,6 +688,8 @@
                                     class="mb-4 opacity-90 
                                     hover:opacity-100 transition-opacity"
                                     >
+
+                                        <!-- Datos de Pedido -->
                                         <div @click="PedidoCambioHistorial(i.id_pedido)"
                                         class="tabgray"
                                         >
@@ -711,6 +736,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <!-- Detalles de Pedido -->
                                         <transition name="slide">
                                             <div v-if = "PedidoNowHistorial === i.id_pedido"
@@ -794,7 +820,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- Direccion -->
                                                 <h3 class="text-lg font-bold text-gray-700 mb-3 
                                                 border-b border-gray-100 pb-2"
                                                 >
@@ -832,8 +857,12 @@
                                                 </div>
                                             </div>
                                         </transition>
+
                                     </div>
                                 </div>
+                                
+
+                                <!-- Tabla Vacia -->
                                 <div v-else class="lilelse"
                                 >
                                     <span class="text-4xl mb-3 block">
@@ -843,6 +872,7 @@
                                         No hay historial de pedidos
                                     </h2>
                                 </div>
+
                             </div>
 
                         </div>
@@ -911,8 +941,7 @@
                 CargandoTrue.value = false
                 ErrorCarga.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
-            }
-        }, 15000)
+        }}, 15000)
         // Leer Pedidos del Cliente
         try {
             const respuesta = await fetch(`${urlover8000}/pedidos/cliente/${ClienteID.value}`, {
@@ -1063,4 +1092,5 @@
         const datos = await BusqPedido.json()
         Pedidos.value = Array.isArray(datos) ? datos : []
     }
+    
 </script>

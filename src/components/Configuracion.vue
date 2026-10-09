@@ -39,7 +39,10 @@
             </div>
 
             <!-- Actualizar Datos de Usuario -->
-            <div v-else class="flex justify-center items-center w-full px-4 py-12">
+            <div v-else 
+            class="flex justify-center 
+            items-center w-full px-4 py-12"
+            >
                 <div class="tarjeta-config">
                     <div class="deco-config">
                     </div>
@@ -50,6 +53,8 @@
                         <h1 class="titulo-config mb-4">
                             DETALLES DE LA CUENTA
                         </h1>
+                        
+                        <!-- Datos de Cliente -->
                         <div class="flex flex-col text-left">
                             <label class="label-config">
                                 Nombre Completo
@@ -90,7 +95,9 @@
                             </div>
                         </div>
                         <div class="flex flex-col text-left">
-                            <label class="label-config">Confirmar Contraseña</label>
+                            <label class="label-config">
+                                Confirmar Contraseña
+                            </label>
                             <div class="relative w-full">
                                 <input placeholder="Repite la contraseña" 
                                 :type="verConContrasena ? 'text' : 'password'" 
@@ -106,6 +113,8 @@
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Botones -->
                         <div class="mt-6">
                             <button type="submit" 
                             :disabled="Actualizando" 
@@ -114,9 +123,11 @@
                                 {{ Actualizando ? 'Guardando datos...' : 'Guardar Cambios' }}
                             </button>
                         </div>
+
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -133,8 +144,7 @@
         CerrarSesion,
         urlover8000, 
         SesionExpirada, 
-        Iniciado,
-        ClienteID
+        Iniciado
     } from './Estatus.js'
 
     // ----- Variables Complejas ----- //
@@ -176,8 +186,7 @@
                 CargandoTrue.value = false
                 ErrorCarga.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
-            }
-        }, 15000)
+        }}, 15000)
         // Leer Datos del Cliente con Sesion Iniciada
         try {
             const respuestaid = await fetch(`${urlover8000}/reload/`, { credentials: 'include' })
@@ -190,9 +199,7 @@
                     if (datos && datos.length > 0) {
                         ClienteConfig.value.nombre = datos[0].nombre
                         ClienteConfig.value.email = datos[0].email
-                    }
-                }
-            }
+            }}}
             clearTimeout(temporizador)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
@@ -202,9 +209,7 @@
         } finally {
             if (!ErrorCarga.value) {
                 CargandoTrue.value = false
-            }
-        }
-    })
+    }}})
 
     // ----- Funciones Backend ----- //
     
@@ -212,12 +217,12 @@
     const ActualizarCliente = async() => {
         if (Actualizando.value) return
         Actualizando.value = true
+        // Verificacion Contraseñas iguales
         if (ClienteConfig.value.contrasena !== "" || ClienteConfig.value.concontrasena !== "") {
             if (ClienteConfig.value.contrasena !== ClienteConfig.value.concontrasena) {
                 alert("❌ Las contraseñas no coinciden. Por favor, verifícalas.")
                 return
-            }
-        }
+        }}
         // Establecer Datos del Cliente
         const UsuarioUpd = {} 
         if (ClienteConfig.value.nombre !== "") {
@@ -239,6 +244,7 @@
             body: JSON.stringify(UsuarioUpd),
             credentials: 'include'
         })
+        // Verificacion Sesion Vencida
         if (ActUsuario.status === 401 || ActUsuario.status === 403) {
             CerrarSesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")

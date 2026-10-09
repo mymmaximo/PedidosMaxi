@@ -74,7 +74,7 @@
                             >
                         </div>
 
-                        <!-- Botones Confirmacion -->
+                        <!-- Botones -->
                         <div class="botones">
                             <button @click="BorrarProducto()"
                             class="botoncon"
@@ -109,7 +109,7 @@
                                 {{ ProductoAct.nombre }}
                             </h1>
 
-                            <!-- Actualizar Nombre -->
+                            <!-- Datos de Producto -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
                                     Nombre
@@ -120,8 +120,6 @@
                                 maxlength="50"
                                 >
                             </div>
-
-                            <!-- Actualizar Precio -->
                             <div v-if="VerificarRol([1, 2, 4])">
                                 <h2>
                                     Precio
@@ -132,8 +130,6 @@
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
-
-                            <!-- Actualizar Stock -->
                             <div v-if="VerificarRol([1, 2, 5])">
                                 <h2>
                                     Stock
@@ -144,8 +140,6 @@
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
-
-                            <!-- Actualizar Categoria y Codigo de Barra -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
                                     Categoria
@@ -182,8 +176,6 @@
                                 maxlength="15"
                                 >
                             </div>
-
-                            <!-- Actualizar Imagenes Actuales -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
                                     Imágenes actuales
@@ -278,7 +270,7 @@
                                 </div>
                             </div>
 
-                            <!-- Botones Confirmacion -->
+                            <!-- Botones -->
                             <div class="botones">
                                 <button :disabled="confirboton || Actualizando" 
                                 type="submit" 
@@ -315,7 +307,7 @@
                             {{ ProductoActual.nombre }}
                         </h1>
 
-                        <!-- Imagenes del Producto -->
+                        <!-- Datos de Producto -->
                         <div class="carrusel-contenedor">
                             <div v-if="ProductoActual.imagenes.length > 0"
                             class="carrusel-fila"
@@ -384,7 +376,7 @@
                             </div>
                         </div>
 
-                        <!-- Botones Confirmacion -->
+                        <!-- Botones -->
                         <div class="botones mt-2">
                             <button @click="SumarCarrito"
                             class="botoncon"
@@ -421,7 +413,7 @@
                                 🏷️ Oferta: {{ ProductoPromo.nombre }}
                             </h1>
 
-                            <!-- Imagenes del Producto -->
+                            <!-- Datos de Producto -->
                             <div class="bg-gray-50 rounded-xl 
                             p-2 shadow-inner 
                             mx-auto w-full max-w-[200px]"
@@ -478,8 +470,6 @@
 
                             <!-- Datos de la Promocion -->
                             <div class="flex flex-col gap-3">
-
-                                <!-- Motivo -->
                                 <div>
                                     <h2 class="text-sm font-bold text-gray-600 ml-1 mb-1">
                                         Nombre (Opcional)
@@ -496,11 +486,7 @@
                                     transition-colors"
                                     >
                                 </div>
-
-                                <!-- Precio Nuevo -->
                                 <div class="grid grid-cols-2 gap-3">
-
-                                    <!-- Precio Fijo -->
                                     <div>
                                         <h2 class="text-sm font-bold 
                                         text-gray-600 
@@ -532,8 +518,6 @@
                                             >
                                         </div>
                                     </div>
-
-                                    <!-- Precio por Porcentaje -->
                                     <div>
                                         <h2 class="text-sm font-bold text-gray-600 
                                         ml-1 mb-1 text-center"
@@ -565,8 +549,6 @@
                                         </div> 
                                     </div>
                                 </div>
-
-                                <!-- Fecha de Inicio/Vencimiento -->
                                 <div class="grid grid-cols-1 
                                 sm:grid-cols-2 gap-3"
                                 >
@@ -612,7 +594,7 @@
                                 </div>
                             </div>
 
-                            <!-- Botones Confirmacion -->
+                            <!-- Botones -->
                             <div class="flex flex-row 
                             justify-center 
                             gap-2 mt-2 pt-4 
@@ -669,16 +651,16 @@
                 : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
                 >
 
-                    <!-- Barra de Filtros -->
+                    <!-- Boton de Filtros -->
                     <div class="hidden sm:block">
-
-                        <!-- Boton de Filtros -->
                         <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
                         >
                             ᯤ
                         </h1>
                     </div>
+
+                    <!-- Barra de Filtros -->
                     <transition name="slide">
                         <div v-if="MostrarFiltro"
                         class="flex flex-col lg:self-center"
@@ -918,7 +900,7 @@
                                 </div>
                             </div>
 
-                            <!-- Botones Confirmacion -->
+                            <!-- Botones -->
                             <div class="botones">
                                 <button @click="AplicarFiltro" 
                                 class="botoncon"
@@ -936,17 +918,16 @@
                         </div>
                     </transition>
 
-                    <!-- Barra de Nuevo Producto -->
+                    <!-- Boton de Crear Nuevo Producto -->
                     <div v-if="VerificarRol([1, 2])">
-
-                        <!-- Boton de Crear -->
                         <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
                         >
                             +
                         </h1>
-
                     </div>
+
+                    <!-- Barra de Nuevo Producto -->
                     <transition name="slide">
                         <div v-if="MostrarNuevo && (VerificarRol([1, 2]))"
                         class="flex flex-col lg:self-center"
@@ -1047,8 +1028,11 @@
                         </div>
                     </transition>
                 </div>
+
                 <!-- Tabla de Productos -->
                 <div class="start">
+
+                    <!-- Gif Cargando -->
                     <div v-if="CargandoTrue" 
                     class="flex flex-col 
                     items-center justify-center 
@@ -1062,6 +1046,8 @@
                             Cargando productos, un momento...
                         </h2>
                     </div>
+
+                    <!-- Error Cargando -->
                     <div v-else-if="ErrorCarga"
                     class="flex flex-col
                     items-center justify-center
@@ -1081,22 +1067,29 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- Productos -->
                     <div v-else>
                         <div class="px-5 w-full">
-                        <button @click="MostrarFiltro = true"
-                        class="sm:hidden 
-                        w-full mb-4 py-3 
-                        bg-white text-green-800 
-                        font-black text-lg 
-                        border-2 border-green-200 
-                        rounded-xl flex items-center 
-                        justify-center gap-2 
-                        shadow-sm transition-all 
-                        active:scale-95 active:bg-green-50"
-                        >
-                            ᯤ Abrir Filtros
-                        </button>
+
+                            <!-- Mostrar Boton Filtro en Celular -->
+                            <button @click="MostrarFiltro = true"
+                            class="sm:hidden 
+                            w-full mb-4 py-3 
+                            bg-white text-green-800 
+                            font-black text-lg 
+                            border-2 border-green-200 
+                            rounded-xl flex items-center 
+                            justify-center gap-2 
+                            shadow-sm transition-all 
+                            active:scale-95 active:bg-green-50"
+                            >
+                                ᯤ Abrir Filtros
+                            </button>
+
                             <div class="flex flex-row items-stretch w-full gap-3 mb-5">-
+
+                                <!-- Barra de Busqueda -->
                                 <input @input="BusquedaProducto"
                                 type="text" 
                                 v-model="Busqueda" 
@@ -1104,6 +1097,8 @@
                                 class="busqueda !mb-0"
                                 maxlength="50"
                                 >
+
+                                <!-- Vista en Lista/Carta -->
                                 <button @click="VistaLista = !VistaLista"
                                 title="Alternar Vista"
                                 class="bg-white border-2 border-green-200 
@@ -1118,7 +1113,10 @@
                                         ☰
                                     </span>
                                 </button>
+
                             </div>
+
+                            <!-- Tabla de Productos -->
                             <div v-if="Productos.length > 0"
                             :class="VistaLista 
                             ? 'flex flex-col gap-4 w-full' 
@@ -1136,6 +1134,8 @@
                                 ? 'tarjeta-premium relative bg-white !w-full !m-0 hover:!shadow-lg' 
                                 : 'carta relative']"
                                 >
+
+                                    <!-- Datos de Productos -->
                                     <div :class="VistaLista 
                                     ? 'flex flex-col sm:flex-row items-center sm:items-start gap-4 w-full sm:w-auto text-left' 
                                     : 'w-full'"
@@ -1144,6 +1144,8 @@
                                         ? 'w-24 sm:w-32 shrink-0' 
                                         : 'w-full'"
                                         >
+
+                                            <!-- Motivo de Promocion -->
                                             <div v-if="i.es_promocion" 
                                             class="absolute top-2 left-2 
                                             z-10 bg-red-500 text-white 
@@ -1152,6 +1154,8 @@
                                             >
                                                 🔥 {{ i.motivo || 'OFERTA' }}
                                             </div>
+
+                                            <!-- Imagenes del Producto -->
                                             <div v-if="i.imagenes.length > 0"
                                             class="flex flex-row 
                                             gap-3 overflow-x-auto
@@ -1195,26 +1199,38 @@
                                             : 'imagen'"
                                             >
                                         </div>
+
+                                        <!-- Datos del Producto -->
                                         <div :class="VistaLista 
                                         ? 'tarjeta-info pt-2 sm:pt-0' 
                                         : 'mt-2'"
                                         >
                                             <h2 :class="['font-bold', VistaLista 
                                             ? 'text-2xl text-gray-800' 
-                                            : '']">
+                                            : '']"
+                                            >
                                                 {{ i.nombre }}
                                             </h2>
                                             <h3 :class="VistaLista 
                                             ? 'text-gray-500 font-medium' 
-                                            : ''">
+                                            : ''"
+                                            >
                                                 Categoria: {{ i.categoria }}
                                             </h3>
                                             <div class="flex flex-col">
-                                                <div v-if="i.es_promocion" class="flex items-center gap-2 -mb-1 mt-1">
-                                                    <span v-if="i.porcentaje_descuento" class="text-xs font-black text-white bg-green-500 px-1.5 py-0.5 rounded">
-                                                        {{ i.porcentaje_descuento }}% OFF
+                                                <div v-if="i.es_promocion" 
+                                                class="flex items-center 
+                                                gap-2 -mb-1 mt-1"
+                                                >
+                                                    <span v-if="i.porcentaje_descuento" 
+                                                    class="text-xs font-black text-white 
+                                                    bg-green-500 px-1.5 py-0.5 rounded"
+                                                    >
+                                                        {{ i.porcentaje_descuento }} % OFF
                                                     </span>
-                                                    <h2 class="text-gray-400 text-sm font-bold line-through">
+                                                    <h2 class="text-gray-400 text-sm font-bold 
+                                                    line-through"
+                                                    >
                                                         $ {{ FormatearPrecio(i.precio) }}
                                                     </h2>
                                                 </div>
@@ -1252,14 +1268,16 @@
                                                 </h3>
                                             </div>
                                         </div>
+
                                     </div>
+
+                                    <!-- Botones -->
                                     <div :class="VistaLista 
                                     ? 'tarjeta-acciones flex flex-wrap justify-end gap-2 !mt-4 sm:!mt-0 w-full sm:w-auto ml-auto shrink-0' 
                                     : [VerificarRol([1, 2]) 
                                     ? 'grid grid-cols-2' 
                                     : 'flex flex-col', 'w-full mt-auto pt-3 gap-1.5 sm:gap-2']"
                                     >
-                                        <!-- Boton Editar -->
                                         <button @click.stop="Edicion(i)" 
                                         v-if="VerificarRol([1, 2, 4, 5])" 
                                         :class="VistaLista 
@@ -1274,8 +1292,6 @@
                                                 Editar
                                             </span>
                                         </button>
-
-                                        <!-- Boton Promocion -->
                                         <button @click.stop="AbrirPopUp04(i)" 
                                         v-if="VerificarRol([1, 2])" 
                                         :class="VistaLista 
@@ -1290,8 +1306,6 @@
                                                 Promoción
                                             </span>
                                         </button>
-
-                                        <!-- Boton Eliminar -->
                                         <button @click.stop="Eliminacion(i)" 
                                         v-if="VerificarRol([1, 2]) && i.activo" 
                                         :class="VistaLista 
@@ -1306,8 +1320,6 @@
                                                 Eliminar
                                             </span>
                                         </button>
-
-                                        <!-- Boton Reactivar -->
                                         <button @click.stop="Eliminacion(i)" 
                                         v-if="VerificarRol([1, 2]) && !i.activo" 
                                         :class="VistaLista 
@@ -1322,8 +1334,6 @@
                                                 Reactivar
                                             </span>
                                         </button>
-
-                                        <!-- Boton Comprar -->
                                         <button @click.stop="Compracion(i)"
                                         :disabled="CarritoStock(i) === 0"
                                         v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
@@ -1339,8 +1349,6 @@
                                                 Comprar
                                             </span>
                                         </button>
-
-                                        <!-- Boton Favoritos -->
                                         <button @click.stop="ToggleFavorito(i.id)"
                                         v-if="ClienteID"
                                         :class="VistaLista 
@@ -1352,16 +1360,26 @@
                                             {{ MisFavoritos.includes(i.id) ? '🤍 Quitar de Favoritos' : '❤️ Agregar a Favoritos' }}
                                         </button>
                                     </div>
+
                                 </div>
                             </div>
-                            <div v-else class="flex flex-col items-center justify-center p-8">
+
+                            <!-- Tabla Vacia -->
+                            <div v-else 
+                            class="flex flex-col 
+                            items-center justify-center p-8"
+                            >
                                 <h2 class="text-xl font-bold text-gray-700 text-center">
                                     {{ Pagina === 0 ? 'No se encontraron productos 😔' : 'Ya no hay más productos para mostrar 🏁' }}
                                 </h2>
-                                <h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
+                                <h3 v-if="Pagina === 0" 
+                                class="text-gray-500 text-center mt-2"
+                                >
                                     Prueba buscando con otro término
                                 </h3>
                             </div>
+
+                            <!-- Mostrando Paginas -->
                             <div class="flex justify-center p-5">
                                 <button @click="CambiarPagina('back')" 
                                 :disabled="Pagina === 0 || CargandoTrue"
@@ -1384,9 +1402,12 @@
                                     ❯
                                 </button>
                             </div>
+
                         </div>
                     </div>
+
                 </div>
+                
             </div>
         </div>
         
@@ -1423,13 +1444,12 @@
         VerificarRol,
         VerificarRolExcluido
     } from './Estatus.js'
-    import { 
-        useRouter 
-    } from 'vue-router'
 
     // ----- Variables Vue ----- //
 
+    // Habilitar Boton //
     const confirboton = computed(() =>{
+        // Nuevo Producto
         if (VentanaNuevo.value) {
             const faltandatos01 = 
                 NuevoProducto.value.nombre === "" ||
@@ -1441,6 +1461,7 @@
                 OpcionCategoria.value === "new" && NuevoProducto.value.categoria === ""
             return faltandatos01 || faltandatos02
         }
+        // Actualizar Producto
         if (ActualizarCajaP.value) {
             const faltandatos03 =
                 ProductoAct.value.nombre === "" ||
@@ -1453,15 +1474,18 @@
                 OpcionCategoriaA.value === "new" && ProductoAct.value.categoria === ""
             return faltandatos03 || faltandatos04
     }})
+    const MostrarFiltro = ref(window.innerWidth >= 1024)
 
     // ----- Variables Complejas ----- //
 
+    // Almacen para Nuevo Producto //
     const NuevoProducto = ref({
         nombre: "",
         precio: "",
         stock: "",
         categoria: ""
     })
+    // Almacen para Actualizar Producto //
     const ProductoAct = ref({
         id: "",
         nombre: "",
@@ -1471,16 +1495,19 @@
         codigo_barra: "",
         imagenes: []
     })
+    // Almacen para Eliminar Producto //
     const ProductoEli = ref({
         id: "",
         nombre: "",
         imagenes: []
     })
+    // Almacen para Producto a Promocionar //
     const ProductoPromo = ref({
         id: "",
         nombre: "",
         imagenes: []
     })
+    // Almacen para Nueva Promocion //
     const FormPromo = ref({
         motivo: "",
         precio_nuevo: "",
@@ -1488,10 +1515,6 @@
         fecha_inicio: "",
         fecha_fin: ""
     })
-    const prop = defineProps (['path','size'])
-    const router = useRouter()
-    const { path } = toRefs (prop)
-    const MostrarFiltro = ref(window.innerWidth >= 1024)
 
     // ----- Variables Booleanas ----- //
 
@@ -1545,9 +1568,11 @@
 
     // ----- Funciones Vue ----- //
 
+    // Primera Carga de Datos de la Pagina //
     onMounted (() => {
         CargarDatos()
     })
+    // Verificacion de Stock > 0 //
     watch (ProductoCantidad, (NuevaCantidad) => {
         let CantidadnCarrito = 0
         if (ProductoActual.value) {
@@ -1563,9 +1588,7 @@
             if (NuevaCantidad < 1 && StockLocal !== 0) {
                 ProductoCantidad.value = 1
     }}})
-    watch(path, () => {
-        if (path.value) ObtenerImgUrl()
-    })
+    // Carga de Datos de la Pagina //
     const CargarDatos = (async() => {
         if (BloqueoPeticion.value) return
         BloqueoPeticion.value = true
@@ -1609,6 +1632,7 @@
             }
             BloqueoPeticion.value = false
     }})
+    // Cambiar Pagina //
     const CambiarPagina = async (direccion) => {
         if (BloqueoPeticion.value) return
         BloqueoPeticion.value = true
@@ -1630,25 +1654,41 @@
             CargandoTrue.value = false
             BloqueoPeticion.value = false
     }}
+    // Leer Url/Link y Tamaño de Imagen //
     const emit = defineEmits([
         'upload',
         'update:path'
     ])
+    // Definir Url/Link y Tamaño de Imagen //
+    const prop = defineProps ([
+        'path',
+        'size'
+    ])
+    // Asignar Url/Link y Tamaño de Imagen //
+    const { path } = toRefs (prop)
+    // Leer Url/Link y Tamaño de Imagen //
+    watch(path, () => {
+        if (path.value) ObtenerImgUrl()
+    })
 
     // ----- Funciones Frontend ----- //
 
+    // Abrir Pop up para Actualizar Producto //
     const AbrirPopUp01 = () => {
 		ActualizarCajaP.value = true
 		document.body.style.overflow = "hidden"
 	}
+    // Abrir Pop up para Desactivar Producto //
 	const AbrirPopUp02 = () => {
 		ActualizarCajaPDel.value = true
 		document.body.style.overflow = "hidden"
 	}
+    // Abrir Pop up para Añadir al Carrito //
 	const AbrirPopUp03 = () => {
 		VentanaCompra.value = true
 		document.body.style.overflow = "hidden"
 	}
+    // Abrir Pop up para Promocion (Lee Precios) //
 	const AbrirPopUp04 = async (producto_fila) => {
 		ProductoPromo.value.id = producto_fila.id
         ProductoPromo.value.nombre = producto_fila.nombre
@@ -1661,6 +1701,7 @@
             fecha_inicio: "", 
             fecha_fin: "" 
         }
+        // Leer Precios
         try {
             const respuesta = await fetch(`${urlover8000}/registro_precios/`, {
                 headers: { "X-Tunnel-Skip-AntiPhishing-Page": "true" },
@@ -1688,12 +1729,14 @@
         VentanaPromocion.value = true
         document.body.style.overflow = "hidden"
 	}
+    // Establecer Accion al Tocar el Tab //
     const AccionCarta = (producto_fila) => {
         if (VerificarRol([1, 2, 3, 4, 5, 6])) {
             Edicion(producto_fila)
         } else {
             Compracion(producto_fila)
     }}
+    // Aplicar Filtros //
     const AplicarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
@@ -1701,35 +1744,42 @@
         menor.value = ""
         mayor.value = ""
     }
+    // Leer Imagen Anterior //
     const BackImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual > 0) {
             IndiceImg.value[imagen.id] = ImgActual - 1
             ImagenesCargando.value[imagen.id] = true
     }}
+    // Cerrar Pop up para Actualizar Producto //
 	const CerrarPopUp01 = () => {
 		ActualizarCajaP.value = false
         DelImg.value = []
         LimpiarImagenes()
 		document.body.style.overflow = "auto"
 	}
+    // Cerrar Pop up para Borrar Producto //
 	const CerrarPopUp02 = () => {
 		ActualizarCajaPDel.value = false
 		document.body.style.overflow = "auto"
 	}
+    // Cerrar Pop up para Añadir el Carrito //
 	const CerrarPopUp03 = () => {
         VentanaCompra.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
 		document.body.style.overflow = "auto"
 	}
+    // Cerrar Pop up para Promocion //
 	const CerrarPopUp04 = () => {
         VentanaPromocion.value = false
 		document.body.style.overflow = "auto"
 	}
+    // Inicio del Toque de Imagen en Celular //
     const ComienzoToque = (evento) => {
         inicioX = evento.changedTouches[0].clientX
     }
+    // Establecer Valores del Producto para Añadir en el Carrito y Abrir Pop Up //
     const Compracion = (producto_fila) => {
         if (CarritoStock(producto_fila) <= 0) {
             return 
@@ -1737,12 +1787,28 @@
         VentanaComprar(producto_fila)
         AbrirPopUp03()
     }
+    // Establecer Valores del Producto para Actualizar Datos y Abrir Pop Up //
+    const Edicion = (producto_fila) => {
+        ProductoAct.value.id = producto_fila.id
+        ProductoAct.value.nombre = producto_fila.nombre
+        ProductoAct.value.precio = producto_fila.precio
+        ProductoAct.value.stock = producto_fila.stock
+        OpcionCategoriaA.value = producto_fila.categoria
+        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
+        ProductoAct.value.imagenes = producto_fila.imagenes
+        DelImg.value = []
+        NewImg.value = []
+        VistaPrevia.value = []
+        AbrirPopUp01()
+    }
+    // Establecer Valores del Producto para Borrar el Producto y Abrir Pop Up //
     const Eliminacion = (producto_fila) => {
         ProductoEli.value.id = producto_fila.id
         ProductoEli.value.nombre = producto_fila.nombre
         ProductoEli.value.imagenes = producto_fila.imagenes
         AbrirPopUp02()
     }
+    // Establecer Color de Carta de Producto (Depende del Estatus) //
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true) {
             return "si"
@@ -1750,6 +1816,7 @@
         else if (id_estatus === false) {
             return "no"
     }}
+    // Fin del Toque de Imagen en Celular //
     const FinToque = (evento, producto) => {
         if (!producto) return
         const finX = evento.changedTouches[0].clientX
@@ -1766,13 +1833,16 @@
         }
         inicioX = 0
     }
+    // Leer Precio con Formato Pesos Argentinos //
     const FormatearPrecio = (precio) => {
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat('es-AR').format(precio)
     }
+    // Leer Imagen //
     const GetImg = (id) => {
         return IndiceImg.value[id] || 0
     }
+    // Limpiar Filtros, Orden y Busqueda //
     const LimpiarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
@@ -1784,18 +1854,21 @@
         BusquedaProducto()
         filtroAct.value = false
     }
+    // Limpiar Imagenes sin Subir en Vista Previa //
     const LimpiarImagenes = () => {
         VistaPrevia.value = []
         ArchivoSave.value = []
         if (fileInput.value) {
             fileInput.value.value = ''
     }}
+    // Leer Imagen Siguiente //
     const NextImg = (imagen) => {
         const ImgActual = GetImg(imagen.id)
         if (ImgActual < imagen.imagenes.length - 1) {
             IndiceImg.value[imagen.id] = ImgActual + 1
             ImagenesCargando.value[imagen.id] = true
     }}
+    // Quitar Imagen de Producto //
     const NoMoreImages = (img) => {
         const index = DelImg.value.indexOf(
             img.id_imagen
@@ -1807,16 +1880,19 @@
         }
         IndiceImg.value[ProductoAct.value.id] = 0
     }
+    // Obtener Url/Link de Imagen //
     const ObtenerImgUrl = (Imgenkey) => {
         const respuesta = supabase.storage
             .from('max_imagenes')
             .getPublicUrl(Imgenkey)
         return respuesta.data.publicUrl
     }
+    // Restar Cantidad de Producto //
     const RestarProducto = () => {
         if (ProductoCantidad.value > 1) {
             ProductoCantidad.value--
     }}
+    // Subir Imagen de Producto //
     const SeleccionarImagen = (evt) => {
         const files = evt.target.files
         if (files) {
@@ -1826,10 +1902,12 @@
                 ArchivoSave.value.push(files[i])
                 VistaPrevia.value.push(URL.createObjectURL(files[i]))
     }}}
+    // Sumar Cantidad de Producto //
     const SumarProducto = () => {
         if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
             ProductoCantidad.value++
     }}
+    // Establecer Valores del Producto para Añadir a Carritos y Abrir Pop Up //
     const VentanaComprar = (ProductoSeleccionado) => {
         AbrirPopUp03()
         ProductoActual.value = ProductoSeleccionado
@@ -1838,11 +1916,12 @@
 
     // ----- Funciones Backend ----- //
 
+    // Actualizar Datos del Producto //
     const ActualizarProducto = async() => {
         if (Actualizando.value) return
         Actualizando.value = true
         try {
-            // ----- Datos Texto Backend ----- //
+            // Datos Texto Backend
             if (OpcionCategoriaA.value != "new") { 
                 ProductoAct.value.categoria = OpcionCategoriaA.value
             }
@@ -1868,7 +1947,7 @@
                 Iniciado.value = false
                 return
             }
-            // ----- Borrar Datos Imagen ----- //
+            // Borrar Datos Imagen
             for (const id_img of DelImg.value) {
                 const listaImagenes = ProductoAct.value.imagenes || []
                 const ImgDel = listaImagenes.find(
@@ -1882,15 +1961,15 @@
                     credentials: 'include'
                 })
             }
-            // ----- Subir Datos Imagen ----- //
+            // Subir Datos Imagen
             for (const file of ArchivoSave.value) {
                 const fileExt = file.name.split('.').pop()
                 const filePath = `${Math.random()}.${fileExt}`
-            // ----- Subir Datos Imagen Supabase ----- //
+            // Subir Datos Imagen Supabase
                 let { error: uploadError } = await supabase.storage
                     .from('max_imagenes')
                     .upload(filePath, file)
-            // ----- Subir Datos Imagen Backend ----- //
+            // Subir Datos Imagen Backend
                 if (!uploadError) {
                     await fetch(`${urlover8000}/productos/archivos/`, {
                         method: 'POST',
@@ -1903,9 +1982,7 @@
                             tamanio: file.size
                         }),
                         credentials: 'include'
-                    })
-                }
-            }
+            })}}
             BusquedaProducto()
             CerrarPopUp01()
         } catch (error) {
@@ -1914,6 +1991,7 @@
         } finally {
             Actualizando.value = false
     }}
+    // Desactivar Datos del Producto //
     const BorrarProducto = async() => {
         const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
             method: 'DELETE',
@@ -1937,6 +2015,7 @@
         BusquedaProducto()
         CerrarPopUp02()
     }
+    // Desactivar Datos de Promocion //
     const BorrarPromocion = async () => {
         if (!FormPromo.value.id_promocion) return
         if (Actualizando.value) return
@@ -1963,19 +2042,23 @@
         } finally {
             Actualizando.value = false
     }}
+    // Leer Datos de los Productos //
     const BusquedaProducto = async() => {
         let url = new URL (`${urlover8000}/producto/`)
 		url.searchParams.append('skip', Pagina.value)
         url.searchParams.append('limit', ItemsPorPagina.value + 1)
+        // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_producto', Busqueda.value)
         }
+        // Establecer Orden
         if (orden.value !== "") {
             url.searchParams.append('orden', orden.value)
             if (orden.value !== "3") {
                 filtroAct.value = true
             }
         }
+        // Establecer Filtro de Precios
         let minfiltro = ""
         let maxfiltro = ""
         if (filtroRadio.value === 4) {
@@ -1994,6 +2077,7 @@
         else if (filtroRadio.value === 1) {
             minfiltro = 50000
         }
+        // Establecer Filtro Precios Personalizados
         else if (filtroRadio.value === 0) {
             minfiltro = menor.value
             maxfiltro = mayor.value
@@ -2016,17 +2100,18 @@
             url.searchParams.append('bool_activo', 'false')
             filtroAct.value = true
         }
+        // Establecer Filtro de Categoria
         if (filtrocat.value !== "") {
             url.searchParams.append('filtrocat', filtrocat.value)
             filtroAct.value = true
         }
+        // Establecer Filtro de Promocion
         if (filtroPromo.value === true) {
             url.searchParams.append('bool_promocion', 'true')
             filtroAct.value = true
             if (filtroDescuentoMin.value > 0) {
                 url.searchParams.append('porcentaje_descuento_min', filtroDescuentoMin.value)
-            }
-        }
+        }}
         const BusqProducto = await fetch(url.toString(), {
             headers: {
                 "X-Tunnel-Skip-AntiPhishing-Page": "true"
@@ -2041,20 +2126,20 @@
             } else {
                 HayMasPaginas.value = false
                 Productos.value = datos
-            }
-        } else {
+        }} else {
             Productos.value = []
             HayMasPaginas.value = false
     }}
+    // Verificacion de Stock > 0 //
     const CarritoStock = (Producto) => {
         let stockCarrito = 0
         CarritoLocal.value.forEach((itemCarrito) => {
             if (itemCarrito.id_producto === Producto.id) {
                 stockCarrito = stockCarrito + itemCarrito.cantidad
-            }
-        })
+        }})
         return Producto.stock - stockCarrito
     }
+    // Añadir al Carrito (Viejo) //
     const Confirmar = (async() => {
         const ClienteGuardado = ClienteID.value
         if (PedidoActual.value) {
@@ -2111,19 +2196,7 @@
                 const error = await respuesta.text()
                 console.error("Error al agregar Pedido:", error)
     }}})
-    const Edicion = (producto_fila) => {
-        ProductoAct.value.id = producto_fila.id
-        ProductoAct.value.nombre = producto_fila.nombre
-        ProductoAct.value.precio = producto_fila.precio
-        ProductoAct.value.stock = producto_fila.stock
-        OpcionCategoriaA.value = producto_fila.categoria
-        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
-        ProductoAct.value.imagenes = producto_fila.imagenes
-        DelImg.value = []
-        NewImg.value = []
-        VistaPrevia.value = []
-        AbrirPopUp01()
-    }
+    // Subir Datos de la Promocion //
     const GuardarPromocion = async () => {
         if (Actualizando.value) return
         Actualizando.value = true
@@ -2164,6 +2237,7 @@
         } finally {
             Actualizando.value = false
     }}
+    // Subir Datos de Nuevo Producto //
     const SubirNuevoProducto = async() => {
         if (OpcionCategoria.value != "new") {
             NuevoProducto.value.categoria = OpcionCategoria.value
@@ -2212,9 +2286,7 @@
                             tamanio: file.size
                         }),
                         credentials: 'include'
-                    })
-                }
-            }
+            })}}
             uploading.value = false
         }
         NuevoProducto.value = {
@@ -2226,9 +2298,11 @@
         LimpiarImagenes()
         BusquedaProducto()
     }
+    // Añadir al Carrito //
     const SumarCarrito = () => {
         if (!ProductoActual.value)
             return
+        // Establecer Datos del Producto 
         const precioEfectivo = ProductoActual.value.es_promocion 
             ? ProductoActual.value.precio_nuevo 
             : ProductoActual.value.precio;
@@ -2254,12 +2328,13 @@
             'carrito_pendiente',
             JSON.stringify(
                 CarritoLocal.value
-            )
-        )
+        ))
         CerrarPopUp03()
         MostrarConfir.value = true
+        // Tiempo de Notificacion en Segundos
         setTimeout(() => { MostrarConfir.value = false }, 2000)
     }
+    // Sumar/Quitar Producto de Favoritos //
     const ToggleFavorito = async (id_producto) => {
         try {
             const respuesta = await fetch(`${urlover8000}/favoritos/toggle?id_cliente=${ClienteID.value}`, {
@@ -2268,23 +2343,21 @@
                 body: JSON.stringify({ id_producto: id_producto }),
                 credentials: 'include'
             })
-            
             if (respuesta.status === 401) {
                 await CerrarSesion()
                 SesionExpirada.value = true
                 Iniciado.value = false
                 return
             }
-            
             if (respuesta.ok) {
                 const data = await respuesta.json()
                 if (data.estado_favorito) {
                     MisFavoritos.value.push(id_producto)
                 } else {
                     MisFavoritos.value = MisFavoritos.value.filter(id => id !== id_producto)
-                }
-            }
+            }}
         } catch (error) {
             console.error("Error al actualizar favorito:", error)
     }}
+
 </script>

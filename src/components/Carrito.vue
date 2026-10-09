@@ -9,19 +9,26 @@
             class="fondo"
             >
                 <div class="popup">
+
+                    <!-- Encabezado -->
                     <h1>
                         ¿Desear Borrar el Detalle?
                     </h1>
+
+                    <!-- Botones -->
                     <div class="botones">
                         <button @click="BorrarDetalle()"
-                        class="botoncon">
+                        class="botoncon"
+                        >
                             Si Confirmo
                         </button>
                         <button @click="CerrarPopUp01"
-                        class="botonc">
+                        class="botonc"
+                        >
                             Cancelar
                         </button>
                     </div>
+                    
                 </div>
             </div>
         </Teleport>   
@@ -34,12 +41,15 @@
             class="fondo"
             >
                 <div class="popup">
+
+                    <!-- Encabezado -->
                     <h1>
                         Dirección de Envío:
                     </h1>
                     <h3>
                         Tus Direcciones
                     </h3>
+
                     <!-- Tiene Direcciones Guardadas -->
                     <select v-model="DireccionExistente">
                         <option value="">
@@ -49,13 +59,10 @@
                         :key="i.id_direccion" 
                         :value="i.id_direccion"
                         >
-                            {{ i.calle }},
-                            {{ i.numero }},
-                            {{ i.barrio }},
-                            {{ i.ciudad }},
-                            {{ i.provincia }},
+                            {{ i.calle }}, {{ i.numero }}, {{ i.barrio }}, {{ i.ciudad }}, {{ i.provincia }}
                         </option>
                     </select>
+
                     <!-- Crear Direccion -->
                     <div v-if="DireccionExistente === ''">
                             <h3>
@@ -81,6 +88,7 @@
                             v-model="NuevaDireccion.ciudad" 
                             >
                             <select v-model="NuevaDireccion.provincia">
+
                                 <!-- Provincias -->
                                 <option value="" disabled>
                                     Selecciona tu Provincia...
@@ -157,9 +165,12 @@
                                 <option value="Tucumán">
                                     Tucumán
                                 </option>
+
                             </select>
                         </div>
                     </div>
+
+                    <!-- Botones -->
                     <div class="botones">
                         <button @click="CerrarPopUp02"
                         class="botonc"
@@ -173,6 +184,7 @@
                             {{ ProcesandoPago ? 'Cargando...' : 'Realizar Pago' }}
                         </button>   
                     </div>
+
                 </div>
             </div>
         </Teleport>
@@ -220,13 +232,15 @@
                     
                     <!-- Carrito -->
                     <div v-else class="carrito-contenedor">
+
+                        <!-- Encabezado -->
                         <div class="titulo-config">
                             <h1>
                                 Tu Carrito
                             </h1>
                         </div>
 
-                        <!-- Encabezado -->
+                        <!-- Datos Encabezado -->
                         <div class="carrito-tabla-cabecera">
                             <div class="col-producto-titulo">
                                 Producto
@@ -245,15 +259,16 @@
                             </div>
                         </div>
 
-                        <!-- Productos -->
+                        <!-- Productos en Carrito -->
                         <div class="carrito-lista">
                             <div v-for="(item, index) in CarritoLocal" 
                             :key="index"
                             class="carrito-fila"
                             >
                                 <div class="carrito-col-producto">
+
+                                    <!-- Imagenes de Producto -->
                                     <div class="carrito-carrusel">
-                                        <!-- Imagenes de Producto -->
                                         <div v-if="item.imagenes && item.imagenes.length > 0"
                                         class="flex flex-row gap-1 items-center">
                                             <button @click="BackImg(item)"
@@ -292,6 +307,7 @@
                                     <h2 class="carrito-nombre-producto">
                                         {{ item.nombre_producto }}
                                     </h2>
+
                                 </div>
 
                                 <!-- Precio del Producto -->
@@ -316,7 +332,7 @@
                                     <span class="carrito-label-movil">
                                         Subtotal:
                                     </span>
-                                        ${{ FormatearPrecio(item.item_subtotal || item.cantidad * item.precio_unitario) }}
+                                        $ {{ FormatearPrecio(item.item_subtotal || item.cantidad * item.precio_unitario) }}
                                 </div>
 
                                 <!-- Boton Borrar Producto de Carrito -->
@@ -328,9 +344,10 @@
                                         🗑️
                                     </button>
                                 </div>
+
                             </div>
 
-                            <!-- Resumen de Compra -->
+                            <!-- Resumen de Compra y Boton de Compra -->
                             <div class="carrito-resumen-seccion">
                                 <div class="carrito-tarjeta-resumen">
                                     <div class="carrito-resumen-decoracion">
@@ -343,12 +360,13 @@
                                             Total:
                                         </span>
                                         <span>
-                                            ${{ FormatearPrecio(CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0)) }}
+                                            $ {{ FormatearPrecio(CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0)) }}
                                         </span>
                                     </div>
-                                    <button 
-                                    @click="AbrirPopUp02"
-                                    class="botoncon w-full !text-xl !py-4 z-10 hover:-translate-y-1"
+                                    <button @click="AbrirPopUp02"
+                                    class="botoncon 
+                                    w-full !text-xl !py-4 
+                                    z-10 hover:-translate-y-1"
                                     >
                                         Completar Pedido
                                     </button>
@@ -450,8 +468,7 @@
                 CargandoTrue.value = false
                 ErrorCarga.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
-            }
-        }, 15000)
+        }}, 15000)
         // Leer Direcciones de Cliente
         try {
             const respuesta = await fetch(`${urlover8000}/cliente/${ClienteID.value}/direcciones/`, {
@@ -468,9 +485,7 @@
         } finally {
             if (!ErrorCarga.value) {
                 CargandoTrue.value = false
-            }
-        }
-    })
+    }}})
     const emit = defineEmits([
         'CarritoVacio'
     ])
@@ -651,8 +666,7 @@
                     id_producto: item.id_producto,
                     cantidad: item.cantidad,
                     precio_unitario: item.precio_unitario
-                }
-            })
+            }})
             // Subir Lista de Detalles de Pedido
             const SubidaNuevoDetalle = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
                 method: 'POST',
@@ -661,7 +675,7 @@
                 },
                 body: JSON.stringify(DetallesLista),
                 credentials: 'include'
-                })  
+                })
             // Sesion Vencida
             if (SubidaNuevoDetalle.status === 401) {
                 CerrarSesion()
@@ -713,6 +727,9 @@
         if (item.cantidad > item.stock_producto) {
             item.cantidad = item.stock_producto
         }
-        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value))
-    }
+        localStorage.setItem(
+            'carrito_pendiente', 
+            JSON.stringify(CarritoLocal.value
+    ))}
+    
 </script>

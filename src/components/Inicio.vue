@@ -27,9 +27,12 @@
                 class="fondo"
                 >
                     <div class="popup">
+
+                        <!-- Encabezado -->
                         <h1>
                             ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
                         </h1>
+
                         <!-- Imagenes del Producto -->
                         <div>
                             <div v-if="ProductoEli.imagenes.length > 0"
@@ -71,7 +74,8 @@
                             class="imagen" 
                             />
                         </div>
-                        <!-- Botones Confirmacion -->
+
+                        <!-- Botones -->
                         <div class="botones">
                             <button @click="BorrarProducto()" 
                             class="botoncon"
@@ -84,6 +88,7 @@
                                 Cancelar
                             </button>
                         </div>
+                        
                     </div>
                 </div>
             </transition>
@@ -98,9 +103,12 @@
                 class="fondo"
                 >
                     <div class="popup popup-compra">
+
+                        <!-- Encabezado -->
                         <h1>
                             {{ ProductoActual.nombre }}
                         </h1>
+
                         <!-- Imagenes del Producto -->
                         <div class="carrusel-contenedor">
                             <div v-if="ProductoActual.imagenes.length > 0"
@@ -143,6 +151,7 @@
                                 />
                             </div>
                         </div>
+
                         <!-- Cantidad de Producto -->
                         <div class="panel-compra">
                             <div class="control-cantidad">
@@ -171,8 +180,10 @@
                                 </span>
                             </div>
                         </div>
+
+                        <!-- Botones -->
                         <div class="botones mt-2">
-                            <button @click="SumarCarrito" 
+                            <button @click="SumarCarrito"
                             class="botoncon"
                             >
                                 Agregar al Carrito
@@ -183,6 +194,7 @@
                                 Cancelar
                             </button>
                         </div>
+
                     </div>
                 </div>
             </transition>
@@ -204,7 +216,7 @@
                                 {{ ProductoAct.nombre }}
                             </h1>
 
-                            <!-- Actualizar Nombre -->
+                            <!-- Datos del Producto -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
                                     Nombre
@@ -215,8 +227,6 @@
                                 maxlength="50"
                                 />
                             </div>
-
-                            <!-- Actualizar Precio -->
                             <div v-if="VerificarRol([1, 2, 4])">
                                 <h2>
                                     Precio
@@ -227,8 +237,6 @@
                                 maxlength="8"
                                 />
                             </div>
-
-                            <!-- Actualizar Stock -->
                             <div v-if="VerificarRol([1, 2, 5])">
                                 <h2>
                                     Stock
@@ -239,7 +247,6 @@
                                 maxlength="8"
                                 />
                             </div>
-                            <!-- Actualizar Categoria y Codigo de Barra -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
                                     Categoria
@@ -276,7 +283,8 @@
                                 maxlength="15"
                                 />
                             </div>
-                            <!-- Actualizar Imagenes Actuales -->
+
+                            <!-- Imagenes del Producto -->
                             <div v-if="VerificarRol([1, 2])">
                                 <h2>
                                     Imágenes actuales
@@ -330,7 +338,6 @@
                                 <div v-else class="imageno">
                                     Sin imágenes
                                 </div>
-                                <!-- Imagenes Nuevas -->
                                 <div>
                                     <h2>
                                         Imagenes Nuevas
@@ -371,6 +378,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Botones -->
                             <div class="botones">
                                 <button :disabled="confirboton || Actualizando"
                                 type="submit"
@@ -385,6 +394,7 @@
                                     Cancelar
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -400,9 +410,12 @@
                 class="fondo"
                 >
                     <div class="popup">
+
+                        <!-- Encabezado -->
                         <h1 class="text-center">
                             Banners:
                         </h1>
+
                         <!-- Subir Banners -->
                         <div>
                             <h1>
@@ -418,6 +431,7 @@
                                 />
                             </div>
                         </div>
+
                         <!-- Actualizar Banners -->
                         <div>
                             <h1>
@@ -510,6 +524,8 @@
                                 Sin imágenes
                             </div>
                         </div>
+
+                        <!-- Botones -->
                         <div class="botones">
                             <button @click="SaveBanner" 
                             class="botoncon"
@@ -522,6 +538,7 @@
                                 Cancelar
                             </button>
                         </div>
+
                     </div>
                 </div>
             </transition>
@@ -539,9 +556,12 @@
                         <form @submit.prevent="GuardarPromocion" 
                         class="flex flex-col gap-4"
                         >
+
+                            <!-- Encabezado -->
                             <h1 class="text-center !text-xl !mb-2">
                                 🏷️ Oferta: {{ ProductoPromo.nombre }}
                             </h1>
+
                             <!-- Imagenes del Producto -->
                             <div class="bg-gray-50 rounded-xl 
                             p-2 shadow-inner 
@@ -593,6 +613,7 @@
                                 class="w-24 h-24 object-cover mx-auto rounded-lg shadow-sm"
                                 />
                             </div>
+
                             <!-- Datos de la Promocion -->
                             <div class="flex flex-col gap-3">
                                 <div>
@@ -665,6 +686,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Botones -->
                             <div class="flex flex-row justify-center 
                             gap-2 mt-2 pt-4 
                             border-t-2 border-gray-100"
@@ -690,6 +713,7 @@
                                     Cancelar
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -699,6 +723,7 @@
         <!-- Pagina -->
         <div class="pagina">
             <div class="flex w-full flex-col lg:flex-row">
+
                 <!-- Pagina de Inicio -->
                 <div class="start">
                     
@@ -806,7 +831,6 @@
                                 </button>
                             </div>
                         </div>
-                        
 
                         <!-- Lista de Productos por Categoria -->
                         <div v-for="cat in ListaCategoria" 
@@ -818,11 +842,15 @@
                             bg-gradient-to-tr from-green-600/50 
                             to-green-300/50 rounded-2xl"
                             >
+
+                                <!-- Encabezado -->
                                 <h1 class="text-3xl font-extrabold 
                                 text-green-900 md:mb-2 mb-0 drop-shadow-sm"
                                 >
                                     {{ cat.categoria }}
                                 </h1>
+
+                                <!-- Carrusel de Productos -->
                                 <div :id="'carrusel-' + cat.categoria"
                                 class="flex flex-row 
                                 w-full overflow-x-auto 
@@ -842,6 +870,8 @@
                                     class="carta relative"
                                     >
                                         <div>
+
+                                            <!-- MMotivo de Promocion -->
                                             <div v-if="i.es_promocion" 
                                             class="absolute top-2 left-2 
                                             z-10 bg-red-500 text-white 
@@ -850,6 +880,7 @@
                                             >
                                                 🔥 {{ i.motivo || 'OFERTA' }}
                                             </div>
+
                                             <!-- Imagenes del Producto -->
                                             <div v-if="i.imagenes.length > 0"
                                             class="flex flex-row 
@@ -875,6 +906,7 @@
                                             src="../assets/images.png" 
                                             class="imagen" 
                                             />
+
                                             <!-- Datos del Producto -->
                                             <div>
                                                 <h2 class="font-bold">
@@ -910,7 +942,8 @@
                                                         {{ i.stock }}
                                                     </h3>
                                                 </div>
-                                                <!-- Botones Producto -->
+
+                                                <!-- Botones -->
                                                 <div class="flex flex-row lg:flex-col justify-center">
                                                     <div class="flex flex-wrap 
                                                     w-full mt-auto justify-center items-center 
@@ -961,8 +994,6 @@
                                                                 Comprar
                                                             </span>
                                                         </button>
-
-                                                        <!-- Boton Favoritos -->
                                                         <button @click.stop="ToggleFavorito(i.id)"
                                                         v-if="ClienteID"
                                                         :class="VistaLista 
@@ -971,10 +1002,11 @@
                                                         >
                                                             {{ MisFavoritos.includes(i.id) ? '🤍 Quitar de Favoritos' : '❤️ Agregar a Favoritos' }}
                                                         </button>
-
                                                     </div>
                                                 </div>
+
                                             </div>
+
                                         </div>
                                     </div>
                                     <button @click="CarruselDerecha(cat.categoria, ProductosPorCategoria[cat.categoria].length)"
@@ -985,6 +1017,7 @@
                                         ❯
                                     </button>
                                 </div>
+
                             </div>
                         </div>
 
@@ -1061,6 +1094,7 @@
         fecha_inicio: "",
         fecha_fin: "",
     })
+    // Llamar Funcion Router //
     const router = useRouter()
     // Leer Url/Link y Tamaño de Imagen //
     const emit = defineEmits(["upload", "update:path"])
@@ -1122,6 +1156,7 @@
 
     // Leer Banners en Orden //
     const BannersOrden = computed({
+        // Establecer Orden
         get() {
             const viejo = Bananaeract.value && Bananaeract.value.imagenes ? Bananaeract.value.imagenes : []
             const nuevo = BannersNuevos.value
@@ -1136,6 +1171,7 @@
                 return ordenA - ordenB
             })
         },
+        // Enviar Orden
         set(bannersordenados) {
             bannersordenados.forEach((banner, index) => {
             banner.orden = index + 1
@@ -1223,6 +1259,7 @@
             })
             if (!respuesta.ok) throw new Error("Error de conexión con el servidor")
             const categ = await respuesta.json()
+            // Orden de las Categorias
             const OrdenDeseado = [
                 "Accesorios",
                 "Hardware",
@@ -1269,6 +1306,7 @@
                     IndiceBanner.value++
                 } else {
                     IndiceBanner.value = 0
+    // Tiempo de Carrusel en Segundos
     }}}, 4000)}
 
 // ----- Para el Frontend ----- //
@@ -1300,7 +1338,7 @@
         VentanaCompra.value = true
         document.body.style.overflow = "hidden"
     }
-    // Abrir Pop up para Promocion //
+    // Abrir Pop up para Promocion (Lee Precios) //
     const AbrirPopUp05 = async (producto_fila) => {
         ProductoPromo.value.id = producto_fila.id
         ProductoPromo.value.nombre = producto_fila.nombre
@@ -1361,8 +1399,7 @@
             DelSupaBann.value = DelSupaBann.value.filter((b) => b !== id)
         } else {
             DelBann.value.push(id)
-        }
-    }
+    }}
     // Siguiente Banner //
     const CarruselDerecha = (categoria, totalProductos) => {
         const current = ObtenerIndiceCarrusel(categoria)
@@ -1379,8 +1416,10 @@
             IndiceCarrusel.value[categoria] = current - 1
             const carrusel = document.getElementById("carrusel-" + categoria)
             if (carrusel) {
-                carrusel.scrollBy({ left: -1000, behavior: "smooth" })
-    }}}
+                carrusel.scrollBy({ 
+                    left: -1000,
+                    behavior: "smooth" 
+    })}}}
     // Cerrar Pop up para Actualizar Producto //
     const CerrarPopUp01 = () => {
         ActualizarCajaP.value = false
@@ -1533,8 +1572,7 @@
     const RestarProducto = () => {
         if (ProductoCantidad.value > 1) {
             ProductoCantidad.value--
-        }
-    }
+    }}
     // Subir Imagen de Producto //
     const SeleccionarImagen = (evt) => {
         const files = evt.target.files
@@ -1549,30 +1587,26 @@
         if (files) {
             let maxOrdenExistente = 0
             if (Bananaer.value && Bananaer.value.imagenes) {
-            Bananaer.value.imagenes.forEach((b) => {
-                if (b.orden && b.orden > maxOrdenExistente) {
-                maxOrdenExistente = b.orden
-                }
-            })
-            }
+                Bananaer.value.imagenes.forEach((b) => {
+                    if (b.orden && b.orden > maxOrdenExistente) {
+                    maxOrdenExistente = b.orden
+            }})}
             let maxOrdenNuevos = 0
             if (BannersNuevos.value.length > 0) {
-            BannersNuevos.value.forEach((b) => {
-                if (b.orden && b.orden > maxOrdenNuevos) {
-                maxOrdenNuevos = b.orden
-                }
-            })
-            }
+                BannersNuevos.value.forEach((b) => {
+                    if (b.orden && b.orden > maxOrdenNuevos) {
+                    maxOrdenNuevos = b.orden
+            }})}
             let proximoOrden = Math.max(maxOrdenExistente, maxOrdenNuevos) + 1
             for (let i = 0 ; i < files.length ; i++) {
-            const BannerNuevo = {
-                imagen: files[i],
-                vista_previa: URL.createObjectURL(files[i]),
-                enlace: "",
-                orden: proximoOrden,
-            }
-            BannersNuevos.value.push(BannerNuevo)
-            proximoOrden++
+                const BannerNuevo = {
+                    imagen: files[i],
+                    vista_previa: URL.createObjectURL(files[i]),
+                    enlace: "",
+                    orden: proximoOrden,
+                }
+                BannersNuevos.value.push(BannerNuevo)
+                proximoOrden++
     }}}
     // Mover Orden de Imagen de Banner //
     const Soltar = (cartasoltada) => {
@@ -1970,7 +2004,9 @@
     }
     // Añadir al Carrito //
     const SumarCarrito = () => {
-        if (!ProductoActual.value) return
+        if (!ProductoActual.value) 
+            return
+        // Establecer Datos del Producto 
         const precioEfectivo = ProductoActual.value.es_promocion
             ? ProductoActual.value.precio_nuevo
             : ProductoActual.value.precio
@@ -1991,11 +2027,15 @@
         } else {
             CarritoLocal.value.push(nuevoProducto)
         }
-        localStorage.setItem("carrito_pendiente", JSON.stringify(CarritoLocal.value))
+        localStorage.setItem(
+            "carrito_pendiente",
+            JSON.stringify(CarritoLocal.value
+        ))
         CerrarPopUp04()
         MostrarConfir.value = true
         setTimeout(() => {
             MostrarConfir.value = false
+    // Tiempo de Notificacion en Segundos
     }, 2000)}
     // Subir Imagen del Banner //
     const SubirBanner = async () => {
@@ -2046,4 +2086,5 @@
         }}} catch (error) {
             console.error("Error al actualizar favorito:", error)
     }}
+    
 </script>

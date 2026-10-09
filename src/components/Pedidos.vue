@@ -10,9 +10,13 @@
 				class="fondo" 
 				>
 					<div class="popup">
+
+                        <!-- Encabezado -->
 						<h1>
 							¿Quiere Actualizar el Estado del Pedido?
 						</h1>
+
+                        <!-- Botones -->
 						<div class="botones">
 							<button @click="ActualizarEstatus()"
 							class="botoncon"
@@ -25,6 +29,7 @@
 								Cancelar
 							</button>
 						</div>
+
 					</div>
 				</div>
 			</transition>
@@ -48,21 +53,22 @@
 				? 'translate-x-0 sm:w-72 lg:w-80' 
 				: '-translate-x-full sm:w-fit sm:translate-x-0']"
 				>
-                    <!-- Barra de Filtros -->
-                    <div class="hidden sm:block">
 
-                        <!-- Boton de Filtros -->
+                    <!-- Boton de Filtros -->
+                    <div class="hidden sm:block">
 						<h1 @click="MostrarFiltro = !MostrarFiltro"
 						class="botonfil"
 						>
 							ᯤ
 						</h1>
-
 					</div>
+
+                    <!-- Barra de Filtros -->
                     <transition name="slide">
 						<div v-if="MostrarFiltro"
 						class="flex flex-col lg:self-center gap-5"
 						>
+
                             <!-- Orden de Pedidos -->
                             <div class="flex flex-col md:px-4 md:pb-4 p-2 !pt-0">
                                 <h1 class="!mt-0">
@@ -82,7 +88,10 @@
                                     </option>
                                 </select>
                             </div>
+
+                            <!-- Filtro de Pedidos -->
 							<div class="flex flex-col">
+
                                 <!-- Filtro de Metodo de Pago -->
 								<h1>
 									Filtro de Metodo de Pago
@@ -130,6 +139,7 @@
 										Efectivo
 								</label>
 							</div>
+
                             <!-- Filtro de Estatus del Pedido -->
 							<div class="flex flex-col">
 								<h1>
@@ -164,6 +174,7 @@
 										Entregado
 								</label>
 							</div>
+
                             <!-- Filtro de Pedido en Promocion -->
 							<div class="flex flex-col">
 								<h1>
@@ -191,6 +202,7 @@
 										Compras sin Descuento
 								</label>
 							</div>
+
                             <!-- Filtro de Ciudad del Cliente -->
 							<div class="flex flex-col">
 								<h1>
@@ -210,6 +222,7 @@
 									</select>
 								</div>
 							</div>
+
                             <!-- Filtro de Provincia del Cliente -->
 							<div class="flex flex-col">
 								<h1>
@@ -228,7 +241,10 @@
 										</option>
 									</select>
 								</div>
+
 							</div>
+
+                        	<!-- Botones -->
 							<div class="botones">
 								<button @click="AplicarFiltro" 
 								class="botoncon"
@@ -242,8 +258,10 @@
 									🗑️ Limpiar Filtro
 								</button>
 							</div>
+
 						</div>
                     </transition>
+
 				</div>
 
 				<!-- Tabla de Pedidos -->
@@ -331,6 +349,8 @@
 							:key="i.id_pedido"
 							class="mb-4"
 							>
+
+                                <!-- Datos de Pedido -->
 								<div @click="Edicion(i)"
 								class="tab"
 								>
@@ -388,6 +408,7 @@
 										</button>
 									</div>
 								</div>
+
                                 <!-- Detalles de Pedido -->
                                 <transition name="slide">
 									<div v-if = "PedidoNow === i.id_pedido"
@@ -514,6 +535,8 @@
 										</div>
 									</div>
                                 </transition>
+
+                        		<!-- Botones -->
 								<div class="flex flex-row justify-end gap-2 mt-3">
 									<button @click= "PedidoCambio(i.id_pedido)"
 									v-if="i.estatus !== 1"
@@ -525,6 +548,7 @@
 										{{ PedidoNow === i.id_pedido ? 'Ocultar ⬆️' : 'Detalles ⬇️' }}
 									</button>
 								</div>
+
 							</div>
 						</div>
 
@@ -812,32 +836,32 @@
 
     // Actualizar Estatus del Pedido //
 	const ActualizarEstatus = async() => {
-			const ActEst = await fetch(`${urlover8000}/pedidos/id/${EstatusAct.value.id_pedido}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(EstatusAct.value),
-           		credentials: 'include'
-			})
-			if (ActEst.status === 401) {
-				CerrarSesion()
-				alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
-                Iniciado.value = false
-				return
-			}
-			EstatusAct.value = {
-				id_pedido: "",
-				id_cliente: "",
-				id_direccion: "",
-				metodo_pago: "",
-				tiempo_estimado_entrega: "",
-				tiempo_entrega: "",
-				estatus: ""
-			}
-			BusquedaPedido()
-			CerrarPopUp01()
+		const ActEst = await fetch(`${urlover8000}/pedidos/id/${EstatusAct.value.id_pedido}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(EstatusAct.value),
+			credentials: 'include'
+		})
+		if (ActEst.status === 401) {
+			CerrarSesion()
+			alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+			SesionExpirada.value = true
+			Iniciado.value = false
+			return
+		}
+		EstatusAct.value = {
+			id_pedido: "",
+			id_cliente: "",
+			id_direccion: "",
+			metodo_pago: "",
+			tiempo_estimado_entrega: "",
+			tiempo_entrega: "",
+			estatus: ""
+		}
+		BusquedaPedido()
+		CerrarPopUp01()
 	}
     // Keer Datos del Pedido //
 	const BusquedaPedido = async() => {
@@ -910,8 +934,7 @@
             } else {
                 HayMasPaginas.value = false
                 Pedidos.value = datos
-            }
-        } else {
+        }} else {
             Pedidos.value = []
             HayMasPaginas.value = false
     }}
