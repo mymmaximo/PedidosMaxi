@@ -1,33 +1,36 @@
+// ----- Imports ----- //
+
 import { ref } from 'vue'
 
-export const urlover8000 = "https://backend-pedidos-maxi.vercel.app"
+// ----- Variables Booleanas ----- //
 
-export const Rol = ref([])
-
-export const ClienteID = ref(null)
-
+export const ActualizarCajaP = ref(false)
+export const ActualizarCajaC = ref(false)
+export const SesionExpirada = ref(false)
+export const MostrarError = ref(false)
+export const VolverCarro = ref(false)
 export const Iniciado = ref(false)
 
+// ----- Variables Vacias ----- //
+
+export const ProductoActual = ref(null)
 export const CarritoLocal = ref ([])
+export const ClienteID = ref(null)
+export const Rol = ref([])
 
-export const VolverCarro = ref(false)
-
-export const MostrarError = ref(false)
+// ----- Variables Simples ----- //
 
 export const ProductoCantidad = ref(1)
 
-export const ProductoActual = ref(null)
+// ----- Funciones Vue ----- //
 
-export const ActualizarCajaP = ref(false)
-
-export const ActualizarCajaC = ref(false)
-
-export const SesionExpirada = ref(false)
-
+export const urlover8000 = "https://backend-pedidos-maxi.vercel.app"
 export const PedidoGuardado = parseInt(localStorage.getItem("pedido"))
-
 export const PedidoActual = ref(PedidoGuardado ? parseInt(PedidoGuardado) : null)
 
+// ----- Funciones ----- //
+
+// Cargar Carrito //
 export const CargarCarrito = () => {
     const CarritoOlvidado = localStorage.getItem('carrito_pendiente')
     if (CarritoOlvidado) {
@@ -39,26 +42,21 @@ export const CargarCarrito = () => {
             } else {
                 console.log("Carrito destruido")
                 LimpiarCompra()
-            }
-        } catch(error) {
+        }} catch(error) {
             console.log("Carrito destruido")
             LimpiarCompra()
-        }
-    }
-}
-
+}}}
+// Cerrar Sesion //
 export const CerrarSesion = async () =>{
     try {
         await fetch (`${urlover8000}/logout/`, {
             method: 'POST',
             credentials: 'include'
-        })
-    } catch (error) {
+    })} catch (error) {
         console.error (
             "Error al cerrar sesion en el servidor:",
             error
-        )
-    }
+    )}
     LimpiarCompra()
     document.cookie = "sesion_activa=; path=/; max-age=0;"
     Rol.value = []
@@ -66,17 +64,7 @@ export const CerrarSesion = async () =>{
     Iniciado.value = false
     window.location.href = '/'
 }
-
-const Decodificar = (token) => {
-    try{
-        const Base64Url = token.split('.')[1]
-        const Base64 = Base64Url.replace(/-/g, '+').replace(/_/g,'/')
-        return JSON.parse(window.atob(Base64))
-    } catch (error) {
-        return null
-    }
-}
-
+// Leer Cookie //
 export const leerCookie = (nombre) => {
     const valor = `; ${document.cookie}`
     const partes = valor.split(`; ${nombre}=`)
@@ -84,12 +72,12 @@ export const leerCookie = (nombre) => {
         return partes.pop().split(';').shift()
     return null
 }
-
+// Vaciar Carrito //
 export const LimpiarCompra = () =>{
     localStorage.removeItem("carrito_pendiente")
     CarritoLocal.value = []
 }
-
+// Validad Sesion Iniciada //
 export const ValidadSesionBack = async () => {
     try {
         const respuesta = await fetch(`${urlover8000}/reload/`, {
@@ -120,28 +108,11 @@ export const ValidadSesionBack = async () => {
             Rol.value = []
             ClienteID.value = null
             LimpiarCompra()
-        }
-    } catch (error) {
+    }} catch (error) {
         console.error("Error validando la sesión:", error)
         Iniciado.value = false
-    }
-}
-
-export const ValidadSesionBackold = async () => {
-    const token = leerCookie("token_seguro")
-    if (token) {
-        const payload = Decodificar(token)
-        if (payload && payload.exp * 1000 > Date.now()) {
-            Iniciado.value = true
-            Rol.value = payload.id_rol
-        } else {
-            await CerrarSesion()
-        }
-    } else {
-        Iniciado.value = false
-    }
-}
-
+}}
+// Verificacion de Carrito //
 export const ValidadCarrito = (carrito_check) => {
     if (!Array.isArray(carrito_check)) {
             return false
@@ -162,8 +133,7 @@ export const ValidadCarrito = (carrito_check) => {
         for (const clave of claves) {
             if (!(clave in item)) {
                 return false
-            }
-        }
+        }}
         if (
             typeof item.id_producto !== 'number' ||
             typeof item.cantidad !== 'number' ||
@@ -176,17 +146,16 @@ export const ValidadCarrito = (carrito_check) => {
         }
         if (item.cantidad < 1 || item.cantidad > item.stock_producto) {
             return false
-        }
-    }
+    }}
     return true
 }
-
+// Verificacion de Rol //
 export const VerificarRol = (rolesPermitidos) => {
     if (!Rol.value || Rol.value.length === 0) return false
     const permitidos = Array.isArray(rolesPermitidos) ? rolesPermitidos : [rolesPermitidos]
     return Rol.value.some(rol => permitidos.includes(rol))
 }
-
+// Prohibicion de Rol //
 export const VerificarRolExcluido = (rolesnoPermitidos) => {
     if (!Rol.value || Rol.value.length === 0) return true
     const nopermitidos = Array.isArray(rolesnoPermitidos) ? rolesnoPermitidos : [rolesnoPermitidos]
