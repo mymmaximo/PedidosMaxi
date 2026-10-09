@@ -21,35 +21,30 @@ import {
     VolverCarro 
 } from './components/Estatus.js'
 
-const routes = [
-    {
+// Redireccion a Url/Link //
+const routes = 
+    [{
         path: '/login',
         name: 'login',
         component: Login,
         meta: {
             requireAuth: false,
             title: 'Iniciar Sesión'
-        }
-    },
-    { 
+    }}, { 
         path: '/', 
         name: 'inicio', 
         component: Inicio,
         meta: {
             requireAuth: false,
             title: 'Inicio'
-        }
-    },
-    { 
+    }}, { 
         path: '/productos', 
         name: 'productos', 
         component: Productos,
         meta: {
             requireAuth: false,
             title: 'Productos'
-        }
-    },
-    { 
+    }}, {
         path: '/pedidos', 
         name: 'pedidos', 
         component: Pedidos, 
@@ -57,9 +52,7 @@ const routes = [
             requireAuth: true,
             rolesPer: [1, 3, 6],
             title: 'Pedidos'
-        }
-    },
-    { 
+    }}, { 
         path: '/clientes', 
         name: 'clientes', 
         component: Clientes, 
@@ -67,9 +60,7 @@ const routes = [
             requireAuth: true,
             rolesPer: [1, 7],
             title: 'Clientes'
-        }
-    },
-    { 
+    }}, { 
         path: '/usuarios', 
         name: 'usuarios', 
         component: Usuarios, 
@@ -77,45 +68,35 @@ const routes = [
             requireAuth: true,
             rolesPer: [1],
             title: 'Usuarios'
-        }
-    },
-    { 
+    }}, { 
         path: '/carrito', 
         name: 'carrito', 
         component: Carrito,
         meta: {
             requireCarrito: true,
             title: 'Carrito'
-        }
-    },
-    { 
+    }}, { 
         path: '/configuracion',
         name: 'configuracion', 
         component: Configuracion,
         meta: {
             requireAuth: true,
             title: 'Configuracion'
-        }
-    },
-    { 
+    }}, { 
         path: '/mis_pedidos', 
         name: 'mis_pedidos', 
         component: Mis_pedidos,
         meta: {
             requireAuth: true,
             title: 'Mis Pedidos'
-        }
-    },
-    { 
+    }}, { 
         path: '/favoritos', 
         name: 'favoritos', 
         component: Favoritos,
         meta: {
             requireAuth: true,
             title: 'Mis Favoritos'
-        }
-    },
-    { 
+    }}, { 
         path: '/registro_precios', 
         name: 'registro_precios', 
         component: Registro_precios, 
@@ -123,40 +104,40 @@ const routes = [
             requireAuth: true,
             rolesPer: [1, 2, 4],
             title: 'Registro de precios'
-        }
-    },
-    { 
+    }}, { 
         path: '/centro_de_ayuda', 
         name: 'centro_de_ayuda', 
         component: Centro_de_ayuda, 
         meta: {
             requireAuth: false,
             title: 'Centro de Ayuda'
-        }
-    },
-]
+}}]
 
+// Subir al Principio de la Pantalla //
 const router = createRouter({
     history: createWebHistory(),
     routes,
-    scrollBehavior(to, from, savedPosition) {
+    scrollBehavior(savedPosition) {
         if (savedPosition) {
             return savedPosition
         } else {
-            return { top: 0, behavior: 'smooth'}
-        }
-    }
-})
+            return { 
+                top: 0, 
+                behavior: 'smooth'
+}}}})
 
 let PrimeraCarga = true
 
+// Verificar de Sesion, Rol, Carrito y Titulo de Pagina //
 router.beforeEach(async (to, from, next) => {
+    // Titulo de Pagina
     const tituloBase = 'Maxi-Store'
     document.title = to.meta.title ? `${to.meta.title} - ${tituloBase}` : tituloBase
     if (PrimeraCarga) {
         await ValidadSesionBack()
         PrimeraCarga = false
     }
+    // Verificar Sesion y Rol
     if (to.meta.requireAuth) {
         if (!Iniciado.value) {
             MostrarError.value = true
@@ -172,10 +153,8 @@ router.beforeEach(async (to, from, next) => {
                     return next(false)
                 } else {
                     return next('/')
-                }
-            }
-        }
-    }
+    }}}}
+    // Verificar Validez del Carrito
     if (to.meta.requireCarrito) {
         let carrito_valido = false
         if (CarritoLocal.value.length > 0 && ValidadCarrito(CarritoLocal.value)) {
@@ -185,11 +164,9 @@ router.beforeEach(async (to, from, next) => {
                 const CarritoGuardado = JSON.parse(localStorage.getItem('carrito_pendiente')) || []
                 if (CarritoGuardado.length > 0 && ValidadCarrito(CarritoGuardado)) {
                     carrito_valido = true
-                }
-            } catch (error) {
+            }} catch (error) {
                 carrito_valido = false
-            }
-        }
+        }}
         if (!carrito_valido) {
             VolverCarro.value = true
             setTimeout(() => { VolverCarro.value = false }, 3000)
@@ -197,9 +174,7 @@ router.beforeEach(async (to, from, next) => {
                 return next(false)
             } else {
                 return next('/')
-            }
-        }
-    }
+    }}}
     next()
 })
 

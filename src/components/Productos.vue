@@ -933,6 +933,8 @@
                         class="flex flex-col lg:self-center"
                         >
                             <form @submit.prevent="SubirNuevoProducto">
+
+                                <!-- Datos de Producto -->
                                 <h2>
                                     Nombre
                                 </h2>
@@ -1016,6 +1018,8 @@
                                         />
                                     </div>
                                 </div>
+
+                                <!-- Botones -->
                                 <div class="botones">
                                     <button :disabled="confirboton" 
                                     type="submit" 
@@ -1027,6 +1031,7 @@
                             </form>
                         </div>
                     </transition>
+
                 </div>
 
                 <!-- Tabla de Productos -->
@@ -1592,9 +1597,13 @@
     const CargarDatos = (async() => {
         if (BloqueoPeticion.value) return
         BloqueoPeticion.value = true
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+        })
         CargandoTrue.value = true
         ErrorCarga.value = false
+        // Tiempo de Espera para el Backend
         const temporizador = setTimeout(() => {
             if (CargandoTrue.value) {
                 CargandoTrue.value = false
@@ -1602,6 +1611,7 @@
                 console.warn("Se agotó el tiempo de espera de la petición.")
             }
         }, 15000)
+        // Leer Productos y Favoritos
         try {
             await BusquedaProducto()
             const respuesta = await fetch(`${urlover8000}/producto/categorias/`, {
@@ -2093,6 +2103,7 @@
         if (filtroEst.value === 2) {
             filtroAct.value = true
         }
+        // Establecer Filtro de Estatus
         if (filtroEst.value === 1) {
             url.searchParams.append('bool_activo', 'true')
         }

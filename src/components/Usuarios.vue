@@ -1,208 +1,240 @@
 <template>
-    <!-- Confirmacion Eliminar -->
-    <Teleport to="body">
-        <transition name="fade">
-            <div v-if="ActualizarCajaUDel" 
-            @click.self="CerrarPopUp01"
-            class="fondo"
-            >
-                <div class="popup">
-                    <h1>
-                    ¿Desear Eliminar/Reactivar el Usuario {{ UsuarioAct.nombre }}?
-                    </h1>
-                    <div class="botones">
-                        <button @click="BorrarUsuario()"
-                        class="botoncon"
-                        >
-                        Si Confirmo
-                        </button>
-                        <button @click="CerrarPopUp01"
-                        class="botonc"
-                        >
-                        Cancelar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </transition>
-    </Teleport>
-    <!-- Actualizar Usuario -->
-    <Teleport to="body">
-        <transition name="fade">
-            <div v-if="ActualizarCajaU"
-            @click.self="CerrarPopUp02"
-            class="fondo"
-            >
-                <div class="popup">
-                    <h1>
-                    Actualizar Usuario {{ UsuarioAct.nombre }}
-                    </h1>
-                    <form @submit.prevent="ActualizarUsuarios">
-                        <h2 class="mt-4 mb-2 font-bold text-center text-green-900">
-                            Roles Asignados
-                        </h2>
-                        <!-- Cuadrícula de botones (3 columnas en PC, 2 en móvil) -->
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 px-4">
-                            <button 
-                            v-for="rol in ListaRoles" 
-                            :key="rol.id"
-                            @click="ToggleRol(rol.id)"
-                            type="button"
-                            class="py-2 px-1 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm border-2"
-                            :class="UsuarioAct.id_rol && UsuarioAct.id_rol.includes(rol.id) 
-                                ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
-                                : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
-                            >
-                                {{ rol.nombre }}
-                            </button>
-                        </div>
+    <div class="cuerpo">
+
+        <!-- Confirmacion -->
+        <!-- Eliminar Usuario -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="ActualizarCajaUDel" 
+                @click.self="CerrarPopUp01"
+                class="fondo"
+                >
+                    <div class="popup">
+
+                        <!-- Encabezado -->
+                        <h1>
+                            ¿Desear Eliminar/Reactivar el Usuario {{ UsuarioAct.nombre }}?
+                        </h1>
+
+                        <!-- Botones -->
                         <div class="botones">
-                            <button :disabled="confirboton"
-                            type="submit" 
+                            <button @click="BorrarUsuario()"
                             class="botoncon"
                             >
-                            Actualizar
+                                Si Confirmo
                             </button>
-                            <button @click="CerrarPopUp02" 
+                            <button @click="CerrarPopUp01"
                             class="botonc"
                             >
-                            Cancelar
+                                Cancelar
                             </button>
                         </div>
-                    </form>
+
+                    </div>
                 </div>
-            </div>
-        </transition>
-    </Teleport>
-    <!-- Tabla de Usuarios -->
-    <div class="cuerpo">
+            </transition>
+        </Teleport>
+
+        <!-- Formulario -->
+        <!-- Actualizar Usuario -->
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="ActualizarCajaU"
+                @click.self="CerrarPopUp02"
+                class="fondo"
+                >
+                    <div class="popup">
+                        <form @submit.prevent="ActualizarUsuarios">
+
+                            <!-- Encabezado -->
+                            <h1>
+                                Actualizar Usuario {{ UsuarioAct.nombre }}
+                            </h1>
+
+                            <!-- Datos de Usuario -->
+                            <h2 class="mt-4 mb-2 font-bold text-center text-green-900">
+                                Roles Asignados
+                            </h2>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 px-4">
+                                <button v-for="rol in ListaRoles" 
+                                :key="rol.id"
+                                @click="ToggleRol(rol.id)"
+                                type="button"
+                                class="py-2 px-1 rounded-lg font-bold text-sm 
+                                transition-all duration-200 shadow-sm border-2"
+                                :class="UsuarioAct.id_rol && UsuarioAct.id_rol.includes(rol.id) 
+                                ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
+                                : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
+                                >
+                                    {{ rol.nombre }}
+                                </button>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="botones">
+                                <button :disabled="confirboton"
+                                type="submit" 
+                                class="botoncon"
+                                >
+                                    Actualizar
+                                </button>
+                                <button @click="CerrarPopUp02" 
+                                class="botonc"
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </transition>
+        </Teleport>
+
+        <!-- Pagina -->
         <div class="pagina">
             <div class="flex w-full flex-col sm:flex-row">
-                <transition name="fade">
-                    <div v-if="(MostrarFiltro || MostrarNuevo)" 
-                    @click="MostrarFiltro = false; MostrarNuevo = false"
-                    class="fixed inset-0 
-                    top-0 left-0 
-                    w-full h-full !z-40 
-                    bg-black/40 
-                    sm:bg-transparent 
-                    backdrop-blur-sm sm:backdrop-blur-none 
-                    m-0 p-0 
-                    cursor-pointer sm:hidden"
-                    >
-                    </div>
-                </transition>
+
+                <!-- Mostrar Fondo en Celular -->
+                <Teleport to="body">
+                    <transition name="fade">
+                        <div v-if="(MostrarFiltro || MostrarNuevo)" 
+                        @click="MostrarFiltro = false; MostrarNuevo = false"
+                        class="fixed inset-0 
+                        bg-black/40 backdrop-blur-sm 
+                        z-[35] sm:hidden cursor-pointer"
+                        >
+                        </div>
+                    </transition>
+                </Teleport>
+
+                <!-- Barra de Filtros de Usuarios y Formulario de Nuevo Usuario -->
                 <div @click.stop 
-                :class="[
-                'bar', 
-                (MostrarFiltro || MostrarNuevo) 
+                :class="['bar', (MostrarFiltro || MostrarNuevo) 
                 ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
-                : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0'
-                ]">
+                : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
+                >
+
+                    <!-- Boton de Filtros -->
                     <div class="hidden sm:block">
                         <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
                         class="botonfil"
                         >
-                        ᯤ
+                            ᯤ
                         </h1>
                     </div>
+
+                    <!-- Barra de Filtros -->
                     <transition name="slide">
                         <div v-if="MostrarFiltro"
                         class="flex flex-col lg:self-center"
                         >
+
+                            <!-- Orden de Usuarios-->
                             <div class="flex flex-col md:px-4 md:pb-4 p-2 !pt-0">
                                 <h1 class="!mt-0">
-                                Ordenar
+                                    Ordenar
                                 </h1>
                                 <select v-model="orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
-                                    Orden...
+                                        Orden...
                                     </option>
                                     <option value="1">
-                                    Usuario A-Z
+                                        Usuario A-Z
                                     </option>
                                     <option value="2">
-                                    Usuario Z-A
+                                        Usuario Z-A
                                     </option>
                                     <option value="3">
-                                    Mayor Relevancia
+                                        Mayor Relevancia
                                     </option>
                                     <option value="4">
-                                    Menor Relevancia
+                                        Menor Relevancia
                                     </option>
                                     <option value="5">
-                                    Usuarios Antiguos
+                                        Usuarios Antiguos
                                     </option>
                                     <option value="6">
-                                    Usuarios Recientes
+                                        Usuarios Recientes
                                     </option>
                                 </select>
                             </div>
+
+                            <!-- Filtro Usuario Activo/Desactivo -->
                             <div class="flex flex-col">
                                 <h1>
-                                ¿El Usuario esta Activo?
+                                    ¿El Usuario esta Activo?
                                 </h1>
                                 <label>
-                                <input :value="2"
-                                type="radio" 
-                                v-model="filtroEst"
-                                > 
-                                Todos los Usuarios
+                                    <input :value="2"
+                                    type="radio" 
+                                    v-model="filtroEst"
+                                    > 
+                                        Todos los Usuarios
                                 </label>
                                 <label>
-                                <input :value="1"
-                                type="radio"
-                                v-model="filtroEst"
-                                > 
-                                Usuario Activo
+                                    <input :value="1"
+                                    type="radio"
+                                    v-model="filtroEst"
+                                    > 
+                                        Usuario Activo
                                 </label>
                                 <label>
-                                <input :value="0"
-                                type="radio" 
-                                v-model="filtroEst"
-                                > 
-                                Usuario Eliminado
+                                    <input :value="0"
+                                    type="radio" 
+                                    v-model="filtroEst"
+                                    > 
+                                        Usuario Eliminado
                                 </label>
                             </div>
+
+                            <!-- Botones -->
                             <div class="botones">
                                 <button @click="AplicarFiltro" 
                                 class="botoncon"
                                 >
-                                Aplicar Filtros
+                                    Aplicar Filtros
                                 </button>
                                 <button @click="LimpiarFiltro" 
                                 v-if="filtroAct === true"
                                 class="botont" 
                                 >
-                                🗑️ Limpiar Filtro
+                                    🗑️ Limpiar Filtro
                                 </button>
                                 <button @click="MostrarFiltro = false" 
                                 class="botonc sm:hidden"
                                 >
-                                Cerrar
+                                    Cerrar
                                 </button>
                             </div>
+
                         </div>
                     </transition>
+
+                    <!-- Boton de Registrar Nuevo Usuario -->
                     <div>
                         <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
                         class="botonnew"
                         >
-                        +
+                            +
                         </h1>
                     </div>
+
+                    <!-- Barra de Nuevo Usuario -->
                     <transition name="slide">
                         <div v-if="MostrarNuevo"
                         class="flex flex-col lg:self-center"
                         >
                             <h1>
-                            Nuevo Usuario
+                                Nuevo Usuario
                             </h1>
                             <form @submit.prevent="SubirNuevoUsuario">
+
+                                <!-- Datos de Usuario -->
                                 <h2>
-                                Nombre
+                                    Nombre
                                 </h2>
                                 <input placeholder="Nombre"
                                 type="text" 
@@ -210,7 +242,7 @@
                                 maxlength="50"
                                 >
                                 <h2>
-                                E-Mail
+                                    E-Mail
                                 </h2>
                                 <input placeholder="E-Mail"
                                 type="text" 
@@ -218,7 +250,7 @@
                                 maxlength="50"
                                 >
                                 <h2>
-                                Documento
+                                    Documento
                                 </h2>
                                 <input placeholder="Documento"
                                 type="text" 
@@ -227,41 +259,55 @@
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 >
                                 <h2>
-                                Contraseña
+                                    Contraseña
                                 </h2>
                                 <input placeholder="Contraseña"
                                 type="text" 
                                 v-model="NuevoUsuario.contrasena"
                                 maxlength="30"
                                 >
-                                <h2>Roles</h2>
+                                <h2>
+                                    Roles
+                                </h2>
                                 <div class="grid grid-cols-1 md:grid-cols-1 gap-2 mb-6 px-4">
-                                    <button 
-                                    v-for="rol in ListaRoles" 
+                                    <button v-for="rol in ListaRoles" 
                                     :key="'nuevo-' + rol.id"
-                                    @click.prevent="NuevoUsuario.id_rol.includes(rol.id) ? NuevoUsuario.id_rol.splice(NuevoUsuario.id_rol.indexOf(rol.id), 1) : NuevoUsuario.id_rol.push(rol.id)"
+                                    @click.prevent="NuevoUsuario.id_rol.includes(rol.id) 
+                                    ? NuevoUsuario.id_rol.splice(NuevoUsuario.id_rol.indexOf(rol.id), 1) 
+                                    : NuevoUsuario.id_rol.push(rol.id)"
                                     type="button"
-                                    class="py-2 px-1 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm border-2"
+                                    class="py-2 px-1 rounded-lg 
+                                    font-bold text-sm 
+                                    transition-all duration-200 
+                                    shadow-sm border-2"
                                     :class="NuevoUsuario.id_rol.includes(rol.id) 
-                                        ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
-                                        : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
+                                    ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
+                                    : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
                                     >
                                         {{ rol.nombre }}
                                     </button>
                                 </div>
+
+                                <!-- Botones -->
                                 <div class="botones">
                                     <button :disabled="confirboton" type="submit" class="botoncon">
-                                    Crear
+                                        Crear
                                     </button>
                                     <button @click="MostrarNuevo = false" type="button" class="botonc sm:hidden">
-                                    Cancelar
+                                        Cancelar
                                     </button>
                                 </div>
+
                             </form>
                         </div>
                     </transition>
+
                 </div>
+
+                <!-- Tabla de Usuarios -->
                 <div class="start !px-5">
+
+                    <!-- Gif Cargando -->
                     <div v-if="CargandoTrue" 
                     class="flex flex-col 
                     items-center justify-center 
@@ -272,153 +318,195 @@
                         class="w-32 h-32 object-contain mb-4"
                         >
                         <h2 class="text-green-800 font-bold text-xl animate-pulse">
-                        Cargando usuarios, un momento...
+                            Cargando usuarios, un momento...
                         </h2>
                     </div>
+
+                    <!-- Error Cargando -->
                     <div v-else-if="ErrorCarga"
                     class="flex flex-col
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
                     >
                         <h1 class="text-3xl font-bold text-red-600 text-center">
-                        ¡Ups! La conexión tardó demasiado 🔌
+                            ¡Ups! La conexión tardó demasiado 🔌
                         </h1>
                         <h2 class="text-xl text-gray-700 text-center px-4">
-                        El servidor no responde o tu conexión es inestable.
+                            El servidor no responde o tu conexión es inestable.
                         </h2>
                         <div class="mt-6 flex justify-center">
                             <button @click="CargarDatos()" 
                             class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                             >
-                            🔄 Recargar Página
+                                🔄 Recargar Página
                             </button>
                         </div>
                     </div>
+
+                    <!-- Usuarios -->
                     <div v-else>
-                        <button @click="MostrarFiltro = true"
-                        class="sm:hidden w-full mb-4 py-3 bg-white text-green-800 font-black text-lg border-2 border-green-200 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 active:bg-green-50"
-                        >
-                        ᯤ Abrir Filtros
-                        </button>
-                        <!-- Barra de Busqueda -->
-                        <div class="flex flex-row items-stretch w-full gap-3 mb-5">-
-                            <input @input="BusquedaUsuario"
-                            type="text" 
-                            v-model="Busqueda" 
-                            placeholder="Busqueda..."
-                            class="busqueda !mb-0"
-                            maxlength="50"
+                        <div class="px-5 w-full">
+
+                            <!-- Mostrar Boton Filtro en Celular -->
+                            <button @click="MostrarFiltro = true"
+                            class="sm:hidden 
+                            w-full mb-4 py-3 
+                            bg-white text-green-800 
+                            font-black text-lg 
+                            border-2 border-green-200 
+                            rounded-xl flex items-center 
+                            justify-center gap-2 
+                            shadow-sm transition-all 
+                            active:scale-95 active:bg-green-50"
                             >
-                            <button @click="VistaLista = !VistaLista"
-                            title="Alternar Vista"
-                            class="botonvista"
-                            >
-                                <span v-if="!VistaLista" class="text-xl">
-                                「 」
-                                </span>
-                                <span v-else class="text-xl">
-                                ☰
-                                </span>
+                                ᯤ Abrir Filtros
                             </button>
-                        </div>
-                        <h1 class="titulo-config">
-                        Usuarios
-                        </h1>
-                        <div v-if="usuarios.length > 0"
-                        :class="VistaLista 
-                        ? 'flex flex-col gap-4 w-full' 
-                        :'grid grid-cols-4 gap-6'"
-                        >
-                            <div v-for= "i in usuarios" 
-                            :key="i.id" 
-                            @click="Edicion(i)"
+
+                            <div class="flex flex-row items-stretch w-full gap-3 mb-5">
+                                <!-- Barra de Busqueda -->
+                                <input @input="BusquedaUsuario"
+                                type="text" 
+                                v-model="Busqueda" 
+                                placeholder="Busqueda..."
+                                class="busqueda !mb-0"
+                                maxlength="50"
+                                >
+
+                                <!-- Vista en Lista/Carta -->
+                                <button @click="VistaLista = !VistaLista"
+                                title="Alternar Vista"
+                                class="botonvista"
+                                >
+                                    <span v-if="!VistaLista" class="text-xl">
+                                       「 」
+                                    </span>
+                                    <span v-else class="text-xl">
+                                        ☰
+                                    </span>
+                                </button>
+
+                            </div>
+
+                            <!-- Encabezado -->
+                            <h1 class="titulo-config">
+                                Usuarios
+                            </h1>
+
+                            <!-- Tabla de Usuarios -->
+                            <div v-if="usuarios.length > 0"
                             :class="VistaLista 
-                            ? 'tarjeta-premium z-10 relative bg-white !mb-6 !w-full !m-0 hover:!shadow-lg' 
-                            : 'carta relative'"
+                            ? 'flex flex-col gap-4 w-full' 
+                            :'grid grid-cols-4 gap-6'"
                             >
-                                <div class="tarjeta-info">
-                                    <div class="tarjeta-titulo">
-                                        👤{{ i.nombre }}
-                                            <span :class="Estatuscolor(i.activo, i.id_rol)">
-                                            {{ Roltxt(i.id_rol) }}
+                                <div v-for= "i in usuarios" 
+                                :key="i.id" 
+                                @click="Edicion(i)"
+                                :class="VistaLista 
+                                ? 'tarjeta-premium z-10 relative bg-white !mb-6 !w-full !m-0 hover:!shadow-lg' 
+                                : 'carta relative'"
+                                >
+
+                                    <!-- Datos de Clientes -->
+                                    <div class="tarjeta-info">
+                                        <div class="tarjeta-titulo">
+                                            👤{{ i.nombre }}
+                                                <span :class="Estatuscolor(i.activo, i.id_rol)">
+                                                    {{ Roltxt(i.id_rol) }}
+                                                </span>
+                                        </div>
+                                        <p class="tarjeta-dato">
+                                            📧 E-Mail: 
+                                            <span class="tarjeta-valor">
+                                                {{ i.email }}
                                             </span>
+                                        </p>
+                                        <p class="tarjeta-dato">
+                                            🪪 DNI: 
+                                            <span class="tarjeta-valor">
+                                                {{ i.dni }}
+                                            </span>
+                                        </p>
+                                        <p class="tarjeta-dato mb-1">
+                                            📅 Creado el: 
+                                            <span class="tarjeta-valor">
+                                                {{ FormatoFecha(i.created_at) }}
+                                            </span>
+                                        </p>
                                     </div>
-                                    <p class="tarjeta-dato">
-                                    📧 E-Mail: <span class="tarjeta-valor">
-                                    {{ i.email }}
-                                    </span>
-                                    </p>
-                                    <p class="tarjeta-dato">
-                                    🪪 DNI: 
-                                    <span class="tarjeta-valor">
-                                    {{ i.dni }}
-                                    </span>
-                                    </p>
-                                    <p class="tarjeta-dato mb-1">
-                                    📅 Creado el: 
-                                    <span class="tarjeta-valor">
-                                    {{ FormatoFecha(i.created_at) }}
-                                    </span>
-                                    </p>
-                                </div>
-                                <div class="tarjeta-acciones">
-                                    <button @click.stop="Eliminacion(i)" 
-                                    v-if="i.activo" 
-                                    class="btn-chico-rojo"
-                                    >
-                                    ❌ Eliminar
-                                    </button>
-                                    <button v-else @click.stop="Eliminacion(i)"
-                                    class="btn-chico-verde"
-                                    >
-                                    🕊️ Reactivar
-                                    </button>
-                                    <button @click.stop="Edicion(i)" 
-                                    class="btn-chico-gris">
-                                    ✏️ Editar
-                                    </button>
+
+                                    <!-- Botones -->
+                                    <div class="tarjeta-acciones">
+                                        <button @click.stop="Eliminacion(i)" 
+                                        v-if="i.activo" 
+                                        class="btn-chico-rojo"
+                                        >
+                                            ❌ Eliminar
+                                        </button>
+                                        <button v-else @click.stop="Eliminacion(i)"
+                                        class="btn-chico-verde"
+                                        >
+                                            🕊️ Reactivar
+                                        </button>
+                                        <button @click.stop="Edicion(i)" 
+                                        class="btn-chico-gris">
+                                            ✏️ Editar
+                                        </button>
+                                    </div>
+
                                 </div>
                             </div>
-                        </div>  
-                        <div v-else class="flex flex-col items-center justify-center p-8">
-                            <h2 class="text-xl font-bold text-gray-700 text-center">
-                            {{ Pagina === 0 ? 'No se encontraron usuarios 😔' : 'Ya no hay más usuarios para mostrar 🏁' }}
-                            </h2>
-                            <h3 v-if="Pagina === 0" class="text-gray-500 text-center mt-2">
-                            Prueba buscando con otro término
-                            </h3>
-                        </div>
-                        <div class="flex justify-center p-3">
-                            <button @click="CambiarPagina('back')" 
-                            :disabled="Pagina === 0 || CargandoTrue"
-                            class="botona"
-                            >
-                            ❮
-                            </button>
-                            <h2 class="self-center font-bold px-6 text-green-800 text-center">
-                            <span v-if="usuarios.length > 0">
-                            Mostrando {{ Pagina + 1 }} - {{ Pagina + usuarios.length }}
-                            </span>
-                            <span v-else>
-                            Fin de la lista
-                            </span>
-                            </h2>
-                            <button @click="CambiarPagina('next')" 
-                            :disabled="!HayMasPaginas || CargandoTrue"
-                            class="botona"
-                            >
-                            ❯
-                            </button>
+
+                            <!-- Tabla Vacia -->
+                            <div v-else class="flex flex-col items-center justify-center p-8">
+                                <h2 class="text-xl font-bold text-gray-700 text-center">
+                                {   { Pagina === 0 ? 'No se encontraron usuarios 😔' : 'Ya no hay más usuarios para mostrar 🏁' }}
+                                </h2>
+                                <h3 v-if="Pagina === 0" 
+                                class="text-gray-500 text-center mt-2"
+                                >
+                                    Prueba buscando con otro término
+                                </h3>
+                            </div>
+
+                            <!-- Mostrando Paginas -->
+                            <div class="flex justify-center p-3">
+                                <button @click="CambiarPagina('back')" 
+                                :disabled="Pagina === 0 || CargandoTrue"
+                                class="botona"
+                                >
+                                    ❮
+                                </button>
+                                <h2 class="self-center font-bold px-6 text-green-800 text-center">
+                                    <span v-if="usuarios.length > 0">
+                                        Mostrando {{ Pagina + 1 }} - {{ Pagina + usuarios.length }}
+                                    </span>
+                                    <span v-else>
+                                        Fin de la lista
+                                    </span>
+                                </h2>
+                                <button @click="CambiarPagina('next')" 
+                                :disabled="!HayMasPaginas || CargandoTrue"
+                                class="botona"
+                                >
+                                    ❯
+                                </button>
+                            </div>
+
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
+
     </div>
 </template>
 
 <script setup>
-    // ----- Imports ----- //6+
+    
+    // ----- Imports ----- //
+    
     import { 
         onMounted, 
         ref, 
@@ -431,8 +519,12 @@
         Iniciado, 
         ActualizarCajaC as ActualizarCajaU 
     } from './Estatus'
+    
     // ----- Variables Vue ----- //
+
+    // Habilitar Boton //
     const confirboton = computed(() =>{
+        // Nuevo Usuario
         if (MostrarNuevo.value) {
             const faltandatos01 = 
                 NuevoUsuario.value.nombre === ""||
@@ -442,6 +534,7 @@
                 NuevoUsuario.value.id_rol.length === 0
             return faltandatos01
         }
+        // Actualizar Usuario
         if (ActualizarCajaU.value) {
             const faltandatos02 = 
                 UsuarioAct.value.id_rol.length === 0
@@ -449,7 +542,10 @@
         }
         return false
     })
+    
     // ----- Variables Complejas ----- //
+
+    // Almacen para Nuevo Usuario //
     const NuevoUsuario = ref({
         nombre: "",
         email: "",
@@ -457,6 +553,7 @@
         contrasena: "",
         id_rol: []
     })
+    // Almacen para Actualizar Usuario //
     const UsuarioAct = ref({
         id: "",
         nombre: "",
@@ -464,6 +561,7 @@
         contrasena: "",
         id_rol: []
     })
+    // Almacen para Roles //
     const ListaRoles = ref([
         { id: 1, nombre: "Administrador"},
         { id: 2, nombre: "Editor de Productor General"},
@@ -473,7 +571,9 @@
         { id: 6, nombre: "Rider"},
         { id: 7, nombre: "Editor de Clientes"}
     ])
+    
     // ----- Variables Booleanas ----- //
+    
     const filtroAct = ref(false)
     const ErrorCarga = ref(false)
     const VistaLista = ref(true)
@@ -483,32 +583,44 @@
     const HayMasPaginas = ref(false)
     const BloqueoPeticion = ref(false)
     const ActualizarCajaUDel = ref(false)
+    
     // ----- Variables Vacias ----- //
+    
     const orden = ref("")
     const Busqueda = ref("")
     const usuarios =  ref([])
     const UsuarioEli = ref("")
+    
     // ----- Variables Simples ----- //
-	const Pagina = ref(0)
+	
+    const Pagina = ref(0)
     const filtroEst = ref(2)
     const ItemsPorPagina = ref(24)
+    
     // ----- Funciones Vue ----- //
+
+    // Primera Carga de Datos de la Pagina //
     onMounted (() => {
         CargarDatos()
     })
+    // Carga de Datos de la Pagina //
     const CargarDatos = (async() => {
         if (BloqueoPeticion.value) return
         BloqueoPeticion.value = true
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+        })
         CargandoTrue.value = true
         ErrorCarga.value = false
+        // Tiempo de Espera para el Backend
         const temporizador = setTimeout(() => {
             if (CargandoTrue.value) {
                 CargandoTrue.value = false
                 ErrorCarga.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
-            }
-        }, 15000)
+        }}, 15000)
+        // Leer Usuarios
         try {
             await BusquedaUsuario()
             clearTimeout(temporizador)
@@ -522,22 +634,8 @@
                 CargandoTrue.value = false
             }
             BloqueoPeticion.value = false
-        }
-    })
-    // ----- Funciones Frontend ----- //
-	const AbrirPopUp01 = () => {
-		ActualizarCajaUDel.value = true
-		document.body.style.overflow = "hidden"
-	}
-	const AbrirPopUp02 = () => {
-		ActualizarCajaU.value = true
-		document.body.style.overflow = "hidden"
-	}
-    const AplicarFiltro = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Pagina.value = 0
-        BusquedaUsuario()
-    }
+    }})
+    // Cambiar Pagina //
     const CambiarPagina = async (direccion) => {
         if (BloqueoPeticion.value) return
         BloqueoPeticion.value = true
@@ -558,16 +656,37 @@
         } finally {
             CargandoTrue.value = false
             BloqueoPeticion.value = false
-        }
+    }}
+    
+    // ----- Funciones Frontend ----- //
+
+    // Abrir Pop up para Desactivar Usuario //
+    const AbrirPopUp01 = () => {
+		ActualizarCajaUDel.value = true
+		document.body.style.overflow = "hidden"
+	}
+    // Abrir Pop up para Actualizar Usuario //
+	const AbrirPopUp02 = () => {
+		ActualizarCajaU.value = true
+		document.body.style.overflow = "hidden"
+	}
+    // Aplicar Filtros //
+    const AplicarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Pagina.value = 0
+        BusquedaUsuario()
     }
+    // Cerrar Pop up para Desactivar Usuario //
 	const CerrarPopUp01 = () => {
 		ActualizarCajaUDel.value = false
 		document.body.style.overflow = "auto"
 	}
+    // Cerrar Pop up para Actualizar Usuario //
 	const CerrarPopUp02 = () => {
 		ActualizarCajaU.value = false
 		document.body.style.overflow = "auto"
 	}
+    // Establecer Valores del Usuario para Actualizar Datos y Abrir Pop Up //
     const Edicion = (usuario_fila) => {
         UsuarioAct.value.id = usuario_fila.id
         UsuarioAct.value.nombre = usuario_fila.nombre
@@ -575,18 +694,20 @@
         UsuarioAct.value.id_rol = usuario_fila.id_rol ? [...usuario_fila.id_rol] : []
         AbrirPopUp02()
     }
+    // Establecer Valores del Usuario para Desactivar el Usuario y Abrir Pop Up //
     const Eliminacion = (usuario_fila) => {
         UsuarioEli.value = usuario_fila.id
         AbrirPopUp01()
     }
+    // Leer Fecha con Formato DD/MM/YYYY //
 	const FormatoFecha = (fechai) => {
 		if (fechai) {
 			return new Date(fechai).toLocaleDateString('es-ES')
 		}
 		else {
 			return "Pendiente"
-		}
-	}
+	}}
+    // Limpiar Filtros, Orden y Busqueda //
     const LimpiarFiltro = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
@@ -595,6 +716,7 @@
         BusquedaUsuario()
         filtroAct.value = false
     }
+    // Establecer Color de Insignia de Estatus y Rol //
     const Estatuscolor = (id_estatus, array_roles) => {
         if (id_estatus === true || id_estatus === 1) {
             if (!Array.isArray(array_roles) || array_roles.length === 0) {
@@ -616,8 +738,8 @@
         }
         else {
             return "badge-inactivo"
-        }
-    }
+    }}
+    // Establecer Texto de Insignia de Rol //
     const Roltxt = (array_roles) => {
         if (!Array.isArray(array_roles) || array_roles.length === 0) {
             return "Sin Rol Asignado"
@@ -636,6 +758,7 @@
         if (id_unico === 7) return "Editor de Clientes"
         return "Desconocido"
     }
+    // Sumar/Quitar Rol //
     const ToggleRol = (id_rol) => {
         if (!UsuarioAct.value.id_rol) {
             UsuarioAct.value.id_rol = []
@@ -645,9 +768,11 @@
             UsuarioAct.value.id_rol.splice(index, 1)
         } else {
             UsuarioAct.value.id_rol.push(id_rol)
-        }
-    }
+    }}
+    
     // ----- Funciones Backend ----- //
+
+    // Actualizar Datos del Usuario //
     const ActualizarUsuarios = async() => {
         const UsuarioUpd = {} 
         if (UsuarioAct.value.nombre !== "") {
@@ -687,13 +812,14 @@
         BusquedaUsuario()
         CerrarPopUp02()
     }
+    // Desactivar Datos del Usuario //
     const BorrarUsuario = async() => {
         const EraseCliente = await fetch(`${urlover8000}/usuarios/id/${UsuarioEli.value}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include'
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
         })
         UsuarioEli.value = ""
         if (EraseCliente.status === 401) {
@@ -706,17 +832,21 @@
         BusquedaUsuario()
         CerrarPopUp01()
     }
+    // Leer Datos de los Usuarios //
     const BusquedaUsuario = async() => {
         let url = new URL (`${urlover8000}/usuarios/`)
 		url.searchParams.append('skip', Pagina.value)
         url.searchParams.append('limit', ItemsPorPagina.value + 1)
+        // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_usuario', Busqueda.value)
         }
+        // Establecer Orden
         if (orden.value !== "") {
             url.searchParams.append('orden', orden.value)
             filtroAct.value = true
         }
+        // Establecer Filtro de Estatus
         if (filtroEst.value === 1) {
             url.searchParams.append('bool_activo', 'true')
             filtroAct.value = true
@@ -737,12 +867,11 @@
             } else {
                 HayMasPaginas.value = false
                 usuarios.value = datos
-            }
-        } else {
+        }} else {
             usuarios.value = []
             HayMasPaginas.value = false
-        }
-    }
+    }}
+    // Subir Datos de Nuevo Usuario //
     const SubirNuevoUsuario = async() => {
         try {
             const SubidaNuevoUsuario = await fetch(`${urlover8000}/usuarios/`, {
@@ -773,9 +902,8 @@
             } else {
                 const errorData = await SubidaNuevoUsuario.json()
                 alert(errorData.detail || "Error al crear el usuario. Revisa los datos.")
-            }
-        } catch (error) {
+        }} catch (error) {
             console.error("Fallo en la comunicación con el servidor:", error)
-        }
-    }
+    }}
+
 </script>

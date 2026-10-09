@@ -1,16 +1,6 @@
 import { ref } from 'vue'
 
-export const urlbase5173 = "https://pedidosmaxi-production.up.way.app"
-
 export const urlover8000 = "https://backend-pedidos-maxi.vercel.app"
-
-export const urlbase5173b = "http://localhost:5173"
-
-export const urlover8000b = "http://localhost:8000"
-
-export const urlbase5173a = "http://10.250.4.18:5173"
-
-export const urlover8000a = "http://10.250.4.18:8000"
 
 export const Rol = ref([])
 
