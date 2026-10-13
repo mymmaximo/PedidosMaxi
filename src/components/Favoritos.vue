@@ -22,7 +22,7 @@
         <!-- Confirmacion Quitar -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="QuitarCaja"
+                <div v-if="PopUpDel"
                 @click.self="CerrarPopUp01"
                 class="fondo"
                 >
@@ -97,7 +97,7 @@
         <!-- Añadir al Carrito -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="VentanaCompra"
+                <div v-if="PopUpBuy"
                 @click.self="CerrarPopUp02"
                 class="fondo" 
                 >
@@ -698,10 +698,10 @@
     // ----- Variables Booleanas ----- //
 
     const BloqueoPeticion = ref(false)
-    const VentanaCompra = ref(false)
+    const PopUpBuy = ref(false)
     const MostrarConfir = ref(false)
     const HayMasPaginas = ref(false)
-    const QuitarCaja = ref (false)
+    const PopUpDel = ref (false)
     const CargandoTrue = ref(true)
     const ErrorCarga = ref(false)
     const VistaLista = ref(false)
@@ -822,7 +822,7 @@
 
     // Abrir Pop up para Quitar de Favoritos //
 	const AbrirPopUp01 = () => {
-		QuitarCaja.value = true
+		PopUpDel.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Aplicar Filtros //
@@ -842,13 +842,13 @@
     }}
     // Cerrar Pop up para Quitar de Favoritos //
 	const CerrarPopUp01 = () => {
-		QuitarCaja.value = false
+		PopUpDel.value = false
         ProductoQ.value = { id: "", nombre: "", imagenes: [] }
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Añadir a Carrito //
     const CerrarPopUp02 = () => {
-        VentanaCompra.value = false
+        PopUpBuy.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
         document.body.style.overflow = "auto"
@@ -862,7 +862,7 @@
         if (CarritoStock(producto_fila) <= 0) {
             return 
         }
-        VentanaCompra.value = true
+        PopUpBuy.value = true
         document.body.style.overflow = "hidden"
         ProductoActual.value = producto_fila
         ProductoCantidad.value = 1

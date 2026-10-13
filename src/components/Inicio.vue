@@ -22,7 +22,7 @@
         <!-- Eliminar Producto -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="ActualizarCajaPDel" 
+                <div v-if="PopUpDel" 
                 @click.self="CerrarPopUp02" 
                 class="fondo"
                 >
@@ -98,7 +98,7 @@
         <!-- Comprar Ventana -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="VentanaCompra" 
+                <div v-if="PopUpBuy" 
                 @click.self="CerrarPopUp04" 
                 class="fondo"
                 >
@@ -204,7 +204,7 @@
         <!-- Actualizar Producto -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="ActualizarCajaP" 
+                <div v-if="PopUpAct" 
                 @click.self="CerrarPopUp01" 
                 class="fondo"
                 >
@@ -405,7 +405,7 @@
         <!-- Actualizar Banner -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="VentanaBanner" 
+                <div v-if="PopUpActBanner" 
                 @click.self="CerrarPopUp03" 
                 class="fondo"
                 >
@@ -548,7 +548,7 @@
         <!-- Promocionar Producto -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="VentanaPromocion" 
+                <div v-if="PopUpOff" 
                 @click.self="CerrarPopUp05" 
                 class="fondo"
                 >
@@ -1038,7 +1038,7 @@
         CarritoLocal,
         CerrarSesion,
         Rol,
-        ActualizarCajaP,
+        PopUpAct,
         ProductoActual,
         ProductoCantidad,
         PedidoActual,
@@ -1105,10 +1105,10 @@
 
     // ----- Variables Booleanas ----- //
 
-    const ActualizarCajaPDel = ref(false)
-    const VentanaPromocion = ref(false)
-    const VentanaCompra = ref(false)
-    const VentanaBanner = ref(false)
+    const PopUpDel = ref(false)
+    const PopUpOff = ref(false)
+    const PopUpBuy = ref(false)
+    const PopUpActBanner = ref(false)
     const MostrarConfir = ref(false)
     const Actualizando = ref(false)
     const CargandoTrue = ref(true)
@@ -1179,7 +1179,7 @@
     // Habilitar Boton //
     const confirboton = computed(() => {
         // Actualizar Producto
-        if (ActualizarCajaP.value) {
+        if (PopUpAct.value) {
             const faltandatos03 =
             ProductoAct.value.nombre === "" ||
             ProductoAct.value.precio === "" ||
@@ -1313,12 +1313,12 @@
 
     // Abrir Pop up para Actualizar Producto //
     const AbrirPopUp01 = () => {
-        ActualizarCajaP.value = true
+        PopUpAct.value = true
         document.body.style.overflow = "hidden"
     }
     // Abrir Pop up para Borrar Producto //
     const AbrirPopUp02 = () => {
-        ActualizarCajaPDel.value = true
+        PopUpDel.value = true
         document.body.style.overflow = "hidden"
         setTimeout(() => {
             ProductoEli.value = {
@@ -1330,12 +1330,12 @@
     }, 300)}
     // Abrir Pop up para Actualizar el Banner //
     const AbrirPopUp03 = () => {
-        VentanaBanner.value = true
+        PopUpActBanner.value = true
         document.body.style.overflow = "hidden"
     }
     // Abrir Pop up para Añadir el Carrito //
     const AbrirPopUp04 = () => {
-        VentanaCompra.value = true
+        PopUpBuy.value = true
         document.body.style.overflow = "hidden"
     }
     // Abrir Pop up para Promocion (Lee Precios) //
@@ -1369,7 +1369,7 @@
         }}}} catch (error) {
             console.error("Error buscando promo existente:", error)
         }
-        VentanaPromocion.value = true
+        PopUpOff.value = true
         document.body.style.overflow = "hidden"
     }
     // Establecer Accion al Tocar el Tab //
@@ -1422,33 +1422,33 @@
     })}}}
     // Cerrar Pop up para Actualizar Producto //
     const CerrarPopUp01 = () => {
-        ActualizarCajaP.value = false
+        PopUpAct.value = false
         DelImg.value = []
         LimpiarImagenes()
         document.body.style.overflow = "auto"
     }
     // Cerrar Pop up para Borrar Producto //
     const CerrarPopUp02 = () => {
-        ActualizarCajaPDel.value = false
+        PopUpDel.value = false
         document.body.style.overflow = "auto"
     }
     // Cerrar Pop up para Actualizar el Banner //
     const CerrarPopUp03 = () => {
-        VentanaBanner.value = false
+        PopUpActBanner.value = false
         DelBann.value = []
         DelSupaBann.value = []
         document.body.style.overflow = "auto"
     }
     // Cerrar Pop up para Añadir el Carrito //
     const CerrarPopUp04 = () => {
-        VentanaCompra.value = false
+        PopUpBuy.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
         document.body.style.overflow = "auto"
     }
     // Cerrar Pop up para Promocion //
     const CerrarPopUp05 = () => {
-        VentanaPromocion.value = false
+        PopUpOff.value = false
         document.body.style.overflow = "auto"
     }
     // Inicio del Toque de Imagen en Celular //

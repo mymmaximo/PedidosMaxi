@@ -4,8 +4,8 @@
         <!-- Confirmacion -->
         <!-- Borrar Detalle -->
         <Teleport to="body">
-            <div v-if="ActualizarCarritoDel"
-            @click.self="CerrarPopUp01"
+            <div v-if="PopUpDel"
+            @click.self="CerrarPopUpDel"
             class="fondo"
             >
                 <div class="popup">
@@ -22,7 +22,7 @@
                         >
                             Si Confirmo
                         </button>
-                        <button @click="CerrarPopUp01"
+                        <button @click="CerrarPopUpDel"
                         class="botonc"
                         >
                             Cancelar
@@ -36,8 +36,8 @@
         <!-- Formulario -->
         <!-- Comfirmar Pago -->
         <Teleport to="body">
-            <div v-if="PantallaDirecto"
-            @click.self="CerrarPopUp02"
+            <div v-if="PopUpPay"
+            @click.self="CerrarPopUpPay"
             class="fondo"
             >
                 <div class="popup">
@@ -172,7 +172,7 @@
 
                     <!-- Botones -->
                     <div class="botones">
-                        <button @click="CerrarPopUp02"
+                        <button @click="CerrarPopUpPay"
                         class="botonc"
                         >
                             Cancelar
@@ -337,7 +337,7 @@
 
                                 <!-- Boton Borrar Producto de Carrito -->
                                 <div class="carrito-col-borrar">
-                                    <button @click="Eliminacion(index)" 
+                                    <button @click="AbrirPopUpDel(index)" 
                                     title="Eliminar"
                                     class="carrito-btn-borrar"
                                     >
@@ -363,7 +363,7 @@
                                             $ {{ FormatearPrecio(CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0)) }}
                                         </span>
                                     </div>
-                                    <button @click="AbrirPopUp02"
+                                    <button @click="AbrirPopUpPay"
                                     class="botoncon 
                                     w-full !text-xl !py-4 
                                     z-10 hover:-translate-y-1"
@@ -507,8 +507,8 @@
     const ErrorCarga = ref(false)
     const CargandoTrue = ref(true)
     const ProcesandoPago = ref(false)
-    const PantallaDirecto = ref (false)
-    const ActualizarCarritoDel = ref(false)
+    const PopUpPay = ref (false)
+    const PopUpDel = ref(false)
 
     // ----- Variables Vacias ----- //
     
@@ -522,17 +522,18 @@
     // ----- Funciones Frontend ----- //
     
     // Abrir Pop up para Borrar Detalle //
-	const AbrirPopUp01 = () => {
-		ActualizarCarritoDel.value = true
+	const AbrirPopUpDel = (producto_fila) => {
+        ProductoEli.value = producto_fila
+		PopUpDel.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Confirmar el Pago (Si no Inicio Sesion /login) //
-	const AbrirPopUp02 = () => {
+	const AbrirPopUpPay = () => {
         if (!Iniciado.value) {
             router.push('/login')
             return
         }
-		PantallaDirecto.value = true
+		PopUpPay.value = true
 		document.body.style.overflow = "hidden"
         if (ListaDirecciones.value.length > 0)
             DireccionExistente.value = ListaDirecciones.value[0].id_direccion
@@ -545,19 +546,19 @@
             ImagenesCargando.value[imagen.id_producto] = true
     }}
     // Cerrar Pop up de Borrar Detalle //
-	const CerrarPopUp01 = () => {
-		ActualizarCarritoDel.value = false
+	const CerrarPopUpDel = () => {
+		PopUpDel.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up de Borrar Detalle //
-	const CerrarPopUp02 = () => {
-		PantallaDirecto.value = false
+	const CerrarPopUpPay = () => {
+		PopUpPay.value = false
 		document.body.style.overflow = "auto"
 	}
     // Leer Producto para Borrar Detalle (Abre Pop up) //
     const Eliminacion = (producto_fila) => {
         ProductoEli.value = producto_fila
-        AbrirPopUp01()
+        AbrirPopUpDel()
     }
     // Leer Precio con Formato Pesos Argentinos //
     const FormatearPrecio = (precio) => {
@@ -589,7 +590,7 @@
     const BorrarDetalle = () => {
         CarritoLocal.value.splice(ProductoEli.value, 1)
         localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value))
-        CerrarPopUp01()
+        CerrarPopUpDel()
         // Carrito Vacio, vuelve al Inicio
         if (CarritoLocal.value.length === 0) {
             emit('CarritoVacio')

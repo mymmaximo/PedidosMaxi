@@ -4,8 +4,7 @@ import { ref } from 'vue'
 
 // ----- Variables Booleanas ----- //
 
-export const ActualizarCajaP = ref(false)
-export const ActualizarCajaC = ref(false)
+export const PopUpAct = ref(false)
 export const SesionExpirada = ref(false)
 export const MostrarError = ref(false)
 export const VolverCarro = ref(false)

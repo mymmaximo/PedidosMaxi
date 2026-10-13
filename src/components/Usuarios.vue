@@ -5,7 +5,7 @@
         <!-- Eliminar Usuario -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="ActualizarCajaUDel" 
+                <div v-if="PopUpDel" 
                 @click.self="CerrarPopUp01"
                 class="fondo"
                 >
@@ -39,7 +39,7 @@
         <!-- Actualizar Usuario -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="ActualizarCajaU"
+                <div v-if="PopUpAct"
                 @click.self="CerrarPopUp02"
                 class="fondo"
                 >
@@ -517,7 +517,7 @@
         CerrarSesion, 
         SesionExpirada, 
         Iniciado, 
-        ActualizarCajaC as ActualizarCajaU 
+        PopUpAct as PopUpAct 
     } from './Estatus'
     
     // ----- Variables Vue ----- //
@@ -535,7 +535,7 @@
             return faltandatos01
         }
         // Actualizar Usuario
-        if (ActualizarCajaU.value) {
+        if (PopUpAct.value) {
             const faltandatos02 = 
                 UsuarioAct.value.id_rol.length === 0
             return faltandatos02
@@ -582,7 +582,7 @@
     const MostrarFiltro = ref(false)
     const HayMasPaginas = ref(false)
     const BloqueoPeticion = ref(false)
-    const ActualizarCajaUDel = ref(false)
+    const PopUpDel = ref(false)
     
     // ----- Variables Vacias ----- //
     
@@ -662,12 +662,12 @@
 
     // Abrir Pop up para Desactivar Usuario //
     const AbrirPopUp01 = () => {
-		ActualizarCajaUDel.value = true
+		PopUpDel.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Actualizar Usuario //
 	const AbrirPopUp02 = () => {
-		ActualizarCajaU.value = true
+		PopUpAct.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Aplicar Filtros //
@@ -678,12 +678,12 @@
     }
     // Cerrar Pop up para Desactivar Usuario //
 	const CerrarPopUp01 = () => {
-		ActualizarCajaUDel.value = false
+		PopUpDel.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Actualizar Usuario //
 	const CerrarPopUp02 = () => {
-		ActualizarCajaU.value = false
+		PopUpAct.value = false
 		document.body.style.overflow = "auto"
 	}
     // Establecer Valores del Usuario para Actualizar Datos y Abrir Pop Up //

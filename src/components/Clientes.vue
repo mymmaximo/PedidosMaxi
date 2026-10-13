@@ -5,7 +5,7 @@
         <!-- Desactivar Cliente -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="ActualizarCajaCDel" 
+                <div v-if="PopUpDel" 
                 @click.self="CerrarPopUp02"
                 class="fondo"
                 >
@@ -39,7 +39,7 @@
         <!-- Actualizar Cliente -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="ActualizarCajaC"
+                <div v-if="PopUpAct"
                 @click.self="CerrarPopUp01"
                 class="fondo"
                 >
@@ -641,7 +641,7 @@
     } from 'vue'
     import { 
         CerrarSesion, 
-        ActualizarCajaC, 
+        PopUpAct, 
         urlover8000, 
         SesionExpirada, 
         Iniciado 
@@ -662,7 +662,7 @@
             return faltandatos01
         }
         // Actualizar Cliente
-        if (ActualizarCajaC.value) {
+        if (PopUpAct.value) {
             const faltandatos02 = 
                 ClienteAct.value.nombre === ""||
                 ClienteAct.value.email === ""
@@ -695,7 +695,7 @@
     const HayMasPaginas = ref(false)
     const MostrarFiltro = ref(false)
     const BloqueoPeticion = ref(false)
-    const ActualizarCajaCDel = ref(false)
+    const PopUpDel = ref(false)
 
     // ----- Variables Vacias ----- //
 
@@ -785,12 +785,12 @@
 
     // Abrir Pop up para Actualizar Cliente //
 	const AbrirPopUp01 = () => {
-		ActualizarCajaC.value = true
+		PopUpAct.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Borrar Cliente //
 	const AbrirPopUp02 = () => {
-		ActualizarCajaCDel.value = true
+		PopUpDel.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Aplicar Filtros //
@@ -803,12 +803,12 @@
     }
     // Cerrar Pop up de Actualizar Cliente //
 	const CerrarPopUp01 = () => {
-		ActualizarCajaC.value = false
+		PopUpAct.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up de Borrar Cliente //
 	const CerrarPopUp02 = () => {
-		ActualizarCajaCDel.value = false
+		PopUpDel.value = false
 		document.body.style.overflow = "auto"
 	}
     // Mostrar Direcciones //

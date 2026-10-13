@@ -5,7 +5,7 @@
 		<!-- Actualizar Estatus -->
 		<Teleport to="body">
 			<transition name="fade">
-				<div v-if="ActualizarCajaP" 
+				<div v-if="PopUpAct" 
 				@click.self="CerrarPopUp01"
 				class="fondo" 
 				>
@@ -637,7 +637,7 @@
     const HayMasPaginas = ref(false)
 	const MostrarFiltro = ref(false)
     const BloqueoPeticion = ref(false)
-	const ActualizarCajaP = ref (false)
+	const PopUpAct = ref (false)
 
     // ----- Variables Vacias ----- //
 
@@ -728,7 +728,7 @@
 
     // Abrir Pop up para Actualizar Estatus de Pedido //
 	const AbrirPopUp01 = () => {
-		ActualizarCajaP.value = true
+		PopUpAct.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Aplicar Filtros //
@@ -739,7 +739,7 @@
 	}
     // Cerrar Pop up para Actualizar Estatus de Pedido //
 	const CerrarPopUp01 = () => {
-		ActualizarCajaP.value = false
+		PopUpAct.value = false
 		document.body.style.overflow = "auto"
 	}
     // Establecer Valores de Pedido para Actualizar Estatus y Abrir Pop Up //

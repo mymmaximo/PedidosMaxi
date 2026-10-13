@@ -22,7 +22,7 @@
         <!-- Eliminar Producto -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="ActualizarCajaPDel"
+                <div v-if="PopUpDel"
                 @click.self="CerrarPopUp02"
                 class="fondo"
                 >
@@ -97,7 +97,7 @@
         <!-- Actualizar Producto -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="ActualizarCajaP"
+                <div v-if="PopUpAct"
                 @click.self="CerrarPopUp01"
                 class="fondo"
                 >
@@ -296,7 +296,7 @@
         <!-- Comprar Ventana -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="VentanaCompra"
+                <div v-if="PopUpBuy"
                 @click.self="CerrarPopUp03"
                 class="fondo" 
                 >
@@ -399,7 +399,7 @@
         <!-- Promocionar Producto -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="VentanaPromocion"
+                <div v-if="PopUpOff"
                 @click.self="CerrarPopUp04" 
                 class="fondo"
                 >
@@ -1437,7 +1437,7 @@
         CarritoLocal, 
         CerrarSesion, 
         Rol, 
-        ActualizarCajaP, 
+        PopUpAct, 
         ProductoActual, 
         ProductoCantidad, 
         PedidoActual, 
@@ -1467,7 +1467,7 @@
             return faltandatos01 || faltandatos02
         }
         // Actualizar Producto
-        if (ActualizarCajaP.value) {
+        if (PopUpAct.value) {
             const faltandatos03 =
                 ProductoAct.value.nombre === "" ||
                 ProductoAct.value.precio === "" ||
@@ -1523,10 +1523,10 @@
 
     // ----- Variables Booleanas ----- //
 
-    const ActualizarCajaPDel = ref (false)
-    const VentanaPromocion = ref(false)
+    const PopUpDel = ref (false)
+    const PopUpOff = ref(false)
     const BloqueoPeticion = ref(false)
-    const VentanaCompra = ref (false)
+    const PopUpBuy = ref (false)
     const MostrarConfir = ref (false)
     const MostrarNuevo = ref (false)
     const VentanaNuevo = ref (false)
@@ -1685,17 +1685,17 @@
 
     // Abrir Pop up para Actualizar Producto //
     const AbrirPopUp01 = () => {
-		ActualizarCajaP.value = true
+		PopUpAct.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Desactivar Producto //
 	const AbrirPopUp02 = () => {
-		ActualizarCajaPDel.value = true
+		PopUpDel.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Añadir al Carrito //
 	const AbrirPopUp03 = () => {
-		VentanaCompra.value = true
+		PopUpBuy.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Promocion (Lee Precios) //
@@ -1736,7 +1736,7 @@
         } catch (error) {
             console.error("Error buscando promo existente:", error)
         }
-        VentanaPromocion.value = true
+        PopUpOff.value = true
         document.body.style.overflow = "hidden"
 	}
     // Establecer Accion al Tocar el Tab //
@@ -1763,26 +1763,26 @@
     }}
     // Cerrar Pop up para Actualizar Producto //
 	const CerrarPopUp01 = () => {
-		ActualizarCajaP.value = false
+		PopUpAct.value = false
         DelImg.value = []
         LimpiarImagenes()
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Borrar Producto //
 	const CerrarPopUp02 = () => {
-		ActualizarCajaPDel.value = false
+		PopUpDel.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Añadir el Carrito //
 	const CerrarPopUp03 = () => {
-        VentanaCompra.value = false
+        PopUpBuy.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Promocion //
 	const CerrarPopUp04 = () => {
-        VentanaPromocion.value = false
+        PopUpOff.value = false
 		document.body.style.overflow = "auto"
 	}
     // Inicio del Toque de Imagen en Celular //
