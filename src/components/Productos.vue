@@ -23,7 +23,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="PopUpDel"
-                @click.self="CerrarPopUp02"
+                @click.self="CerrarPopUpDel"
                 class="fondo"
                 >
                     <div class="popup">
@@ -81,7 +81,7 @@
                             >
                                 Confirmo
                             </button>
-                            <button @click="CerrarPopUp02"
+                            <button @click="CerrarPopUpDel"
                             class="botonc"
                             >
                                 Cancelar
@@ -98,7 +98,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="PopUpAct"
-                @click.self="CerrarPopUp01"
+                @click.self="CerrarPopUpAct"
                 class="fondo"
                 >
                     <div class="popup">
@@ -278,7 +278,7 @@
                                 >
                                     {{ Actualizando ? 'Actualizando...' : 'Actualizar' }}
                                 </button>
-                                <button @click="CerrarPopUp01"
+                                <button @click="CerrarPopUpAct"
                                 type="button" 
                                 class="botonc"
                                 >
@@ -297,7 +297,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="PopUpBuy"
-                @click.self="CerrarPopUp03"
+                @click.self="CerrarPopUpBuy"
                 class="fondo" 
                 >
                     <div class="popup popup-compra">
@@ -383,7 +383,7 @@
                             >
                                 Agregar al Carrito
                             </button>
-                            <button @click="CerrarPopUp03"
+                            <button @click="CerrarPopUpBuy"
                             class="botonc"
                             >
                                 Cancelar
@@ -400,7 +400,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="PopUpOff"
-                @click.self="CerrarPopUp04" 
+                @click.self="CerrarPopUpOff" 
                 class="fondo"
                 >
                     <div class="popup !max-w-md">
@@ -614,7 +614,7 @@
                                 >
                                     🗑️ Borrar
                                 </button>
-                                <button @click="CerrarPopUp04" 
+                                <button @click="CerrarPopUpOff" 
                                 type="button" 
                                 class="botonc flex-1 !m-0"
                                 >
@@ -1283,7 +1283,7 @@
                                     ? 'grid grid-cols-2' 
                                     : 'flex flex-col', 'w-full mt-auto pt-3 gap-1.5 sm:gap-2']"
                                     >
-                                        <button @click.stop="Edicion(i)" 
+                                        <button @click.stop="AbrirPopUpAct(i)" 
                                         v-if="VerificarRol([1, 2, 4, 5])" 
                                         :class="VistaLista 
                                         ? 'btn-chico-gris w-full justify-center' 
@@ -1297,7 +1297,7 @@
                                                 Editar
                                             </span>
                                         </button>
-                                        <button @click.stop="AbrirPopUp04(i)" 
+                                        <button @click.stop="AbrirPopUpOff(i)" 
                                         v-if="VerificarRol([1, 2])" 
                                         :class="VistaLista 
                                         ? 'btn-chico-gris !bg-blue-600 hover:!bg-blue-700 !text-white w-full justify-center' 
@@ -1311,7 +1311,7 @@
                                                 Promoción
                                             </span>
                                         </button>
-                                        <button @click.stop="Eliminacion(i)" 
+                                        <button @click.stop="AbrirPopUpDel(i)" 
                                         v-if="VerificarRol([1, 2]) && i.activo" 
                                         :class="VistaLista 
                                         ? 'btn-chico-rojo w-full justify-center' 
@@ -1325,7 +1325,7 @@
                                                 Eliminar
                                             </span>
                                         </button>
-                                        <button @click.stop="Eliminacion(i)" 
+                                        <button @click.stop="AbrirPopUpDel(i)" 
                                         v-if="VerificarRol([1, 2]) && !i.activo" 
                                         :class="VistaLista 
                                         ? 'btn-chico-verde w-full justify-center' 
@@ -1339,7 +1339,7 @@
                                                 Reactivar
                                             </span>
                                         </button>
-                                        <button @click.stop="Compracion(i)"
+                                        <button @click.stop="AbrirPopUpBuy(i)"
                                         :disabled="CarritoStock(i) === 0"
                                         v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
                                         :class="VistaLista 
@@ -1684,22 +1684,40 @@
     // ----- Funciones Frontend ----- //
 
     // Abrir Pop up para Actualizar Producto //
-    const AbrirPopUp01 = () => {
+    const AbrirPopUpAct = (producto_fila) => {
+        ProductoAct.value.id = producto_fila.id
+        ProductoAct.value.nombre = producto_fila.nombre
+        ProductoAct.value.precio = producto_fila.precio
+        ProductoAct.value.stock = producto_fila.stock
+        OpcionCategoriaA.value = producto_fila.categoria
+        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
+        ProductoAct.value.imagenes = producto_fila.imagenes
+        DelImg.value = []
+        NewImg.value = []
+        VistaPrevia.value = []
 		PopUpAct.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Desactivar Producto //
-	const AbrirPopUp02 = () => {
+	const AbrirPopUpDel = (producto_fila) => {
+        ProductoEli.value.id = producto_fila.id
+        ProductoEli.value.nombre = producto_fila.nombre
+        ProductoEli.value.imagenes = producto_fila.imagenes
 		PopUpDel.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Añadir al Carrito //
-	const AbrirPopUp03 = () => {
+	const AbrirPopUpBuy = (producto_fila) => {
+        if (CarritoStock(producto_fila) <= 0) {
+            return 
+        }
+        ProductoActual.value = producto_fila
+        ProductoCantidad.value = 1
 		PopUpBuy.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Promocion (Lee Precios) //
-	const AbrirPopUp04 = async (producto_fila) => {
+	const AbrirPopUpOff = async (producto_fila) => {
 		ProductoPromo.value.id = producto_fila.id
         ProductoPromo.value.nombre = producto_fila.nombre
         ProductoPromo.value.imagenes = producto_fila.imagenes
@@ -1742,9 +1760,9 @@
     // Establecer Accion al Tocar el Tab //
     const AccionCarta = (producto_fila) => {
         if (VerificarRol([1, 2, 3, 4, 5, 6])) {
-            Edicion(producto_fila)
+            AbrirPopUpAct(producto_fila)
         } else {
-            Compracion(producto_fila)
+            AbrirPopUpBuy(producto_fila)
     }}
     // Aplicar Filtros //
     const AplicarFiltro = () => {
@@ -1762,61 +1780,32 @@
             ImagenesCargando.value[imagen.id] = true
     }}
     // Cerrar Pop up para Actualizar Producto //
-	const CerrarPopUp01 = () => {
+	const CerrarPopUpAct = () => {
 		PopUpAct.value = false
         DelImg.value = []
         LimpiarImagenes()
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Borrar Producto //
-	const CerrarPopUp02 = () => {
+	const CerrarPopUpDel = () => {
 		PopUpDel.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Añadir el Carrito //
-	const CerrarPopUp03 = () => {
+	const CerrarPopUpBuy = () => {
         PopUpBuy.value = false
         ProductoActual.value = null
         ProductoCantidad.value = 1
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Promocion //
-	const CerrarPopUp04 = () => {
+	const CerrarPopUpOff = () => {
         PopUpOff.value = false
 		document.body.style.overflow = "auto"
 	}
     // Inicio del Toque de Imagen en Celular //
     const ComienzoToque = (evento) => {
         inicioX = evento.changedTouches[0].clientX
-    }
-    // Establecer Valores del Producto para Añadir en el Carrito y Abrir Pop Up //
-    const Compracion = (producto_fila) => {
-        if (CarritoStock(producto_fila) <= 0) {
-            return 
-        }
-        VentanaComprar(producto_fila)
-        AbrirPopUp03()
-    }
-    // Establecer Valores del Producto para Actualizar Datos y Abrir Pop Up //
-    const Edicion = (producto_fila) => {
-        ProductoAct.value.id = producto_fila.id
-        ProductoAct.value.nombre = producto_fila.nombre
-        ProductoAct.value.precio = producto_fila.precio
-        ProductoAct.value.stock = producto_fila.stock
-        OpcionCategoriaA.value = producto_fila.categoria
-        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
-        ProductoAct.value.imagenes = producto_fila.imagenes
-        DelImg.value = []
-        NewImg.value = []
-        VistaPrevia.value = []
-        AbrirPopUp01()
-    }
-    // Establecer Valores del Producto para Borrar el Producto y Abrir Pop Up //
-    const Eliminacion = (producto_fila) => {
-        ProductoEli.value.id = producto_fila.id
-        ProductoEli.value.nombre = producto_fila.nombre
-        ProductoEli.value.imagenes = producto_fila.imagenes
-        AbrirPopUp02()
     }
     // Establecer Color de Carta de Producto (Depende del Estatus) //
     const Estatuscolor = (id_estatus) => {
@@ -1917,12 +1906,6 @@
         if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
             ProductoCantidad.value++
     }}
-    // Establecer Valores del Producto para Añadir a Carritos y Abrir Pop Up //
-    const VentanaComprar = (ProductoSeleccionado) => {
-        AbrirPopUp03()
-        ProductoActual.value = ProductoSeleccionado
-        ProductoCantidad.value = 1
-    }
 
     // ----- Funciones Backend ----- //
 
@@ -1994,7 +1977,7 @@
                         credentials: 'include'
             })}}
             BusquedaProducto()
-            CerrarPopUp01()
+            CerrarPopUpAct()
         } catch (error) {
             console.error(error)
             alert("Hubo un error al guardar los cambios.")
@@ -2023,7 +2006,7 @@
         imagenes: []
         }
         BusquedaProducto()
-        CerrarPopUp02()
+        CerrarPopUpDel()
     }
     // Desactivar Datos de Promocion //
     const BorrarPromocion = async () => {
@@ -2045,7 +2028,7 @@
                 throw new Error("No se pudo eliminar la promoción")
             }
             BusquedaProducto()
-            CerrarPopUp04()
+            CerrarPopUpOff()
         } catch (error) {
             console.error(error)
             alert("Hubo un error al eliminar la promoción.")
@@ -2167,7 +2150,7 @@
                 credentials: 'include'
             })
             if (respuesta.ok) {
-                CerrarPopUp03()
+                CerrarPopUpBuy()
                 console.log ("funciono")
             } else {
                 const error = await respuesta.text()
@@ -2241,7 +2224,7 @@
                 throw new Error(err)
             }
             BusquedaProducto()
-            CerrarPopUp04()
+            CerrarPopUpOff()
         } catch (error) {
             console.error("Error al guardar promoción:", error)
             alert("Hubo un error al guardar la promoción.")
@@ -2340,7 +2323,7 @@
             JSON.stringify(
                 CarritoLocal.value
         ))
-        CerrarPopUp03()
+        CerrarPopUpBuy()
         MostrarConfir.value = true
         // Tiempo de Notificacion en Segundos
         setTimeout(() => { MostrarConfir.value = false }, 2000)

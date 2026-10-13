@@ -555,11 +555,6 @@
 		PopUpPay.value = false
 		document.body.style.overflow = "auto"
 	}
-    // Leer Producto para Borrar Detalle (Abre Pop up) //
-    const Eliminacion = (producto_fila) => {
-        ProductoEli.value = producto_fila
-        AbrirPopUpDel()
-    }
     // Leer Precio con Formato Pesos Argentinos //
     const FormatearPrecio = (precio) => {
         if (precio === null || precio === undefined) return "0"

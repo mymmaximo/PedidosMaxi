@@ -6,7 +6,7 @@
 		<Teleport to="body">
 			<transition name="fade">
 				<div v-if="PopUpAct" 
-				@click.self="CerrarPopUp01"
+				@click.self="CerrarPopUpAct"
 				class="fondo" 
 				>
 					<div class="popup">
@@ -23,7 +23,7 @@
 							>
 								Si Confirmo
 							</button>
-							<button @click="CerrarPopUp01"
+							<button @click="CerrarPopUpAct"
 							class="botonc"
 							>
 								Cancelar
@@ -351,7 +351,7 @@
 							>
 
                                 <!-- Datos de Pedido -->
-								<div @click="Edicion(i)"
+								<div @click="AbrirPopUpAct(i)"
 								class="tab"
 								>
 									<div class="flex flex-col text-left">
@@ -727,23 +727,7 @@
     // ----- Funciones Frontend ----- //
 
     // Abrir Pop up para Actualizar Estatus de Pedido //
-	const AbrirPopUp01 = () => {
-		PopUpAct.value = true
-		document.body.style.overflow = "hidden"
-	}
-    // Aplicar Filtros //
-	const AplicarFiltro = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Pagina.value = 0
-		BusquedaPedido()
-	}
-    // Cerrar Pop up para Actualizar Estatus de Pedido //
-	const CerrarPopUp01 = () => {
-		PopUpAct.value = false
-		document.body.style.overflow = "auto"
-	}
-    // Establecer Valores de Pedido para Actualizar Estatus y Abrir Pop Up //
-	const Edicion = (pedido_fila) => {
+	const AbrirPopUpAct = (pedido_fila) => {
 		if (pedido_fila.estatus === 1) {
 			PedidoCambio(pedido_fila.id_pedido)
 			return
@@ -755,7 +739,19 @@
 		EstatusAct.value.tiempo_estimado_entrega = pedido_fila.tiempo_estimado_entrega
 		EstatusAct.value.tiempo_entrega = pedido_fila.tiempo_entrega
 		EstatusAct.value.estatus = pedido_fila.estatus - 1
-		AbrirPopUp01()
+		PopUpAct.value = true
+		document.body.style.overflow = "hidden"
+	}
+    // Aplicar Filtros //
+	const AplicarFiltro = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Pagina.value = 0
+		BusquedaPedido()
+	}
+    // Cerrar Pop up para Actualizar Estatus de Pedido //
+	const CerrarPopUpAct = () => {
+		PopUpAct.value = false
+		document.body.style.overflow = "auto"
 	}
     // Establecer Color de Insignia de Estatus //
 	const Estatuscolor = (id_estatus) => {
@@ -861,7 +857,7 @@
 			estatus: ""
 		}
 		BusquedaPedido()
-		CerrarPopUp01()
+		CerrarPopUpAct()
 	}
     // Keer Datos del Pedido //
 	const BusquedaPedido = async() => {

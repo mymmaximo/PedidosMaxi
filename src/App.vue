@@ -39,8 +39,8 @@
         <!-- Cerrar Sesion -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="ActualizarCajaLogout"
-                @click.self="CerrarPopUp01"
+                <div v-if="PopUpLogOut"
+                @click.self="CerrarPopUpLogOut"
                 class="fondo"
                 >
                     <div class="popup">
@@ -52,12 +52,12 @@
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="CerrarSesion() ; CerrarPopUp01()"
+                            <button @click="CerrarSesion() ; CerrarPopUpLogOut()"
                             class="botonc"
                             >
                                 Si Confirmo
                             </button>
-                            <button @click="CerrarPopUp01()"
+                            <button @click="CerrarPopUpLogOut()"
                             class="botoncon"
                             >
                                 Cancelar
@@ -101,8 +101,8 @@
         <!-- Borrar Carrito -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="BorrarCarrito"
-                @click.self="CerrarPopUp02"
+                <div v-if="PopUpDelCarrito"
+                @click.self="CerrarPopUpDelCarrito"
                 class="fondo"
                 >
                     <div class="popup">
@@ -114,12 +114,12 @@
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="LimpiarCompra() ; CerrarPopUp02() ; router.push('/')"
+                            <button @click="LimpiarCompra() ; CerrarPopUpDelCarrito() ; router.push('/')"
                             class="botonc"
                             >
                                 Si Confirmo
                             </button>
-                            <button @click="CerrarPopUp02()"
+                            <button @click="CerrarPopUpDelCarrito()"
                             class="botoncon"
                             >
                                 Cancelar
@@ -197,7 +197,7 @@
                 <div class="flex min-h-10">
 
                     <!-- Vaciar Carrito -->
-                    <div @click="AbrirPopUp02()" 
+                    <div @click="AbrirPopUpDelCarrito()" 
                     v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
                     class="botonc !rounded-none !px-2"
                     >
@@ -296,7 +296,7 @@
                             </h3>
 
                             <!-- Cerrar Sesion -->
-                            <h3 @click="AbrirPopUp01()"
+                            <h3 @click="AbrirPopUpLogOut()"
                             v-if="Iniciado"
                             class="botonc !rounded-none !p-2 !truncate"
                             >
@@ -425,7 +425,7 @@
                                 </div>
 
                                 <!-- Vaciar Carrito -->
-                                <div @click="AbrirPopUp02()" 
+                                <div @click="AbrirPopUpDelCarrito()" 
                                 v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
                                 class="botonpestaña !from-red-400/80 !to-red-500/80 !py-4 !text-left"
                                 >
@@ -477,7 +477,7 @@
                                 </div>
 
                                 <!-- Cerrar Sesion -->
-                                <div @click="AbrirPopUp01()"
+                                <div @click="AbrirPopUpLogOut()"
                                 v-if="Iniciado"
                                 class="botonpestaña 
                                 !from-red-600/80 !to-red-800/80 
@@ -600,29 +600,29 @@
     // ----- Variables Booleanas ----- //
     
     const MostrarMenu = ref (false)
-    const BorrarCarrito = ref(false)
-    const ActualizarCajaLogout = ref(false)
+    const PopUpDelCarrito = ref(false)
+    const PopUpLogOut = ref(false)
     
     // ----- Funciones Frontend ----- //
 	
     // Abrir Pop up para Cerrar Sesion //
-    const AbrirPopUp01 = () => {
-		ActualizarCajaLogout.value = true
+    const AbrirPopUpLogOut = () => {
+		PopUpLogOut.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Vaciar Carrito //
-	const AbrirPopUp02 = () => {
-		BorrarCarrito.value = true
+	const AbrirPopUpDelCarrito = () => {
+		PopUpDelCarrito.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Cerrar Pop up para Cerrar Sesion //
-	const CerrarPopUp01 = () => {
-		ActualizarCajaLogout.value = false
+	const CerrarPopUpLogOut = () => {
+		PopUpLogOut.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Vaciar Carrito //
-	const CerrarPopUp02 = () => {
-		BorrarCarrito.value = false
+	const CerrarPopUpDelCarrito = () => {
+		PopUpDelCarrito.value = false
 		document.body.style.overflow = "auto"
 	}
 

@@ -6,7 +6,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="PopUpDel" 
-                @click.self="CerrarPopUp01"
+                @click.self="CerrarPopUpDel"
                 class="fondo"
                 >
                     <div class="popup">
@@ -23,7 +23,7 @@
                             >
                                 Si Confirmo
                             </button>
-                            <button @click="CerrarPopUp01"
+                            <button @click="CerrarPopUpDel"
                             class="botonc"
                             >
                                 Cancelar
@@ -40,7 +40,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="PopUpAct"
-                @click.self="CerrarPopUp02"
+                @click.self="CerrarPopUpAct"
                 class="fondo"
                 >
                     <div class="popup">
@@ -78,7 +78,7 @@
                                 >
                                     Actualizar
                                 </button>
-                                <button @click="CerrarPopUp02" 
+                                <button @click="CerrarPopUpAct" 
                                 class="botonc"
                                 >
                                     Cancelar
@@ -400,7 +400,7 @@
                             >
                                 <div v-for= "i in usuarios" 
                                 :key="i.id" 
-                                @click="Edicion(i)"
+                                @click="AbrirPopUpAct(i)"
                                 :class="VistaLista 
                                 ? 'tarjeta-premium z-10 relative bg-white !mb-6 !w-full !m-0 hover:!shadow-lg' 
                                 : 'carta relative'"
@@ -436,18 +436,18 @@
 
                                     <!-- Botones -->
                                     <div class="tarjeta-acciones">
-                                        <button @click.stop="Eliminacion(i)" 
+                                        <button @click.stop="AbrirPopUpDel(i)" 
                                         v-if="i.activo" 
                                         class="btn-chico-rojo"
                                         >
                                             ❌ Eliminar
                                         </button>
-                                        <button v-else @click.stop="Eliminacion(i)"
+                                        <button v-else @click.stop="AbrirPopUpDel(i)"
                                         class="btn-chico-verde"
                                         >
                                             🕊️ Reactivar
                                         </button>
-                                        <button @click.stop="Edicion(i)" 
+                                        <button @click.stop="AbrirPopUpAct(i)" 
                                         class="btn-chico-gris">
                                             ✏️ Editar
                                         </button>
@@ -661,12 +661,17 @@
     // ----- Funciones Frontend ----- //
 
     // Abrir Pop up para Desactivar Usuario //
-    const AbrirPopUp01 = () => {
+    const AbrirPopUpDel = (usuario_fila) => {
+        UsuarioEli.value = usuario_fila.id
 		PopUpDel.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Actualizar Usuario //
-	const AbrirPopUp02 = () => {
+	const AbrirPopUpAct = (usuario_fila) => {
+        UsuarioAct.value.id = usuario_fila.id
+        UsuarioAct.value.nombre = usuario_fila.nombre
+        UsuarioAct.value.email = usuario_fila.email
+        UsuarioAct.value.id_rol = usuario_fila.id_rol ? [...usuario_fila.id_rol] : []
 		PopUpAct.value = true
 		document.body.style.overflow = "hidden"
 	}
@@ -677,28 +682,15 @@
         BusquedaUsuario()
     }
     // Cerrar Pop up para Desactivar Usuario //
-	const CerrarPopUp01 = () => {
+	const CerrarPopUpDel = () => {
 		PopUpDel.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Actualizar Usuario //
-	const CerrarPopUp02 = () => {
+	const CerrarPopUpAct = () => {
 		PopUpAct.value = false
 		document.body.style.overflow = "auto"
 	}
-    // Establecer Valores del Usuario para Actualizar Datos y Abrir Pop Up //
-    const Edicion = (usuario_fila) => {
-        UsuarioAct.value.id = usuario_fila.id
-        UsuarioAct.value.nombre = usuario_fila.nombre
-        UsuarioAct.value.email = usuario_fila.email
-        UsuarioAct.value.id_rol = usuario_fila.id_rol ? [...usuario_fila.id_rol] : []
-        AbrirPopUp02()
-    }
-    // Establecer Valores del Usuario para Desactivar el Usuario y Abrir Pop Up //
-    const Eliminacion = (usuario_fila) => {
-        UsuarioEli.value = usuario_fila.id
-        AbrirPopUp01()
-    }
     // Leer Fecha con Formato DD/MM/YYYY //
 	const FormatoFecha = (fechai) => {
 		if (fechai) {
@@ -810,7 +802,7 @@
             id_rol: []
         }
         BusquedaUsuario()
-        CerrarPopUp02()
+        CerrarPopUpAct()
     }
     // Desactivar Datos del Usuario //
     const BorrarUsuario = async() => {
@@ -830,7 +822,7 @@
             return
         }
         BusquedaUsuario()
-        CerrarPopUp01()
+        CerrarPopUpDel()
     }
     // Leer Datos de los Usuarios //
     const BusquedaUsuario = async() => {

@@ -6,7 +6,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="PopUpDel" 
-                @click.self="CerrarPopUp02"
+                @click.self="CerrarPopUpDel"
                 class="fondo"
                 >
                     <div class="popup">
@@ -23,7 +23,7 @@
                             >
                                 Si Confirmo
                             </button>
-                            <button @click="CerrarPopUp02"
+                            <button @click="CerrarPopUpDel"
                             class="botonc"
                             >
                                 Cancelar
@@ -40,7 +40,7 @@
         <Teleport to="body">
             <transition name="fade">
                 <div v-if="PopUpAct"
-                @click.self="CerrarPopUp01"
+                @click.self="CerrarPopUpAct"
                 class="fondo"
                 >
                     <div class="popup">
@@ -77,7 +77,7 @@
                                 >
                                     Actualizar
                                 </button>
-                                <button @click="CerrarPopUp01" 
+                                <button @click="CerrarPopUpAct" 
                                 class="botonc"
                                 >
                                     Cancelar
@@ -469,18 +469,18 @@
 
                                         <!-- Botones -->
                                         <div class="tarjeta-acciones">
-                                            <button @click.stop="Eliminacion(i)" 
+                                            <button @click.stop="AbrirPopUpDel(i)" 
                                             v-if="i.activo" 
                                             class="btn-chico-rojo"
                                             >
                                                 ❌ Eliminar
                                             </button>
-                                            <button v-else @click.stop="Eliminacion(i)"
+                                            <button v-else @click.stop="AbrirPopUpDel(i)"
                                             class="btn-chico-verde"
                                             >
                                                 🕊️ Reactivar
                                             </button>
-                                            <button @click.stop="Edicion(i)" 
+                                            <button @click.stop="AbrirPopUpAct(i)" 
                                             class="btn-chico-gris">
                                                 ✏️ Editar
                                             </button>
@@ -784,12 +784,17 @@
     // ----- Funciones Frontend ----- //
 
     // Abrir Pop up para Actualizar Cliente //
-	const AbrirPopUp01 = () => {
+	const AbrirPopUpAct = (cliente_fila) => {
+        ClienteAct.value.id = cliente_fila.id
+        ClienteAct.value.nombre = cliente_fila.nombre
+        ClienteAct.value.email = cliente_fila.email
 		PopUpAct.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Borrar Cliente //
-	const AbrirPopUp02 = () => {
+	const AbrirPopUpDel = (cliente_fila) => {
+        ClienteEli.value = cliente_fila.id
+        ClienteAct.value.nombre = cliente_fila.nombre
 		PopUpDel.value = true
 		document.body.style.overflow = "hidden"
 	}
@@ -802,12 +807,12 @@
         filtroprovincia.value = ""
     }
     // Cerrar Pop up de Actualizar Cliente //
-	const CerrarPopUp01 = () => {
+	const CerrarPopUpAct = () => {
 		PopUpAct.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up de Borrar Cliente //
-	const CerrarPopUp02 = () => {
+	const CerrarPopUpDel = () => {
 		PopUpDel.value = false
 		document.body.style.overflow = "auto"
 	}
@@ -819,19 +824,6 @@
         else {
             DireccionNow.value = id
     }}
-    // Establecer Valores de Cliente para Actualizar y Abrir Pop Up //
-    const Edicion = (cliente_fila) => {
-        ClienteAct.value.id = cliente_fila.id
-        ClienteAct.value.nombre = cliente_fila.nombre
-        ClienteAct.value.email = cliente_fila.email
-        AbrirPopUp01()
-    }
-    // Establecer Valores de Cliente para Borrar y Abrir Pop Up //
-    const Eliminacion = (cliente_fila) => {
-        ClienteEli.value = cliente_fila.id
-        ClienteAct.value.nombre = cliente_fila.nombre
-        AbrirPopUp02()
-    }
     // Establecer Color de Insignia de Estatus //
     const Estatuscolor = (id_estatus) => {
         if (id_estatus === true || id_estatus === 1) {
@@ -873,7 +865,7 @@
     // Establecer Accion al Tocar el Tab //
     const TocarTab = (cliente) => {
         if (!cliente.direcciones || cliente.direcciones.length === 0) {
-            Eliminacion(cliente)
+            AbrirPopUpDel(cliente)
         } else {
             DireccionCambio(cliente.id)
     }}
@@ -916,7 +908,7 @@
             contrasena: "",
         }
         BusquedaCliente()
-        CerrarPopUp01()
+        CerrarPopUpAct()
     }
     // Desactivar Cliente //
     const BorrarCliente = async() => {
@@ -936,7 +928,7 @@
             return
         }
         BusquedaCliente()
-        CerrarPopUp02()
+        CerrarPopUpDel()
     }
     // Leer Datos de los Clientes //
     const BusquedaCliente = async() => {
