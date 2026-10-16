@@ -5,7 +5,7 @@
         <!-- Rol invalido -->
         <Teleport to="body">
             <transition name="slide">
-                <div v-if="MostrarError" 
+                <div v-if="Mostrar_Error" 
                 class="notificacion !bg-yellow-600"
                 >
                     <span class="text-xl drop-shadow-sm">
@@ -23,7 +23,7 @@
         <template>
             <Teleport to="body">
                 <transition name="fade">
-                    <div v-if="VolverCarro" 
+                    <div v-if="Volver_Carro" 
                     class="fixed top-4 right-4
                     bg-red-600 text-black 
                     px-6 py-3 rounded-xl shadow-lg
@@ -39,8 +39,8 @@
         <!-- Cerrar Sesion -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpLogOut"
-                @click.self="CerrarPopUpLogOut"
+                <div v-if="PopUp_Log_Out"
+                @click.self="Cerrar_PopUp_Log_Out"
                 class="fondo"
                 >
                     <div class="popup">
@@ -52,12 +52,12 @@
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="CerrarSesion() ; CerrarPopUpLogOut()"
+                            <button @click="Cerrar_Sesion() ; Cerrar_PopUp_Log_Out()"
                             class="botonc"
                             >
                                 Si Confirmo
                             </button>
-                            <button @click="CerrarPopUpLogOut()"
+                            <button @click="Cerrar_PopUp_Log_Out()"
                             class="botoncon"
                             >
                                 Cancelar
@@ -73,7 +73,7 @@
         <!-- Sesion Expirada -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="SesionExpirada" 
+                <div v-if="Sesion_Expirada" 
                 class="fondo"
                 >
                     <div class="popup">
@@ -85,7 +85,7 @@
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="SesionExpirada = false; document.body.style.overflow = 'auto'; router.push('/login')"
+                            <button @click="Sesion_Expirada = false; document.body.style.overflow = 'auto'; router.push('/login')"
                             class="botoncon"
                             >
                                 Iniciar Sesion
@@ -101,8 +101,8 @@
         <!-- Borrar Carrito -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpDelCarrito"
-                @click.self="CerrarPopUpDelCarrito"
+                <div v-if="PopUp_Delete_Carrito"
+                @click.self="Cerrar_PopUp_Delete_Carrito"
                 class="fondo"
                 >
                     <div class="popup">
@@ -114,12 +114,12 @@
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="LimpiarCompra() ; CerrarPopUpDelCarrito() ; router.push('/')"
+                            <button @click="Limpiar_Compra() ; Cerrar_PopUp_Delete_Carrito() ; router.push('/')"
                             class="botonc"
                             >
                                 Si Confirmo
                             </button>
-                            <button @click="CerrarPopUpDelCarrito()"
+                            <button @click="Cerrar_PopUp_Delete_Carrito()"
                             class="botoncon"
                             >
                                 Cancelar
@@ -142,7 +142,7 @@
 
                     <!-- Pagina de Inicio -->
                     <div @click="router.push('/')" 
-                    v-if="VerificarRolExcluido([3, 6])"
+                    v-if="Verificar_Rol_Excluido([3, 6])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
                     class="botonpestaña"
                     >
@@ -151,7 +151,7 @@
 
                     <!-- Productos -->
                     <div @click="router.push('/productos')" 
-                    v-if="VerificarRolExcluido([3, 6])"
+                    v-if="Verificar_Rol_Excluido([3, 6])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
                     class="botonpestaña"
                     >
@@ -160,7 +160,7 @@
 
                     <!-- Pedidos -->
                     <div @click="router.push('/pedidos')" 
-                    v-if="VerificarRol([1, 3, 6])"
+                    v-if="Verificar_Rol([1, 3, 6])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
                     class="botonpestaña"
                     >
@@ -169,7 +169,7 @@
 
                     <!-- Clientes -->
                     <div @click="router.push('/clientes')" 
-                    v-if="VerificarRol([1, 3])"
+                    v-if="Verificar_Rol([1, 3])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
                     class="botonpestaña"
                     >
@@ -178,7 +178,7 @@
 
                     <!-- Usuarios -->
                     <div @click="router.push('/usuarios')" 
-                    v-if="VerificarRol([1])"
+                    v-if="Verificar_Rol([1])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
                     class="botonpestaña"
                     >
@@ -187,7 +187,7 @@
 
                     <!-- Registros de Precios -->
                     <div @click="router.push('/registro_precios')" 
-                    v-if="VerificarRol([1, 4])"
+                    v-if="Verificar_Rol([1, 4])"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/registro_precios'}"
                     class="botonpestaña"
                     >
@@ -197,15 +197,15 @@
                 <div class="flex min-h-10">
 
                     <!-- Vaciar Carrito -->
-                    <div @click="AbrirPopUpDelCarrito()" 
-                    v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
+                    <div @click="Abrir_PopUp_Delete_Carrito()" 
+                    v-if="Carrito_Local.length > 0 && Verificar_Rol_Excluido([2, 3, 4, 5, 6])"
                     class="botonc !rounded-none !px-2"
                     >
                         🗑️
                     </div>
 
                     <!-- Carrito -->
-                    <div v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
+                    <div v-if="Carrito_Local.length > 0 && Verificar_Rol_Excluido([2, 3, 4, 5, 6])"
                     @click="router.push('/carrito')"
                     :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
                     class="botonpestaña flex flex-row items-center justify-center gap-2"
@@ -217,7 +217,7 @@
                         rounded-full shadow-md
                         text-white text-xs font-bold"
                         >
-                            {{ CarritoLocal.length }}
+                            {{ Carrito_Local.length }}
                         </span>
                     </div>
 
@@ -273,7 +273,7 @@
 
                             <!-- Mis Pedidos -->
                             <h3 @click="router.push('/mis_pedidos')"
-                            v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
+                            v-if="Verificar_Rol_Excluido([2, 3, 4, 5, 6]) && Iniciado"
                             class="botonpestaña !p-2 !truncate"
                             >
                                 Mis Pedidos
@@ -281,7 +281,7 @@
 
                             <!-- Mis Favoritos -->
                             <h3 @click="router.push('/favoritos')"
-                            v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
+                            v-if="Verificar_Rol_Excluido([2, 3, 4, 5, 6]) && Iniciado"
                             class="botonpestaña !p-2 !truncate"
                             >
                                 Mis Favoritos
@@ -289,14 +289,14 @@
 
                             <!-- Configuracion -->
                             <h3 @click="router.push('/configuracion')" 
-                            v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
+                            v-if="Verificar_Rol_Excluido([2, 3, 4, 5, 6]) && Iniciado"
                             class="botonpestaña !p-2 !truncate"
                             >
                                 Configuracion
                             </h3>
 
                             <!-- Cerrar Sesion -->
-                            <h3 @click="AbrirPopUpLogOut()"
+                            <h3 @click="Abrir_PopUp_Log_Out()"
                             v-if="Iniciado"
                             class="botonc !rounded-none !p-2 !truncate"
                             >
@@ -318,7 +318,7 @@
 
                     <!-- Abrir Menu -->
                     <div class="p-3 w-full">
-                        <h1 @click="MostrarMenu = !MostrarMenu ; document.body.style.overflow = 'hidden'"
+                        <h1 @click="Mostrar_Menu = !Mostrar_Menu ; document.body.style.overflow = 'hidden'"
                         class="botonfil !mb-0 !py-2"
                         >
                             ⫶☰ Menú
@@ -327,8 +327,8 @@
 
                     <!-- Mostrar Fondo que Cierra Menu -->
                     <transition name="fade">
-                        <div @click="MostrarMenu = false"
-                        v-if="MostrarMenu" 
+                        <div @click="Mostrar_Menu = false"
+                        v-if="Mostrar_Menu" 
                         class="fondo !z-40 cursor-pointer"
                         >
                         </div>
@@ -336,7 +336,7 @@
 
                     <!-- Menu Desplegado -->
                     <transition name="slide-left">
-                        <div v-if="MostrarMenu"
+                        <div v-if="Mostrar_Menu"
                         class="flex flex-col  overflow-y-auto
                         fixed top-0 left-0 
                         h-screen w-[75%] max-w-sm 
@@ -345,15 +345,15 @@
                             <div class="flex flex-col">
 
                                 <!-- Abrir Menu -->
-                                <h1 @click="MostrarMenu = !MostrarMenu"
-                                v-if="!MostrarMenu"
+                                <h1 @click="Mostrar_Menu = !Mostrar_Menu"
+                                v-if="!Mostrar_Menu"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                     ⫶☰
                                 </h1>
 
                                 <!-- Cerrar Menu -->
-                                <h1 @click="MostrarMenu = !MostrarMenu"
+                                <h1 @click="Mostrar_Menu = !Mostrar_Menu"
                                 class="botonpestaña 
                                 !py-4 !text-left 
                                 bg-green-900 border-b border-green-700"
@@ -362,8 +362,8 @@
                                 </h1>
 
                                 <!-- Pagina de Inicio -->
-                                <div @click="router.push('/') ; MostrarMenu = false" 
-                                v-if="VerificarRolExcluido([3, 6])"
+                                <div @click="router.push('/') ; Mostrar_Menu = false" 
+                                v-if="Verificar_Rol_Excluido([3, 6])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -371,8 +371,8 @@
                                 </div>
 
                                 <!-- Productos -->
-                                <div @click="router.push('/productos') ; MostrarMenu = false" 
-                                v-if="VerificarRolExcluido([3, 6])"
+                                <div @click="router.push('/productos') ; Mostrar_Menu = false" 
+                                v-if="Verificar_Rol_Excluido([3, 6])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/productos'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -380,8 +380,8 @@
                                 </div>
 
                                 <!-- Pedidos -->
-                                <div @click="router.push('/pedidos') ; MostrarMenu = false" 
-                                v-if="VerificarRol([1, 3, 6])"
+                                <div @click="router.push('/pedidos') ; Mostrar_Menu = false" 
+                                v-if="Verificar_Rol([1, 3, 6])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/pedidos'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -389,8 +389,8 @@
                                 </div>
 
                                 <!-- Clientes -->
-                                <div @click="router.push('/clientes') ; MostrarMenu = false" 
-                                v-if="VerificarRol([1, 3])"
+                                <div @click="router.push('/clientes') ; Mostrar_Menu = false" 
+                                v-if="Verificar_Rol([1, 3])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/clientes'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -398,8 +398,8 @@
                                 </div>
 
                                 <!-- Usuarios -->
-                                <div @click="router.push('/usuarios') ; MostrarMenu = false" 
-                                v-if="VerificarRol([1])"
+                                <div @click="router.push('/usuarios') ; Mostrar_Menu = false" 
+                                v-if="Verificar_Rol([1])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/usuarios'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -407,8 +407,8 @@
                                 </div>
 
                                 <!-- Registros de Precios -->
-                                <div @click="router.push('/registro_precios') ; MostrarMenu = false" 
-                                v-if="VerificarRol([1, 4])"
+                                <div @click="router.push('/registro_precios') ; Mostrar_Menu = false" 
+                                v-if="Verificar_Rol([1, 4])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/registro_precios'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -416,8 +416,8 @@
                                 </div>
 
                                 <!-- Carrito -->
-                                <div @click="router.push('/carrito') ; MostrarMenu = false"
-                                v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
+                                <div @click="router.push('/carrito') ; Mostrar_Menu = false"
+                                v-if="Carrito_Local.length > 0 && Verificar_Rol_Excluido([2, 3, 4, 5, 6])"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/carrito'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -425,15 +425,15 @@
                                 </div>
 
                                 <!-- Vaciar Carrito -->
-                                <div @click="AbrirPopUpDelCarrito()" 
-                                v-if="CarritoLocal.length > 0 && VerificarRolExcluido([2, 3, 4, 5, 6])"
+                                <div @click="Abrir_PopUp_Delete_Carrito()" 
+                                v-if="Carrito_Local.length > 0 && Verificar_Rol_Excluido([2, 3, 4, 5, 6])"
                                 class="botonpestaña !from-red-400/80 !to-red-500/80 !py-4 !text-left"
                                 >
                                     🗑️ Vaciar Carrito
                                 </div>
 
                                 <!-- Iniciar Sesion -->
-                                <div @click="router.push('/login') ; MostrarMenu = false"
+                                <div @click="router.push('/login') ; Mostrar_Menu = false"
                                 v-if="!Iniciado"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
                                 class="botonpestaña !py-4 !text-left"
@@ -442,7 +442,7 @@
                                 </div>
 
                                 <!-- Centro de Ayuda -->
-                                <div @click="router.push('/centro_de_ayuda') ; MostrarMenu = false"
+                                <div @click="router.push('/centro_de_ayuda') ; Mostrar_Menu = false"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/centro_de_ayuda'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -450,8 +450,8 @@
                                 </div>
 
                                 <!-- Mis Pedidos -->
-                                <div @click="router.push('/mis_pedidos') ; MostrarMenu = false"
-                                v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
+                                <div @click="router.push('/mis_pedidos') ; Mostrar_Menu = false"
+                                v-if="Verificar_Rol_Excluido([2, 3, 4, 5, 6]) && Iniciado"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -459,8 +459,8 @@
                                 </div>
 
                                 <!-- Mis Favoritos -->
-                                <div @click="router.push('/favoritos') ; MostrarMenu = false"
-                                v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
+                                <div @click="router.push('/favoritos') ; Mostrar_Menu = false"
+                                v-if="Verificar_Rol_Excluido([2, 3, 4, 5, 6]) && Iniciado"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -468,8 +468,8 @@
                                 </div>
 
                                 <!-- Configuracion -->
-                                <div @click="router.push('/configuracion') ; MostrarMenu = false" 
-                                v-if="VerificarRolExcluido([2, 3, 4, 5, 6]) && Iniciado"
+                                <div @click="router.push('/configuracion') ; Mostrar_Menu = false" 
+                                v-if="Verificar_Rol_Excluido([2, 3, 4, 5, 6]) && Iniciado"
                                 :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/configuracion'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
@@ -477,7 +477,7 @@
                                 </div>
 
                                 <!-- Cerrar Sesion -->
-                                <div @click="AbrirPopUpLogOut()"
+                                <div @click="Abrir_PopUp_Log_Out()"
                                 v-if="Iniciado"
                                 class="botonpestaña 
                                 !from-red-600/80 !to-red-800/80 
@@ -580,16 +580,16 @@
         useRoute 
     } from 'vue-router'
     import { 
-        CarritoLocal, 
-        LimpiarCompra, 
+        Carrito_Local, 
+        Limpiar_Compra, 
         Iniciado, 
-        CerrarSesion, 
+        Cerrar_Sesion, 
         Rol, 
-        MostrarError, 
-        VolverCarro, 
-        SesionExpirada,
-        VerificarRol,
-        VerificarRolExcluido
+        Mostrar_Error, 
+        Volver_Carro, 
+        Sesion_Expirada,
+        Verificar_Rol,
+        Verificar_Rol_Excluido
     } from './components/Estatus.js'
     
     // ----- Variables Complejas ----- //
@@ -599,30 +599,30 @@
     
     // ----- Variables Booleanas ----- //
     
-    const MostrarMenu = ref (false)
-    const PopUpDelCarrito = ref(false)
-    const PopUpLogOut = ref(false)
+    const Mostrar_Menu = ref (false)
+    const PopUp_Delete_Carrito = ref(false)
+    const PopUp_Log_Out = ref(false)
     
     // ----- Funciones Frontend ----- //
 	
     // Abrir Pop up para Cerrar Sesion //
-    const AbrirPopUpLogOut = () => {
-		PopUpLogOut.value = true
+    const Abrir_PopUp_Log_Out = () => {
+		PopUp_Log_Out.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Vaciar Carrito //
-	const AbrirPopUpDelCarrito = () => {
-		PopUpDelCarrito.value = true
+	const Abrir_PopUp_Delete_Carrito = () => {
+		PopUp_Delete_Carrito.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Cerrar Pop up para Cerrar Sesion //
-	const CerrarPopUpLogOut = () => {
-		PopUpLogOut.value = false
+	const Cerrar_PopUp_Log_Out = () => {
+		PopUp_Log_Out.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Vaciar Carrito //
-	const CerrarPopUpDelCarrito = () => {
-		PopUpDelCarrito.value = false
+	const Cerrar_PopUp_Delete_Carrito = () => {
+		PopUp_Delete_Carrito.value = false
 		document.body.style.overflow = "auto"
 	}
 

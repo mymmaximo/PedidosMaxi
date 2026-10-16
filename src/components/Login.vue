@@ -4,7 +4,7 @@
         <div class="pagina !md:items-center">
                     
             <!-- Gif Cargando -->
-            <div v-if="CargandoTrue" 
+            <div v-if="Backend_Espera" 
             class="flex flex-col 
             items-center justify-center 
             w-full h-[60vh]"
@@ -23,7 +23,7 @@
             </div>
 
             <!-- Error Cargando -->
-            <div v-else-if="ErrorCarga" 
+            <div v-else-if="Backend_Error" 
             class="flex flex-col 
             items-center justify-center 
             w-full h-[60vh] gap-4"
@@ -35,7 +35,7 @@
                     El servidor no responde o tu conexión es inestable.
                 </h2>
                 <div class="mt-6 flex justify-center">
-                    <button @click="CargarDatos()" 
+                    <button @click="Backend_Cargar()" 
                     class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                     >
                         🔄 Recargar Página
@@ -47,7 +47,7 @@
             <div v-else>
 
                 <!-- Opcion Iniciar Sesion -->
-                <div v-if="MostrarLogin"
+                <div v-if="Mostrar_Log_In"
                 class="tarjeta-config"
                 >
 
@@ -65,7 +65,7 @@
 
                     <!-- Formulario -->
                     <!-- Iniciar Sesion -->
-                    <form @submit.prevent="IniciarSesionUsuario" 
+                    <form @submit.prevent="Backend_Post_Usuario_Log_In" 
                     class="!gap-5 relative z-10"
                     >
                         <div class="flex flex-col text-left">
@@ -74,9 +74,9 @@
                             </label>
                             <input placeholder="tucorreo@email.com"
                             type="text" 
-                            v-model="LoginBox.email" 
+                            v-model="Datos_Log_In.email" 
                             class="input-config"
-                            :class="{'!border-red-500' : Heror}"
+                            :class="{'!border-red-500' : Dato_Error}"
                             >
                         </div>
                         <div class="flex flex-col text-left">
@@ -86,9 +86,9 @@
                             <div class="relative w-full">
                                 <input placeholder="Tu contraseña"
                                 :type="verContrasena ? 'text' : 'password'"
-                                v-model="LoginBox.contrasena" 
+                                v-model="Datos_Log_In.contrasena" 
                                 class="input-config input-pass"
-                                :class="{'!border-red-500' : Heror}"
+                                :class="{'!border-red-500' : Dato_Error}"
                                 >
                                 <button @click="verContrasena = !verContrasena"
                                 type="button" 
@@ -100,25 +100,25 @@
                         </div>
 
                         <!-- Botones -->
-                        <div v-if="Heror" 
+                        <div v-if="Dato_Error" 
                         class="text-red-500 text-center font-bold text-sm 
                         bg-red-50 py-2 rounded-lg border border-red-200"
                         >
-                            ❌ {{ Herror }}
+                            ❌ {{ Texto_Error }}
                         </div>
                         <div class="mt-2">
-                            <button :disabled="confirboton || ProcesandoAuth" 
+                            <button :disabled="Verificar_Boton || Dato_Verificacion" 
                             type="submit" 
                             class="boton-guardar"
                             >
-                                {{ ProcesandoAuth ? 'Ingresando...' : 'Ingresar' }}
+                                {{ Dato_Verificacion ? 'Ingresando...' : 'Ingresar' }}
                             </button>
                         </div>
                         <div class="mt-6 border-t border-green-100 pt-6 text-center">
                             <p class="text-gray-600 font-medium mb-3">
                                 ¿No tienes cuenta?
                             </p>
-                            <button @click="MostrarLogin = false; Heror = false"
+                            <button @click="Mostrar_Log_In = false; Dato_Error = false"
                             type="button" 
                             class="botont w-full !py-3 !rounded-2xl shadow-sm"
                             >
@@ -147,7 +147,7 @@
 
                     <!-- Formulario -->
                     <!-- Registrarse -->
-                    <form @submit.prevent="SubirNuevoCliente" 
+                    <form @submit.prevent="Backend_Post" 
                     class="!gap-5 relative z-10"
                     >
                         <div class="flex flex-col text-left">
@@ -156,7 +156,7 @@
                             </label>
                             <input placeholder="Tu nombre"
                             type="text" 
-                            v-model="NuevoCliente.nombre" 
+                            v-model="Datos_New.nombre" 
                             class="input-config"
                             >
                         </div>
@@ -166,7 +166,7 @@
                             </label>
                             <input placeholder="Tu documento"
                             type="text" 
-                            v-model="NuevoCliente.dni"
+                            v-model="Datos_New.dni"
                             maxlength="8"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                             class="input-config"
@@ -178,7 +178,7 @@
                             </label>
                             <input placeholder="tucorreo@email.com"
                             type="text" 
-                            v-model="NuevoCliente.email" 
+                            v-model="Datos_New.email" 
                             class="input-config"
                             >
                         </div>
@@ -189,7 +189,7 @@
                             <div class="relative w-full">
                                 <input placeholder="Crea una contraseña"
                                 :type="verContrasena ? 'text' : 'password'"
-                                v-model="NuevoCliente.contrasena" 
+                                v-model="Datos_New.contrasena" 
                                 autocomplete="new-password"
                                 class="input-config input-pass"
                                 >
@@ -208,7 +208,7 @@
                             <div class="relative w-full">
                                 <input placeholder="Repite la contraseña"
                                 :type="verConContrasena ? 'text' : 'password'"
-                                v-model="NuevoCliente.concontrasena" 
+                                v-model="Datos_New.concontrasena" 
                                 autocomplete="new-password"
                                 class="input-config input-pass"
                                 >
@@ -222,25 +222,25 @@
                         </div>
 
                         <!-- Botones -->
-                        <div v-if="Heror" 
+                        <div v-if="Dato_Error" 
                         class="text-red-500 text-center font-bold text-sm 
                         bg-red-50 py-2 rounded-lg border border-red-200"
                         >
-                            ❌ {{ Herror }}
+                            ❌ {{ Texto_Error }}
                         </div>
                         <div class="mt-2">
-                            <button :disabled="confirboton || ProcesandoAuth" 
+                            <button :disabled="Verificar_Boton || Dato_Verificacion" 
                             type="submit" 
                             class="boton-guardar"
                             >
-                                {{ ProcesandoAuth ? 'Registrando...' : 'Registrarte' }}
+                                {{ Dato_Verificacion ? 'Registrando...' : 'Registrarte' }}
                             </button>
                         </div>
                         <div class="mt-6 border-t border-green-100 pt-6 text-center">
                             <p class="text-gray-600 font-medium mb-3">
                                 ¿Ya tienes cuenta?
                             </p>
-                            <button @click="MostrarLogin = true; Heror = false"
+                            <button @click="Mostrar_Log_In = true; Dato_Error = false"
                             type="button" 
                             class="botont w-full !py-3 !rounded-2xl shadow-sm"
                             >
@@ -269,44 +269,44 @@
         useRouter
     } from 'vue-router'
     import { 
-        ValidadSesionBack, 
-        urlover8000,
+        Validad_Sesion_Backend, 
+        backend_url,
         Iniciado,
-        VerificarRol
+        Verificar_Rol
     } from './Estatus.js'
     
     // ----- Variables Vue ----- //
     
     // Habilitar Boton //
-    const confirboton = computed(() =>{
+    const Verificar_Boton = computed(() =>{
         // Iniciar Sesion
-        if (MostrarLogin.value) {
-            const faltandatos01 = 
-                LoginBox.value.email === "" ||
-                LoginBox.value.contrasena === ""
-            return faltandatos01
+        if (Mostrar_Log_In.value) {
+            const Datos_Log_In_Faltantes = 
+                Datos_Log_In.value.email === "" ||
+                Datos_Log_In.value.contrasena === ""
+            return Datos_Log_In_Faltantes
         }
         // Registrarse
-        if (!MostrarLogin.value) {
-            const faltandatos02 = 
-                NuevoCliente.value.nombre === "" ||
-                NuevoCliente.value.email === "" ||
-                NuevoCliente.value.dni === "" ||
-                NuevoCliente.value.contrasena === "" ||
-                NuevoCliente.value.concontrasena === "" 
-            return faltandatos02
+        if (!Mostrar_Log_In.value) {
+            const Datos_New_Faltantes = 
+                Datos_New.value.nombre === "" ||
+                Datos_New.value.email === "" ||
+                Datos_New.value.dni === "" ||
+                Datos_New.value.contrasena === "" ||
+                Datos_New.value.concontrasena === "" 
+            return Datos_New_Faltantes
     }})
     const router = useRouter()
 
     // ----- Variables Complejas ----- //
 
     // Almacen para Inicio de Sesion //
-    const LoginBox = ref({
+    const Datos_Log_In = ref({
         email: "",
         contrasena: ""
     })
     // Almacen para Resgistrar Cliente //
-    const NuevoCliente = ref({
+    const Datos_New = ref({
         nombre: "",
         email: "",
         dni: "",
@@ -316,49 +316,49 @@
 
     // ----- Variantes Booleanas ----- //
     
-    const Heror = ref(false)
-    const ErrorCarga = ref(false)
-    const CargandoTrue = ref(false)
-    const MostrarLogin = ref(true)
+    const Dato_Error = ref(false)
+    const Backend_Error = ref(false)
+    const Backend_Espera = ref(false)
+    const Mostrar_Log_In = ref(true)
     const verContrasena = ref(false)
-    const ProcesandoAuth = ref(false)
+    const Dato_Verificacion = ref(false)
     const verConContrasena = ref(false)
     
     // ----- Variantes Vacias ----- //
     
-    const Herror = ref("")
+    const Texto_Error = ref("")
     
     // ----- Funciones Vue ----- //
     
     // Carga de Datos de la Pagina //
-    const CargarDatos = ( async () => {
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+    const Backend_Cargar = ( async () => {
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Tiempo de Espera para el Backend
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
+        const Tiempo_Espera = setTimeout(() => {
+            if (Backend_Espera.value) {
+                Backend_Espera.value = false
+                Backend_Error.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
             }
         }, 15000)
         try {
-            clearTimeout(temporizador)
+            clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
+            clearTimeout(Tiempo_Espera)
+            Backend_Error.value = true
+            Backend_Espera.value = false
         } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
+            if (!Backend_Error.value) {
+                Backend_Espera.value = false
     }}})
 
     // Enviar Usuario/Cliente a Url/Link //
-    const ProcesarLogin = () => {
+    const Click_Log_In = () => {
         Iniciado.value = true
         // Rider y Gestor de Pedidos General
-        if (VerificarRol([3, 6])) {
+        if (Verificar_Rol([3, 6])) {
             router.push('/pedidos')
         } else {
             router.push('/')
@@ -367,100 +367,100 @@
     // ----- Funciones Backend ----- //
 
     // Verificar Inicio de Sesion como Cliente //
-    const IniciarSesionCliente = async() => {
-        const respuesta = await fetch(`${urlover8000}/cliente/login/`, {
+    const Backend_Post_Cliente_Log_In = async() => {
+        const respuesta = await fetch(`${backend_url}/cliente/login/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(LoginBox.value),
+            body: JSON.stringify(Datos_Log_In.value),
             credentials: 'include'
         })
         if (respuesta.ok) {
-            await ValidadSesionBack()
-            ProcesarLogin()
-            LoginBox.value = {
+            await Validad_Sesion_Backend()
+            Click_Log_In()
+            Datos_Log_In.value = {
                 email: "",
                 contrasena: ""
             }
         } else {
-            Herror.value = "Usuario o contraseña incorrectos"
-            Heror.value = true
+            Texto_Error.value = "Usuario o contraseña incorrectos"
+            Dato_Error.value = true
     }}
     // Verificar Inicio de Sesion como Usuario //
-    const IniciarSesionUsuario = async() => {
-        if (ProcesandoAuth.value) return
-        ProcesandoAuth.value = true
-        Heror.value = false
+    const Backend_Post_Usuario_Log_In = async() => {
+        if (Dato_Verificacion.value) return
+        Dato_Verificacion.value = true
+        Dato_Error.value = false
         try {
-            const respuesta = await fetch(`${urlover8000}/usuario/login/`, {
+            const respuesta = await fetch(`${backend_url}/usuario/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(LoginBox.value),
+                body: JSON.stringify(Datos_Log_In.value),
                 credentials: 'include'
             })
             if (respuesta.status === 401) {
-                await IniciarSesionCliente()
+                await Backend_Post_Cliente_Log_In()
                 return
             }
             if (respuesta.ok) {
-                await ValidadSesionBack()
-                ProcesarLogin()
-                LoginBox.value = {
+                await Validad_Sesion_Backend()
+                Click_Log_In()
+                Datos_Log_In.value = {
                     email: "",
                     contrasena: ""
                 }
             } else {
                 // Verificar Inicio de Sesion como Cliente //
-                await IniciarSesionCliente()
+                await Backend_Post_Cliente_Log_In()
             } 
         } catch (error) {
             console.error("Error de conexión:", error)
-            Herror.value = "Error al conectar con el servidor"
-            Heror.value = true
+            Texto_Error.value = "Error al conectar con el servidor"
+            Dato_Error.value = true
         } finally {
-            ProcesandoAuth.value = false
+            Dato_Verificacion.value = false
     }}
     // Registrar Cliente Nuevo //
-    const SubirNuevoCliente = async() => {
-        if (NuevoCliente.value.contrasena !== "" || NuevoCliente.value.concontrasena !== "") {
-            if (NuevoCliente.value.contrasena !== NuevoCliente.value.concontrasena) {
+    const Backend_Post = async() => {
+        if (Datos_New.value.contrasena !== "" || Datos_New.value.concontrasena !== "") {
+            if (Datos_New.value.contrasena !== Datos_New.value.concontrasena) {
                 alert("❌ Las contraseñas no coinciden. Por favor, verifícalas.")
                 return
             }
         }
-        if (ProcesandoAuth.value) return
-        ProcesandoAuth.value = true
-        Heror.value = false
+        if (Dato_Verificacion.value) return
+        Dato_Verificacion.value = true
+        Dato_Error.value = false
         try {
-            const respuesta = await fetch(`${urlover8000}/clientes/`, {
+            const respuesta = await fetch(`${backend_url}/clientes/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(NuevoCliente.value),
+                body: JSON.stringify(Datos_New.value),
                 credentials: 'include'
                 })
             if (respuesta.ok) {
-                NuevoCliente.value = {
+                Datos_New.value = {
                     nombre: "",
                     email: "",
                     dni: "",
                     contrasena: "",
                     concontrasena: ""
                 }
-                MostrarLogin.value = true
+                Mostrar_Log_In.value = true
             } else {
-                Herror.value = "Error al registrar, revisa tus datos"
-                Heror.value = true
+                Texto_Error.value = "Error al registrar, revisa tus datos"
+                Dato_Error.value = true
         }} catch (error) {
             console.error("Error de conexión:", error)
-            Herror.value = "Error al conectar con el servidor"
-            Heror.value = true
+            Texto_Error.value = "Error al conectar con el servidor"
+            Dato_Error.value = true
         } finally {
-            ProcesandoAuth.value = false
+            Dato_Verificacion.value = false
     }}
     
 </script>

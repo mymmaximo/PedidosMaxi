@@ -5,7 +5,7 @@
         <!-- Copiado Exitoso -->
         <Teleport to="body">
             <transition name="slide">
-                <div v-if="MostrarNotificacion" 
+                <div v-if="Notificacion_Copiar" 
                 class="notificacion 
                 !bg-blue-300 !text-white"
                 >
@@ -13,7 +13,7 @@
                         ✅ 
                     </span>
                     <span>
-                        {{ TextoNotificacion }}
+                        {{ Notificacion_Texto }}
                     </span>
                 </div>
             </transition>
@@ -33,7 +33,7 @@
                     <div class="mb-2 lg:mb-5">
 
                         <!-- Correo Electronico -->
-                        <div @click="CopiarAlPortapapeles('maxgiesenow@gmail.com', 'E-Mail')"
+                        <div @click="Copiar_Portapapeles('maxgiesenow@gmail.com', 'E-Mail')"
                         class="tab cursor-pointer !mb-10"
                         >
                             <div class="flex flex-col">
@@ -59,7 +59,7 @@
                         </div>
 
                         <!-- Whatsapp -->
-                        <div @click="CopiarAlPortapapeles('+54 351 250-0570', 'WhatsApp')"
+                        <div @click="Copiar_Portapapeles('+54 351 250-0570', 'WhatsApp')"
                         class="tab cursor-pointer !mb-10"
                         >
                             <div class="flex flex-col">
@@ -85,7 +85,7 @@
                         </div>
 
                         <!-- Telefono -->
-                        <div @click="CopiarAlPortapapeles('+54 351 250-0570', 'Teléfono')"
+                        <div @click="Copiar_Portapapeles('+54 351 250-0570', 'Teléfono')"
                         class="tab cursor-pointer !mb-10"
                         >
                             <div class="flex flex-col">
@@ -127,24 +127,24 @@
 
     // ----- Variables Booleanas ----- //
 
-    const MostrarNotificacion = ref(false)
+    const Notificacion_Copiar = ref(false)
 
     // ----- Variables Vacias ----- //
 
-    const TextoNotificacion = ref("")
+    const Notificacion_Texto = ref("")
 
     // ----- Funciones Vue ----- //
 
     // Copiar en Portapapeles //
-    const CopiarAlPortapapeles = async (texto, tipo) => {
+    const Copiar_Portapapeles = async (texto, tipo) => {
         // Mostrar Notificacion
         try {
             await navigator.clipboard.writeText(texto)
-            TextoNotificacion.value = `¡${tipo} copiado al portapapeles!`
-            MostrarNotificacion.value = true
+            Notificacion_Texto.value = `¡${tipo} copiado al portapapeles!`
+            Notificacion_Copiar.value = true
             // Tiempo de Espera para la Notificacion
             setTimeout(() => {
-                MostrarNotificacion.value = false
+                Notificacion_Copiar.value = false
             }, 2500)
         } catch (error) {
             console.error('Error al copiar al portapapeles:', error)

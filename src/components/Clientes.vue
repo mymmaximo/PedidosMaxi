@@ -5,25 +5,25 @@
         <!-- Desactivar Cliente -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpDel" 
-                @click.self="CerrarPopUpDel"
+                <div v-if="PopUp_Delete" 
+                @click.self="Cerrar_PopUp_Delete"
                 class="fondo"
                 >
                     <div class="popup">
 
                         <!-- Encabezado -->
                         <h1>
-                            ¿Desear Eliminar/Reactivar el Cliente {{ ClienteAct.nombre }}?
+                            ¿Desear Eliminar/Reactivar el Cliente {{ Datos_Upgrade.nombre }}?
                         </h1>
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="BorrarCliente()"
+                            <button @click="Backend_Delete()"
                             class="botoncon"
                             >
                                 Si Confirmo
                             </button>
-                            <button @click="CerrarPopUpDel"
+                            <button @click="Cerrar_PopUp_Delete"
                             class="botonc"
                             >
                                 Cancelar
@@ -39,16 +39,16 @@
         <!-- Actualizar Cliente -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpAct"
-                @click.self="CerrarPopUpAct"
+                <div v-if="PopUp_Upgrade"
+                @click.self="Cerrar_PopUp_Upgrade"
                 class="fondo"
                 >
                     <div class="popup">
-                        <form @submit.prevent="ActualizarClientes">
+                        <form @submit.prevent="Backend_Put">
 
                             <!-- Encabezado -->
                             <h1>
-                                    Actualizar Cliente {{ ClienteAct.nombre }}
+                                    Actualizar Cliente {{ Datos_Upgrade.nombre }}
                             </h1>
 
                             <!-- Datos de Cliente -->
@@ -57,7 +57,7 @@
                             </h2>
                             <input placeholder="Nombre"
                             type="text" 
-                            v-model="ClienteAct.nombre" 
+                            v-model="Datos_Upgrade.nombre" 
                             maxlength="20"
                             >
                             <h2>
@@ -65,19 +65,19 @@
                             </h2>
                             <input placeholder="Email@email.com"
                             type="text" 
-                            v-model="ClienteAct.email" 
+                            v-model="Datos_Upgrade.email" 
                             maxlength="50"
                             >
 
                             <!-- Botones -->
                             <div class="botones">
-                                <button :disabled="confirboton"
+                                <button :disabled="Verificar_Boton"
                                 type="submit" 
                                 class="botoncon"
                                 >
                                     Actualizar
                                 </button>
-                                <button @click="CerrarPopUpAct" 
+                                <button @click="Cerrar_PopUp_Upgrade" 
                                 class="botonc"
                                 >
                                     Cancelar
@@ -97,8 +97,8 @@
                 <!-- Mostrar Fondo en Celular -->
                 <Teleport to="body">
                     <transition name="fade">
-                        <div v-if="(MostrarFiltro || MostrarNuevo)" 
-                        @click="MostrarFiltro = false; MostrarNuevo = false"
+                        <div v-if="(Mostrar_Filtro || Mostrar_Nuevo)" 
+                        @click="Mostrar_Filtro = false; Mostrar_Nuevo = false"
                         class="fixed inset-0 
                         bg-black/40 backdrop-blur-sm 
                         z-[35] sm:hidden cursor-pointer"
@@ -108,7 +108,7 @@
                 </Teleport>
 
                 <!-- Barra de Filtros y Formulario de Nuevo Cliente -->
-                <div :class="['bar', (MostrarFiltro || MostrarNuevo) 
+                <div :class="['bar', (Mostrar_Filtro || Mostrar_Nuevo) 
                 ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                 : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
                 >
@@ -117,7 +117,7 @@
                     <div class="hidden sm:block">
 
                         <!-- Boton de Filtros -->
-                        <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
+                        <h1 @click="Mostrar_Filtro = !Mostrar_Filtro ; Mostrar_Nuevo = false"
                         class="botonfil"
                         >
                             ᯤ
@@ -125,7 +125,7 @@
 
                         <!-- Filtro -->
                         <transition name="slide">
-                            <div v-if="MostrarFiltro"
+                            <div v-if="Mostrar_Filtro"
                             class="flex flex-col lg:self-center"
                             >
 
@@ -135,7 +135,7 @@
                                         Ordenar
                                     </h1>
                                     <select placeholder=""
-                                    v-model="orden" 
+                                    v-model="Orden" 
                                     >
                                         <option value="" disabled>
                                             Orden...
@@ -164,21 +164,21 @@
                                         <label>
                                             <input :value="2" 
                                             type="radio"
-                                            v-model="filtroDirec"
+                                            v-model="Filtro_Direccion"
                                             >
                                                 Todos los Clientes
                                         </label>
                                         <label>
                                             <input :value="1"
                                             type="radio" 
-                                            v-model="filtroDirec"
+                                            v-model="Filtro_Direccion"
                                             > 
                                                 Realizo uno o mas Pedidos
                                         </label>
                                         <label>
                                             <input :value="0"
                                             type="radio"
-                                            v-model="filtroDirec"
+                                            v-model="Filtro_Direccion"
                                             > 
                                                 No Realizo Pedidos
                                         </label>
@@ -194,21 +194,21 @@
                                         <label>
                                             <input :value="2"
                                             type="radio" 
-                                            v-model="filtroEst"
+                                            v-model="Filtro_Estatus"
                                             > 
                                                 Todos los Clientes
                                         </label>
                                         <label>
                                             <input :value="1"
                                             type="radio" 
-                                            v-model="filtroEst"
+                                            v-model="Filtro_Estatus"
                                             > 
                                                 Cliente Activo
                                         </label>
                                         <label>
                                             <input :value="0"
                                             type="radio"
-                                            v-model="filtroEst"
+                                            v-model="Filtro_Estatus"
                                             > 
                                                 Cliente Eliminado
                                         </label>
@@ -217,19 +217,19 @@
 
                                 <!-- Filtro Direcciones -->
                                 <div class="flex flex-col p-2">
-                                    <div v-if="filtroDirec === 1">
+                                    <div v-if="Filtro_Direccion === 1">
 
                                         <!-- Filtro Ciudad -->
                                         <h2>
                                             Ciudad del Cliente
                                         </h2>
-                                        <select v-model="filtrociudad" 
+                                        <select v-model="Filtro_Ciudad" 
                                         class="sel"
                                         >
                                             <option value="" disabled>
                                                 Selecciona una Ciudad...
                                             </option>
-                                            <option v-for="i in ListaCiudad" 
+                                            <option v-for="i in Datos_Ciudad" 
                                             :key="i.ciudad" 
                                             :value="i.ciudad"
                                             >
@@ -241,13 +241,13 @@
                                         <h2>
                                             Provincia del Cliente
                                         </h2>
-                                        <select v-model="filtroprovincia" 
+                                        <select v-model="Filtro_Provincia" 
                                         class="sel"
                                         >
                                             <option value="" disabled>
                                                 Selecciona una Provincia...
                                             </option>
-                                            <option v-for="i in ListaProvincia" 
+                                            <option v-for="i in Datos_Provincia" 
                                             :key="i.provincia" 
                                             :value="i.provincia"
                                             >
@@ -259,13 +259,13 @@
 
                                 <!-- Botones -->
                                 <div class="botones">
-                                    <button @click="AplicarFiltro" 
+                                    <button @click="Filtro_Aplicar" 
                                     class="botoncon"
                                     >
                                         Filtrar
                                     </button>
-                                    <button @click="LimpiarFiltro" 
-                                    v-if="filtroAct === true"
+                                    <button @click="Filtro_Limpiar" 
+                                    v-if="Mostrar_Limpiar_Filtro === true"
                                     class="botont" 
                                     >
                                         🗑️ Limpiar Filtro
@@ -281,7 +281,7 @@
                     <div>
 
                         <!-- Boton de Registro -->
-                        <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
+                        <h1 @click="Mostrar_Nuevo = !Mostrar_Nuevo ; Mostrar_Filtro = false"
                         class="botonnew"
                         >
                             +
@@ -289,7 +289,7 @@
 
                         <!-- Registro -->
                         <transition name="slide">
-                            <div v-if="MostrarNuevo"
+                            <div v-if="Mostrar_Nuevo"
                             class="flex flex-col lg:self-center"
                             >
 
@@ -299,13 +299,13 @@
                                 </h1>
 
                                 <!-- Formulario de Cliente -->
-                                <form @submit.prevent="SubirNuevoCliente">
+                                <form @submit.prevent="Backend_Post">
                                     <h2>
                                         Nombre
                                     </h2>
                                     <input placeholder="Nombre"
                                     type="text" 
-                                    v-model="NuevoCliente.nombre" 
+                                    v-model="Datos_New.nombre" 
                                     maxlength="20"
                                     >
                                     <h2>
@@ -313,7 +313,7 @@
                                     </h2>
                                     <input placeholder="E-Mail"
                                     type="text" 
-                                    v-model="NuevoCliente.email" 
+                                    v-model="Datos_New.email" 
                                     maxlength="50"
                                     >
                                     <h2>
@@ -321,7 +321,7 @@
                                     </h2>
                                     <input placeholder="Documento"
                                     type="text"
-                                    v-model="NuevoCliente.dni"
+                                    v-model="Datos_New.dni"
                                     maxlength="8"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                     >
@@ -330,13 +330,13 @@
                                     </h2>
                                     <input placeholder="Contraseña"
                                     type="text"
-                                    v-model="NuevoCliente.contrasena"
+                                    v-model="Datos_New.contrasena"
                                     maxlength="20"
                                     >
 
                                     <!-- Botones -->
                                     <div class="botones">
-                                        <button :disabled="confirboton"
+                                        <button :disabled="Verificar_Boton"
                                         type="submit" 
                                         class="botoncon"
                                         >
@@ -357,7 +357,7 @@
                 <div class="start !px-5">
 
                     <!-- Gif Cargando -->
-                    <div v-if="CargandoTrue" 
+                    <div v-if="Backend_Espera" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh]"
@@ -372,7 +372,7 @@
                     </div>
 
                     <!-- Error Cargando -->
-                    <div v-else-if="ErrorCarga" 
+                    <div v-else-if="Backend_Error" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
@@ -384,7 +384,7 @@
                             El servidor no responde o tu conexión es inestable.
                         </h2>
                         <div class="mt-6 flex justify-center">
-                            <button @click="CargarDatos()" 
+                            <button @click="Backend_Cargar()" 
                             class="botoncon 
                             !flex-none !w-auto 
                             px-8 shadow-lg shadow-green-900/20"
@@ -398,7 +398,7 @@
                     <div v-else>
 
                         <!-- Mostrar Boton Filtro en Celular -->
-                        <button @click="MostrarFiltro = true"
+                        <button @click="Mostrar_Filtro = true"
                         class="sm:hidden w-full mb-4 py-3 
                         bg-white text-green-800 font-black text-lg 
                         border-2 border-green-200 rounded-xl 
@@ -411,7 +411,7 @@
 
                         <!-- Barra de Busqueda -->
 						<div class="flex flex-row items-stretch w-full gap-3 mb-5">-
-							<input @input="BusquedaCliente"
+							<input @input="Backend_Get"
 							type="text" 
 							v-model="Busqueda" 
 							placeholder="Busqueda..."
@@ -427,15 +427,15 @@
 
                         <!-- Tabla de Clientes -->
                         <div>
-                            <div v-if="clientes.length > 0">
-                                <div v-for= "i in clientes"
+                            <div v-if="Clientes.length > 0">
+                                <div v-for= "i in Clientes"
                                 :key="i.id"
                                 class="mb-6 relative"
                                 >
 
                                     <!-- Boton al Tocar Tarjeta de Cliente -->
                                     <!-- Si Tiene Direcciones las Muestra, Sino Desactiva Cliente -->
-                                    <div @click= "TocarTab(i)"
+                                    <div @click= "Click_Items(i)"
                                     class="tarjeta-premium z-10 relative bg-white"
                                     >
 
@@ -443,8 +443,8 @@
                                         <div class="tarjeta-info">
                                             <div class="tarjeta-titulo">
                                                 👤 {{ i.nombre }}
-                                                <span :class="Estatuscolor(i.activo)">
-                                                    {{ Estatustxt(i.activo) }}
+                                                <span :class="Estatus_Color(i.activo)">
+                                                    {{ Estatus_Texto(i.activo) }}
                                                 </span>
                                             </div>
                                             <p class="tarjeta-dato">
@@ -462,25 +462,25 @@
                                             <p class="tarjeta-dato mb-1">
                                                 📅 Creado el: 
                                                 <span class="tarjeta-valor">
-                                                    {{ FormatoFecha(i.created_at) }}
+                                                    {{ Formato_Fecha(i.created_at) }}
                                                 </span>
                                             </p>
                                         </div>
 
                                         <!-- Botones -->
                                         <div class="tarjeta-acciones">
-                                            <button @click.stop="AbrirPopUpDel(i)" 
+                                            <button @click.stop="Abrir_PopUp_Delete(i)" 
                                             v-if="i.activo" 
                                             class="btn-chico-rojo"
                                             >
                                                 ❌ Eliminar
                                             </button>
-                                            <button v-else @click.stop="AbrirPopUpDel(i)"
+                                            <button v-else @click.stop="Abrir_PopUp_Delete(i)"
                                             class="btn-chico-verde"
                                             >
                                                 🕊️ Reactivar
                                             </button>
-                                            <button @click.stop="AbrirPopUpAct(i)" 
+                                            <button @click.stop="Abrir_PopUp_Act(i)" 
                                             class="btn-chico-gris">
                                                 ✏️ Editar
                                             </button>
@@ -495,8 +495,8 @@
                                     >
                                         Sin direcciones adjuntas
                                     </div>
-                                    <div v-else-if="DireccionNow !== i.id" 
-                                    @click.stop="DireccionCambio(i.id)"
+                                    <div v-else-if="Mostrar_Direccion !== i.id" 
+                                    @click.stop="Cambio_Direccion(i.id)"
                                     class="relative !z-[40]
                                     w-full mt-3 py-2 px-4 
                                     bg-green-50 hover:bg-green-100 
@@ -510,7 +510,7 @@
                                     >
                                         Ver {{ i.direcciones.length }} Dirección(es) ⬇️
                                     </div>
-                                    <div v-else @click.stop="DireccionCambio(i.id)"
+                                    <div v-else @click.stop="Cambio_Direccion(i.id)"
                                     class="w-full mt-3 py-2 px-4 
                                     bg-gray-100 hover:bg-gray-200 text-gray-700 
                                     border border-gray-200 rounded-b-xl rounded-t-none 
@@ -523,7 +523,7 @@
                                         Ocultar Direcciones ⬆️
                                     </div>
                                     <transition name="slide">
-                                        <div v-if="DireccionNow === i.id && i.direcciones.length > 0" 
+                                        <div v-if="Mostrar_Direccion === i.id && i.direcciones.length > 0" 
                                         class="panel-desplegable 
                                         relative z-0 mt-2 
                                         bg-gray-50/50 rounded-xl 
@@ -597,22 +597,22 @@
 
                             <!-- Mostrando Paginas -->
                             <div class="flex justify-center p-3">
-                                <button @click="CambiarPagina('back')" 
-                                :disabled="Pagina === 0 || CargandoTrue"
+                                <button @click="Cambiar_Pagina('back')" 
+                                :disabled="Pagina === 0 || Backend_Espera"
                                 class="botona"
                                 >
                                     ❮
                                 </button>
                                 <h2 class="self-center font-bold px-6 text-green-800 text-center">
-                                    <span v-if="clientes.length > 0">
-                                        Mostrando {{ Pagina + 1 }} - {{ Pagina + clientes.length }}
+                                    <span v-if="Clientes.length > 0">
+                                        Mostrando {{ Pagina + 1 }} - {{ Pagina + Clientes.length }}
                                     </span>
                                     <span v-else>
                                         Fin de la lista
                                     </span>
                                 </h2>
-                                <button @click="CambiarPagina('next')" 
-                                :disabled="!HayMasPaginas || CargandoTrue"
+                                <button @click="Cambiar_Pagina('next')" 
+                                :disabled="!Paginas_Max || Backend_Espera"
                                 class="botona"
                                 >
                                     ❯
@@ -640,46 +640,47 @@
         computed 
     } from 'vue'
     import { 
-        CerrarSesion, 
-        PopUpAct, 
-        urlover8000, 
-        SesionExpirada, 
-        Iniciado 
+        Cerrar_Sesion,
+        PopUp_Upgrade,
+        PopUp_Delete,
+        backend_url,
+        Sesion_Expirada,
+        Iniciado
     } from './Estatus'
     
     // ----- Variables Vue ----- //
 
     // Habilitar Boton //
-    const confirboton = computed(() =>{
+    const Verificar_Boton = computed(() =>{
         // Nuevo Cliente
-        if (MostrarNuevo.value) {
-            const faltandatos01 = 
-                NuevoCliente.value.nombre === ""||
-                NuevoCliente.value.email === ""||
-                !NuevoCliente.value.email.includes("@") ||
-                NuevoCliente.value.dni === ""||
-                NuevoCliente.value.contrasena === ""
-            return faltandatos01
+        if (Mostrar_Nuevo.value) {
+            const Datos_New_Faltantes = 
+                Datos_New.value.nombre === ""||
+                Datos_New.value.email === ""||
+                !Datos_New.value.email.includes("@") ||
+                Datos_New.value.dni === ""||
+                Datos_New.value.contrasena === ""
+            return Datos_New_Faltantes
         }
         // Actualizar Cliente
-        if (PopUpAct.value) {
-            const faltandatos02 = 
-                ClienteAct.value.nombre === ""||
-                ClienteAct.value.email === ""
-            return faltandatos02
+        if (PopUp_Upgrade.value) {
+            const Datos_Upgrade_Faltantes = 
+                Datos_Upgrade.value.nombre === ""||
+                Datos_Upgrade.value.email === ""
+            return Datos_Upgrade_Faltantes
     }})
 
     // ----- Variables Complejas ----- //
 
     // Almacen para Actualizar Cliente //
-    const ClienteAct = ref({
+    const Datos_Upgrade = ref({
         id: "",
         nombre: "",
         email: "",
         contrasena: "",
     })
     // Almacen para Nuevo Cliente //
-    const NuevoCliente = ref({
+    const Datos_New = ref({
         nombre: "",
         email: "",
         dni: "",
@@ -688,144 +689,143 @@
 
     // ----- Variables Booleanas ----- //
 
-    const filtroAct = ref(false)
-    const ErrorCarga = ref(false)
-    const CargandoTrue = ref(true)
-    const MostrarNuevo = ref(false)
-    const HayMasPaginas = ref(false)
-    const MostrarFiltro = ref(false)
-    const BloqueoPeticion = ref(false)
-    const PopUpDel = ref(false)
+    const Mostrar_Limpiar_Filtro = ref(false)
+    const Bloqueo_Peticion = ref(false)
+    const Mostrar_Filtro = ref(false)
+    const Mostrar_Nuevo = ref(false)
+    const Backend_Error = ref(false)
+    const Backend_Espera = ref(true)
+    const Paginas_Max = ref(false)
 
     // ----- Variables Vacias ----- //
 
-    const orden = ref("")
+    const Orden = ref("")
     const Busqueda = ref("")
-    const clientes =  ref([])
-    const ClienteEli = ref("")
-    const ListaCiudad = ref ("")
-    const filtrociudad = ref ("")
-    const ListaProvincia = ref ("")
-    const filtroprovincia = ref ("")
+    const Clientes =  ref([])
+    const Datos_Delete = ref("")
+    const Datos_Ciudad = ref ("")
+    const Filtro_Ciudad = ref ("")
+    const Datos_Provincia = ref ("")
+    const Filtro_Provincia = ref ("")
+    const Mostrar_Direccion = ref(null)
 
     // ----- Variables Simples ----- //
 
 	const Pagina = ref(0)
-    const filtroEst = ref(2)
-    const filtroDirec = ref(2)
-    const ItemsPorPagina = ref(24)
-    const DireccionNow = ref(null)
+    const Paginas_Items = ref(24)
+    const Filtro_Estatus = ref(2)
+    const Filtro_Direccion = ref(2)
 
     // ----- Funciones Vue ----- //
     
     // Primera Carga de Datos de la Pagina //
     onMounted (() => {
-        CargarDatos()
+        Backend_Cargar()
     })
     // Carga de Datos de la Pagina //
-    const CargarDatos = (async() => {
-        if (BloqueoPeticion.value) return
-        BloqueoPeticion.value = true
+    const Backend_Cargar = (async() => {
+        if (Bloqueo_Peticion.value) return
+        Bloqueo_Peticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Tiempo de Espera para el Backend
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
+        const Tiempo_Espera = setTimeout(() => {
+            if (Backend_Espera.value) {
+                Backend_Espera.value = false
+                Backend_Error.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
         }}, 15000)
         // Leer Clientes y Direcciones
         try {
-            await BusquedaCliente()
-            const respuestac = await fetch(`${urlover8000}/direccion/ciudad/`)
-            const ciudad = await respuestac.json()
-            ListaCiudad.value = ciudad
-            const respuestap = await fetch(`${urlover8000}/direccion/provincia/`)
-            const provincia = await respuestap.json()
-            ListaProvincia.value = provincia
-            clearTimeout(temporizador)
+            await Backend_Get()
+            const respuesta_ciudad = await fetch(`${backend_url}/direccion/ciudad/`)
+            const ciudad = await respuesta_ciudad.json()
+            Datos_Ciudad.value = ciudad
+            const respuesta_provincia = await fetch(`${backend_url}/direccion/provincia/`)
+            const provincia = await respuesta_provincia.json()
+            Datos_Provincia.value = provincia
+            clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
+            clearTimeout(Tiempo_Espera)
+            Backend_Error.value = true
+            Backend_Espera.value = false
         } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
+            if (!Backend_Error.value) {
+                Backend_Espera.value = false
             }
-            BloqueoPeticion.value = false
+            Bloqueo_Peticion.value = false
     }})
     // Cambiar Pagina //
-    const CambiarPagina = async (direccion) => {
-        if (BloqueoPeticion.value) return
-        BloqueoPeticion.value = true
+    const Cambiar_Pagina = async (direccion) => {
+        if (Bloqueo_Peticion.value) return
+        Bloqueo_Peticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Establecer Valor de Items de Pagina
         if (direccion === 'next') {
-            Pagina.value += ItemsPorPagina.value
+            Pagina.value += Paginas_Items.value
         } else if (direccion === 'back') {
-            Pagina.value -= ItemsPorPagina.value
+            Pagina.value -= Paginas_Items.value
             if (Pagina.value < 0) Pagina.value = 0
         }
         try {
-            await BusquedaCliente()
+            await Backend_Get()
         } catch (error) {
             console.error(error)
-            ErrorCarga.value = true
+            Backend_Error.value = true
         } finally {
-            CargandoTrue.value = false
-            BloqueoPeticion.value = false
+            Backend_Espera.value = false
+            Bloqueo_Peticion.value = false
     }}
 
     // ----- Funciones Frontend ----- //
 
     // Abrir Pop up para Actualizar Cliente //
-	const AbrirPopUpAct = (cliente_fila) => {
-        ClienteAct.value.id = cliente_fila.id
-        ClienteAct.value.nombre = cliente_fila.nombre
-        ClienteAct.value.email = cliente_fila.email
-		PopUpAct.value = true
+	const Abrir_PopUp_Act = (cliente_fila) => {
+        Datos_Upgrade.value.id = cliente_fila.id
+        Datos_Upgrade.value.nombre = cliente_fila.nombre
+        Datos_Upgrade.value.email = cliente_fila.email
+		PopUp_Upgrade.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Borrar Cliente //
-	const AbrirPopUpDel = (cliente_fila) => {
-        ClienteEli.value = cliente_fila.id
-        ClienteAct.value.nombre = cliente_fila.nombre
-		PopUpDel.value = true
+	const Abrir_PopUp_Delete = (cliente_fila) => {
+        Datos_Delete.value = cliente_fila.id
+        Datos_Upgrade.value.nombre = cliente_fila.nombre
+		PopUp_Delete.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Aplicar Filtros //
-    const AplicarFiltro = () => {
+    const Filtro_Aplicar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
-        BusquedaCliente()
-        filtrociudad.value = ""
-        filtroprovincia.value = ""
+        Backend_Get()
+        Filtro_Ciudad.value = ""
+        Filtro_Provincia.value = ""
     }
     // Cerrar Pop up de Actualizar Cliente //
-	const CerrarPopUpAct = () => {
-		PopUpAct.value = false
+	const Cerrar_PopUp_Upgrade = () => {
+		PopUp_Upgrade.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up de Borrar Cliente //
-	const CerrarPopUpDel = () => {
-		PopUpDel.value = false
+	const Cerrar_PopUp_Delete = () => {
+		PopUp_Delete.value = false
 		document.body.style.overflow = "auto"
 	}
     // Mostrar Direcciones //
-    const DireccionCambio = (id) => {
-        if (DireccionNow.value === id) {
-            DireccionNow.value = null
+    const Cambio_Direccion = (id) => {
+        if (Mostrar_Direccion.value === id) {
+            Mostrar_Direccion.value = null
         }
         else {
-            DireccionNow.value = id
+            Mostrar_Direccion.value = id
     }}
     // Establecer Color de Insignia de Estatus //
-    const Estatuscolor = (id_estatus) => {
+    const Estatus_Color = (id_estatus) => {
         if (id_estatus === true || id_estatus === 1) {
             return "badge-activo"
         }
@@ -833,7 +833,7 @@
             return "badge-inactivo"
     }}
     // Establecer Texto de Insignia de Estatus //
-	const Estatustxt = (id_estatus) => {
+	const Estatus_Texto = (id_estatus) => {
 		if (id_estatus === 1 || id_estatus === true) {
             return "✅ Activo"
         }
@@ -843,7 +843,7 @@
         return "Indefinido"
 	}
     // Leer Fecha con Formato DD/MM/YYYY //
-	const FormatoFecha = (fechai) => {
+	const Formato_Fecha = (fechai) => {
 		if (fechai) {
 			return new Date(fechai).toLocaleDateString('es-ES')
 		}
@@ -851,166 +851,166 @@
 			return "Pendiente"
 	}}
     // Limpiar Filtros, Orden y Busqueda //
-    const LimpiarFiltro = () => {
+    const Filtro_Limpiar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
-        filtroDirec.value = 2
-        filtroEst.value = 2
-        filtrociudad.value = ""
-        filtroprovincia.value = ""
-        orden.value = ""
-        BusquedaCliente()
-        filtroAct.value = false
+        Filtro_Direccion.value = 2
+        Filtro_Estatus.value = 2
+        Filtro_Ciudad.value = ""
+        Filtro_Provincia.value = ""
+        Orden.value = ""
+        Backend_Get()
+        Mostrar_Limpiar_Filtro.value = false
     }
     // Establecer Accion al Tocar el Tab //
-    const TocarTab = (cliente) => {
+    const Click_Items = (cliente) => {
         if (!cliente.direcciones || cliente.direcciones.length === 0) {
-            AbrirPopUpDel(cliente)
+            Abrir_PopUp_Delete(cliente)
         } else {
-            DireccionCambio(cliente.id)
+            Cambio_Direccion(cliente.id)
     }}
 
     // ----- Funciones Backend ----- //
     
     // Actualizar Datos del Cliente //
-    const ActualizarClientes = async() => {
-        const ClienteUpd = {} 
+    const Backend_Put = async() => {
+        const Dato_Upgrade = {} 
         // Establecer Datos del Cliente
-        if (ClienteAct.value.nombre !== "") {
-            ClienteUpd.nombre = ClienteAct.value.nombre
+        if (Datos_Upgrade.value.nombre !== "") {
+            Dato_Upgrade.nombre = Datos_Upgrade.value.nombre
         }
-        if (ClienteAct.value.email !== "") {
-            ClienteUpd.email = ClienteAct.value.email
+        if (Datos_Upgrade.value.email !== "") {
+            Dato_Upgrade.email = Datos_Upgrade.value.email
         }
-        if (ClienteAct.value.contrasena !== "") {
-            ClienteUpd.contrasena = ClienteAct.value.contrasena
+        if (Datos_Upgrade.value.contrasena !== "") {
+            Dato_Upgrade.contrasena = Datos_Upgrade.value.contrasena
         }
         // Enviar Datos Actualizados al Backend
-        const ActCliente = await fetch(`${urlover8000}/clientes/id/${ClienteAct.value.id}`, {
+        const PutBackend = await fetch(`${backend_url}/clientes/id/${Datos_Upgrade.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(ClienteUpd),
+            body: JSON.stringify(Dato_Upgrade),
             credentials: 'include'
         })
-        if (ActCliente.status === 401) {
-            CerrarSesion()
+        if (PutBackend.status === 401) {
+            Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
+            Sesion_Expirada.value = true
             Iniciado.value = false
             return
         }
-        ClienteAct.value = {
+        Datos_Upgrade.value = {
             id: "",
             nombre: "",
             email: "",
             contrasena: "",
         }
-        BusquedaCliente()
-        CerrarPopUpAct()
+        Backend_Get()
+        Cerrar_PopUp_Upgrade()
     }
     // Desactivar Cliente //
-    const BorrarCliente = async() => {
-        const EraseCliente = await fetch(`${urlover8000}/clientes/id/${ClienteEli.value}`, {
+    const Backend_Delete = async() => {
+        const DeleteBackend = await fetch(`${backend_url}/clientes/id/${Datos_Delete.value}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
         credentials: 'include'
         })
-        ClienteEli.value = ""
-        if (EraseCliente.status === 401) {
-            CerrarSesion()
+        Datos_Delete.value = ""
+        if (DeleteBackend.status === 401) {
+            Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
+            Sesion_Expirada.value = true
             Iniciado.value = false
             return
         }
-        BusquedaCliente()
-        CerrarPopUpDel()
+        Backend_Get()
+        Cerrar_PopUp_Delete()
     }
     // Leer Datos de los Clientes //
-    const BusquedaCliente = async() => {
-        let url = new URL (`${urlover8000}/cliente/`)
+    const Backend_Get = async() => {
+        let url = new URL (`${backend_url}/cliente/`)
 		url.searchParams.append('skip', Pagina.value)
-        url.searchParams.append('limit', ItemsPorPagina.value + 1)
+        url.searchParams.append('limit', Paginas_Items.value + 1)
         // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_cliente', Busqueda.value)
         }
         // Establecer Orden
-        if (orden.value !== "") {
-            url.searchParams.append('orden', orden.value)
-            filtroAct.value = true
+        if (Orden.value !== "") {
+            url.searchParams.append('orden', Orden.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro Realizo el Pedido/Tiene Direcciones Cargadas
-        if (filtroDirec.value === 1) {
+        if (Filtro_Direccion.value === 1) {
             url.searchParams.append('bool_direccion', 'true')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (filtroDirec.value === 0) {
+        if (Filtro_Direccion.value === 0) {
             url.searchParams.append('bool_direccion', 'false')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro Activo/Desactivo
-        if (filtroEst.value === 1) {
+        if (Filtro_Estatus.value === 1) {
             url.searchParams.append('bool_activo', 'true')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (filtroEst.value === 0) {
+        if (Filtro_Estatus.value === 0) {
             url.searchParams.append('bool_activo', 'false')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro Direcciones
-        if (filtrociudad.value !== "") {
-            url.searchParams.append('filtrociudad', filtrociudad.value)
-            filtroAct.value = true            
+        if (Filtro_Ciudad.value !== "") {
+            url.searchParams.append('Filtro_Ciudad', Filtro_Ciudad.value)
+            Mostrar_Limpiar_Filtro.value = true            
         }
-        if (filtroprovincia.value !== "") {
-            url.searchParams.append('filtroprovincia', filtroprovincia.value)
-            filtroAct.value = true            
+        if (Filtro_Provincia.value !== "") {
+            url.searchParams.append('Filtro_Provincia', Filtro_Provincia.value)
+            Mostrar_Limpiar_Filtro.value = true            
         }
-        const BusqCliente = await fetch(url, {
+        const GetBackend = await fetch(url, {
             method: 'GET',
             credentials: 'include'
         })
-        const datos = await BusqCliente.json()
+        const datos = await GetBackend.json()
         if (Array.isArray(datos)) {
-            if (datos.length > ItemsPorPagina.value) {
-                HayMasPaginas.value = true
-                clientes.value = datos.slice(0, ItemsPorPagina.value)
+            if (datos.length > Paginas_Items.value) {
+                Paginas_Max.value = true
+                Clientes.value = datos.slice(0, Paginas_Items.value)
             } else {
-                HayMasPaginas.value = false
-                clientes.value = datos
+                Paginas_Max.value = false
+                Clientes.value = datos
         }} else {
-            clientes.value = []
-            HayMasPaginas.value = false
+            Clientes.value = []
+            Paginas_Max.value = false
     }}
     // Registrando Cliente //
-    const SubirNuevoCliente = async() => {
-        const SubidaNuevoCliente = await fetch(`${urlover8000}/clientes/`, {
+    const Backend_Post = async() => {
+        const PostBackend = await fetch(`${backend_url}/clientes/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(NuevoCliente.value),
+            body: JSON.stringify(Datos_New.value),
             credentials: 'include'
         })
-        if (SubidaNuevoCliente.status === 401) {
-            CerrarSesion()
+        if (PostBackend.status === 401) {
+            Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
+            Sesion_Expirada.value = true
             Iniciado.value = false
             return
         }
-        NuevoCliente.value = {
+        Datos_New.value = {
             nombre: "",
             email: "",
             dni: "",
             contrasena: ""
         }
-        BusquedaCliente()
+        Backend_Get()
     }
 
 </script>

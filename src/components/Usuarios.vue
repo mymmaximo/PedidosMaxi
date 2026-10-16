@@ -5,25 +5,25 @@
         <!-- Eliminar Usuario -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpDel" 
-                @click.self="CerrarPopUpDel"
+                <div v-if="PopUp_Delete" 
+                @click.self="Cerrar_PopUp_Delete"
                 class="fondo"
                 >
                     <div class="popup">
 
                         <!-- Encabezado -->
                         <h1>
-                            ¿Desear Eliminar/Reactivar el Usuario {{ UsuarioAct.nombre }}?
+                            ¿Desear Eliminar/Reactivar el Usuario {{ Datos_Upgrade.nombre }}?
                         </h1>
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="BorrarUsuario()"
+                            <button @click="Backend_Delete()"
                             class="botoncon"
                             >
                                 Si Confirmo
                             </button>
-                            <button @click="CerrarPopUpDel"
+                            <button @click="Cerrar_PopUp_Delete"
                             class="botonc"
                             >
                                 Cancelar
@@ -39,16 +39,16 @@
         <!-- Actualizar Usuario -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpAct"
-                @click.self="CerrarPopUpAct"
+                <div v-if="PopUp_Upgrade"
+                @click.self="Cerrar_PopUp_Upgrade"
                 class="fondo"
                 >
                     <div class="popup">
-                        <form @submit.prevent="ActualizarUsuarios">
+                        <form @submit.prevent="Backend_Put">
 
                             <!-- Encabezado -->
                             <h1>
-                                Actualizar Usuario {{ UsuarioAct.nombre }}
+                                Actualizar Usuario {{ Datos_Upgrade.nombre }}
                             </h1>
 
                             <!-- Datos de Usuario -->
@@ -56,13 +56,13 @@
                                 Roles Asignados
                             </h2>
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6 px-4">
-                                <button v-for="rol in ListaRoles" 
+                                <button v-for="rol in Datos_Rol" 
                                 :key="rol.id"
-                                @click="ToggleRol(rol.id)"
+                                @click="Datos_Roles(rol.id)"
                                 type="button"
                                 class="py-2 px-1 rounded-lg font-bold text-sm 
                                 transition-all duration-200 shadow-sm border-2"
-                                :class="UsuarioAct.id_rol && UsuarioAct.id_rol.includes(rol.id) 
+                                :class="Datos_Upgrade.id_rol && Datos_Upgrade.id_rol.includes(rol.id) 
                                 ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
                                 : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
                                 >
@@ -72,13 +72,13 @@
 
                             <!-- Botones -->
                             <div class="botones">
-                                <button :disabled="confirboton"
+                                <button :disabled="Verificar_Boton"
                                 type="submit" 
                                 class="botoncon"
                                 >
                                     Actualizar
                                 </button>
-                                <button @click="CerrarPopUpAct" 
+                                <button @click="Cerrar_PopUp_Upgrade" 
                                 class="botonc"
                                 >
                                     Cancelar
@@ -98,8 +98,8 @@
                 <!-- Mostrar Fondo en Celular -->
                 <Teleport to="body">
                     <transition name="fade">
-                        <div v-if="(MostrarFiltro || MostrarNuevo)" 
-                        @click="MostrarFiltro = false; MostrarNuevo = false"
+                        <div v-if="(Mostrar_Filtro || Mostrar_Nuevo)" 
+                        @click="Mostrar_Filtro = false; Mostrar_Nuevo = false"
                         class="fixed inset-0 
                         bg-black/40 backdrop-blur-sm 
                         z-[35] sm:hidden cursor-pointer"
@@ -110,14 +110,14 @@
 
                 <!-- Barra de Filtros de Usuarios y Formulario de Nuevo Usuario -->
                 <div @click.stop 
-                :class="['bar', (MostrarFiltro || MostrarNuevo) 
+                :class="['bar', (Mostrar_Filtro || Mostrar_Nuevo) 
                 ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                 : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
                 >
 
                     <!-- Boton de Filtros -->
                     <div class="hidden sm:block">
-                        <h1 @click="MostrarFiltro = !MostrarFiltro ; MostrarNuevo = false"
+                        <h1 @click="Mostrar_Filtro = !Mostrar_Filtro ; Mostrar_Nuevo = false"
                         class="botonfil"
                         >
                             ᯤ
@@ -126,7 +126,7 @@
 
                     <!-- Barra de Filtros -->
                     <transition name="slide">
-                        <div v-if="MostrarFiltro"
+                        <div v-if="Mostrar_Filtro"
                         class="flex flex-col lg:self-center"
                         >
 
@@ -135,7 +135,7 @@
                                 <h1 class="!mt-0">
                                     Ordenar
                                 </h1>
-                                <select v-model="orden" 
+                                <select v-model="Orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
@@ -170,21 +170,21 @@
                                 <label>
                                     <input :value="2"
                                     type="radio" 
-                                    v-model="filtroEst"
+                                    v-model="Filtro_Estatus"
                                     > 
                                         Todos los Usuarios
                                 </label>
                                 <label>
                                     <input :value="1"
                                     type="radio"
-                                    v-model="filtroEst"
+                                    v-model="Filtro_Estatus"
                                     > 
                                         Usuario Activo
                                 </label>
                                 <label>
                                     <input :value="0"
                                     type="radio" 
-                                    v-model="filtroEst"
+                                    v-model="Filtro_Estatus"
                                     > 
                                         Usuario Eliminado
                                 </label>
@@ -192,18 +192,18 @@
 
                             <!-- Botones -->
                             <div class="botones">
-                                <button @click="AplicarFiltro" 
+                                <button @click="Filtro_Aplicar" 
                                 class="botoncon"
                                 >
                                     Aplicar Filtros
                                 </button>
-                                <button @click="LimpiarFiltro" 
-                                v-if="filtroAct === true"
+                                <button @click="Filtro_Limpiar" 
+                                v-if="Mostrar_Limpiar_Filtro === true"
                                 class="botont" 
                                 >
                                     🗑️ Limpiar Filtro
                                 </button>
-                                <button @click="MostrarFiltro = false" 
+                                <button @click="Mostrar_Filtro = false" 
                                 class="botonc sm:hidden"
                                 >
                                     Cerrar
@@ -215,7 +215,7 @@
 
                     <!-- Boton de Registrar Nuevo Usuario -->
                     <div>
-                        <h1 @click="MostrarNuevo = !MostrarNuevo ; MostrarFiltro = false"
+                        <h1 @click="Mostrar_Nuevo = !Mostrar_Nuevo ; Mostrar_Filtro = false"
                         class="botonnew"
                         >
                             +
@@ -224,13 +224,13 @@
 
                     <!-- Barra de Nuevo Usuario -->
                     <transition name="slide">
-                        <div v-if="MostrarNuevo"
+                        <div v-if="Mostrar_Nuevo"
                         class="flex flex-col lg:self-center"
                         >
                             <h1>
                                 Nuevo Usuario
                             </h1>
-                            <form @submit.prevent="SubirNuevoUsuario">
+                            <form @submit.prevent="Backend_Post">
 
                                 <!-- Datos de Usuario -->
                                 <h2>
@@ -238,7 +238,7 @@
                                 </h2>
                                 <input placeholder="Nombre"
                                 type="text" 
-                                v-model="NuevoUsuario.nombre" 
+                                v-model="Datos_New.nombre" 
                                 maxlength="50"
                                 >
                                 <h2>
@@ -246,7 +246,7 @@
                                 </h2>
                                 <input placeholder="E-Mail"
                                 type="text" 
-                                v-model="NuevoUsuario.email" 
+                                v-model="Datos_New.email" 
                                 maxlength="50"
                                 >
                                 <h2>
@@ -254,7 +254,7 @@
                                 </h2>
                                 <input placeholder="Documento"
                                 type="text" 
-                                v-model="NuevoUsuario.dni"
+                                v-model="Datos_New.dni"
                                 maxlength="8"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 >
@@ -263,24 +263,24 @@
                                 </h2>
                                 <input placeholder="Contraseña"
                                 type="text" 
-                                v-model="NuevoUsuario.contrasena"
+                                v-model="Datos_New.contrasena"
                                 maxlength="30"
                                 >
                                 <h2>
                                     Roles
                                 </h2>
                                 <div class="grid grid-cols-1 md:grid-cols-1 gap-2 mb-6 px-4">
-                                    <button v-for="rol in ListaRoles" 
+                                    <button v-for="rol in Datos_Rol" 
                                     :key="'nuevo-' + rol.id"
-                                    @click.prevent="NuevoUsuario.id_rol.includes(rol.id) 
-                                    ? NuevoUsuario.id_rol.splice(NuevoUsuario.id_rol.indexOf(rol.id), 1) 
-                                    : NuevoUsuario.id_rol.push(rol.id)"
+                                    @click.prevent="Datos_New.id_rol.includes(rol.id) 
+                                    ? Datos_New.id_rol.splice(Datos_New.id_rol.indexOf(rol.id), 1) 
+                                    : Datos_New.id_rol.push(rol.id)"
                                     type="button"
                                     class="py-2 px-1 rounded-lg 
                                     font-bold text-sm 
                                     transition-all duration-200 
                                     shadow-sm border-2"
-                                    :class="NuevoUsuario.id_rol.includes(rol.id) 
+                                    :class="Datos_New.id_rol.includes(rol.id) 
                                     ? 'bg-green-600 text-white border-green-700 shadow-inner scale-95' 
                                     : 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'"
                                     >
@@ -290,10 +290,10 @@
 
                                 <!-- Botones -->
                                 <div class="botones">
-                                    <button :disabled="confirboton" type="submit" class="botoncon">
+                                    <button :disabled="Verificar_Boton" type="submit" class="botoncon">
                                         Crear
                                     </button>
-                                    <button @click="MostrarNuevo = false" type="button" class="botonc sm:hidden">
+                                    <button @click="Mostrar_Nuevo = false" type="button" class="botonc sm:hidden">
                                         Cancelar
                                     </button>
                                 </div>
@@ -308,7 +308,7 @@
                 <div class="start !px-5">
 
                     <!-- Gif Cargando -->
-                    <div v-if="CargandoTrue" 
+                    <div v-if="Backend_Espera" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh]"
@@ -323,7 +323,7 @@
                     </div>
 
                     <!-- Error Cargando -->
-                    <div v-else-if="ErrorCarga"
+                    <div v-else-if="Backend_Error"
                     class="flex flex-col
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
@@ -335,7 +335,7 @@
                             El servidor no responde o tu conexión es inestable.
                         </h2>
                         <div class="mt-6 flex justify-center">
-                            <button @click="CargarDatos()" 
+                            <button @click="Backend_Cargar()" 
                             class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                             >
                                 🔄 Recargar Página
@@ -348,7 +348,7 @@
                         <div class="px-5 w-full">
 
                             <!-- Mostrar Boton Filtro en Celular -->
-                            <button @click="MostrarFiltro = true"
+                            <button @click="Mostrar_Filtro = true"
                             class="sm:hidden 
                             w-full mb-4 py-3 
                             bg-white text-green-800 
@@ -364,7 +364,7 @@
 
                             <div class="flex flex-row items-stretch w-full gap-3 mb-5">
                                 <!-- Barra de Busqueda -->
-                                <input @input="BusquedaUsuario"
+                                <input @input="Backend_Get"
                                 type="text" 
                                 v-model="Busqueda" 
                                 placeholder="Busqueda..."
@@ -373,11 +373,11 @@
                                 >
 
                                 <!-- Vista en Lista/Carta -->
-                                <button @click="VistaLista = !VistaLista"
+                                <button @click="Formato_Items = !Formato_Items"
                                 title="Alternar Vista"
                                 class="botonvista"
                                 >
-                                    <span v-if="!VistaLista" class="text-xl">
+                                    <span v-if="!Formato_Items" class="text-xl">
                                        「 」
                                     </span>
                                     <span v-else class="text-xl">
@@ -393,15 +393,15 @@
                             </h1>
 
                             <!-- Tabla de Usuarios -->
-                            <div v-if="usuarios.length > 0"
-                            :class="VistaLista 
+                            <div v-if="Usuarios.length > 0"
+                            :class="Formato_Items 
                             ? 'flex flex-col gap-4 w-full' 
                             :'grid grid-cols-4 gap-6'"
                             >
-                                <div v-for= "i in usuarios" 
+                                <div v-for= "i in Usuarios" 
                                 :key="i.id" 
-                                @click="AbrirPopUpAct(i)"
-                                :class="VistaLista 
+                                @click="Abrir_PopUp_Act(i)"
+                                :class="Formato_Items 
                                 ? 'tarjeta-premium z-10 relative bg-white !mb-6 !w-full !m-0 hover:!shadow-lg' 
                                 : 'carta relative'"
                                 >
@@ -410,8 +410,8 @@
                                     <div class="tarjeta-info">
                                         <div class="tarjeta-titulo">
                                             👤{{ i.nombre }}
-                                                <span :class="Estatuscolor(i.activo, i.id_rol)">
-                                                    {{ Roltxt(i.id_rol) }}
+                                                <span :class="Estatus_Color(i.activo, i.id_rol)">
+                                                    {{ Estatus_Texto(i.id_rol) }}
                                                 </span>
                                         </div>
                                         <p class="tarjeta-dato">
@@ -429,25 +429,25 @@
                                         <p class="tarjeta-dato mb-1">
                                             📅 Creado el: 
                                             <span class="tarjeta-valor">
-                                                {{ FormatoFecha(i.created_at) }}
+                                                {{ Formato_Fecha(i.created_at) }}
                                             </span>
                                         </p>
                                     </div>
 
                                     <!-- Botones -->
                                     <div class="tarjeta-acciones">
-                                        <button @click.stop="AbrirPopUpDel(i)" 
+                                        <button @click.stop="Abrir_PopUp_Delete(i)" 
                                         v-if="i.activo" 
                                         class="btn-chico-rojo"
                                         >
                                             ❌ Eliminar
                                         </button>
-                                        <button v-else @click.stop="AbrirPopUpDel(i)"
+                                        <button v-else @click.stop="Abrir_PopUp_Delete(i)"
                                         class="btn-chico-verde"
                                         >
                                             🕊️ Reactivar
                                         </button>
-                                        <button @click.stop="AbrirPopUpAct(i)" 
+                                        <button @click.stop="Abrir_PopUp_Act(i)" 
                                         class="btn-chico-gris">
                                             ✏️ Editar
                                         </button>
@@ -470,22 +470,22 @@
 
                             <!-- Mostrando Paginas -->
                             <div class="flex justify-center p-3">
-                                <button @click="CambiarPagina('back')" 
-                                :disabled="Pagina === 0 || CargandoTrue"
+                                <button @click="Cambiar_Pagina('back')" 
+                                :disabled="Pagina === 0 || Backend_Espera"
                                 class="botona"
                                 >
                                     ❮
                                 </button>
                                 <h2 class="self-center font-bold px-6 text-green-800 text-center">
-                                    <span v-if="usuarios.length > 0">
-                                        Mostrando {{ Pagina + 1 }} - {{ Pagina + usuarios.length }}
+                                    <span v-if="Usuarios.length > 0">
+                                        Mostrando {{ Pagina + 1 }} - {{ Pagina + Usuarios.length }}
                                     </span>
                                     <span v-else>
                                         Fin de la lista
                                     </span>
                                 </h2>
-                                <button @click="CambiarPagina('next')" 
-                                :disabled="!HayMasPaginas || CargandoTrue"
+                                <button @click="Cambiar_Pagina('next')" 
+                                :disabled="!Paginas_Max || Backend_Espera"
                                 class="botona"
                                 >
                                     ❯
@@ -513,32 +513,33 @@
         computed 
     } from 'vue'
     import { 
-        urlover8000, 
-        CerrarSesion, 
-        SesionExpirada, 
+        backend_url, 
+        Cerrar_Sesion, 
+        Sesion_Expirada, 
         Iniciado, 
-        PopUpAct as PopUpAct 
+        PopUp_Upgrade,
+        PopUp_Delete
     } from './Estatus'
     
     // ----- Variables Vue ----- //
 
     // Habilitar Boton //
-    const confirboton = computed(() =>{
+    const Verificar_Boton = computed(() =>{
         // Nuevo Usuario
-        if (MostrarNuevo.value) {
-            const faltandatos01 = 
-                NuevoUsuario.value.nombre === ""||
-                NuevoUsuario.value.email === ""||
-                NuevoUsuario.value.dni === ""||
-                NuevoUsuario.value.contrasena === ""||
-                NuevoUsuario.value.id_rol.length === 0
-            return faltandatos01
+        if (Mostrar_Nuevo.value) {
+            const Datos_New_Faltantes = 
+                Datos_New.value.nombre === ""||
+                Datos_New.value.email === ""||
+                Datos_New.value.dni === ""||
+                Datos_New.value.contrasena === ""||
+                Datos_New.value.id_rol.length === 0
+            return Datos_New_Faltantes
         }
         // Actualizar Usuario
-        if (PopUpAct.value) {
-            const faltandatos02 = 
-                UsuarioAct.value.id_rol.length === 0
-            return faltandatos02
+        if (PopUp_Upgrade.value) {
+            const Datos_Upgrade_Faltantes = 
+                Datos_Upgrade.value.id_rol.length === 0
+            return Datos_Upgrade_Faltantes
         }
         return false
     })
@@ -546,7 +547,7 @@
     // ----- Variables Complejas ----- //
 
     // Almacen para Nuevo Usuario //
-    const NuevoUsuario = ref({
+    const Datos_New = ref({
         nombre: "",
         email: "",
         dni: "",
@@ -554,7 +555,7 @@
         id_rol: []
     })
     // Almacen para Actualizar Usuario //
-    const UsuarioAct = ref({
+    const Datos_Upgrade = ref({
         id: "",
         nombre: "",
         email: "",
@@ -562,7 +563,7 @@
         id_rol: []
     })
     // Almacen para Roles //
-    const ListaRoles = ref([
+    const Datos_Rol = ref([
         { id: 1, nombre: "Administrador"},
         { id: 2, nombre: "Editor de Productor General"},
         { id: 3, nombre: "Gestor de Pedidos General"},
@@ -574,125 +575,124 @@
     
     // ----- Variables Booleanas ----- //
     
-    const filtroAct = ref(false)
-    const ErrorCarga = ref(false)
-    const VistaLista = ref(true)
-    const CargandoTrue = ref(true)
-    const MostrarNuevo = ref(false)
-    const MostrarFiltro = ref(false)
-    const HayMasPaginas = ref(false)
-    const BloqueoPeticion = ref(false)
-    const PopUpDel = ref(false)
+    const Mostrar_Limpiar_Filtro = ref(false)
+    const Backend_Error = ref(false)
+    const Formato_Items = ref(true)
+    const Backend_Espera = ref(true)
+    const Mostrar_Nuevo = ref(false)
+    const Mostrar_Filtro = ref(false)
+    const Paginas_Max = ref(false)
+    const Bloqueo_Peticion = ref(false)
     
     // ----- Variables Vacias ----- //
     
-    const orden = ref("")
+    const Orden = ref("")
     const Busqueda = ref("")
-    const usuarios =  ref([])
-    const UsuarioEli = ref("")
+    const Usuarios =  ref([])
+    const Datos_Delete = ref("")
     
     // ----- Variables Simples ----- //
 	
     const Pagina = ref(0)
-    const filtroEst = ref(2)
-    const ItemsPorPagina = ref(24)
+    const Filtro_Estatus = ref(2)
+    const Paginas_Items = ref(24)
     
     // ----- Funciones Vue ----- //
 
     // Primera Carga de Datos de la Pagina //
     onMounted (() => {
-        CargarDatos()
+        Backend_Cargar()
     })
     // Carga de Datos de la Pagina //
-    const CargarDatos = (async() => {
-        if (BloqueoPeticion.value) return
-        BloqueoPeticion.value = true
+    const Backend_Cargar = (async() => {
+        if (Bloqueo_Peticion.value) return
+        Bloqueo_Peticion.value = true
         window.scrollTo({ 
             top: 0, 
             behavior: 'smooth' 
         })
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Tiempo de Espera para el Backend
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
+        const Tiempo_Espera = setTimeout(() => {
+            if (Backend_Espera.value) {
+                Backend_Espera.value = false
+                Backend_Error.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
         }}, 15000)
         // Leer Usuarios
         try {
-            await BusquedaUsuario()
-            clearTimeout(temporizador)
+            await Backend_Get()
+            clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
+            clearTimeout(Tiempo_Espera)
+            Backend_Error.value = true
+            Backend_Espera.value = false
         } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
+            if (!Backend_Error.value) {
+                Backend_Espera.value = false
             }
-            BloqueoPeticion.value = false
+            Bloqueo_Peticion.value = false
     }})
     // Cambiar Pagina //
-    const CambiarPagina = async (direccion) => {
-        if (BloqueoPeticion.value) return
-        BloqueoPeticion.value = true
+    const Cambiar_Pagina = async (direccion) => {
+        if (Bloqueo_Peticion.value) return
+        Bloqueo_Peticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+        Backend_Espera.value = true
+        Backend_Error.value = false
         if (direccion === 'next') {
-            Pagina.value += ItemsPorPagina.value
+            Pagina.value += Paginas_Items.value
         } else if (direccion === 'back') {
-            Pagina.value -= ItemsPorPagina.value
+            Pagina.value -= Paginas_Items.value
             if (Pagina.value < 0) Pagina.value = 0
         }
         try {
             await BusquedaProducto()
         } catch (error) {
             console.error(error)
-            ErrorCarga.value = true
+            Backend_Error.value = true
         } finally {
-            CargandoTrue.value = false
-            BloqueoPeticion.value = false
+            Backend_Espera.value = false
+            Bloqueo_Peticion.value = false
     }}
     
     // ----- Funciones Frontend ----- //
 
     // Abrir Pop up para Desactivar Usuario //
-    const AbrirPopUpDel = (usuario_fila) => {
-        UsuarioEli.value = usuario_fila.id
-		PopUpDel.value = true
+    const Abrir_PopUp_Delete = (usuario_fila) => {
+        Datos_Delete.value = usuario_fila.id
+		PopUp_Delete.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Actualizar Usuario //
-	const AbrirPopUpAct = (usuario_fila) => {
-        UsuarioAct.value.id = usuario_fila.id
-        UsuarioAct.value.nombre = usuario_fila.nombre
-        UsuarioAct.value.email = usuario_fila.email
-        UsuarioAct.value.id_rol = usuario_fila.id_rol ? [...usuario_fila.id_rol] : []
-		PopUpAct.value = true
+	const Abrir_PopUp_Act = (usuario_fila) => {
+        Datos_Upgrade.value.id = usuario_fila.id
+        Datos_Upgrade.value.nombre = usuario_fila.nombre
+        Datos_Upgrade.value.email = usuario_fila.email
+        Datos_Upgrade.value.id_rol = usuario_fila.id_rol ? [...usuario_fila.id_rol] : []
+		PopUp_Upgrade.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Aplicar Filtros //
-    const AplicarFiltro = () => {
+    const Filtro_Aplicar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
-        BusquedaUsuario()
+        Backend_Get()
     }
     // Cerrar Pop up para Desactivar Usuario //
-	const CerrarPopUpDel = () => {
-		PopUpDel.value = false
+	const Cerrar_PopUp_Delete = () => {
+		PopUp_Delete.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up para Actualizar Usuario //
-	const CerrarPopUpAct = () => {
-		PopUpAct.value = false
+	const Cerrar_PopUp_Upgrade = () => {
+		PopUp_Upgrade.value = false
 		document.body.style.overflow = "auto"
 	}
     // Leer Fecha con Formato DD/MM/YYYY //
-	const FormatoFecha = (fechai) => {
+	const Formato_Fecha = (fechai) => {
 		if (fechai) {
 			return new Date(fechai).toLocaleDateString('es-ES')
 		}
@@ -700,16 +700,16 @@
 			return "Pendiente"
 	}}
     // Limpiar Filtros, Orden y Busqueda //
-    const LimpiarFiltro = () => {
+    const Filtro_Limpiar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
-        filtroEst.value = 2
-        orden.value = ""
-        BusquedaUsuario()
-        filtroAct.value = false
+        Filtro_Estatus.value = 2
+        Orden.value = ""
+        Backend_Get()
+        Mostrar_Limpiar_Filtro.value = false
     }
     // Establecer Color de Insignia de Estatus y Rol //
-    const Estatuscolor = (id_estatus, array_roles) => {
+    const Estatus_Color = (id_estatus, array_roles) => {
         if (id_estatus === true || id_estatus === 1) {
             if (!Array.isArray(array_roles) || array_roles.length === 0) {
                 return "badge-activo !bg-gray-200 !text-gray-800"
@@ -718,21 +718,21 @@
                 if (array_roles.includes(1)) return "badge-activo"
                 return "badge-activo !bg-indigo-100 !text-indigo-800"
             }
-            const id_unico = array_roles[0]
-            if (id_unico === 1) return "badge-activo"
-            if (id_unico === 2) return "badge-activo !bg-blue-100 !text-blue-800"
-            if (id_unico === 3) return "badge-activo !bg-yellow-100 !text-yellow-800"
-            if (id_unico === 4) return "badge-activo !bg-orange-100 !text-orange-800"
-            if (id_unico === 5) return "badge-activo !bg-stone-100 !text-stone-800"
-            if (id_unico === 6) return "badge-activo !bg-pink-100 !text-pink-800"
-            if (id_unico === 7) return "badge-activo !bg-purple-100 !text-purple-800"
+            const Rol_Id = array_roles[0]
+            if (Rol_Id === 1) return "badge-activo"
+            if (Rol_Id === 2) return "badge-activo !bg-blue-100 !text-blue-800"
+            if (Rol_Id === 3) return "badge-activo !bg-yellow-100 !text-yellow-800"
+            if (Rol_Id === 4) return "badge-activo !bg-orange-100 !text-orange-800"
+            if (Rol_Id === 5) return "badge-activo !bg-stone-100 !text-stone-800"
+            if (Rol_Id === 6) return "badge-activo !bg-pink-100 !text-pink-800"
+            if (Rol_Id === 7) return "badge-activo !bg-purple-100 !text-purple-800"
             return "badge-activo"
         }
         else {
             return "badge-inactivo"
     }}
     // Establecer Texto de Insignia de Rol //
-    const Roltxt = (array_roles) => {
+    const Estatus_Texto = (array_roles) => {
         if (!Array.isArray(array_roles) || array_roles.length === 0) {
             return "Sin Rol Asignado"
         }
@@ -740,160 +740,160 @@
             if (array_roles.includes(1)) return "Admin +"
             return "Multirrol"
         }
-        const id_unico = array_roles[0]
-        if (id_unico === 1) return "Administrador"
-        if (id_unico === 2) return "Editor de Productos Gral."
-        if (id_unico === 3) return "Gestor de Pedidos"
-        if (id_unico === 4) return "Gestor de Precios"
-        if (id_unico === 5) return "Gestor de Stock"
-        if (id_unico === 6) return "Rider"
-        if (id_unico === 7) return "Editor de Clientes"
+        const Rol_Id = array_roles[0]
+        if (Rol_Id === 1) return "Administrador"
+        if (Rol_Id === 2) return "Editor de Productos Gral."
+        if (Rol_Id === 3) return "Gestor de Pedidos"
+        if (Rol_Id === 4) return "Gestor de Precios"
+        if (Rol_Id === 5) return "Gestor de Stock"
+        if (Rol_Id === 6) return "Rider"
+        if (Rol_Id === 7) return "Editor de Clientes"
         return "Desconocido"
     }
     // Sumar/Quitar Rol //
-    const ToggleRol = (id_rol) => {
-        if (!UsuarioAct.value.id_rol) {
-            UsuarioAct.value.id_rol = []
+    const Datos_Roles = (id_rol) => {
+        if (!Datos_Upgrade.value.id_rol) {
+            Datos_Upgrade.value.id_rol = []
         }
-        const index = UsuarioAct.value.id_rol.indexOf(id_rol)
+        const index = Datos_Upgrade.value.id_rol.indexOf(id_rol)
         if (index > -1) {
-            UsuarioAct.value.id_rol.splice(index, 1)
+            Datos_Upgrade.value.id_rol.splice(index, 1)
         } else {
-            UsuarioAct.value.id_rol.push(id_rol)
+            Datos_Upgrade.value.id_rol.push(id_rol)
     }}
     
     // ----- Funciones Backend ----- //
 
     // Actualizar Datos del Usuario //
-    const ActualizarUsuarios = async() => {
-        const UsuarioUpd = {} 
-        if (UsuarioAct.value.nombre !== "") {
-            UsuarioUpd.nombre = UsuarioAct.value.nombre
+    const Backend_Put = async() => {
+        const Dato_Upgrade = {} 
+        if (Datos_Upgrade.value.nombre !== "") {
+            Dato_Upgrade.nombre = Datos_Upgrade.value.nombre
         }
-        if (UsuarioAct.value.email !== "") {
-            UsuarioUpd.email = UsuarioAct.value.email
+        if (Datos_Upgrade.value.email !== "") {
+            Dato_Upgrade.email = Datos_Upgrade.value.email
         }
-        if (UsuarioAct.value.contrasena !== "") {
-            UsuarioUpd.contrasena = UsuarioAct.value.contrasena
+        if (Datos_Upgrade.value.contrasena !== "") {
+            Dato_Upgrade.contrasena = Datos_Upgrade.value.contrasena
         }
-        if (UsuarioAct.value.id_rol.length > 0) {
-            UsuarioUpd.id_rol = UsuarioAct.value.id_rol
+        if (Datos_Upgrade.value.id_rol.length > 0) {
+            Dato_Upgrade.id_rol = Datos_Upgrade.value.id_rol
         }
-        const ActUsuario = await fetch(`${urlover8000}/usuarios/id/${UsuarioAct.value.id}`, {
+        const PutBackend = await fetch(`${backend_url}/usuarios/id/${Datos_Upgrade.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(UsuarioUpd),
+            body: JSON.stringify(Dato_Upgrade),
             credentials: 'include'
         })
-        if (ActUsuario.status === 401) {
-            await CerrarSesion()
+        if (PutBackend.status === 401) {
+            await Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
+            Sesion_Expirada.value = true
             Iniciado.value = false
             return
         }
-        UsuarioAct.value = {
+        Datos_Upgrade.value = {
             id: "",
             nombre: "",
             email: "",
             contrasena: "",
             id_rol: []
         }
-        BusquedaUsuario()
-        CerrarPopUpAct()
+        Backend_Get()
+        Cerrar_PopUp_Upgrade()
     }
     // Desactivar Datos del Usuario //
-    const BorrarUsuario = async() => {
-        const EraseCliente = await fetch(`${urlover8000}/usuarios/id/${UsuarioEli.value}`, {
+    const Backend_Delete = async() => {
+        const DeleteBackend = await fetch(`${backend_url}/usuarios/id/${Datos_Delete.value}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
             credentials: 'include'
         })
-        UsuarioEli.value = ""
-        if (EraseCliente.status === 401) {
-            await CerrarSesion()
+        Datos_Delete.value = ""
+        if (DeleteBackend.status === 401) {
+            await Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
+            Sesion_Expirada.value = true
             Iniciado.value = false
             return
         }
-        BusquedaUsuario()
-        CerrarPopUpDel()
+        Backend_Get()
+        Cerrar_PopUp_Delete()
     }
     // Leer Datos de los Usuarios //
-    const BusquedaUsuario = async() => {
-        let url = new URL (`${urlover8000}/usuarios/`)
+    const Backend_Get = async() => {
+        let url = new URL (`${backend_url}/usuarios/`)
 		url.searchParams.append('skip', Pagina.value)
-        url.searchParams.append('limit', ItemsPorPagina.value + 1)
+        url.searchParams.append('limit', Paginas_Items.value + 1)
         // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_usuario', Busqueda.value)
         }
         // Establecer Orden
-        if (orden.value !== "") {
-            url.searchParams.append('orden', orden.value)
-            filtroAct.value = true
+        if (Orden.value !== "") {
+            url.searchParams.append('orden', Orden.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Estatus
-        if (filtroEst.value === 1) {
+        if (Filtro_Estatus.value === 1) {
             url.searchParams.append('bool_activo', 'true')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (filtroEst.value === 0) {
+        if (Filtro_Estatus.value === 0) {
             url.searchParams.append('bool_activo', 'false')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
-        const BusqUsuario = await fetch(url, {
+        const GetBackend = await fetch(url, {
             method: 'GET',
             credentials: 'include'
         })
-        const datos = await BusqUsuario.json()
+        const datos = await GetBackend.json()
         if (Array.isArray(datos)) {
-            if (datos.length > ItemsPorPagina.value) {
-                HayMasPaginas.value = true
-                usuarios.value = datos.slice(0, ItemsPorPagina.value)
+            if (datos.length > Paginas_Items.value) {
+                Paginas_Max.value = true
+                Usuarios.value = datos.slice(0, Paginas_Items.value)
             } else {
-                HayMasPaginas.value = false
-                usuarios.value = datos
+                Paginas_Max.value = false
+                Usuarios.value = datos
         }} else {
-            usuarios.value = []
-            HayMasPaginas.value = false
+            Usuarios.value = []
+            Paginas_Max.value = false
     }}
     // Subir Datos de Nuevo Usuario //
-    const SubirNuevoUsuario = async() => {
+    const Backend_Post = async() => {
         try {
-            const SubidaNuevoUsuario = await fetch(`${urlover8000}/usuarios/`, {
+            const PostBackend = await fetch(`${backend_url}/usuarios/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(NuevoUsuario.value),
+                body: JSON.stringify(Datos_New.value),
                 credentials: 'include'
             })
-            if (SubidaNuevoUsuario.status === 401) {
-                await CerrarSesion()
+            if (PostBackend.status === 401) {
+                await Cerrar_Sesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
+                Sesion_Expirada.value = true
                 Iniciado.value = false
                 return
             }
-            if (SubidaNuevoUsuario.ok) {
-                NuevoUsuario.value = {
+            if (PostBackend.ok) {
+                Datos_New.value = {
                     nombre: "",
                     email: "",
                     dni: "",
                     contrasena: "",
                     id_rol: []
                 }
-                MostrarNuevo.value = false
-                BusquedaUsuario()
+                Mostrar_Nuevo.value = false
+                Backend_Get()
             } else {
-                const errorData = await SubidaNuevoUsuario.json()
-                alert(errorData.detail || "Error al crear el usuario. Revisa los datos.")
+                const Datos_Error = await PostBackend.json()
+                alert(Datos_Error.detail || "Error al crear el usuario. Revisa los datos.")
         }} catch (error) {
             console.error("Fallo en la comunicación con el servidor:", error)
     }}

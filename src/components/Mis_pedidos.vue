@@ -8,8 +8,8 @@
                 <!-- Mostrar Fondo en Celular -->
                 <Teleport to="body">
                     <transition name="fade">
-                        <div v-if="(MostrarFiltro || MostrarNuevo)" 
-                        @click="MostrarFiltro = false; MostrarNuevo = false"
+                        <div v-if="(Mostrar_Filtro || Mostrar_Nuevo)" 
+                        @click="Mostrar_Filtro = false; Mostrar_Nuevo = false"
                         class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[35] sm:hidden cursor-pointer"
                         >
                         </div>
@@ -17,14 +17,14 @@
                 </Teleport>
 
                 <!-- Barra de Filtros de Pedidos de Cliente -->
-                <div :class="['bar', (MostrarFiltro || MostrarNuevo) 
+                <div :class="['bar', (Mostrar_Filtro || Mostrar_Nuevo) 
                 ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                 : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
                 >
 
                     <!-- Boton de Filtros -->
                     <div class="hidden sm:block">
-                        <h1 @click="MostrarFiltro = !MostrarFiltro"
+                        <h1 @click="Mostrar_Filtro = !Mostrar_Filtro"
                         class="botonfil"
                         >
                             ᯤ
@@ -33,7 +33,7 @@
 
                     <!-- Barra de Filtros y Orden -->
                     <transition name="slide">
-                        <div v-if="MostrarFiltro"
+                        <div v-if="Mostrar_Filtro"
                         class="flex flex-col self-center"
                         >
 
@@ -42,7 +42,7 @@
                                 <h1 class="!mt-0">
                                     Ordenar
                                 </h1>
-                                <select v-model="orden" 
+                                <select v-model="Orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
@@ -68,42 +68,42 @@
                                     <label>
                                         <input :value="5"
                                         type="radio" 
-                                        v-model="filtroMP"
+                                        v-model="Filtro_Metodo_Pago"
                                         > 
                                             Todos
                                     </label>
                                     <label>
                                         <input :value="4"
                                         type="radio" 
-                                        v-model="filtroMP"
+                                        v-model="Filtro_Metodo_Pago"
                                         > 
                                             Paddle
                                     </label>
                                     <label>
                                         <input :value="3"
                                         type="radio" 
-                                        v-model="filtroMP"
+                                        v-model="Filtro_Metodo_Pago"
                                         > 
                                             Tarjeta de Credito / Debito
                                     </label>
                                     <label>
                                         <input :value="2"
                                         type="radio" 
-                                        v-model="filtroMP"
+                                        v-model="Filtro_Metodo_Pago"
                                         > 
                                             Mercado Pago
                                     </label>
                                     <label>
                                         <input :value="1"
                                         type="radio" 
-                                        v-model="filtroMP"
+                                        v-model="Filtro_Metodo_Pago"
                                         > 
                                             Transferencia Bancaria
                                     </label>
                                     <label>
                                         <input :value="0"
                                         type="radio" 
-                                        v-model="filtroMP"
+                                        v-model="Filtro_Metodo_Pago"
                                         > 
                                             Efectivo
                                     </label>
@@ -117,28 +117,28 @@
                                     <label>
                                         <input :value="4"
                                         type="radio" 
-                                        v-model="filtroEst"
+                                        v-model="Filtro_Estatus"
                                         > 
                                             Todos
                                     </label>
                                     <label>
                                         <input :value="3"
                                         type="radio" 
-                                        v-model="filtroEst"
+                                        v-model="Filtro_Estatus"
                                         > 
                                             Preparando
                                     </label>
                                     <label>
                                         <input :value="2"
                                         type="radio" 
-                                        v-model="filtroEst"
+                                        v-model="Filtro_Estatus"
                                         > 
                                             En Camino
                                     </label>
                                     <label>
                                         <input :value="1"
                                         type="radio" 
-                                        v-model="filtroEst"
+                                        v-model="Filtro_Estatus"
                                         > 
                                             Entregado
                                     </label>
@@ -146,13 +146,13 @@
 
                                 <!-- Botones -->
                                 <div class="botones">
-                                    <button @click="AplicarFiltro" 
+                                    <button @click="Filtro_Aplicar" 
                                     class="botoncon"
                                     >
                                         Aplicar Filtros
                                     </button>
-                                    <button @click="LimpiarFiltro" 
-                                    v-if="filtroAct === true"
+                                    <button @click="Filtro_Limpiar" 
+                                    v-if="Mostrar_Limpiar_Filtro === true"
                                     class="botont" 
                                     >
                                         🗑️ Limpiar Filtro
@@ -170,7 +170,7 @@
                 <div class="start !px-5">
 
                     <!-- Gif Cargando -->
-                    <div v-if="CargandoTrue" 
+                    <div v-if="Backend_Espera" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh]"
@@ -185,7 +185,7 @@
                     </div>
 
                     <!-- Error Cargando -->
-                    <div v-else-if="ErrorCarga" 
+                    <div v-else-if="Backend_Error" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
@@ -197,7 +197,7 @@
                             El servidor no responde o tu conexión es inestable.
                         </h2>
                         <div class="mt-6 flex justify-center">
-                            <button @click="CargarDatos()" 
+                            <button @click="Backend_Cargar()" 
                             class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                             >
                                 🔄 Recargar Página
@@ -210,7 +210,7 @@
                         <div>
 
                             <!-- Mostrar Boton Filtro en Celular -->
-                            <button @click="MostrarFiltro = true"
+                            <button @click="Mostrar_Filtro = true"
                             class="sm:hidden 
                             w-full mb-4 py-3 
                             bg-white text-green-800 
@@ -225,7 +225,7 @@
 
                             <!-- Barra de Busqueda -->
                             <div class="flex flex-row items-stretch w-full gap-3 mb-5">-
-                                <input @input="BusquedaPedido"
+                                <input @input="Backend_Get"
                                 type="text" 
                                 v-model="Busqueda" 
                                 placeholder="Busqueda..."
@@ -245,16 +245,16 @@
                             </h1>
 
                             <!-- Pedidos en Preparacion -->
-                            <div v-if="PedidosEnPreparacion.length > 0"
+                            <div v-if="Filtro_Preparacion.length > 0"
                             class="w-full mb-8"
                             >
-                                <div v-for= "i in PedidosEnPreparacion" 
+                                <div v-for= "i in Filtro_Preparacion" 
                                 :key="i.id_pedido"
                                 class="mb-4"
                                 >
 
                                     <!-- Datos de Pedido -->
-                                    <div  @click="PedidoCambioPreparando(i.id_pedido)"
+                                    <div  @click="Mostrar_Detalle_Preparando(i.id_pedido)"
                                     class="tab"
                                     >
                                         <div class="flex flex-col text-left">
@@ -275,7 +275,7 @@
                                             <p class="text-gray-500 font-medium text-sm mt-1">
                                                 💰 Total: 
                                                 <span class="text-green-700 font-bold text-lg">
-                                                    $ {{ FormatearPrecio(i.total) }}
+                                                    $ {{ Formato_Precios(i.total) }}
                                                 </span>
                                             </p>
                                         </div>
@@ -296,14 +296,14 @@
                                             class="text-green-600 text-sm font-bold 
                                             mt-3 flex items-center justify-end gap-1"
                                             >
-                                                {{ PedidoNowPreparando === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
+                                                {{ Mostrar_Preparando === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Detalles de Pedido -->
                                     <transition name="slide">
-                                        <div v-if = "PedidoNowPreparando === i.id_pedido"
+                                        <div v-if = "Mostrar_Preparando === i.id_pedido"
                                         class="liltab !border-green-100/50"
                                         >
                                             <h3 class="text-lg font-bold text-gray-800 
@@ -366,12 +366,12 @@
                                                             <span v-if="e.producto.es_promocion && e.producto.precio_anterior" 
                                                             class="text-xs text-gray-400 font-bold line-through"
                                                             >
-                                                                $ {{ FormatearPrecio(e.producto.precio_anterior) }}
+                                                                $ {{ Formato_Precios(e.producto.precio_anterior) }}
                                                             </span>
                                                             <span class="text-gray-500">
                                                                 Unidad: 
                                                                 <b :class="e.producto.es_promocion ? 'text-red-600 font-black' : 'text-gray-800'">
-                                                                    $ {{ FormatearPrecio(e.precio_unitario) }}
+                                                                    $ {{ Formato_Precios(e.precio_unitario) }}
                                                                 </b>
                                                             </span>
                                                         </div>
@@ -380,7 +380,7 @@
                                                                 Subtotal:
                                                             </h2>
                                                             <h2 class="font-black text-gray-800 text-base">
-                                                                $ {{ FormatearPrecio(e.subtotal) }}
+                                                                $ {{ Formato_Precios(e.subtotal) }}
                                                             </h2>
                                                         </div>
                                                     </div>
@@ -397,14 +397,14 @@
                                                         <span class="font-semibold text-gray-800">
                                                             Creado:
                                                         </span> 
-                                                        {{ FormatoFecha(i.created_at) }}
+                                                        {{ Formato_Fecha(i.created_at) }}
                                                     </p>
                                                     <p class="text-gray-500">
                                                         🔄 
                                                         <span class="font-semibold text-gray-800">
                                                             Actualizado:
                                                         </span> 
-                                                       {{ FormatoFecha(i.updated_at) }}
+                                                       {{ Formato_Fecha(i.updated_at) }}
                                                     </p>
                                                     <p class="text-gray-500">
                                                         🏙️ 
@@ -452,16 +452,16 @@
                                 </h1>
 
                                 <!-- Pedidos en Camino -->
-                                <div v-if="PedidosEnCamino.length > 0"
+                                <div v-if="Filtro_En_Camino.length > 0"
                                 class="w-full mb-8"
                                 >
-                                    <div v-for= "i in PedidosEnCamino" 
+                                    <div v-for= "i in Filtro_En_Camino" 
                                     :key="i.id_pedido"
                                     class="mb-4"
                                     >
 
                                         <!-- Datos de Pedido -->
-                                        <div @click="PedidoCambioEnCamino(i.id_pedido)"
+                                        <div @click="Mostrar_Detalle_En_Camino(i.id_pedido)"
                                         class="tablue"
                                         >
                                             <div class="flex flex-col text-left">
@@ -482,7 +482,7 @@
                                                 <p class="text-gray-500 font-medium text-sm mt-1">
                                                     💰 Total: 
                                                     <span class="text-blue-700 font-bold text-lg">
-                                                        ${{ FormatearPrecio(i.total) }}
+                                                        ${{ Formato_Precios(i.total) }}
                                                     </span>
                                                 </p>
                                             </div>
@@ -502,14 +502,14 @@
                                                 <div class="text-blue-600 text-sm font-bold 
                                                 flex items-center justify-end mt-3 gap-1"
                                                 >
-                                                    {{ PedidoNowEnCamino === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
+                                                    {{ Mostrar_En_Camino === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Detalles de Pedido -->
                                         <transition name="slide">
-                                            <div v-if = "PedidoNowEnCamino === i.id_pedido"
+                                            <div v-if = "Mostrar_En_Camino === i.id_pedido"
                                             class="lilelse !border-blue-100/50 "
                                             >
                                                 <h3 class="text-lg font-bold text-gray-800 
@@ -572,7 +572,7 @@
                                                                 <span v-if="e.producto.es_promocion && e.producto.precio_anterior" 
                                                                 class="text-xs text-gray-400 font-bold line-through"
                                                                 >
-                                                                    ${{ FormatearPrecio(e.producto.precio_anterior) }}
+                                                                    ${{ Formato_Precios(e.producto.precio_anterior) }}
                                                                 </span>
                                                                 <span class="text-gray-500">
                                                                     Unidad: 
@@ -580,7 +580,7 @@
                                                                     ? 'text-red-600 font-black' 
                                                                     : 'text-gray-800'"
                                                                     >
-                                                                        ${{ FormatearPrecio(e.precio_unitario) }}
+                                                                        ${{ Formato_Precios(e.precio_unitario) }}
                                                                     </b>
                                                                 </span>
                                                             </div>
@@ -589,7 +589,7 @@
                                                                     Subtotal:
                                                                 </h2>
                                                                 <h2 class="font-black text-gray-800 text-base">
-                                                                    $ {{ FormatearPrecio(e.subtotal) }}
+                                                                    $ {{ Formato_Precios(e.subtotal) }}
                                                                 </h2>
                                                             </div>
                                                         </div>
@@ -608,14 +608,14 @@
                                                         <span class="font-semibold text-gray-800">
                                                             Creado:
                                                         </span> 
-                                                        {{ FormatoFecha(i.created_at) }}
+                                                        {{ Formato_Fecha(i.created_at) }}
                                                     </p>
                                                     <p class="text-gray-500">
                                                         🔄 
                                                         <span class="font-semibold text-gray-800">
                                                             Actualizado:
                                                         </span> 
-                                                        {{ FormatoFecha(i.updated_at) }}
+                                                        {{ Formato_Fecha(i.updated_at) }}
                                                     </p>
                                                     <p class="text-gray-500">
                                                         🏙️ 
@@ -652,25 +652,25 @@
 
                             <!-- Boton Historial -->
                             <div class="w-full flex justify-center my-6">
-                                <button @click="mostrarhistorial = !mostrarhistorial" 
+                                <button @click="Boton_Mostrar_Historial = !Boton_Mostrar_Historial" 
                                 class="boton-guardar 
                                 !w-auto !px-8 !py-3 !rounded-full 
                                 shadow-md flex items-center gap-2"
-                                :class="mostrarhistorial 
+                                :class="Boton_Mostrar_Historial 
                                 ? '!from-gray-500 !to-gray-700' 
                                 : ''"
                                 >
-                                    <span v-if="!mostrarhistorial">
+                                    <span v-if="!Boton_Mostrar_Historial">
                                         📜 Ver Historial de Pedidos Anteriores
                                     </span>
-                                    <span v-if="mostrarhistorial">
+                                    <span v-if="Boton_Mostrar_Historial">
                                         ⬆️ Ocultar Historial
                                     </span>
                                 </button>
                             </div>
 
                             <!-- Historial de Pedidos -->
-                            <div v-if="mostrarhistorial">
+                            <div v-if="Boton_Mostrar_Historial">
 
                                 <!-- Encabezado -->
                                 <h1 class="text-2xl font-black text-gray-700 
@@ -680,17 +680,17 @@
                                 </h1>
 
                                 <!-- Historial de Pedidos -->
-                                <div v-if="PedidosEnHistorial.length > 0"
+                                <div v-if="Filtro_Historial.length > 0"
                                 class="w-full"
                                 >
-                                    <div v-for= "i in PedidosEnHistorial" 
+                                    <div v-for= "i in Filtro_Historial" 
                                     :key="i.id_pedido"
                                     class="mb-4 opacity-90 
                                     hover:opacity-100 transition-opacity"
                                     >
 
                                         <!-- Datos de Pedido -->
-                                        <div @click="PedidoCambioHistorial(i.id_pedido)"
+                                        <div @click="Mostrar_Detalle_Historial(i.id_pedido)"
                                         class="tabgray"
                                         >
                                             <div class="flex flex-col text-left">       
@@ -711,7 +711,7 @@
                                                 <p class="text-gray-500 font-medium text-sm mt-1">
                                                     💰 Total: 
                                                     <span class="text-gray-700 font-bold text-lg">
-                                                        $ {{ FormatearPrecio(i.total) }}
+                                                        $ {{ Formato_Precios(i.total) }}
                                                     </span>
                                                 </p>
                                             </div>
@@ -732,14 +732,14 @@
                                                 flex items-center justify-end 
                                                 mt-3 gap-1"
                                                 >
-                                                    {{ PedidoNowHistorial === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
+                                                    {{ Mostrar_Historial === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Detalles de Pedido -->
                                         <transition name="slide">
-                                            <div v-if = "PedidoNowHistorial === i.id_pedido"
+                                            <div v-if = "Mostrar_Historial === i.id_pedido"
                                             class="liltab"
                                             >
                                                 <h3 class="text-lg font-bold text-gray-700 
@@ -800,12 +800,12 @@
                                                                 <span v-if="e.producto.es_promocion && e.producto.precio_anterior" 
                                                                 class="text-xs text-gray-400 font-bold line-through"
                                                                 >
-                                                                    ${{ FormatearPrecio(e.producto.precio_anterior) }}
+                                                                    ${{ Formato_Precios(e.producto.precio_anterior) }}
                                                                 </span>
                                                                 <span class="text-gray-500">
                                                                     Unidad: 
                                                                     <b :class="e.producto.es_promocion ? 'text-red-600 font-black' : 'text-gray-800'">
-                                                                        ${{ FormatearPrecio(e.precio_unitario) }}
+                                                                        ${{ Formato_Precios(e.precio_unitario) }}
                                                                     </b>
                                                                 </span>
                                                             </div>
@@ -814,7 +814,7 @@
                                                                     Subtotal:
                                                                 </h2>
                                                                 <h2 class="font-black text-gray-800 text-base">
-                                                                    $ {{ FormatearPrecio(e.subtotal) }}
+                                                                    $ {{ Formato_Precios(e.subtotal) }}
                                                                 </h2>
                                                             </div>
                                                         </div>
@@ -831,14 +831,14 @@
                                                         <span class="font-semibold text-gray-700">
                                                             Creado:
                                                         </span> 
-                                                        {{ FormatoFecha(i.created_at) }}
+                                                        {{ Formato_Fecha(i.created_at) }}
                                                     </p>
                                                     <p class="text-gray-500">
                                                         🔄 
                                                         <span class="font-semibold text-gray-700">
                                                             Entregado:
                                                         </span> 
-                                                        {{ FormatoFecha(i.updated_at) }}
+                                                        {{ Formato_Fecha(i.updated_at) }}
                                                     </p>
                                                     <p class="text-gray-500">
                                                         🏙️ 
@@ -895,202 +895,202 @@
         ref 
     } from 'vue'
     import { 
-        ClienteID, 
-        urlover8000,
-        CerrarSesion,
-        SesionExpirada,
+        Cliente_ID, 
+        backend_url,
+        Cerrar_Sesion,
+        Sesion_Expirada,
         Iniciado
     } from './Estatus.js'
 
     // ----- Variables Booleanas ----- //
 
-    const filtroAct = ref(false)
-    const ErrorCarga = ref(false)
-    const CargandoTrue = ref(true)
-    const MostrarFiltro = ref (false)
-    const mostrarhistorial = ref(false)
+    const Mostrar_Limpiar_Filtro = ref(false)
+    const Backend_Error = ref(false)
+    const Backend_Espera = ref(true)
+    const Mostrar_Filtro = ref (false)
+    const Boton_Mostrar_Historial = ref(false)
 
     // ----- Variables Vacias ----- //
 
-    const orden = ref("")
+    const Orden = ref("")
     const Pedidos = ref([])
     const Busqueda = ref("")
-    const PedidoNowEnCamino = ref(null)
-    const PedidoNowHistorial = ref(null)
-    const PedidoNowPreparando = ref(null)
+    const Mostrar_En_Camino = ref(null)
+    const Mostrar_Historial = ref(null)
+    const Mostrar_Preparando = ref(null)
 
     // ----- Variables Simples ----- //
 
-    const filtroMP = ref(5)
-    const filtroEst = ref(4)
+    const Filtro_Metodo_Pago = ref(5)
+    const Filtro_Estatus = ref(4)
 
     // ----- Funciones Vue ----- //
     
     // Primera Carga de Datos de la Pagina //
     onMounted (() => {
-        CargarDatos()
+        Backend_Cargar()
     })
     // Carga de Datos de la Pagina //
-    const CargarDatos = (async() => {
-        if (!ClienteID.value) return
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+    const Backend_Cargar = (async() => {
+        if (!Cliente_ID.value) return
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Tiempo de Espera para el Backend
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
+        const Tiempo_Espera = setTimeout(() => {
+            if (Backend_Espera.value) {
+                Backend_Espera.value = false
+                Backend_Error.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
         }}, 15000)
         // Leer Pedidos del Cliente
         try {
-            const respuesta = await fetch(`${urlover8000}/pedidos/cliente/${ClienteID.value}`, {
+            const respuesta = await fetch(`${backend_url}/pedidos/cliente/${Cliente_ID.value}`, {
                 credentials: 'include'
             })
             if (respuesta.status === 401) {
-                await CerrarSesion()
-                SesionExpirada.value = true
+                await Cerrar_Sesion()
+                Sesion_Expirada.value = true
                 Iniciado.value = false
                 return
             }
             const datos = await respuesta.json()
             Pedidos.value = Array.isArray(datos) ? datos : []
-            clearTimeout(temporizador)
+            clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
+            clearTimeout(Tiempo_Espera)
+            Backend_Error.value = true
+            Backend_Espera.value = false
         } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
+            if (!Backend_Error.value) {
+                Backend_Espera.value = false
     }}})
     // Filtrar Pedidos en Preparacion //
-    const PedidosEnPreparacion = computed(() => {
+    const Filtro_Preparacion = computed(() => {
         return Pedidos.value.filter(pedido => pedido.estatus === 3)
     })
     // Filtrar Pedidos en Camino //
-    const PedidosEnCamino = computed(() => {
+    const Filtro_En_Camino = computed(() => {
         return Pedidos.value.filter(pedido => pedido.estatus === 2)
     })
     // Filtrar Pedidos Entregados //
-    const PedidosEnHistorial = computed(() => {
+    const Filtro_Historial = computed(() => {
         return Pedidos.value.filter(pedido => pedido.estatus === 1)
     })
 
     // ----- Funciones Frontend ----- //
     
     // Aplicar Filtros //
-    const AplicarFiltro = () => {
+    const Filtro_Aplicar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        BusquedaPedido()
-        MostrarFiltro.value = false
-        if (filtroEst.value === 1) {
-            mostrarhistorial.value = true
+        Backend_Get()
+        Mostrar_Filtro.value = false
+        if (Filtro_Estatus.value === 1) {
+            Boton_Mostrar_Historial.value = true
     }}
     // Leer Fecha con Formato DD/MM/YYYY //
-    const FormatoFecha = (fechai) => {
-        if (fechai) {
-            return new Date(fechai).toLocaleDateString('es-ES')
+    const Formato_Fecha = (fecha) => {
+        if (fecha) {
+            return new Date(fecha).toLocaleDateString('es-ES')
         }
         else {
             return "Pendiente"
     }}
     // Leer Precio con Formato Pesos Argentinos //
-    const FormatearPrecio = (precio) => {
+    const Formato_Precios = (precio) => {
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat('es-AR').format(precio)
     }
     // Limpiar Filtros, Orden y Busqueda //
-    const LimpiarFiltro = () => {
+    const Filtro_Limpiar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        filtroMP.value = 5
-        filtroEst.value = 4
-        BusquedaPedido()
-        MostrarFiltro.value = false
-        filtroAct.value = false
+        Filtro_Metodo_Pago.value = 5
+        Filtro_Estatus.value = 4
+        Backend_Get()
+        Mostrar_Filtro.value = false
+        Mostrar_Limpiar_Filtro.value = false
     }
     // Mostrar Detalles de Pedido //
-    const PedidoCambioEnCamino = (id) => {
-        if (PedidoNowEnCamino.value === id) {
-            PedidoNowEnCamino.value = null
+    const Mostrar_Detalle_En_Camino = (id) => {
+        if (Mostrar_En_Camino.value === id) {
+            Mostrar_En_Camino.value = null
         }
         else {
-            PedidoNowEnCamino.value = id
+            Mostrar_En_Camino.value = id
     }}
     // Mostrar Detalles de Pedido //
-    const PedidoCambioHistorial = (id) => {
-        if (PedidoNowHistorial.value === id) {
-            PedidoNowHistorial.value = null
+    const Mostrar_Detalle_Historial = (id) => {
+        if (Mostrar_Historial.value === id) {
+            Mostrar_Historial.value = null
         }
         else {
-            PedidoNowHistorial.value = id
+            Mostrar_Historial.value = id
     }}
     // Mostrar Detalles de Pedido //
-    const PedidoCambioPreparando = (id) => {
-        if (PedidoNowPreparando.value === id) {
-            PedidoNowPreparando.value = null
+    const Mostrar_Detalle_Preparando = (id) => {
+        if (Mostrar_Preparando.value === id) {
+            Mostrar_Preparando.value = null
         }
         else {
-            PedidoNowPreparando.value = id
+            Mostrar_Preparando.value = id
     }}
 
     // ----- Funciones Backend ----- //
     
     // Leer Datos de los Pedidos //
-    const BusquedaPedido = async() => {
-        let url = new URL (`${urlover8000}/pedidos/cliente/${ClienteID.value}`)
+    const Backend_Get = async() => {
+        let url = new URL (`${backend_url}/pedidos/cliente/${Cliente_ID.value}`)
         // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_pedido', Busqueda.value)
         }
         // Establecer Orden
-        if (orden.value !== "") {
-            url.searchParams.append('orden', orden.value)
-            filtroAct.value = true
+        if (Orden.value !== "") {
+            url.searchParams.append('orden', Orden.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Metodo de Pago
         let mpfiltro = ""
-        if (filtroMP.value === 5) {
+        if (Filtro_Metodo_Pago.value === 5) {
             mpfiltro = ""
         }
-        else if (filtroMP.value === 4) {
+        else if (Filtro_Metodo_Pago.value === 4) {
             mpfiltro = "Paddle"
         }
-        else if (filtroMP.value === 3) {
+        else if (Filtro_Metodo_Pago.value === 3) {
             mpfiltro = "Tarjeta de Crédito"
         }
-        else if (filtroMP.value === 2) {
+        else if (Filtro_Metodo_Pago.value === 2) {
             mpfiltro = "MercadoPago"
         }
-        else if (filtroMP.value === 1) {
+        else if (Filtro_Metodo_Pago.value === 1) {
             mpfiltro = "Transferencia"
         }
-        else if (filtroMP.value === 0) {
+        else if (Filtro_Metodo_Pago.value === 0) {
             mpfiltro = "Efectivo"
         }
-        if (filtroMP.value !== 5 && mpfiltro !== "") {
+        if (Filtro_Metodo_Pago.value !== 5 && mpfiltro !== "") {
             url.searchParams.append('filtromp', mpfiltro)
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Estatus de los Pedidos
-        if (filtroEst.value !== 4) {
-            url.searchParams.append('filtroest', filtroEst.value)
-            filtroAct.value = true
+        if (Filtro_Estatus.value !== 4) {
+            url.searchParams.append('filtroest', Filtro_Estatus.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
-        const BusqPedido = await fetch(url, {
+        const GetBackend = await fetch(url, {
             method: 'GET',
             credentials: 'include'
         })
-        if (BusqPedido.status === 401) {
-            await CerrarSesion()
+        if (GetBackend.status === 401) {
+            await Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
+            Sesion_Expirada.value = true
             Iniciado.value = false
             return
         }
-        const datos = await BusqPedido.json()
+        const datos = await GetBackend.json()
         Pedidos.value = Array.isArray(datos) ? datos : []
     }
-    
+
 </script>

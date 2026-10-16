@@ -3,7 +3,7 @@
         <div class="pagina">
 
             <!-- Gif Cargando -->
-            <div v-if="CargandoTrue" 
+            <div v-if="Backend_Espera" 
             class="flex flex-col 
             items-center justify-center 
             w-full h-[60vh]"
@@ -18,7 +18,7 @@
             </div>
 
             <!-- Error Cargando -->
-            <div v-else-if="ErrorCarga" 
+            <div v-else-if="Backend_Error" 
             class="flex flex-col 
             items-center justify-center 
             w-full h-[60vh] gap-4"
@@ -30,7 +30,7 @@
                     El servidor no responde o tu conexión es inestable.
                 </h2>
                 <div class="mt-6 flex justify-center">
-                    <button @click="CargarDatos()" 
+                    <button @click="Backend_Cargar()" 
                     class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                     >
                         🔄 Recargar Página
@@ -46,7 +46,7 @@
                 <div class="tarjeta-config">
                     <div class="deco-config">
                     </div>
-                    <form @submit.prevent="ActualizarCliente"
+                    <form @submit.prevent="Backend_Put"
                     class="relative z-10 flex flex-col gap-4"
                     >
                         <!-- Encabezado -->
@@ -61,7 +61,7 @@
                             </label>
                             <input placeholder="Nombre" 
                             type="text" 
-                            v-model="ClienteConfig.nombre" 
+                            v-model="Datos_Upgrade.nombre" 
                             class="input-config"
                             >
                         </div>
@@ -71,7 +71,7 @@
                             </label>
                             <input placeholder="tucorreo@email.com" 
                             type="text" 
-                            v-model="ClienteConfig.email" 
+                            v-model="Datos_Upgrade.email" 
                             class="input-config"
                             >
                         </div>
@@ -82,7 +82,7 @@
                             <div class="relative w-full">
                                 <input placeholder="Escribe para cambiarla" 
                                 :type="verContrasena ? 'text' : 'password'" 
-                                v-model="ClienteConfig.contrasena" 
+                                v-model="Datos_Upgrade.contrasena" 
                                 autocomplete="new-password" 
                                 class="input-config input-pass"
                                 >
@@ -101,7 +101,7 @@
                             <div class="relative w-full">
                                 <input placeholder="Repite la contraseña" 
                                 :type="verConContrasena ? 'text' : 'password'" 
-                                v-model="ClienteConfig.concontrasena" 
+                                v-model="Datos_Upgrade.concontrasena" 
                                 autocomplete="new-password" 
                                 class="input-config input-pass"
                                 >
@@ -117,10 +117,10 @@
                         <!-- Botones -->
                         <div class="mt-6">
                             <button type="submit" 
-                            :disabled="Actualizando" 
+                            :disabled="Boton_Espera" 
                             class="boton-guardar"
                             >
-                                {{ Actualizando ? 'Guardando datos...' : 'Guardar Cambios' }}
+                                {{ Boton_Espera ? 'Guardando datos...' : 'Guardar Cambios' }}
                             </button>
                         </div>
 
@@ -141,16 +141,16 @@
         ref 
     } from 'vue'
     import { 
-        CerrarSesion,
-        urlover8000, 
-        SesionExpirada, 
+        Cerrar_Sesion,
+        backend_url, 
+        Sesion_Expirada, 
         Iniciado
     } from './Estatus.js'
 
     // ----- Variables Complejas ----- //
 
     // Almacen para Actualizar Clientes //
-    const ClienteConfig = ref({
+    const Datos_Upgrade = ref({
         nombre: "",
         email: "",
         contrasena: "",
@@ -159,108 +159,108 @@
 
     // ----- Variantes Booleanas ----- //
 
-    const ErrorCarga = ref(false)
-    const CargandoTrue = ref(true)
-    const Actualizando = ref(false)
+    const Backend_Error = ref(false)
+    const Backend_Espera = ref(true)
+    const Boton_Espera = ref(false)
     const verContrasena = ref(false)
     const verConContrasena = ref(false)
 
     // ----- Variables Vacias ----- //
 
-    const IdClienteAct = ref(null)
+    const Datos_Id = ref(null)
 
     // ----- Funciones Vue ----- //
     
     // Primera Carga de Datos de la Pagina //
     onMounted (() => {
-        CargarDatos()
+        Backend_Cargar()
     })
 
     // Carga de Datos de la Pagina //
-    const CargarDatos = (async() => {
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+    const Backend_Cargar = (async() => {
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Tiempo de Espera para el Backend
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
+        const Tiempo_Espera = setTimeout(() => {
+            if (Backend_Espera.value) {
+                Backend_Espera.value = false
+                Backend_Error.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
         }}, 15000)
         // Leer Datos del Cliente con Sesion Iniciada
         try {
-            const respuestaid = await fetch(`${urlover8000}/reload/`, { credentials: 'include' })
-            if (respuestaid.ok) {
-                const sesion = await respuestaid.json()
-                IdClienteAct.value = sesion.id_cliente
-                const respuesta = await fetch(`${urlover8000}/cliente/`, { credentials: 'include' })
+            const respuesta_id = await fetch(`${backend_url}/reload/`, { credentials: 'include' })
+            if (respuesta_id.ok) {
+                const sesion = await respuesta_id.json()
+                Datos_Id.value = sesion.id_cliente
+                const respuesta = await fetch(`${backend_url}/cliente/`, { credentials: 'include' })
                 if (respuesta.ok) {
                     const datos = await respuesta.json()
                     if (datos && datos.length > 0) {
-                        ClienteConfig.value.nombre = datos[0].nombre
-                        ClienteConfig.value.email = datos[0].email
+                        Datos_Upgrade.value.nombre = datos[0].nombre
+                        Datos_Upgrade.value.email = datos[0].email
             }}}
-            clearTimeout(temporizador)
+            clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
+            clearTimeout(Tiempo_Espera)
+            Backend_Error.value = true
+            Backend_Espera.value = false
         } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
+            if (!Backend_Error.value) {
+                Backend_Espera.value = false
     }}})
 
     // ----- Funciones Backend ----- //
     
     // Actualizar Datos del Cliente //
-    const ActualizarCliente = async() => {
-        if (Actualizando.value) return
-        Actualizando.value = true
+    const Backend_Put = async() => {
+        if (Boton_Espera.value) return
+        Boton_Espera.value = true
         // Verificacion Contraseñas iguales
-        if (ClienteConfig.value.contrasena !== "" || ClienteConfig.value.concontrasena !== "") {
-            if (ClienteConfig.value.contrasena !== ClienteConfig.value.concontrasena) {
+        if (Datos_Upgrade.value.contrasena !== "" || Datos_Upgrade.value.concontrasena !== "") {
+            if (Datos_Upgrade.value.contrasena !== Datos_Upgrade.value.concontrasena) {
                 alert("❌ Las contraseñas no coinciden. Por favor, verifícalas.")
                 return
         }}
         // Establecer Datos del Cliente
-        const UsuarioUpd = {} 
-        if (ClienteConfig.value.nombre !== "") {
-            UsuarioUpd.nombre = ClienteConfig.value.nombre
+        const Dato_Upgrade = {} 
+        if (Datos_Upgrade.value.nombre !== "") {
+            Dato_Upgrade.nombre = Datos_Upgrade.value.nombre
         }
-        if (ClienteConfig.value.email !== "") {
-            UsuarioUpd.email = ClienteConfig.value.email
+        if (Datos_Upgrade.value.email !== "") {
+            Dato_Upgrade.email = Datos_Upgrade.value.email
         }
-        if (ClienteConfig.value.contrasena !== "") {
-            UsuarioUpd.contrasena = ClienteConfig.value.contrasena
+        if (Datos_Upgrade.value.contrasena !== "") {
+            Dato_Upgrade.contrasena = Datos_Upgrade.value.contrasena
         }
-        if (!IdClienteAct.value) return
+        if (!Datos_Id.value) return
         // Enviar Datos Actualizados al Backend
-        const ActUsuario = await fetch(`${urlover8000}/clientes/id/${IdClienteAct.value}`, {
+        const PutBackend = await fetch(`${backend_url}/clientes/id/${Datos_Id.value}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(UsuarioUpd),
+            body: JSON.stringify(Dato_Upgrade),
             credentials: 'include'
         })
         // Verificacion Sesion Vencida
-        if (ActUsuario.status === 401 || ActUsuario.status === 403) {
-            CerrarSesion()
+        if (PutBackend.status === 401 || PutBackend.status === 403) {
+            Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
+            Sesion_Expirada.value = true
             Iniciado.value = false
-            Actualizando.value = false
+            Boton_Espera.value = false
             return
         }
-        ClienteConfig.value = {
+        Datos_Upgrade.value = {
             nombre: "",
             email: "",
             contrasena: "",
             concontrasena: ""
         }
-        await CargarDatos()
-        Actualizando.value = false
+        await Backend_Cargar()
+        Boton_Espera.value = false
     }
     
 </script>

@@ -5,8 +5,8 @@
 		<!-- Actualizar Estatus -->
 		<Teleport to="body">
 			<transition name="fade">
-				<div v-if="PopUpAct" 
-				@click.self="CerrarPopUpAct"
+				<div v-if="PopUp_Upgrade" 
+				@click.self="Cerrar_PopUp_Upgrade"
 				class="fondo" 
 				>
 					<div class="popup">
@@ -18,12 +18,12 @@
 
                         <!-- Botones -->
 						<div class="botones">
-							<button @click="ActualizarEstatus()"
+							<button @click="Backend_Put()"
 							class="botoncon"
 							>
 								Si Confirmo
 							</button>
-							<button @click="CerrarPopUpAct"
+							<button @click="Cerrar_PopUp_Upgrade"
 							class="botonc"
 							>
 								Cancelar
@@ -41,22 +41,22 @@
 
                 <!-- Mostrar Fondo en Celular -->
 				<transition name="fade">
-					<div v-if="(MostrarFiltro || MostrarNuevo)" 
-					@click="MostrarFiltro = false; MostrarNuevo = false"
+					<div v-if="(Mostrar_Filtro || Mostrar_Nuevo)" 
+					@click="Mostrar_Filtro = false; Mostrar_Nuevo = false"
                     class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[35] sm:hidden cursor-pointer"
 					>
 					</div>
 				</transition>
 
                 <!-- Barra de Filtros de Pedidos -->
-				<div :class="['bar', (MostrarFiltro || MostrarNuevo) 
+				<div :class="['bar', (Mostrar_Filtro || Mostrar_Nuevo) 
 				? 'translate-x-0 sm:w-72 lg:w-80' 
 				: '-translate-x-full sm:w-fit sm:translate-x-0']"
 				>
 
                     <!-- Boton de Filtros -->
                     <div class="hidden sm:block">
-						<h1 @click="MostrarFiltro = !MostrarFiltro"
+						<h1 @click="Mostrar_Filtro = !Mostrar_Filtro"
 						class="botonfil"
 						>
 							ᯤ
@@ -65,7 +65,7 @@
 
                     <!-- Barra de Filtros -->
                     <transition name="slide">
-						<div v-if="MostrarFiltro"
+						<div v-if="Mostrar_Filtro"
 						class="flex flex-col lg:self-center gap-5"
 						>
 
@@ -74,7 +74,7 @@
                                 <h1 class="!mt-0">
 	                                Ordenar
                                 </h1>
-                                <select v-model="orden" 
+                                <select v-model="Orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
@@ -99,42 +99,42 @@
 								<label>
 									<input :value="5"
 									type="radio" 
-									v-model="filtroMP"
+									v-model="Filtro_Metodo_Pago"
 									> 
 										Todos
 								</label>
 								<label>
 									<input :value="4"
 									type="radio" 
-									v-model="filtroMP"
+									v-model="Filtro_Metodo_Pago"
 									> 
 										Paddle
 								</label>
 								<label>
 									<input :value="3"
 									type="radio" 
-									v-model="filtroMP"
+									v-model="Filtro_Metodo_Pago"
 									> 
 										Tarjeta de Credito / Debito
 								</label>
 								<label>
 									<input :value="2"
 									type="radio"
-									v-model="filtroMP"
+									v-model="Filtro_Metodo_Pago"
 									> 
 										Mercado Pago
 								</label>
 								<label>
 									<input :value="1"
 									type="radio"
-									v-model="filtroMP"
+									v-model="Filtro_Metodo_Pago"
 									> 
 										Transferencia Bancaria
 								</label>
 								<label>
 									<input :value="0"
 									type="radio"
-									v-model="filtroMP"
+									v-model="Filtro_Metodo_Pago"
 									> 
 										Efectivo
 								</label>
@@ -148,28 +148,28 @@
 								<label>
 									<input :value="4"
 									type="radio"
-									v-model="filtroEst"
+									v-model="Filtro_Estatus"
 									> 
 										Todos
 								</label>
 								<label>
 									<input :value="3"
 									type="radio"
-									v-model="filtroEst"
+									v-model="Filtro_Estatus"
 									> 
 										Preparando
 								</label>
 								<label>
 									<input :value="2"
 									type="radio" 
-									v-model="filtroEst"
+									v-model="Filtro_Estatus"
 									> 
 										En Camino
 								</label>
 								<label>
 									<input :value="1"
 									type="radio" 
-									v-model="filtroEst"
+									v-model="Filtro_Estatus"
 									> 
 										Entregado
 								</label>
@@ -183,21 +183,21 @@
 								<label>
 									<input :value="3"
 									type="radio"
-									v-model="filtroProm"
+									v-model="Filtro_Promocion"
 									> 
 										Todos
 								</label>
 								<label>
 									<input :value="2"
 									type="radio" 
-									v-model="filtroProm"
+									v-model="Filtro_Promocion"
 									> 
 										Compras con Descuento
 								</label>
 								<label>
 									<input :value="1"
 									type="radio" 
-									v-model="filtroProm"
+									v-model="Filtro_Promocion"
 									> 
 										Compras sin Descuento
 								</label>
@@ -209,11 +209,11 @@
 									Ciudad del Cliente
 								</h1>
 								<div>
-									<select v-model="filtrociudad">
+									<select v-model="Filtro_Ciudad">
 										<option value="" disabled>
 											Selecciona una Ciudad...
 										</option>
-										<option v-for="i in ListaCiudad" 
+										<option v-for="i in Datos_Ciudad" 
 										:key="i.ciudad" 
 										:value="i.ciudad"
 										>
@@ -229,11 +229,11 @@
 									Provincia del Cliente
 								</h1>
 								<div>
-									<select v-model="filtroprovincia">
+									<select v-model="Filtro_Provincia">
 										<option value="" disabled>
 											Selecciona una Provincia...
 										</option>
-										<option v-for="i in ListaProvincia" 
+										<option v-for="i in Datos_Provincia" 
 										:key="i.provincia" 
 										:value="i.provincia"
 										>
@@ -246,13 +246,13 @@
 
                         	<!-- Botones -->
 							<div class="botones">
-								<button @click="AplicarFiltro" 
+								<button @click="Filtro_Aplicar" 
 								class="botoncon"
 								>
 									Aplicar Filtros
 								</button>
-								<button @click="LimpiarFiltro" 
-								v-if="filtroAct === true"
+								<button @click="Filtro_Limpiar" 
+								v-if="Mostrar_Limpiar_Filtro === true"
 								class="botont" 
 								>
 									🗑️ Limpiar Filtro
@@ -268,7 +268,7 @@
 				<div class="start !px-5">
 
                     <!-- Gif Cargando -->
-					<div v-if="CargandoTrue" 
+					<div v-if="Backend_Espera" 
 					class="flex flex-col 
 					items-center justify-center 
 					w-full h-[60vh]"
@@ -283,7 +283,7 @@
 					</div>
 
                     <!-- Error Cargando -->
-                    <div v-else-if="ErrorCarga" 
+                    <div v-else-if="Backend_Error" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
@@ -295,7 +295,7 @@
                 	        El servidor no responde o tu conexión es inestable.
                         </h2>
                         <div class="mt-6 flex justify-center">
-                            <button @click="CargarDatos()" 
+                            <button @click="Backend_Cargar()" 
                             class="botoncon 
 							!flex-none !w-auto 
 							px-8 shadow-lg shadow-green-900/20"
@@ -310,7 +310,7 @@
 						<div>
 
                             <!-- Mostrar Boton Filtro en Celular -->
-							<button @click="MostrarFiltro = true"
+							<button @click="Mostrar_Filtro = true"
 							class="sm:hidden 
 							w-full mb-4 py-3 
 							bg-white text-green-800 
@@ -325,7 +325,7 @@
 
                             <!-- Barra de Busqueda -->
 							<div class="flex flex-row items-stretch w-full gap-3 mb-5">-
-								<input @input="BusquedaPedido"
+								<input @input="Backend_Get"
 								type="text" 
 								v-model="Busqueda" 
 								placeholder="Busqueda..."
@@ -351,13 +351,13 @@
 							>
 
                                 <!-- Datos de Pedido -->
-								<div @click="AbrirPopUpAct(i)"
+								<div @click="Abrir_PopUp_Act(i)"
 								class="tab"
 								>
 									<div class="flex flex-col text-left">
 										<div class="flex flex-wrap items-center gap-3 mb-2">
-											<span :class="Estatuscolor(i.estatus)">
-												{{ Estatustxt(i.estatus) }}
+											<span :class="Estatus_Color(i.estatus)">
+												{{ Estatus_Texto(i.estatus) }}
 											</span>
 										</div>
 										<p class="text-gray-500 font-medium text-sm">
@@ -375,7 +375,7 @@
 										<p class="text-gray-500 font-medium text-sm mt-1">
 											💰 Total: 
 											<span class="text-green-700 font-bold text-lg">
-												$ {{ FormatearPrecio(i.total) }}
+												$ {{ Formato_Precios(i.total) }}
 											</span>
 										</p>
 									</div>
@@ -396,7 +396,7 @@
 										class="text-green-600 text-sm font-bold 
 										mt-3 flex items-center justify-end gap-1"
 										>
-											{{ PedidoNow === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
+											{{ Mostrar_Pedido === i.id_pedido ? 'Ocultar Detalles ⬆️' : 'Ver Detalles ⬇️' }}
 										</div>
 										<button v-if="i.estatus !== 1"
 										class="bg-gray-800 text-white text-xs 
@@ -411,7 +411,7 @@
 
                                 <!-- Detalles de Pedido -->
                                 <transition name="slide">
-									<div v-if = "PedidoNow === i.id_pedido"
+									<div v-if = "Mostrar_Pedido === i.id_pedido"
 									class="liltab !border-green-100/50"
 									>
 										<h3 class="text-lg font-bold text-gray-800 
@@ -474,7 +474,7 @@
 														<span v-if="e.producto.es_promocion && e.producto.precio_anterior" 
 														class="text-xs text-gray-400 font-bold line-through"
 														>
-															$ {{ FormatearPrecio(e.producto.precio_anterior) }}
+															$ {{ Formato_Precios(e.producto.precio_anterior) }}
 														</span>
 														<span class="text-gray-500">
 															Unidad: 
@@ -482,7 +482,7 @@
 															? 'text-red-600 font-black' 
 															: 'text-gray-800'"
 															>
-																${{ FormatearPrecio(e.precio_unitario) }}
+																${{ Formato_Precios(e.precio_unitario) }}
 															</b>
 														</span>
 													</div>
@@ -491,7 +491,7 @@
 															Subtotal:
 														</h2>
 														<h2 class="font-black text-gray-800 text-base">
-															$ {{ FormatearPrecio(e.subtotal) }}
+															$ {{ Formato_Precios(e.subtotal) }}
 														</h2>
 													</div>
 												</div>
@@ -508,14 +508,14 @@
 													<span class="font-semibold text-gray-800">
 														Creado:
 													</span> 
-													{{ FormatoFecha(i.created_at) }}
+													{{ Formato_Fecha(i.created_at) }}
 												</p>
 												<p class="text-gray-500">
 													🔄 
 													<span class="font-semibold text-gray-800">
 														Actualizado:
 													</span> 
-													{{ FormatoFecha(i.updated_at) }}
+													{{ Formato_Fecha(i.updated_at) }}
 												</p>
 												<p class="text-gray-500">
 													🏙️ 
@@ -538,14 +538,14 @@
 
                         		<!-- Botones -->
 								<div class="flex flex-row justify-end gap-2 mt-3">
-									<button @click= "PedidoCambio(i.id_pedido)"
+									<button @click= "Mostrar_Detalles(i.id_pedido)"
 									v-if="i.estatus !== 1"
 									class="bg-green-50 text-green-700 
 									border border-green-200 
 									text-xs font-bold px-3 py-2 
 									rounded-lg hover:bg-green-100 shadow-sm"
 									>
-										{{ PedidoNow === i.id_pedido ? 'Ocultar ⬆️' : 'Detalles ⬇️' }}
+										{{ Mostrar_Pedido === i.id_pedido ? 'Ocultar ⬆️' : 'Detalles ⬇️' }}
 									</button>
 								</div>
 
@@ -569,8 +569,8 @@
 
                         <!-- Mostrando Paginas -->
 						<div class="flex justify-center p-3">
-                            <button @click="CambiarPagina('back')" 
-                            :disabled="Pagina === 0 || CargandoTrue"
+                            <button @click="Cambiar_Pagina('back')" 
+                            :disabled="Pagina === 0 || Backend_Espera"
 							class="botona"
 							>
 								❮
@@ -585,8 +585,8 @@
 									Fin de la lista
 								</span>
 							</h2>
-                            <button @click="CambiarPagina('next')" 
-                            :disabled="!HayMasPaginas || CargandoTrue"
+                            <button @click="Cambiar_Pagina('next')" 
+                            :disabled="!Paginas_Max || Backend_Espera"
 							class="botona"
 							>
 								❯
@@ -611,15 +611,16 @@
 		ref 
 	} from 'vue'
     import { 
-		urlover8000, 
-		SesionExpirada, 
-		Iniciado 
+		backend_url, 
+		Sesion_Expirada, 
+		Iniciado,
+        PopUp_Upgrade
 	} from './Estatus.js'
 
 	// ----- Variables Complejas ----- //
 
     // Almacen para Actualizar Estatus del Pedido //
-	const EstatusAct = ref({
+	const Datos_Upgrade = ref({
 		id_pedido: "",
 		id_cliente: "",
 		id_direccion: "",
@@ -631,130 +632,129 @@
 
     // ----- Variables Booleanas ----- //
 
-	const filtroAct = ref(false)
-    const ErrorCarga = ref(false)
-    const CargandoTrue = ref(true)
-    const HayMasPaginas = ref(false)
-	const MostrarFiltro = ref(false)
-    const BloqueoPeticion = ref(false)
-	const PopUpAct = ref (false)
+	const Mostrar_Limpiar_Filtro = ref(false)
+    const Backend_Error = ref(false)
+    const Backend_Espera = ref(true)
+    const Paginas_Max = ref(false)
+	const Mostrar_Filtro = ref(false)
+    const Bloqueo_Peticion = ref(false)
 
     // ----- Variables Vacias ----- //
 
-	const orden = ref("")
+	const Orden = ref("")
 	const Pedidos = ref([])
 	const Busqueda = ref("")
-	const PedidoNow = ref(null)
-    const ListaCiudad = ref ("")
-    const filtrociudad = ref ("")
-    const ListaProvincia = ref ("")
-    const filtroprovincia = ref ("")
+	const Mostrar_Pedido = ref(null)
+    const Datos_Ciudad = ref ("")
+    const Filtro_Ciudad = ref ("")
+    const Datos_Provincia = ref ("")
+    const Filtro_Provincia = ref ("")
 
     // ----- Variables Simples ----- //
 
 	const Pagina = ref(0)
-	const filtroMP = ref(5)
-	const filtroEst = ref(4)
-	const filtroProm = ref(3)
-    const ItemsPorPagina = ref(24)
+	const Filtro_Metodo_Pago = ref(5)
+	const Filtro_Estatus = ref(4)
+	const Filtro_Promocion = ref(3)
+    const Paginas_Items = ref(24)
 
     // ----- Funciones Vue ----- //
     
     // Primera Carga de Datos de la Pagina //
 	onMounted (() => {
-        CargarDatos()
+        Backend_Cargar()
     })
     // Carga de Datos de la Pagina //
-    const CargarDatos = (async() => {
-        if (BloqueoPeticion.value) return
-        BloqueoPeticion.value = true
+    const Backend_Cargar = (async() => {
+        if (Bloqueo_Peticion.value) return
+        Bloqueo_Peticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Tiempo de Espera para el Backend
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
+        const Tiempo_Espera = setTimeout(() => {
+            if (Backend_Espera.value) {
+                Backend_Espera.value = false
+                Backend_Error.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
             }
         }, 15000)
         // Leer Pedidos y Direcciones
         try {
-			await BusquedaPedido()
-			const respuestac = await fetch(`${urlover8000}/direccion/ciudad/`)
-			const ciudad = await respuestac.json()
-			ListaCiudad.value = ciudad
-			const respuestap = await fetch(`${urlover8000}/direccion/provincia/`)
-			const provincia = await respuestap.json()
-			ListaProvincia.value = provincia
-            clearTimeout(temporizador)
+			await Backend_Get()
+			const respuesta_ciudad = await fetch(`${backend_url}/direccion/ciudad/`)
+			const ciudad = await respuesta_ciudad.json()
+			Datos_Ciudad.value = ciudad
+			const respuesta_provincia = await fetch(`${backend_url}/direccion/provincia/`)
+			const provincia = await respuesta_provincia.json()
+			Datos_Provincia.value = provincia
+            clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
+            clearTimeout(Tiempo_Espera)
+            Backend_Error.value = true
+            Backend_Espera.value = false
         } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
+            if (!Backend_Error.value) {
+                Backend_Espera.value = false
             }
-            BloqueoPeticion.value = false
+            Bloqueo_Peticion.value = false
     }})
     // Cambiar Pagina //
-    const CambiarPagina = async (direccion) => {
-        if (BloqueoPeticion.value) return
-        BloqueoPeticion.value = true
+    const Cambiar_Pagina = async (direccion) => {
+        if (Bloqueo_Peticion.value) return
+        Bloqueo_Peticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Establecer Valor de Items de Pagina
         if (direccion === 'next') {
-            Pagina.value += ItemsPorPagina.value
+            Pagina.value += Paginas_Items.value
         } else if (direccion === 'back') {
-            Pagina.value -= ItemsPorPagina.value
+            Pagina.value -= Paginas_Items.value
             if (Pagina.value < 0) Pagina.value = 0
         }
         try {
-            await BusquedaPedido()
+            await Backend_Get()
         } catch (error) {
             console.error(error)
-            ErrorCarga.value = true
+            Backend_Error.value = true
         } finally {
-            CargandoTrue.value = false
-            BloqueoPeticion.value = false
+            Backend_Espera.value = false
+            Bloqueo_Peticion.value = false
     }}
 
     // ----- Funciones Frontend ----- //
 
     // Abrir Pop up para Actualizar Estatus de Pedido //
-	const AbrirPopUpAct = (pedido_fila) => {
+	const Abrir_PopUp_Act = (pedido_fila) => {
 		if (pedido_fila.estatus === 1) {
-			PedidoCambio(pedido_fila.id_pedido)
+			Mostrar_Detalles(pedido_fila.id_pedido)
 			return
 		}
-		EstatusAct.value.id_pedido = pedido_fila.id_pedido
-		EstatusAct.value.id_cliente = pedido_fila.id_cliente
-		EstatusAct.value.id_direccion = pedido_fila.id_direccion
-		EstatusAct.value.metodo_pago = pedido_fila.metodo_pago
-		EstatusAct.value.tiempo_estimado_entrega = pedido_fila.tiempo_estimado_entrega
-		EstatusAct.value.tiempo_entrega = pedido_fila.tiempo_entrega
-		EstatusAct.value.estatus = pedido_fila.estatus - 1
-		PopUpAct.value = true
+		Datos_Upgrade.value.id_pedido = pedido_fila.id_pedido
+		Datos_Upgrade.value.id_cliente = pedido_fila.id_cliente
+		Datos_Upgrade.value.id_direccion = pedido_fila.id_direccion
+		Datos_Upgrade.value.metodo_pago = pedido_fila.metodo_pago
+		Datos_Upgrade.value.tiempo_estimado_entrega = pedido_fila.tiempo_estimado_entrega
+		Datos_Upgrade.value.tiempo_entrega = pedido_fila.tiempo_entrega
+		Datos_Upgrade.value.estatus = pedido_fila.estatus - 1
+		PopUp_Upgrade.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Aplicar Filtros //
-	const AplicarFiltro = () => {
+	const Filtro_Aplicar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
-		BusquedaPedido()
+		Backend_Get()
 	}
     // Cerrar Pop up para Actualizar Estatus de Pedido //
-	const CerrarPopUpAct = () => {
-		PopUpAct.value = false
+	const Cerrar_PopUp_Upgrade = () => {
+		PopUp_Upgrade.value = false
 		document.body.style.overflow = "auto"
 	}
     // Establecer Color de Insignia de Estatus //
-	const Estatuscolor = (id_estatus) => {
+	const Estatus_Color = (id_estatus) => {
 		// Entregado
 		if (id_estatus === 1) {
 			return "globoazul"
@@ -774,7 +774,7 @@
 			return "globlanco"
 	}
     // Establecer Texto de Insignia de Estatus //
-	const Estatustxt = (id_estatus) => {
+	const Estatus_Texto = (id_estatus) => {
 		// Entregado
 		if (id_estatus === 1) {
 			return "✅ Entregado"
@@ -794,7 +794,7 @@
 			return "indefinido"
 	}
     // Leer Fecha con Formato DD/MM/YYYY //
-	const FormatoFecha = (fechai) => {
+	const Formato_Fecha = (fechai) => {
 		if (fechai) {
 			return new Date(fechai).toLocaleDateString('es-ES')
 		}
@@ -802,52 +802,52 @@
 			return "Pendiente"
 	}}
     // Leer Precio con Formato Pesos Argentinos //
-	const FormatearPrecio = (precio) => {
+	const Formato_Precios = (precio) => {
 		if (precio === null || precio === undefined) return "0"
 		return new Intl.NumberFormat('es-AR').format(precio)
 	}
     // Limpiar Filtros, Orden y Busqueda //
-	const LimpiarFiltro = () => {
+	const Filtro_Limpiar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
-		filtroMP.value = 5
-		filtroEst.value = 4
-		filtroProm.value = 3
-        filtrociudad.value = ""
-        filtroprovincia.value = ""
-		orden.value = ""
-		BusquedaPedido()
-		filtroAct.value = false
+		Filtro_Metodo_Pago.value = 5
+		Filtro_Estatus.value = 4
+		Filtro_Promocion.value = 3
+        Filtro_Ciudad.value = ""
+        Filtro_Provincia.value = ""
+		Orden.value = ""
+		Backend_Get()
+		Mostrar_Limpiar_Filtro.value = false
 	}
     // Mostrar Detalles de Pedido //
-	const PedidoCambio = (id) => {
-		if (PedidoNow.value === id) {
-			PedidoNow.value = null
+	const Mostrar_Detalles = (id) => {
+		if (Mostrar_Pedido.value === id) {
+			Mostrar_Pedido.value = null
 		}
 		else {
-			PedidoNow.value = id
+			Mostrar_Pedido.value = id
 	}}
 
     // ----- Funciones Backend ----- //
 
     // Actualizar Estatus del Pedido //
-	const ActualizarEstatus = async() => {
-		const ActEst = await fetch(`${urlover8000}/pedidos/id/${EstatusAct.value.id_pedido}`, {
+	const Backend_Put = async() => {
+		const PutBackend = await fetch(`${backend_url}/pedidos/id/${Datos_Upgrade.value.id_pedido}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(EstatusAct.value),
+			body: JSON.stringify(Datos_Upgrade.value),
 			credentials: 'include'
 		})
-		if (ActEst.status === 401) {
-			CerrarSesion()
+		if (PutBackend.status === 401) {
+			Cerrar_Sesion()
 			alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-			SesionExpirada.value = true
+			Sesion_Expirada.value = true
 			Iniciado.value = false
 			return
 		}
-		EstatusAct.value = {
+		Datos_Upgrade.value = {
 			id_pedido: "",
 			id_cliente: "",
 			id_direccion: "",
@@ -856,82 +856,83 @@
 			tiempo_entrega: "",
 			estatus: ""
 		}
-		BusquedaPedido()
-		CerrarPopUpAct()
+		Backend_Get()
+		Cerrar_PopUp_Upgrade()
 	}
     // Keer Datos del Pedido //
-	const BusquedaPedido = async() => {
-		let url = new URL (`${urlover8000}/pedidos/all/`)
+	const Backend_Get = async() => {
+		let url = new URL (`${backend_url}/pedidos/all/`)
 		url.searchParams.append('skip', Pagina.value)
-        url.searchParams.append('limit', ItemsPorPagina.value + 1)
+        url.searchParams.append('limit', Paginas_Items.value + 1)
         // Establecer Busqueda
 		if (Busqueda.value !== "") {
 			url.searchParams.append('busqueda_pedido', Busqueda.value)
 		}
         // Establecer Orden
-        if (orden.value !== "") {
-            url.searchParams.append('orden', orden.value)
-            filtroAct.value = true
+        if (Orden.value !== "") {
+            url.searchParams.append('orden', Orden.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Metodo de Pago
-		let mpfiltro = ""
-		if (filtroMP.value === 5) {
-			mpfiltro = ""
+		let Texto_Metodo_Pago = ""
+		if (Filtro_Metodo_Pago.value === 5) {
+			Texto_Metodo_Pago = ""
 		}
-		else if (filtroMP.value === 4) {
-			mpfiltro = "Paddle"
+		else if (Filtro_Metodo_Pago.value === 4) {
+			Texto_Metodo_Pago = "Paddle"
 		}
-		else if (filtroMP.value === 3) {
-			mpfiltro = "Tarjeta de Crédito"
+		else if (Filtro_Metodo_Pago.value === 3) {
+			Texto_Metodo_Pago = "Tarjeta de Crédito"
 		}
-		else if (filtroMP.value === 2) {
-			mpfiltro = "MercadoPago"
+		else if (Filtro_Metodo_Pago.value === 2) {
+			Texto_Metodo_Pago = "MercadoPago"
 		}
-		else if (filtroMP.value === 1) {
-			mpfiltro = "Transferencia"
+		else if (Filtro_Metodo_Pago.value === 1) {
+			Texto_Metodo_Pago = "Transferencia"
 		}
-		else if (filtroMP.value === 0) {
-			mpfiltro = "Efectivo"
+		else if (Filtro_Metodo_Pago.value === 0) {
+			Texto_Metodo_Pago = "Efectivo"
 		}
-		if (filtroMP.value !== 5 && mpfiltro !== "") {
-			url.searchParams.append('filtromp', mpfiltro)
-			filtroAct.value = true
+		if (Filtro_Metodo_Pago.value !== 5 && Texto_Metodo_Pago !== "") {
+			url.searchParams.append('filtromp', Texto_Metodo_Pago)
+			Mostrar_Limpiar_Filtro.value = true
 		}
         // Establecer Filtro de Estatus de los Pedidos
-		if (filtroEst.value !== 4) {
-			url.searchParams.append('filtroest', filtroEst.value)
-			filtroAct.value = true
+		if (Filtro_Estatus.value !== 4) {
+			url.searchParams.append('filtroest', Filtro_Estatus.value)
+			Mostrar_Limpiar_Filtro.value = true
 		}
         // Establecer Filtro en Promocion
-		if (filtroProm.value !== 3) {
-			const esPromoBool = filtroProm.value === 2 ? 'true' : 'false'
-            url.searchParams.append('filtroprom', esPromoBool)
-            filtroAct.value = true
+		if (Filtro_Promocion.value !== 3) {
+			const Dato_Filtro_Promocion = Filtro_Promocion.value === 2 ? 'true' : 'false'
+            url.searchParams.append('filtroprom', Dato_Filtro_Promocion)
+            Mostrar_Limpiar_Filtro.value = true
 		}
         // Establecer Filtro Direcciones
-        if (filtrociudad.value !== "") {
-            url.searchParams.append('busqueda_pedido', filtrociudad.value)
-            filtroAct.value = true
+        if (Filtro_Ciudad.value !== "") {
+            url.searchParams.append('busqueda_pedido', Filtro_Ciudad.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (filtroprovincia.value !== "") {
-            url.searchParams.append('busqueda_pedido', filtroprovincia.value)
-            filtroAct.value = true
+        if (Filtro_Provincia.value !== "") {
+            url.searchParams.append('busqueda_pedido', Filtro_Provincia.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
-		const BusqPedido = await fetch(url, {
+		const Get_Backend = await fetch(url, {
 			method: 'GET',
             credentials: 'include'
 		})
-		const datos = await BusqPedido.json()
+		const datos = await Get_Backend.json()
 		Pedidos.value = datos
         if (Array.isArray(datos)) {
-            if (datos.length > ItemsPorPagina.value) {
-                HayMasPaginas.value = true
-                Pedidos.value = datos.slice(0, ItemsPorPagina.value)
+            if (datos.length > Paginas_Items.value) {
+                Paginas_Max.value = true
+                Pedidos.value = datos.slice(0, Paginas_Items.value)
             } else {
-                HayMasPaginas.value = false
+                Paginas_Max.value = false
                 Pedidos.value = datos
         }} else {
             Pedidos.value = []
-            HayMasPaginas.value = false
+            Paginas_Max.value = false
     }}
+
 </script>

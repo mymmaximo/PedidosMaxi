@@ -5,7 +5,7 @@
         <!-- Adicion al Carrito Exitosa -->
         <Teleport to="body">
             <transition name="slide">
-                <div v-if="MostrarConfir" 
+                <div v-if="Mostrar_Confirmacion" 
                 class="notificacion"
                 >
                     <span class="text-xl drop-shadow-sm"> 
@@ -22,38 +22,38 @@
         <!-- Eliminar Producto -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpDel" 
-                @click.self="CerrarPopUpDel" 
+                <div v-if="PopUp_Delete" 
+                @click.self="Cerrar_PopUp_Delete" 
                 class="fondo"
                 >
                     <div class="popup">
 
                         <!-- Encabezado -->
                         <h1>
-                            ¿Desear Eliminar/Reactivar {{ ProductoEli.nombre }}?
+                            ¿Desear Eliminar/Reactivar {{ Datos_Delete.nombre }}?
                         </h1>
 
                         <!-- Imagenes del Producto -->
                         <div>
-                            <div v-if="ProductoEli.imagenes.length > 0"
+                            <div v-if="Datos_Delete.imagenes.length > 0"
                             class="flex flex-row 
                             gap-1 md:gap-3 overflow-x-auto 
                             items-center justify-center 
                             w-full md:pb-2 snap-x pb-1"
                             >
-                                <button @click="BackImg(ProductoEli)"
-                                :disabled="GetImg(ProductoEli.id) === 0"
+                                <button @click="Imagen_Anterior(Datos_Delete)"
+                                :disabled="Imagen_Leer(Datos_Delete.id) === 0"
                                 class="botonflecha"
                                 >
                                     ❮
                                 </button>
                                 <div>
-                                    <img v-show="ImagenesCargando[ProductoEli.id] === false"
-                                    :src="ObtenerImgUrl(ProductoEli.imagenes[GetImg(ProductoEli.id)].s3_key)"
-                                    @load="ImagenesCargando[ProductoEli.id] = false"
+                                    <img v-show="Imagen_Espera[Datos_Delete.id] === false"
+                                    :src="Imagen_Url(Datos_Delete.imagenes[Imagen_Leer(Datos_Delete.id)].s3_key)"
+                                    @load="Imagen_Espera[Datos_Delete.id] = false"
                                     class="imagen"
                                     />
-                                    <div v-if="ImagenesCargando[ProductoEli.id] !== false" 
+                                    <div v-if="Imagen_Espera[Datos_Delete.id] !== false" 
                                     class="mt-2"
                                     >
                                         <img src="../assets/loading.gif"
@@ -62,8 +62,8 @@
                                         />
                                     </div>
                                 </div>
-                                <button @click="NextImg(ProductoEli)"
-                                :disabled="GetImg(ProductoEli.id) === ProductoEli.imagenes.length - 1"
+                                <button @click="Imagen_Siguiente(Datos_Delete)"
+                                :disabled="Imagen_Leer(Datos_Delete.id) === Datos_Delete.imagenes.length - 1"
                                 class="botonflecha"
                                 >
                                     ❯
@@ -77,12 +77,12 @@
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="BorrarProducto()" 
+                            <button @click="Backend_Delete()" 
                             class="botoncon"
                             >
                                 Si Confirmo
                             </button>
-                            <button @click="CerrarPopUpDel" 
+                            <button @click="Cerrar_PopUp_Delete" 
                             class="botonc"
                             >
                                 Cancelar
@@ -98,35 +98,35 @@
         <!-- Comprar Ventana -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpBuy" 
-                @click.self="CerrarPopUpBuy" 
+                <div v-if="PopUp_Buy" 
+                @click.self="Cerrar_PopUp_Buy" 
                 class="fondo"
                 >
                     <div class="popup popup-compra">
 
                         <!-- Encabezado -->
                         <h1>
-                            {{ ProductoActual.nombre }}
+                            {{ Producto_Actual.nombre }}
                         </h1>
 
                         <!-- Imagenes del Producto -->
                         <div class="carrusel-contenedor">
-                            <div v-if="ProductoActual.imagenes.length > 0"
+                            <div v-if="Producto_Actual.imagenes.length > 0"
                             class="carrusel-fila"
                             >
-                                <button @click="BackImg(ProductoActual)"
-                                :disabled="GetImg(ProductoActual.id) === 0"
+                                <button @click="Imagen_Anterior(Producto_Actual)"
+                                :disabled="Imagen_Leer(Producto_Actual.id) === 0"
                                 class="carrusel-btn"
                                 >
                                     ❮
                                 </button>
                                 <div class="carrusel-img-caja">
-                                    <img v-show="ImagenesCargando[ProductoActual.id] === false"
-                                    :src="ObtenerImgUrl(ProductoActual.imagenes[GetImg(ProductoActual.id)].s3_key)"
-                                    @load="ImagenesCargando[ProductoActual.id] = false"
+                                    <img v-show="Imagen_Espera[Producto_Actual.id] === false"
+                                    :src="Imagen_Url(Producto_Actual.imagenes[Imagen_Leer(Producto_Actual.id)].s3_key)"
+                                    @load="Imagen_Espera[Producto_Actual.id] = false"
                                     class="carrusel-img"
                                     />
-                                    <div v-if="ImagenesCargando[ProductoActual.id] !== false"
+                                    <div v-if="Imagen_Espera[Producto_Actual.id] !== false"
                                     class="absolute inset-0 
                                     flex items-center justify-center"
                                     >
@@ -136,8 +136,8 @@
                                         />
                                     </div>
                                 </div>
-                                <button @click="NextImg(ProductoActual)"
-                                :disabled="GetImg(ProductoActual.id) === ProductoActual.imagenes.length - 1"
+                                <button @click="Imagen_Siguiente(Producto_Actual)"
+                                :disabled="Imagen_Leer(Producto_Actual.id) === Producto_Actual.imagenes.length - 1"
                                 class="carrusel-btn"
                                 >
                                     ❯
@@ -155,17 +155,17 @@
                         <!-- Cantidad de Producto -->
                         <div class="panel-compra">
                             <div class="control-cantidad">
-                                <button @click="RestarProducto(ProductoActual)"
+                                <button @click="Producto_Restar(Producto_Actual)"
                                 class="control-btn-restar"
                                 >
                                     ━
                                 </button>
-                                <input v-model="ProductoCantidad"
+                                <input v-model="Producto_Cantidad"
                                 type="number"
                                 maxlength="8"
                                 class="control-input"
                                 />
-                                <button @click="SumarProducto(ProductoActual)" 
+                                <button @click="Producto_Sumar(Producto_Actual)" 
                                 class="control-btn-sumar"
                                 >
                                     ✚
@@ -176,19 +176,19 @@
                                     Precio Total 
                                 </span>
                                 <span class="total-valor">
-                                    $ {{ FormatearPrecio(ProductoActual.precio * ProductoCantidad) }}
+                                    $ {{ Formato_Precios(Producto_Actual.precio * Producto_Cantidad) }}
                                 </span>
                             </div>
                         </div>
 
                         <!-- Botones -->
                         <div class="botones mt-2">
-                            <button @click="SumarCarrito"
+                            <button @click="Backend_Post"
                             class="botoncon"
                             >
                                 Agregar al Carrito
                             </button>
-                            <button @click="CerrarPopUpBuy" 
+                            <button @click="Cerrar_PopUp_Buy" 
                             class="botonc"
                             >
                                 Cancelar
@@ -204,73 +204,73 @@
         <!-- Actualizar Producto -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpAct" 
-                @click.self="CerrarPopUpAct" 
+                <div v-if="PopUp_Upgrade" 
+                @click.self="Cerrar_PopUp_Upgrade" 
                 class="fondo"
                 >
                     <div class="popup">
-                        <form @submit.prevent="ActualizarProducto">
+                        <form @submit.prevent="Backend_Put">
 
                             <!-- Encabezado -->
                             <h1>
-                                {{ ProductoAct.nombre }}
+                                {{ Datos_Upgrade.nombre }}
                             </h1>
 
                             <!-- Datos del Producto -->
-                            <div v-if="VerificarRol([1, 2])">
+                            <div v-if="Verificar_Rol([1, 2])">
                                 <h2>
                                     Nombre
                                 </h2>
                                 <input placeholder="Nombre"
                                 type="text"
-                                v-model="ProductoAct.nombre"
+                                v-model="Datos_Upgrade.nombre"
                                 maxlength="50"
                                 />
                             </div>
-                            <div v-if="VerificarRol([1, 2, 4])">
+                            <div v-if="Verificar_Rol([1, 2, 4])">
                                 <h2>
                                     Precio
                                 </h2>
                                 <input placeholder="Precio"
                                 type="number"
-                                v-model="ProductoAct.precio"
+                                v-model="Datos_Upgrade.precio"
                                 maxlength="8"
                                 />
                             </div>
-                            <div v-if="VerificarRol([1, 2, 5])">
+                            <div v-if="Verificar_Rol([1, 2, 5])">
                                 <h2>
                                     Stock
                                 </h2>
                                 <input placeholder="Stock"
                                 type="number"
-                                v-model="ProductoAct.stock"
+                                v-model="Datos_Upgrade.stock"
                                 maxlength="8"
                                 />
                             </div>
-                            <div v-if="VerificarRol([1, 2])">
+                            <div v-if="Verificar_Rol([1, 2])">
                                 <h2>
                                     Categoria
                                 </h2>
-                                <select v-model="OpcionCategoriaA" 
+                                <select v-model="Dato_Categorias" 
                                 class="seleccion"
                                 >
                                     <option value="new">
                                         + Agrega una Categoria
                                     </option>
-                                    <option v-for="i in ListaCategoria"
+                                    <option v-for="i in Datos_Categorias"
                                     :key="i.categoria"
                                     :value="i.categoria"
                                     >
                                         {{ i.categoria }}
                                     </option>
                                 </select>
-                                <div v-if="OpcionCategoriaA === 'new'">
+                                <div v-if="Dato_Categorias === 'new'">
                                     <h3>
                                         Nueva Categoria
                                     </h3>
                                     <input placeholder="Categoria"
                                     type="text"
-                                    v-model="ProductoAct.categoria"
+                                    v-model="Datos_Upgrade.categoria"
                                     maxlength="20"
                                     />
                                 </div>
@@ -279,30 +279,30 @@
                                 </h2>
                                 <input placeholder="Codigo de Barras"
                                 type="text"
-                                v-model="ProductoAct.codigo_barra"
+                                v-model="Datos_Upgrade.codigo_barra"
                                 maxlength="15"
                                 />
                             </div>
 
                             <!-- Imagenes del Producto -->
-                            <div v-if="VerificarRol([1, 2])">
+                            <div v-if="Verificar_Rol([1, 2])">
                                 <h2>
                                     Imágenes actuales
                                 </h2>
-                                <div v-if="ProductoAct.imagenes && ProductoAct.imagenes.length > 0"
+                                <div v-if="Datos_Upgrade.imagenes && Datos_Upgrade.imagenes.length > 0"
                                 class="flex flex-row 
                                 md:gap-3 gap-1 items-center 
                                 justify-center w-full md:pb-2 pb-1"
                                 >
-                                    <button @click="BackImg(ProductoAct)"
+                                    <button @click="Imagen_Anterior(Datos_Upgrade)"
                                     type="button"
-                                    :disabled="GetImg(ProductoAct.id) === 0"
+                                    :disabled="Imagen_Leer(Datos_Upgrade.id) === 0"
                                     class="botonflecha"
                                     >
                                         ❮
                                     </button>
                                     <div class="relative w-fit mx-auto mt-2">
-                                        <button @click="NoMoreImages(ProductoAct.imagenes[GetImg(ProductoAct.id)])"
+                                        <button @click="Imagen_Delete(Datos_Upgrade.imagenes[Imagen_Leer(Datos_Upgrade.id)])"
                                         type="button"
                                         title="Quitar imagen"
                                         class="botonx"
@@ -310,14 +310,14 @@
                                             🗙
                                         </button>
                                         <div>
-                                            <img v-show="ImagenesCargando[ProductoAct.id] === false"
-                                            :src="ObtenerImgUrl(ProductoAct.imagenes[GetImg(ProductoAct.id)].s3_key)" 
-                                            @load="ImagenesCargando[ProductoAct.id] = false"
-                                            :class="DelImg.includes(ProductoAct.imagenes[GetImg(ProductoAct.id)].id_imagen) 
+                                            <img v-show="Imagen_Espera[Datos_Upgrade.id] === false"
+                                            :src="Imagen_Url(Datos_Upgrade.imagenes[Imagen_Leer(Datos_Upgrade.id)].s3_key)" 
+                                            @load="Imagen_Espera[Datos_Upgrade.id] = false"
+                                            :class="Datos_Delete_Imagenes.includes(Datos_Upgrade.imagenes[Imagen_Leer(Datos_Upgrade.id)].id_imagen) 
                                             ? 'imagendel' 
                                             : 'imagen'"
                                             />
-                                            <div v-if="ImagenesCargando[ProductoAct.id] !== false" 
+                                            <div v-if="Imagen_Espera[Datos_Upgrade.id] !== false" 
                                             class="mt-2"
                                             >
                                                 <img src="../assets/loading.gif"
@@ -327,9 +327,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button @click="NextImg(ProductoAct)"
+                                    <button @click="Imagen_Siguiente(Datos_Upgrade)"
                                     type="button"
-                                    :disabled="GetImg(ProductoAct.id) === ProductoAct.imagenes.length - 1"
+                                    :disabled="Imagen_Leer(Datos_Upgrade.id) === Datos_Upgrade.imagenes.length - 1"
                                     class="botonflecha"
                                     >
                                         ❯
@@ -342,14 +342,14 @@
                                     <h2>
                                         Imagenes Nuevas
                                     </h2>
-                                    <div v-if="VistaPrevia.length > 0" 
+                                    <div v-if="Producto_Imagenes_Previa.length > 0" 
                                     class="relative w-fit mx-auto mt-2"
                                     >
-                                        <div v-for="(img, index) in VistaPrevia"
+                                        <div v-for="(img, index) in Producto_Imagenes_Previa"
                                         :key="index"
                                         class="shrink-0 mt-2 relative"
                                         >
-                                            <button @click="LimpiarImagenes"
+                                            <button @click="Imagen_Limpiar"
                                             type="button"
                                             title="Quitar imagen"
                                             class="botonx"
@@ -368,12 +368,12 @@
                                         </span>
                                     </div>
                                     <div class="md:mt-4 mt-2">
-                                        <input @change="SeleccionarImagen"
+                                        <input @change="Imagen_Seleccionar"
                                         type="file"
                                         accept="image/*"
                                         multiple
                                         class="imagenu !w-full"
-                                        ref="fileInput"
+                                        ref="Imagen_New"
                                         />
                                     </div>
                                 </div>
@@ -381,13 +381,13 @@
 
                             <!-- Botones -->
                             <div class="botones">
-                                <button :disabled="confirboton || Actualizando"
+                                <button :disabled="Verificar_Boton || Actualizando"
                                 type="submit"
                                 class="botoncon"
                                 >
                                     {{ Actualizando ? "Actualizando..." : "Actualizar" }}
                                 </button>
-                                <button @click="CerrarPopUpAct" 
+                                <button @click="Cerrar_PopUp_Upgrade" 
                                 type="button" 
                                 class="botonc"
                                 >
@@ -405,8 +405,8 @@
         <!-- Actualizar Banner -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpActBanner" 
-                @click.self="CerrarPopUpActBanner" 
+                <div v-if="PopUp_Banner" 
+                @click.self="Cerrar_PopUp_Banner" 
                 class="fondo"
                 >
                     <div class="popup">
@@ -422,12 +422,12 @@
                                 Nuevos Banners
                             </h1>
                             <div class="md:mt-4 mt-2">
-                                <input @change="SeleccionarBanner"
+                                <input @change="Banner_Seleccionar"
                                 type="file"
                                 accept="image/*"
                                 multiple
                                 class="imagenu !w-full"
-                                ref="fileInput"
+                                ref="Imagen_New"
                                 />
                             </div>
                         </div>
@@ -437,21 +437,21 @@
                             <h1>
                                 Actualizar Banners
                             </h1>
-                            <div v-if="BannersOrden.length > 0"
+                            <div v-if="Orden_Banner.length > 0"
                             class="relative flex flex-row overflow-x-auto gap-4"
                             >
-                                <div v-for="(banner, index) in BannersOrden"
+                                <div v-for="(banner, index) in Orden_Banner"
                                 :key="banner.id || banner.vista_previa"
-                                :class="BannerDesactivado(banner) ? 'cartabannerdel' : 'cartabanner'"
+                                :class="Filtro_Banner_Estatus_0(banner) ? 'cartabannerdel' : 'cartabanner'"
                                 draggable="true"
-                                @dragstart="EmpezarArrastre(index)"
+                                @dragstart="Toque_Drag(index)"
                                 @dragover.prevent
-                                @drop="Soltar(index)"
+                                @drop="Toque_Drop(index)"
                                 >
                                     <template v-if="banner.id">
                                         <div class="botones">
-                                            <button @click="BannerEstatus(banner.id)"
-                                            v-if="!BannerDesactivado(banner)"
+                                            <button @click="Filtro_Banner_Estatus_1(banner.id)"
+                                            v-if="!Filtro_Banner_Estatus_0(banner)"
                                             type="button"
                                             title="Desactivar"
                                             class="botonc"
@@ -459,7 +459,7 @@
                                                 🗙
                                             </button>
                                             <button v-else
-                                            @click="BannerEstatus(banner.id)"
+                                            @click="Filtro_Banner_Estatus_1(banner.id)"
                                             type="button"
                                             title="Restaurar"
                                             class="botoncon"
@@ -467,9 +467,9 @@
                                                 🐦‍🔥
                                             </button>
                                         </div>
-                                        <div v-if="BannerDesactivado(banner)">
-                                            <button @click="DelSupaBann.push(banner.id)"
-                                            v-if="!DelSupaBann.includes(banner.id)"
+                                        <div v-if="Filtro_Banner_Estatus_0(banner)">
+                                            <button @click="Banner_Delete_Supabase.push(banner.id)"
+                                            v-if="!Banner_Delete_Supabase.includes(banner.id)"
                                             type="button"
                                             title="Quitar imagen"
                                             class="botonx"
@@ -477,7 +477,7 @@
                                                 🗑️
                                             </button>
                                             <button v-else
-                                            @click="DelSupaBann = DelSupaBann.filter((id) => id !== banner.id)"
+                                            @click="Banner_Delete_Supabase = Banner_Delete_Supabase.filter((id) => id !== banner.id)"
                                             type="button"
                                             title="Restaurar imagen"
                                             class="botonx"
@@ -486,12 +486,12 @@
                                             </button>
                                         </div>
                                         <div class="banner-wrapper">
-                                            <img :src="ObtenerImgUrl(banner.s3_key)"
-                                            :class="DelSupaBann.includes(banner.id) 
+                                            <img :src="Imagen_Url(banner.s3_key)"
+                                            :class="Banner_Delete_Supabase.includes(banner.id) 
                                             ? 'imagendel' 
                                             : 'imagen'"
                                             />
-                                            <div v-if="BannerDesactivado(banner)" 
+                                            <div v-if="Filtro_Banner_Estatus_0(banner)" 
                                             class="banner-overlay"
                                             >
                                             </div>
@@ -501,7 +501,7 @@
                                         <h1>
                                             Nuevo!
                                         </h1>
-                                        <button @click="BannersNuevos.splice(BannersNuevos.indexOf(banner), 1)"
+                                        <button @click="Datos_New.splice(Datos_New.indexOf(banner), 1)"
                                         type="button"
                                         title="Quitar imagen nueva"
                                         class="botonx !top-20 !right-20"
@@ -527,12 +527,12 @@
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="SaveBanner" 
+                            <button @click="Backend_Post_Banner" 
                             class="botoncon"
                             >
                                 Guardar Cambios
                             </button>
-                            <button @click="CerrarPopUpActBanner" 
+                            <button @click="Cerrar_PopUp_Banner" 
                             class="botonc"
                             >
                                 Cancelar
@@ -548,18 +548,18 @@
         <!-- Promocionar Producto -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="PopUpOff" 
-                @click.self="CerrarPopUpOff" 
+                <div v-if="PopUp_Off" 
+                @click.self="Cerrar_PopUp_Off" 
                 class="fondo"
                 >
                     <div class="popup !max-w-md">
-                        <form @submit.prevent="GuardarPromocion" 
+                        <form @submit.prevent="Backend_Post_Promocion" 
                         class="flex flex-col gap-4"
                         >
 
                             <!-- Encabezado -->
                             <h1 class="text-center !text-xl !mb-2">
-                                🏷️ Oferta: {{ ProductoPromo.nombre }}
+                                🏷️ Oferta: {{ Datos_Off.nombre }}
                             </h1>
 
                             <!-- Imagenes del Producto -->
@@ -567,14 +567,14 @@
                             p-2 shadow-inner 
                             mx-auto w-full max-w-[200px]"
                             >
-                                <div v-if="ProductoPromo.imagenes.length > 0"
+                                <div v-if="Datos_Off.imagenes.length > 0"
                                 class="flex flex-row gap-2 
                                 overflow-x-auto items-center 
                                 justify-between w-full snap-x"
                                 >
                                     <button type="button"
-                                    @click="BackImg(ProductoPromo)"
-                                    :disabled="GetImg(ProductoPromo.id) === 0"
+                                    @click="Imagen_Anterior(Datos_Off)"
+                                    :disabled="Imagen_Leer(Datos_Off.id) === 0"
                                     class="botonflecha !p-1 !h-8 !w-8 shrink-0"
                                     >
                                         ❮
@@ -584,12 +584,12 @@
                                     rounded-lg overflow-hidden 
                                     border-2 border-white shadow-sm"
                                     >
-                                        <img v-show="ImagenesCargando[ProductoPromo.id] === false"
-                                        :src="ObtenerImgUrl(ProductoPromo.imagenes[GetImg(ProductoPromo.id)].s3_key)"
-                                        @load="ImagenesCargando[ProductoPromo.id] = false"
+                                        <img v-show="Imagen_Espera[Datos_Off.id] === false"
+                                        :src="Imagen_Url(Datos_Off.imagenes[Imagen_Leer(Datos_Off.id)].s3_key)"
+                                        @load="Imagen_Espera[Datos_Off.id] = false"
                                         class="w-full h-full object-cover"
                                         />
-                                        <div v-if="ImagenesCargando[ProductoPromo.id] !== false"
+                                        <div v-if="Imagen_Espera[Datos_Off.id] !== false"
                                         class="absolute inset-0 flex items-center justify-center bg-gray-100"
                                         >
                                             <img src="../assets/loading.gif"
@@ -599,9 +599,9 @@
                                         </div>
                                     </div>
                                     <button type="button"
-                                    @click="NextImg(ProductoPromo)"
+                                    @click="Imagen_Siguiente(Datos_Off)"
                                     :disabled="
-                                    GetImg(ProductoPromo.id) === ProductoPromo.imagenes.length - 1"
+                                    Imagen_Leer(Datos_Off.id) === Datos_Off.imagenes.length - 1"
                                     class="botonflecha !p-1 !h-8 !w-8 shrink-0"
                                     >
                                         ❯
@@ -624,7 +624,7 @@
                                     </h2>
                                     <input placeholder="Ej: Cyber Monday..."
                                     type="text"
-                                    v-model="FormPromo.motivo"
+                                    v-model="Datos_Offf.motivo"
                                     maxlength="100"
                                     class="w-full px-4 py-2 
                                     border-2 border-green-200 rounded-xl 
@@ -646,7 +646,7 @@
                                         </span>
                                         <input placeholder="Nuevo Precio"
                                         type="number"
-                                        v-model="FormPromo.precio_nuevo"
+                                        v-model="Datos_Offf.precio_nuevo"
                                         maxlength="8"
                                         required
                                         class="w-full pl-8 pr-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
@@ -661,7 +661,7 @@
                                             Inicio
                                         </h2>
                                         <input type="datetime-local"
-                                        v-model="FormPromo.fecha_inicio"
+                                        v-model="Datos_Offf.fecha_inicio"
                                         required
                                         class="w-full px-3 py-2 
                                         border-2 border-green-200 rounded-xl 
@@ -676,7 +676,7 @@
                                             Fin
                                         </h2>
                                         <input type="datetime-local"
-                                        v-model="FormPromo.fecha_fin"
+                                        v-model="Datos_Offf.fecha_fin"
                                         required
                                         class="w-full px-3 py-2 
                                         border-2 border-green-200 rounded-xl 
@@ -696,17 +696,17 @@
                                 class="botoncon flex-1 !m-0"
                                 :disabled="Actualizando"
                                 >
-                                    {{ FormPromo.id_promocion ? "Actualizar" : "Guardar" }}
+                                    {{ Datos_Offf.id_promocion ? "Actualizar" : "Guardar" }}
                                 </button>
                                 <button type="button"
-                                v-if="FormPromo.id_promocion"
-                                @click="BorrarPromocion"
+                                v-if="Datos_Offf.id_promocion"
+                                @click="Backend_Delete_Promocion"
                                 class="botonc flex-1 !m-0"
                                 :disabled="Actualizando"
                                 >
                                     🗑️ Borrar
                                 </button>
-                                <button @click="CerrarPopUpOff" 
+                                <button @click="Cerrar_PopUp_Off" 
                                 type="button" 
                                 class="botonc flex-1 !m-0"
                                 >
@@ -728,7 +728,7 @@
                 <div class="start">
                     
                     <!-- Gif Cargando -->
-                    <div v-if="CargandoTrue"
+                    <div v-if="Backend_Espera"
                     class="flex flex-col items-center 
                     justify-center w-full h-[60vh]"
                     >
@@ -742,7 +742,7 @@
                     </div>
 
                     <!-- Error Cargando -->
-                    <div v-else-if="ErrorCarga"
+                    <div v-else-if="Backend_Error"
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
@@ -755,7 +755,7 @@
                         </h2>
                         <div class="mt-6 flex justify-center">
                             <button
-                            @click="CargarDatos()"
+                            @click="Backend_Cargar()"
                             class="botoncon !flex-none !w-auto 
                             px-8 shadow-lg shadow-green-900/20"
                             >
@@ -770,7 +770,7 @@
                         <!-- Barra de Busqueda -->
                         <div class="px-5">
                             <input placeholder="🔍 Busqueda..."
-                            @input="BusquedaProducto"
+                            @input="Backend_Get"
                             type="text"
                             v-model="Busqueda"
                             class="busqueda"
@@ -779,39 +779,39 @@
                         </div>
 
                         <!-- Banner Encabezado -->
-                        <div v-if="Bananaer"
+                        <div v-if="Datos_Banner"
                         class="flex flex-col 
                         relative group w-full 
                         overflow-hidden rounded-xl"
                         >
                             <div
-                            v-if="Bananaer.imagenes && Bananaer.imagenes.length > 0"
+                            v-if="Datos_Banner.imagenes && Datos_Banner.imagenes.length > 0"
                             class="relative px-5"
-                            @touchstart="ComienzoToque($event)"
-                            @touchend="FinToque($event, Bananaer)"
+                            @touchstart="Toque_Start($event)"
+                            @touchend="Toque_End($event, Datos_Banner)"
                             >
-                                <button @click="IndiceBanner--"
-                                :disabled="IndiceBanner === 0"
+                                <button @click="Banner_Indice--"
+                                :disabled="Banner_Indice === 0"
                                 type="button"
                                 class="botonflechagrande absolute left-0 top-0 z-20 opacity-0 hidden md:flex group-hover:opacity-100"
                                 >
                                     ❮
                                 </button>
-                                <button @click="AbrirPopUpActBanner"
-                                v-if="VerificarRol([1])"
+                                <button @click="Abrir_PopUp_Banner"
+                                v-if="Verificar_Rol([1])"
                                 type="button"
                                 class="botonx !right-20 !bg-gray-700"
                                 >
                                     ✏️
                                 </button>
                                 <div>
-                                    <img @click="router.push(`/${Bananaer.imagenes[IndiceBanner].enlace}`)"
-                                    @load="ImagenesCargando[Bananaer.id] = false"
-                                    v-show="ImagenesCargando[Bananaer.id] === false"
-                                    :src="ObtenerImgUrl(Bananaer.imagenes[IndiceBanner].s3_key)"
+                                    <img @click="router.push(`/${Datos_Banner.imagenes[Banner_Indice].enlace}`)"
+                                    @load="Imagen_Espera[Datos_Banner.id] = false"
+                                    v-show="Imagen_Espera[Datos_Banner.id] === false"
+                                    :src="Imagen_Url(Datos_Banner.imagenes[Banner_Indice].s3_key)"
                                     class="banner"
                                     />
-                                    <div v-if="ImagenesCargando[Bananaer.id] !== false" 
+                                    <div v-if="Imagen_Espera[Datos_Banner.id] !== false" 
                                     class="mt-2"
                                     >
                                         <img src="../assets/loading.gif" 
@@ -820,8 +820,8 @@
                                         />
                                     </div>
                                 </div>
-                                <button @click="IndiceBanner++"
-                                :disabled="IndiceBanner === Bananaer.imagenes.length - 1"
+                                <button @click="Banner_Indice++"
+                                :disabled="Banner_Indice === Datos_Banner.imagenes.length - 1"
                                 type="button"
                                 class="botonflechagrande absolute 
                                 right-0 top-0 z-20 opacity-0 
@@ -833,10 +833,10 @@
                         </div>
 
                         <!-- Lista de Productos por Categoria -->
-                        <div v-for="cat in ListaCategoria" 
+                        <div v-for="cat in Datos_Categorias" 
                         :key="cat.categoria"
                         >
-                            <div v-if="ProductosPorCategoria[cat.categoria] && ProductosPorCategoria[cat.categoria].length > 0"
+                            <div v-if="Datos_Productos_Categoria[cat.categoria] && Datos_Productos_Categoria[cat.categoria].length > 0"
                             class="relative group flex flex-col 
                             md:mb-8 mb-2 
                             bg-gradient-to-tr from-green-600/50 
@@ -857,16 +857,16 @@
                                 md:overflow-hidden 
                                 md:py-4 py-2 scroll-smooth gap-5"
                                 >
-                                    <button @click="CarruselIzquierda(cat.categoria)"
-                                    :disabled="ObtenerIndiceCarrusel(cat.categoria) === 0"
+                                    <button @click="Carrusel_Anterior(cat.categoria)"
+                                    :disabled="Carrusel_Get_Indice(cat.categoria) === 0"
                                     class="botonflechacatr absolute left-0 top-[55%] hidden md:flex opacity-0 group-hover:opacity-100"
                                     >
                                         ❮
                                     </button>
-                                    <div v-for="i in ProductosPorCategoria[cat.categoria]"
+                                    <div v-for="i in Datos_Productos_Categoria[cat.categoria]"
                                     :key="cat.categoria + '-' + i.id"
-                                    :class="Estatuscolor(i.activo)"
-                                    @click="AccionCarta(i)"
+                                    :class="Estatus_Color(i.activo)"
+                                    @click="Click_Items(i)"
                                     class="carta relative"
                                     >
                                         <div>
@@ -888,12 +888,12 @@
                                             items-center justify-center 
                                             w-full md:pb-2 pb-1 snap-x"
                                             >
-                                                <img v-show="ImagenesCargando[i.id] === false"
-                                                :src="ObtenerImgUrl(i.imagenes[GetImg(i.id)].s3_key)"
-                                                @load="ImagenesCargando[i.id] = false"
+                                                <img v-show="Imagen_Espera[i.id] === false"
+                                                :src="Imagen_Url(i.imagenes[Imagen_Leer(i.id)].s3_key)"
+                                                @load="Imagen_Espera[i.id] = false"
                                                 class="imagen"
                                                 />
-                                                <div v-if="ImagenesCargando[i.id] !== false" 
+                                                <div v-if="Imagen_Espera[i.id] !== false" 
                                                 class="mt-2"
                                                 >
                                                     <img src="../assets/loading.gif"
@@ -918,10 +918,10 @@
                                                             {{ i.porcentaje_descuento }}% OFF
                                                         </span>
                                                         <h2 class="text-gray-400 text-sm font-bold line-through">
-                                                            $ {{ FormatearPrecio(i.precio) }}
+                                                            $ {{ Formato_Precios(i.precio) }}
                                                         </h2>
                                                     </div>
-                                                    <h2 :class="[VistaLista 
+                                                    <h2 :class="[Formato_Items 
                                                     ? 'text-xl font-black mt-1' 
                                                     : 'font-bold', 
                                                     i.es_promocion 
@@ -931,10 +931,10 @@
                                                     ? 'mt-1' 
                                                     : '']"
                                                     >
-                                                        $ {{ FormatearPrecio(i.es_promocion ? i.precio_nuevo : i.precio) }}
+                                                        $ {{ Formato_Precios(i.es_promocion ? i.precio_nuevo : i.precio) }}
                                                     </h2>
                                                 </div>
-                                                <div v-if="VerificarRol([1, 2, 4, 5])">
+                                                <div v-if="Verificar_Rol([1, 2, 4, 5])">
                                                     <h3>
                                                         {{ i.codigo_barra }}
                                                         <br />
@@ -948,8 +948,8 @@
                                                     <div class="flex flex-wrap 
                                                     w-full mt-auto justify-center items-center 
                                                     pt-3 gap-1.5 sm:gap-2">
-                                                        <button @click.stop="AbrirPopUpAct(i)"
-                                                        v-if="VerificarRol([1, 2, 4, 5])"
+                                                        <button @click.stop="Abrir_PopUp_Act(i)"
+                                                        v-if="Verificar_Rol([1, 2, 4, 5])"
                                                         class="botont !px-2 !py-2 !text-sm"
                                                         >
                                                             ✏️
@@ -957,8 +957,8 @@
                                                                 Editar 
                                                             </span>
                                                         </button>
-                                                        <button @click.stop="AbrirPopUpOff(i)"
-                                                        v-if="VerificarRol([1, 2, 3])"
+                                                        <button @click.stop="Abrir_PopUp_Off(i)"
+                                                        v-if="Verificar_Rol([1, 2, 3])"
                                                         class="botont !bg-blue-50 !border-blue-200 !text-blue-700 hover:!bg-blue-100 !px-2 !py-2 !text-sm"
                                                         >
                                                             🏷️
@@ -966,8 +966,8 @@
                                                                 Promoción
                                                             </span>
                                                         </button>
-                                                        <button @click.stop="AbrirPopUpDel(i)"
-                                                        v-if="VerificarRol([1, 2]) && i.activo"
+                                                        <button @click.stop="Abrir_PopUp_Delete(i)"
+                                                        v-if="Verificar_Rol([1, 2]) && i.activo"
                                                         class="botonc !px-2 !py-2 !text-sm"
                                                         >
                                                             ❌
@@ -975,8 +975,8 @@
                                                                 Eliminar
                                                             </span>
                                                         </button>
-                                                        <button @click.stop="AbrirPopUpDel(i)"
-                                                        v-if="VerificarRol([1, 2]) && !i.activo"
+                                                        <button @click.stop="Abrir_PopUp_Delete(i)"
+                                                        v-if="Verificar_Rol([1, 2]) && !i.activo"
                                                         class="botoncon !px-2 !py-2 !text-sm"
                                                         >
                                                             🕊️
@@ -984,9 +984,9 @@
                                                                 Reactivar
                                                             </span>
                                                         </button>
-                                                        <button @click.stop="AbrirPopUpBuy(i)"
-                                                        :disabled="CarritoStock(i) === 0"
-                                                        v-if="VerificarRolExcluido([2, 3, 4, 5, 6])"
+                                                        <button @click.stop="Abrir_PopUp_Buy(i)"
+                                                        :disabled="Verificar_Stock(i) === 0"
+                                                        v-if="Verificar_Rol_Excluido([2, 3, 4, 5, 6])"
                                                         class="botoncon !px-2 !py-2 !text-sm"
                                                         >
                                                             🛍️
@@ -994,13 +994,13 @@
                                                                 Comprar
                                                             </span>
                                                         </button>
-                                                        <button @click.stop="ToggleFavorito(i.id)"
-                                                        v-if="ClienteID"
-                                                        :class="VistaLista 
+                                                        <button @click.stop="Backend_Post_Delete_Favorito(i.id)"
+                                                        v-if="Cliente_ID"
+                                                        :class="Formato_Items 
                                                         ? 'btn-chico-rojo w-full justify-center' 
-                                                        : [VerificarRol([1, 2]) ? 'col-span-2' : '', 'botonc !px-2 !py-2 !text-sm']"
+                                                        : [Verificar_Rol([1, 2]) ? 'col-span-2' : '', 'botonc !px-2 !py-2 !text-sm']"
                                                         >
-                                                            {{ MisFavoritos.includes(i.id) ? '🤍 Quitar de Favoritos' : '❤️ Agregar a Favoritos' }}
+                                                            {{ Datos_Favoritos.includes(i.id) ? '🤍 Quitar de Favoritos' : '❤️ Agregar a Favoritos' }}
                                                         </button>
                                                     </div>
                                                 </div>
@@ -1009,7 +1009,7 @@
 
                                         </div>
                                     </div>
-                                    <button @click="CarruselDerecha(cat.categoria, ProductosPorCategoria[cat.categoria].length)"
+                                    <button @click="Carrusel_Siguiente(cat.categoria, Datos_Productos_Categoria[cat.categoria].length)"
                                     class="botonflechacatl 
                                     absolute right-0 top-[55%] hidden 
                                     md:flex opacity-0 group-hover:opacity-100"
@@ -1035,22 +1035,24 @@
     // ----- Imports ----- //
 
     import {
-        CarritoLocal,
-        CerrarSesion,
-        Rol,
-        PopUpAct,
-        ProductoActual,
-        ProductoCantidad,
-        PedidoActual,
-        leerCookie,
-        ClienteID,
-        urlover8000,
-        CargarCarrito,
+        Carrito_Local,
+        Cerrar_Sesion,
+        PopUp_Upgrade,
+        PopUp_Delete,
+        PopUp_Off,
+        PopUp_Buy,
+        Producto_Actual,
+        Producto_Cantidad,
+        Pedido_Actual as Datos_Pedido,
+        Leer_Cookie,
+        Cliente_ID,
+        backend_url,
+        Cargar_Carrito,
         Iniciado,
-        SesionExpirada,
-        ValidadSesionBack,
-        VerificarRol,
-        VerificarRolExcluido,
+        Sesion_Expirada,
+        Validad_Sesion_Backend,
+        Verificar_Rol,
+        Verificar_Rol_Excluido,
     } from "./Estatus.js"
     import { 
         onMounted, 
@@ -1066,7 +1068,7 @@
     // ----- Variables Complejas ----- //
 
     // Almacen para Actualizar Productos //
-    const ProductoAct = ref({
+    const Datos_Upgrade = ref({
         id: "",
         nombre: "",
         precio: "",
@@ -1076,19 +1078,19 @@
         imagenes: [],
     })
     // Almacen para Eliminar Productos //
-    const ProductoEli = ref({
+    const Datos_Delete = ref({
         id: "",
         nombre: "",
         imagenes: [],
     })
     // Almacen para Promocionar Productos //
-    const ProductoPromo = ref({
+    const Datos_Off = ref({
         id: "",
         nombre: "",
         imagenes: [],
     })
     // Almacen para Promociones //
-    const FormPromo = ref({
+    const Datos_Offf = ref({
         motivo: "",
         precio_nuevo: "",
         fecha_inicio: "",
@@ -1105,162 +1107,152 @@
 
     // ----- Variables Booleanas ----- //
 
-    const PopUpDel = ref(false)
-    const PopUpOff = ref(false)
-    const PopUpBuy = ref(false)
-    const PopUpActBanner = ref(false)
-    const MostrarConfir = ref(false)
+    const PopUp_Banner = ref(false)
+    const Mostrar_Confirmacion = ref(false)
     const Actualizando = ref(false)
-    const CargandoTrue = ref(true)
-    const ErrorCarga = ref(false)
-    const filtroAct = ref(false)
+    const Backend_Espera = ref(true)
+    const Backend_Error = ref(false)
 
     // ----- Variables Vacias ----- //
 
-    const ImagenesCargando = ref({})
-    const ListaCategoria = ref("")
-    const IndiceCarrusel = ref({})
-    const BannersNuevos = ref([])
-    const MisFavoritos = ref([])
-    const VistaPrevia = ref([])
-    const ArchivoSave = ref([])
-    const DelSupaBann = ref([])
-    const filtrocat = ref("")
-    const IndiceImg = ref({})
+    const Imagen_Espera = ref({})
+    const Datos_Categorias = ref("")
+    const Indice_Carrusel = ref({})
+    const Datos_New = ref([])
+    const Datos_Favoritos = ref([])
+    const Producto_Imagenes_Previa = ref([])
+    const Producto_Imagenes_Seleccion = ref([])
+    const Banner_Delete_Supabase = ref([])
+    const Imagen_Indice = ref({})
     const Productos = ref([])
-    const fileInput = ref("")
+    const Imagen_New = ref("")
     const Busqueda = ref("")
-    const DelBann = ref([])
-    const NewImg = ref([])
-    const DelImg = ref([])
-    const mayor = ref("")
-    const menor = ref("")
+    const Banner_Delete = ref([])
+    const Datos_Delete_Imagenes = ref([])
 
     // ----- Variables Simples ----- //
 
-    const OpcionCategoriaA = ref("new")
-    const Bananaeract = ref(null)
-    const IndiceBanner = ref(0)
-    const filtroRadio = ref(0)
-    const Bananaer = ref(null)
-    const filtroEst = ref(1)
+    const Dato_Categorias = ref("new")
+    const Banner_Upgrade = ref(null)
+    const Datos_Banner = ref(null)
+    const Banner_Indice = ref(0)
 
     // ----- Variables Temporales ----- //
 
-    let intervaloCarrusel = null
-    let cartagarrada = null
-    let inicioX = 0
-    let inicioY = 0
+    let Carrusel_Espera = null
+    let Banner_Picked = null
+    let Cordenada_X = 0
+    let Cordenada_Y = 0
 
     // ----- Variables Vue ----- //
 
     // Leer Banners en Orden //
-    const BannersOrden = computed({
+    const Orden_Banner = computed({
         // Establecer Orden
         get() {
-            const viejo = Bananaeract.value && Bananaeract.value.imagenes ? Bananaeract.value.imagenes : []
-            const nuevo = BannersNuevos.value
+            const viejo = Banner_Upgrade.value && Banner_Upgrade.value.imagenes ? Banner_Upgrade.value.imagenes : []
+            const nuevo = Datos_New.value
             const todo = [...viejo, ...nuevo]
             return todo.sort((a, b) => {
-                const desactA = BannerDesactivado(a)
-                const desactB = BannerDesactivado(b)
-                if (desactA && !desactB) return 1
-                if (desactB && !desactA) return -1
-                const ordenA = a.orden || 0
-                const ordenB = b.orden || 0
-                return ordenA - ordenB
+                const Banner_Desactivado_A = Filtro_Banner_Estatus_0(a)
+                const Banner_Desactivado_B = Filtro_Banner_Estatus_0(b)
+                if (Banner_Desactivado_A && !Banner_Desactivado_B) return 1
+                if (Banner_Desactivado_B && !Banner_Desactivado_A) return -1
+                const Orden_Banner_A = a.orden || 0
+                const Orden_Banner_B = b.orden || 0
+                return Orden_Banner_A - Orden_Banner_B
             })
         },
         // Enviar Orden
-        set(bannersordenados) {
-            bannersordenados.forEach((banner, index) => {
+        set(Orden_Bannerados) {
+            Orden_Bannerados.forEach((banner, index) => {
             banner.orden = index + 1
     })},})
     // Habilitar Boton //
-    const confirboton = computed(() => {
+    const Verificar_Boton = computed(() => {
         // Actualizar Producto
-        if (PopUpAct.value) {
-            const faltandatos03 =
-            ProductoAct.value.nombre === "" ||
-            ProductoAct.value.precio === "" ||
-            ProductoAct.value.stock === "" ||
-            ProductoAct.value.codigo_barra === "" ||
-            ProductoAct.value.stock < 0 ||
-            ProductoAct.value.precio <= 0
-            const faltandatos04 =
-            OpcionCategoriaA.value === "new" && ProductoAct.value.categoria === ""
-            return faltandatos03 || faltandatos04
+        if (PopUp_Upgrade.value) {
+            const Datos_Upgrade_Faltantes =
+            Datos_Upgrade.value.nombre === "" ||
+            Datos_Upgrade.value.precio === "" ||
+            Datos_Upgrade.value.stock === "" ||
+            Datos_Upgrade.value.codigo_barra === "" ||
+            Datos_Upgrade.value.stock < 0 ||
+            Datos_Upgrade.value.precio <= 0
+            const Dato_Categorias_Faltantes =
+            Dato_Categorias.value === "new" && Datos_Upgrade.value.categoria === ""
+            return Datos_Upgrade_Faltantes || Dato_Categorias_Faltantes
     }})
     // Establecer Categorias para la Pagina //
-    const ProductosPorCategoria = computed(() => {
-        const agrupados = {}
-        if (ListaCategoria.value && Productos.value) {
-                ListaCategoria.value.forEach((cat) => {
-                    agrupados[cat.categoria] = Productos.value.filter(
+    const Datos_Productos_Categoria = computed(() => {
+        const Categorias_Grupos = {}
+        if (Datos_Categorias.value && Productos.value) {
+                Datos_Categorias.value.forEach((cat) => {
+                    Categorias_Grupos[cat.categoria] = Productos.value.filter(
                         (p) => p.categoria === cat.categoria
         )})}
-        return agrupados
+        return Categorias_Grupos
     })
 
     // ----- Funciones Vue ----- //
 
     // Primera Carga de Datos de la Pagina //
     onMounted(() => {
-        CargarDatos()
+        Backend_Cargar()
     })
     // Temporizador del Carrusel del Banner //
     onUnmounted(() => {
-        if (intervaloCarrusel) clearInterval(intervaloCarrusel)
+        if (Carrusel_Espera) clearInterval(Carrusel_Espera)
     })
     // Verificacion de Stock > 0 //
-    watch(ProductoCantidad, (NuevaCantidad) => {
+    watch(Producto_Cantidad, (NuevaCantidad) => {
         let CantidadnCarrito = 0
-        if (ProductoActual.value) {
-            CarritoLocal.value.forEach((prod) => {
-                if (prod.id_producto === ProductoActual.value.id) {
+        if (Producto_Actual.value) {
+            Carrito_Local.value.forEach((prod) => {
+                if (prod.id_producto === Producto_Actual.value.id) {
                     CantidadnCarrito = CantidadnCarrito + prod.cantidad
             }})
-            const StockLocal = ProductoActual.value.stock - CantidadnCarrito
-            if (NuevaCantidad > StockLocal) {
-                ProductoCantidad.value = StockLocal
+            const Stock_Local = Producto_Actual.value.stock - CantidadnCarrito
+            if (NuevaCantidad > Stock_Local) {
+                Producto_Cantidad.value = Stock_Local
             }
-            if (NuevaCantidad < 1 && StockLocal !== 0) {
-                ProductoCantidad.value = 1
+            if (NuevaCantidad < 1 && Stock_Local !== 0) {
+                Producto_Cantidad.value = 1
     }}})
     // Leer Url/Link y Tamaño de Imagen //
     watch(path, () => {
-        if (path.value) ObtenerImgUrl()
+        if (path.value) Imagen_Url()
     })
     // Carga de Datos de la Pagina //
-    const CargarDatos = async () => {
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+    const Backend_Cargar = async () => {
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Tiempo de Espera para el Backend
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
+        const Tiempo_Espera = setTimeout(() => {
+            if (Backend_Espera.value) {
+                Backend_Espera.value = false
+                Backend_Error.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
             }
         }, 15000)
         // Leer Banners, Productos, Categorias y Favoritos
         try {
-            await ValidadSesionBack()
-            await Banner()
-            await BusquedaProducto()
-            if (VerificarRol([1])) {
-                await BannersAll()
+            await Validad_Sesion_Backend()
+            await Backend_Get_Banner()
+            await Backend_Get()
+            if (Verificar_Rol([1])) {
+                await Backend_Get_Banners()
             }
-            const respuesta = await fetch(`${urlover8000}/producto/categorias/`, {
+            const respuesta = await fetch(`${backend_url}/producto/categorias/`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true",
                 },
                 credentials: "include",
             })
             if (!respuesta.ok) throw new Error("Error de conexión con el servidor")
-            const categ = await respuesta.json()
+            const Dato_Categoria = await respuesta.json()
             // Orden de las Categorias
-            const OrdenDeseado = [
+            const Orden_Deseado = [
                 "Accesorios",
                 "Hardware",
                 "Periféricos",
@@ -1270,98 +1262,97 @@
                 "SimRacing",
                 "Varios...",
             ]
-            categ.sort((a, b) => {
-                let indexA = OrdenDeseado.indexOf(a.categoria)
-                let indexB = OrdenDeseado.indexOf(b.categoria)
-                if (indexA === -1) indexA = 999
-                if (indexB === -1) indexB = 999
-                return indexA - indexB
+            Dato_Categoria.sort((a, b) => {
+                let Orden_Index_A = Orden_Deseado.indexOf(a.categoria)
+                let Orden_Index_B = Orden_Deseado.indexOf(b.categoria)
+                if (Orden_Index_A === -1) Orden_Index_A = 999
+                if (Orden_Index_B === -1) Orden_Index_B = 999
+                return Orden_Index_A - Orden_Index_B
             })
-            ListaCategoria.value = categ
-            if (ClienteID.value) {
-                const resFav = await fetch(`${urlover8000}/favoritos/cliente/${ClienteID.value}`, {
+            Datos_Categorias.value = Dato_Categoria
+            if (Cliente_ID.value) {
+                const Dato_Favorito = await fetch(`${backend_url}/favoritos/cliente/${Cliente_ID.value}`, {
                     credentials: "include",
                 })
-                if (resFav.ok) {
-                    MisFavoritos.value = await resFav.json()
+                if (Dato_Favorito.ok) {
+                    Datos_Favoritos.value = await Dato_Favorito.json()
                 }
             }
-            CargarCarrito()
-            IniciarCarruselAutomatico()
-            clearTimeout(temporizador)
+            Cargar_Carrito()
+            Carrusel_Automatico()
+            clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
+            clearTimeout(Tiempo_Espera)
+            Backend_Error.value = true
+            Backend_Espera.value = false
         } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
+            if (!Backend_Error.value) {
+                Backend_Espera.value = false
     }}}
     // Iniciar Carrusel del Banner //
-    const IniciarCarruselAutomatico = () => {
-        intervaloCarrusel = setInterval(() => {
-            if (Bananaer.value && Bananaer.value.imagenes) {
-                if (IndiceBanner.value < Bananaer.value.imagenes.length - 1) {
-                    IndiceBanner.value++
+    const Carrusel_Automatico = () => {
+        Carrusel_Espera = setInterval(() => {
+            if (Datos_Banner.value && Datos_Banner.value.imagenes) {
+                if (Banner_Indice.value < Datos_Banner.value.imagenes.length - 1) {
+                    Banner_Indice.value++
                 } else {
-                    IndiceBanner.value = 0
+                    Banner_Indice.value = 0
     // Tiempo de Carrusel en Segundos
     }}}, 4000)}
 
 // ----- Para el Frontend ----- //
 
     // Abrir Pop up para Actualizar Producto //
-    const AbrirPopUpAct = (producto_fila) => {
-        ProductoAct.value.id = producto_fila.id
-        ProductoAct.value.nombre = producto_fila.nombre
-        ProductoAct.value.precio = producto_fila.precio
-        ProductoAct.value.stock = producto_fila.stock
-        OpcionCategoriaA.value = producto_fila.categoria
-        ProductoAct.value.codigo_barra = producto_fila.codigo_barra
-        ProductoAct.value.imagenes = producto_fila.imagenes
-        DelImg.value = []
-        NewImg.value = []
-        VistaPrevia.value = []
-        PopUpAct.value = true
+    const Abrir_PopUp_Act = (producto_fila) => {
+        Datos_Upgrade.value.id = producto_fila.id
+        Datos_Upgrade.value.nombre = producto_fila.nombre
+        Datos_Upgrade.value.precio = producto_fila.precio
+        Datos_Upgrade.value.stock = producto_fila.stock
+        Dato_Categorias.value = producto_fila.categoria
+        Datos_Upgrade.value.codigo_barra = producto_fila.codigo_barra
+        Datos_Upgrade.value.imagenes = producto_fila.imagenes
+        Datos_Delete_Imagenes.value = []
+        Producto_Imagenes_Previa.value = []
+        PopUp_Upgrade.value = true
         document.body.style.overflow = "hidden"
     }
     // Abrir Pop up para Borrar Producto //
-    const AbrirPopUpDel = (producto_fila) => {
-        ProductoEli.value.id = producto_fila.id
-        ProductoEli.value.nombre = producto_fila.nombre
-        ProductoEli.value.imagenes = producto_fila.imagenes
-        PopUpDel.value = true
+    const Abrir_PopUp_Delete = (producto_fila) => {
+        Datos_Delete.value.id = producto_fila.id
+        Datos_Delete.value.nombre = producto_fila.nombre
+        Datos_Delete.value.imagenes = producto_fila.imagenes
+        PopUp_Delete.value = true
         document.body.style.overflow = "hidden"
         setTimeout(() => {
-            ProductoEli.value = {
+            Datos_Delete.value = {
                 id: "",
                 nombre: "",
                 imagenes: [],
             }
-            IndiceImg.value = {}
+            Imagen_Indice.value = {}
     }, 300)}
     // Abrir Pop up para Actualizar el Banner //
-    const AbrirPopUpActBanner = () => {
-        PopUpActBanner.value = true
+    const Abrir_PopUp_Banner = () => {
+        PopUp_Banner.value = true
         document.body.style.overflow = "hidden"
     }
     // Abrir Pop up para Añadir el Carrito //
-    const AbrirPopUpBuy = (producto_fila) => {
-        if (CarritoStock(producto_fila) <= 0) {
+    const Abrir_PopUp_Buy = (producto_fila) => {
+        if (Verificar_Stock(producto_fila) <= 0) {
             return
         }
-        ProductoActual.value = producto_fila
-        ProductoCantidad.value = 1
-        PopUpBuy.value = true
+        Producto_Actual.value = producto_fila
+        Producto_Cantidad.value = 1
+        PopUp_Buy.value = true
         document.body.style.overflow = "hidden"
     }
     // Abrir Pop up para Promocion (Lee Precios) //
-    const AbrirPopUpOff = async (producto_fila) => {
-        ProductoPromo.value.id = producto_fila.id
-        ProductoPromo.value.nombre = producto_fila.nombre
-        ProductoPromo.value.imagenes = producto_fila.imagenes
-        FormPromo.value = {
+    const Abrir_PopUp_Off = async (producto_fila) => {
+        Datos_Off.value.id = producto_fila.id
+        Datos_Off.value.nombre = producto_fila.nombre
+        Datos_Off.value.imagenes = producto_fila.imagenes
+        Datos_Offf.value = {
             id_promocion: null,
             motivo: "",
             precio_nuevo: "",
@@ -1370,324 +1361,324 @@
         }
         // Leer Precios
         try {
-            const respuesta = await fetch(`${urlover8000}/registro_precios/`, {
+            const respuesta = await fetch(`${backend_url}/registro_precios/`, {
                 headers: { "X-Tunnel-Skip-AntiPhishing-Page": "true" },
                 credentials: "include",
             })
             if (respuesta.ok) {
-                const todasLasPromos = await respuesta.json()
-                const promoExistente = todasLasPromos.find((p) => p.id_producto === producto_fila.id)
-                if (promoExistente) {
-                    FormPromo.value = {
-                    id_promocion: promoExistente.id,
-                    motivo: promoExistente.motivo || "",
-                    precio_nuevo: promoExistente.precio_nuevo,
-                    fecha_inicio: new Date(promoExistente.fecha_inicio).toISOString().slice(0, 16),
-                    fecha_fin: new Date(promoExistente.fecha_fin).toISOString().slice(0, 16),
+                const Datos_Registros = await respuesta.json()
+                const Datos_Promociones = Datos_Registros.find((p) => p.id_producto === producto_fila.id)
+                if (Datos_Promociones) {
+                    Datos_Offf.value = {
+                    id_promocion: Datos_Promociones.id,
+                    motivo: Datos_Promociones.motivo || "",
+                    precio_nuevo: Datos_Promociones.precio_nuevo,
+                    fecha_inicio: new Date(Datos_Promociones.fecha_inicio).toISOString().slice(0, 16),
+                    fecha_fin: new Date(Datos_Promociones.fecha_fin).toISOString().slice(0, 16),
         }}}} catch (error) {
             console.error("Error buscando promo existente:", error)
         }
-        PopUpOff.value = true
+        PopUp_Off.value = true
         document.body.style.overflow = "hidden"
     }
     // Establecer Accion al Tocar el Tab //
-    const AccionCarta = (producto_fila) => {
-        if (VerificarRol([1, 2, 3, 4, 5, 6])) {
-            AbrirPopUpAct(producto_fila)
+    const Click_Items = (producto_fila) => {
+        if (Verificar_Rol([1, 2, 3, 4, 5, 6])) {
+            Abrir_PopUp_Act(producto_fila)
         } else {
-            AbrirPopUpBuy(producto_fila)
+            Abrir_PopUp_Buy(producto_fila)
     }}
     // Leer Imagen Anterior //
-    const BackImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id)
-        if (ImgActual > 0) {
-            IndiceImg.value[imagen.id] = ImgActual - 1
-            ImagenesCargando.value[imagen.id] = true
+    const Imagen_Anterior = (imagen) => {
+        const Imagen_Actual = Imagen_Leer(imagen.id)
+        if (Imagen_Actual > 0) {
+            Imagen_Indice.value[imagen.id] = Imagen_Actual - 1
+            Imagen_Espera.value[imagen.id] = true
     }}
     // Filtrar Banners Desactivados //
-    const BannerDesactivado = (banner) => {
+    const Filtro_Banner_Estatus_0 = (banner) => {
         if (!banner.id) return false
-        if (banner.activo === true) return DelBann.value.includes(banner.id)
-        return !DelBann.value.includes(banner.id)
+        if (banner.activo === true) return Banner_Delete.value.includes(banner.id)
+        return !Banner_Delete.value.includes(banner.id)
     }
     // Filtrar Banners Activados //
-    const BannerEstatus = (id) => {
-        if (DelBann.value.includes(id)) {
-            DelBann.value = DelBann.value.filter((b) => b !== id)
-            DelSupaBann.value = DelSupaBann.value.filter((b) => b !== id)
+    const Filtro_Banner_Estatus_1 = (id) => {
+        if (Banner_Delete.value.includes(id)) {
+            Banner_Delete.value = Banner_Delete.value.filter((b) => b !== id)
+            Banner_Delete_Supabase.value = Banner_Delete_Supabase.value.filter((b) => b !== id)
         } else {
-            DelBann.value.push(id)
+            Banner_Delete.value.push(id)
     }}
     // Siguiente Banner //
-    const CarruselDerecha = (categoria, totalProductos) => {
-        const current = ObtenerIndiceCarrusel(categoria)
-        if (current < totalProductos - 1) {
-            IndiceCarrusel.value[categoria] = current + 1
-            const carrusel = document.getElementById("carrusel-" + categoria)
-            if (carrusel) {
-                carrusel.scrollBy({ left: 1000, behavior: "smooth" })
+    const Carrusel_Siguiente = (categoria, totalProductos) => {
+        const Banner_Actual = Carrusel_Get_Indice(categoria)
+        if (Banner_Actual < totalProductos - 1) {
+            Indice_Carrusel.value[categoria] = Banner_Actual + 1
+            const Carrusel = document.getElementById("carrusel-" + categoria)
+            if (Carrusel) {
+                Carrusel.scrollBy({ left: 1000, behavior: "smooth" })
     }}}
     // Banner Anterior //
-    const CarruselIzquierda = (categoria) => {
-        const current = ObtenerIndiceCarrusel(categoria)
-        if (current > 0) {
-            IndiceCarrusel.value[categoria] = current - 1
-            const carrusel = document.getElementById("carrusel-" + categoria)
-            if (carrusel) {
-                carrusel.scrollBy({ 
+    const Carrusel_Anterior = (categoria) => {
+        const Banner_Actual = Carrusel_Get_Indice(categoria)
+        if (Banner_Actual > 0) {
+            Indice_Carrusel.value[categoria] = Banner_Actual - 1
+            const Carrusel = document.getElementById("carrusel-" + categoria)
+            if (Carrusel) {
+                Carrusel.scrollBy({ 
                     left: -1000,
                     behavior: "smooth" 
     })}}}
     // Cerrar Pop up para Actualizar Producto //
-    const CerrarPopUpAct = () => {
-        PopUpAct.value = false
-        DelImg.value = []
-        LimpiarImagenes()
+    const Cerrar_PopUp_Upgrade = () => {
+        PopUp_Upgrade.value = false
+        Datos_Delete_Imagenes.value = []
+        Imagen_Limpiar()
         document.body.style.overflow = "auto"
     }
     // Cerrar Pop up para Borrar Producto //
-    const CerrarPopUpDel = () => {
-        PopUpDel.value = false
+    const Cerrar_PopUp_Delete = () => {
+        PopUp_Delete.value = false
         document.body.style.overflow = "auto"
     }
     // Cerrar Pop up para Actualizar el Banner //
-    const CerrarPopUpActBanner = () => {
-        PopUpActBanner.value = false
-        DelBann.value = []
-        DelSupaBann.value = []
+    const Cerrar_PopUp_Banner = () => {
+        PopUp_Banner.value = false
+        Banner_Delete.value = []
+        Banner_Delete_Supabase.value = []
         document.body.style.overflow = "auto"
     }
     // Cerrar Pop up para Añadir el Carrito //
-    const CerrarPopUpBuy = () => {
-        PopUpBuy.value = false
-        ProductoActual.value = null
-        ProductoCantidad.value = 1
+    const Cerrar_PopUp_Buy = () => {
+        PopUp_Buy.value = false
+        Producto_Actual.value = null
+        Producto_Cantidad.value = 1
         document.body.style.overflow = "auto"
     }
     // Cerrar Pop up para Promocion //
-    const CerrarPopUpOff = () => {
-        PopUpOff.value = false
+    const Cerrar_PopUp_Off = () => {
+        PopUp_Off.value = false
         document.body.style.overflow = "auto"
     }
     // Inicio del Toque de Imagen en Celular //
-    const ComienzoToque = (evento) => {
-        inicioX = evento.changedTouches[0].clientX
-        inicioY = evento.changedTouches[0].clientY
+    const Toque_Start = (evento) => {
+        Cordenada_X = evento.changedTouches[0].clientX
+        Cordenada_Y = evento.changedTouches[0].clientY
     }
     // Inicio del Arrastre de Imagen en Celular //
-    const EmpezarArrastre = (index) => {
-        cartagarrada = index
+    const Toque_Drag = (index) => {
+        Banner_Picked = index
     }
     // Establecer Color de Carta de Producto (Depende del Estatus) //
-    const Estatuscolor = (id_estatus) => {
+    const Estatus_Color = (id_estatus) => {
         if (id_estatus === true) {
             return "si"
         } else if (id_estatus === false) {
             return "no"
     }}
     // Fin del Toque de Imagen en Celular //
-    const FinToque = (evento, producto) => {
+    const Toque_End = (evento, producto) => {
         if (!producto) return
-        const finX = evento.changedTouches[0].clientX
-        const finY = evento.changedTouches[0].clientY
-        const diferenciaX = inicioX - finX
-        const diferenciaY = Math.abs(inicioY - finY)
-        if (diferenciaY > Math.abs(diferenciaX)) {
-            inicioX = 0
-            inicioY = 0
+        const Cordenada_X_End = evento.changedTouches[0].clientX
+        const Cordenada_Y_End = evento.changedTouches[0].clientY
+        const Distancia_X = Cordenada_X - Cordenada_X_End
+        const Distancia_Y = Math.abs(Cordenada_Y - Cordenada_Y_End)
+        if (Distancia_Y > Math.abs(Distancia_X)) {
+            Cordenada_X = 0
+            Cordenada_Y = 0
             return
         }
-        if (Math.abs(diferenciaX) < 50) {
-            inicioX = 0
-            inicioY = 0
+        if (Math.abs(Distancia_X) < 50) {
+            Cordenada_X = 0
+            Cordenada_Y = 0
             return
         }
-        if (Math.abs(diferenciaX) < 50) {
-            inicioX = 0
+        if (Math.abs(Distancia_X) < 50) {
+            Cordenada_X = 0
             return
         }
-        if (diferenciaX > 0) {
-            NextImg(producto)
+        if (Distancia_X > 0) {
+            Imagen_Siguiente(producto)
         } else {
-            BackImg(producto)
+            Imagen_Anterior(producto)
         }
-        inicioX = 0
-        inicioY = 0
+        Cordenada_X = 0
+        Cordenada_Y = 0
     }
     // Leer Precio con Formato Pesos Argentinos //
-    const FormatearPrecio = (precio) => {
+    const Formato_Precios = (precio) => {
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat("es-AR").format(precio)
     }
     // Leer Imagen //
-    const GetImg = (id) => {
-        return IndiceImg.value[id] || 0
+    const Imagen_Leer = (id) => {
+        return Imagen_Indice.value[id] || 0
     }
     // Limpiar Imagenes sin Subir en Vista Previa //
-    const LimpiarImagenes = () => {
-        VistaPrevia.value = []
-        ArchivoSave.value = []
-        if (fileInput.value) {
-            fileInput.value.value = ""
+    const Imagen_Limpiar = () => {
+        Producto_Imagenes_Previa.value = []
+        Producto_Imagenes_Seleccion.value = []
+        if (Imagen_New.value) {
+            Imagen_New.value.value = ""
     }}
     // Leer Imagen Siguiente //
-    const NextImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id)
-        if (ImgActual < imagen.imagenes.length - 1) {
-            IndiceImg.value[imagen.id] = ImgActual + 1
-            ImagenesCargando.value[imagen.id] = true
+    const Imagen_Siguiente = (imagen) => {
+        const Imagen_Actual = Imagen_Leer(imagen.id)
+        if (Imagen_Actual < imagen.imagenes.length - 1) {
+            Imagen_Indice.value[imagen.id] = Imagen_Actual + 1
+            Imagen_Espera.value[imagen.id] = true
     }}
     // Quitar Imagen de Producto //
-    const NoMoreImages = (img) => {
-        const index = DelImg.value.indexOf(img.id_imagen)
+    const Imagen_Delete = (img) => {
+        const index = Datos_Delete_Imagenes.value.indexOf(img.id_imagen)
         if (index === -1) {
-            DelImg.value.push(img.id_imagen)
+            Datos_Delete_Imagenes.value.push(img.id_imagen)
         } else {
-            DelImg.value.splice(index, 1)
+            Datos_Delete_Imagenes.value.splice(index, 1)
         }
-        IndiceImg.value[ProductoAct.value.id] = 0
+        Imagen_Indice.value[Datos_Upgrade.value.id] = 0
     }
     // Obtener Url/Link de Imagen //
-    const ObtenerImgUrl = (Imgenkey) => {
+    const Imagen_Url = (Imgenkey) => {
         const respuesta = supabase.storage.from("max_imagenes").getPublicUrl(Imgenkey)
         return respuesta.data.publicUrl
     }
     // Leer que Banner Mostrar //
-    const ObtenerIndiceCarrusel = (categoria) => {
-        const ind = IndiceCarrusel.value[categoria]
+    const Carrusel_Get_Indice = (categoria) => {
+        const ind = Indice_Carrusel.value[categoria]
         return ind || 0
     }
     // Restar Cantidad de Producto //
-    const RestarProducto = () => {
-        if (ProductoCantidad.value > 1) {
-            ProductoCantidad.value--
+    const Producto_Restar = () => {
+        if (Producto_Cantidad.value > 1) {
+            Producto_Cantidad.value--
     }}
     // Subir Imagen de Producto //
-    const SeleccionarImagen = (evt) => {
+    const Imagen_Seleccionar = (evt) => {
         const files = evt.target.files
         if (files) {
             for (let i = 0 ; i < files.length ; i++) {
-            ArchivoSave.value.push(files[i])
-            VistaPrevia.value.push(URL.createObjectURL(files[i]))
+            Producto_Imagenes_Seleccion.value.push(files[i])
+            Producto_Imagenes_Previa.value.push(URL.createObjectURL(files[i]))
     }}}
     // Subir Imagen de Banner //
-    const SeleccionarBanner = (evt) => {
+    const Banner_Seleccionar = (evt) => {
         const files = evt.target.files
         if (files) {
-            let maxOrdenExistente = 0
-            if (Bananaer.value && Bananaer.value.imagenes) {
-                Bananaer.value.imagenes.forEach((b) => {
-                    if (b.orden && b.orden > maxOrdenExistente) {
-                    maxOrdenExistente = b.orden
+            let Orden_Maximo = 0
+            if (Datos_Banner.value && Datos_Banner.value.imagenes) {
+                Datos_Banner.value.imagenes.forEach((b) => {
+                    if (b.orden && b.orden > Orden_Maximo) {
+                    Orden_Maximo = b.orden
             }})}
-            let maxOrdenNuevos = 0
-            if (BannersNuevos.value.length > 0) {
-                BannersNuevos.value.forEach((b) => {
-                    if (b.orden && b.orden > maxOrdenNuevos) {
-                    maxOrdenNuevos = b.orden
+            let Orden_Minimo = 0
+            if (Datos_New.value.length > 0) {
+                Datos_New.value.forEach((b) => {
+                    if (b.orden && b.orden > Orden_Minimo) {
+                    Orden_Minimo = b.orden
             }})}
-            let proximoOrden = Math.max(maxOrdenExistente, maxOrdenNuevos) + 1
+            let Orden_Next = Math.max(Orden_Maximo, Orden_Minimo) + 1
             for (let i = 0 ; i < files.length ; i++) {
-                const BannerNuevo = {
+                const Banner_New = {
                     imagen: files[i],
                     vista_previa: URL.createObjectURL(files[i]),
                     enlace: "",
-                    orden: proximoOrden,
+                    orden: Orden_Next,
                 }
-                BannersNuevos.value.push(BannerNuevo)
-                proximoOrden++
+                Datos_New.value.push(Banner_New)
+                Orden_Next++
     }}}
     // Mover Orden de Imagen de Banner //
-    const Soltar = (cartasoltada) => {
-        if (cartagarrada === null || cartagarrada === cartasoltada) return
-        const nuevalista = [...BannersOrden.value]
-        const cartamovida = nuevalista.splice(cartagarrada, 1)[0]
-        nuevalista.splice(cartasoltada, 0, cartamovida)
-        BannersOrden.value = nuevalista
-        cartagarrada = null
+    const Toque_Drop = (cartasoltada) => {
+        if (Banner_Picked === null || Banner_Picked === cartasoltada) return
+        const Orden_New_Banner = [...Orden_Banner.value]
+        const Banner_Moved = Orden_New_Banner.splice(Banner_Picked, 1)[0]
+        Orden_New_Banner.splice(cartasoltada, 0, Banner_Moved)
+        Orden_Banner.value = Orden_New_Banner
+        Banner_Picked = null
     }
     // Sumar Cantidad de Producto //
-    const SumarProducto = () => {
-        if (ProductoActual.value && ProductoCantidad.value < ProductoActual.value.stock) {
-            ProductoCantidad.value++
+    const Producto_Sumar = () => {
+        if (Producto_Actual.value && Producto_Cantidad.value < Producto_Actual.value.stock) {
+            Producto_Cantidad.value++
     }}
 
     // ----- Para el Backend ----- //
 
     // Actualizar Datos del Banner //
-    const ActualizarBanner = async () => {
-        if (!Bananaeract.value) return
-        for (const BannerAct of Bananaeract.value.imagenes) {
-            if (BannerDesactivado(BannerAct)) continue
-            const BannerActData = {
-                enlace: BannerAct.enlace,
-                orden: BannerAct.orden,
+    const Backend_Put_Banner = async () => {
+        if (!Banner_Upgrade.value) return
+        for (const Dato_Banner of Banner_Upgrade.value.imagenes) {
+            if (Filtro_Banner_Estatus_0(Dato_Banner)) continue
+            const Dato_Upgrade_Banner = {
+                enlace: Dato_Banner.enlace,
+                orden: Dato_Banner.orden,
             }
-            const ActBanner = await fetch(`${urlover8000}/banners/id/${BannerAct.id}`, {
+            const PutBackend_Banner = await fetch(`${backend_url}/banners/id/${Dato_Banner.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(BannerActData),
+                body: JSON.stringify(Dato_Upgrade_Banner),
                 credentials: "include",
             })
-            if (ActBanner.status === 401) {
-                await CerrarSesion()
+            if (PutBackend_Banner.status === 401) {
+                await Cerrar_Sesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
+                Sesion_Expirada.value = true
                 Iniciado.value = false
                 return
     }}}
     // Actualizar Datos del Producto //
-    const ActualizarProducto = async () => {
+    const Backend_Put = async () => {
         if (Actualizando.value) return
         Actualizando.value = true
         try {
-            if (OpcionCategoriaA.value != "new") {
-                ProductoAct.value.categoria = OpcionCategoriaA.value
+            if (Dato_Categorias.value != "new") {
+                Datos_Upgrade.value.categoria = Dato_Categorias.value
             }
-            const ProductoActNoImg = {
-                nombre: ProductoAct.value.nombre,
-                precio: ProductoAct.value.precio,
-                stock: ProductoAct.value.stock,
-                categoria: ProductoAct.value.categoria,
-                codigo_barra: ProductoAct.value.codigo_barra,
+            const Dato_Upgrade = {
+                nombre: Datos_Upgrade.value.nombre,
+                precio: Datos_Upgrade.value.precio,
+                stock: Datos_Upgrade.value.stock,
+                categoria: Datos_Upgrade.value.categoria,
+                codigo_barra: Datos_Upgrade.value.codigo_barra,
             }
-            const ActProducto = await fetch(`${urlover8000}/productos/id/${ProductoAct.value.id}`, {
+            const PutBackend = await fetch(`${backend_url}/productos/id/${Datos_Upgrade.value.id}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json",},
-                body: JSON.stringify(ProductoActNoImg),
+                body: JSON.stringify(Dato_Upgrade),
                 credentials: "include",
             })
-            if (ActProducto.status === 401) {
-                await CerrarSesion()
+            if (PutBackend.status === 401) {
+                await Cerrar_Sesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
+                Sesion_Expirada.value = true
                 Iniciado.value = false
                 return
             }
-            for (const id_img of DelImg.value) {
-                const listaImagenes = ProductoAct.value.imagenes || []
-                const ImgDel = listaImagenes.find((img) => img.id_imagen === id_img)
-                if (ImgDel && ImgDel.s3_key) {
-                    await supabase.storage.from("max_imagenes").remove([ImgDel.s3_key])
+            for (const Imagen_Id of Datos_Delete_Imagenes.value) {
+                const Datos_Imagenes = Datos_Upgrade.value.imagenes || []
+                const Datos_Delete_Imagen = Datos_Imagenes.find((img) => img.id_imagen === Imagen_Id)
+                if (Datos_Delete_Imagen && Datos_Delete_Imagen.s3_key) {
+                    await supabase.storage.from("max_imagenes").remove([Datos_Delete_Imagen.s3_key])
                 }
-                await fetch(`${urlover8000}/productos/archivos/id/${id_img}`, {
+                await fetch(`${backend_url}/productos/archivos/id/${Imagen_Id}`, {
                     method: "DELETE",
                     credentials: "include",
             })}
-            for (const file of ArchivoSave.value) {
+            for (const file of Producto_Imagenes_Seleccion.value) {
                 const fileExt = file.name.split(".").pop()
                 const filePath = `${Math.random()}.${fileExt}`
                 let { error: uploadError } = await supabase.storage
                     .from("max_imagenes")
                     .upload(filePath, file)
                 if (!uploadError) {
-                    await fetch(`${urlover8000}/productos/archivos/`, {
+                    await fetch(`${backend_url}/productos/archivos/`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
-                            id_producto: ProductoAct.value.id,
+                            id_producto: Datos_Upgrade.value.id,
                             s3_key: filePath,
                             nombre_original: file.name,
                             tipo_contenido: fileExt,
@@ -1695,8 +1686,8 @@
                         }),
                         credentials: "include",
             })}}
-            BusquedaProducto()
-            CerrarPopUpAct()
+            Backend_Get()
+            Cerrar_PopUp_Upgrade()
         } catch (error) {
             console.error(error)
             alert("Hubo un error al guardar los cambios.")
@@ -1704,90 +1695,90 @@
             Actualizando.value = false
     }}
     // Leer Datos Activos del Banner //
-    const Banner = async () => {
+    const Backend_Get_Banner = async () => {
         try {
-            const respuesta = await fetch(`${urlover8000}/banners/?bool_activo=true`, {
+            const respuesta = await fetch(`${backend_url}/banners/?bool_activo=true`, {
                 headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
                 credentials: "include",
             })
             if (respuesta.ok) {
-                const bananaer = await respuesta.json()
-                if (bananaer.length > 0) {
-                    Bananaer.value = {
-                        id: "bananaer",
-                        imagenes: bananaer,
+                const Datos_Banner = await respuesta.json()
+                if (Datos_Banner.length > 0) {
+                    Datos_Banner.value = {
+                        id: "Datos_Banner",
+                        imagenes: Datos_Banner,
         }}}} catch (error) {
             console.error("Error al cargar el banner:", error)
     }}
     // Leer Todos los Datos del Banner //
-    const BannersAll = async () => {
+    const Backend_Get_Banners = async () => {
         try {
-            const respuesta = await fetch(`${urlover8000}/banners/`, {
+            const respuesta = await fetch(`${backend_url}/banners/`, {
                 headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
                 credentials: "include",
             })
             if (respuesta.ok) {
-                const bananaeract = await respuesta.json()
-                if (bananaeract.length > 0) {
-                    Bananaeract.value = {
-                    id: "bananaeract",
-                    imagenes: bananaeract,
+                const Banner_Upgrade = await respuesta.json()
+                if (Banner_Upgrade.length > 0) {
+                    Banner_Upgrade.value = {
+                    id: "Banner_Upgrade",
+                    imagenes: Banner_Upgrade,
         }}}} catch (error) {
             console.error("Error al cargar el banner:", error)
     }}
     // Borrar Datos del Banner //
-    const BorrarBanner = async () => {
-        if (!Bananaeract.value) return
-        for (const id_banner of DelSupaBann.value) {
-            const BannerDelete = Bananaeract.value.imagenes.find((b) => b.id === id_banner)
+    const Backend_Delete_Banner = async () => {
+        if (!Banner_Upgrade.value) return
+        for (const Banner_Id of Banner_Delete_Supabase.value) {
+            const BannerDelete = Banner_Upgrade.value.imagenes.find((b) => b.id === Banner_Id)
             if (BannerDelete) {
                 if (BannerDelete.s3_key) {
                     await supabase.storage.from("max_imagenes").remove([BannerDelete.s3_key])
                 }
-                await fetch(`${urlover8000}/banners/id/${BannerDelete.id}`, {
+                await fetch(`${backend_url}/banners/id/${BannerDelete.id}`, {
                     method: "DELETE",
                     credentials: "include",
         })}}
-        DelSupaBann.value = []
+        Banner_Delete_Supabase.value = []
     }
     // Desactivar Datos del Producto //
-    const BorrarProducto = async () => {
-        const EraseProducto = await fetch(`${urlover8000}/productos/id/${ProductoEli.value.id}`, {
+    const Backend_Delete = async () => {
+        const DeleteBackend = await fetch(`${backend_url}/productos/id/${Datos_Delete.value.id}`, {
                 method: "DELETE",
                 headers: {"Content-Type": "application/json",},
                 credentials: "include",
         })
-        if (EraseProducto.status === 401) {
-            await CerrarSesion()
+        if (DeleteBackend.status === 401) {
+            await Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            SesionExpirada.value = true
+            Sesion_Expirada.value = true
             Iniciado.value = false
             return
         }
-        BusquedaProducto()
-        CerrarPopUpDel()
+        Backend_Get()
+        Cerrar_PopUp_Delete()
     }
     // Desactivar Datos de Promocion //
-    const BorrarPromocion = async () => {
-        if (!FormPromo.value.id_promocion) return
+    const Backend_Delete_Promocion = async () => {
+        if (!Datos_Offf.value.id_promocion) return
         if (Actualizando.value) return
         Actualizando.value = true
         try {
-            const respuesta = await fetch(`${urlover8000}/registro_precios/id/${FormPromo.value.id_promocion}`, {
+            const respuesta = await fetch(`${backend_url}/registro_precios/id/${Datos_Offf.value.id_promocion}`, {
                 method: "DELETE",
                 credentials: "include",
             })
             if (respuesta.status === 401) {
-                await CerrarSesion()
-                SesionExpirada.value = true
+                await Cerrar_Sesion()
+                Sesion_Expirada.value = true
                 Iniciado.value = false
                 return
             }
             if (!respuesta.ok) {
                 throw new Error("No se pudo eliminar la promoción")
             }
-            BusquedaProducto()
-            CerrarPopUpOff()
+            Backend_Get()
+            Cerrar_PopUp_Off()
         } catch (error) {
             console.error(error)
             alert("Hubo un error al eliminar la promoción.")
@@ -1795,172 +1786,74 @@
             Actualizando.value = false
     }}
     // Leer Datos de los Productos //
-    const BusquedaProducto = async () => {
-        let url = new URL(`${urlover8000}/producto/`)
+    const Backend_Get = async () => {
+        let url = new URL(`${backend_url}/producto/`)
         url.searchParams.append("limit", 1000)
         url.searchParams.append("bool_activo", "true")
         // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append("busqueda_producto", Busqueda.value)
         }
-        // Establecer Filtro de Precios
-        let minfiltro = ""
-        let maxfiltro = ""
-        if (filtroRadio.value === 4) {
-            minfiltro = ""
-            maxfiltro = ""
-            menor.value = ""
-            mayor.value = ""
-        } else if (filtroRadio.value === 3) {
-            maxfiltro = 10000
-        } else if (filtroRadio.value === 2) {
-            minfiltro = 10000
-            maxfiltro = 50000
-        } else if (filtroRadio.value === 1) {
-            minfiltro = 50000
-        } else if (filtroRadio.value === 0) {
-            minfiltro = menor.value
-            maxfiltro = mayor.value
-        }
-        if (minfiltro !== "" && minfiltro != null) {
-            url.searchParams.append("precio_producto_min", minfiltro)
-            filtroAct.value = true
-        }
-        if (maxfiltro !== "" && maxfiltro != null) {
-            url.searchParams.append("precio_producto_max", maxfiltro)
-            filtroAct.value = true
-        }
-        // Establecer Filtro de Estado de los Precios
-        if (filtroEst.value === 1) {
-            url.searchParams.append("bool_activo", "true")
-            filtroAct.value = true
-        }
-        if (filtroEst.value === 0) {
-            url.searchParams.append("bool_activo", "false")
-            filtroAct.value = true
-        }
-        // Establecer Filtro de las Categorias
-        if (filtrocat.value !== "") {
-            url.searchParams.append("filtrocat", filtrocat.value)
-            filtroAct.value = true
-        }
-        const BusqProducto = await fetch(url, {
+        const GetBackend = await fetch(url, {
             headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
             credentials: "include",
         })
-        const datos = await BusqProducto.json()
+        const datos = await GetBackend.json()
         Productos.value = datos
     }
     // Verificacion de Stock > 0 //
-    const CarritoStock = (Producto) => {
+    const Verificar_Stock = (Producto) => {
         let stockCarrito = 0
-        CarritoLocal.value.forEach((itemCarrito) => {
+        Carrito_Local.value.forEach((itemCarrito) => {
             if (itemCarrito.id_producto === Producto.id) {
                 stockCarrito = stockCarrito + itemCarrito.cantidad
         }})
         return Producto.stock - stockCarrito
     }
-    // Añadir al Carrito (Viejo) //
-    const Confirmar = async () => {
-        const tokenGuardado = leerCookie("token")
-        const ClienteGuardado = leerCookie("id_cliente")
-        if (PedidoActual.value) {
-            const respuesta = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + tokenGuardado,
-                },
-                body: JSON.stringify([{
-                    id_pedido: PedidoActual.value,
-                    id_producto: ProductoActual.value.id,
-                    cantidad: ProductoCantidad.value,
-                },]),
-                credentials: "include",
-            })
-            if (respuesta.ok) {
-                CerrarPopUpBuy()
-                console.log("funciono")
-            } else {
-                const error = await respuesta.text()
-                console.error("Error al agregar detalle:", error)
-            }
-        } else {
-            const respuesta = await fetch(`${urlover8000}/pedidos/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + tokenGuardado,
-                },
-                body: JSON.stringify({
-                    id_cliente: parseInt(ClienteGuardado),
-                    id_direccion: 1,
-                    metodo_pago: " ",
-                    tiempo_estimado_entrega: 0,
-                    tiempo_entrega: 0,
-                }),
-                credentials: "include",
-            })
-            if (respuesta.status === 401) {
-                await CerrarSesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
-                Iniciado.value = false
-                return
-            }
-            if (respuesta.ok) {
-                const DatosPedido = await respuesta.json()
-                PedidoActual.value = DatosPedido.id
-                localStorage.setItem("pedido", PedidoActual.value)
-                Confirmar()
-            } else {
-                const error = await respuesta.text()
-                console.error("Error al agregar Pedido:", error)
-    }}}
     // Desactivar Datos del Banner //
-    const DesactivarBanner = async () => {
-        if (!Bananaeract.value) return
-        for (const id_banner of DelBann.value) {
-            if (DelSupaBann.value.includes(id_banner)) continue
-                const BannerDelete = Bananaeract.value.imagenes.find((b) => b.id === id_banner)
-                if (BannerDelete) {
-                    await fetch(`${urlover8000}/banners/estado/id/${BannerDelete.id}`, {
+    const Backend_Put_Delete_Banner = async () => {
+        if (!Banner_Upgrade.value) return
+        for (const Banner_Id of Banner_Delete.value) {
+            if (Banner_Delete_Supabase.value.includes(Banner_Id)) continue
+                const Datos_Delete_Banner = Banner_Upgrade.value.imagenes.find((b) => b.id === Banner_Id)
+                if (Datos_Delete_Banner) {
+                    await fetch(`${backend_url}/banners/estado/id/${Datos_Delete_Banner.id}`, {
                         method: "PUT",
                         credentials: "include",
         })}}
-        DelBann.value = []
+        Banner_Delete.value = []
     }
     // Subir Datos de la Promocion //
-    const GuardarPromocion = async () => {
+    const Backend_Post_Promocion = async () => {
         if (Actualizando.value) return
         Actualizando.value = true
         try {
-            const payload = {
-                id_producto: ProductoPromo.value.id,
-                motivo: FormPromo.value.motivo || null,
-                precio_nuevo: parseFloat(FormPromo.value.precio_nuevo),
-                fecha_inicio: new Date(FormPromo.value.fecha_inicio).toISOString(),
-                fecha_fin: new Date(FormPromo.value.fecha_fin).toISOString(),
+            const Payload = {
+                id_producto: Datos_Off.value.id,
+                motivo: Datos_Offf.value.motivo || null,
+                precio_nuevo: parseFloat(Datos_Offf.value.precio_nuevo),
+                fecha_inicio: new Date(Datos_Offf.value.fecha_inicio).toISOString(),
+                fecha_fin: new Date(Datos_Offf.value.fecha_fin).toISOString(),
             }
-            const respuesta = await fetch(`${urlover8000}/registro_precios/`, {
+            const respuesta = await fetch(`${backend_url}/registro_precios/`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json",},
-                body: JSON.stringify(payload),
+                body: JSON.stringify(Payload),
                 credentials: "include",
             })
             if (respuesta.status === 401) {
-                await CerrarSesion()
+                await Cerrar_Sesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
+                Sesion_Expirada.value = true
                 Iniciado.value = false
                 return
             }
             if (!respuesta.ok) {
-                const err = await respuesta.text()
-                throw new Error(err)
+                const Texto_Error = await respuesta.text()
+                throw new Error(Texto_Error)
             }
-            BusquedaProducto()
-            CerrarPopUpOff()
+            Backend_Get()
+            Cerrar_PopUp_Off()
         } catch (error) {
             console.error("Error al guardar promoción:", error)
             alert("Hubo un error al guardar la promoción.")
@@ -1968,106 +1861,106 @@
             Actualizando.value = false
     }}
     // Subir Datos del Banner //
-    const SaveBanner = async () => {
-        if (BannersNuevos.value.length > 0) {
-            await SubirBanner()
+    const Backend_Post_Banner = async () => {
+        if (Datos_New.value.length > 0) {
+            await Backend_Post_Banner_Imagen()
         }
-        if (DelBann.value.length > 0) {
-            await DesactivarBanner()
+        if (Banner_Delete.value.length > 0) {
+            await Backend_Put_Delete_Banner()
         }
-        if (DelSupaBann.value.length > 0) {
-            await BorrarBanner()
+        if (Banner_Delete_Supabase.value.length > 0) {
+            await Backend_Delete_Banner()
         }
-        await ActualizarBanner()
-        DelBann.value = []
-        DelSupaBann.value = []
-        await Banner()
-        await BannersAll()
-        CerrarPopUpActBanner()
+        await Backend_Put_Banner()
+        Banner_Delete.value = []
+        Banner_Delete_Supabase.value = []
+        await Backend_Get_Banner()
+        await Backend_Get_Banners()
+        Cerrar_PopUp_Banner()
     }
     // Añadir al Carrito //
-    const SumarCarrito = () => {
-        if (!ProductoActual.value) 
+    const Backend_Post = () => {
+        if (!Producto_Actual.value) 
             return
         // Establecer Datos del Producto 
-        const precioEfectivo = ProductoActual.value.es_promocion
-            ? ProductoActual.value.precio_nuevo
-            : ProductoActual.value.precio
-        const nuevoProducto = {
-            id_pedido: PedidoActual.value,
-            nombre_producto: ProductoActual.value.nombre,
-            id_producto: ProductoActual.value.id,
-            cantidad: ProductoCantidad.value,
-            precio_unitario: precioEfectivo,
-            stock_producto: ProductoActual.value.stock,
-            imagenes: ProductoActual.value.imagenes,
+        const Dato_Precio = Producto_Actual.value.es_promocion
+            ? Producto_Actual.value.precio_nuevo
+            : Producto_Actual.value.precio
+        const Producto_New = {
+            id_pedido: Datos_Pedido.value,
+            nombre_producto: Producto_Actual.value.nombre,
+            id_producto: Producto_Actual.value.id,
+            cantidad: Producto_Cantidad.value,
+            precio_unitario: Dato_Precio,
+            stock_producto: Producto_Actual.value.stock,
+            imagenes: Producto_Actual.value.imagenes,
         }
-        let CarritoExistente = CarritoLocal.value.find(
-            (item_exitente) => item_exitente.id_producto === ProductoActual.value.id
+        let Carrito_Existente = Carrito_Local.value.find(
+            (item_exitente) => item_exitente.id_producto === Producto_Actual.value.id
         )
-        if (CarritoExistente) {
-            CarritoExistente.cantidad = ProductoCantidad.value + CarritoExistente.cantidad
+        if (Carrito_Existente) {
+            Carrito_Existente.cantidad = Producto_Cantidad.value + Carrito_Existente.cantidad
         } else {
-            CarritoLocal.value.push(nuevoProducto)
+            Carrito_Local.value.push(Producto_New)
         }
         localStorage.setItem(
             "carrito_pendiente",
-            JSON.stringify(CarritoLocal.value
+            JSON.stringify(Carrito_Local.value
         ))
-        CerrarPopUpBuy()
-        MostrarConfir.value = true
+        Cerrar_PopUp_Buy()
+        Mostrar_Confirmacion.value = true
         setTimeout(() => {
-            MostrarConfir.value = false
+            Mostrar_Confirmacion.value = false
     // Tiempo de Notificacion en Segundos
     }, 2000)}
     // Subir Imagen del Banner //
-    const SubirBanner = async () => {
-        for (const BannerNew of BannersNuevos.value) {
-            const fileExt = BannerNew.imagen.name.split(".").pop()
+    const Backend_Post_Banner_Imagen = async () => {
+        for (const Banner_New of Datos_New.value) {
+            const fileExt = Banner_New.imagen.name.split(".").pop()
             const filePath = `${Math.random()}.${fileExt}`
             let { error: uploadError } = await supabase.storage
             .from("max_imagenes")
-            .upload(filePath, BannerNew.imagen)
+            .upload(filePath, Banner_New.imagen)
             if (!uploadError) {
-                await fetch(`${urlover8000}/banners/`, {
+                await fetch(`${backend_url}/banners/`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify ({
                     s3_key: filePath,
-                    nombre_original: BannerNew.imagen.name,
+                    nombre_original: Banner_New.imagen.name,
                     tipo_contenido: fileExt,
-                    tamanio: BannerNew.imagen.size,
-                    enlace: BannerNew.enlace,
-                    orden: Number(BannerNew.orden) || 1,
+                    tamanio: Banner_New.imagen.size,
+                    enlace: Banner_New.enlace,
+                    orden: Number(Banner_New.orden) || 1,
                     }),
                     credentials: "include",
         })}}
-        BannersNuevos.value = []
+        Datos_New.value = []
     }
     // Sumar/Quitar Producto de Favoritos //
-    const ToggleFavorito = async (id_producto) => {
+    const Backend_Post_Delete_Favorito = async (id_producto) => {
         try {
-            const respuesta = await fetch(`${urlover8000}/favoritos/toggle?id_cliente=${ClienteID.value}`, {
+            const respuesta = await fetch(`${backend_url}/favoritos/toggle?id_cliente=${Cliente_ID.value}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id_producto: id_producto }),
                 credentials: "include",
             })
             if (respuesta.status === 401) {
-                await CerrarSesion()
-                SesionExpirada.value = true
+                await Cerrar_Sesion()
+                Sesion_Expirada.value = true
                 Iniciado.value = false
                 return
             }
             if (respuesta.ok) {
                 const data = await respuesta.json()
             if (data.estado_favorito) {
-                MisFavoritos.value.push(id_producto)
+                Datos_Favoritos.value.push(id_producto)
             } 
             else {
-                MisFavoritos.value = MisFavoritos.value.filter((id) => id !== id_producto)
+                Datos_Favoritos.value = Datos_Favoritos.value.filter((id) => id !== id_producto)
         }}} catch (error) {
             console.error("Error al actualizar favorito:", error)
     }}
-    
+
 </script>

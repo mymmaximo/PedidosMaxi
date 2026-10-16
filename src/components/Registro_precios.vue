@@ -5,14 +5,14 @@
         <!-- Copiado en PortaPapeles -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="MostrarNotificacion" 
+                <div v-if="Notificacion_Copiar" 
                 class="notificacion !bg-blue-300 !text-white"
                 >
                     <span class="text-xl drop-shadow-sm">
                         ✅ 
                     </span>
                     <span>
-                        {{ TextoNotificacion }}
+                        {{ Texto_Notificacion }}
                     </span>
                 </div>
             </transition>
@@ -25,8 +25,8 @@
                 <!-- Mostrar Fondo en Celular -->
                 <Teleport to="body">
                     <transition name="fade">
-                        <div v-if="(MostrarFiltro || MostrarNuevo)" 
-                        @click="MostrarFiltro = false; MostrarNuevo = false"
+                        <div v-if="(Mostrar_Filtro || Mostrar_Nuevo)" 
+                        @click="Mostrar_Filtro = false; Mostrar_Nuevo = false"
                         class="fixed inset-0 
                         bg-black/40 backdrop-blur-sm 
                         z-[35] sm:hidden cursor-pointer"
@@ -36,14 +36,14 @@
                 </Teleport>
 
                 <!-- Barra de Filtros de Registro de Precios -->
-                <div :class="['bar', (MostrarFiltro || MostrarNuevo) 
+                <div :class="['bar', (Mostrar_Filtro || Mostrar_Nuevo) 
                 ? 'translate-x-0 opacity-100 visible sm:w-72 lg:w-80' 
                 : '-translate-x-full opacity-0 invisible sm:opacity-100 sm:visible sm:w-fit sm:translate-x-0']"
                 >
 
                     <!-- Boton de Filtros -->
                     <div class="hidden sm:block">
-                        <h1 @click="MostrarFiltro = !MostrarFiltro"
+                        <h1 @click="Mostrar_Filtro = !Mostrar_Filtro"
                         class="botonfil"
                         >
                             ᯤ
@@ -52,7 +52,7 @@
 
                     <!-- Barra de Filtros -->
                     <transition name="slide">
-                        <div v-if="MostrarFiltro"
+                        <div v-if="Mostrar_Filtro"
                         class="flex flex-col lg:self-center"
                         >
 
@@ -61,7 +61,7 @@
                                 <h1 class="!mt-0">
                                     Ordenar
                                 </h1>
-                                <select v-model="orden" 
+                                <select v-model="Orden" 
                                 placeholder=""
                                 >
                                     <option value="" disabled>
@@ -119,19 +119,19 @@
                                 </h2>
                                 <input placeholder="Fecha de Actualizacion Max..."
                                 type="date"
-                                v-model="fecha_inicio_max" 
+                                v-model="Filtro_Fecha_Inicio_Maximo" 
                                 >
                                 <input placeholder="Fecha de Actualizacion Min..."
                                 type="date"
-                                v-model="fecha_inicio_min" 
+                                v-model="Filtro_Fecha_Inicio_Minimo" 
                                 >
                                 <input placeholder="Fecha de Actualizacion Max..."
                                 type="date"
-                                v-model="fecha_fin_max" 
+                                v-model="Filtro_Fecha_Fin_Maximo" 
                                 >
                                 <input placeholder="Fecha de Actualizacion Min..."
                                 type="date"
-                                v-model="fecha_fin_min" 
+                                v-model="Filtro_Fecha_Fin_Minimo" 
                                 >
                             </div>
 
@@ -142,12 +142,12 @@
                                 </h2>
                                 <input placeholder="Precio Anterior Max..."
                                 type="number"
-                                v-model="precio_anterior_max" 
+                                v-model="Filtro_Precio_Anterior_Maximo" 
                                 maxlength="10"
                                 >
                                 <input placeholder="Precio Anterior Min..."
                                 type="number"
-                                v-model="precio_anterior_min" 
+                                v-model="Filtro_Precio_Anterior_Minimo" 
                                 maxlength="10"
                                 >
                             </div>
@@ -159,12 +159,12 @@
                                 </h2>
                                 <input placeholder="Precio Nuevo Max..."
                                 type="number"
-                                v-model="precio_nuevo_max" 
+                                v-model="Filtro_Precio_Nuevo_Maximo" 
                                 maxlength="10"
                                 >
                                 <input placeholder="Precio Nuevo Min..."
                                 type="number"
-                                v-model="precio_nuevo_min"
+                                v-model="Filtro_Precio_Nuevo_Minimo"
                                 maxlength="10"
                                 >
                             </div>
@@ -175,11 +175,11 @@
                                     Filtro Categoria
                                 </h2>
                                 <div>
-                                    <select v-model="filtrocat">
+                                    <select v-model="Filtro_Categorias">
                                         <option value="" disabled>
                                             Categorias...
                                         </option>
-                                        <option v-for="i in ListaCategoria" 
+                                        <option v-for="i in Datos_Categorias" 
                                         :key="i.categoria" 
                                         :value="i.categoria"
                                         >
@@ -198,7 +198,7 @@
                                     <label class="cursor-pointer">
                                         <input :value="2"
                                         type="radio" 
-                                        v-model="es_promocion_filtro"
+                                        v-model="Filtro_Promocion"
                                         class="accent-green-600 mr-1"
                                         > 
                                             Todos (Historial Completo)
@@ -206,7 +206,7 @@
                                     <label class="cursor-pointer text-red-600 font-semibold">
                                         <input :value="1"
                                         type="radio" 
-                                        v-model="es_promocion_filtro"
+                                        v-model="Filtro_Promocion"
                                         class="accent-red-500 mr-1"
                                         > 
                                             🔥 Solo Ofertas Temporales
@@ -214,7 +214,7 @@
                                     <label class="cursor-pointer text-blue-600 font-semibold">
                                         <input :value="0"
                                         type="radio" 
-                                        v-model="es_promocion_filtro"
+                                        v-model="Filtro_Promocion"
                                         class="accent-blue-500 mr-1"
                                         > 
                                             ⇄ Solo Cambios Fijos de Precio
@@ -231,21 +231,21 @@
                                     <label>
                                     <input :value="2"
                                     type="radio" 
-                                    v-model="bool_activo"
+                                    v-model="Filtro_Estatus"
                                     > 
                                         Todos los Productos
                                     </label>
                                     <label>
                                     <input :value="1"
                                     type="radio" 
-                                    v-model="bool_activo"
+                                    v-model="Filtro_Estatus"
                                     > 
                                         Productos Activos
                                     </label>
                                     <label>
                                     <input :value="0"
                                     type="radio" 
-                                    v-model="bool_activo"
+                                    v-model="Filtro_Estatus"
                                     > 
                                         Productos Eliminados
                                     </label>
@@ -253,7 +253,7 @@
                             </div>
 
                             <!-- Filtro de Promocion Vigente -->
-                            <div v-if="es_promocion_filtro === 1"
+                            <div v-if="Filtro_Promocion === 1"
                             class="flex flex-col md:p-4 p-2"
                             >
                                 <h2 class="p-2 text-indigo-800 font-bold">
@@ -263,7 +263,7 @@
                                     <label class="cursor-pointer">
                                         <input :value="2"
                                         type="radio" 
-                                        v-model="promo_activa_filtro"
+                                        v-model="Filtro_Promocion_Estatus"
                                         class="accent-indigo-600 mr-1"
                                         > 
                                             Todos (Vigentes y Borrados)
@@ -271,7 +271,7 @@
                                     <label class="cursor-pointer">
                                         <input :value="1"
                                         type="radio" 
-                                        v-model="promo_activa_filtro"
+                                        v-model="Filtro_Promocion_Estatus"
                                         class="accent-indigo-600 mr-1"
                                         > 
                                             Solo Vigentes
@@ -279,7 +279,7 @@
                                     <label class="cursor-pointer text-gray-500">
                                         <input :value="0"
                                         type="radio" 
-                                        v-model="promo_activa_filtro"
+                                        v-model="Filtro_Promocion_Estatus"
                                         class="accent-gray-500 mr-1"
                                         > 
                                             Solo Eliminados / Vencidos
@@ -289,12 +289,12 @@
 
                             <!-- Botones -->
                             <div class="botones">
-                                <button @click="AplicarFiltro" 
+                                <button @click="Filtro_Aplicar" 
                                 class="botoncon">
                                     Aplicar Filtros
                                 </button>
-                                <button @click="LimpiarFiltro"
-                                v-if="filtroAct === true" 
+                                <button @click="Filtro_Limpiar"
+                                v-if="Mostrar_Limpiar_Filtro === true" 
                                 class="botont"
                                 >
                                     🗑️ Limpiar Filtro
@@ -310,7 +310,7 @@
                 <div class="start !px-5">
 
                     <!-- Gif Cargando -->
-                    <div v-if="CargandoTrue" 
+                    <div v-if="Backend_Espera" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh]"
@@ -325,7 +325,7 @@
                     </div>
 
                     <!-- Error Cargando -->
-                    <div v-else-if="ErrorCarga"
+                    <div v-else-if="Backend_Error"
                     class="flex flex-col
                     items-center justify-center
                     w-full h-[60vh] gap-4"
@@ -337,7 +337,7 @@
                             El servidor no responde o tu conexión es inestable.
                         </h2>
                         <div class="mt-6 flex justify-center">
-                            <button @click="CargarDatos()" 
+                            <button @click="Backend_Cargar()" 
                             class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                             >
                                 🔄 Recargar Página
@@ -349,7 +349,7 @@
                     <div v-else>
 
                         <!-- Mostrar Boton Filtro en Celular -->
-                        <button @click="MostrarFiltro = true"
+                        <button @click="Mostrar_Filtro = true"
                         class="sm:hidden 
                         w-full mb-4 py-3 
                         bg-white text-green-800 
@@ -365,18 +365,18 @@
 
                         <!-- Barra de Busqueda -->
 						<div class="flex flex-row items-stretch w-full gap-3 mb-5">-
-							<input @input="BusquedaHistorial"
+							<input @input="Backend_Get"
 							type="text" 
 							v-model="Busqueda" 
 							placeholder="Busqueda..."
 							class="busqueda !mb-0"
 							maxlength="50"
 							>
-							<button @click="VistaLista = !VistaLista"
+							<button @click="Formato_Items = !Formato_Items"
 							title="Alternar Vista"
 							class="botonvista"
 							>
-								<span v-if="!VistaLista" class="text-xl">
+								<span v-if="!Formato_Items" class="text-xl">
     								「 」
 								</span>
 								<span v-else class="text-xl">
@@ -392,7 +392,7 @@
 
                         <!-- Tabla de Historial de Precios -->
                         <div v-if="Historial.length > 0"
-                        :class="VistaLista 
+                        :class="Formato_Items 
                         ? 'flex flex-col gap-4 w-full' 
                         :'grid grid-cols-4 gap-6'"
                         >
@@ -400,8 +400,8 @@
                             <!-- Datos de Productos -->
                             <div v-for= "i in Historial" 
                             :key="i.id"
-                            @click="CopiarAlPortapapeles(i.codigo_barra, i.nombre)"
-                            :class="VistaLista 
+                            @click="Copiar_Portapapeles(i.codigo_barra, i.nombre)"
+                            :class="Formato_Items 
                             ? 'tarjeta-premium z-10 relative bg-white !mb-6 !w-full !m-0 hover:!shadow-lg' 
                             : 'carta relative'"
                             >
@@ -416,7 +416,7 @@
                                         ? 'bg-green-100 text-green-800 border-green-300' 
                                         : 'bg-red-100 text-red-800 border-red-300'"
                                         >
-                                            {{ Estatustxt(i.activo) }}
+                                            {{ Estatus_Texto(i.activo) }}
                                         </span>
                                     </div>
                                     <div class="flex flex-col">
@@ -466,7 +466,7 @@
                                         <span class="text-xs text-gray-500 font-bold mb-1">
                                             Precio Anterior: 
                                         </span>
-                                        $ {{ FormatearPrecio(i.precio_anterior) }}
+                                        $ {{ Formato_Precios(i.precio_anterior) }}
                                     </h2>
                                     <h2>
                                         <span class="text-gray-500 font-medium text-sm">
@@ -477,7 +477,7 @@
                                         ? 'text-green-600' 
                                         : 'text-red-600'"
                                         >
-                                        $ {{ FormatearPrecio(i.precio_nuevo) }}
+                                        $ {{ Formato_Precios(i.precio_nuevo) }}
                                     </h2>
                                     <h2 v-if="i.es_promocion && i.porcentaje_descuento">
                                         <span class="text-gray-500 font-medium text-sm">
@@ -489,19 +489,19 @@
                                         <span class="text-gray-500 font-medium text-sm">
                                             Fecha Inicio: 
                                         </span>
-                                        {{ FormatoFecha(i.fecha_inicio) }}
+                                        {{ Formato_Fecha(i.fecha_inicio) }}
                                     </h2>
                                     <h2 v-if="i.es_promocion">
                                         <span class="text-gray-500 font-medium text-sm">
                                             Fecha Fin: 
                                         </span>
-                                        {{ FormatoFecha(i.fecha_fin) }}
+                                        {{ Formato_Fecha(i.fecha_fin) }}
                                     </h2>
                                     <h2 v-if="!i.es_promocion">
                                         <span class="text-gray-500 font-medium text-sm">
                                             Fecha de Cambio: 
                                         </span>
-                                        {{ FormatoFecha(i.fecha_inicio) }}
+                                        {{ Formato_Fecha(i.fecha_inicio) }}
                                     </h2>
                                 </div>
                             </div>
@@ -525,8 +525,8 @@
 
                         <!-- Mostrando Paginas -->
                         <div class="flex justify-center p-3">
-                            <button @click="CambiarPagina('back')" 
-                            :disabled="Pagina === 0 || CargandoTrue"
+                            <button @click="Cambiar_Pagina('back')" 
+                            :disabled="Pagina === 0 || Backend_Espera"
                             class="botona"
                             >
                                 ❮
@@ -539,8 +539,8 @@
                                     Fin de la lista
                                 </span>
                             </h2>
-                            <button @click="CambiarPagina('next')" 
-                            :disabled="!HayMasPaginas || CargandoTrue"
+                            <button @click="Cambiar_Pagina('next')" 
+                            :disabled="!Paginas_Max || Backend_Espera"
                             class="botona"
                             >
                                 ❯
@@ -566,132 +566,132 @@
         ref 
     } from 'vue'
     import { 
-        urlover8000 
+        backend_url 
     } from './Estatus.js'
 
     // ----- Variables Booleanas ----- //
 
-    const VistaLista = ref(true)
-	const filtroAct = ref (false)
-    const ErrorCarga = ref(false)
-    const CargandoTrue = ref(true)
-    const HayMasPaginas = ref(false)
-	const MostrarFiltro = ref (false)
-    const BloqueoPeticion = ref(false)
-    const MostrarNotificacion = ref(false)
+    const Formato_Items = ref(true)
+	const Mostrar_Limpiar_Filtro = ref (false)
+    const Backend_Error = ref(false)
+    const Backend_Espera = ref(true)
+    const Paginas_Max = ref(false)
+	const Mostrar_Filtro = ref (false)
+    const Bloqueo_Peticion = ref(false)
+    const Notificacion_Copiar = ref(false)
     
     // ----- Variables Vacias ----- //
 	
-    const orden = ref ("")
+    const Orden = ref ("")
     const Historial = ref([])
 	const Busqueda = ref ("")
-	const filtrocat = ref ("")
-    const ListaCategoria = ref ("")
-	const precio_nuevo_max = ref ("")
-	const precio_nuevo_min = ref ("")
-	const precio_anterior_max = ref ("")
-	const precio_anterior_min = ref ("")
-    const TextoNotificacion = ref("")
-	const fecha_inicio_max = ref ("")
-	const fecha_inicio_min = ref ("")
-	const fecha_fin_max = ref ("")
-	const fecha_fin_min = ref ("")
+    const Datos_Categorias = ref ("")
+    const Texto_Notificacion = ref("")
+	const Filtro_Categorias = ref ("")
+	const Filtro_Fecha_Fin_Maximo = ref ("")
+	const Filtro_Fecha_Fin_Minimo = ref ("")
+	const Filtro_Precio_Nuevo_Maximo = ref ("")
+	const Filtro_Precio_Nuevo_Minimo = ref ("")
+	const Filtro_Fecha_Inicio_Maximo = ref ("")
+	const Filtro_Fecha_Inicio_Minimo = ref ("")
+	const Filtro_Precio_Anterior_Maximo = ref ("")
+	const Filtro_Precio_Anterior_Minimo = ref ("")
     
     // ----- Variables Simples ----- //
 	
     const Pagina = ref (0)
-	const bool_activo = ref (2)
-    const ItemsPorPagina = ref(24)
-    const es_promocion_filtro = ref(2)
-    const promo_activa_filtro = ref (2)
+    const Paginas_Items = ref(24)
+	const Filtro_Estatus = ref (2)
+    const Filtro_Promocion = ref(2)
+    const Filtro_Promocion_Estatus = ref (2)
     
     // ----- Funciones Vue ----- //
     
     // Primera Carga de Datos de la Pagina //
     onMounted (() => {
-        CargarDatos()
+        Backend_Cargar()
     })
     // Carga de Datos de la Pagina //
-    const CargarDatos = (async() => {
-        if (BloqueoPeticion.value) 
+    const Backend_Cargar = (async() => {
+        if (Bloqueo_Peticion.value) 
             return
-        BloqueoPeticion.value = true
+        Bloqueo_Peticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        CargandoTrue.value = true
-        ErrorCarga.value = false
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
+        Backend_Espera.value = true
+        Backend_Error.value = false
+        const Tiempo_Espera = setTimeout(() => {
+            if (Backend_Espera.value) {
+                Backend_Espera.value = false
+                Backend_Error.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
             }
         }, 15000)
         // Leer Registros y Categorias
         try {
-            await BusquedaHistorial()
-            const respuesta = await fetch(`${urlover8000}/producto/categorias/`)
-            const categ = await respuesta.json()
-            ListaCategoria.value = categ
-            clearTimeout(temporizador)
+            await Backend_Get()
+            const respuesta = await fetch(`${backend_url}/producto/categorias/`)
+            const datos = await respuesta.json()
+            Datos_Categorias.value = datos
+            clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
+            clearTimeout(Tiempo_Espera)
+            Backend_Error.value = true
+            Backend_Espera.value = false
         } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
+            if (!Backend_Error.value) {
+                Backend_Espera.value = false
             }
-            BloqueoPeticion.value = false
+            Bloqueo_Peticion.value = false
     }})
     // Cambiar Pagina //
-    const CambiarPagina = async (direccion) => {
-        if (BloqueoPeticion.value) return
-        BloqueoPeticion.value = true
+    const Cambiar_Pagina = async (direccion) => {
+        if (Bloqueo_Peticion.value) return
+        Bloqueo_Peticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+        Backend_Espera.value = true
+        Backend_Error.value = false
         if (direccion === 'next') {
-            Pagina.value += ItemsPorPagina.value
+            Pagina.value += Paginas_Items.value
         } else if (direccion === 'back') {
-            Pagina.value -= ItemsPorPagina.value
+            Pagina.value -= Paginas_Items.value
             if (Pagina.value < 0) Pagina.value = 0
         }
         try {
-            await BusquedaHistorial()
+            await Backend_Get()
         } catch (error) {
             console.error(error)
-            ErrorCarga.value = true
+            Backend_Error.value = true
         } finally {
-            CargandoTrue.value = false
-            BloqueoPeticion.value = false
+            Backend_Espera.value = false
+            Bloqueo_Peticion.value = false
     }}
     
     // ----- Funciones Frontend ----- //
 
     // Aplicar Filtros //
-    const AplicarFiltro = () => {
+    const Filtro_Aplicar = () => {
         window.scrollTo({ 
             top: 0, 
             behavior: 'smooth' 
         })
         Pagina.value = 0
-        BusquedaHistorial()
-        CerrarFiltro()
+        Backend_Get()
+        Cerrar_Filtro()
     }
     // Cerrar Barra de Filtros //
-	const CerrarFiltro = () => {
-		MostrarFiltro.value = false
+	const Cerrar_Filtro = () => {
+		Mostrar_Filtro.value = false
 		document.body.style.overflow = "auto"
 	}
     // Copiar en Portapapeles //
-    const CopiarAlPortapapeles = async (codigo, nombre_producto) => {
+    const Copiar_Portapapeles = async (codigo, nombre_producto) => {
         try {
             await navigator.clipboard.writeText(codigo)
-            TextoNotificacion.value = `¡Codigo de Barra de ${nombre_producto} copiado al portapapeles!`
-            MostrarNotificacion.value = true
+            Texto_Notificacion.value = `¡Codigo de Barra de ${nombre_producto} copiado al portapapeles!`
+            Notificacion_Copiar.value = true
             setTimeout(() => {
-                MostrarNotificacion.value = false
+                Notificacion_Copiar.value = false
             }, 2500)
         } catch (error) {
             console.error(
@@ -701,7 +701,7 @@
             alert("Tu navegador no soporta la función de copiar automáticamente.")
     }}
     // Establecer Texto de Insignia de Estatus de Producto //
-	const Estatustxt = (id_estatus) => {
+	const Estatus_Texto = (id_estatus) => {
 		if (id_estatus === 1 || id_estatus === true) {
             return "✅Producto Activo"
         }
@@ -721,7 +721,7 @@
         return "Indefinido"
 	}
     // Leer Fecha con Formato DD/MM/YYYY //
-	const FormatoFecha = (fechai) => {
+	const Formato_Fecha = (fechai) => {
 		if (fechai) {
 			return new Date(fechai).toLocaleDateString('es-ES')
 		}
@@ -729,131 +729,131 @@
 			return "Pendiente"
 	}}
     // Leer Precio con Formato Pesos Argentinos //
-    const FormatearPrecio = (precio) => {
+    const Formato_Precios = (precio) => {
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat('es-AR').format(precio)
     }
     // Limpiar Filtros, Orden y Busqueda //
-    const LimpiarFiltro = () => {
+    const Filtro_Limpiar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
+        Orden.value = ""
         Pagina.value = 0
         Busqueda.value = ""
-		fecha_inicio_max.value = ""
-		fecha_inicio_min.value = ""
-		fecha_fin_max.value = ""
-		fecha_fin_min.value = ""
-		precio_nuevo_max.value = ""
-		precio_nuevo_min.value = ""
-		precio_anterior_max.value = ""
-		precio_anterior_min.value = ""
-        filtrocat.value = ""
-		bool_activo.value = 2 
-        promo_activa_filtro.value = 2
-        es_promocion_filtro.value = 2
-        orden.value = ""
-        BusquedaHistorial()
-        CerrarFiltro()
-        filtroAct.value = false
+        Filtro_Categorias.value = ""
+		Filtro_Fecha_Fin_Maximo.value = ""
+		Filtro_Fecha_Fin_Minimo.value = ""
+		Filtro_Precio_Nuevo_Maximo.value = ""
+		Filtro_Precio_Nuevo_Minimo.value = ""
+		Filtro_Fecha_Inicio_Maximo.value = ""
+		Filtro_Fecha_Inicio_Minimo.value = ""
+		Filtro_Precio_Anterior_Maximo.value = ""
+		Filtro_Precio_Anterior_Minimo.value = ""
+		Filtro_Estatus.value = 2 
+        Filtro_Promocion.value = 2
+        Filtro_Promocion_Estatus.value = 2
+        Backend_Get()
+        Cerrar_Filtro()
+        Mostrar_Limpiar_Filtro.value = false
     }
 
     // ----- Funciones Backend ----- //
     
     // Leer Datos de los Registros //
-    const BusquedaHistorial = async() => {
-        let url = new URL (`${urlover8000}/registro_precios/historial/`)
+    const Backend_Get = async() => {
+        let url = new URL (`${backend_url}/registro_precios/historial/`)
 		url.searchParams.append('skip', Pagina.value)
-        url.searchParams.append('limit', ItemsPorPagina.value + 1)
+        url.searchParams.append('limit', Paginas_Items.value + 1)
         // Establecer Busqueda
         if (Busqueda.value !== "") {
             url.searchParams.append('busqueda_promocion', Busqueda.value)
         }
         // Establecer Orden
-        if (orden.value !== "") {
-            url.searchParams.append('orden', orden.value)
-            filtroAct.value = true
+        if (Orden.value !== "") {
+            url.searchParams.append('orden', Orden.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Fecha de Inicio
-        if (fecha_inicio_max.value !== "") {
-            url.searchParams.append('fecha_inicio_max', fecha_inicio_max.value)
-            filtroAct.value = true
+        if (Filtro_Fecha_Inicio_Maximo.value !== "") {
+            url.searchParams.append('fecha_inicio_max', Filtro_Fecha_Inicio_Maximo.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (fecha_inicio_min.value !== "") {
-            url.searchParams.append('fecha_inicio_min', fecha_inicio_min.value)
-            filtroAct.value = true
+        if (Filtro_Fecha_Inicio_Minimo.value !== "") {
+            url.searchParams.append('fecha_inicio_min', Filtro_Fecha_Inicio_Minimo.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Fecha d de Vencimiento
-        if (fecha_fin_max.value !== "") {
-            url.searchParams.append('fecha_fin_max', fecha_fin_max.value)
-            filtroAct.value = true
+        if (Filtro_Fecha_Fin_Maximo.value !== "") {
+            url.searchParams.append('fecha_fin_max', Filtro_Fecha_Fin_Maximo.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (fecha_fin_min.value !== "") {
-            url.searchParams.append('fecha_fin_min', fecha_fin_min.value)
-            filtroAct.value = true
+        if (Filtro_Fecha_Fin_Minimo.value !== "") {
+            url.searchParams.append('fecha_fin_min', Filtro_Fecha_Fin_Minimo.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Precios Nuevos
-        if (precio_nuevo_max.value !== "") {
-            url.searchParams.append('precio_nuevo_max', precio_nuevo_max.value)
-            filtroAct.value = true
+        if (Filtro_Precio_Nuevo_Maximo.value !== "") {
+            url.searchParams.append('precio_nuevo_max', Filtro_Precio_Nuevo_Maximo.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (precio_nuevo_min.value !== "") {
-            url.searchParams.append('precio_nuevo_min', precio_nuevo_min.value)
-            filtroAct.value = true
+        if (Filtro_Precio_Nuevo_Minimo.value !== "") {
+            url.searchParams.append('precio_nuevo_min', Filtro_Precio_Nuevo_Minimo.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Precios Anteriores
-        if (precio_anterior_max.value !== "") {
-            url.searchParams.append('precio_anterior_max', precio_anterior_max.value)
-            filtroAct.value = true
+        if (Filtro_Precio_Anterior_Maximo.value !== "") {
+            url.searchParams.append('precio_anterior_max', Filtro_Precio_Anterior_Maximo.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (precio_anterior_min.value !== "") {
-            url.searchParams.append('precio_anterior_min', precio_anterior_min.value)
-            filtroAct.value = true
+        if (Filtro_Precio_Anterior_Minimo.value !== "") {
+            url.searchParams.append('precio_anterior_min', Filtro_Precio_Anterior_Minimo.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Promocion
-        if (es_promocion_filtro.value === 1) {
+        if (Filtro_Promocion.value === 1) {
             url.searchParams.append('es_promocion', 'true')
-            filtroAct.value = true
-        } else if (es_promocion_filtro.value === 0) {
+            Mostrar_Limpiar_Filtro.value = true
+        } else if (Filtro_Promocion.value === 0) {
             url.searchParams.append('es_promocion', 'false')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Estatus de Promocion
-        if (promo_activa_filtro.value === 1) {
+        if (Filtro_Promocion_Estatus.value === 1) {
             url.searchParams.append('promo_activa', 'true')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (promo_activa_filtro.value === 0) {
+        if (Filtro_Promocion_Estatus.value === 0) {
             url.searchParams.append('promo_activa', 'false')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Estatus de Producto
-        if (bool_activo.value === 1) {
+        if (Filtro_Estatus.value === 1) {
             url.searchParams.append('bool_activo', 'true')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
-        if (bool_activo.value === 0) {
+        if (Filtro_Estatus.value === 0) {
             url.searchParams.append('bool_activo', 'false')
-            filtroAct.value = true
+            Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Categoria
-        if (filtrocat.value !== "") {
-            url.searchParams.append('filtrocat', filtrocat.value)
-            filtroAct.value = true
+        if (Filtro_Categorias.value !== "") {
+            url.searchParams.append('Filtro_Categorias', Filtro_Categorias.value)
+            Mostrar_Limpiar_Filtro.value = true
         }
-        const BusqProducto = await fetch(url, {
+        const GetBackend = await fetch(url, {
             method: 'GET',
             credentials: 'include'
         })
-        const datos = await BusqProducto.json()
+        const datos = await GetBackend.json()
         if (Array.isArray(datos)) {
-            if (datos.length > ItemsPorPagina.value) {
-                HayMasPaginas.value = true
-                Historial.value = datos.slice(0, ItemsPorPagina.value)
+            if (datos.length > Paginas_Items.value) {
+                Paginas_Max.value = true
+                Historial.value = datos.slice(0, Paginas_Items.value)
             } else {
-                HayMasPaginas.value = false
+                Paginas_Max.value = false
                 Historial.value = datos
         }} else {
             Historial.value = []
-            HayMasPaginas.value = false
+            Paginas_Max.value = false
     }}
 
 </script>

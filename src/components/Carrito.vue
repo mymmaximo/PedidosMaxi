@@ -4,8 +4,8 @@
         <!-- Confirmacion -->
         <!-- Borrar Detalle -->
         <Teleport to="body">
-            <div v-if="PopUpDel"
-            @click.self="CerrarPopUpDel"
+            <div v-if="PopUp_Delete"
+            @click.self="Cerrar_PopUp_Delete"
             class="fondo"
             >
                 <div class="popup">
@@ -17,12 +17,12 @@
 
                     <!-- Botones -->
                     <div class="botones">
-                        <button @click="BorrarDetalle()"
+                        <button @click="Frontend_Delete()"
                         class="botoncon"
                         >
                             Si Confirmo
                         </button>
-                        <button @click="CerrarPopUpDel"
+                        <button @click="Cerrar_PopUp_Delete"
                         class="botonc"
                         >
                             Cancelar
@@ -36,8 +36,8 @@
         <!-- Formulario -->
         <!-- Comfirmar Pago -->
         <Teleport to="body">
-            <div v-if="PopUpPay"
-            @click.self="CerrarPopUpPay"
+            <div v-if="PopUp_Pay"
+            @click.self="Cerrar_PopUp_Pay"
             class="fondo"
             >
                 <div class="popup">
@@ -51,11 +51,11 @@
                     </h3>
 
                     <!-- Tiene Direcciones Guardadas -->
-                    <select v-model="DireccionExistente">
+                    <select v-model="Datos_Direccion">
                         <option value="">
                             + Agrega una direccion
                         </option>
-                        <option v-for="i in ListaDirecciones" 
+                        <option v-for="i in Datos_Direcciones" 
                         :key="i.id_direccion" 
                         :value="i.id_direccion"
                         >
@@ -64,30 +64,30 @@
                     </select>
 
                     <!-- Crear Direccion -->
-                    <div v-if="DireccionExistente === ''">
+                    <div v-if="Datos_Direccion === ''">
                             <h3>
                                 Nueva Direccion:
                             </h3>
                         <div class="botones">
                             <input placeholder="Calle"
                             type="text" 
-                            v-model="NuevaDireccion.calle" 
+                            v-model="Datos_New.calle" 
                             >
                             <input placeholder="Numero"
                             type="text" 
-                            v-model="NuevaDireccion.numero" 
+                            v-model="Datos_New.numero" 
                             maxlength="6"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                             >
                             <input placeholder="Barrio"
                             type="text" 
-                            v-model="NuevaDireccion.barrio" 
+                            v-model="Datos_New.barrio" 
                             >
                             <input placeholder="Ciudad"
                             type="text" 
-                            v-model="NuevaDireccion.ciudad" 
+                            v-model="Datos_New.ciudad" 
                             >
-                            <select v-model="NuevaDireccion.provincia">
+                            <select v-model="Datos_New.provincia">
 
                                 <!-- Provincias -->
                                 <option value="" disabled>
@@ -172,16 +172,16 @@
 
                     <!-- Botones -->
                     <div class="botones">
-                        <button @click="CerrarPopUpPay"
+                        <button @click="Cerrar_PopUp_Pay"
                         class="botonc"
                         >
                             Cancelar
                         </button>
-                        <button @click="ConfirmarCompra"
-                        :disabled="confirboton || ProcesandoPago" 
+                        <button @click="Backend_Post"
+                        :disabled="Verificar_Boton || Procesando_Pago" 
                         class="botoncon"
                         >
-                            {{ ProcesandoPago ? 'Cargando...' : 'Realizar Pago' }}
+                            {{ Procesando_Pago ? 'Cargando...' : 'Realizar Pago' }}
                         </button>   
                     </div>
 
@@ -195,7 +195,7 @@
                 <div class="start">
 
                     <!-- Gif Cargando -->
-                    <div v-if="CargandoTrue" 
+                    <div v-if="Backend_Espera" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh]"
@@ -210,7 +210,7 @@
                     </div>
 
                     <!-- Error Cargando -->
-                    <div v-else-if="ErrorCarga" 
+                    <div v-else-if="Backend_Error" 
                     class="flex flex-col 
                     items-center justify-center 
                     w-full h-[60vh] gap-4"
@@ -222,7 +222,7 @@
                             El servidor no responde o tu conexión es inestable.
                         </h2>
                         <div class="mt-6 flex justify-center">
-                            <button @click="CargarDatos()" 
+                            <button @click="Backend_Cargar()" 
                             class="botoncon !flex-none !w-auto px-8 shadow-lg shadow-green-900/20"
                             >
                                 🔄 Recargar Página
@@ -261,7 +261,7 @@
 
                         <!-- Productos en Carrito -->
                         <div class="carrito-lista">
-                            <div v-for="(item, index) in CarritoLocal" 
+                            <div v-for="(item, index) in Carrito_Local" 
                             :key="index"
                             class="carrito-fila"
                             >
@@ -271,28 +271,28 @@
                                     <div class="carrito-carrusel">
                                         <div v-if="item.imagenes && item.imagenes.length > 0"
                                         class="flex flex-row gap-1 items-center">
-                                            <button @click="BackImg(item)"
-                                            :disabled="GetImg(item.id_producto) === 0"
+                                            <button @click="Imagen_Anterior(item)"
+                                            :disabled="Imagen_Leer(item.id_producto) === 0"
                                             class="carrito-btn-flecha"
                                             >
                                                 ❮
                                             </button>
                                             <div>
-                                                <img v-show="ImagenesCargando[item.id_producto] === false"
-                                                :key="item.imagenes[GetImg(item.id_producto)].s3_key"
-                                                :src="ObtenerImgUrl(item.imagenes[GetImg(item.id_producto)].s3_key)"
-                                                @load="ImagenesCargando[item.id_producto] = false"
+                                                <img v-show="Imagen_Espera[item.id_producto] === false"
+                                                :key="item.imagenes[Imagen_Leer(item.id_producto)].s3_key"
+                                                :src="Imagen_Url(item.imagenes[Imagen_Leer(item.id_producto)].s3_key)"
+                                                @load="Imagen_Espera[item.id_producto] = false"
                                                 class="imagencar !w-16 !h-16 shadow-sm"
                                                 >
-                                                <div v-if="ImagenesCargando[item.id_producto] !== false" 
+                                                <div v-if="Imagen_Espera[item.id_producto] !== false" 
                                                 class="imagencar !w-16 !h-16"
                                                 >
                                                     <img src="../assets/loading.gif" 
                                                     alt="Cargando...">
                                                 </div>
                                             </div>
-                                            <button @click="NextImg(item)"
-                                            :disabled="GetImg(item.id_producto) === item.imagenes.length - 1"
+                                            <button @click="Imagen_Siguiente(item)"
+                                            :disabled="Imagen_Leer(item.id_producto) === item.imagenes.length - 1"
                                             class="carrito-btn-flecha"
                                             >
                                                 ❯
@@ -315,14 +315,14 @@
                                     <span class="carrito-label-movil">
                                         Precio:
                                     </span>
-                                        ${{ FormatearPrecio(item.precio_unitario) }}
+                                        ${{ Formato_Precios(item.precio_unitario) }}
                                 </div>
 
                                 <!-- Stock del Producto (Incluye Verificacion) -->
                                 <div class="carrito-col-cantidad">
                                     <input v-model="item.cantidad"
                                     type="number"
-                                    @change="VerificarStock(item)" 
+                                    @change="Verificar_Stock(item)" 
                                     class="carrito-input-cantidad"
                                     >
                                 </div>
@@ -332,12 +332,12 @@
                                     <span class="carrito-label-movil">
                                         Subtotal:
                                     </span>
-                                        $ {{ FormatearPrecio(item.item_subtotal || item.cantidad * item.precio_unitario) }}
+                                        $ {{ Formato_Precios(item.item_subtotal || item.cantidad * item.precio_unitario) }}
                                 </div>
 
                                 <!-- Boton Borrar Producto de Carrito -->
                                 <div class="carrito-col-borrar">
-                                    <button @click="AbrirPopUpDel(index)" 
+                                    <button @click="Abrir_PopUp_Delete(index)" 
                                     title="Eliminar"
                                     class="carrito-btn-borrar"
                                     >
@@ -360,10 +360,10 @@
                                             Total:
                                         </span>
                                         <span>
-                                            $ {{ FormatearPrecio(CarritoLocal.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0)) }}
+                                            $ {{ Formato_Precios(Carrito_Local.reduce((suma, item) => suma + (item.cantidad * item.precio_unitario), 0)) }}
                                         </span>
                                     </div>
-                                    <button @click="AbrirPopUpPay"
+                                    <button @click="Abrir_PopUp_Pay"
                                     class="botoncon 
                                     w-full !text-xl !py-4 
                                     z-10 hover:-translate-y-1"
@@ -401,32 +401,33 @@
         supabase 
     } from '../config/supabase.js'
     import { 
-        CarritoLocal, 
-        LimpiarCompra, 
-        CerrarSesion, 
+        Carrito_Local, 
+        Limpiar_Compra, 
+        Cerrar_Sesion, 
         Rol, 
-        urlover8000, 
-        ValidadCarrito, 
-        ClienteID, 
-        CargarCarrito, 
-        SesionExpirada, 
+        backend_url, 
+        Validad_Carrito, 
+        PopUp_Delete,
+        Cliente_ID, 
+        Cargar_Carrito, 
+        Sesion_Expirada, 
         Iniciado 
     } from './Estatus.js'
 
     // ----- Variables Vue ----- //
 
     // Verificacion del Boton //
-    const confirboton = computed(() =>{
+    const Verificar_Boton = computed(() =>{
         if (Rol.value && Rol.value.length > 0) {
             return true
         }
-        if (DireccionExistente.value === "") {
+        if (Datos_Direccion.value === "") {
             if (
-                NuevaDireccion.value.calle === ""||
-                NuevaDireccion.value.numero === ""||
-                NuevaDireccion.value.barrio === ""||
-                NuevaDireccion.value.ciudad === ""||
-                NuevaDireccion.value.provincia === ""
+                Datos_New.value.calle === ""||
+                Datos_New.value.numero === ""||
+                Datos_New.value.barrio === ""||
+                Datos_New.value.ciudad === ""||
+                Datos_New.value.provincia === ""
             ) {
                 return true
         }}
@@ -434,57 +435,57 @@
     })
     // Primera Carga de Datos de la Pagina //
     onMounted (async () => {
-        let PagoExito = false
-        await CargarDatos()
-        CargarCarrito()
+        let Pago_Exitoso = false
+        await Backend_Cargar()
+        Cargar_Carrito()
         // Llamar Pasarela de Pago
-        InstanciaPaddle.value = await initializePaddle({
+        Instancia_Paddle.value = await initializePaddle({
             environment: 'sandbox', 
             token: 'test_04e1ed8d821a1fd086eaaa9ec0b',
             eventCallback: function(evento) {
                 if (evento.name === "checkout.completed") {
-                    PagoExito = true
+                    Pago_Exitoso = true
                     emit('CarritoVacio')
-                    LimpiarCompra()
+                    Limpiar_Compra()
                     document.body.style.overflow = "auto"
                     router.push('/mis_pedidos')
                 } else if (evento.name === "checkout.closed") {
-                    if (!PagoExito) {
+                    if (!Pago_Exitoso) {
                         console.log("El usuario cerró la ventana sin pagar")
                     }
-                    ProcesandoPago.value = false
+                    Procesando_Pago.value = false
     }}})})
     // Carga de Datos de la Pagina //
-    const CargarDatos = (async() => {
-        if (!ClienteID.value) { 
-            CargandoTrue.value = false
+    const Backend_Cargar = (async() => {
+        if (!Cliente_ID.value) { 
+            Backend_Espera.value = false
             return
         }
-        CargandoTrue.value = true
-        ErrorCarga.value = false
+        Backend_Espera.value = true
+        Backend_Error.value = false
         // Tiempo de Espera para el Backend
-        const temporizador = setTimeout(() => {
-            if (CargandoTrue.value) {
-                CargandoTrue.value = false
-                ErrorCarga.value = true
+        const Tiempo_Espera = setTimeout(() => {
+            if (Backend_Espera.value) {
+                Backend_Espera.value = false
+                Backend_Error.value = true
                 console.warn("Se agotó el tiempo de espera de la petición.")
         }}, 15000)
         // Leer Direcciones de Cliente
         try {
-            const respuesta = await fetch(`${urlover8000}/cliente/${ClienteID.value}/direcciones/`, {
+            const respuesta = await fetch(`${backend_url}/cliente/${Cliente_ID.value}/direcciones/`, {
                 credentials: 'include'
             })
             const datos = await respuesta.json()
-            ListaDirecciones.value = datos
-            clearTimeout(temporizador)
+            Datos_Direcciones.value = datos
+            clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
-            clearTimeout(temporizador)
-            ErrorCarga.value = true
-            CargandoTrue.value = false
+            clearTimeout(Tiempo_Espera)
+            Backend_Error.value = true
+            Backend_Espera.value = false
         } finally {
-            if (!ErrorCarga.value) {
-                CargandoTrue.value = false
+            if (!Backend_Error.value) {
+                Backend_Espera.value = false
     }}})
     const emit = defineEmits([
         'CarritoVacio'
@@ -494,7 +495,7 @@
     // ----- Variables Complejas ----- //
 
     // Almacen para Nuevas Direcciones //
-    const NuevaDireccion = ref ({
+    const Datos_New = ref ({
         calle: "",
         numero: null,
         barrio: "",
@@ -504,75 +505,74 @@
 
     // ----- Variables Booleanas ----- //
     
-    const ErrorCarga = ref(false)
-    const CargandoTrue = ref(true)
-    const ProcesandoPago = ref(false)
-    const PopUpPay = ref (false)
-    const PopUpDel = ref(false)
+    const Backend_Error = ref(false)
+    const Backend_Espera = ref(true)
+    const Procesando_Pago = ref(false)
+    const PopUp_Pay = ref (false)
 
     // ----- Variables Vacias ----- //
     
-    const IndiceImg = ref ({})
-    const ProductoEli = ref("")
-    const ListaDirecciones = ref([])
-    const ImagenesCargando = ref({})
-    const InstanciaPaddle = ref(null)
-    const DireccionExistente = ref ("")
+    const Imagen_Indice = ref ({})
+    const Datos_Delete = ref("")
+    const Datos_Direcciones = ref([])
+    const Imagen_Espera = ref({})
+    const Instancia_Paddle = ref(null)
+    const Datos_Direccion = ref ("")
 
     // ----- Funciones Frontend ----- //
     
     // Abrir Pop up para Borrar Detalle //
-	const AbrirPopUpDel = (producto_fila) => {
-        ProductoEli.value = producto_fila
-		PopUpDel.value = true
+	const Abrir_PopUp_Delete = (producto_fila) => {
+        Datos_Delete.value = producto_fila
+		PopUp_Delete.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Confirmar el Pago (Si no Inicio Sesion /login) //
-	const AbrirPopUpPay = () => {
+	const Abrir_PopUp_Pay = () => {
         if (!Iniciado.value) {
             router.push('/login')
             return
         }
-		PopUpPay.value = true
+		PopUp_Pay.value = true
 		document.body.style.overflow = "hidden"
-        if (ListaDirecciones.value.length > 0)
-            DireccionExistente.value = ListaDirecciones.value[0].id_direccion
+        if (Datos_Direcciones.value.length > 0)
+            Datos_Direccion.value = Datos_Direcciones.value[0].id_direccion
 	}
     // Leer Imagen Anterior //
-    const BackImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id_producto)
-        if (ImgActual > 0) {
-            IndiceImg.value[imagen.id_producto] = ImgActual - 1
-            ImagenesCargando.value[imagen.id_producto] = true
+    const Imagen_Anterior = (imagen) => {
+        const Imagen_Actual = Imagen_Leer(imagen.id_producto)
+        if (Imagen_Actual > 0) {
+            Imagen_Indice.value[imagen.id_producto] = Imagen_Actual - 1
+            Imagen_Espera.value[imagen.id_producto] = true
     }}
     // Cerrar Pop up de Borrar Detalle //
-	const CerrarPopUpDel = () => {
-		PopUpDel.value = false
+	const Cerrar_PopUp_Delete = () => {
+		PopUp_Delete.value = false
 		document.body.style.overflow = "auto"
 	}
     // Cerrar Pop up de Borrar Detalle //
-	const CerrarPopUpPay = () => {
-		PopUpPay.value = false
+	const Cerrar_PopUp_Pay = () => {
+		PopUp_Pay.value = false
 		document.body.style.overflow = "auto"
 	}
     // Leer Precio con Formato Pesos Argentinos //
-    const FormatearPrecio = (precio) => {
+    const Formato_Precios = (precio) => {
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat('es-AR').format(precio)
     }
     // Leer Imagen //
-    const GetImg = (id) => {
-        return IndiceImg.value[id] || 0
+    const Imagen_Leer = (id) => {
+        return Imagen_Indice.value[id] || 0
     }
     // Leer Imagen Siguiente //
-    const NextImg = (imagen) => {
-        const ImgActual = GetImg(imagen.id_producto)
-        if (ImgActual < imagen.imagenes.length - 1) {
-            IndiceImg.value[imagen.id_producto] = ImgActual + 1
-            ImagenesCargando.value[imagen.id_producto] = true
+    const Imagen_Siguiente = (imagen) => {
+        const Imagen_Actual = Imagen_Leer(imagen.id_producto)
+        if (Imagen_Actual < imagen.imagenes.length - 1) {
+            Imagen_Indice.value[imagen.id_producto] = Imagen_Actual + 1
+            Imagen_Espera.value[imagen.id_producto] = true
     }}
     // Obtener Url/Link de Imagen //
-    const ObtenerImgUrl = (Imgenkey) => {
+    const Imagen_Url = (Imgenkey) => {
         const respuesta = supabase.storage
             .from('max_imagenes')
             .getPublicUrl(Imgenkey)
@@ -582,62 +582,62 @@
     // ----- Funciones Backend ----- //
     
     // Borrar Detalle de Pedido del Carrito //
-    const BorrarDetalle = () => {
-        CarritoLocal.value.splice(ProductoEli.value, 1)
-        localStorage.setItem('carrito_pendiente', JSON.stringify(CarritoLocal.value))
-        CerrarPopUpDel()
+    const Frontend_Delete = () => {
+        Carrito_Local.value.splice(Datos_Delete.value, 1)
+        localStorage.setItem('carrito_pendiente', JSON.stringify(Carrito_Local.value))
+        Cerrar_PopUp_Delete()
         // Carrito Vacio, vuelve al Inicio
-        if (CarritoLocal.value.length === 0) {
+        if (Carrito_Local.value.length === 0) {
             emit('CarritoVacio')
             router.push('/')
     }}
     // Enviar Pedido Completo al Backend //
-    const ConfirmarCompra = (async() => {
-        if (ProcesandoPago.value) return
-        ProcesandoPago.value = true
+    const Backend_Post = (async() => {
+        if (Procesando_Pago.value) return
+        Procesando_Pago.value = true
         // Verificacion de Carrito
-        if (!ValidadCarrito(CarritoLocal.value)) {
+        if (!Validad_Carrito(Carrito_Local.value)) {
             alert("Manipulación detectada. Tu carrito ha sido vaciado por seguridad.")
-            LimpiarCompra()
+            Limpiar_Compra()
             emit('CarritoVacio')
-            ProcesandoPago.value = false
+            Procesando_Pago.value = false
             return
         }
         // Confirmar Compra
         try {
-            let DireccionPedido = null
-            if (DireccionExistente.value !== "") {
-                DireccionPedido = DireccionExistente.value
+            let Datos_Direccion_Pedido = null
+            if (Datos_Direccion.value !== "") {
+                Datos_Direccion_Pedido = Datos_Direccion.value
             } else {
                 // Establecer Datos de Nueva de Direccion
-                const DatosNuevaDireccion = {
-                    calle: NuevaDireccion.value.calle,
-                    numero: parseInt(NuevaDireccion.value.numero),
-                    barrio: NuevaDireccion.value.barrio,
-                    ciudad: NuevaDireccion.value.ciudad,
-                    provincia: NuevaDireccion.value.provincia
+                const DatosBackend = {
+                    calle: Datos_New.value.calle,
+                    numero: parseInt(Datos_New.value.numero),
+                    barrio: Datos_New.value.barrio,
+                    ciudad: Datos_New.value.ciudad,
+                    provincia: Datos_New.value.provincia
                 }
                 // Subir Datos de Nueva de Direccion
-                const SubidaNuevaDireccion = await fetch(`${urlover8000}/direcciones/`, {
+                const PostBackend_Direccion = await fetch(`${backend_url}/direcciones/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(DatosNuevaDireccion),
+                    body: JSON.stringify(DatosBackend),
                     credentials: 'include'
                 })
-                const datos = await SubidaNuevaDireccion.json()
-                DireccionPedido = datos.id
+                const datos = await PostBackend_Direccion.json()
+                Datos_Direccion_Pedido = datos.id
             }
             // Subir Nuevo Pedido
-            const SubidaNuevoPedido = await fetch(`${urlover8000}/pedidos/`, {
+            const PostBackend = await fetch(`${backend_url}/pedidos/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id_cliente: parseInt(ClienteID.value),
-                    id_direccion: DireccionPedido,
+                    id_cliente: parseInt(Cliente_ID.value),
+                    id_direccion: Datos_Direccion_Pedido,
                     metodo_pago: " ",
                     tiempo_estimado_entrega: 0,
                     tiempo_entrega: 0
@@ -645,18 +645,18 @@
                 credentials: 'include'
             })
             // Sesion Vencida
-            if (SubidaNuevoPedido.status === 401) {
-                CerrarSesion()
+            if (PostBackend.status === 401) {
+                Cerrar_Sesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
+                Sesion_Expirada.value = true
                 Iniciado.value = false
-                ProcesandoPago.value = false
+                Procesando_Pago.value = false
                 return
             }
-            const datosPedido = await SubidaNuevoPedido.json()
-            const Pedidoid = datosPedido.id
+            const DatosPedido = await PostBackend.json()
+            const Pedidoid = DatosPedido.id
             // Establecer Lista de Detalles de Pedido
-            const DetallesLista = CarritoLocal.value.map(item => {
+            const DatosDetalle = Carrito_Local.value.map(item => {
                 return {
                     id_pedido: Pedidoid,
                     id_producto: item.id_producto,
@@ -664,25 +664,25 @@
                     precio_unitario: item.precio_unitario
             }})
             // Subir Lista de Detalles de Pedido
-            const SubidaNuevoDetalle = await fetch(`${urlover8000}/pedidos/detalles_pedido/`, {
+            const PostBackend_Detalle = await fetch(`${backend_url}/pedidos/detalles_pedido/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(DetallesLista),
+                body: JSON.stringify(DatosDetalle),
                 credentials: 'include'
                 })
             // Sesion Vencida
-            if (SubidaNuevoDetalle.status === 401) {
-                CerrarSesion()
+            if (PostBackend_Detalle.status === 401) {
+                Cerrar_Sesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
+                Sesion_Expirada.value = true
                 Iniciado.value = false
-                ProcesandoPago.value = false
+                Procesando_Pago.value = false
                 return
             }
             // Subir Transaccion de Pasarela de Pago
-            const SubidaTransaccion = await fetch(`${urlover8000}/crear-transaccion-paddle/`, {
+            const PostBackend_Paddle = await fetch(`${backend_url}/crear-transaccion-paddle/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -693,30 +693,30 @@
                 credentials: 'include'
             })
             // Sesion Vencida
-            if (SubidaTransaccion.status === 401) {
-                CerrarSesion()
+            if (PostBackend_Paddle.status === 401) {
+                Cerrar_Sesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                SesionExpirada.value = true
+                Sesion_Expirada.value = true
                 Iniciado.value = false
-                ProcesandoPago.value = false
+                Procesando_Pago.value = false
                 return
             }
-            const datosTransaccion = await SubidaTransaccion.json()
-            InstanciaPaddle.value?.Checkout.open({
+            const DatosPaddle = await PostBackend_Paddle.json()
+            Instancia_Paddle.value?.Checkout.open({
                 settings: {
                     displayMode: "overlay",
                     theme: "light",
                     locale: "es"
                 },
-                transactionId: datosTransaccion.transaction_id
+                transactionId: DatosPaddle.transaction_id
             })
         } catch (error) {
             console.error("Error crítico procesando la compra:", error)
             alert("Ocurrió un problema al procesar tu pedido. Por favor, intenta de nuevo.")
-            ProcesandoPago.value = false
+            Procesando_Pago.value = false
     }})
     // Verificacion de Stock > 0 //
-    const VerificarStock = (item) => {
+    const Verificar_Stock = (item) => {
         if (item.cantidad < 1) {
             item.cantidad = 1
         }
@@ -725,7 +725,7 @@
         }
         localStorage.setItem(
             'carrito_pendiente', 
-            JSON.stringify(CarritoLocal.value
+            JSON.stringify(Carrito_Local.value
     ))}
     
 </script>

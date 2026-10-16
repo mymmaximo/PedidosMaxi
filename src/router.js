@@ -12,13 +12,13 @@ import Registro_precios from './components/Registro_precios.vue'
 import Centro_de_ayuda from './components/Centro_de_ayuda.vue'
 import Login from './components/Login.vue'
 import { 
-    ValidadSesionBack, 
+    Validad_Sesion_Backend, 
     Rol, 
     Iniciado, 
-    MostrarError, 
-    CarritoLocal, 
-    ValidadCarrito, 
-    VolverCarro 
+    Mostrar_Error, 
+    Carrito_Local, 
+    Validad_Carrito, 
+    Volver_Carro 
 } from './components/Estatus.js'
 
 // Redireccion a Url/Link //
@@ -131,24 +131,24 @@ let PrimeraCarga = true
 // Verificar de Sesion, Rol, Carrito y Titulo de Pagina //
 router.beforeEach(async (to, from, next) => {
     // Titulo de Pagina
-    const tituloBase = 'Maxi-Store'
-    document.title = to.meta.title ? `${to.meta.title} - ${tituloBase}` : tituloBase
+    const Mostrar_Titulo = 'Maxi-Store'
+    document.title = to.meta.title ? `${to.meta.title} - ${Mostrar_Titulo}` : Mostrar_Titulo
     if (PrimeraCarga) {
-        await ValidadSesionBack()
+        await Validad_Sesion_Backend()
         PrimeraCarga = false
     }
     // Verificar Sesion y Rol
     if (to.meta.requireAuth) {
         if (!Iniciado.value) {
-            MostrarError.value = true
-            setTimeout(() => { MostrarError.value = false }, 3000)
+            Mostrar_Error.value = true
+            setTimeout(() => { Mostrar_Error.value = false }, 3000)
             return next('/')
         }
         if (to.meta.rolesPer) {
             const Acceso = Rol.value && Rol.value.some(rol => to.meta.rolesPer.includes(rol))
             if (!Acceso) {
-                MostrarError.value = true
-                setTimeout(() => { MostrarError.value = false }, 3000)
+                Mostrar_Error.value = true
+                setTimeout(() => { Mostrar_Error.value = false }, 3000)
                 if (from.matched.length > 0) {
                     return next(false)
                 } else {
@@ -156,20 +156,20 @@ router.beforeEach(async (to, from, next) => {
     }}}}
     // Verificar Validez del Carrito
     if (to.meta.requireCarrito) {
-        let carrito_valido = false
-        if (CarritoLocal.value.length > 0 && ValidadCarrito(CarritoLocal.value)) {
-            carrito_valido = true
+        let Carrito_Valido = false
+        if (Carrito_Local.value.length > 0 && Validad_Carrito(Carrito_Local.value)) {
+            Carrito_Valido = true
         } else {
             try {
-                const CarritoGuardado = JSON.parse(localStorage.getItem('carrito_pendiente')) || []
-                if (CarritoGuardado.length > 0 && ValidadCarrito(CarritoGuardado)) {
-                    carrito_valido = true
+                const Carrito_Guardado = JSON.parse(localStorage.getItem('carrito_pendiente')) || []
+                if (Carrito_Guardado.length > 0 && Validad_Carrito(Carrito_Guardado)) {
+                    Carrito_Valido = true
             }} catch (error) {
-                carrito_valido = false
+                Carrito_Valido = false
         }}
-        if (!carrito_valido) {
-            VolverCarro.value = true
-            setTimeout(() => { VolverCarro.value = false }, 3000)
+        if (!Carrito_Valido) {
+            Volver_Carro.value = true
+            setTimeout(() => { Volver_Carro.value = false }, 3000)
             if (from.matched.length > 0) {
                 return next(false)
             } else {
