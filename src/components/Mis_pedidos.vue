@@ -904,25 +904,25 @@
 
     // ----- Variables Booleanas ----- //
 
-    const Mostrar_Limpiar_Filtro = ref(false)
-    const Backend_Error = ref(false)
-    const Backend_Espera = ref(true)
+    const Backend_Error = ref (false)
+    const Backend_Espera = ref (true)
     const Mostrar_Filtro = ref (false)
-    const Boton_Mostrar_Historial = ref(false)
+    const Mostrar_Limpiar_Filtro = ref (false)
+    const Boton_Mostrar_Historial = ref (false)
 
     // ----- Variables Vacias ----- //
 
-    const Orden = ref("")
-    const Pedidos = ref([])
-    const Busqueda = ref("")
-    const Mostrar_En_Camino = ref(null)
-    const Mostrar_Historial = ref(null)
-    const Mostrar_Preparando = ref(null)
+    const Orden = ref ("")
+    const Pedidos = ref ([])
+    const Busqueda = ref ("")
+    const Mostrar_En_Camino = ref (null)
+    const Mostrar_Historial = ref (null)
+    const Mostrar_Preparando = ref (null)
 
     // ----- Variables Simples ----- //
 
-    const Filtro_Metodo_Pago = ref(5)
-    const Filtro_Estatus = ref(4)
+    const Filtro_Estatus = ref (4)
+    const Filtro_Metodo_Pago = ref (5)
 
     // ----- Funciones Vue ----- //
     
@@ -965,10 +965,6 @@
             if (!Backend_Error.value) {
                 Backend_Espera.value = false
     }}})
-    // Filtrar Pedidos en Preparacion //
-    const Filtro_Preparacion = computed(() => {
-        return Pedidos.value.filter(pedido => pedido.estatus === 3)
-    })
     // Filtrar Pedidos en Camino //
     const Filtro_En_Camino = computed(() => {
         return Pedidos.value.filter(pedido => pedido.estatus === 2)
@@ -976,6 +972,10 @@
     // Filtrar Pedidos Entregados //
     const Filtro_Historial = computed(() => {
         return Pedidos.value.filter(pedido => pedido.estatus === 1)
+    })
+    // Filtrar Pedidos en Preparacion //
+    const Filtro_Preparacion = computed(() => {
+        return Pedidos.value.filter(pedido => pedido.estatus === 3)
     })
 
     // ----- Funciones Frontend ----- //
@@ -988,6 +988,15 @@
         if (Filtro_Estatus.value === 1) {
             Boton_Mostrar_Historial.value = true
     }}
+    // Limpiar Filtros, Orden y Busqueda //
+    const Filtro_Limpiar = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Filtro_Metodo_Pago.value = 5
+        Filtro_Estatus.value = 4
+        Backend_Get()
+        Mostrar_Filtro.value = false
+        Mostrar_Limpiar_Filtro.value = false
+    }
     // Leer Fecha con Formato DD/MM/YYYY //
     const Formato_Fecha = (fecha) => {
         if (fecha) {
@@ -1000,15 +1009,6 @@
     const Formato_Precios = (precio) => {
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat('es-AR').format(precio)
-    }
-    // Limpiar Filtros, Orden y Busqueda //
-    const Filtro_Limpiar = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Filtro_Metodo_Pago.value = 5
-        Filtro_Estatus.value = 4
-        Backend_Get()
-        Mostrar_Filtro.value = false
-        Mostrar_Limpiar_Filtro.value = false
     }
     // Mostrar Detalles de Pedido //
     const Mostrar_Detalle_En_Camino = (id) => {

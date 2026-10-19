@@ -127,11 +127,11 @@
 
     // ----- Variables Booleanas ----- //
 
-    const Notificacion_Copiar = ref(false)
+    const Notificacion_Copiar = ref (false)
 
     // ----- Variables Vacias ----- //
 
-    const Notificacion_Texto = ref("")
+    const Notificacion_Texto = ref ("")
 
     // ----- Funciones Vue ----- //
 

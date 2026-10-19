@@ -4,31 +4,31 @@ import { ref } from 'vue'
 
 // ----- Variables Booleanas ----- //
 
-export const PopUp_Upgrade = ref(false)
-export const PopUp_Delete = ref(false)
-export const PopUp_Off = ref(false)
-export const PopUp_Buy = ref(false)
-export const Sesion_Expirada = ref(false)
-export const Mostrar_Error = ref(false)
-export const Volver_Carro = ref(false)
-export const Iniciado = ref(false)
+export const Iniciado = ref (false)
+export const PopUp_Off = ref (false)
+export const PopUp_Buy = ref (false)
+export const Volver_Carro = ref (false)
+export const PopUp_Delete = ref (false)
+export const PopUp_Upgrade = ref (false)
+export const Mostrar_Error = ref (false)
+export const Sesion_Expirada = ref (false)
 
 // ----- Variables Vacias ----- //
 
-export const Producto_Actual = ref(null)
+export const Rol = ref ([])
+export const Cliente_ID = ref (null)
 export const Carrito_Local = ref ([])
-export const Cliente_ID = ref(null)
-export const Rol = ref([])
+export const Producto_Actual = ref (null)
 
 // ----- Variables Simples ----- //
 
-export const Producto_Cantidad = ref(1)
+export const Producto_Cantidad = ref (1)
 
 // ----- Funciones Vue ----- //
 
 export const backend_url = "https://backend-pedidos-maxi.vercel.app"
 export const Pedido_Guardado = parseInt(localStorage.getItem("pedido"))
-export const Pedido_Actual = ref(Pedido_Guardado ? parseInt(Pedido_Guardado) : null)
+export const Pedido_Actual = ref (Pedido_Guardado ? parseInt(Pedido_Guardado) : null)
 
 // ----- Funciones ----- //
 
@@ -79,41 +79,6 @@ export const Limpiar_Compra = () =>{
     localStorage.removeItem("carrito_pendiente")
     Carrito_Local.value = []
 }
-// Validad Sesion Iniciada //
-export const Validad_Sesion_Backend = async () => {
-    try {
-        const respuesta = await fetch(`${backend_url}/reload/`, {
-            method: 'GET',
-            credentials: 'include'
-        })
-        if (respuesta.status === 401) {
-            if (Leer_Cookie('sesion_activa') === 'true') {
-                Sesion_Expirada.value = true
-                document.cookie = "sesion_activa=; path=/; max-age=0"
-            }
-            Iniciado.value = false
-            Rol.value = []
-            Cliente_ID.value = null
-            return false
-        }
-        if (respuesta.ok) {
-            const datos = await respuesta.json()
-            Iniciado.value = true
-            Rol.value = datos.id_rol || []
-            Cliente_ID.value = datos.id_cliente
-        } else {
-            if (Leer_Cookie('sesion_activa') === 'true') {
-                Sesion_Expirada.value = true
-                document.cookie = "sesion_activa=; path=/; max-age=0;"
-            }
-            Iniciado.value = false
-            Rol.value = []
-            Cliente_ID.value = null
-            Limpiar_Compra()
-    }} catch (error) {
-        console.error("Error validando la sesión:", error)
-        Iniciado.value = false
-}}
 // Verificacion de Carrito //
 export const Validad_Carrito = (carrito_check) => {
     if (!Array.isArray(carrito_check)) {
@@ -151,6 +116,41 @@ export const Validad_Carrito = (carrito_check) => {
     }}
     return true
 }
+// Validad Sesion Iniciada //
+export const Validad_Sesion_Backend = async () => {
+    try {
+        const respuesta = await fetch(`${backend_url}/reload/`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+        if (respuesta.status === 401) {
+            if (Leer_Cookie('sesion_activa') === 'true') {
+                Sesion_Expirada.value = true
+                document.cookie = "sesion_activa=; path=/; max-age=0"
+            }
+            Iniciado.value = false
+            Rol.value = []
+            Cliente_ID.value = null
+            return false
+        }
+        if (respuesta.ok) {
+            const datos = await respuesta.json()
+            Iniciado.value = true
+            Rol.value = datos.id_rol || []
+            Cliente_ID.value = datos.id_cliente
+        } else {
+            if (Leer_Cookie('sesion_activa') === 'true') {
+                Sesion_Expirada.value = true
+                document.cookie = "sesion_activa=; path=/; max-age=0;"
+            }
+            Iniciado.value = false
+            Rol.value = []
+            Cliente_ID.value = null
+            Limpiar_Compra()
+    }} catch (error) {
+        console.error("Error validando la sesión:", error)
+        Iniciado.value = false
+}}
 // Verificacion de Rol //
 export const Verificar_Rol = (rolesPermitidos) => {
     if (!Rol.value || Rol.value.length === 0) return false

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 /* -------------------------------------------PRINCIPAL------------------------------------------- */
+
+/* App */
 #app {
     @apply
     font-sans
@@ -14,7 +16,7 @@
     lg:text-base
     2xl:text-base
 }
-/* Barra de Filtros y Nuevos */
+/* Barra Lateral Izquierda */
 .bar {
     @apply 
     /* Cell */
@@ -55,9 +57,11 @@
     sm:gap-4
     sm:translate-x-0
 }
+/* Barra de Filtros y Nuevos */
 .bar h1:not(.botonfil):not(.botonnew), .bar h2:not(.botonfil):not(.botonnew) {
     @apply text-xs font-black text-green-800 uppercase tracking-wider mb-3 mt-5 p-0 text-left border-none w-full;
 }
+/* Texto de Barra */
 .bar label {
     @apply 
     flex 
@@ -73,6 +77,7 @@
 body {
     @apply m-0 p-0 overflow-x-hidden;
 }
+/* Pagina */
 .pagina {
     @apply
     flex flex-col
@@ -91,108 +96,14 @@ body {
     xl:items-center
     2xl:items-center
 }
+/* Cuerpo de Pagina */
 .cuerpo {
     @apply
     w-full
     min-h-screen
     bg-white
 }
-input, select, input[type="number"], input[type="date"] {
-    @apply
-    w-full place-self-center
-    text-gray-700 font-medium text-left
-    bg-gray-50 border border-gray-200 rounded-xl
-    outline-none transition-all duration-200
-    px-4 py-2.5 mb-2
-    text-sm sm:text-base
-    shadow-sm
-    focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 focus:-translate-y-0.5 focus:shadow-md;
-}
-input[type="radio"] {
-    @apply 
-    w-4 h-4 mb-0
-    accent-green-600 cursor-pointer
-    focus:ring-0 focus:translate-y-0 shadow-none;
-}
-form {
-    @apply
-    flex flex-col
-    gap-2
-    lg:gap-3
-    2xl:gap-3
-}
-/* Scrollbar */
-::-webkit-scrollbar {
-    width: 15px
-}
-::-webkit-scrollbar-track {
-    @apply 
-    bg-green-100
-}
-::-webkit-scrollbar-thumb {
-    @apply 
-    bg-green-700 
-    rounded-xs
-}
-::-webkit-scrollbar-thumb:hover {
-    @apply 
-    bg-green-900
-}
-/* Objetos Basicos en Pagina */
-.carta {
-    @apply
-    flex flex-col justify-between shrink-0 snap-center items-center text-center
-    bg-white border-2 border-gray-100 rounded-2xl shadow-sm
-    transition-all duration-300 ease-out
-    overflow-hidden h-auto p-4 sm:p-5 cursor-pointer
-    w-44 sm:w-56 md:w-64 lg:w-72 m-2
-    hover:-translate-y-1 hover:shadow-lg hover:border-green-200 hover:shadow-green-900/10;
-}
-.fondo {
-    @apply 
-    flex fixed inset-0
-    justify-center items-center
-    bg-black/40 
-    backdrop-blur-sm transition-all duration-300
-    z-40
-}
-.popup {
-    @apply
-    flex flex-col
-    z-50
-    bg-white
-    border border-gray-100
-    rounded-3xl
-    shadow-2xl shadow-green-900/20
-    overflow-y-auto
-    p-6 sm:p-8 md:p-10
-    gap-4 sm:gap-6
-    max-h-[90vh]
-    w-[92%] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl
-    mx-auto;
-}
-.popup h1 {
-    @apply 
-    text-2xl sm:text-3xl font-black text-gray-800 
-    border-b-2 border-gray-100 
-    pb-4 mb-2 p-0 text-center leading-tight;
-}
-.popup h2 {
-    @apply 
-    text-sm sm:text-base font-bold text-gray-500 
-    mt-2 mb-1 p-0 text-left;
-}
-.pestaña {
-    @apply
-    flex-initial 
-    text-white
-    hover:bg-green-100
-    hover:text-black
-    active:bg-green-400 
-    p-0
-    lg:p-2
-    2xl:p-3
-}
+/* Centro de Pagina */
 .start {
     @apply
     flex-1 flex flex-col
@@ -212,69 +123,105 @@ form {
     xl:gap-2
     2xl:gap-2
 }
-table {
-    @apply 
-    w-full
-    table-fixed
-    text-center
+/* Inputs de Texto/Numeros/Fechas y Cajas de Seleccion */
+input, select, input[type="number"], input[type="date"] {
+    @apply
+    w-full place-self-center
+    text-gray-700 font-medium text-left
+    bg-gray-50 border border-gray-200 rounded-xl
+    outline-none transition-all duration-200
+    px-4 py-2.5 mb-2
+    text-sm sm:text-base
+    shadow-sm
+    focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 focus:-translate-y-0.5 focus:shadow-md;
 }
-table th {
+/* Input de Seleccion Unica */
+input[type="radio"] {
     @apply 
-    truncate 
-    text-[8px]
-    lg:text-base
-    2xl:text-base
-    p-0
-    lg:p-2
-    2xl:p-4
-    font-normal
-    lg:font-bold
-    2xl:font-bold
-    break-words
-    bg-green-800
-    text-white
+    w-4 h-4 mb-0
+    accent-green-600 cursor-pointer
+    focus:ring-0 focus:translate-y-0 shadow-none;
 }
-table td {
-    @apply 
-    truncate
-    p-0
-    lg:p-3
-    2xl:p-4
-    text-[8px]
-    lg:text-base
-    2xl:text-base
-    border border-gray-800
-    bg-green-100
-    max-w-0
-}
-.troncodentro {
+/* Formulario */
+form {
     @apply
     flex flex-col
-    translate-z-15 z-50
-    bg-gradient-to-tr from-green-200 to-green-300
-    rounded-lg
-    overflow-y-auto
-    sm:overflow-y-auto
-    md:overflow-y-auto
-    lg:overflow-y-auto
-    xl:overflow-y-auto
-    2xl:overflow-y-auto
-    p-20
-    sm:p-10
-    md:p-8
-    lg:p-8
-    xl:p-10
-    2xl:p-15
-    gap-3
-    sm:gap-3
-    md:gap-3
+    gap-2
     lg:gap-3
-    xl:gap-4
-    2xl:gap-4
-    max-h-full
-    max-w-[90vh]
+    2xl:gap-3
 }
-/* Inicio.Banner */
+/* Barra Scrollbar */
+::-webkit-scrollbar {
+    width: 15px
+}
+/* Color de Barra Total Scrollbar */
+::-webkit-scrollbar-track {
+    @apply 
+    bg-green-100
+}
+/* Color de Barra Seleccion Scrollbar */
+::-webkit-scrollbar-thumb {
+    @apply 
+    bg-green-700 
+    rounded-xs
+}
+/* Color de Barra Mantenida Scrollbar */
+::-webkit-scrollbar-thumb:hover {
+    @apply 
+    bg-green-900
+}
+
+/* OBJETOS BASICOS EN PAGINA */
+
+/* Items en Carta */
+.carta {
+    @apply
+    flex flex-col justify-between shrink-0 snap-center items-center text-center
+    bg-white border-2 border-gray-100 rounded-2xl shadow-sm
+    transition-all duration-300 ease-out
+    overflow-hidden h-auto p-4 sm:p-5 cursor-pointer
+    w-44 sm:w-56 md:w-64 lg:w-72 m-2
+    hover:-translate-y-1 hover:shadow-lg hover:border-green-200 hover:shadow-green-900/10;
+}
+/* Fondo Negro Borroso */
+.fondo {
+    @apply 
+    flex fixed inset-0
+    justify-center items-center
+    bg-black/40 
+    backdrop-blur-sm transition-all duration-300
+    z-40
+}
+/* Pop Up */
+.popup {
+    @apply
+    flex flex-col
+    z-50
+    bg-white
+    border border-gray-100
+    rounded-3xl
+    shadow-2xl shadow-green-900/20
+    overflow-y-auto
+    p-6 sm:p-8 md:p-10
+    gap-4 sm:gap-6
+    max-h-[90vh]
+    w-[92%] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl
+    mx-auto;
+}
+/* Texto 1 Pop Up */
+.popup h1 {
+    @apply 
+    text-2xl sm:text-3xl font-black text-gray-800 
+    border-b-2 border-gray-100 
+    pb-4 mb-2 p-0 text-center leading-tight;
+}
+/* Texto 2 Pop Up */
+.popup h2 {
+    @apply 
+    text-sm sm:text-base font-bold text-gray-500 
+    mt-2 mb-1 p-0 text-left;
+}
+/* Banner en Carta */
 .cartabanner {
     @apply
     flex flex-col
@@ -299,6 +246,7 @@ table td {
     cursor-grab 
     active:cursor-grabbing
 }
+/* Banner Desactivado en Carta */
 .cartabannerdel {
     @apply
     flex flex-col
@@ -324,6 +272,8 @@ table td {
     relative
 }
 /* -------------------------------------------TEXTO------------------------------------------- */
+
+/* Input de Barra de Busqueda */
 .busqueda {
     @apply
     object-contain
@@ -345,6 +295,7 @@ table td {
     focus:ring-4  
     focus:outline-none
 }
+/* Texto Titulo H1 */
 h1 {
     @apply
     text-black
@@ -361,6 +312,7 @@ h1 {
     2xl:p-3
     select-none
 }
+/* Texto Normal H2 */
 h2 {
     @apply
     text-black
@@ -373,6 +325,7 @@ h2 {
     2xl:text-base
     select-none
 }
+/* Texto Pequeño H3 */
 h3 {
     @apply
     text-black
@@ -385,6 +338,7 @@ h3 {
     2xl:text-base
     select-none
 }
+/* Texto Sin Uso H4 */
 h4 {
     @apply
     text-3xl

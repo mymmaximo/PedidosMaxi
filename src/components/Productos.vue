@@ -1283,7 +1283,7 @@
                                     ? 'grid grid-cols-2' 
                                     : 'flex flex-col', 'w-full mt-auto pt-3 gap-1.5 sm:gap-2']"
                                     >
-                                        <button @click.stop="Abrir_PopUp_Act(i)" 
+                                        <button @click.stop="Abrir_PopUp_Upgrade(i)" 
                                         v-if="Verificar_Rol([1, 2, 4, 5])" 
                                         :class="Formato_Items 
                                         ? 'btn-chico-gris w-full justify-center' 
@@ -1454,6 +1454,7 @@
 
     // ----- Variables Vue ----- //
 
+    const Mostrar_Filtro = ref (window.innerWidth >= 1024)
     // Habilitar Boton //
     const Verificar_Boton = computed(() =>{
         // Nuevo Producto
@@ -1481,19 +1482,38 @@
                 Dato_Categorias.value === "new" && Datos_Upgrade.value.categoria === ""
             return faltandatos03 || faltandatos04
     }})
-    const Mostrar_Filtro = ref(window.innerWidth >= 1024)
 
     // ----- Variables Complejas ----- //
 
+    // Almacen para Eliminar Producto //
+    const Datos_Delete = ref ({
+        id: "",
+        nombre: "",
+        imagenes: []
+    })
     // Almacen para Nuevo Producto //
-    const Datos_New = ref({
+    const Datos_New = ref ({
         nombre: "",
         precio: "",
         stock: "",
         categoria: ""
     })
+    // Almacen para Producto a Promocionar //
+    const Datos_Off = ref ({
+        id: "",
+        nombre: "",
+        imagenes: []
+    })
+    // Almacen para Nueva Promocion //
+    const Datos_Offf = ref ({
+        motivo: "",
+        precio_nuevo: "",
+        porcentaje_descuento: "",
+        fecha_inicio: "",
+        fecha_fin: ""
+    })
     // Almacen para Actualizar Producto //
-    const Datos_Upgrade = ref({
+    const Datos_Upgrade = ref ({
         id: "",
         nombre: "",
         precio: "",
@@ -1502,66 +1522,46 @@
         codigo_barra: "",
         imagenes: []
     })
-    // Almacen para Eliminar Producto //
-    const Datos_Delete = ref({
-        id: "",
-        nombre: "",
-        imagenes: []
-    })
-    // Almacen para Producto a Promocionar //
-    const Datos_Off = ref({
-        id: "",
-        nombre: "",
-        imagenes: []
-    })
-    // Almacen para Nueva Promocion //
-    const Datos_Offf = ref({
-        motivo: "",
-        precio_nuevo: "",
-        porcentaje_descuento: "",
-        fecha_inicio: "",
-        fecha_fin: ""
-    })
 
     // ----- Variables Booleanas ----- //
 
-    const Bloqueo_Peticion = ref(false)
-    const Mostrar_Confirmacion = ref (false)
+    const Paginas_Max = ref (false)
+    const Actualizando = ref (false)
+    const Backend_Error = ref (false)
+    const Formato_Items = ref (false)
     const Mostrar_Nuevo = ref (false)
-    const Paginas_Max = ref(false)
-    const Actualizando = ref(false)
-    const Backend_Espera = ref(true)
-    const Filtro_Promocion = ref(false)
-    const Backend_Error = ref(false)
-    const Formato_Items = ref(false)
+    const Backend_Espera = ref (true)
+    const Filtro_Promocion = ref (false)
+    const Bloqueo_Peticion = ref (false)
+    const Mostrar_Confirmacion = ref (false)
     const Mostrar_Limpiar_Filtro = ref (false)
 
     // ----- Variables Vacias ----- //
 
-    const Datos_Categorias = ref ("")
-    const Imagen_Espera = ref({})
-    const Producto_Imagenes_Seleccion = ref ([])
-    const Producto_Imagenes_Previa = ref ([])
-    const Datos_Favoritos = ref([])
-    const Filtro_Categorias = ref ("")
-    const Imagen_Indice = ref ({})
+    const Orden = ref ("3")
+    const Busqueda = ref ("")
     const Productos = ref ([])
     const Imagen_New = ref ('')
-    const Busqueda = ref ("")
-    const Orden = ref ("3")
+    const Imagen_Espera = ref ({})
+    const Imagen_Indice = ref ({})
+    const Datos_Favoritos = ref ([])
+    const Datos_Categorias = ref ("")
+    const Filtro_Categorias = ref ("")
     const Filtro_Precio_Mayor = ref ("")
     const Filtro_Precio_Menor = ref ("")
     const Datos_Delete_Imagenes= ref ([])
+    const Producto_Imagenes_Previa = ref ([])
+    const Producto_Imagenes_Seleccion = ref ([])
 
     // ----- Variables Simples ----- //
 
-    const Dato_Categorias = ref ("new")
-    const Dato_Categoria = ref ("new")
-    const filtroDescuentoMin = ref(0)
-    const Paginas_Items = ref(24)
-    const Filtro_Precios = ref(4)
-    const Filtro_Estatus = ref (1)
 	const Pagina = ref (0)
+    const Paginas_Items = ref (24)
+    const Filtro_Precios = ref (4)
+    const Filtro_Estatus = ref (1)
+    const filtroDescuentoMin = ref (0)
+    const Dato_Categoria = ref ("new")
+    const Dato_Categorias = ref ("new")
 
     // ----- Variables Temporales ----- //
 
@@ -1572,6 +1572,10 @@
     // Primera Carga de Datos de la Pagina //
     onMounted (() => {
         Backend_Cargar()
+    })
+    // Leer Url/Link y Tamaño de Imagen //
+    watch(path, () => {
+        if (path.value) Imagen_Url()
     })
     // Verificacion de Stock > 0 //
     watch (Producto_Cantidad, (NuevaCantidad) => {
@@ -1672,35 +1676,9 @@
     ])
     // Asignar Url/Link y Tamaño de Imagen //
     const { path } = toRefs (prop)
-    // Leer Url/Link y Tamaño de Imagen //
-    watch(path, () => {
-        if (path.value) Imagen_Url()
-    })
 
     // ----- Funciones Frontend ----- //
 
-    // Abrir Pop up para Actualizar Producto //
-    const Abrir_PopUp_Act = (producto_fila) => {
-        Datos_Upgrade.value.id = producto_fila.id
-        Datos_Upgrade.value.nombre = producto_fila.nombre
-        Datos_Upgrade.value.precio = producto_fila.precio
-        Datos_Upgrade.value.stock = producto_fila.stock
-        Dato_Categorias.value = producto_fila.categoria
-        Datos_Upgrade.value.codigo_barra = producto_fila.codigo_barra
-        Datos_Upgrade.value.imagenes = producto_fila.imagenes
-        Datos_Delete_Imagenes.value = []
-        Producto_Imagenes_Previa.value = []
-		PopUp_Upgrade.value = true
-		document.body.style.overflow = "hidden"
-	}
-    // Abrir Pop up para Desactivar Producto //
-	const Abrir_PopUp_Delete = (producto_fila) => {
-        Datos_Delete.value.id = producto_fila.id
-        Datos_Delete.value.nombre = producto_fila.nombre
-        Datos_Delete.value.imagenes = producto_fila.imagenes
-		PopUp_Delete.value = true
-		document.body.style.overflow = "hidden"
-	}
     // Abrir Pop up para Añadir al Carrito //
 	const Abrir_PopUp_Buy = (producto_fila) => {
         if (Verificar_Stock(producto_fila) <= 0) {
@@ -1709,6 +1687,14 @@
         Producto_Actual.value = producto_fila
         Producto_Cantidad.value = 1
 		PopUp_Buy.value = true
+		document.body.style.overflow = "hidden"
+	}
+    // Abrir Pop up para Desactivar Producto //
+	const Abrir_PopUp_Delete = (producto_fila) => {
+        Datos_Delete.value.id = producto_fila.id
+        Datos_Delete.value.nombre = producto_fila.nombre
+        Datos_Delete.value.imagenes = producto_fila.imagenes
+		PopUp_Delete.value = true
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Promocion (Lee Precios) //
@@ -1752,12 +1738,58 @@
         PopUp_Off.value = true
         document.body.style.overflow = "hidden"
 	}
+    // Abrir Pop up para Actualizar Producto //
+    const Abrir_PopUp_Upgrade = (producto_fila) => {
+        Datos_Upgrade.value.id = producto_fila.id
+        Datos_Upgrade.value.nombre = producto_fila.nombre
+        Datos_Upgrade.value.precio = producto_fila.precio
+        Datos_Upgrade.value.stock = producto_fila.stock
+        Dato_Categorias.value = producto_fila.categoria
+        Datos_Upgrade.value.codigo_barra = producto_fila.codigo_barra
+        Datos_Upgrade.value.imagenes = producto_fila.imagenes
+        Datos_Delete_Imagenes.value = []
+        Producto_Imagenes_Previa.value = []
+		PopUp_Upgrade.value = true
+		document.body.style.overflow = "hidden"
+	}
+    // Cerrar Pop up para Añadir el Carrito //
+	const Cerrar_PopUp_Buy = () => {
+        PopUp_Buy.value = false
+        Producto_Actual.value = null
+        Producto_Cantidad.value = 1
+		document.body.style.overflow = "auto"
+	}
+    // Cerrar Pop up para Borrar Producto //
+	const Cerrar_PopUp_Delete = () => {
+		PopUp_Delete.value = false
+		document.body.style.overflow = "auto"
+	}
+    // Cerrar Pop up para Promocion //
+	const Cerrar_PopUp_Off = () => {
+        PopUp_Off.value = false
+		document.body.style.overflow = "auto"
+	}
+    // Cerrar Pop up para Actualizar Producto //
+	const Cerrar_PopUp_Upgrade = () => {
+		PopUp_Upgrade.value = false
+        Datos_Delete_Imagenes.value = []
+        Imagen_Limpiar()
+		document.body.style.overflow = "auto"
+	}
     // Establecer Accion al Tocar el Tab //
     const Click_Items = (producto_fila) => {
         if (Verificar_Rol([1, 2, 3, 4, 5, 6])) {
-            Abrir_PopUp_Act(producto_fila)
+            Abrir_PopUp_Upgrade(producto_fila)
         } else {
             Abrir_PopUp_Buy(producto_fila)
+    }}
+    // Establecer Color de Carta de Producto (Depende del Estatus) //
+    const Estatus_Color = (id_estatus) => {
+        if (id_estatus === true) {
+            return "si"
+        }
+        else if (id_estatus === false) {
+            return "no"
     }}
     // Aplicar Filtros //
     const Filtro_Aplicar = () => {
@@ -1767,6 +1799,23 @@
         Filtro_Precio_Menor.value = ""
         Filtro_Precio_Mayor.value = ""
     }
+    // Limpiar Filtros, Orden y Busqueda //
+    const Filtro_Limpiar = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Pagina.value = 0
+        Filtro_Precios.value = 4
+        Filtro_Categorias.value = ""
+        Filtro_Estatus.value =  1
+        filtroDescuentoMin.value = 0
+        Filtro_Promocion.value = false
+        Backend_Get()
+        Mostrar_Limpiar_Filtro.value = false
+    }
+    // Leer Precio con Formato Pesos Argentinos //
+    const Formato_Precios = (precio) => {
+        if (precio === null || precio === undefined) return "0"
+        return new Intl.NumberFormat('es-AR').format(precio)
+    }
     // Leer Imagen Anterior //
     const Imagen_Anterior = (imagen) => {
         const Imagen_Actual = Imagen_Leer(imagen.id)
@@ -1774,41 +1823,62 @@
             Imagen_Indice.value[imagen.id] = Imagen_Actual - 1
             Imagen_Espera.value[imagen.id] = true
     }}
-    // Cerrar Pop up para Actualizar Producto //
-	const Cerrar_PopUp_Upgrade = () => {
-		PopUp_Upgrade.value = false
-        Datos_Delete_Imagenes.value = []
-        Imagen_Limpiar()
-		document.body.style.overflow = "auto"
-	}
-    // Cerrar Pop up para Borrar Producto //
-	const Cerrar_PopUp_Delete = () => {
-		PopUp_Delete.value = false
-		document.body.style.overflow = "auto"
-	}
-    // Cerrar Pop up para Añadir el Carrito //
-	const Cerrar_PopUp_Buy = () => {
-        PopUp_Buy.value = false
-        Producto_Actual.value = null
-        Producto_Cantidad.value = 1
-		document.body.style.overflow = "auto"
-	}
-    // Cerrar Pop up para Promocion //
-	const Cerrar_PopUp_Off = () => {
-        PopUp_Off.value = false
-		document.body.style.overflow = "auto"
-	}
-    // Inicio del Toque de Imagen en Celular //
-    const Toque_Start = (evento) => {
-        Cordenada_X = evento.changedTouches[0].clientX
-    }
-    // Establecer Color de Carta de Producto (Depende del Estatus) //
-    const Estatus_Color = (id_estatus) => {
-        if (id_estatus === true) {
-            return "si"
+    // Quitar Imagen de Producto //
+    const Imagen_Delete = (img) => {
+        const index = Datos_Delete_Imagenes.value.indexOf(
+            img.id_imagen
+        )
+        if (index === -1) {
+            Datos_Delete_Imagenes.value.push(img.id_imagen)
+        } else {
+            Datos_Delete_Imagenes.value.splice(index, 1)
         }
-        else if (id_estatus === false) {
-            return "no"
+        Imagen_Indice.value[Datos_Upgrade.value.id] = 0
+    }
+    // Leer Imagen //
+    const Imagen_Leer = (id) => {
+        return Imagen_Indice.value[id] || 0
+    }
+    // Limpiar Imagenes sin Subir en Vista Previa //
+    const Imagen_Limpiar = () => {
+        Producto_Imagenes_Previa.value = []
+        Producto_Imagenes_Seleccion.value = []
+        if (Imagen_New.value) {
+            Imagen_New.value.value = ''
+    }}
+    // Subir Imagen de Producto //
+    const Imagen_Seleccionar = (evt) => {
+        const files = evt.target.files
+        if (files) {
+            for (
+                let i = 0 ; i < files.length ; i++ 
+            ) {
+                Producto_Imagenes_Seleccion.value.push(files[i])
+                Producto_Imagenes_Previa.value.push(URL.createObjectURL(files[i]))
+    }}}
+    // Leer Imagen Siguiente //
+    const Imagen_Siguiente = (imagen) => {
+        const Imagen_Actual = Imagen_Leer(imagen.id)
+        if (Imagen_Actual < imagen.imagenes.length - 1) {
+            Imagen_Indice.value[imagen.id] = Imagen_Actual + 1
+            Imagen_Espera.value[imagen.id] = true
+    }}
+    // Obtener Url/Link de Imagen //
+    const Imagen_Url = (Imgenkey) => {
+        const respuesta = supabase.storage
+            .from('max_imagenes')
+            .getPublicUrl(Imgenkey)
+        return respuesta.data.publicUrl
+    }
+    // Restar Cantidad de Producto //
+    const Producto_Restar = () => {
+        if (Producto_Cantidad.value > 1) {
+            Producto_Cantidad.value--
+    }}
+    // Sumar Cantidad de Producto //
+    const Producto_Sumar = () => {
+        if (Producto_Actual.value && Producto_Cantidad.value < Producto_Actual.value.stock) {
+            Producto_Cantidad.value++
     }}
     // Fin del Toque de Imagen en Celular //
     const Toque_End = (evento, producto) => {
@@ -1827,158 +1897,13 @@
         }
         Cordenada_X = 0
     }
-    // Leer Precio con Formato Pesos Argentinos //
-    const Formato_Precios = (precio) => {
-        if (precio === null || precio === undefined) return "0"
-        return new Intl.NumberFormat('es-AR').format(precio)
+    // Inicio del Toque de Imagen en Celular //
+    const Toque_Start = (evento) => {
+        Cordenada_X = evento.changedTouches[0].clientX
     }
-    // Leer Imagen //
-    const Imagen_Leer = (id) => {
-        return Imagen_Indice.value[id] || 0
-    }
-    // Limpiar Filtros, Orden y Busqueda //
-    const Filtro_Limpiar = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Pagina.value = 0
-        Filtro_Precios.value = 4
-        Filtro_Categorias.value = ""
-        Filtro_Estatus.value =  1
-        filtroDescuentoMin.value = 0
-        Filtro_Promocion.value = false
-        Backend_Get()
-        Mostrar_Limpiar_Filtro.value = false
-    }
-    // Limpiar Imagenes sin Subir en Vista Previa //
-    const Imagen_Limpiar = () => {
-        Producto_Imagenes_Previa.value = []
-        Producto_Imagenes_Seleccion.value = []
-        if (Imagen_New.value) {
-            Imagen_New.value.value = ''
-    }}
-    // Leer Imagen Siguiente //
-    const Imagen_Siguiente = (imagen) => {
-        const Imagen_Actual = Imagen_Leer(imagen.id)
-        if (Imagen_Actual < imagen.imagenes.length - 1) {
-            Imagen_Indice.value[imagen.id] = Imagen_Actual + 1
-            Imagen_Espera.value[imagen.id] = true
-    }}
-    // Quitar Imagen de Producto //
-    const Imagen_Delete = (img) => {
-        const index = Datos_Delete_Imagenes.value.indexOf(
-            img.id_imagen
-        )
-        if (index === -1) {
-            Datos_Delete_Imagenes.value.push(img.id_imagen)
-        } else {
-            Datos_Delete_Imagenes.value.splice(index, 1)
-        }
-        Imagen_Indice.value[Datos_Upgrade.value.id] = 0
-    }
-    // Obtener Url/Link de Imagen //
-    const Imagen_Url = (Imgenkey) => {
-        const respuesta = supabase.storage
-            .from('max_imagenes')
-            .getPublicUrl(Imgenkey)
-        return respuesta.data.publicUrl
-    }
-    // Restar Cantidad de Producto //
-    const Producto_Restar = () => {
-        if (Producto_Cantidad.value > 1) {
-            Producto_Cantidad.value--
-    }}
-    // Subir Imagen de Producto //
-    const Imagen_Seleccionar = (evt) => {
-        const files = evt.target.files
-        if (files) {
-            for (
-                let i = 0 ; i < files.length ; i++ 
-            ) {
-                Producto_Imagenes_Seleccion.value.push(files[i])
-                Producto_Imagenes_Previa.value.push(URL.createObjectURL(files[i]))
-    }}}
-    // Sumar Cantidad de Producto //
-    const Producto_Sumar = () => {
-        if (Producto_Actual.value && Producto_Cantidad.value < Producto_Actual.value.stock) {
-            Producto_Cantidad.value++
-    }}
 
     // ----- Funciones Backend ----- //
 
-    // Actualizar Datos del Producto //
-    const Backend_Put = async() => {
-        if (Actualizando.value) return
-        Actualizando.value = true
-        try {
-            // Datos Texto Backend
-            if (Dato_Categorias.value != "new") { 
-                Datos_Upgrade.value.categoria = Dato_Categorias.value
-            }
-            const Dato_Upgrade = {
-                nombre: Datos_Upgrade.value.nombre,
-                precio: Datos_Upgrade.value.precio,
-                stock: Datos_Upgrade.value.stock,
-                categoria: Datos_Upgrade.value.categoria,
-                codigo_barra: Datos_Upgrade.value.codigo_barra
-            }
-            const PutBackend = await fetch(`${backend_url}/productos/id/${Datos_Upgrade.value.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(Dato_Upgrade),
-            credentials: 'include'
-            })
-            if (PutBackend.status === 401) {
-                await Cerrar_Sesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                Sesion_Expirada.value = true
-                Iniciado.value = false
-                return
-            }
-            // Borrar Datos Imagen
-            for (const Imagen_Id of Datos_Delete_Imagenes.value) {
-                const Datos_Imagenes = Datos_Upgrade.value.imagenes || []
-                const Datos_Delete_Imagen = Datos_Imagenes.find(
-                    img => img.id_imagen === Imagen_Id
-                )
-                if (Datos_Delete_Imagen && Datos_Delete_Imagen.s3_key) {
-                    await supabase.storage.from('max_imagenes').remove([Datos_Delete_Imagen.s3_key])
-                }
-                await fetch(`${backend_url}/productos/archivos/id/${Imagen_Id}`, {
-                    method: 'DELETE',
-                    credentials: 'include'
-                })
-            }
-            // Subir Datos Imagen
-            for (const file of Producto_Imagenes_Seleccion.value) {
-                const fileExt = file.name.split('.').pop()
-                const filePath = `${Math.random()}.${fileExt}`
-            // Subir Datos Imagen Supabase
-                let { error: uploadError } = await supabase.storage
-                    .from('max_imagenes')
-                    .upload(filePath, file)
-            // Subir Datos Imagen Backend
-                if (!uploadError) {
-                    await fetch(`${backend_url}/productos/archivos/`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            id_producto: Datos_Upgrade.value.id,
-                            s3_key: filePath,
-                            nombre_original: file.name,
-                            tipo_contenido: fileExt,
-                            tamanio: file.size
-                        }),
-                        credentials: 'include'
-            })}}
-            Backend_Get()
-            Cerrar_PopUp_Upgrade()
-        } catch (error) {
-            console.error(error)
-            alert("Hubo un error al guardar los cambios.")
-        } finally {
-            Actualizando.value = false
-    }}
     // Desactivar Datos del Producto //
     const Backend_Delete = async() => {
         const DeleteBackend = await fetch(`${backend_url}/productos/id/${Datos_Delete.value.id}`, {
@@ -2119,56 +2044,6 @@
             Productos.value = []
             Paginas_Max.value = false
     }}
-    // Verificacion de Stock > 0 //
-    const Verificar_Stock = (Producto) => {
-        let Stock_Carrito = 0
-        Carrito_Local.value.forEach((itemCarrito) => {
-            if (itemCarrito.id_producto === Producto.id) {
-                Stock_Carrito = Stock_Carrito + itemCarrito.cantidad
-        }})
-        return Producto.stock - Stock_Carrito
-    }
-    // Subir Datos de la Promocion //
-    const Backend_Post_Promocion = async () => {
-        if (Actualizando.value) return
-        Actualizando.value = true
-        
-        try {
-            const Payload = {
-                id_producto: Datos_Off.value.id,
-                motivo: Datos_Offf.value.motivo || null,
-                precio_nuevo: Datos_Offf.value.precio_nuevo ? parseFloat(Datos_Offf.value.precio_nuevo) : null,
-                porcentaje_descuento: Datos_Offf.value.porcentaje_descuento ? parseInt(Datos_Offf.value.porcentaje_descuento) : null,
-                fecha_inicio: new Date(Datos_Offf.value.fecha_inicio).toISOString(),
-                fecha_fin: new Date(Datos_Offf.value.fecha_fin).toISOString()
-            }
-            const respuesta = await fetch(`${backend_url}/registro_precios/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(Payload),
-                credentials: 'include'
-            })
-            if (respuesta.status === 401) {
-                await Cerrar_Sesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                Sesion_Expirada.value = true
-                Iniciado.value = false
-                return
-            }
-            if (!respuesta.ok) {
-                const err = await respuesta.text()
-                throw new Error(err)
-            }
-            Backend_Get()
-            Cerrar_PopUp_Off()
-        } catch (error) {
-            console.error("Error al guardar promoción:", error)
-            alert("Hubo un error al guardar la promoción.")
-        } finally {
-            Actualizando.value = false
-    }}
     // Subir Datos de Nuevo Producto //
     const Backend_Post = async() => {
         if (Dato_Categoria.value != "new") {
@@ -2228,6 +2103,147 @@
         Imagen_Limpiar()
         Backend_Get()
     }
+    // Sumar/Quitar Producto de Favoritos //
+    const Backend_Post_Delete_Favorito = async (id_producto) => {
+        try {
+            const respuesta = await fetch(`${backend_url}/favoritos/toggle?id_cliente=${Cliente_ID.value}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_producto: id_producto }),
+                credentials: 'include'
+            })
+            if (respuesta.status === 401) {
+                await Cerrar_Sesion()
+                Sesion_Expirada.value = true
+                Iniciado.value = false
+                return
+            }
+            if (respuesta.ok) {
+                const data = await respuesta.json()
+                if (data.estado_favorito) {
+                    Datos_Favoritos.value.push(id_producto)
+                } else {
+                    Datos_Favoritos.value = Datos_Favoritos.value.filter(id => id !== id_producto)
+            }}
+        } catch (error) {
+            console.error("Error al actualizar favorito:", error)
+    }}
+    // Subir Datos de la Promocion //
+    const Backend_Post_Promocion = async () => {
+        if (Actualizando.value) return
+        Actualizando.value = true
+        
+        try {
+            const Payload = {
+                id_producto: Datos_Off.value.id,
+                motivo: Datos_Offf.value.motivo || null,
+                precio_nuevo: Datos_Offf.value.precio_nuevo ? parseFloat(Datos_Offf.value.precio_nuevo) : null,
+                porcentaje_descuento: Datos_Offf.value.porcentaje_descuento ? parseInt(Datos_Offf.value.porcentaje_descuento) : null,
+                fecha_inicio: new Date(Datos_Offf.value.fecha_inicio).toISOString(),
+                fecha_fin: new Date(Datos_Offf.value.fecha_fin).toISOString()
+            }
+            const respuesta = await fetch(`${backend_url}/registro_precios/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Payload),
+                credentials: 'include'
+            })
+            if (respuesta.status === 401) {
+                await Cerrar_Sesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                Sesion_Expirada.value = true
+                Iniciado.value = false
+                return
+            }
+            if (!respuesta.ok) {
+                const err = await respuesta.text()
+                throw new Error(err)
+            }
+            Backend_Get()
+            Cerrar_PopUp_Off()
+        } catch (error) {
+            console.error("Error al guardar promoción:", error)
+            alert("Hubo un error al guardar la promoción.")
+        } finally {
+            Actualizando.value = false
+    }}
+    // Actualizar Datos del Producto //
+    const Backend_Put = async() => {
+        if (Actualizando.value) return
+        Actualizando.value = true
+        try {
+            // Datos Texto Backend
+            if (Dato_Categorias.value != "new") { 
+                Datos_Upgrade.value.categoria = Dato_Categorias.value
+            }
+            const Dato_Upgrade = {
+                nombre: Datos_Upgrade.value.nombre,
+                precio: Datos_Upgrade.value.precio,
+                stock: Datos_Upgrade.value.stock,
+                categoria: Datos_Upgrade.value.categoria,
+                codigo_barra: Datos_Upgrade.value.codigo_barra
+            }
+            const PutBackend = await fetch(`${backend_url}/productos/id/${Datos_Upgrade.value.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(Dato_Upgrade),
+            credentials: 'include'
+            })
+            if (PutBackend.status === 401) {
+                await Cerrar_Sesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+                Sesion_Expirada.value = true
+                Iniciado.value = false
+                return
+            }
+            // Borrar Datos Imagen
+            for (const Imagen_Id of Datos_Delete_Imagenes.value) {
+                const Datos_Imagenes = Datos_Upgrade.value.imagenes || []
+                const Datos_Delete_Imagen = Datos_Imagenes.find(
+                    img => img.id_imagen === Imagen_Id
+                )
+                if (Datos_Delete_Imagen && Datos_Delete_Imagen.s3_key) {
+                    await supabase.storage.from('max_imagenes').remove([Datos_Delete_Imagen.s3_key])
+                }
+                await fetch(`${backend_url}/productos/archivos/id/${Imagen_Id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                })
+            }
+            // Subir Datos Imagen
+            for (const file of Producto_Imagenes_Seleccion.value) {
+                const fileExt = file.name.split('.').pop()
+                const filePath = `${Math.random()}.${fileExt}`
+            // Subir Datos Imagen Supabase
+                let { error: uploadError } = await supabase.storage
+                    .from('max_imagenes')
+                    .upload(filePath, file)
+            // Subir Datos Imagen Backend
+                if (!uploadError) {
+                    await fetch(`${backend_url}/productos/archivos/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id_producto: Datos_Upgrade.value.id,
+                            s3_key: filePath,
+                            nombre_original: file.name,
+                            tipo_contenido: fileExt,
+                            tamanio: file.size
+                        }),
+                        credentials: 'include'
+            })}}
+            Backend_Get()
+            Cerrar_PopUp_Upgrade()
+        } catch (error) {
+            console.error(error)
+            alert("Hubo un error al guardar los cambios.")
+        } finally {
+            Actualizando.value = false
+    }}
     // Añadir al Carrito //
     const Frontend_Post = () => {
         if (!Producto_Actual.value)
@@ -2264,30 +2280,14 @@
         // Tiempo de Notificacion en Segundos
         setTimeout(() => { Mostrar_Confirmacion.value = false }, 2000)
     }
-    // Sumar/Quitar Producto de Favoritos //
-    const Backend_Post_Delete_Favorito = async (id_producto) => {
-        try {
-            const respuesta = await fetch(`${backend_url}/favoritos/toggle?id_cliente=${Cliente_ID.value}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id_producto: id_producto }),
-                credentials: 'include'
-            })
-            if (respuesta.status === 401) {
-                await Cerrar_Sesion()
-                Sesion_Expirada.value = true
-                Iniciado.value = false
-                return
-            }
-            if (respuesta.ok) {
-                const data = await respuesta.json()
-                if (data.estado_favorito) {
-                    Datos_Favoritos.value.push(id_producto)
-                } else {
-                    Datos_Favoritos.value = Datos_Favoritos.value.filter(id => id !== id_producto)
-            }}
-        } catch (error) {
-            console.error("Error al actualizar favorito:", error)
-    }}
+    // Verificacion de Stock > 0 //
+    const Verificar_Stock = (Producto) => {
+        let Stock_Carrito = 0
+        Carrito_Local.value.forEach((itemCarrito) => {
+            if (itemCarrito.id_producto === Producto.id) {
+                Stock_Carrito = Stock_Carrito + itemCarrito.cantidad
+        }})
+        return Producto.stock - Stock_Carrito
+    }
 
 </script>

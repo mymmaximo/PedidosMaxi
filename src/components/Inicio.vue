@@ -948,7 +948,7 @@
                                                     <div class="flex flex-wrap 
                                                     w-full mt-auto justify-center items-center 
                                                     pt-3 gap-1.5 sm:gap-2">
-                                                        <button @click.stop="Abrir_PopUp_Act(i)"
+                                                        <button @click.stop="Abrir_PopUp_Upgrade(i)"
                                                         v-if="Verificar_Rol([1, 2, 4, 5])"
                                                         class="botont !px-2 !py-2 !text-sm"
                                                         >
@@ -1067,8 +1067,27 @@
 
     // ----- Variables Complejas ----- //
 
+    // Almacen para Eliminar Productos //
+    const Datos_Delete = ref ({
+        id: "",
+        nombre: "",
+        imagenes: [],
+    })
+    // Almacen para Promocionar Productos //
+    const Datos_Off = ref ({
+        id: "",
+        nombre: "",
+        imagenes: [],
+    })
+    // Almacen para Promociones //
+    const Datos_Offf = ref ({
+        motivo: "",
+        precio_nuevo: "",
+        fecha_inicio: "",
+        fecha_fin: "",
+    })
     // Almacen para Actualizar Productos //
-    const Datos_Upgrade = ref({
+    const Datos_Upgrade = ref ({
         id: "",
         nombre: "",
         precio: "",
@@ -1077,29 +1096,10 @@
         codigo_barra: "",
         imagenes: [],
     })
-    // Almacen para Eliminar Productos //
-    const Datos_Delete = ref({
-        id: "",
-        nombre: "",
-        imagenes: [],
-    })
-    // Almacen para Promocionar Productos //
-    const Datos_Off = ref({
-        id: "",
-        nombre: "",
-        imagenes: [],
-    })
-    // Almacen para Promociones //
-    const Datos_Offf = ref({
-        motivo: "",
-        precio_nuevo: "",
-        fecha_inicio: "",
-        fecha_fin: "",
-    })
-    // Llamar Funcion Router //
-    const router = useRouter()
     // Leer Url/Link y Tamaño de Imagen //
     const emit = defineEmits(["upload", "update:path"])
+    // Llamar Funcion Router //
+    const router = useRouter()
     // Definir Url/Link y Tamaño de Imagen //
     const prop = defineProps(["path", "size"])
     // Asignar Url/Link y Tamaño de Imagen //
@@ -1107,45 +1107,55 @@
 
     // ----- Variables Booleanas ----- //
 
-    const PopUp_Banner = ref(false)
-    const Mostrar_Confirmacion = ref(false)
-    const Actualizando = ref(false)
-    const Backend_Espera = ref(true)
-    const Backend_Error = ref(false)
+    const PopUp_Banner = ref (false)
+    const Actualizando = ref (false)
+    const Backend_Error = ref (false)
+    const Backend_Espera = ref (true)
+    const Mostrar_Confirmacion = ref (false)
 
     // ----- Variables Vacias ----- //
 
-    const Imagen_Espera = ref({})
-    const Datos_Categorias = ref("")
-    const Indice_Carrusel = ref({})
-    const Datos_New = ref([])
-    const Datos_Favoritos = ref([])
-    const Producto_Imagenes_Previa = ref([])
-    const Producto_Imagenes_Seleccion = ref([])
-    const Banner_Delete_Supabase = ref([])
-    const Imagen_Indice = ref({})
-    const Productos = ref([])
-    const Imagen_New = ref("")
-    const Busqueda = ref("")
-    const Banner_Delete = ref([])
-    const Datos_Delete_Imagenes = ref([])
+    const Busqueda = ref ("")
+    const Datos_New = ref ([])
+    const Productos = ref ([])
+    const Imagen_New = ref ("")
+    const Imagen_Indice = ref ({})
+    const Imagen_Espera = ref ({})
+    const Banner_Delete = ref ([])
+    const Indice_Carrusel = ref ({})
+    const Datos_Favoritos = ref ([])
+    const Datos_Categorias = ref ("")
+    const Datos_Delete_Imagenes = ref ([])
+    const Banner_Delete_Supabase = ref ([])
+    const Producto_Imagenes_Previa = ref ([])
+    const Producto_Imagenes_Seleccion = ref ([])
 
     // ----- Variables Simples ----- //
 
-    const Dato_Categorias = ref("new")
-    const Banner_Upgrade = ref(null)
-    const Datos_Banner = ref(null)
-    const Banner_Indice = ref(0)
+    const Banner_Indice = ref (0)
+    const Datos_Banner = ref (null)
+    const Banner_Upgrade = ref (null)
+    const Dato_Categorias = ref ("new")
 
     // ----- Variables Temporales ----- //
 
-    let Carrusel_Espera = null
-    let Banner_Picked = null
     let Cordenada_X = 0
     let Cordenada_Y = 0
+    let Banner_Picked = null
+    let Carrusel_Espera = null
 
     // ----- Variables Vue ----- //
 
+    // Establecer Categorias para la Pagina //
+    const Datos_Productos_Categoria = computed(() => {
+        const Categorias_Grupos = {}
+        if (Datos_Categorias.value && Productos.value) {
+                Datos_Categorias.value.forEach((cat) => {
+                    Categorias_Grupos[cat.categoria] = Productos.value.filter(
+                        (p) => p.categoria === cat.categoria
+        )})}
+        return Categorias_Grupos
+    })
     // Leer Banners en Orden //
     const Orden_Banner = computed({
         // Establecer Orden
@@ -1183,16 +1193,6 @@
             Dato_Categorias.value === "new" && Datos_Upgrade.value.categoria === ""
             return Datos_Upgrade_Faltantes || Dato_Categorias_Faltantes
     }})
-    // Establecer Categorias para la Pagina //
-    const Datos_Productos_Categoria = computed(() => {
-        const Categorias_Grupos = {}
-        if (Datos_Categorias.value && Productos.value) {
-                Datos_Categorias.value.forEach((cat) => {
-                    Categorias_Grupos[cat.categoria] = Productos.value.filter(
-                        (p) => p.categoria === cat.categoria
-        )})}
-        return Categorias_Grupos
-    })
 
     // ----- Funciones Vue ----- //
 
@@ -1303,18 +1303,19 @@
 
 // ----- Para el Frontend ----- //
 
-    // Abrir Pop up para Actualizar Producto //
-    const Abrir_PopUp_Act = (producto_fila) => {
-        Datos_Upgrade.value.id = producto_fila.id
-        Datos_Upgrade.value.nombre = producto_fila.nombre
-        Datos_Upgrade.value.precio = producto_fila.precio
-        Datos_Upgrade.value.stock = producto_fila.stock
-        Dato_Categorias.value = producto_fila.categoria
-        Datos_Upgrade.value.codigo_barra = producto_fila.codigo_barra
-        Datos_Upgrade.value.imagenes = producto_fila.imagenes
-        Datos_Delete_Imagenes.value = []
-        Producto_Imagenes_Previa.value = []
-        PopUp_Upgrade.value = true
+    // Abrir Pop up para Actualizar el Banner //
+    const Abrir_PopUp_Banner = () => {
+        PopUp_Banner.value = true
+        document.body.style.overflow = "hidden"
+    }
+    // Abrir Pop up para Añadir el Carrito //
+    const Abrir_PopUp_Buy = (producto_fila) => {
+        if (Verificar_Stock(producto_fila) <= 0) {
+            return
+        }
+        Producto_Actual.value = producto_fila
+        Producto_Cantidad.value = 1
+        PopUp_Buy.value = true
         document.body.style.overflow = "hidden"
     }
     // Abrir Pop up para Borrar Producto //
@@ -1332,21 +1333,6 @@
             }
             Imagen_Indice.value = {}
     }, 300)}
-    // Abrir Pop up para Actualizar el Banner //
-    const Abrir_PopUp_Banner = () => {
-        PopUp_Banner.value = true
-        document.body.style.overflow = "hidden"
-    }
-    // Abrir Pop up para Añadir el Carrito //
-    const Abrir_PopUp_Buy = (producto_fila) => {
-        if (Verificar_Stock(producto_fila) <= 0) {
-            return
-        }
-        Producto_Actual.value = producto_fila
-        Producto_Cantidad.value = 1
-        PopUp_Buy.value = true
-        document.body.style.overflow = "hidden"
-    }
     // Abrir Pop up para Promocion (Lee Precios) //
     const Abrir_PopUp_Off = async (producto_fila) => {
         Datos_Off.value.id = producto_fila.id
@@ -1381,19 +1367,116 @@
         PopUp_Off.value = true
         document.body.style.overflow = "hidden"
     }
+    // Abrir Pop up para Actualizar Producto //
+    const Abrir_PopUp_Upgrade = (producto_fila) => {
+        Datos_Upgrade.value.id = producto_fila.id
+        Datos_Upgrade.value.nombre = producto_fila.nombre
+        Datos_Upgrade.value.precio = producto_fila.precio
+        Datos_Upgrade.value.stock = producto_fila.stock
+        Dato_Categorias.value = producto_fila.categoria
+        Datos_Upgrade.value.codigo_barra = producto_fila.codigo_barra
+        Datos_Upgrade.value.imagenes = producto_fila.imagenes
+        Datos_Delete_Imagenes.value = []
+        Producto_Imagenes_Previa.value = []
+        PopUp_Upgrade.value = true
+        document.body.style.overflow = "hidden"
+    }
+    // Subir Imagen de Banner //
+    const Banner_Seleccionar = (evt) => {
+        const files = evt.target.files
+        if (files) {
+            let Orden_Maximo = 0
+            if (Datos_Banner.value && Datos_Banner.value.imagenes) {
+                Datos_Banner.value.imagenes.forEach((b) => {
+                    if (b.orden && b.orden > Orden_Maximo) {
+                    Orden_Maximo = b.orden
+            }})}
+            let Orden_Minimo = 0
+            if (Datos_New.value.length > 0) {
+                Datos_New.value.forEach((b) => {
+                    if (b.orden && b.orden > Orden_Minimo) {
+                    Orden_Minimo = b.orden
+            }})}
+            let Orden_Next = Math.max(Orden_Maximo, Orden_Minimo) + 1
+            for (let i = 0 ; i < files.length ; i++) {
+                const Banner_New = {
+                    imagen: files[i],
+                    vista_previa: URL.createObjectURL(files[i]),
+                    enlace: "",
+                    orden: Orden_Next,
+                }
+                Datos_New.value.push(Banner_New)
+                Orden_Next++
+    }}}
+    // Banner Anterior //
+    const Carrusel_Anterior = (categoria) => {
+        const Banner_Actual = Carrusel_Get_Indice(categoria)
+        if (Banner_Actual > 0) {
+            Indice_Carrusel.value[categoria] = Banner_Actual - 1
+            const Carrusel = document.getElementById("carrusel-" + categoria)
+            if (Carrusel) {
+                Carrusel.scrollBy({ 
+                    left: -1000,
+                    behavior: "smooth" 
+    })}}}
+    // Leer que Banner Mostrar //
+    const Carrusel_Get_Indice = (categoria) => {
+        const ind = Indice_Carrusel.value[categoria]
+        return ind || 0
+    }
+    // Siguiente Banner //
+    const Carrusel_Siguiente = (categoria, totalProductos) => {
+        const Banner_Actual = Carrusel_Get_Indice(categoria)
+        if (Banner_Actual < totalProductos - 1) {
+            Indice_Carrusel.value[categoria] = Banner_Actual + 1
+            const Carrusel = document.getElementById("carrusel-" + categoria)
+            if (Carrusel) {
+                Carrusel.scrollBy({ left: 1000, behavior: "smooth" })
+    }}}
+    // Cerrar Pop up para Actualizar el Banner //
+    const Cerrar_PopUp_Banner = () => {
+        PopUp_Banner.value = false
+        Banner_Delete.value = []
+        Banner_Delete_Supabase.value = []
+        document.body.style.overflow = "auto"
+    }
+    // Cerrar Pop up para Añadir el Carrito //
+    const Cerrar_PopUp_Buy = () => {
+        PopUp_Buy.value = false
+        Producto_Actual.value = null
+        Producto_Cantidad.value = 1
+        document.body.style.overflow = "auto"
+    }
+    // Cerrar Pop up para Borrar Producto //
+    const Cerrar_PopUp_Delete = () => {
+        PopUp_Delete.value = false
+        document.body.style.overflow = "auto"
+    }
+    // Cerrar Pop up para Promocion //
+    const Cerrar_PopUp_Off = () => {
+        PopUp_Off.value = false
+        document.body.style.overflow = "auto"
+    }
+    // Cerrar Pop up para Actualizar Producto //
+    const Cerrar_PopUp_Upgrade = () => {
+        PopUp_Upgrade.value = false
+        Datos_Delete_Imagenes.value = []
+        Imagen_Limpiar()
+        document.body.style.overflow = "auto"
+    }
     // Establecer Accion al Tocar el Tab //
     const Click_Items = (producto_fila) => {
         if (Verificar_Rol([1, 2, 3, 4, 5, 6])) {
-            Abrir_PopUp_Act(producto_fila)
+            Abrir_PopUp_Upgrade(producto_fila)
         } else {
             Abrir_PopUp_Buy(producto_fila)
     }}
-    // Leer Imagen Anterior //
-    const Imagen_Anterior = (imagen) => {
-        const Imagen_Actual = Imagen_Leer(imagen.id)
-        if (Imagen_Actual > 0) {
-            Imagen_Indice.value[imagen.id] = Imagen_Actual - 1
-            Imagen_Espera.value[imagen.id] = true
+    // Establecer Color de Carta de Producto (Depende del Estatus) //
+    const Estatus_Color = (id_estatus) => {
+        if (id_estatus === true) {
+            return "si"
+        } else if (id_estatus === false) {
+            return "no"
     }}
     // Filtrar Banners Desactivados //
     const Filtro_Banner_Estatus_0 = (banner) => {
@@ -1409,73 +1492,82 @@
         } else {
             Banner_Delete.value.push(id)
     }}
-    // Siguiente Banner //
-    const Carrusel_Siguiente = (categoria, totalProductos) => {
-        const Banner_Actual = Carrusel_Get_Indice(categoria)
-        if (Banner_Actual < totalProductos - 1) {
-            Indice_Carrusel.value[categoria] = Banner_Actual + 1
-            const Carrusel = document.getElementById("carrusel-" + categoria)
-            if (Carrusel) {
-                Carrusel.scrollBy({ left: 1000, behavior: "smooth" })
+    // Leer Precio con Formato Pesos Argentinos //
+    const Formato_Precios = (precio) => {
+        if (precio === null || precio === undefined) return "0"
+        return new Intl.NumberFormat("es-AR").format(precio)
+    }
+    // Leer Imagen Anterior //
+    const Imagen_Anterior = (imagen) => {
+        const Imagen_Actual = Imagen_Leer(imagen.id)
+        if (Imagen_Actual > 0) {
+            Imagen_Indice.value[imagen.id] = Imagen_Actual - 1
+            Imagen_Espera.value[imagen.id] = true
+    }}
+    // Quitar Imagen de Producto //
+    const Imagen_Delete = (img) => {
+        const index = Datos_Delete_Imagenes.value.indexOf(img.id_imagen)
+        if (index === -1) {
+            Datos_Delete_Imagenes.value.push(img.id_imagen)
+        } else {
+            Datos_Delete_Imagenes.value.splice(index, 1)
+        }
+        Imagen_Indice.value[Datos_Upgrade.value.id] = 0
+    }
+    // Leer Imagen //
+    const Imagen_Leer = (id) => {
+        return Imagen_Indice.value[id] || 0
+    }
+    // Limpiar Imagenes sin Subir en Vista Previa //
+    const Imagen_Limpiar = () => {
+        Producto_Imagenes_Previa.value = []
+        Producto_Imagenes_Seleccion.value = []
+        if (Imagen_New.value) {
+            Imagen_New.value.value = ""
+    }}
+    // Subir Imagen de Producto //
+    const Imagen_Seleccionar = (evt) => {
+        const files = evt.target.files
+        if (files) {
+            for (let i = 0 ; i < files.length ; i++) {
+            Producto_Imagenes_Seleccion.value.push(files[i])
+            Producto_Imagenes_Previa.value.push(URL.createObjectURL(files[i]))
     }}}
-    // Banner Anterior //
-    const Carrusel_Anterior = (categoria) => {
-        const Banner_Actual = Carrusel_Get_Indice(categoria)
-        if (Banner_Actual > 0) {
-            Indice_Carrusel.value[categoria] = Banner_Actual - 1
-            const Carrusel = document.getElementById("carrusel-" + categoria)
-            if (Carrusel) {
-                Carrusel.scrollBy({ 
-                    left: -1000,
-                    behavior: "smooth" 
-    })}}}
-    // Cerrar Pop up para Actualizar Producto //
-    const Cerrar_PopUp_Upgrade = () => {
-        PopUp_Upgrade.value = false
-        Datos_Delete_Imagenes.value = []
-        Imagen_Limpiar()
-        document.body.style.overflow = "auto"
+    // Leer Imagen Siguiente //
+    const Imagen_Siguiente = (imagen) => {
+        const Imagen_Actual = Imagen_Leer(imagen.id)
+        if (Imagen_Actual < imagen.imagenes.length - 1) {
+            Imagen_Indice.value[imagen.id] = Imagen_Actual + 1
+            Imagen_Espera.value[imagen.id] = true
+    }}
+    // Obtener Url/Link de Imagen //
+    const Imagen_Url = (Imgenkey) => {
+        const respuesta = supabase.storage.from("max_imagenes").getPublicUrl(Imgenkey)
+        return respuesta.data.publicUrl
     }
-    // Cerrar Pop up para Borrar Producto //
-    const Cerrar_PopUp_Delete = () => {
-        PopUp_Delete.value = false
-        document.body.style.overflow = "auto"
-    }
-    // Cerrar Pop up para Actualizar el Banner //
-    const Cerrar_PopUp_Banner = () => {
-        PopUp_Banner.value = false
-        Banner_Delete.value = []
-        Banner_Delete_Supabase.value = []
-        document.body.style.overflow = "auto"
-    }
-    // Cerrar Pop up para Añadir el Carrito //
-    const Cerrar_PopUp_Buy = () => {
-        PopUp_Buy.value = false
-        Producto_Actual.value = null
-        Producto_Cantidad.value = 1
-        document.body.style.overflow = "auto"
-    }
-    // Cerrar Pop up para Promocion //
-    const Cerrar_PopUp_Off = () => {
-        PopUp_Off.value = false
-        document.body.style.overflow = "auto"
-    }
-    // Inicio del Toque de Imagen en Celular //
-    const Toque_Start = (evento) => {
-        Cordenada_X = evento.changedTouches[0].clientX
-        Cordenada_Y = evento.changedTouches[0].clientY
-    }
+    // Restar Cantidad de Producto //
+    const Producto_Restar = () => {
+        if (Producto_Cantidad.value > 1) {
+            Producto_Cantidad.value--
+    }}
+    // Sumar Cantidad de Producto //
+    const Producto_Sumar = () => {
+        if (Producto_Actual.value && Producto_Cantidad.value < Producto_Actual.value.stock) {
+            Producto_Cantidad.value++
+    }}
     // Inicio del Arrastre de Imagen en Celular //
     const Toque_Drag = (index) => {
         Banner_Picked = index
     }
-    // Establecer Color de Carta de Producto (Depende del Estatus) //
-    const Estatus_Color = (id_estatus) => {
-        if (id_estatus === true) {
-            return "si"
-        } else if (id_estatus === false) {
-            return "no"
-    }}
+    // Mover Orden de Imagen de Banner //
+    const Toque_Drop = (cartasoltada) => {
+        if (Banner_Picked === null || Banner_Picked === cartasoltada) return
+        const Orden_New_Banner = [...Orden_Banner.value]
+        const Banner_Moved = Orden_New_Banner.splice(Banner_Picked, 1)[0]
+        Orden_New_Banner.splice(cartasoltada, 0, Banner_Moved)
+        Orden_Banner.value = Orden_New_Banner
+        Banner_Picked = null
+    }
     // Fin del Toque de Imagen en Celular //
     const Toque_End = (evento, producto) => {
         if (!producto) return
@@ -1505,130 +1597,225 @@
         Cordenada_X = 0
         Cordenada_Y = 0
     }
-    // Leer Precio con Formato Pesos Argentinos //
-    const Formato_Precios = (precio) => {
-        if (precio === null || precio === undefined) return "0"
-        return new Intl.NumberFormat("es-AR").format(precio)
+    // Inicio del Toque de Imagen en Celular //
+    const Toque_Start = (evento) => {
+        Cordenada_X = evento.changedTouches[0].clientX
+        Cordenada_Y = evento.changedTouches[0].clientY
     }
-    // Leer Imagen //
-    const Imagen_Leer = (id) => {
-        return Imagen_Indice.value[id] || 0
-    }
-    // Limpiar Imagenes sin Subir en Vista Previa //
-    const Imagen_Limpiar = () => {
-        Producto_Imagenes_Previa.value = []
-        Producto_Imagenes_Seleccion.value = []
-        if (Imagen_New.value) {
-            Imagen_New.value.value = ""
-    }}
-    // Leer Imagen Siguiente //
-    const Imagen_Siguiente = (imagen) => {
-        const Imagen_Actual = Imagen_Leer(imagen.id)
-        if (Imagen_Actual < imagen.imagenes.length - 1) {
-            Imagen_Indice.value[imagen.id] = Imagen_Actual + 1
-            Imagen_Espera.value[imagen.id] = true
-    }}
-    // Quitar Imagen de Producto //
-    const Imagen_Delete = (img) => {
-        const index = Datos_Delete_Imagenes.value.indexOf(img.id_imagen)
-        if (index === -1) {
-            Datos_Delete_Imagenes.value.push(img.id_imagen)
-        } else {
-            Datos_Delete_Imagenes.value.splice(index, 1)
-        }
-        Imagen_Indice.value[Datos_Upgrade.value.id] = 0
-    }
-    // Obtener Url/Link de Imagen //
-    const Imagen_Url = (Imgenkey) => {
-        const respuesta = supabase.storage.from("max_imagenes").getPublicUrl(Imgenkey)
-        return respuesta.data.publicUrl
-    }
-    // Leer que Banner Mostrar //
-    const Carrusel_Get_Indice = (categoria) => {
-        const ind = Indice_Carrusel.value[categoria]
-        return ind || 0
-    }
-    // Restar Cantidad de Producto //
-    const Producto_Restar = () => {
-        if (Producto_Cantidad.value > 1) {
-            Producto_Cantidad.value--
-    }}
-    // Subir Imagen de Producto //
-    const Imagen_Seleccionar = (evt) => {
-        const files = evt.target.files
-        if (files) {
-            for (let i = 0 ; i < files.length ; i++) {
-            Producto_Imagenes_Seleccion.value.push(files[i])
-            Producto_Imagenes_Previa.value.push(URL.createObjectURL(files[i]))
-    }}}
-    // Subir Imagen de Banner //
-    const Banner_Seleccionar = (evt) => {
-        const files = evt.target.files
-        if (files) {
-            let Orden_Maximo = 0
-            if (Datos_Banner.value && Datos_Banner.value.imagenes) {
-                Datos_Banner.value.imagenes.forEach((b) => {
-                    if (b.orden && b.orden > Orden_Maximo) {
-                    Orden_Maximo = b.orden
-            }})}
-            let Orden_Minimo = 0
-            if (Datos_New.value.length > 0) {
-                Datos_New.value.forEach((b) => {
-                    if (b.orden && b.orden > Orden_Minimo) {
-                    Orden_Minimo = b.orden
-            }})}
-            let Orden_Next = Math.max(Orden_Maximo, Orden_Minimo) + 1
-            for (let i = 0 ; i < files.length ; i++) {
-                const Banner_New = {
-                    imagen: files[i],
-                    vista_previa: URL.createObjectURL(files[i]),
-                    enlace: "",
-                    orden: Orden_Next,
-                }
-                Datos_New.value.push(Banner_New)
-                Orden_Next++
-    }}}
-    // Mover Orden de Imagen de Banner //
-    const Toque_Drop = (cartasoltada) => {
-        if (Banner_Picked === null || Banner_Picked === cartasoltada) return
-        const Orden_New_Banner = [...Orden_Banner.value]
-        const Banner_Moved = Orden_New_Banner.splice(Banner_Picked, 1)[0]
-        Orden_New_Banner.splice(cartasoltada, 0, Banner_Moved)
-        Orden_Banner.value = Orden_New_Banner
-        Banner_Picked = null
-    }
-    // Sumar Cantidad de Producto //
-    const Producto_Sumar = () => {
-        if (Producto_Actual.value && Producto_Cantidad.value < Producto_Actual.value.stock) {
-            Producto_Cantidad.value++
-    }}
 
     // ----- Para el Backend ----- //
 
-    // Actualizar Datos del Banner //
-    const Backend_Put_Banner = async () => {
+    // Desactivar Datos del Producto //
+    const Backend_Delete = async () => {
+        const DeleteBackend = await fetch(`${backend_url}/productos/id/${Datos_Delete.value.id}`, {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json",},
+                credentials: "include",
+        })
+        if (DeleteBackend.status === 401) {
+            await Cerrar_Sesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            Sesion_Expirada.value = true
+            Iniciado.value = false
+            return
+        }
+        Backend_Get()
+        Cerrar_PopUp_Delete()
+    }
+    // Borrar Datos del Banner //
+    const Backend_Delete_Banner = async () => {
         if (!Banner_Upgrade.value) return
-        for (const Dato_Banner of Banner_Upgrade.value.imagenes) {
-            if (Filtro_Banner_Estatus_0(Dato_Banner)) continue
-            const Dato_Upgrade_Banner = {
-                enlace: Dato_Banner.enlace,
-                orden: Dato_Banner.orden,
-            }
-            const PutBackend_Banner = await fetch(`${backend_url}/banners/id/${Dato_Banner.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(Dato_Upgrade_Banner),
+        for (const Banner_Id of Banner_Delete_Supabase.value) {
+            const BannerDelete = Banner_Upgrade.value.imagenes.find((b) => b.id === Banner_Id)
+            if (BannerDelete) {
+                if (BannerDelete.s3_key) {
+                    await supabase.storage.from("max_imagenes").remove([BannerDelete.s3_key])
+                }
+                await fetch(`${backend_url}/banners/id/${BannerDelete.id}`, {
+                    method: "DELETE",
+                    credentials: "include",
+        })}}
+        Banner_Delete_Supabase.value = []
+    }
+    // Desactivar Datos de Promocion //
+    const Backend_Delete_Promocion = async () => {
+        if (!Datos_Offf.value.id_promocion) return
+        if (Actualizando.value) return
+        Actualizando.value = true
+        try {
+            const respuesta = await fetch(`${backend_url}/registro_precios/id/${Datos_Offf.value.id_promocion}`, {
+                method: "DELETE",
                 credentials: "include",
             })
-            if (PutBackend_Banner.status === 401) {
+            if (respuesta.status === 401) {
+                await Cerrar_Sesion()
+                Sesion_Expirada.value = true
+                Iniciado.value = false
+                return
+            }
+            if (!respuesta.ok) {
+                throw new Error("No se pudo eliminar la promoción")
+            }
+            Backend_Get()
+            Cerrar_PopUp_Off()
+        } catch (error) {
+            console.error(error)
+            alert("Hubo un error al eliminar la promoción.")
+        } finally {
+            Actualizando.value = false
+    }}
+    // Leer Datos de los Productos //
+    const Backend_Get = async () => {
+        let url = new URL(`${backend_url}/producto/`)
+        url.searchParams.append("limit", 1000)
+        url.searchParams.append("bool_activo", "true")
+        // Establecer Busqueda
+        if (Busqueda.value !== "") {
+            url.searchParams.append("busqueda_producto", Busqueda.value)
+        }
+        const GetBackend = await fetch(url, {
+            headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
+            credentials: "include",
+        })
+        const datos = await GetBackend.json()
+        Productos.value = datos
+    }
+    // Leer Datos Activos del Banner //
+    const Backend_Get_Banner = async () => {
+        try {
+            const respuesta = await fetch(`${backend_url}/banners/?bool_activo=true`, {
+                headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
+                credentials: "include",
+            })
+            if (respuesta.ok) {
+                const Dato_Banners = await respuesta.json()
+                if (Dato_Banners.length > 0) {
+                    Datos_Banner.value = {
+                        id: "Datos_Banner",
+                        imagenes: Dato_Banners,
+        }}}} catch (error) {
+            console.error("Error al cargar el banner:", error)
+    }}
+    // Leer Todos los Datos del Banner //
+    const Backend_Get_Banners = async () => {
+        try {
+            const respuesta = await fetch(`${backend_url}/banners/`, {
+                headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
+                credentials: "include",
+            })
+            if (respuesta.ok) {
+                const Dato_All_Banners = await respuesta.json()
+                if (Dato_All_Banners.length > 0) {
+                    Banner_Upgrade.value = {
+                    id: "Banner_Upgrade",
+                    imagenes: Dato_All_Banners,
+        }}}} catch (error) {
+            console.error("Error al cargar el banner:", error)
+    }}
+    // Subir Datos del Banner //
+    const Backend_Post_Banner = async () => {
+        if (Datos_New.value.length > 0) {
+            await Backend_Post_Banner_Imagen()
+        }
+        if (Banner_Delete.value.length > 0) {
+            await Backend_Put_Delete_Banner()
+        }
+        if (Banner_Delete_Supabase.value.length > 0) {
+            await Backend_Delete_Banner()
+        }
+        await Backend_Put_Banner()
+        Banner_Delete.value = []
+        Banner_Delete_Supabase.value = []
+        await Backend_Get_Banner()
+        await Backend_Get_Banners()
+        Cerrar_PopUp_Banner()
+    }
+    // Subir Imagen del Banner //
+    const Backend_Post_Banner_Imagen = async () => {
+        for (const Banner_New of Datos_New.value) {
+            const fileExt = Banner_New.imagen.name.split(".").pop()
+            const filePath = `${Math.random()}.${fileExt}`
+            let { error: uploadError } = await supabase.storage
+            .from("max_imagenes")
+            .upload(filePath, Banner_New.imagen)
+            if (!uploadError) {
+                await fetch(`${backend_url}/banners/`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify ({
+                    s3_key: filePath,
+                    nombre_original: Banner_New.imagen.name,
+                    tipo_contenido: fileExt,
+                    tamanio: Banner_New.imagen.size,
+                    enlace: Banner_New.enlace,
+                    orden: Number(Banner_New.orden) || 1,
+                    }),
+                    credentials: "include",
+        })}}
+        Datos_New.value = []
+    }
+    // Sumar/Quitar Producto de Favoritos //
+    const Backend_Post_Delete_Favorito = async (id_producto) => {
+        try {
+            const respuesta = await fetch(`${backend_url}/favoritos/toggle?id_cliente=${Cliente_ID.value}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_producto: id_producto }),
+                credentials: "include",
+            })
+            if (respuesta.status === 401) {
+                await Cerrar_Sesion()
+                Sesion_Expirada.value = true
+                Iniciado.value = false
+                return
+            }
+            if (respuesta.ok) {
+                const data = await respuesta.json()
+            if (data.estado_favorito) {
+                Datos_Favoritos.value.push(id_producto)
+            } 
+            else {
+                Datos_Favoritos.value = Datos_Favoritos.value.filter((id) => id !== id_producto)
+        }}} catch (error) {
+            console.error("Error al actualizar favorito:", error)
+    }}
+    // Subir Datos de la Promocion //
+    const Backend_Post_Promocion = async () => {
+        if (Actualizando.value) return
+        Actualizando.value = true
+        try {
+            const Payload = {
+                id_producto: Datos_Off.value.id,
+                motivo: Datos_Offf.value.motivo || null,
+                precio_nuevo: parseFloat(Datos_Offf.value.precio_nuevo),
+                fecha_inicio: new Date(Datos_Offf.value.fecha_inicio).toISOString(),
+                fecha_fin: new Date(Datos_Offf.value.fecha_fin).toISOString(),
+            }
+            const respuesta = await fetch(`${backend_url}/registro_precios/`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json",},
+                body: JSON.stringify(Payload),
+                credentials: "include",
+            })
+            if (respuesta.status === 401) {
                 await Cerrar_Sesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
                 Sesion_Expirada.value = true
                 Iniciado.value = false
                 return
-    }}}
+            }
+            if (!respuesta.ok) {
+                const Texto_Error = await respuesta.text()
+                throw new Error(Texto_Error)
+            }
+            Backend_Get()
+            Cerrar_PopUp_Off()
+        } catch (error) {
+            console.error("Error al guardar promoción:", error)
+            alert("Hubo un error al guardar la promoción.")
+        } finally {
+            Actualizando.value = false
+    }}
     // Actualizar Datos del Producto //
     const Backend_Put = async () => {
         if (Actualizando.value) return
@@ -1694,122 +1881,30 @@
         } finally {
             Actualizando.value = false
     }}
-    // Leer Datos Activos del Banner //
-    const Backend_Get_Banner = async () => {
-        try {
-            const respuesta = await fetch(`${backend_url}/banners/?bool_activo=true`, {
-                headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
-                credentials: "include",
-            })
-            if (respuesta.ok) {
-                const Dato_Banners = await respuesta.json()
-                if (Dato_Banners.length > 0) {
-                    Datos_Banner.value = {
-                        id: "Datos_Banner",
-                        imagenes: Dato_Banners,
-        }}}} catch (error) {
-            console.error("Error al cargar el banner:", error)
-    }}
-    // Leer Todos los Datos del Banner //
-    const Backend_Get_Banners = async () => {
-        try {
-            const respuesta = await fetch(`${backend_url}/banners/`, {
-                headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
-                credentials: "include",
-            })
-            if (respuesta.ok) {
-                const Dato_All_Banners = await respuesta.json()
-                if (Dato_All_Banners.length > 0) {
-                    Banner_Upgrade.value = {
-                    id: "Banner_Upgrade",
-                    imagenes: Dato_All_Banners,
-        }}}} catch (error) {
-            console.error("Error al cargar el banner:", error)
-    }}
-    // Borrar Datos del Banner //
-    const Backend_Delete_Banner = async () => {
+    // Actualizar Datos del Banner //
+    const Backend_Put_Banner = async () => {
         if (!Banner_Upgrade.value) return
-        for (const Banner_Id of Banner_Delete_Supabase.value) {
-            const BannerDelete = Banner_Upgrade.value.imagenes.find((b) => b.id === Banner_Id)
-            if (BannerDelete) {
-                if (BannerDelete.s3_key) {
-                    await supabase.storage.from("max_imagenes").remove([BannerDelete.s3_key])
-                }
-                await fetch(`${backend_url}/banners/id/${BannerDelete.id}`, {
-                    method: "DELETE",
-                    credentials: "include",
-        })}}
-        Banner_Delete_Supabase.value = []
-    }
-    // Desactivar Datos del Producto //
-    const Backend_Delete = async () => {
-        const DeleteBackend = await fetch(`${backend_url}/productos/id/${Datos_Delete.value.id}`, {
-                method: "DELETE",
-                headers: {"Content-Type": "application/json",},
-                credentials: "include",
-        })
-        if (DeleteBackend.status === 401) {
-            await Cerrar_Sesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            Sesion_Expirada.value = true
-            Iniciado.value = false
-            return
-        }
-        Backend_Get()
-        Cerrar_PopUp_Delete()
-    }
-    // Desactivar Datos de Promocion //
-    const Backend_Delete_Promocion = async () => {
-        if (!Datos_Offf.value.id_promocion) return
-        if (Actualizando.value) return
-        Actualizando.value = true
-        try {
-            const respuesta = await fetch(`${backend_url}/registro_precios/id/${Datos_Offf.value.id_promocion}`, {
-                method: "DELETE",
+        for (const Dato_Banner of Banner_Upgrade.value.imagenes) {
+            if (Filtro_Banner_Estatus_0(Dato_Banner)) continue
+            const Dato_Upgrade_Banner = {
+                enlace: Dato_Banner.enlace,
+                orden: Dato_Banner.orden,
+            }
+            const PutBackend_Banner = await fetch(`${backend_url}/banners/id/${Dato_Banner.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(Dato_Upgrade_Banner),
                 credentials: "include",
             })
-            if (respuesta.status === 401) {
+            if (PutBackend_Banner.status === 401) {
                 await Cerrar_Sesion()
+                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
                 Sesion_Expirada.value = true
                 Iniciado.value = false
                 return
-            }
-            if (!respuesta.ok) {
-                throw new Error("No se pudo eliminar la promoción")
-            }
-            Backend_Get()
-            Cerrar_PopUp_Off()
-        } catch (error) {
-            console.error(error)
-            alert("Hubo un error al eliminar la promoción.")
-        } finally {
-            Actualizando.value = false
-    }}
-    // Leer Datos de los Productos //
-    const Backend_Get = async () => {
-        let url = new URL(`${backend_url}/producto/`)
-        url.searchParams.append("limit", 1000)
-        url.searchParams.append("bool_activo", "true")
-        // Establecer Busqueda
-        if (Busqueda.value !== "") {
-            url.searchParams.append("busqueda_producto", Busqueda.value)
-        }
-        const GetBackend = await fetch(url, {
-            headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
-            credentials: "include",
-        })
-        const datos = await GetBackend.json()
-        Productos.value = datos
-    }
-    // Verificacion de Stock > 0 //
-    const Verificar_Stock = (Producto) => {
-        let stockCarrito = 0
-        Carrito_Local.value.forEach((itemCarrito) => {
-            if (itemCarrito.id_producto === Producto.id) {
-                stockCarrito = stockCarrito + itemCarrito.cantidad
-        }})
-        return Producto.stock - stockCarrito
-    }
+    }}}
     // Desactivar Datos del Banner //
     const Backend_Put_Delete_Banner = async () => {
         if (!Banner_Upgrade.value) return
@@ -1822,61 +1917,6 @@
                         credentials: "include",
         })}}
         Banner_Delete.value = []
-    }
-    // Subir Datos de la Promocion //
-    const Backend_Post_Promocion = async () => {
-        if (Actualizando.value) return
-        Actualizando.value = true
-        try {
-            const Payload = {
-                id_producto: Datos_Off.value.id,
-                motivo: Datos_Offf.value.motivo || null,
-                precio_nuevo: parseFloat(Datos_Offf.value.precio_nuevo),
-                fecha_inicio: new Date(Datos_Offf.value.fecha_inicio).toISOString(),
-                fecha_fin: new Date(Datos_Offf.value.fecha_fin).toISOString(),
-            }
-            const respuesta = await fetch(`${backend_url}/registro_precios/`, {
-                method: "POST",
-                headers: {"Content-Type": "application/json",},
-                body: JSON.stringify(Payload),
-                credentials: "include",
-            })
-            if (respuesta.status === 401) {
-                await Cerrar_Sesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                Sesion_Expirada.value = true
-                Iniciado.value = false
-                return
-            }
-            if (!respuesta.ok) {
-                const Texto_Error = await respuesta.text()
-                throw new Error(Texto_Error)
-            }
-            Backend_Get()
-            Cerrar_PopUp_Off()
-        } catch (error) {
-            console.error("Error al guardar promoción:", error)
-            alert("Hubo un error al guardar la promoción.")
-        } finally {
-            Actualizando.value = false
-    }}
-    // Subir Datos del Banner //
-    const Backend_Post_Banner = async () => {
-        if (Datos_New.value.length > 0) {
-            await Backend_Post_Banner_Imagen()
-        }
-        if (Banner_Delete.value.length > 0) {
-            await Backend_Put_Delete_Banner()
-        }
-        if (Banner_Delete_Supabase.value.length > 0) {
-            await Backend_Delete_Banner()
-        }
-        await Backend_Put_Banner()
-        Banner_Delete.value = []
-        Banner_Delete_Supabase.value = []
-        await Backend_Get_Banner()
-        await Backend_Get_Banners()
-        Cerrar_PopUp_Banner()
     }
     // Añadir al Carrito //
     const Frontend_Post = () => {
@@ -1913,54 +1953,14 @@
             Mostrar_Confirmacion.value = false
     // Tiempo de Notificacion en Segundos
     }, 2000)}
-    // Subir Imagen del Banner //
-    const Backend_Post_Banner_Imagen = async () => {
-        for (const Banner_New of Datos_New.value) {
-            const fileExt = Banner_New.imagen.name.split(".").pop()
-            const filePath = `${Math.random()}.${fileExt}`
-            let { error: uploadError } = await supabase.storage
-            .from("max_imagenes")
-            .upload(filePath, Banner_New.imagen)
-            if (!uploadError) {
-                await fetch(`${backend_url}/banners/`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify ({
-                    s3_key: filePath,
-                    nombre_original: Banner_New.imagen.name,
-                    tipo_contenido: fileExt,
-                    tamanio: Banner_New.imagen.size,
-                    enlace: Banner_New.enlace,
-                    orden: Number(Banner_New.orden) || 1,
-                    }),
-                    credentials: "include",
-        })}}
-        Datos_New.value = []
+    // Verificacion de Stock > 0 //
+    const Verificar_Stock = (Producto) => {
+        let stockCarrito = 0
+        Carrito_Local.value.forEach((itemCarrito) => {
+            if (itemCarrito.id_producto === Producto.id) {
+                stockCarrito = stockCarrito + itemCarrito.cantidad
+        }})
+        return Producto.stock - stockCarrito
     }
-    // Sumar/Quitar Producto de Favoritos //
-    const Backend_Post_Delete_Favorito = async (id_producto) => {
-        try {
-            const respuesta = await fetch(`${backend_url}/favoritos/toggle?id_cliente=${Cliente_ID.value}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id_producto: id_producto }),
-                credentials: "include",
-            })
-            if (respuesta.status === 401) {
-                await Cerrar_Sesion()
-                Sesion_Expirada.value = true
-                Iniciado.value = false
-                return
-            }
-            if (respuesta.ok) {
-                const data = await respuesta.json()
-            if (data.estado_favorito) {
-                Datos_Favoritos.value.push(id_producto)
-            } 
-            else {
-                Datos_Favoritos.value = Datos_Favoritos.value.filter((id) => id !== id_producto)
-        }}} catch (error) {
-            console.error("Error al actualizar favorito:", error)
-    }}
 
 </script>

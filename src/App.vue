@@ -600,29 +600,29 @@
     // ----- Variables Booleanas ----- //
     
     const Mostrar_Menu = ref (false)
-    const PopUp_Delete_Carrito = ref(false)
-    const PopUp_Log_Out = ref(false)
+    const PopUp_Log_Out = ref (false)
+    const PopUp_Delete_Carrito = ref (false)
     
     // ----- Funciones Frontend ----- //
 	
-    // Abrir Pop up para Cerrar Sesion //
-    const Abrir_PopUp_Log_Out = () => {
-		PopUp_Log_Out.value = true
-		document.body.style.overflow = "hidden"
-	}
     // Abrir Pop up para Vaciar Carrito //
 	const Abrir_PopUp_Delete_Carrito = () => {
 		PopUp_Delete_Carrito.value = true
 		document.body.style.overflow = "hidden"
 	}
-    // Cerrar Pop up para Cerrar Sesion //
-	const Cerrar_PopUp_Log_Out = () => {
-		PopUp_Log_Out.value = false
-		document.body.style.overflow = "auto"
+    // Abrir Pop up para Cerrar Sesion //
+    const Abrir_PopUp_Log_Out = () => {
+		PopUp_Log_Out.value = true
+		document.body.style.overflow = "hidden"
 	}
     // Cerrar Pop up para Vaciar Carrito //
 	const Cerrar_PopUp_Delete_Carrito = () => {
 		PopUp_Delete_Carrito.value = false
+		document.body.style.overflow = "auto"
+	}
+    // Cerrar Pop up para Cerrar Sesion //
+	const Cerrar_PopUp_Log_Out = () => {
+		PopUp_Log_Out.value = false
 		document.body.style.overflow = "auto"
 	}
 

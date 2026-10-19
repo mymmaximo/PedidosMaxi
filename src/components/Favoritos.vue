@@ -690,40 +690,43 @@
     // ----- Variables Complejas ----- //
 
     // Almacen para Quitar de Favoritos //
-    const Datos_Delete = ref({
+    const Datos_Delete = ref ({
         id: "",
         nombre: "",
         imagenes: []
     })
-    const Mostrar_Filtro = ref(window.innerWidth >= 1024)
+    const Mostrar_Filtro = ref (window.innerWidth >= 1024)
 
     // ----- Variables Booleanas ----- //
 
-    const Bloqueo_Peticion = ref(false)
-    const Mostrar_Confirmacion = ref(false)
-    const Paginas_Max = ref(false)
-    const Backend_Espera = ref(true)
-    const Backend_Error = ref(false)
-    const Formato_Items = ref(false)
-    const Mostrar_Limpiar_Filtro = ref(false)
+    const Paginas_Max = ref (false)
+    const Formato_Items = ref (false)
+    const Backend_Error = ref (false)
+    const Backend_Espera = ref (true)
+    const Bloqueo_Peticion = ref (false)
+    const Mostrar_Confirmacion = ref (false)
+    const Mostrar_Limpiar_Filtro = ref (false)
 
     // ----- Variables Complejas ----- //
 
-    const Datos_Categorias = ref("")
-    const Imagen_Espera = ref({})
-    const Filtro_Categorias = ref("")
-    const Imagen_Indice = ref({})
-    const Productos = ref([])
-    const Busqueda = ref("")
-    const Orden = ref("8")
-    const Filtro_Precio_Mayor = ref("")
-    const Filtro_Precio_Menor = ref("")
+    const Orden = ref ("8")
+    const Busqueda = ref ("")
+    const Productos = ref ([])
+    const Imagen_Espera = ref ({})
+    const Imagen_Indice = ref ({})
+    const Datos_Categorias = ref ("")
+    const Filtro_Categorias = ref ("")
+    const Filtro_Precio_Mayor = ref ("")
+    const Filtro_Precio_Menor = ref ("")
 
     // ----- Variables Simples ----- //
 
-    const Paginas_Items = ref(24)
-    const Filtro_Precios = ref(4)
-    const Pagina = ref(0)
+    const Pagina = ref (0)
+    const Paginas_Items = ref (24)
+    const Filtro_Precios = ref (4)
+
+    // ----- Variables Temporales ----- //
+
     let Cordenada_X = 0
 
     // ----- Funciones Vue ----- //
@@ -747,13 +750,6 @@
             if (NuevaCantidad < 1 && Stock_Local !== 0) {
                 Producto_Cantidad.value = 1
     }}})
-    // Definir Url/Link y Tamaño de Imagen //
-    const prop = defineProps([
-        'path',
-        'size'
-    ])
-    // Asignar Url/Link y Tamaño de Imagen //
-    const { path } = toRefs(prop)
     // Leer Url/Link y Tamaño de Imagen //
     watch(path, () => {
         if (path.value) Imagen_Url()
@@ -817,6 +813,13 @@
             Backend_Espera.value = false
             Bloqueo_Peticion.value = false
     }}
+    // Definir Url/Link y Tamaño de Imagen //
+    const prop = defineProps([
+        'path',
+        'size'
+    ])
+    // Asignar Url/Link y Tamaño de Imagen //
+    const { path } = toRefs(prop)
 
     // ----- Funciones Frontend ----- //
 
@@ -838,6 +841,19 @@
 		PopUp_Delete.value = true
 		document.body.style.overflow = "hidden"
 	}
+    // Cerrar Pop up para Añadir a Carrito //
+    const Cerrar_PopUp_Buy = () => {
+        PopUp_Buy.value = false
+        Producto_Actual.value = null
+        Producto_Cantidad.value = 1
+        document.body.style.overflow = "auto"
+    }
+    // Cerrar Pop up para Quitar de Favoritos //
+	const Cerrar_PopUp_Delete = () => {
+		PopUp_Delete.value = false
+        Datos_Delete.value = { id: "", nombre: "", imagenes: [] }
+		document.body.style.overflow = "auto"
+	}
     // Aplicar Filtros //
     const Filtro_Aplicar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -846,6 +862,20 @@
         Filtro_Precio_Menor.value = ""
         Filtro_Precio_Mayor.value = ""
     }
+    // Limpiar Filtros, Orden y Busqueda //
+    const Filtro_Limpiar = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Pagina.value = 0
+        Filtro_Precios.value = 4
+        Filtro_Categorias.value = ""
+        Backend_Get()
+        Mostrar_Limpiar_Filtro.value = false
+    }
+    // Leer Precio con Formato Pesos Argentinos //
+    const Formato_Precios = (precio) => {
+        if (precio === null || precio === undefined) return "0"
+        return new Intl.NumberFormat('es-AR').format(precio)
+    }
     // Leer Imagen Anterior //
     const Imagen_Anterior = (imagen) => {
         const Imagen_Actual = Imagen_Get(imagen.id)
@@ -853,22 +883,23 @@
             Imagen_Indice.value[imagen.id] = Imagen_Actual - 1
             Imagen_Espera.value[imagen.id] = true
     }}
-    // Cerrar Pop up para Quitar de Favoritos //
-	const Cerrar_PopUp_Delete = () => {
-		PopUp_Delete.value = false
-        Datos_Delete.value = { id: "", nombre: "", imagenes: [] }
-		document.body.style.overflow = "auto"
-	}
-    // Cerrar Pop up para Añadir a Carrito //
-    const Cerrar_PopUp_Buy = () => {
-        PopUp_Buy.value = false
-        Producto_Actual.value = null
-        Producto_Cantidad.value = 1
-        document.body.style.overflow = "auto"
+    // Leer Imagen //
+    const Imagen_Get = (id) => {
+        return Imagen_Indice.value[id] || 0
     }
-    // Inicio del Toque de Imagen en Celular //
-    const Toque_Start = (evento) => {
-        Cordenada_X = evento.changedTouches[0].clientX
+    // Leer Imagen Siguiente //
+    const Imagen_Siguiente = (imagen) => {
+        const Imagen_Actual = Imagen_Get(imagen.id)
+        if (Imagen_Actual < imagen.imagenes.length - 1) {
+            Imagen_Indice.value[imagen.id] = Imagen_Actual + 1
+            Imagen_Espera.value[imagen.id] = true
+    }}
+    // Obtener Url/Link de Imagen //
+    const Imagen_Url = (Imgenkey) => {
+        const respuesta = supabase.storage
+            .from('max_imagenes')
+            .getPublicUrl(Imgenkey)
+        return respuesta.data.publicUrl
     }
     // Fin del Toque de Imagen en Celular //
     const Toque_End = (evento, producto) => {
@@ -887,37 +918,9 @@
         }
         Cordenada_X = 0
     }
-    // Leer Precio con Formato Pesos Argentinos //
-    const Formato_Precios = (precio) => {
-        if (precio === null || precio === undefined) return "0"
-        return new Intl.NumberFormat('es-AR').format(precio)
-    }
-    // Leer Imagen //
-    const Imagen_Get = (id) => {
-        return Imagen_Indice.value[id] || 0
-    }
-    // Limpiar Filtros, Orden y Busqueda //
-    const Filtro_Limpiar = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Pagina.value = 0
-        Filtro_Precios.value = 4
-        Filtro_Categorias.value = ""
-        Backend_Get()
-        Mostrar_Limpiar_Filtro.value = false
-    }
-    // Leer Imagen Siguiente //
-    const Imagen_Siguiente = (imagen) => {
-        const Imagen_Actual = Imagen_Get(imagen.id)
-        if (Imagen_Actual < imagen.imagenes.length - 1) {
-            Imagen_Indice.value[imagen.id] = Imagen_Actual + 1
-            Imagen_Espera.value[imagen.id] = true
-    }}
-    // Obtener Url/Link de Imagen //
-    const Imagen_Url = (Imgenkey) => {
-        const respuesta = supabase.storage
-            .from('max_imagenes')
-            .getPublicUrl(Imgenkey)
-        return respuesta.data.publicUrl
+    // Inicio del Toque de Imagen en Celular //
+    const Toque_Start = (evento) => {
+        Cordenada_X = evento.changedTouches[0].clientX
     }
     // Restar Cantidad de Producto //
     const Producto_Restar = () => {
@@ -1041,15 +1044,6 @@
             Productos.value = []
             Paginas_Max.value = false
     }}
-    // Verificacion de Stock > 0 //
-    const Verificar_Stock = (Producto) => {
-        let Stock_Carrito = 0
-        Carrito_Local.value.forEach((itemCarrito) => {
-            if (itemCarrito.id_producto === Producto.id) {
-                Stock_Carrito = Stock_Carrito + itemCarrito.cantidad
-        }})
-        return Producto.stock - Stock_Carrito
-    }
     // Añadir al Carrito //
     const Backend_Post = () => {
         if (!Producto_Actual.value)
@@ -1081,6 +1075,15 @@
         Cerrar_PopUp_Buy()
         Mostrar_Confirmacion.value = true
         setTimeout(() => { Mostrar_Confirmacion.value = false }, 2000)
+    }
+    // Verificacion de Stock > 0 //
+    const Verificar_Stock = (Producto) => {
+        let Stock_Carrito = 0
+        Carrito_Local.value.forEach((itemCarrito) => {
+            if (itemCarrito.id_producto === Producto.id) {
+                Stock_Carrito = Stock_Carrito + itemCarrito.cantidad
+        }})
+        return Producto.stock - Stock_Carrito
     }
     
 </script>

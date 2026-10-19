@@ -400,7 +400,7 @@
                             >
                                 <div v-for= "i in Usuarios" 
                                 :key="i.id" 
-                                @click="Abrir_PopUp_Act(i)"
+                                @click="Abrir_PopUp_Upgrade(i)"
                                 :class="Formato_Items 
                                 ? 'tarjeta-premium z-10 relative bg-white !mb-6 !w-full !m-0 hover:!shadow-lg' 
                                 : 'carta relative'"
@@ -447,7 +447,7 @@
                                         >
                                             🕊️ Reactivar
                                         </button>
-                                        <button @click.stop="Abrir_PopUp_Act(i)" 
+                                        <button @click.stop="Abrir_PopUp_Upgrade(i)" 
                                         class="btn-chico-gris">
                                             ✏️ Editar
                                         </button>
@@ -547,23 +547,15 @@
     // ----- Variables Complejas ----- //
 
     // Almacen para Nuevo Usuario //
-    const Datos_New = ref({
+    const Datos_New = ref ({
         nombre: "",
         email: "",
         dni: "",
         contrasena: "",
         id_rol: []
     })
-    // Almacen para Actualizar Usuario //
-    const Datos_Upgrade = ref({
-        id: "",
-        nombre: "",
-        email: "",
-        contrasena: "",
-        id_rol: []
-    })
     // Almacen para Roles //
-    const Datos_Rol = ref([
+    const Datos_Rol = ref ([
         { id: 1, nombre: "Administrador"},
         { id: 2, nombre: "Editor de Productor General"},
         { id: 3, nombre: "Gestor de Pedidos General"},
@@ -572,30 +564,38 @@
         { id: 6, nombre: "Rider"},
         { id: 7, nombre: "Editor de Clientes"}
     ])
+    // Almacen para Actualizar Usuario //
+    const Datos_Upgrade = ref ({
+        id: "",
+        nombre: "",
+        email: "",
+        contrasena: "",
+        id_rol: []
+    })
     
     // ----- Variables Booleanas ----- //
     
-    const Mostrar_Limpiar_Filtro = ref(false)
-    const Backend_Error = ref(false)
-    const Formato_Items = ref(true)
-    const Backend_Espera = ref(true)
-    const Mostrar_Nuevo = ref(false)
-    const Mostrar_Filtro = ref(false)
-    const Paginas_Max = ref(false)
-    const Bloqueo_Peticion = ref(false)
+    const Paginas_Max = ref (false)
+    const Formato_Items = ref (true)
+    const Backend_Error = ref (false)
+    const Mostrar_Nuevo = ref (false)
+    const Backend_Espera = ref (true)
+    const Mostrar_Filtro = ref (false)
+    const Bloqueo_Peticion = ref (false)
+    const Mostrar_Limpiar_Filtro = ref (false)
     
     // ----- Variables Vacias ----- //
     
-    const Orden = ref("")
-    const Busqueda = ref("")
-    const Usuarios =  ref([])
-    const Datos_Delete = ref("")
+    const Orden = ref ("")
+    const Busqueda = ref ("")
+    const Usuarios =  ref ([])
+    const Datos_Delete = ref ("")
     
     // ----- Variables Simples ----- //
 	
-    const Pagina = ref(0)
-    const Filtro_Estatus = ref(2)
-    const Paginas_Items = ref(24)
+    const Pagina = ref (0)
+    const Paginas_Items = ref (24)
+    const Filtro_Estatus = ref (2)
     
     // ----- Funciones Vue ----- //
 
@@ -667,7 +667,7 @@
 		document.body.style.overflow = "hidden"
 	}
     // Abrir Pop up para Actualizar Usuario //
-	const Abrir_PopUp_Act = (usuario_fila) => {
+	const Abrir_PopUp_Upgrade = (usuario_fila) => {
         Datos_Upgrade.value.id = usuario_fila.id
         Datos_Upgrade.value.nombre = usuario_fila.nombre
         Datos_Upgrade.value.email = usuario_fila.email
@@ -675,12 +675,6 @@
 		PopUp_Upgrade.value = true
 		document.body.style.overflow = "hidden"
 	}
-    // Aplicar Filtros //
-    const Filtro_Aplicar = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Pagina.value = 0
-        Backend_Get()
-    }
     // Cerrar Pop up para Desactivar Usuario //
 	const Cerrar_PopUp_Delete = () => {
 		PopUp_Delete.value = false
@@ -691,23 +685,17 @@
 		PopUp_Upgrade.value = false
 		document.body.style.overflow = "auto"
 	}
-    // Leer Fecha con Formato DD/MM/YYYY //
-	const Formato_Fecha = (fechai) => {
-		if (fechai) {
-			return new Date(fechai).toLocaleDateString('es-ES')
-		}
-		else {
-			return "Pendiente"
-	}}
-    // Limpiar Filtros, Orden y Busqueda //
-    const Filtro_Limpiar = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Pagina.value = 0
-        Filtro_Estatus.value = 2
-        Orden.value = ""
-        Backend_Get()
-        Mostrar_Limpiar_Filtro.value = false
-    }
+    // Sumar/Quitar Rol //
+    const Datos_Roles = (id_rol) => {
+        if (!Datos_Upgrade.value.id_rol) {
+            Datos_Upgrade.value.id_rol = []
+        }
+        const index = Datos_Upgrade.value.id_rol.indexOf(id_rol)
+        if (index > -1) {
+            Datos_Upgrade.value.id_rol.splice(index, 1)
+        } else {
+            Datos_Upgrade.value.id_rol.push(id_rol)
+    }}
     // Establecer Color de Insignia de Estatus y Rol //
     const Estatus_Color = (id_estatus, array_roles) => {
         if (id_estatus === true || id_estatus === 1) {
@@ -750,60 +738,32 @@
         if (Rol_Id === 7) return "Editor de Clientes"
         return "Desconocido"
     }
-    // Sumar/Quitar Rol //
-    const Datos_Roles = (id_rol) => {
-        if (!Datos_Upgrade.value.id_rol) {
-            Datos_Upgrade.value.id_rol = []
-        }
-        const index = Datos_Upgrade.value.id_rol.indexOf(id_rol)
-        if (index > -1) {
-            Datos_Upgrade.value.id_rol.splice(index, 1)
-        } else {
-            Datos_Upgrade.value.id_rol.push(id_rol)
-    }}
+    // Aplicar Filtros //
+    const Filtro_Aplicar = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Pagina.value = 0
+        Backend_Get()
+    }
+    // Limpiar Filtros, Orden y Busqueda //
+    const Filtro_Limpiar = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Pagina.value = 0
+        Filtro_Estatus.value = 2
+        Orden.value = ""
+        Backend_Get()
+        Mostrar_Limpiar_Filtro.value = false
+    }
+    // Leer Fecha con Formato DD/MM/YYYY //
+	const Formato_Fecha = (fechai) => {
+		if (fechai) {
+			return new Date(fechai).toLocaleDateString('es-ES')
+		}
+		else {
+			return "Pendiente"
+	}}
     
     // ----- Funciones Backend ----- //
 
-    // Actualizar Datos del Usuario //
-    const Backend_Put = async() => {
-        const Dato_Upgrade = {} 
-        if (Datos_Upgrade.value.nombre !== "") {
-            Dato_Upgrade.nombre = Datos_Upgrade.value.nombre
-        }
-        if (Datos_Upgrade.value.email !== "") {
-            Dato_Upgrade.email = Datos_Upgrade.value.email
-        }
-        if (Datos_Upgrade.value.contrasena !== "") {
-            Dato_Upgrade.contrasena = Datos_Upgrade.value.contrasena
-        }
-        if (Datos_Upgrade.value.id_rol.length > 0) {
-            Dato_Upgrade.id_rol = Datos_Upgrade.value.id_rol
-        }
-        const PutBackend = await fetch(`${backend_url}/usuarios/id/${Datos_Upgrade.value.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(Dato_Upgrade),
-            credentials: 'include'
-        })
-        if (PutBackend.status === 401) {
-            await Cerrar_Sesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            Sesion_Expirada.value = true
-            Iniciado.value = false
-            return
-        }
-        Datos_Upgrade.value = {
-            id: "",
-            nombre: "",
-            email: "",
-            contrasena: "",
-            id_rol: []
-        }
-        Backend_Get()
-        Cerrar_PopUp_Upgrade()
-    }
     // Desactivar Datos del Usuario //
     const Backend_Delete = async() => {
         const DeleteBackend = await fetch(`${backend_url}/usuarios/id/${Datos_Delete.value}`, {
@@ -897,5 +857,45 @@
         }} catch (error) {
             console.error("Fallo en la comunicación con el servidor:", error)
     }}
+    // Actualizar Datos del Usuario //
+    const Backend_Put = async() => {
+        const Dato_Upgrade = {} 
+        if (Datos_Upgrade.value.nombre !== "") {
+            Dato_Upgrade.nombre = Datos_Upgrade.value.nombre
+        }
+        if (Datos_Upgrade.value.email !== "") {
+            Dato_Upgrade.email = Datos_Upgrade.value.email
+        }
+        if (Datos_Upgrade.value.contrasena !== "") {
+            Dato_Upgrade.contrasena = Datos_Upgrade.value.contrasena
+        }
+        if (Datos_Upgrade.value.id_rol.length > 0) {
+            Dato_Upgrade.id_rol = Datos_Upgrade.value.id_rol
+        }
+        const PutBackend = await fetch(`${backend_url}/usuarios/id/${Datos_Upgrade.value.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(Dato_Upgrade),
+            credentials: 'include'
+        })
+        if (PutBackend.status === 401) {
+            await Cerrar_Sesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            Sesion_Expirada.value = true
+            Iniciado.value = false
+            return
+        }
+        Datos_Upgrade.value = {
+            id: "",
+            nombre: "",
+            email: "",
+            contrasena: "",
+            id_rol: []
+        }
+        Backend_Get()
+        Cerrar_PopUp_Upgrade()
+    }
 
 </script>

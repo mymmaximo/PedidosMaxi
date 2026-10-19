@@ -428,7 +428,7 @@
                                         ? 'bg-green-100 text-green-800 border-green-300' 
                                         : 'bg-red-100 text-red-800 border-red-300'"
                                         >
-                                            {{ EstatusPromotxt(i.activa) }}
+                                            {{ Estatus_Promocion(i.activa) }}
                                         </span>
                                         <h2 class="mb-2 flex items-center gap-2">
                                             <span class="px-2 py-1 rounded-full 
@@ -571,23 +571,23 @@
 
     // ----- Variables Booleanas ----- //
 
-    const Formato_Items = ref(true)
-	const Mostrar_Limpiar_Filtro = ref (false)
-    const Backend_Error = ref(false)
-    const Backend_Espera = ref(true)
-    const Paginas_Max = ref(false)
+    const Paginas_Max = ref (false)
+    const Formato_Items = ref (true)
+    const Backend_Error = ref (false)
+    const Backend_Espera = ref (true)
 	const Mostrar_Filtro = ref (false)
-    const Bloqueo_Peticion = ref(false)
-    const Notificacion_Copiar = ref(false)
+    const Bloqueo_Peticion = ref (false)
+    const Notificacion_Copiar = ref (false)
+	const Mostrar_Limpiar_Filtro = ref (false)
     
     // ----- Variables Vacias ----- //
 	
     const Orden = ref ("")
-    const Historial = ref([])
 	const Busqueda = ref ("")
+    const Historial = ref ([])
     const Datos_Categorias = ref ("")
-    const Texto_Notificacion = ref("")
 	const Filtro_Categorias = ref ("")
+    const Texto_Notificacion = ref ("")
 	const Filtro_Fecha_Fin_Maximo = ref ("")
 	const Filtro_Fecha_Fin_Minimo = ref ("")
 	const Filtro_Precio_Nuevo_Maximo = ref ("")
@@ -600,9 +600,9 @@
     // ----- Variables Simples ----- //
 	
     const Pagina = ref (0)
-    const Paginas_Items = ref(24)
+    const Paginas_Items = ref (24)
 	const Filtro_Estatus = ref (2)
-    const Filtro_Promocion = ref(2)
+    const Filtro_Promocion = ref (2)
     const Filtro_Promocion_Estatus = ref (2)
     
     // ----- Funciones Vue ----- //
@@ -669,16 +669,6 @@
     
     // ----- Funciones Frontend ----- //
 
-    // Aplicar Filtros //
-    const Filtro_Aplicar = () => {
-        window.scrollTo({ 
-            top: 0, 
-            behavior: 'smooth' 
-        })
-        Pagina.value = 0
-        Backend_Get()
-        Cerrar_Filtro()
-    }
     // Cerrar Barra de Filtros //
 	const Cerrar_Filtro = () => {
 		Mostrar_Filtro.value = false
@@ -711,7 +701,7 @@
         return "Indefinido"
 	}
     // Establecer Texto de Insignia de Estatus de Promocion //
-	const EstatusPromotxt = (id_estatus) => {
+	const Estatus_Promocion = (id_estatus) => {
 		if (id_estatus === 1 || id_estatus === true) {
             return "✅ Promo Activa"
         }
@@ -720,18 +710,15 @@
         }
         return "Indefinido"
 	}
-    // Leer Fecha con Formato DD/MM/YYYY //
-	const Formato_Fecha = (fechai) => {
-		if (fechai) {
-			return new Date(fechai).toLocaleDateString('es-ES')
-		}
-		else {
-			return "Pendiente"
-	}}
-    // Leer Precio con Formato Pesos Argentinos //
-    const Formato_Precios = (precio) => {
-        if (precio === null || precio === undefined) return "0"
-        return new Intl.NumberFormat('es-AR').format(precio)
+    // Aplicar Filtros //
+    const Filtro_Aplicar = () => {
+        window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+        })
+        Pagina.value = 0
+        Backend_Get()
+        Cerrar_Filtro()
     }
     // Limpiar Filtros, Orden y Busqueda //
     const Filtro_Limpiar = () => {
@@ -754,6 +741,19 @@
         Backend_Get()
         Cerrar_Filtro()
         Mostrar_Limpiar_Filtro.value = false
+    }
+    // Leer Fecha con Formato DD/MM/YYYY //
+	const Formato_Fecha = (fechai) => {
+		if (fechai) {
+			return new Date(fechai).toLocaleDateString('es-ES')
+		}
+		else {
+			return "Pendiente"
+	}}
+    // Leer Precio con Formato Pesos Argentinos //
+    const Formato_Precios = (precio) => {
+        if (precio === null || precio === undefined) return "0"
+        return new Intl.NumberFormat('es-AR').format(precio)
     }
 
     // ----- Funciones Backend ----- //

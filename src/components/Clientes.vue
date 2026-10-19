@@ -480,7 +480,7 @@
                                             >
                                                 🕊️ Reactivar
                                             </button>
-                                            <button @click.stop="Abrir_PopUp_Act(i)" 
+                                            <button @click.stop="Abrir_PopUp_Upgrade(i)" 
                                             class="btn-chico-gris">
                                                 ✏️ Editar
                                             </button>
@@ -672,49 +672,49 @@
 
     // ----- Variables Complejas ----- //
 
-    // Almacen para Actualizar Cliente //
-    const Datos_Upgrade = ref({
-        id: "",
-        nombre: "",
-        email: "",
-        contrasena: "",
-    })
     // Almacen para Nuevo Cliente //
-    const Datos_New = ref({
+    const Datos_New = ref ({
         nombre: "",
         email: "",
         dni: "",
         contrasena: ""
     })
+    // Almacen para Actualizar Cliente //
+    const Datos_Upgrade = ref ({
+        id: "",
+        nombre: "",
+        email: "",
+        contrasena: "",
+    })
 
     // ----- Variables Booleanas ----- //
 
-    const Mostrar_Limpiar_Filtro = ref(false)
-    const Bloqueo_Peticion = ref(false)
-    const Mostrar_Filtro = ref(false)
-    const Mostrar_Nuevo = ref(false)
-    const Backend_Error = ref(false)
-    const Backend_Espera = ref(true)
-    const Paginas_Max = ref(false)
+    const Paginas_Max = ref (false)
+    const Mostrar_Nuevo = ref (false)
+    const Backend_Error = ref (false)
+    const Backend_Espera = ref (true)
+    const Mostrar_Filtro = ref (false)
+    const Bloqueo_Peticion = ref (false)
+    const Mostrar_Limpiar_Filtro = ref (false)
 
     // ----- Variables Vacias ----- //
 
-    const Orden = ref("")
-    const Busqueda = ref("")
-    const Clientes =  ref([])
-    const Datos_Delete = ref("")
+    const Orden = ref ("")
+    const Busqueda = ref ("")
+    const Clientes =  ref ([])
+    const Datos_Delete = ref ("")
     const Datos_Ciudad = ref ("")
     const Filtro_Ciudad = ref ("")
     const Datos_Provincia = ref ("")
     const Filtro_Provincia = ref ("")
-    const Mostrar_Direccion = ref(null)
+    const Mostrar_Direccion = ref (null)
 
     // ----- Variables Simples ----- //
 
-	const Pagina = ref(0)
-    const Paginas_Items = ref(24)
-    const Filtro_Estatus = ref(2)
-    const Filtro_Direccion = ref(2)
+	const Pagina = ref (0)
+    const Paginas_Items = ref (24)
+    const Filtro_Estatus = ref (2)
+    const Filtro_Direccion = ref (2)
 
     // ----- Funciones Vue ----- //
     
@@ -783,14 +783,6 @@
 
     // ----- Funciones Frontend ----- //
 
-    // Abrir Pop up para Actualizar Cliente //
-	const Abrir_PopUp_Act = (cliente_fila) => {
-        Datos_Upgrade.value.id = cliente_fila.id
-        Datos_Upgrade.value.nombre = cliente_fila.nombre
-        Datos_Upgrade.value.email = cliente_fila.email
-		PopUp_Upgrade.value = true
-		document.body.style.overflow = "hidden"
-	}
     // Abrir Pop up para Borrar Cliente //
 	const Abrir_PopUp_Delete = (cliente_fila) => {
         Datos_Delete.value = cliente_fila.id
@@ -798,23 +790,13 @@
 		PopUp_Delete.value = true
 		document.body.style.overflow = "hidden"
 	}
-    // Aplicar Filtros //
-    const Filtro_Aplicar = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Pagina.value = 0
-        Backend_Get()
-        Filtro_Ciudad.value = ""
-        Filtro_Provincia.value = ""
-    }
-    // Cerrar Pop up de Actualizar Cliente //
-	const Cerrar_PopUp_Upgrade = () => {
-		PopUp_Upgrade.value = false
-		document.body.style.overflow = "auto"
-	}
-    // Cerrar Pop up de Borrar Cliente //
-	const Cerrar_PopUp_Delete = () => {
-		PopUp_Delete.value = false
-		document.body.style.overflow = "auto"
+    // Abrir Pop up para Actualizar Cliente //
+	const Abrir_PopUp_Upgrade = (cliente_fila) => {
+        Datos_Upgrade.value.id = cliente_fila.id
+        Datos_Upgrade.value.nombre = cliente_fila.nombre
+        Datos_Upgrade.value.email = cliente_fila.email
+		PopUp_Upgrade.value = true
+		document.body.style.overflow = "hidden"
 	}
     // Mostrar Direcciones //
     const Cambio_Direccion = (id) => {
@@ -823,6 +805,23 @@
         }
         else {
             Mostrar_Direccion.value = id
+    }}
+    // Cerrar Pop up de Borrar Cliente //
+	const Cerrar_PopUp_Delete = () => {
+		PopUp_Delete.value = false
+		document.body.style.overflow = "auto"
+	}
+    // Cerrar Pop up de Actualizar Cliente //
+	const Cerrar_PopUp_Upgrade = () => {
+		PopUp_Upgrade.value = false
+		document.body.style.overflow = "auto"
+	}
+    // Establecer Accion al Tocar el Tab //
+    const Click_Items = (cliente) => {
+        if (!cliente.direcciones || cliente.direcciones.length === 0) {
+            Abrir_PopUp_Delete(cliente)
+        } else {
+            Cambio_Direccion(cliente.id)
     }}
     // Establecer Color de Insignia de Estatus //
     const Estatus_Color = (id_estatus) => {
@@ -842,14 +841,14 @@
         }
         return "Indefinido"
 	}
-    // Leer Fecha con Formato DD/MM/YYYY //
-	const Formato_Fecha = (fechai) => {
-		if (fechai) {
-			return new Date(fechai).toLocaleDateString('es-ES')
-		}
-		else {
-			return "Pendiente"
-	}}
+    // Aplicar Filtros //
+    const Filtro_Aplicar = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Pagina.value = 0
+        Backend_Get()
+        Filtro_Ciudad.value = ""
+        Filtro_Provincia.value = ""
+    }
     // Limpiar Filtros, Orden y Busqueda //
     const Filtro_Limpiar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -862,54 +861,17 @@
         Backend_Get()
         Mostrar_Limpiar_Filtro.value = false
     }
-    // Establecer Accion al Tocar el Tab //
-    const Click_Items = (cliente) => {
-        if (!cliente.direcciones || cliente.direcciones.length === 0) {
-            Abrir_PopUp_Delete(cliente)
-        } else {
-            Cambio_Direccion(cliente.id)
-    }}
+    // Leer Fecha con Formato DD/MM/YYYY //
+	const Formato_Fecha = (fechai) => {
+		if (fechai) {
+			return new Date(fechai).toLocaleDateString('es-ES')
+		}
+		else {
+			return "Pendiente"
+	}}
 
     // ----- Funciones Backend ----- //
     
-    // Actualizar Datos del Cliente //
-    const Backend_Put = async() => {
-        const Dato_Upgrade = {} 
-        // Establecer Datos del Cliente
-        if (Datos_Upgrade.value.nombre !== "") {
-            Dato_Upgrade.nombre = Datos_Upgrade.value.nombre
-        }
-        if (Datos_Upgrade.value.email !== "") {
-            Dato_Upgrade.email = Datos_Upgrade.value.email
-        }
-        if (Datos_Upgrade.value.contrasena !== "") {
-            Dato_Upgrade.contrasena = Datos_Upgrade.value.contrasena
-        }
-        // Enviar Datos Actualizados al Backend
-        const PutBackend = await fetch(`${backend_url}/clientes/id/${Datos_Upgrade.value.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(Dato_Upgrade),
-            credentials: 'include'
-        })
-        if (PutBackend.status === 401) {
-            Cerrar_Sesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-            Sesion_Expirada.value = true
-            Iniciado.value = false
-            return
-        }
-        Datos_Upgrade.value = {
-            id: "",
-            nombre: "",
-            email: "",
-            contrasena: "",
-        }
-        Backend_Get()
-        Cerrar_PopUp_Upgrade()
-    }
     // Desactivar Cliente //
     const Backend_Delete = async() => {
         const DeleteBackend = await fetch(`${backend_url}/clientes/id/${Datos_Delete.value}`, {
@@ -1011,6 +973,44 @@
             contrasena: ""
         }
         Backend_Get()
+    }
+    // Actualizar Datos del Cliente //
+    const Backend_Put = async() => {
+        const Dato_Upgrade = {} 
+        // Establecer Datos del Cliente
+        if (Datos_Upgrade.value.nombre !== "") {
+            Dato_Upgrade.nombre = Datos_Upgrade.value.nombre
+        }
+        if (Datos_Upgrade.value.email !== "") {
+            Dato_Upgrade.email = Datos_Upgrade.value.email
+        }
+        if (Datos_Upgrade.value.contrasena !== "") {
+            Dato_Upgrade.contrasena = Datos_Upgrade.value.contrasena
+        }
+        // Enviar Datos Actualizados al Backend
+        const PutBackend = await fetch(`${backend_url}/clientes/id/${Datos_Upgrade.value.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(Dato_Upgrade),
+            credentials: 'include'
+        })
+        if (PutBackend.status === 401) {
+            Cerrar_Sesion()
+            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            Sesion_Expirada.value = true
+            Iniciado.value = false
+            return
+        }
+        Datos_Upgrade.value = {
+            id: "",
+            nombre: "",
+            email: "",
+            contrasena: "",
+        }
+        Backend_Get()
+        Cerrar_PopUp_Upgrade()
     }
 
 </script>

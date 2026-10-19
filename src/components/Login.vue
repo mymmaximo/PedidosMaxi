@@ -301,12 +301,12 @@
     // ----- Variables Complejas ----- //
 
     // Almacen para Inicio de Sesion //
-    const Datos_Log_In = ref({
+    const Datos_Log_In = ref ({
         email: "",
         contrasena: ""
     })
     // Almacen para Resgistrar Cliente //
-    const Datos_New = ref({
+    const Datos_New = ref ({
         nombre: "",
         email: "",
         dni: "",
@@ -314,19 +314,19 @@
         concontrasena: ""
     })
 
-    // ----- Variantes Booleanas ----- //
+    // ----- Variables Booleanas ----- //
     
-    const Dato_Error = ref(false)
-    const Backend_Error = ref(false)
-    const Backend_Espera = ref(false)
-    const Mostrar_Log_In = ref(true)
-    const verContrasena = ref(false)
-    const Dato_Verificacion = ref(false)
-    const verConContrasena = ref(false)
+    const Dato_Error = ref (false)
+    const verContrasena = ref (false)
+    const Backend_Error = ref (false)
+    const Mostrar_Log_In = ref (true)
+    const Backend_Espera = ref (false)
+    const verConContrasena = ref (false)
+    const Dato_Verificacion = ref (false)
     
-    // ----- Variantes Vacias ----- //
+    // ----- Variables Vacias ----- //
     
-    const Texto_Error = ref("")
+    const Texto_Error = ref ("")
     
     // ----- Funciones Vue ----- //
     
@@ -353,7 +353,6 @@
             if (!Backend_Error.value) {
                 Backend_Espera.value = false
     }}})
-
     // Enviar Usuario/Cliente a Url/Link //
     const Click_Log_In = () => {
         Iniciado.value = true
@@ -366,6 +365,45 @@
 
     // ----- Funciones Backend ----- //
 
+    // Registrar Cliente Nuevo //
+    const Backend_Post = async() => {
+        if (Datos_New.value.contrasena !== "" || Datos_New.value.concontrasena !== "") {
+            if (Datos_New.value.contrasena !== Datos_New.value.concontrasena) {
+                alert("❌ Las contraseñas no coinciden. Por favor, verifícalas.")
+                return
+            }
+        }
+        if (Dato_Verificacion.value) return
+        Dato_Verificacion.value = true
+        Dato_Error.value = false
+        try {
+            const respuesta = await fetch(`${backend_url}/clientes/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Datos_New.value),
+                credentials: 'include'
+                })
+            if (respuesta.ok) {
+                Datos_New.value = {
+                    nombre: "",
+                    email: "",
+                    dni: "",
+                    contrasena: "",
+                    concontrasena: ""
+                }
+                Mostrar_Log_In.value = true
+            } else {
+                Texto_Error.value = "Error al registrar, revisa tus datos"
+                Dato_Error.value = true
+        }} catch (error) {
+            console.error("Error de conexión:", error)
+            Texto_Error.value = "Error al conectar con el servidor"
+            Dato_Error.value = true
+        } finally {
+            Dato_Verificacion.value = false
+    }}
     // Verificar Inicio de Sesion como Cliente //
     const Backend_Post_Cliente_Log_In = async() => {
         const respuesta = await fetch(`${backend_url}/cliente/login/`, {
@@ -417,45 +455,6 @@
                 await Backend_Post_Cliente_Log_In()
             } 
         } catch (error) {
-            console.error("Error de conexión:", error)
-            Texto_Error.value = "Error al conectar con el servidor"
-            Dato_Error.value = true
-        } finally {
-            Dato_Verificacion.value = false
-    }}
-    // Registrar Cliente Nuevo //
-    const Backend_Post = async() => {
-        if (Datos_New.value.contrasena !== "" || Datos_New.value.concontrasena !== "") {
-            if (Datos_New.value.contrasena !== Datos_New.value.concontrasena) {
-                alert("❌ Las contraseñas no coinciden. Por favor, verifícalas.")
-                return
-            }
-        }
-        if (Dato_Verificacion.value) return
-        Dato_Verificacion.value = true
-        Dato_Error.value = false
-        try {
-            const respuesta = await fetch(`${backend_url}/clientes/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(Datos_New.value),
-                credentials: 'include'
-                })
-            if (respuesta.ok) {
-                Datos_New.value = {
-                    nombre: "",
-                    email: "",
-                    dni: "",
-                    contrasena: "",
-                    concontrasena: ""
-                }
-                Mostrar_Log_In.value = true
-            } else {
-                Texto_Error.value = "Error al registrar, revisa tus datos"
-                Dato_Error.value = true
-        }} catch (error) {
             console.error("Error de conexión:", error)
             Texto_Error.value = "Error al conectar con el servidor"
             Dato_Error.value = true

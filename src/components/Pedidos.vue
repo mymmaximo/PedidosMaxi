@@ -351,7 +351,7 @@
 							>
 
                                 <!-- Datos de Pedido -->
-								<div @click="Abrir_PopUp_Act(i)"
+								<div @click="Abrir_PopUp_Upgrade(i)"
 								class="tab"
 								>
 									<div class="flex flex-col text-left">
@@ -620,7 +620,7 @@
 	// ----- Variables Complejas ----- //
 
     // Almacen para Actualizar Estatus del Pedido //
-	const Datos_Upgrade = ref({
+	const Datos_Upgrade = ref ({
 		id_pedido: "",
 		id_cliente: "",
 		id_direccion: "",
@@ -632,31 +632,31 @@
 
     // ----- Variables Booleanas ----- //
 
-	const Mostrar_Limpiar_Filtro = ref(false)
-    const Backend_Error = ref(false)
-    const Backend_Espera = ref(true)
-    const Paginas_Max = ref(false)
-	const Mostrar_Filtro = ref(false)
-    const Bloqueo_Peticion = ref(false)
+    const Paginas_Max = ref (false)
+    const Backend_Error = ref (false)
+    const Backend_Espera = ref (true)
+	const Mostrar_Filtro = ref (false)
+    const Bloqueo_Peticion = ref (false)
+	const Mostrar_Limpiar_Filtro = ref (false)
 
     // ----- Variables Vacias ----- //
 
-	const Orden = ref("")
-	const Pedidos = ref([])
-	const Busqueda = ref("")
-	const Mostrar_Pedido = ref(null)
+	const Orden = ref ("")
+	const Pedidos = ref ([])
+	const Busqueda = ref ("")
     const Datos_Ciudad = ref ("")
     const Filtro_Ciudad = ref ("")
     const Datos_Provincia = ref ("")
+	const Mostrar_Pedido = ref (null)
     const Filtro_Provincia = ref ("")
 
     // ----- Variables Simples ----- //
 
-	const Pagina = ref(0)
-	const Filtro_Metodo_Pago = ref(5)
-	const Filtro_Estatus = ref(4)
-	const Filtro_Promocion = ref(3)
-    const Paginas_Items = ref(24)
+	const Pagina = ref (0)
+    const Paginas_Items = ref (24)
+	const Filtro_Estatus = ref (4)
+	const Filtro_Promocion = ref (3)
+	const Filtro_Metodo_Pago = ref (5)
 
     // ----- Funciones Vue ----- //
     
@@ -727,7 +727,7 @@
     // ----- Funciones Frontend ----- //
 
     // Abrir Pop up para Actualizar Estatus de Pedido //
-	const Abrir_PopUp_Act = (pedido_fila) => {
+	const Abrir_PopUp_Upgrade = (pedido_fila) => {
 		if (pedido_fila.estatus === 1) {
 			Mostrar_Detalles(pedido_fila.id_pedido)
 			return
@@ -741,12 +741,6 @@
 		Datos_Upgrade.value.estatus = pedido_fila.estatus - 1
 		PopUp_Upgrade.value = true
 		document.body.style.overflow = "hidden"
-	}
-    // Aplicar Filtros //
-	const Filtro_Aplicar = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        Pagina.value = 0
-		Backend_Get()
 	}
     // Cerrar Pop up para Actualizar Estatus de Pedido //
 	const Cerrar_PopUp_Upgrade = () => {
@@ -793,18 +787,11 @@
 		}
 			return "indefinido"
 	}
-    // Leer Fecha con Formato DD/MM/YYYY //
-	const Formato_Fecha = (fechai) => {
-		if (fechai) {
-			return new Date(fechai).toLocaleDateString('es-ES')
-		}
-		else {
-			return "Pendiente"
-	}}
-    // Leer Precio con Formato Pesos Argentinos //
-	const Formato_Precios = (precio) => {
-		if (precio === null || precio === undefined) return "0"
-		return new Intl.NumberFormat('es-AR').format(precio)
+    // Aplicar Filtros //
+	const Filtro_Aplicar = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        Pagina.value = 0
+		Backend_Get()
 	}
     // Limpiar Filtros, Orden y Busqueda //
 	const Filtro_Limpiar = () => {
@@ -819,6 +806,19 @@
 		Backend_Get()
 		Mostrar_Limpiar_Filtro.value = false
 	}
+    // Leer Fecha con Formato DD/MM/YYYY //
+	const Formato_Fecha = (fechai) => {
+		if (fechai) {
+			return new Date(fechai).toLocaleDateString('es-ES')
+		}
+		else {
+			return "Pendiente"
+	}}
+    // Leer Precio con Formato Pesos Argentinos //
+	const Formato_Precios = (precio) => {
+		if (precio === null || precio === undefined) return "0"
+		return new Intl.NumberFormat('es-AR').format(precio)
+	}
     // Mostrar Detalles de Pedido //
 	const Mostrar_Detalles = (id) => {
 		if (Mostrar_Pedido.value === id) {
@@ -830,36 +830,7 @@
 
     // ----- Funciones Backend ----- //
 
-    // Actualizar Estatus del Pedido //
-	const Backend_Put = async() => {
-		const PutBackend = await fetch(`${backend_url}/pedidos/id/${Datos_Upgrade.value.id_pedido}`, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(Datos_Upgrade.value),
-			credentials: 'include'
-		})
-		if (PutBackend.status === 401) {
-			Cerrar_Sesion()
-			alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-			Sesion_Expirada.value = true
-			Iniciado.value = false
-			return
-		}
-		Datos_Upgrade.value = {
-			id_pedido: "",
-			id_cliente: "",
-			id_direccion: "",
-			metodo_pago: "",
-			tiempo_estimado_entrega: "",
-			tiempo_entrega: "",
-			estatus: ""
-		}
-		Backend_Get()
-		Cerrar_PopUp_Upgrade()
-	}
-    // Keer Datos del Pedido //
+    // Leer Datos del Pedido //
 	const Backend_Get = async() => {
 		let url = new URL (`${backend_url}/pedidos/all/`)
 		url.searchParams.append('skip', Pagina.value)
@@ -934,5 +905,34 @@
             Pedidos.value = []
             Paginas_Max.value = false
     }}
+    // Actualizar Estatus del Pedido //
+	const Backend_Put = async() => {
+		const PutBackend = await fetch(`${backend_url}/pedidos/id/${Datos_Upgrade.value.id_pedido}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(Datos_Upgrade.value),
+			credentials: 'include'
+		})
+		if (PutBackend.status === 401) {
+			Cerrar_Sesion()
+			alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+			Sesion_Expirada.value = true
+			Iniciado.value = false
+			return
+		}
+		Datos_Upgrade.value = {
+			id_pedido: "",
+			id_cliente: "",
+			id_direccion: "",
+			metodo_pago: "",
+			tiempo_estimado_entrega: "",
+			tiempo_entrega: "",
+			estatus: ""
+		}
+		Backend_Get()
+		Cerrar_PopUp_Upgrade()
+	}
 
 </script>

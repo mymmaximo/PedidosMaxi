@@ -505,19 +505,19 @@
 
     // ----- Variables Booleanas ----- //
     
-    const Backend_Error = ref(false)
-    const Backend_Espera = ref(true)
-    const Procesando_Pago = ref(false)
     const PopUp_Pay = ref (false)
+    const Backend_Error = ref (false)
+    const Backend_Espera = ref (true)
+    const Procesando_Pago = ref (false)
 
     // ----- Variables Vacias ----- //
     
+    const Datos_Delete = ref ("")
+    const Imagen_Espera = ref ({})
     const Imagen_Indice = ref ({})
-    const Datos_Delete = ref("")
-    const Datos_Direcciones = ref([])
-    const Imagen_Espera = ref({})
-    const Instancia_Paddle = ref(null)
     const Datos_Direccion = ref ("")
+    const Datos_Direcciones = ref ([])
+    const Instancia_Paddle = ref (null)
 
     // ----- Funciones Frontend ----- //
     
@@ -538,13 +538,6 @@
         if (Datos_Direcciones.value.length > 0)
             Datos_Direccion.value = Datos_Direcciones.value[0].id_direccion
 	}
-    // Leer Imagen Anterior //
-    const Imagen_Anterior = (imagen) => {
-        const Imagen_Actual = Imagen_Leer(imagen.id_producto)
-        if (Imagen_Actual > 0) {
-            Imagen_Indice.value[imagen.id_producto] = Imagen_Actual - 1
-            Imagen_Espera.value[imagen.id_producto] = true
-    }}
     // Cerrar Pop up de Borrar Detalle //
 	const Cerrar_PopUp_Delete = () => {
 		PopUp_Delete.value = false
@@ -560,6 +553,13 @@
         if (precio === null || precio === undefined) return "0"
         return new Intl.NumberFormat('es-AR').format(precio)
     }
+    // Leer Imagen Anterior //
+    const Imagen_Anterior = (imagen) => {
+        const Imagen_Actual = Imagen_Leer(imagen.id_producto)
+        if (Imagen_Actual > 0) {
+            Imagen_Indice.value[imagen.id_producto] = Imagen_Actual - 1
+            Imagen_Espera.value[imagen.id_producto] = true
+    }}
     // Leer Imagen //
     const Imagen_Leer = (id) => {
         return Imagen_Indice.value[id] || 0
@@ -581,16 +581,6 @@
 
     // ----- Funciones Backend ----- //
     
-    // Borrar Detalle de Pedido del Carrito //
-    const Frontend_Delete = () => {
-        Carrito_Local.value.splice(Datos_Delete.value, 1)
-        localStorage.setItem('carrito_pendiente', JSON.stringify(Carrito_Local.value))
-        Cerrar_PopUp_Delete()
-        // Carrito Vacio, vuelve al Inicio
-        if (Carrito_Local.value.length === 0) {
-            emit('CarritoVacio')
-            router.push('/')
-    }}
     // Enviar Pedido Completo al Backend //
     const Backend_Post = (async() => {
         if (Procesando_Pago.value) return
@@ -715,6 +705,16 @@
             alert("Ocurrió un problema al procesar tu pedido. Por favor, intenta de nuevo.")
             Procesando_Pago.value = false
     }})
+    // Borrar Detalle de Pedido del Carrito //
+    const Frontend_Delete = () => {
+        Carrito_Local.value.splice(Datos_Delete.value, 1)
+        localStorage.setItem('carrito_pendiente', JSON.stringify(Carrito_Local.value))
+        Cerrar_PopUp_Delete()
+        // Carrito Vacio, vuelve al Inicio
+        if (Carrito_Local.value.length === 0) {
+            emit('CarritoVacio')
+            router.push('/')
+    }}
     // Verificacion de Stock > 0 //
     const Verificar_Stock = (item) => {
         if (item.cantidad < 1) {

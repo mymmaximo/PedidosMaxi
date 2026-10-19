@@ -150,24 +150,24 @@
     // ----- Variables Complejas ----- //
 
     // Almacen para Actualizar Clientes //
-    const Datos_Upgrade = ref({
+    const Datos_Upgrade = ref ({
         nombre: "",
         email: "",
         contrasena: "",
         concontrasena: ""
     })
 
-    // ----- Variantes Booleanas ----- //
+    // ----- Variables Booleanas ----- //
 
-    const Backend_Error = ref(false)
-    const Backend_Espera = ref(true)
-    const Boton_Espera = ref(false)
-    const verContrasena = ref(false)
-    const verConContrasena = ref(false)
+    const Boton_Espera = ref (false)
+    const Backend_Error = ref (false)
+    const verContrasena = ref (false)
+    const Backend_Espera = ref (true)
+    const verConContrasena = ref (false)
 
     // ----- Variables Vacias ----- //
 
-    const Datos_Id = ref(null)
+    const Datos_Id = ref (null)
 
     // ----- Funciones Vue ----- //
     
