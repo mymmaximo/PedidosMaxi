@@ -76,7 +76,7 @@
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="BorrarProducto()"
+                            <button @click="Backend_Delete()"
                             class="botoncon"
                             >
                                 Confirmo
@@ -102,7 +102,7 @@
                 class="fondo"
                 >
                     <div class="popup">
-                        <form @submit.prevent="ActualizarProducto">
+                        <form @submit.prevent="Backend_Put">
 
                             <!-- Encabezado -->
                             <h1>
@@ -378,7 +378,7 @@
 
                         <!-- Botones -->
                         <div class="botones mt-2">
-                            <button @click="SumarCarrito"
+                            <button @click="Frontend_Post"
                             class="botoncon"
                             >
                                 Agregar al Carrito
@@ -404,7 +404,7 @@
                 class="fondo"
                 >
                     <div class="popup !max-w-md">
-                        <form @submit.prevent="GuardarPromocion" 
+                        <form @submit.prevent="Backend_Post_Promocion" 
                         class="flex flex-col gap-4"
                         >
 
@@ -608,7 +608,7 @@
                                 </button>   
                                 <button type="button" 
                                 v-if="Datos_Offf.id_promocion"
-                                @click="BorrarPromocion"
+                                @click="Backend_Delete_Promocion"
                                 class="botonc flex-1 !m-0"
                                 :disabled="Actualizando"
                                 >
@@ -857,7 +857,7 @@
                                 </h3>
                                 <input placeholder="Precio Max..."
                                 type="number"
-                                v-model="Mayor" 
+                                v-model="Filtro_Precio_Mayor" 
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                                 <h3 class="flex flex-col md:p-4 p-2">
@@ -865,7 +865,7 @@
                                 </h3>
                                 <input placeholder="Precio Min..."
                                 type="number"
-                                v-model="Menor" 
+                                v-model="Filtro_Precio_Menor" 
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
@@ -932,7 +932,7 @@
                         <div v-if="Mostrar_Nuevo && (Verificar_Rol([1, 2]))"
                         class="flex flex-col lg:self-center"
                         >
-                            <form @submit.prevent="SubirNuevoProducto">
+                            <form @submit.prevent="Backend_Post">
 
                                 <!-- Datos de Producto -->
                                 <h2>
@@ -962,7 +962,7 @@
                                 <h2>
                                     Categoria
                                 </h2>
-                                <select v-model="OpcionCategoria" 
+                                <select v-model="Dato_Categoria" 
                                 class="seleccion"
                                 >
                                     <option value="new">
@@ -975,10 +975,10 @@
                                         {{ i.categoria }}
                                     </option>
                                 </select>
-                                <h3 v-if="OpcionCategoria === 'new'">
+                                <h3 v-if="Dato_Categoria === 'new'">
                                     Nueva Categoria
                                 </h3>
-                                <input v-if="OpcionCategoria === 'new'" 
+                                <input v-if="Dato_Categoria === 'new'" 
                                 type="text" 
                                 v-model="Datos_New.categoria" 
                                 placeholder="Categoria"
@@ -1095,7 +1095,7 @@
                             <div class="flex flex-row items-stretch w-full gap-3 mb-5">-
 
                                 <!-- Barra de Busqueda -->
-                                <input @input="BusquedaProducto"
+                                <input @input="Backend_Get"
                                 type="text" 
                                 v-model="Busqueda" 
                                 placeholder="Busqueda..."
@@ -1340,7 +1340,7 @@
                                             </span>
                                         </button>
                                         <button @click.stop="Abrir_PopUp_Buy(i)"
-                                        :disabled="CarritoStock(i) === 0"
+                                        :disabled="Verificar_Stock(i) === 0"
                                         v-if="Verificar_Rol_Excluido([2, 3, 4, 5, 6])"
                                         :class="Formato_Items 
                                         ? 'btn-chico-verde !bg-green-600 !text-white hover:!bg-green-700 w-full justify-center' 
@@ -1354,7 +1354,7 @@
                                                 Comprar
                                             </span>
                                         </button>
-                                        <button @click.stop="ToggleFavorito(i.id)"
+                                        <button @click.stop="Backend_Post_Delete_Favorito(i.id)"
                                         v-if="Cliente_ID"
                                         :class="Formato_Items 
                                         ? 'btn-chico-rojo w-full justify-center' 
@@ -1465,7 +1465,7 @@
                 Datos_New.value.stock < 0 ||
                 Datos_New.value.precio <= 0
             const faltandatos02 = 
-                OpcionCategoria.value === "new" && Datos_New.value.categoria === ""
+                Dato_Categoria.value === "new" && Datos_New.value.categoria === ""
             return faltandatos01 || faltandatos02
         }
         // Actualizar Producto
@@ -1549,14 +1549,14 @@
     const Imagen_New = ref ('')
     const Busqueda = ref ("")
     const Orden = ref ("3")
-    const Mayor = ref ("")
-    const Menor = ref ("")
+    const Filtro_Precio_Mayor = ref ("")
+    const Filtro_Precio_Menor = ref ("")
     const Datos_Delete_Imagenes= ref ([])
 
     // ----- Variables Simples ----- //
 
     const Dato_Categorias = ref ("new")
-    const OpcionCategoria = ref ("new")
+    const Dato_Categoria = ref ("new")
     const filtroDescuentoMin = ref(0)
     const Paginas_Items = ref(24)
     const Filtro_Precios = ref(4)
@@ -1609,7 +1609,7 @@
         }, 15000)
         // Leer Productos y Favoritos
         try {
-            await BusquedaProducto()
+            await Backend_Get()
             const respuesta = await fetch(`${backend_url}/producto/categorias/`, {
                 headers: {
                     "X-Tunnel-Skip-AntiPhishing-Page": "true"
@@ -1652,7 +1652,7 @@
             if (Pagina.value < 0) Pagina.value = 0
         }
         try {
-            await BusquedaProducto()
+            await Backend_Get()
         } catch (error) {
             console.error(error)
             Backend_Error.value = true
@@ -1703,7 +1703,7 @@
 	}
     // Abrir Pop up para Añadir al Carrito //
 	const Abrir_PopUp_Buy = (producto_fila) => {
-        if (CarritoStock(producto_fila) <= 0) {
+        if (Verificar_Stock(producto_fila) <= 0) {
             return 
         }
         Producto_Actual.value = producto_fila
@@ -1763,9 +1763,9 @@
     const Filtro_Aplicar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
-        BusquedaProducto()
-        Menor.value = ""
-        Mayor.value = ""
+        Backend_Get()
+        Filtro_Precio_Menor.value = ""
+        Filtro_Precio_Mayor.value = ""
     }
     // Leer Imagen Anterior //
     const Imagen_Anterior = (imagen) => {
@@ -1845,7 +1845,7 @@
         Filtro_Estatus.value =  1
         filtroDescuentoMin.value = 0
         Filtro_Promocion.value = false
-        BusquedaProducto()
+        Backend_Get()
         Mostrar_Limpiar_Filtro.value = false
     }
     // Limpiar Imagenes sin Subir en Vista Previa //
@@ -1905,7 +1905,7 @@
     // ----- Funciones Backend ----- //
 
     // Actualizar Datos del Producto //
-    const ActualizarProducto = async() => {
+    const Backend_Put = async() => {
         if (Actualizando.value) return
         Actualizando.value = true
         try {
@@ -1913,22 +1913,22 @@
             if (Dato_Categorias.value != "new") { 
                 Datos_Upgrade.value.categoria = Dato_Categorias.value
             }
-            const ProductoActNoImg = {
+            const Dato_Upgrade = {
                 nombre: Datos_Upgrade.value.nombre,
                 precio: Datos_Upgrade.value.precio,
                 stock: Datos_Upgrade.value.stock,
                 categoria: Datos_Upgrade.value.categoria,
                 codigo_barra: Datos_Upgrade.value.codigo_barra
             }
-            const ActProducto = await fetch(`${backend_url}/productos/id/${Datos_Upgrade.value.id}`, {
+            const PutBackend = await fetch(`${backend_url}/productos/id/${Datos_Upgrade.value.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(ProductoActNoImg),
+            body: JSON.stringify(Dato_Upgrade),
             credentials: 'include'
             })
-            if (ActProducto.status === 401) {
+            if (PutBackend.status === 401) {
                 await Cerrar_Sesion()
                 alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
                 Sesion_Expirada.value = true
@@ -1936,15 +1936,15 @@
                 return
             }
             // Borrar Datos Imagen
-            for (const id_img of Datos_Delete_Imagenes.value) {
-                const listaImagenes = Datos_Upgrade.value.imagenes || []
-                const ImgDel = listaImagenes.find(
-                    img => img.id_imagen === id_img
+            for (const Imagen_Id of Datos_Delete_Imagenes.value) {
+                const Datos_Imagenes = Datos_Upgrade.value.imagenes || []
+                const Datos_Delete_Imagen = Datos_Imagenes.find(
+                    img => img.id_imagen === Imagen_Id
                 )
-                if (ImgDel && ImgDel.s3_key) {
-                    await supabase.storage.from('max_imagenes').remove([ImgDel.s3_key])
+                if (Datos_Delete_Imagen && Datos_Delete_Imagen.s3_key) {
+                    await supabase.storage.from('max_imagenes').remove([Datos_Delete_Imagen.s3_key])
                 }
-                await fetch(`${backend_url}/productos/archivos/id/${id_img}`, {
+                await fetch(`${backend_url}/productos/archivos/id/${Imagen_Id}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 })
@@ -1971,7 +1971,7 @@
                         }),
                         credentials: 'include'
             })}}
-            BusquedaProducto()
+            Backend_Get()
             Cerrar_PopUp_Upgrade()
         } catch (error) {
             console.error(error)
@@ -1980,15 +1980,15 @@
             Actualizando.value = false
     }}
     // Desactivar Datos del Producto //
-    const BorrarProducto = async() => {
-        const EraseProducto = await fetch(`${backend_url}/productos/id/${Datos_Delete.value.id}`, {
+    const Backend_Delete = async() => {
+        const DeleteBackend = await fetch(`${backend_url}/productos/id/${Datos_Delete.value.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
             credentials: 'include'
         })
-        if (EraseProducto.status === 401) {
+        if (DeleteBackend.status === 401) {
             await Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
             Sesion_Expirada.value = true
@@ -1996,15 +1996,15 @@
             return
         }
         Datos_Delete.value = {
-        id: "",
-        nombre: "",
-        imagenes: []
+            id: "",
+            nombre: "",
+            imagenes: []
         }
-        BusquedaProducto()
+        Backend_Get()
         Cerrar_PopUp_Delete()
     }
     // Desactivar Datos de Promocion //
-    const BorrarPromocion = async () => {
+    const Backend_Delete_Promocion = async () => {
         if (!Datos_Offf.value.id_promocion) return
         if (Actualizando.value) return
         Actualizando.value = true
@@ -2022,7 +2022,7 @@
             if (!respuesta.ok) {
                 throw new Error("No se pudo eliminar la promoción")
             }
-            BusquedaProducto()
+            Backend_Get()
             Cerrar_PopUp_Off()
         } catch (error) {
             console.error(error)
@@ -2031,7 +2031,7 @@
             Actualizando.value = false
     }}
     // Leer Datos de los Productos //
-    const BusquedaProducto = async() => {
+    const Backend_Get = async() => {
         let url = new URL (`${backend_url}/producto/`)
 		url.searchParams.append('skip', Pagina.value)
         url.searchParams.append('limit', Paginas_Items.value + 1)
@@ -2047,35 +2047,35 @@
             }
         }
         // Establecer Filtro de Precios
-        let minfiltro = ""
-        let maxfiltro = ""
+        let Filtro_Minimo = ""
+        let Filtro_Maximo = ""
         if (Filtro_Precios.value === 4) {
-            minfiltro = ""
-            maxfiltro = ""
-            Menor.value = ""
-            Mayor.value = ""
+            Filtro_Minimo = ""
+            Filtro_Maximo = ""
+            Filtro_Precio_Menor.value = ""
+            Filtro_Precio_Mayor.value = ""
         }
         else if (Filtro_Precios.value === 3) {
-            maxfiltro = 10000
+            Filtro_Maximo = 10000
         }
         else if (Filtro_Precios.value === 2) {
-            minfiltro = 10000
-            maxfiltro = 50000
+            Filtro_Minimo = 10000
+            Filtro_Maximo = 50000
         }
         else if (Filtro_Precios.value === 1) {
-            minfiltro = 50000
+            Filtro_Minimo = 50000
         }
         // Establecer Filtro Precios Personalizados
         else if (Filtro_Precios.value === 0) {
-            minfiltro = Menor.value
-            maxfiltro = Mayor.value
+            Filtro_Minimo = Filtro_Precio_Menor.value
+            Filtro_Maximo = Filtro_Precio_Mayor.value
         }
-        if (minfiltro !== "" && minfiltro != null) {
-            url.searchParams.append('precio_producto_min', minfiltro)
+        if (Filtro_Minimo !== "" && Filtro_Minimo != null) {
+            url.searchParams.append('precio_producto_min', Filtro_Minimo)
             Mostrar_Limpiar_Filtro.value = true
         }
-        if (maxfiltro !== "" && maxfiltro != null) {
-            url.searchParams.append('precio_producto_max', maxfiltro)
+        if (Filtro_Maximo !== "" && Filtro_Maximo != null) {
+            url.searchParams.append('precio_producto_max', Filtro_Maximo)
             Mostrar_Limpiar_Filtro.value = true
         }
         if (Filtro_Estatus.value === 2) {
@@ -2101,13 +2101,13 @@
             if (filtroDescuentoMin.value > 0) {
                 url.searchParams.append('porcentaje_descuento_min', filtroDescuentoMin.value)
         }}
-        const BusqProducto = await fetch(url.toString(), {
+        const GetBackend = await fetch(url.toString(), {
             headers: {
                 "X-Tunnel-Skip-AntiPhishing-Page": "true"
             },
             credentials: 'include'
         })
-        const datos = await BusqProducto.json()
+        const datos = await GetBackend.json()
         if (Array.isArray(datos)) {
             if (datos.length > Paginas_Items.value) {
                 Paginas_Max.value = true
@@ -2120,78 +2120,21 @@
             Paginas_Max.value = false
     }}
     // Verificacion de Stock > 0 //
-    const CarritoStock = (Producto) => {
-        let stockCarrito = 0
+    const Verificar_Stock = (Producto) => {
+        let Stock_Carrito = 0
         Carrito_Local.value.forEach((itemCarrito) => {
             if (itemCarrito.id_producto === Producto.id) {
-                stockCarrito = stockCarrito + itemCarrito.cantidad
+                Stock_Carrito = Stock_Carrito + itemCarrito.cantidad
         }})
-        return Producto.stock - stockCarrito
+        return Producto.stock - Stock_Carrito
     }
-    // Añadir al Carrito (Viejo) //
-    const Confirmar = (async() => {
-        const ClienteGuardado = Cliente_ID.value
-        if (Pedido_Actual.value) {
-            const respuesta = await fetch(`${backend_url}/pedidos/detalles_pedido/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify([{
-                    id_pedido: Pedido_Actual.value,
-                    id_producto: Producto_Actual.value.id,
-                    cantidad: Producto_Cantidad.value
-                }]),
-                credentials: 'include'
-            })
-            if (respuesta.ok) {
-                Cerrar_PopUp_Buy()
-                console.log ("funciono")
-            } else {
-                const error = await respuesta.text()
-                console.error("Error al agregar detalle:", error)
-            }
-        } else {
-            const respuesta = await fetch(`${backend_url}/pedidos/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id_cliente: parseInt(ClienteGuardado),
-                    id_direccion: 1,
-                    metodo_pago: " ",
-                    tiempo_estimado_entrega: 0,
-                    tiempo_entrega: 0
-                }),
-                credentials: 'include'
-            })
-            if (respuesta.status === 401) {
-                await Cerrar_Sesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
-                Sesion_Expirada.value = true
-                Iniciado.value = false
-                return
-            }
-            if (respuesta.ok) {
-                const DatosPedido = await respuesta.json ()
-                Pedido_Actual.value = DatosPedido.id
-                localStorage.setItem(
-                    "pedido",
-                    Pedido_Actual.value
-                )
-                Confirmar() 
-            } else {
-                const error = await respuesta.text()
-                console.error("Error al agregar Pedido:", error)
-    }}})
     // Subir Datos de la Promocion //
-    const GuardarPromocion = async () => {
+    const Backend_Post_Promocion = async () => {
         if (Actualizando.value) return
         Actualizando.value = true
         
         try {
-            const payload = {
+            const Payload = {
                 id_producto: Datos_Off.value.id,
                 motivo: Datos_Offf.value.motivo || null,
                 precio_nuevo: Datos_Offf.value.precio_nuevo ? parseFloat(Datos_Offf.value.precio_nuevo) : null,
@@ -2204,7 +2147,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(Payload),
                 credentials: 'include'
             })
             if (respuesta.status === 401) {
@@ -2218,7 +2161,7 @@
                 const err = await respuesta.text()
                 throw new Error(err)
             }
-            BusquedaProducto()
+            Backend_Get()
             Cerrar_PopUp_Off()
         } catch (error) {
             console.error("Error al guardar promoción:", error)
@@ -2227,11 +2170,11 @@
             Actualizando.value = false
     }}
     // Subir Datos de Nuevo Producto //
-    const SubirNuevoProducto = async() => {
-        if (OpcionCategoria.value != "new") {
-            Datos_New.value.categoria = OpcionCategoria.value
+    const Backend_Post = async() => {
+        if (Dato_Categoria.value != "new") {
+            Datos_New.value.categoria = Dato_Categoria.value
         }
-        const SubidaNuevoProducto = await fetch(`${backend_url}/productos/`, {
+        const PostBackend = await fetch(`${backend_url}/productos/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -2239,15 +2182,15 @@
             body: JSON.stringify(Datos_New.value),
             credentials: 'include'
         })
-        if (SubidaNuevoProducto.status === 401) {
+        if (PostBackend.status === 401) {
             await Cerrar_Sesion()
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
             Sesion_Expirada.value = true
             Iniciado.value = false
             return
         }
-        const ProductoNew = await SubidaNuevoProducto.json()
-        const NewId = ProductoNew.id        
+        const Dato_New = await PostBackend.json()
+        const Dato_New_Id = Dato_New.id        
         if (Producto_Imagenes_Seleccion.value.length > 0) {
             for (
                 let i = 0 ; i < Producto_Imagenes_Seleccion.value.length ; i++
@@ -2267,7 +2210,7 @@
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            id_producto: NewId,
+                            id_producto: Dato_New_Id,
                             s3_key: filePath,
                             nombre_original: file.name,
                             tipo_contenido: fileExt,
@@ -2283,33 +2226,33 @@
             categoria: ""
         }
         Imagen_Limpiar()
-        BusquedaProducto()
+        Backend_Get()
     }
     // Añadir al Carrito //
-    const SumarCarrito = () => {
+    const Frontend_Post = () => {
         if (!Producto_Actual.value)
             return
         // Establecer Datos del Producto 
-        const precioEfectivo = Producto_Actual.value.es_promocion 
+        const Dato_Precio = Producto_Actual.value.es_promocion 
             ? Producto_Actual.value.precio_nuevo 
             : Producto_Actual.value.precio;
-        const nuevoProducto = {
+        const Producto_New = {
             id_pedido: Pedido_Actual.value,
             nombre_producto: Producto_Actual.value.nombre,
             id_producto: Producto_Actual.value.id,
             cantidad: Producto_Cantidad.value,
-            precio_unitario: precioEfectivo,
+            precio_unitario: Dato_Precio,
             stock_producto: Producto_Actual.value.stock,
             imagenes: Producto_Actual.value.imagenes
         }
-        let CarritoExistente = Carrito_Local.value.find(
+        let Carrito_Existente = Carrito_Local.value.find(
             (item_exitente) =>
             item_exitente.id_producto === Producto_Actual.value.id
         )
-        if (CarritoExistente){
-            CarritoExistente.cantidad = Producto_Cantidad.value + CarritoExistente.cantidad
+        if (Carrito_Existente){
+            Carrito_Existente.cantidad = Producto_Cantidad.value + Carrito_Existente.cantidad
         } else {
-            Carrito_Local.value.push(nuevoProducto)
+            Carrito_Local.value.push(Producto_New)
         }
         localStorage.setItem(
             'carrito_pendiente',
@@ -2322,7 +2265,7 @@
         setTimeout(() => { Mostrar_Confirmacion.value = false }, 2000)
     }
     // Sumar/Quitar Producto de Favoritos //
-    const ToggleFavorito = async (id_producto) => {
+    const Backend_Post_Delete_Favorito = async (id_producto) => {
         try {
             const respuesta = await fetch(`${backend_url}/favoritos/toggle?id_cliente=${Cliente_ID.value}`, {
                 method: 'POST',

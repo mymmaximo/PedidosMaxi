@@ -343,7 +343,7 @@
                                 </h3>
                                 <input placeholder="Precio Max..." 
                                 type="number" 
-                                v-model="Mayor" 
+                                v-model="Filtro_Precio_Mayor" 
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                                 <h3 class="flex flex-col md:p-4 p-2">
@@ -351,7 +351,7 @@
                                 </h3>
                                 <input placeholder="Precio Min..." 
                                 type="number" 
-                                v-model="Menor" 
+                                v-model="Filtro_Precio_Menor" 
                                 oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                             </div>
@@ -716,8 +716,8 @@
     const Productos = ref([])
     const Busqueda = ref("")
     const Orden = ref("8")
-    const Mayor = ref("")
-    const Menor = ref("")
+    const Filtro_Precio_Mayor = ref("")
+    const Filtro_Precio_Menor = ref("")
 
     // ----- Variables Simples ----- //
 
@@ -843,8 +843,8 @@
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
         Backend_Get()
-        Menor.value = ""
-        Mayor.value = ""
+        Filtro_Precio_Menor.value = ""
+        Filtro_Precio_Mayor.value = ""
     }
     // Leer Imagen Anterior //
     const Imagen_Anterior = (imagen) => {
@@ -984,8 +984,8 @@
         if (Filtro_Precios.value === 4) {
             Filtro_Precios_Minimo = ""
             Filtro_Precios_Maximo = ""
-            Menor.value = ""
-            Mayor.value = ""
+            Filtro_Precio_Menor.value = ""
+            Filtro_Precio_Mayor.value = ""
         }
         else if (Filtro_Precios.value === 3) {
             Filtro_Precios_Maximo = 10000
@@ -999,8 +999,8 @@
         }
         // Establecer Filtro Precios Personalizados
         else if (Filtro_Precios.value === 0) {
-            Filtro_Precios_Minimo = Menor.value
-            Filtro_Precios_Maximo = Mayor.value
+            Filtro_Precios_Minimo = Filtro_Precio_Menor.value
+            Filtro_Precios_Maximo = Filtro_Precio_Mayor.value
         }
         if (Filtro_Precios_Minimo !== "" && Filtro_Precios_Minimo != null) {
             url.searchParams.append('precio_producto_min', Filtro_Precios_Minimo)

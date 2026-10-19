@@ -183,7 +183,7 @@
 
                         <!-- Botones -->
                         <div class="botones mt-2">
-                            <button @click="Backend_Post"
+                            <button @click="Frontend_Post"
                             class="botoncon"
                             >
                                 Agregar al Carrito
@@ -1702,11 +1702,11 @@
                 credentials: "include",
             })
             if (respuesta.ok) {
-                const Datos_Banner = await respuesta.json()
-                if (Datos_Banner.length > 0) {
+                const Dato_Banners = await respuesta.json()
+                if (Dato_Banners.length > 0) {
                     Datos_Banner.value = {
                         id: "Datos_Banner",
-                        imagenes: Datos_Banner,
+                        imagenes: Dato_Banners,
         }}}} catch (error) {
             console.error("Error al cargar el banner:", error)
     }}
@@ -1718,11 +1718,11 @@
                 credentials: "include",
             })
             if (respuesta.ok) {
-                const Banner_Upgrade = await respuesta.json()
-                if (Banner_Upgrade.length > 0) {
+                const Dato_All_Banners = await respuesta.json()
+                if (Dato_All_Banners.length > 0) {
                     Banner_Upgrade.value = {
                     id: "Banner_Upgrade",
-                    imagenes: Banner_Upgrade,
+                    imagenes: Dato_All_Banners,
         }}}} catch (error) {
             console.error("Error al cargar el banner:", error)
     }}
@@ -1879,7 +1879,7 @@
         Cerrar_PopUp_Banner()
     }
     // Añadir al Carrito //
-    const Backend_Post = () => {
+    const Frontend_Post = () => {
         if (!Producto_Actual.value) 
             return
         // Establecer Datos del Producto 
