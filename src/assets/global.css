@@ -128,7 +128,7 @@ input, select, input[type="number"], input[type="date"] {
     @apply
     w-full place-self-center
     text-gray-700 font-medium text-left
-    bg-gray-500 border border-gray-200 rounded-xl
+    bg-gray-50 border border-gray-200 rounded-xl
     outline-none transition-all duration-200
     px-4 py-2.5 mb-2
     text-sm sm:text-base
@@ -278,7 +278,7 @@ form {
     @apply
     object-contain
     cursor-text
-    bg-white/80 backdrop-blur-md
+    bg-red-500/80 backdrop-blur-md
     border-green-400/50 border-2 rounded-xl
     text-base lg:text-lg text-left
     transition-all duration-300 ease-out
