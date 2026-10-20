@@ -1362,7 +1362,10 @@
                                         ? 'col-span-2' 
                                         : '', 'botonc !px-2 !py-2 !text-sm']"
                                         >
-                                            {{ Datos_Favoritos.includes(i.id) ? '🤍 Quitar de Favoritos' : '❤️ Agregar a Favoritos' }}
+                                            {{ Datos_Favoritos.includes(i.id) ? '🤍' : '❤️' }}
+                                            <span class="hidden xl:inline ml-1 truncate">
+                                                {{ Datos_Favoritos.includes(i.id) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
+                                            </span>
                                         </button>
                                     </div>
 
