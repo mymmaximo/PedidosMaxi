@@ -123,9 +123,6 @@
                                 <option value="La Pampa">
                                     La Pampa
                                 </option>
-                                <option value="La Pampa">
-                                    La Pampa
-                                </option>
                                 <option value="La Rioja">
                                     La Rioja
                                 </option>

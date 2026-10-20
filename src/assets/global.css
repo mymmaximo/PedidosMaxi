@@ -123,6 +123,25 @@ body {
     xl:gap-2
     2xl:gap-2
 }
+/* Inputs de Texto/Numeros/Fechas y Cajas de Seleccion */
+input, select, input[type="number"], input[type="date"] {
+    @apply
+    w-full place-self-center
+    text-gray-700 font-medium text-left
+    bg-gray-50 border border-gray-200 rounded-xl
+    outline-none transition-all duration-200
+    px-4 py-2.5 mb-2
+    text-sm sm:text-base
+    shadow-sm
+    focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 focus:-translate-y-0.5 focus:shadow-md;
+}
+/* Input de Seleccion Unica */
+input[type="radio"] {
+    @apply 
+    w-4 h-4 mb-0
+    accent-green-600 cursor-pointer
+    focus:ring-0 focus:translate-y-0 shadow-none;
+}
 /* Formulario */
 form {
     @apply
@@ -335,43 +354,57 @@ h4 {
     2xl:p-3
     select-none
 }
-input[type="date"] {
+input {
     @apply
-    w-full place-self-center
-    text-gray-700 font-medium text-left
-    bg-gray-50 border border-gray-200 rounded-xl
-    outline-none transition-all duration-200
-    px-4 py-2.5 mb-2
-    text-sm sm:text-base shadow-sm
-    focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 focus:-translate-y-0.5 focus:shadow-md;
-}
-input:not([type="date"]):not([type="radio"]) {
-    @apply
-    w-full place-self-center cursor-text
+    place-self-center
+    cursor-text
     text-gray-700 text-center font-semibold
-    bg-green-100 border-green-800 rounded-sm border-2
-    outline-none transition-all duration-200
-    p-1 px-2 mb-2 shadow-sm
-    text-xl sm:text-base
-    focus:bg-white focus:border-green-800 focus:ring-4 focus:ring-green-500/30 focus:-translate-y-0.5 focus:shadow-md;
+    bg-green-100
+    border-green-800 rounded-sm border-2
+    outline-none transition-all
+    w-full
+    p-1
+    px-2
+    lg:px-2
+    2xl:px-2
+    text-xl
+    sm:text-base
+    md:text-base
+    lg:text-base
+    xl:text-base
+    2xl:text-base
 }
 input[type="number"] {
-    @apply border-1;
+    @apply
+    place-self-center
+    cursor-text
+    text-gray-700 text-center font-semibold
+    bg-green-100
+    border-green-800 rounded-sm border-1
+    outline-none transition-all
+    text-xl
+    sm:text-base
+    md:text-base
+    lg:text-base
+    xl:text-base
+    2xl:text-base
+    w-full
+    p-1
+    px-2
+    lg:px-2
+    2xl:px-2
+    focus:border-green-800 
+    focus:ring-4 
+    focus:ring-green-500/30
+    focus:-translate-y-0.5 focus:shadow-md
 }
 input[type="radio"] {
     @apply 
-    w-3 lg:w-5 2xl:w-7 h-4 mb-0
-    accent-green-600 cursor-pointer
-    focus:ring-0 focus:translate-y-0 shadow-none;
-}
-select {
-    @apply
-    w-full place-self-center cursor-pointer
-    text-black text-center font-semibold
-    bg-green-100 border-green-800 rounded-sm border-1
-    outline-none transition-all duration-200
-    p-1 px-2 mb-2 text-base shadow-sm
-    focus:bg-white focus:border-green-800 focus:ring-4 focus:ring-green-500/30 focus:-translate-y-0.5 focus:shadow-md;
+    w-3
+    lg:w-5
+    2xl:w-7
+    accent-green-600 
+    cursor-pointer
 }
 .item {
     @apply
@@ -381,6 +414,26 @@ select {
 label {
     @apply
     select-none
+}
+select {
+    @apply
+    place-self-center
+    cursor-pointer
+    text-black text-center font-semibold
+    bg-green-100 
+    border-green-800 rounded-sm border-1
+    outline-none transition-all
+    text-base
+    lg:text-base
+    2xl:text-base
+    w-full
+    p-1
+    px-2
+    lg:px-2
+    2xl:px-2
+    focus:border-green-800 
+    focus:ring-4 
+    focus:ring-green-500/30
 }
 ::selection {
     @apply bg-green-500 text-white
