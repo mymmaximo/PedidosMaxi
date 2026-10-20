@@ -401,7 +401,7 @@ select {
     place-self-center
     cursor-pointer
     text-black text-center font-semibold
-    bg-white/25
+    bg-white/75
     border-green-800 rounded-sm border-1
     outline-none transition-all
     text-base
