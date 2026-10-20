@@ -1451,6 +1451,18 @@
         Verificar_Rol,
         Verificar_Rol_Excluido
     } from './Estatus.js'
+    // Leer Url/Link y Tamaño de Imagen //
+    const emit = defineEmits([
+        'upload',
+        'update:path'
+    ])
+    // Definir Url/Link y Tamaño de Imagen //
+    const prop = defineProps ([
+        'path',
+        'size'
+    ])
+    // Asignar Url/Link y Tamaño de Imagen //
+    const { path } = toRefs (prop)
 
     // ----- Variables Vue ----- //
 
@@ -1664,18 +1676,6 @@
             Backend_Espera.value = false
             Bloqueo_Peticion.value = false
     }}
-    // Leer Url/Link y Tamaño de Imagen //
-    const emit = defineEmits([
-        'upload',
-        'update:path'
-    ])
-    // Definir Url/Link y Tamaño de Imagen //
-    const prop = defineProps ([
-        'path',
-        'size'
-    ])
-    // Asignar Url/Link y Tamaño de Imagen //
-    const { path } = toRefs (prop)
 
     // ----- Funciones Frontend ----- //
 
