@@ -123,25 +123,6 @@ body {
     xl:gap-2
     2xl:gap-2
 }
-/* Inputs de Texto/Numeros/Fechas y Cajas de Seleccion */
-input, select, input[type="number"], input[type="date"] {
-    @apply
-    w-full place-self-center
-    text-gray-700 font-medium text-left
-    bg-gray-50 border border-gray-200 rounded-xl
-    outline-none transition-all duration-200
-    px-4 py-2.5 mb-2
-    text-sm sm:text-base
-    shadow-sm
-    focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 focus:-translate-y-0.5 focus:shadow-md;
-}
-/* Input de Seleccion Unica */
-input[type="radio"] {
-    @apply 
-    w-4 h-4 mb-0
-    accent-green-600 cursor-pointer
-    focus:ring-0 focus:translate-y-0 shadow-none;
-}
 /* Formulario */
 form {
     @apply
