@@ -278,7 +278,7 @@ form {
     @apply
     object-contain
     cursor-text
-    bg-red-500/80 backdrop-blur-md
+    bg-white/80 backdrop-blur-md
     border-green-400/50 border-2 rounded-xl
     text-base lg:text-lg text-left
     transition-all duration-300 ease-out
