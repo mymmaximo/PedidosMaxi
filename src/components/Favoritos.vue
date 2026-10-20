@@ -695,7 +695,15 @@
         nombre: "",
         imagenes: []
     })
+    // Ancho de Filtro //
     const Mostrar_Filtro = ref (window.innerWidth >= 1024)
+    // Definir Url/Link y Tamaño de Imagen //
+    const prop = defineProps([
+        'path',
+        'size'
+    ])
+    // Asignar Url/Link y Tamaño de Imagen //
+    const { path } = toRefs(prop)
 
     // ----- Variables Booleanas ----- //
 
@@ -813,14 +821,6 @@
             Backend_Espera.value = false
             Bloqueo_Peticion.value = false
     }}
-    // Definir Url/Link y Tamaño de Imagen //
-    const prop = defineProps([
-        'path',
-        'size'
-    ])
-    // Asignar Url/Link y Tamaño de Imagen //
-    const { path } = toRefs(prop)
-
     // ----- Funciones Frontend ----- //
 
     // Establecer Valores del Producto para Añadir en el Carrito y Abrir Pop Up //

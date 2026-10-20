@@ -1451,21 +1451,9 @@
         Verificar_Rol,
         Verificar_Rol_Excluido
     } from './Estatus.js'
-    // Leer Url/Link y Tamaño de Imagen //
-    const emit = defineEmits([
-        'upload',
-        'update:path'
-    ])
-    // Definir Url/Link y Tamaño de Imagen //
-    const prop = defineProps ([
-        'path',
-        'size'
-    ])
-    // Asignar Url/Link y Tamaño de Imagen //
-    const { path } = toRefs (prop)
-
     // ----- Variables Vue ----- //
 
+    // Ancho de Filtro //
     const Mostrar_Filtro = ref (window.innerWidth >= 1024)
     // Habilitar Boton //
     const Verificar_Boton = computed(() =>{
@@ -1494,6 +1482,18 @@
                 Dato_Categorias.value === "new" && Datos_Upgrade.value.categoria === ""
             return faltandatos03 || faltandatos04
     }})
+    // Leer Url/Link y Tamaño de Imagen //
+    const emit = defineEmits([
+        'upload',
+        'update:path'
+    ])
+    // Definir Url/Link y Tamaño de Imagen //
+    const prop = defineProps ([
+        'path',
+        'size'
+    ])
+    // Asignar Url/Link y Tamaño de Imagen //
+    const { path } = toRefs (prop)
 
     // ----- Variables Complejas ----- //
 
