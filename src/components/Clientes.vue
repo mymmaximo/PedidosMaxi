@@ -647,28 +647,6 @@
         Sesion_Expirada,
         Iniciado
     } from './Estatus'
-    
-    // ----- Variables Vue ----- //
-
-    // Habilitar Boton //
-    const Verificar_Boton = computed(() =>{
-        // Nuevo Cliente
-        if (Mostrar_Nuevo.value) {
-            const Datos_New_Faltantes = 
-                Datos_New.value.nombre === ""||
-                Datos_New.value.email === ""||
-                !Datos_New.value.email.includes("@") ||
-                Datos_New.value.dni === ""||
-                Datos_New.value.contrasena === ""
-            return Datos_New_Faltantes
-        }
-        // Actualizar Cliente
-        if (PopUp_Upgrade.value) {
-            const Datos_Upgrade_Faltantes = 
-                Datos_Upgrade.value.nombre === ""||
-                Datos_Upgrade.value.email === ""
-            return Datos_Upgrade_Faltantes
-    }})
 
     // ----- Variables Complejas ----- //
 
@@ -780,6 +758,25 @@
             Backend_Espera.value = false
             Bloqueo_Peticion.value = false
     }}
+    // Habilitar Boton //
+    const Verificar_Boton = computed(() =>{
+        // Nuevo Cliente
+        if (Mostrar_Nuevo.value) {
+            const Datos_New_Faltantes = 
+                Datos_New.value.nombre === ""||
+                Datos_New.value.email === ""||
+                !Datos_New.value.email.includes("@") ||
+                Datos_New.value.dni === ""||
+                Datos_New.value.contrasena === ""
+            return Datos_New_Faltantes
+        }
+        // Actualizar Cliente
+        if (PopUp_Upgrade.value) {
+            const Datos_Upgrade_Faltantes = 
+                Datos_Upgrade.value.nombre === ""||
+                Datos_Upgrade.value.email === ""
+            return Datos_Upgrade_Faltantes
+    }})
 
     // ----- Funciones Frontend ----- //
 

@@ -49,7 +49,7 @@
                                 </button>
                                 <div>
                                     <img v-show="Imagen_Espera[Datos_Delete.id] === false"
-                                    :src=Imagen_Url(Datos_Delete.imagenes[Imagen_Leer(Datos_Delete.id)].s3_key)
+                                    :src="Imagen_Url(Datos_Delete.imagenes[Imagen_Leer(Datos_Delete.id)].s3_key)"
                                     @load="Imagen_Espera[Datos_Delete.id] = false"
                                     class="imagen"
                                     >
@@ -202,7 +202,7 @@
                                         </button>
                                         <div>
                                             <img v-show="Imagen_Espera[Datos_Upgrade.id] === false"
-                                            :src=Imagen_Url(Datos_Upgrade.imagenes[Imagen_Leer(Datos_Upgrade.id)].s3_key)
+                                            :src="Imagen_Url(Datos_Upgrade.imagenes[Imagen_Leer(Datos_Upgrade.id)].s3_key)"
                                             @load="Imagen_Espera[Datos_Upgrade.id] = false"
                                             :class="Datos_Delete_Imagenes.includes(Datos_Upgrade.imagenes[Imagen_Leer(Datos_Upgrade.id)].id_imagen) 
                                             ? 'imagendel' 
@@ -320,7 +320,7 @@
                                 </button>
                                 <div>
                                     <img v-show="Imagen_Espera[Producto_Actual.id] === false"
-                                    :src=Imagen_Url(Producto_Actual.imagenes[Imagen_Leer(Producto_Actual.id)].s3_key)
+                                    :src="Imagen_Url(Producto_Actual.imagenes[Imagen_Leer(Producto_Actual.id)].s3_key)"
                                     @load="Imagen_Espera[Producto_Actual.id] = false"
                                     class="carrusel-img"
                                     >
@@ -439,7 +439,7 @@
                                     border-white shadow-sm"
                                     >
                                         <img v-show="Imagen_Espera[Datos_Off.id] === false"
-                                        :src=Imagen_Url(Datos_Off.imagenes[Imagen_Leer(Datos_Off.id)].s3_key)
+                                        :src="Imagen_Url(Datos_Off.imagenes[Imagen_Leer(Datos_Off.id)].s3_key)"
                                         @load="Imagen_Espera[Datos_Off.id] = false"
                                         class="w-full h-full object-cover"
                                         >
@@ -506,7 +506,7 @@
                                             type="number" 
                                             v-model="Datos_Offf.precio_nuevo" 
                                             :disabled="Datos_Offf.porcentaje_descuento > 0"
-                                            maxlength="8"
+                                            oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                             class="w-full 
                                             pl-8 pr-4 py-2 
                                             border-2 border-green-200 
@@ -957,7 +957,7 @@
                                 <input placeholder="Stock"
                                 type="number" 
                                 v-model="Datos_New.stock"
-                                maxlength="8"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                                 <h2>
                                     Categoria
@@ -993,6 +993,7 @@
                                         class="shrink-0 mt-2 relative"
                                         >
                                             <button @click="Imagen_Limpiar"
+                                            type="button"
                                             title="Quitar imagen"
                                             class="botonx"
                                             >
@@ -1092,7 +1093,7 @@
                                 ᯤ Abrir Filtros
                             </button>
 
-                            <div class="flex flex-row items-stretch w-full gap-3 mb-5">-
+                            <div class="flex flex-row items-stretch w-full gap-3 mb-5">
 
                                 <!-- Barra de Busqueda -->
                                 <input @input="Backend_Get"
@@ -1176,7 +1177,7 @@
                                                 </button>
                                                 <div>
                                                     <img v-show="Imagen_Espera[i.id] === false"
-                                                    :src=Imagen_Url(i.imagenes[Imagen_Leer(i.id)].s3_key)
+                                                    :src="Imagen_Url(i.imagenes[Imagen_Leer(i.id)].s3_key)"
                                                     @load="Imagen_Espera[i.id] = false"
                                                     class="imagen"
                                                     >
@@ -1458,33 +1459,6 @@
 
     // Ancho de Filtro //
     const Mostrar_Filtro = ref (window.innerWidth >= 1024)
-    // Habilitar Boton //
-    const Verificar_Boton = computed(() =>{
-        // Nuevo Producto
-        if (Mostrar_Nuevo.value) {
-            const faltandatos01 = 
-                Datos_New.value.nombre === "" ||
-                Datos_New.value.precio === "" ||
-                Datos_New.value.stock === "" ||
-                Datos_New.value.stock < 0 ||
-                Datos_New.value.precio <= 0
-            const faltandatos02 = 
-                Dato_Categoria.value === "new" && Datos_New.value.categoria === ""
-            return faltandatos01 || faltandatos02
-        }
-        // Actualizar Producto
-        if (PopUp_Upgrade.value) {
-            const faltandatos03 =
-                Datos_Upgrade.value.nombre === "" ||
-                Datos_Upgrade.value.precio === "" ||
-                Datos_Upgrade.value.stock === "" ||
-                Datos_Upgrade.value.codigo_barra === "" ||
-                Datos_Upgrade.value.stock < 0 ||
-                Datos_Upgrade.value.precio <= 0
-            const faltandatos04 = 
-                Dato_Categorias.value === "new" && Datos_Upgrade.value.categoria === ""
-            return faltandatos03 || faltandatos04
-    }})
     // Leer Url/Link y Tamaño de Imagen //
     const emit = defineEmits([
         'upload',
@@ -1679,6 +1653,33 @@
             Backend_Espera.value = false
             Bloqueo_Peticion.value = false
     }}
+    // Habilitar Boton //
+    const Verificar_Boton = computed(() =>{
+        // Nuevo Producto
+        if (Mostrar_Nuevo.value) {
+            const faltandatos01 = 
+                Datos_New.value.nombre === "" ||
+                Datos_New.value.precio === "" ||
+                Datos_New.value.stock === "" ||
+                Datos_New.value.stock < 0 ||
+                Datos_New.value.precio <= 0
+            const faltandatos02 = 
+                Dato_Categoria.value === "new" && Datos_New.value.categoria === ""
+            return faltandatos01 || faltandatos02
+        }
+        // Actualizar Producto
+        if (PopUp_Upgrade.value) {
+            const faltandatos03 =
+                Datos_Upgrade.value.nombre === "" ||
+                Datos_Upgrade.value.precio === "" ||
+                Datos_Upgrade.value.stock === "" ||
+                Datos_Upgrade.value.codigo_barra === "" ||
+                Datos_Upgrade.value.stock < 0 ||
+                Datos_Upgrade.value.precio <= 0
+            const faltandatos04 = 
+                Dato_Categorias.value === "new" && Datos_Upgrade.value.categoria === ""
+            return faltandatos03 || faltandatos04
+    }})
 
     // ----- Funciones Frontend ----- //
 
@@ -1751,7 +1752,7 @@
         Datos_Upgrade.value.codigo_barra = producto_fila.codigo_barra
         Datos_Upgrade.value.imagenes = producto_fila.imagenes
         Datos_Delete_Imagenes.value = []
-        Producto_Imagenes_Previa.value = []
+        Imagen_Limpiar()
 		PopUp_Upgrade.value = true
 		document.body.style.overflow = "hidden"
 	}
@@ -1806,6 +1807,7 @@
     const Filtro_Limpiar = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         Pagina.value = 0
+        Orden.value = "3"
         Filtro_Precios.value = 4
         Filtro_Categorias.value = ""
         Filtro_Estatus.value =  1
@@ -2019,7 +2021,7 @@
         }
         // Establecer Filtro de Categoria
         if (Filtro_Categorias.value !== "") {
-            url.searchParams.append('Filtro_Categorias', Filtro_Categorias.value)
+            url.searchParams.append('filtrocat', Filtro_Categorias.value)
             Mostrar_Limpiar_Filtro.value = true
         }
         // Establecer Filtro de Promocion

@@ -49,7 +49,7 @@
                                 </button>
                                 <div>
                                     <img v-show="Imagen_Espera[Datos_Delete.id] === false"
-                                    :src=Imagen_Url(Datos_Delete.imagenes[Imagen_Get(Datos_Delete.id)].s3_key)
+                                    :src="Imagen_Url(Datos_Delete.imagenes[Imagen_Get(Datos_Delete.id)].s3_key)"
                                     @load="Imagen_Espera[Datos_Delete.id] = false"
                                     class="imagen"
                                     >
@@ -121,7 +121,7 @@
                                 </button>
                                 <div>
                                     <img v-show="Imagen_Espera[Producto_Actual.id] === false"
-                                    :src=Imagen_Url(Producto_Actual.imagenes[Imagen_Get(Producto_Actual.id)].s3_key)
+                                    :src="Imagen_Url(Producto_Actual.imagenes[Imagen_Get(Producto_Actual.id)].s3_key)"
                                     @load="Imagen_Espera[Producto_Actual.id] = false"
                                     class="carrusel-img"
                                     >
@@ -505,7 +505,7 @@
                                                 </button>
                                                 <div>
                                                     <img v-show="Imagen_Espera[i.id] === false"
-                                                    :src=Imagen_Url(i.imagenes[Imagen_Get(i.id)].s3_key)
+                                                    :src="Imagen_Url(i.imagenes[Imagen_Get(i.id)].s3_key)"
                                                     @load="Imagen_Espera[i.id] = false"
                                                     :class="Formato_Items ? 'w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-xl drop-shadow-md' : 'imagen'"
                                                     >
