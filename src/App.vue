@@ -461,7 +461,7 @@
                                 <!-- Mis Favoritos -->
                                 <div @click="router.push('/favoritos') ; Mostrar_Menu = false"
                                 v-if="Verificar_Rol_Excluido([2, 3, 4, 5, 6]) && Iniciado"
-                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/mis_pedidos'}"
+                                :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/favoritos'}"
                                 class="botonpestaña !py-4 !text-left"
                                 >
                                     🤍 Mis Favoritos
