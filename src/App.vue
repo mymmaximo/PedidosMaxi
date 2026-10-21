@@ -265,10 +265,7 @@
                             Mi Perfil
                         </h3>
                         <div v-if="Iniciado"
-                        class="hidden group-hover:block 
-                        absolute top-full 
-                        sm:right-0 md:right-0 lg:right-0
-                        bg-green-800 text-white border-green-700 border-4 rounded-sm"
+                        class="botonpestaña"
                         >
 
                             <!-- Mis Pedidos -->
