@@ -1186,7 +1186,7 @@
 
     // ----- Variables Temporales ----- //
 
-    let Cordenada_XX = 0
+    let Cordenada_X = 0
     let Cordenada_Y = 0
     let Banner_Picked = null
     let Carrusel_Espera = null
