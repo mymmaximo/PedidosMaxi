@@ -152,8 +152,9 @@
                             </div>
                         </div>
 
-                        <!-- Cantidad de Producto -->
+                        <!-- Cantidad y Precio de Producto -->
                         <div class="panel-compra">
+                            <!-- Cantidad de Producto -->
                             <div class="control-cantidad">
                                 <button @click="Producto_Restar(Producto_Actual)"
                                 class="control-btn-restar"
@@ -162,7 +163,7 @@
                                 </button>
                                 <input v-model="Producto_Cantidad"
                                 type="number"
-                                maxlength="8"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 class="control-input"
                                 />
                                 <button @click="Producto_Sumar(Producto_Actual)" 
@@ -171,12 +172,13 @@
                                     ✚
                                 </button>
                             </div>
+                            <!-- Precio de Producto -->
                             <div class="total-caja">
                                 <span class="total-subtitulo"> 
                                     Precio Total 
                                 </span>
                                 <span class="total-valor">
-                                    $ {{ Formato_Precios(Producto_Actual.precio * Producto_Cantidad) }}
+                                    $ {{ Formato_Precios((Producto_Actual.es_promocion ? Producto_Actual.precio_nuevo : Producto_Actual.precio) * Producto_Cantidad) }}
                                 </span>
                             </div>
                         </div>
@@ -233,8 +235,8 @@
                                 </h2>
                                 <input placeholder="Precio"
                                 type="number"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 v-model="Datos_Upgrade.precio"
-                                maxlength="8"
                                 />
                             </div>
                             <div v-if="Verificar_Rol([1, 2, 5])">
@@ -243,8 +245,8 @@
                                 </h2>
                                 <input placeholder="Stock"
                                 type="number"
+                                oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 v-model="Datos_Upgrade.stock"
-                                maxlength="8"
                                 />
                             </div>
                             <div v-if="Verificar_Rol([1, 2])">
@@ -646,8 +648,8 @@
                                         </span>
                                         <input placeholder="Nuevo Precio"
                                         type="number"
+                                        oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                         v-model="Datos_Offf.precio_nuevo"
-                                        maxlength="8"
                                         required
                                         class="w-full pl-8 pr-4 py-2 border-2 border-green-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
                                         />
@@ -1047,7 +1049,6 @@
         Producto_Actual,
         Producto_Cantidad,
         Pedido_Actual as Datos_Pedido,
-        Leer_Cookie,
         Cliente_ID,
         backend_url,
         Cargar_Carrito,
@@ -1112,6 +1113,7 @@
 
     const PopUp_Banner = ref (false)
     const Actualizando = ref (false)
+    const Formato_Items = ref (true)
     const Backend_Error = ref (false)
     const Backend_Espera = ref (true)
     const Mostrar_Confirmacion = ref (false)
@@ -1328,14 +1330,7 @@
         Datos_Delete.value.imagenes = producto_fila.imagenes
         PopUp_Delete.value = true
         document.body.style.overflow = "hidden"
-        setTimeout(() => {
-            Datos_Delete.value = {
-                id: "",
-                nombre: "",
-                imagenes: [],
-            }
-            Imagen_Indice.value = {}
-    }, 300)}
+    }
     // Abrir Pop up para Promocion (Lee Precios) //
     const Abrir_PopUp_Off = async (producto_fila) => {
         Datos_Off.value.id = producto_fila.id
@@ -1356,7 +1351,9 @@
             })
             if (respuesta.ok) {
                 const Datos_Registros = await respuesta.json()
-                const Datos_Promociones = Datos_Registros.find((p) => p.id_producto === producto_fila.id)
+                const Datos_Promociones = Datos_Registros.find(
+                    (p) => p.id_producto === producto_fila.id && p.activa === true
+                )
                 if (Datos_Promociones) {
                     Datos_Offf.value = {
                     id_promocion: Datos_Promociones.id,
@@ -1380,7 +1377,7 @@
         Datos_Upgrade.value.codigo_barra = producto_fila.codigo_barra
         Datos_Upgrade.value.imagenes = producto_fila.imagenes
         Datos_Delete_Imagenes.value = []
-        Producto_Imagenes_Previa.value = []
+        Imagen_Limpiar()
         PopUp_Upgrade.value = true
         document.body.style.overflow = "hidden"
     }
@@ -1454,7 +1451,14 @@
     const Cerrar_PopUp_Delete = () => {
         PopUp_Delete.value = false
         document.body.style.overflow = "auto"
-    }
+        setTimeout(() => {
+            Datos_Delete.value = {
+                id: "",
+                nombre: "",
+                imagenes: [],
+            }
+            Imagen_Indice.value = {}
+    }, 300)}
     // Cerrar Pop up para Promocion //
     const Cerrar_PopUp_Off = () => {
         PopUp_Off.value = false
@@ -1593,9 +1597,17 @@
             return
         }
         if (Distancia_X > 0) {
-            Imagen_Siguiente(producto)
+            if (producto.id === "Datos_Banner") {
+                if (Banner_Indice.value < producto.imagenes.length - 1) Banner_Indice.value++
+            } else {
+                Imagen_Siguiente(producto)
+            }
         } else {
-            Imagen_Anterior(producto)
+            if (producto.id === "Datos_Banner") {
+                if (Banner_Indice.value > 0) Banner_Indice.value--
+            } else {
+                Imagen_Anterior(producto)
+            }
         }
         Cordenada_X = 0
         Cordenada_Y = 0
