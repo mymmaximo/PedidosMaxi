@@ -205,6 +205,20 @@
                         </div>
                     </div>
 
+                    <!-- Error No Cliente -->
+                    <div v-else-if="!Cliente_ID" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh] gap-4"
+                    >
+                        <h1 class="text-3xl font-bold text-red-600 text-center">
+                            🚫 Los usuarios no tienen pedidos
+                        </h1>
+                        <h2 class="text-xl text-gray-700 text-center px-4">
+                            Esta sección es exclusiva para cuentas de clientes.
+                        </h2>
+                    </div>
+
                     <!-- Mis Pedidos -->
                     <div v-else class="w-full max-w-5xl mx-auto pb-10">
                         <div>
@@ -932,7 +946,10 @@
     })
     // Carga de Datos de la Pagina //
     const Backend_Cargar = (async() => {
-        if (!Cliente_ID.value) return
+        if (!Cliente_ID.value) {
+            Backend_Espera.value = false
+            return
+        }
         Backend_Espera.value = true
         Backend_Error.value = false
         // Tiempo de Espera para el Backend

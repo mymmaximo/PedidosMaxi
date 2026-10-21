@@ -409,6 +409,20 @@
                         </div>
                     </div>
 
+                    <!-- Error No Cliente -->
+                    <div v-else-if="!Cliente_ID" 
+                    class="flex flex-col 
+                    items-center justify-center 
+                    w-full h-[60vh] gap-4"
+                    >
+                        <h1 class="text-3xl font-bold text-red-600 text-center">
+                            🚫 Los usuarios no tienen pedidos
+                        </h1>
+                        <h2 class="text-xl text-gray-700 text-center px-4">
+                            Esta sección es exclusiva para cuentas de clientes.
+                        </h2>
+                    </div>
+
                     <!-- Favoritos -->
                     <div v-else>
                         <div class="px-5 w-full">
@@ -764,7 +778,10 @@
     })
     // Carga de Datos de la Pagina //
     const Backend_Cargar = (async() => {
-        if (!Cliente_ID.value) return
+        if (!Cliente_ID.value) {
+            Backend_Espera.value = false
+            return
+        }
         if (Bloqueo_Peticion.value) return
         Bloqueo_Peticion.value = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
