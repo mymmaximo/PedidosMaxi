@@ -212,7 +212,7 @@
                     w-full h-[60vh] gap-4"
                     >
                         <h1 class="text-3xl font-bold text-red-600 text-center">
-                            🚫 Los usuarios no tienen pedidos
+                            🚫 Los usuarios no tienen Pedidos
                         </h1>
                         <h2 class="text-xl text-gray-700 text-center px-4">
                             Esta sección es exclusiva para cuentas de clientes.

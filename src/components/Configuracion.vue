@@ -39,13 +39,13 @@
             </div>
 
             <!-- Error No Cliente -->
-            <div v-else-if="!Cliente_ID" 
+            <div v-else-if="!Datos_Id" 
             class="flex flex-col 
             items-center justify-center 
             w-full h-[60vh] gap-4"
             >
                 <h1 class="text-3xl font-bold text-red-600 text-center">
-                    🚫 Los usuarios no tienen pedidos
+                    🚫 Los Usuarios no tienen Datos de Cliente, para cambiar tus datos habla con el Administrador
                 </h1>
                 <h2 class="text-xl text-gray-700 text-center px-4">
                     Esta sección es exclusiva para cuentas de clientes.
@@ -206,13 +206,14 @@
             if (respuesta_id.ok) {
                 const sesion = await respuesta_id.json()
                 Datos_Id.value = sesion.id_cliente
-                const respuesta = await fetch(`${backend_url}/cliente/`, { credentials: 'include' })
-                if (respuesta.ok) {
-                    const datos = await respuesta.json()
-                    if (datos && datos.length > 0) {
-                        Datos_Upgrade.value.nombre = datos[0].nombre
-                        Datos_Upgrade.value.email = datos[0].email
-            }}}
+                if (Datos_Id.value) {
+                    const respuesta = await fetch(`${backend_url}/cliente/`, { credentials: 'include' })
+                    if (respuesta.ok) {
+                        const datos = await respuesta.json()
+                        if (datos && datos.length > 0) {
+                            Datos_Upgrade.value.nombre = datos[0].nombre
+                            Datos_Upgrade.value.email = datos[0].email
+            }}}}
             clearTimeout(Tiempo_Espera)
         } catch (error) {
             console.error("Error cargando la pagina:", error)
@@ -234,6 +235,7 @@
         if (Datos_Upgrade.value.contrasena !== "" || Datos_Upgrade.value.concontrasena !== "") {
             if (Datos_Upgrade.value.contrasena !== Datos_Upgrade.value.concontrasena) {
                 alert("❌ Las contraseñas no coinciden. Por favor, verifícalas.")
+                Boton_Espera.value = false
                 return
         }}
         // Establecer Datos del Cliente
@@ -275,5 +277,5 @@
         await Backend_Cargar()
         Boton_Espera.value = false
     }
-    
+
 </script>
