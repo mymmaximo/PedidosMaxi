@@ -262,7 +262,7 @@
                         v-if="Iniciado"
                         class="botonpestaña"
                         >
-                            Mi Perfil
+                            Mi Perfila
                         </h3>
                         <div v-if="Iniciado"
                         class="botonpestaña"
