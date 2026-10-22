@@ -718,7 +718,8 @@ select {
     text-green-700 
     rounded-xl 
     px-4 
-    flex 
+    hidden 
+    sm:flex 
     items-center 
     justify-center 
     hover:bg-green-50 

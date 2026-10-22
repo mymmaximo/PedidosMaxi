@@ -458,7 +458,7 @@
                                 <!-- Vista en Lista/Carta -->
                                 <button @click="Formato_Items = !Formato_Items"
                                 title="Alternar Vista"
-                                class="shrink-0 flex items-center justify-center bg-white border-2 border-green-200 text-green-700 rounded-xl w-12 sm:w-14 hover:bg-green-50 transition-all shadow-sm active:scale-95 cursor-pointer"
+                                class="botonvista"
                                 >
                                     <span v-if="!Formato_Items" class="text-xl">
                                         「 」
@@ -722,12 +722,12 @@
     // ----- Variables Booleanas ----- //
 
     const Paginas_Max = ref (false)
-    const Formato_Items = ref (false)
     const Backend_Error = ref (false)
     const Backend_Espera = ref (true)
     const Bloqueo_Peticion = ref (false)
     const Mostrar_Confirmacion = ref (false)
     const Mostrar_Limpiar_Filtro = ref (false)
+    const Formato_Items = ref (window.innerWidth < 640)
 
     // ----- Variables Complejas ----- //
 

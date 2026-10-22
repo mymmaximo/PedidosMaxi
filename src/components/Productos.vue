@@ -602,7 +602,7 @@
                             >
                                 <button type="submit" 
                                 class="botoncon flex-1 !m-0"
-                                :disabled="Actualizando"
+                                :disabled="Verificar_Boton || Actualizando"
                                 >
                                     {{ Datos_Offf.id_promocion ? 'Actualizar' : 'Guardar' }}
                                 </button>   
@@ -1107,10 +1107,7 @@
                                 <!-- Vista en Lista/Carta -->
                                 <button @click="Formato_Items = !Formato_Items"
                                 title="Alternar Vista"
-                                class="bg-white border-2 border-green-200 
-                                text-green-700 rounded-xl 
-                                px-4 flex items-center justify-center hover:bg-green-50 
-                                transition-all shadow-sm active:scale-95"
+                                class="botonvista"
                                 >
                                     <span v-if="!Formato_Items" class="text-xl">
                                         「 」
@@ -1364,7 +1361,10 @@
                                         : '', 'botonc !px-2 !py-2 !text-sm']"
                                         >
                                             {{ Datos_Favoritos.includes(i.id) ? '🤍' : '❤️' }}
-                                            <span class="hidden xl:inline ml-1 truncate">
+                                            <span :class="Formato_Items 
+                                            ? 'inline ml-1' 
+                                            : 'hidden xl:inline ml-1 truncate'"
+                                            >
                                                 {{ Datos_Favoritos.includes(i.id) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
                                             </span>
                                         </button>
@@ -1517,13 +1517,13 @@
     const Paginas_Max = ref (false)
     const Actualizando = ref (false)
     const Backend_Error = ref (false)
-    const Formato_Items = ref (false)
     const Mostrar_Nuevo = ref (false)
     const Backend_Espera = ref (true)
     const Filtro_Promocion = ref (false)
     const Bloqueo_Peticion = ref (false)
     const Mostrar_Confirmacion = ref (false)
     const Mostrar_Limpiar_Filtro = ref (false)
+    const Formato_Items = ref (window.innerWidth < 640)
 
     // ----- Variables Vacias ----- //
 
@@ -1555,6 +1555,7 @@
     // ----- Variables Temporales ----- //
 
     let Cordenada_X = 0
+    let Cordenada_Y = 0
 
     // ----- Funciones Vue ----- //
 
@@ -1657,28 +1658,42 @@
     const Verificar_Boton = computed(() =>{
         // Nuevo Producto
         if (Mostrar_Nuevo.value) {
-            const faltandatos01 = 
+            const Datos_New_Faltantes = 
                 Datos_New.value.nombre === "" ||
                 Datos_New.value.precio === "" ||
                 Datos_New.value.stock === "" ||
                 Datos_New.value.stock < 0 ||
                 Datos_New.value.precio <= 0
-            const faltandatos02 = 
+            const Dato_Categoria_Faltantes = 
                 Dato_Categoria.value === "new" && Datos_New.value.categoria === ""
-            return faltandatos01 || faltandatos02
+            return Datos_New_Faltantes || Dato_Categoria_Faltantes
         }
         // Actualizar Producto
         if (PopUp_Upgrade.value) {
-            const faltandatos03 =
+            const Datos_Upgrade_Faltantes =
                 Datos_Upgrade.value.nombre === "" ||
                 Datos_Upgrade.value.precio === "" ||
                 Datos_Upgrade.value.stock === "" ||
                 Datos_Upgrade.value.codigo_barra === "" ||
                 Datos_Upgrade.value.stock < 0 ||
                 Datos_Upgrade.value.precio <= 0
-            const faltandatos04 = 
+            const Dato_Categorias_Faltantes = 
                 Dato_Categorias.value === "new" && Datos_Upgrade.value.categoria === ""
-            return faltandatos03 || faltandatos04
+            return Datos_Upgrade_Faltantes || Dato_Categorias_Faltantes
+        }
+        // Nueva Promocion
+        if (PopUp_Off.value) {
+            const Datos_Offf_Precio_Faltantes = 
+                !Datos_Offf.value.precio_nuevo || 
+                Datos_Offf.value.precio_nuevo <= 0
+            const Datos_Offf_Porcentaje_Faltantes = 
+                !Datos_Offf.value.porcentaje_descuento || 
+                Datos_Offf.value.porcentaje_descuento <= 0 || 
+                Datos_Offf.value.porcentaje_descuento > 99
+            const Datos_Offf_Fecha_Faltantes = 
+                Datos_Offf.value.fecha_inicio === "" || 
+                Datos_Offf.value.fecha_fin === ""
+            return (Datos_Offf_Precio_Faltantes && Datos_Offf_Porcentaje_Faltantes) || Datos_Offf_Fecha_Faltantes
     }})
 
     // ----- Funciones Frontend ----- //
@@ -1888,23 +1903,44 @@
     // Fin del Toque de Imagen en Celular //
     const Toque_End = (evento, producto) => {
         if (!producto) return
-        const finX = evento.changedTouches[0].clientX
-        const diferencia = Cordenada_X - finX
-        if (Math.abs(diferencia) < 50) {
+        const Cordenada_X_End = evento.changedTouches[0].clientX
+        const Cordenada_Y_End = evento.changedTouches[0].clientY
+        const Distancia_X = Cordenada_X - Cordenada_X_End
+        const Distancia_Y = Math.abs(Cordenada_Y - Cordenada_Y_End)
+        if (Distancia_Y > Math.abs(Distancia_X)) {
+            Cordenada_X = 0
+            Cordenada_Y = 0
+            return
+        }
+        if (Math.abs(Distancia_X) < 50) {
+            Cordenada_X = 0
+            Cordenada_Y = 0
+            return
+        }
+        if (Math.abs(Distancia_X) < 50) {
             Cordenada_X = 0
             return
         }
-        if (diferencia > 0) {
-            Imagen_Siguiente(producto)
-        }
-        else {
-            Imagen_Anterior(producto)
+        if (Distancia_X > 0) {
+            if (producto.id === "Datos_Banner") {
+                if (Banner_Indice.value < producto.imagenes.length - 1) Banner_Indice.value++
+            } else {
+                Imagen_Siguiente(producto)
+            }
+        } else {
+            if (producto.id === "Datos_Banner") {
+                if (Banner_Indice.value > 0) Banner_Indice.value--
+            } else {
+                Imagen_Anterior(producto)
+            }
         }
         Cordenada_X = 0
+        Cordenada_Y = 0
     }
     // Inicio del Toque de Imagen en Celular //
     const Toque_Start = (evento) => {
         Cordenada_X = evento.changedTouches[0].clientX
+        Cordenada_Y = evento.changedTouches[0].clientY
     }
 
     // ----- Funciones Backend ----- //
@@ -2082,7 +2118,7 @@
                     .from('max_imagenes')
                     .upload(filePath, file)
                 if (uploadError) {
-                    alert("El Producto se creo, Pero hubi un  error subiendo la imagen")
+                    alert("El Producto se creo, Pero hubo un  error subiendo la imagen")
                 } else {
                     await fetch(`${backend_url}/productos/archivos/`, {
                         method: 'POST',

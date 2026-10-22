@@ -576,7 +576,7 @@
     // ----- Variables Booleanas ----- //
     
     const Paginas_Max = ref (false)
-    const Formato_Items = ref (true)
+    const Formato_Items = ref (window.innerWidth > 640)
     const Backend_Error = ref (false)
     const Mostrar_Nuevo = ref (false)
     const Backend_Espera = ref (true)

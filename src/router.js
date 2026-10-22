@@ -50,7 +50,7 @@ const routes =
         component: Pedidos, 
         meta: {
             requireAuth: true,
-            rolesPer: [1, 3, 6],
+            Roles_Permitidos: [1, 3, 6],
             title: 'Pedidos'
     }}, { 
         path: '/clientes', 
@@ -58,7 +58,7 @@ const routes =
         component: Clientes, 
         meta: {
             requireAuth: true,
-            rolesPer: [1, 7],
+            Roles_Permitidos: [1, 7],
             title: 'Clientes'
     }}, { 
         path: '/usuarios', 
@@ -66,7 +66,7 @@ const routes =
         component: Usuarios, 
         meta: {
             requireAuth: true,
-            rolesPer: [1],
+            Roles_Permitidos: [1],
             title: 'Usuarios'
     }}, { 
         path: '/carrito', 
@@ -102,7 +102,7 @@ const routes =
         component: Registro_precios, 
         meta: {
             requireAuth: true,
-            rolesPer: [1, 2, 4],
+            Roles_Permitidos: [1, 2, 4],
             title: 'Registro de precios'
     }}, { 
         path: '/centro_de_ayuda', 
@@ -117,7 +117,7 @@ const routes =
 const router = createRouter({
     history: createWebHistory(),
     routes,
-    scrollBehavior(savedPosition) {
+    scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
             return savedPosition
         } else {
@@ -133,6 +133,7 @@ router.beforeEach(async (to, from, next) => {
     // Titulo de Pagina
     const Mostrar_Titulo = 'Maxi-Store'
     document.title = to.meta.title ? `${to.meta.title} - ${Mostrar_Titulo}` : Mostrar_Titulo
+    next()
     if (PrimeraCarga) {
         await Validad_Sesion_Backend()
         PrimeraCarga = false
@@ -144,8 +145,8 @@ router.beforeEach(async (to, from, next) => {
             setTimeout(() => { Mostrar_Error.value = false }, 3000)
             return next('/')
         }
-        if (to.meta.rolesPer) {
-            const Acceso = Rol.value && Rol.value.some(rol => to.meta.rolesPer.includes(rol))
+        if (to.meta.Roles_Permitidos) {
+            const Acceso = Rol.value && Rol.value.some(rol => to.meta.Roles_Permitidos.includes(rol))
             if (!Acceso) {
                 Mostrar_Error.value = true
                 setTimeout(() => { Mostrar_Error.value = false }, 3000)

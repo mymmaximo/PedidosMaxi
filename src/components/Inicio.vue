@@ -1045,7 +1045,10 @@
                                                         : [Verificar_Rol([1, 2]) ? 'col-span-2' : '', 'botonc !px-2 !py-2 !text-sm']"
                                                         >
                                                             {{ Datos_Favoritos.includes(i.id) ? '🤍' : '❤️' }}
-                                                            <span class="hidden xl:inline ml-1 truncate">
+                                                            <span :class="Formato_Items 
+                                                            ? 'inline ml-1' 
+                                                            : 'hidden xl:inline ml-1 truncate'"
+                                                            >
                                                                 {{ Datos_Favoritos.includes(i.id) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
                                                             </span>
                                                         </button>
