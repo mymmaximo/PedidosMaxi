@@ -246,13 +246,13 @@
                     </div>
 
                     <!-- Desplegable Mi Perfil/Iniciar Sesion -->
-                    <div class="group relative z-50">
+                    <div class="group relative z-50 flex">
 
                         <!-- Iniciar Sesion -->
                         <h3 @click="router.push('/login')"
                         v-if="!Iniciado"
                         :class="{'!from-green-100 !to-green-300 !text-black shadow-inner': route.path === '/login'}"
-                        class="botonpestaña"
+                        class="botonpestaña h-full flex items-center"
                         >
                             Iniciar Sesion
                         </h3>
@@ -260,13 +260,13 @@
                         <!-- Mi Perfil -->
                         <h3 @click="!Rol || Rol.length === 0 ? router.push('/mis_pedidos') : null"
                         v-if="Iniciado"
-                        class="botonpestaña"
+                        class="botonpestaña h-full flex items-center"
                         >
                             Mi Perfil
                         </h3>
                         <div v-if="Iniciado"
                         class="hidden group-hover:block 
-                        absolute
+                        absolute top-full 
                         sm:right-0 md:right-0 lg:right-0
                         bg-green-800 text-white border-green-700 border-4 rounded-sm"
                         >
