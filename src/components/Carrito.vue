@@ -472,6 +472,13 @@
             const respuesta = await fetch(`${backend_url}/cliente/${Cliente_ID.value}/direcciones/`, {
                 credentials: 'include'
             })
+            if (respuesta.status === 401) {
+                await Cerrar_Sesion(false)
+                Sesion_Expirada.value = true
+                Iniciado.value = false
+                clearTimeout(Tiempo_Espera)
+                return
+            }
             const datos = await respuesta.json()
             Datos_Direcciones.value = datos
             clearTimeout(Tiempo_Espera)
@@ -682,7 +689,6 @@
             // Sesion Vencida
             if (PostBackend_Paddle.status === 401) {
                 Cerrar_Sesion()
-                alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
                 Sesion_Expirada.value = true
                 Iniciado.value = false
                 Procesando_Pago.value = false
