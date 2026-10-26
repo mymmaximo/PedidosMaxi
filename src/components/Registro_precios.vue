@@ -566,7 +566,8 @@
         ref 
     } from 'vue'
     import { 
-        backend_url 
+        backend_url,
+        Cerrar_Sesion
     } from './Estatus.js'
 
     // ----- Variables Booleanas ----- //

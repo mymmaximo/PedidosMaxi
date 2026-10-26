@@ -888,11 +888,17 @@
             url.searchParams.append('busqueda_pedido', Filtro_Provincia.value)
             Mostrar_Limpiar_Filtro.value = true
         }
-		const Get_Backend = await fetch(url, {
+		const GetBackend = await fetch(url, {
 			method: 'GET',
             credentials: 'include'
 		})
-		const datos = await Get_Backend.json()
+        if (GetBackend.status === 401) {
+            await Cerrar_Sesion(false)
+            Sesion_Expirada.value = true
+            Iniciado.value = false
+            return
+        }
+		const datos = await GetBackend.json()
 		Pedidos.value = datos
         if (Array.isArray(datos)) {
             if (datos.length > Paginas_Items.value) {
