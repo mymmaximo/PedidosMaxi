@@ -1100,8 +1100,7 @@
             credentials: 'include'
         })
         if (GetBackend.status === 401) {
-            await Cerrar_Sesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            await Cerrar_Sesion(false)
             Sesion_Expirada.value = true
             Iniciado.value = false
             return

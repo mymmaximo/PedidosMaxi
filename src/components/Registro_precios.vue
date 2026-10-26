@@ -843,6 +843,12 @@
             method: 'GET',
             credentials: 'include'
         })
+        if (GetBackend.status === 401) {
+            await Cerrar_Sesion(false)
+            Sesion_Expirada.value = true
+            Iniciado.value = false
+            return
+        }
         const datos = await GetBackend.json()
         if (Array.isArray(datos)) {
             if (datos.length > Paginas_Items.value) {

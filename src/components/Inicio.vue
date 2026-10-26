@@ -1737,6 +1737,12 @@
             headers: {"X-Tunnel-Skip-AntiPhishing-Page": "true",},
             credentials: "include",
         })
+        if (GetBackend.status === 401) {
+            await Cerrar_Sesion(false)
+            Sesion_Expirada.value = true
+            Iniciado.value = false
+            return
+        }
         const datos = await GetBackend.json()
         Productos.value = datos
     }

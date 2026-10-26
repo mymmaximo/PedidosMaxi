@@ -141,8 +141,10 @@ router.beforeEach(async (to, from, next) => {
     // Verificar Sesion y Rol
     if (to.meta.requireAuth) {
         if (!Iniciado.value) {
-            Mostrar_Error.value = true
-            setTimeout(() => { Mostrar_Error.value = false }, 3000)
+            if (!Sesion_Expirada.value) {
+                Mostrar_Error.value = true
+                setTimeout(() => { Mostrar_Error.value = false }, 3000)
+            }
             return next('/')
         }
         if (to.meta.Roles_Permitidos) {
