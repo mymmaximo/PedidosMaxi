@@ -49,7 +49,7 @@ export const Cargar_Carrito = () => {
             Limpiar_Compra()
 }}}
 // Cerrar Sesion //
-export const Cerrar_Sesion = async () =>{
+export const Cerrar_Sesion = async (Re_Direccionar = true) =>{
     try {
         await fetch (`${backend_url}/logout/`, {
             method: 'POST',
@@ -60,11 +60,13 @@ export const Cerrar_Sesion = async () =>{
             error
     )}
     Limpiar_Compra()
-    document.cookie = "sesion_activa=; path=/; max-age=0;"
     Rol.value = []
     Cliente_ID.value = null
     Iniciado.value = false
-    window.location.href = '/'
+    document.cookie = "sesion_activa=; path=/; max-age=0;"
+    if (Re_Direccionar) {
+        window.location.href = '/'
+    }
 }
 // Leer Cookie //
 export const Leer_Cookie = (nombre) => {
@@ -124,9 +126,10 @@ export const Validad_Sesion_Backend = async () => {
             credentials: 'include'
         })
         if (respuesta.status === 401) {
-            if (Leer_Cookie('sesion_activa') === 'true') {
+            const Error_Expirada = await respuesta.json().catch(() => ({}))
+            if (Error_Expirada.detail === "SESION_EXPIRADA") {
                 Sesion_Expirada.value = true
-                document.cookie = "sesion_activa=; path=/; max-age=0"
+                await Cerrar_Sesion(false)
             }
             Iniciado.value = false
             Rol.value = []
@@ -138,18 +141,10 @@ export const Validad_Sesion_Backend = async () => {
             Iniciado.value = true
             Rol.value = datos.id_rol || []
             Cliente_ID.value = datos.id_cliente
-        } else {
-            if (Leer_Cookie('sesion_activa') === 'true') {
-                Sesion_Expirada.value = true
-                document.cookie = "sesion_activa=; path=/; max-age=0;"
-            }
-            Iniciado.value = false
-            Rol.value = []
-            Cliente_ID.value = null
-            Limpiar_Compra()
     }} catch (error) {
         console.error("Error validando la sesión:", error)
         Iniciado.value = false
+        return false
 }}
 // Verificacion de Rol //
 export const Verificar_Rol = (rolesPermitidos) => {

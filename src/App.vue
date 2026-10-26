@@ -20,20 +20,18 @@
 
         <!-- Notificación -->
         <!-- Carro Vacio -->
-        <template>
-            <Teleport to="body">
-                <transition name="fade">
-                    <div v-if="Volver_Carro" 
-                    class="fixed top-4 right-4
-                    bg-red-600 text-black 
-                    px-6 py-3 rounded-xl shadow-lg
-                    z-[100] font-bold"
-                    >
-                    ¡Carrito Vacio!
-                    </div>
-                </transition>
-            </Teleport>
-        </template>
+        <Teleport to="body">
+            <transition name="fade">
+                <div v-if="Volver_Carro" 
+                class="fixed top-4 right-4
+                bg-red-600 text-black 
+                px-6 py-3 rounded-xl shadow-lg
+                z-[100] font-bold"
+                >
+                ¡Carrito Vacio!
+                </div>
+            </transition>
+        </Teleport>
 
         <!-- Confirmacion -->
         <!-- Cerrar Sesion -->
@@ -85,7 +83,7 @@
 
                         <!-- Botones -->
                         <div class="botones">
-                            <button @click="Sesion_Expirada = false; document.body.style.overflow = 'auto'; router.push('/login')"
+                            <button @click="Cerrar_PopUp_Sesion_Expirada()"
                             class="botoncon"
                             >
                                 Iniciar Sesion
@@ -318,7 +316,7 @@
 
                     <!-- Abrir Menu -->
                     <div class="p-3 w-full">
-                        <h1 @click="Mostrar_Menu = !Mostrar_Menu ; document.body.style.overflow = 'hidden'"
+                        <h1 @click="Mostrar_Menu = !Mostrar_Menu"
                         class="botonfil !mb-0 !py-2"
                         >
                             ⫶☰ Menú
@@ -625,5 +623,10 @@
 		PopUp_Log_Out.value = false
 		document.body.style.overflow = "auto"
 	}
-
+    // Cerrar Pop up para Sesion Expirada //
+    const Cerrar_PopUp_Sesion_Expirada = () => {
+        Sesion_Expirada.value = false
+        document.body.style.overflow = "auto"
+        router.push('/login')
+    }
 </script>
