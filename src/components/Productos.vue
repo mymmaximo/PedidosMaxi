@@ -2099,7 +2099,7 @@
             credentials: 'include'
         })
         if (PostBackend.status === 401) {
-            await Cerrar_Sesion()
+            await Cerrar_Sesion(false)
             alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
             Sesion_Expirada.value = true
             Iniciado.value = false
