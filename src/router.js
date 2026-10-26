@@ -18,7 +18,8 @@ import {
     Mostrar_Error, 
     Carrito_Local, 
     Validad_Carrito, 
-    Volver_Carro 
+    Volver_Carro,
+    Sesion_Expirada
 } from './components/Estatus.js'
 
 // Redireccion a Url/Link //
@@ -130,11 +131,7 @@ let PrimeraCarga = true
 
 // Verificar de Sesion, Rol, Carrito y Titulo de Pagina //
 router.beforeEach(async (to, from, next) => {
-    // Titulo de Pagina
-    const Mostrar_Titulo = 'Maxi-Store'
-    document.title = to.meta.title ? `${to.meta.title} - ${Mostrar_Titulo}` : Mostrar_Titulo
-    next()
-    if (PrimeraCarga) {
+    if (PrimeraCarga || Iniciado.value) {
         await Validad_Sesion_Backend()
         PrimeraCarga = false
     }
@@ -178,6 +175,9 @@ router.beforeEach(async (to, from, next) => {
             } else {
                 return next('/')
     }}}
+    // Titulo de Pagina
+    const Mostrar_Titulo = 'Maxi-Store'
+    document.title = to.meta.title ? `${to.meta.title} - ${Mostrar_Titulo}` : Mostrar_Titulo
     next()
 })
 
