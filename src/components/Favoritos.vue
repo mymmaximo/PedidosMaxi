@@ -441,7 +441,7 @@
 
                             <!-- Encabezado -->
                             <h1 class="text-2xl font-black text-green-800 mb-4 ml-1">
-                                🤍 Mi Lista de Deseos
+                                Mi Lista de Favoritos
                             </h1>
 
                             <div class="flex flex-row items-stretch w-full gap-3 mb-5">
