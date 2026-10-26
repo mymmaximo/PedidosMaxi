@@ -39,7 +39,7 @@
             </div>
 
             <!-- Error No Cliente -->
-            <div v-else-if="!Datos_Id" 
+            <div v-else-if="!Datos_Id && !Sesion_Expirada"
             class="flex flex-col 
             items-center justify-center 
             w-full h-[60vh] gap-4"
@@ -203,11 +203,25 @@
         // Leer Datos del Cliente con Sesion Iniciada
         try {
             const respuesta_id = await fetch(`${backend_url}/reload/`, { credentials: 'include' })
+            if (respuesta_id.status === 401) {
+                await Cerrar_Sesion(false)
+                Sesion_Expirada.value = true
+                Iniciado.value = false
+                clearTimeout(Tiempo_Espera)
+                return
+            }
             if (respuesta_id.ok) {
                 const sesion = await respuesta_id.json()
                 Datos_Id.value = sesion.id_cliente
                 if (Datos_Id.value) {
                     const respuesta = await fetch(`${backend_url}/cliente/`, { credentials: 'include' })
+                    if (respuesta.status === 401) {
+                        await Cerrar_Sesion(false)
+                        Sesion_Expirada.value = true
+                        Iniciado.value = false
+                        clearTimeout(Tiempo_Espera)
+                        return
+                    }
                     if (respuesta.ok) {
                         const datos = await respuesta.json()
                         if (datos && datos.length > 0) {
@@ -261,8 +275,7 @@
         })
         // Verificacion Sesion Vencida
         if (PutBackend.status === 401 || PutBackend.status === 403) {
-            Cerrar_Sesion()
-            alert("Tu sesión expiró por inactividad. Por favor, vuelve a iniciar sesión.")
+            Cerrar_Sesion(false)
             Sesion_Expirada.value = true
             Iniciado.value = false
             Boton_Espera.value = false
